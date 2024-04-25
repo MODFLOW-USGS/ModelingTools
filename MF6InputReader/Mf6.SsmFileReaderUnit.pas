@@ -410,11 +410,11 @@ begin
   begin
     SpcPackage := TPackage.Create;
     FSpcPackages.Add(SpcPackage);
-    SpcPackage.FileType := FPackageType;
+    SpcPackage.FileType := 'SPC';
     SpcPackage.FileName := FFileInput.FItems[PackageIndex].spc6_filename;
     SpcPackage.PackageName := FFileInput.FItems[PackageIndex].pname;
 
-    SpcReader := TSpc.Create(FPackageType);
+    SpcReader := TSpc.Create('SPC');
     SpcReader.Dimensions := FDimensions;
     SpcPackage.Package := SpcReader;
     SpcPackage.ReadPackage(Unhandled, NPER);

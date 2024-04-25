@@ -10175,7 +10175,6 @@ var
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
   SutraNod3DDisWriter: TSutraNod3DDisWriter;
-//  ParamEstBatchFile: TStringList;
   PLPROC_Location: string;
   DSIndex: Integer;
   ADataArray: TDataArray;
@@ -10333,7 +10332,6 @@ begin
           try
             BoundaryWriter.WriteFile(FileName, FluidSourceNodes, nil);
             AddPestDataArraysToDictionary(BoundaryWriter.GetUsedPestDataArrays)
-//            InputPestDataArrays := BoundaryWriter.GetUsedPestDataArrays;
           finally
             BoundaryWriter.Free;
           end;

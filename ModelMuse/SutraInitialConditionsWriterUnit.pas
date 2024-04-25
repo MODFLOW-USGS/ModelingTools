@@ -36,13 +36,18 @@ implementation
 
 uses
   GoPhastTypes, SutraMeshUnit, Generics.Defaults,
-  SutraFileWriterUnit, IOUtils, Dialogs, PlProcUnit, DataSetNamesUnit;
+  SutraFileWriterUnit, IOUtils, Dialogs, PlProcUnit, DataSetNamesUnit,
+  frmErrorsAndWarningsUnit;
 
 resourcestring
   StrTheRestartFileS = 'The restart file "%s" does not exist.';
   StrTheEndOfTheResta = 'The end of the restart file, %0:s, was reached before' +
   ' reading all the data required for data set %1:d of the initial conditions f' +
   'ile.';
+  StrUniformInitialPresSummary = 'Uniform initial pressure';
+  StrUniformInitialPres = 'Uniform initial pressures are typically inappropr' +
+  'iate for profile and 3D models because the weight of the overlying water ' +
+  'would cause positive pressures except for the top of the model.';
 
 
 
@@ -215,6 +220,7 @@ var
   InitialPressure: TDataArray;
   index: Integer;
   ALine: string;
+  SutraOptions: TSutraOptions;
 begin
   WriteCommentLine('Data set 2');
 
@@ -242,9 +248,21 @@ begin
   else
   begin
     InitialPressure := nil;
-    case (Model as TPhastModel).SutraOptions.TransportChoice of
+    SutraOptions := (Model as TPhastModel).SutraOptions;
+    case SutraOptions.TransportChoice of
       tcSolute, tcEnergy, tcFreezing:
-        InitialPressure := Model.DataArrayManager.GetDataSetByName(KInitialPressure);
+        begin
+          InitialPressure := Model.DataArrayManager.GetDataSetByName(KInitialPressure);
+          if (Model as TPhastModel).SutraMesh.MeshType in [mtProfile, mt3D] then
+          begin
+            InitialPressure.Initialize;
+            if InitialPressure.IsUniform = iuTrue then
+            begin
+              frmErrorsAndWarnings.AddWarning(Model, StrUniformInitialPresSummary,
+                StrUniformInitialPres);
+            end;
+          end;
+         end;
       tcSoluteHead:
         InitialPressure := Model.DataArrayManager.GetDataSetByName(rsInitial_Head);
       else

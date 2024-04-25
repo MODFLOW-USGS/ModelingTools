@@ -10233,6 +10233,9 @@ const
 //    '5.2.0.7'  bug fix: Fixed bug in exporting the DIS input file for
 //                MODFLOW-OWHM version 2 when the Farm package is not selected.
 
+//               bug fix: Fixed bug in assigning properties to SUTRA nodes
+//                with objects that should intersect the cell around nodes.
+
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const

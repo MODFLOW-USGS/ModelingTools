@@ -45,6 +45,7 @@ type
 
   TRchTimeItem = class(TObject)
   private
+    FId: Integer;
     Fcellid: TMfCellId;
     Frecharge: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
@@ -60,6 +61,7 @@ type
     property Count: integer read GetCount;
     property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
     property BoundName: string read Fboundname;
+    property ID: Integer read FId;
   end;
 
   TRchTimeItemList = class(TObjectList<TRchTimeItem>)
@@ -437,7 +439,9 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   NumberOfColumns: Integer;
+  ID: Integer;
 begin
+  ID := 0;
   DimensionCount := Dimensions.DimensionCount;
   Initialize;
   NumberOfColumns := DimensionCount + 1 + naux;
@@ -553,6 +557,8 @@ begin
         for ColIndex := 0 to LocalDim.NCol - 1 do
         begin
           Cell := TRchTimeItem.Create;
+          Inc(ID);
+          Cell.FId := ID;
           if IRCH = nil then
           begin
             Cell.Fcellid.Layer := 1;
@@ -593,8 +599,6 @@ begin
           FCells.Add(Cell);
         end;
       end;
-
-//      AuxList.Free;
     end;
   end
   else
@@ -617,6 +621,8 @@ begin
 
       Cell := TRchTimeItem.Create;
       try
+        Inc(ID);
+        Cell.FId := ID;
         CaseSensitiveLine := ALine;
         if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'PERIOD') then
         begin
@@ -668,10 +674,14 @@ begin
         end
         else
         begin
-            Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
+          Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
           Unhandled.WriteLine(ErrorLine);
         end;
       finally
+        if Cell <> nil then
+        begin
+          Dec(ID);
+        end;
         Cell.Free;
       end;
     end;

@@ -2130,23 +2130,25 @@ var
   PriorVertex: Tgpc_vertex;
   SegDistance: double;
 
-  function NearlyTheSame(A, B: Single): Boolean;
-  const
-    Epsilon = 1e-6;
-  begin
-    result := A = B;
-    if not result then
-    begin
-      result := Abs(A - B) / (Abs(A) + Abs(B)) < Epsilon;
-    end;
-  end;
+//  function NearlyTheSame(A, B: Single): Boolean;
+//  const
+//    Epsilon = 1e-6;
+//  begin
+//    result := A = B;
+//    if not result then
+//    begin
+//      result := Abs(A - B) / (Abs(A) + Abs(B)) < Epsilon;
+//    end;
+//  end;
 begin
-  if NearlyTheSame(APoint.x, FLocation.x)
-    and NearlyTheSame(APoint.y, FLocation.y) then
-  begin
-    result := True;
-    Exit;
-  end;
+// Checking whether a point is nearly the same as the cell center doesn't work
+// in cases where the X and Y coordinates are both large.
+//  if NearlyTheSame(APoint.x, FLocation.x)
+//    and NearlyTheSame(APoint.y, FLocation.y) then
+//  begin
+//    result := True;
+//    Exit;
+//  end;
 
   GetCellOutline(CellOutline);
 

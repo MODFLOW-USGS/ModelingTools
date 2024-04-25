@@ -63,7 +63,11 @@ type
       write SetOnUpdataStatusBar;
   end;
 
-  TModelList = TList<TModel>;
+  TModelList = class(TList<TModel>)
+  public
+    function GetModelByName(const ModelName: string): TModel;
+    function GetModelIndexByName(const ModelName: string): Integer;
+  end;
   TObjectModelList = TObjectList<TModel>;
 
   TModels = class(TCustomMf6Persistent)
@@ -1142,6 +1146,38 @@ end;
 procedure TModel.SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar);
 begin
   FOnUpdataStatusBar := Value;
+end;
+
+{ TModelList }
+
+function TModelList.GetModelByName(const ModelName: string): TModel;
+var
+  Index: Integer;
+begin
+  Index := GetModelIndexByName(ModelName);
+  if Index >= 0 then
+  begin
+    result := Items[Index];
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function TModelList.GetModelIndexByName(const ModelName: string): Integer;
+var
+  Index: Integer;
+begin
+  result := -1;
+  for Index := 0 to Count - 1 do
+  begin
+    if AnsiSameText(ModelName, Items[Index].ModelName) then
+    begin
+      result := Index;
+      exit;
+    end;
+  end;
 end;
 
 end.

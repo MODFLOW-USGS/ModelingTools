@@ -126,8 +126,8 @@ type
     procedure ImportSto(Package: TPackage);
     procedure ImportTvs(Package: TPackage);
     procedure ImportCSub(Package: TPackage);
-    procedure ImportBuy(Package: TPackage);
-    procedure ImportVsc(Package: TPackage);
+    procedure ImportBuy(Package: TPackage; TransportModels: TModelList);
+    procedure ImportVsc(Package: TPackage; TransportModels: TModelList);
     procedure ImportChd(Package: TPackage; TransportModels: TModelList);
     procedure GetObservations(NumberObsDictionary: TNumberDictionary;
       BoundNameObsDictionary: TBoundNameDictionary;
@@ -515,7 +515,7 @@ begin
 
 end;
 
-procedure TModflow6Importer.ImportBuy(Package: TPackage);
+procedure TModflow6Importer.ImportBuy(Package: TPackage; TransportModels: TModelList);
 var
   Buy: TBuy;
   Model: TPhastModel;
@@ -526,6 +526,8 @@ var
   Item: TBuyItem;
   ChemComponents: TMobileChemSpeciesCollection;
   ChemItem: TMobileChemSpeciesItem;
+  AModel: TModel;
+  TransportModel: TTransportNameFile;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -555,12 +557,20 @@ begin
   for index := 0 to PackageData.Count - 1 do
   begin
     Item := PackageData[index];
-    ChemItem := ChemComponents.GetItemByName(Item.auxspeciesname);
-    if ChemItem = nil then
+    AModel := TransportModels.GetModelByName(Item.modelname);
+    TransportModel := AModel.FName as TTransportNameFile;
+
+    if TransportModel.SpeciesName = '' then
     begin
       ChemItem := ChemComponents.Add;
       ChemItem.Name := Item.auxspeciesname;
+      TransportModel.SpeciesName := Item.auxspeciesname;
+    end
+    else
+    begin
+      ChemItem := ChemComponents.GetItemByName(TransportModel.SpeciesName)
     end;
+
     if SameText(ChemItem.Name, 'Density') then
     begin
       BuoyancyPackage.DensitySpecified := True;
@@ -3841,11 +3851,11 @@ begin
         end
         else if APackage.FileType = 'BUY6' then
         begin
-          ImportBuy(APackage);
+          ImportBuy(APackage, TransportModels);
         end
         else if APackage.FileType = 'VSC6' then
         begin
-          ImportVsc(APackage);
+          ImportVsc(APackage, TransportModels);
         end
         else if APackage.FileType = 'CHD6' then
         begin
@@ -4040,32 +4050,6 @@ begin
   end;
 end;
 
-type
-  TGhbConnection = class(TObject)
-    ScreenObject: TScreenObject;
-    List: TGhbTimeItemList;
-    IFACE: Integer;
-    destructor Destroy; override;
-  end;
-
-  TGhbConnectionObjectList = TObjectList<TGhbConnection>;
-  TGhbConnectionObjectLists = TObjectList<TGhbConnectionObjectList>;
-
-  TGhbMvrLink = record
-    GhbPeriod: TGhbPeriod;
-    MvrPeriod: TMvrPeriod;
-    function Period: Integer;
-  end;
-  TGhbMvrLinkArray = TArray<TGhbMvrLink>;
-  TGhbMvrLinkList = TList<TGhbMvrLink>;
-
-  TMvrGhbTimeItemList = Class(TGhbTimeItemList)
-    FIds: TGenericIntegerList;
-    constructor Create;
-    destructor Destroy; override;
-    procedure Sort;
-  end;
-
 procedure TModflow6Importer.ImportGnc(Package: TPackage);
 var
   Model: TPhastModel;
@@ -4153,15 +4137,43 @@ begin
   end;
 end;
 
+type
+  TGhbConnection = class(TObject)
+    ScreenObject: TScreenObject;
+    List: TGhbTimeItemList;
+    IFACE: Integer;
+    destructor Destroy; override;
+  end;
+
+  TGhbConnectionObjectList = TObjectList<TGhbConnection>;
+  TGhbConnectionObjectLists = TObjectList<TGhbConnectionObjectList>;
+
+  TGhbMvrLink = record
+    GhbPeriod: TGhbPeriod;
+    MvrPeriod: TMvrPeriod;
+    SpcPeriods: TSpcPeriodArray;
+    function Period: Integer;
+    function SameContents(GhbMvrLink: TGhbMvrLink): Boolean;
+  end;
+  TGhbMvrLinkArray = TArray<TGhbMvrLink>;
+  TGhbMvrLinkList = TList<TGhbMvrLink>;
+
+  TMvrGhbTimeItemList = Class(TGhbTimeItemList)
+    FIds: TGenericIntegerList;
+    constructor Create;
+    destructor Destroy; override;
+    procedure Sort;
+  end;
+
 procedure TModflow6Importer.ImportGhb(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
 var
   Model: TPhastModel;
   Ghb: TGhb;
   AModel: TModel;
-  ModelIndex: Integer;
+//  ModelIndex: Integer;
   TransportModel: TTransportNameFile;
-  PackageIndex: Integer;
+//  PackageIndex: Integer;
   BoundNameObsDictionary: TBoundNameDictionary;
   CellIdObsDictionary: TCellIdObsDictionary;
   Ssm: TSsm;
@@ -4174,6 +4186,7 @@ var
   SourceIndex: Integer;
   FoundMatch: Boolean;
   TransportAuxNames: TStringList;
+  TransportSpeciesNames: TStringList;
   PeriodIndex: Integer;
   APeriod: TGhbPeriod;
   CellIndex: Integer;
@@ -4229,18 +4242,30 @@ var
   EndPeriod: Integer;
   NextMvrPeriod: TMvrPeriod;
   CellListIndex: Integer;
+  SpcList: TSpcList;
+  Spc: TSpc;
+  SpcPeriod: TSpcPeriod;
+  NextSpcPeriod: TSpcPeriod;
+  SpcMaps: TimeSeriesMaps;
+  SpcDictionaries: TSpcDictionaries;
+  SpcDictionary: TSpcDictionary;
+  SpcCell: TSpcTimeItem;
+  SpcItem: TSpcTimeItem;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TGhbTimeItem; const Period: Integer);
   var
     GhbItem: TGhbItem;
     ImportedName: string;
     Concentrations: TGhbGwtConcCollection;
     ChemSpeciesName: string;
+    SpeciesName: string;
     ConcItem: TGwtConcStringValueItem;
     GwtAuxIndex: Integer;
     AuxIndex: Integer;
     Aux: TMf6BoundaryValue;
     Imported_Chem: TValueArrayItem;
     AuxMultiplier: Extended;
+    SpcDictionary: TSpcDictionary;
+    SpcItem: TSpcTimeItem;
   begin
     GhbItem := AScreenObject.ModflowGhbBoundary.Values.Add as TGhbItem;
     ItemList.Add(GhbItem);
@@ -4317,30 +4342,68 @@ var
       Concentrations.Count := TransportAuxNames.Count;
       for AuxIndex := 0 to TransportAuxNames.Count - 1 do
       begin
+        SpeciesName := TransportSpeciesNames[AuxIndex];
         ChemSpeciesName := TransportAuxNames[AuxIndex];
         ConcItem := Concentrations[AuxIndex];
 
-        GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
-        Assert(GwtAuxIndex >= 0);
-        Aux := ACell[GwtAuxIndex];
-        if Aux.ValueType = vtNumeric then
+        if ChemSpeciesName <> '' then
         begin
-          ImportedName := Format('Imported_%s_Period_%d', [ChemSpeciesName, Period]);
-          Imported_Chem := AScreenObject.ImportedValues.Add;
-          Imported_Chem.Name := ImportedName;
-          Imported_Chem.Values.DataType := rdtDouble;
-          ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
-          TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+          GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+          Assert(GwtAuxIndex >= 0);
+          Aux := ACell[GwtAuxIndex];
+          if Aux.ValueType = vtNumeric then
+          begin
+            ImportedName := Format('Imported_%s_Period_%d', [SpeciesName, Period]);
+            Imported_Chem := AScreenObject.ImportedValues.Add;
+            Imported_Chem.Name := ImportedName;
+            Imported_Chem.Values.DataType := rdtDouble;
+            ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+            TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+          end
+          else
+          begin
+            TransportAuxNames.Objects[AuxIndex] := nil;
+            TimeSeries := Aux.StringValue;
+            if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+            begin
+              Assert(False);
+            end;
+            ConcItem.Value := ImportedTimeSeries;
+          end;
         end
         else
         begin
-          TransportAuxNames.Objects[AuxIndex] := nil;
-          TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+          if (AuxIndex < SpcDictionaries.Count)
+            and (SpcDictionaries[AuxIndex] <> nil) then
           begin
-            Assert(False);
+            SpcDictionary := SpcDictionaries[AuxIndex];
+            if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
+            begin
+              if SpcItem.spcsetting.ValueType = vtNumeric then
+              begin
+                ImportedName := Format('Imported_%s_Period_%d', [SpeciesName, Period]);
+                Imported_Chem := AScreenObject.ImportedValues.Add;
+                Imported_Chem.Name := ImportedName;
+                Imported_Chem.Values.DataType := rdtDouble;
+                ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+                TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+              end
+              else
+              begin
+                TransportAuxNames.Objects[AuxIndex] := nil;
+                TimeSeries := SpcItem.spcsetting.StringValue;
+                if not SpcMaps[AuxIndex].TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+                begin
+                  Assert(False);
+                end;
+                ConcItem.Value := ImportedTimeSeries;
+              end;
+            end
+            else
+            begin
+              Assert(False);
+            end;
           end;
-          ConcItem.Value := ImportedTimeSeries;
         end;
       end;
     end;
@@ -4476,6 +4539,7 @@ begin
     AuxMultIndex := -1;
   end;
 
+  SpcList := TSpcList.Create;
   GhbMvrLinkList := TGhbMvrLinkList.Create;
   CellIds := TCellIdList.Create;
   ConnectionObjectLists := TGhbConnectionObjectLists.Create;
@@ -4488,10 +4552,24 @@ begin
   KeyStringDictionary := TDictionary<string, TMvrGhbTimeItemList>.Create;
   CellLists := TObjectList<TMvrGhbTimeItemList>.Create;
   OtherCellLists := TObjectList<TMvrGhbTimeItemList>.Create;
+  SpcMaps := TimeSeriesMaps.Create;
+  SpcDictionaries := TSpcDictionaries.Create;
   try
     OtherCellLists.OwnsObjects := False;
   try
-    if Mvr = nil then
+    FillSpcList(SpcList, Package, TransportModels, SpcMaps);
+    for var SpcIndex := 0 to SpcList.Count - 1 do
+    begin
+      if SpcList[SpcIndex] <> nil then
+      begin
+        SpcDictionaries.Add(TSpcDictionary.Create);
+      end
+      else
+      begin
+        SpcDictionaries.Add(nil);
+      end;
+    end;
+    if (Mvr = nil) and (SpcList.Count = 0) then
     begin
       GhbMvrLink.MvrPeriod := nil;
       for PeriodIndex := 0 to Ghb.PeriodCount - 1 do
@@ -4509,6 +4587,7 @@ begin
       begin
         GhbMvrLinkArray[PeriodIndex].GhbPeriod := nil;
         GhbMvrLinkArray[PeriodIndex].MvrPeriod := nil;
+        SetLength(GhbMvrLinkArray[PeriodIndex].SpcPeriods, SpcList.Count)
       end;
 
       for PeriodIndex := 0 to Ghb.PeriodCount - 1 do
@@ -4529,29 +4608,57 @@ begin
         end;
       end;
 
-      for PeriodIndex := 0 to Mvr.PeriodCount - 1 do
+      if Mvr <> nil then
       begin
-        MvrPeriod := Mvr.Periods[PeriodIndex];
-        if PeriodIndex < Mvr.PeriodCount - 1 then
+        for PeriodIndex := 0 to Mvr.PeriodCount - 1 do
         begin
-          NextMvrPeriod := Mvr.Periods[PeriodIndex+1];
-          EndPeriod := NextMvrPeriod.Period;
-        end
-        else
-        begin
-          EndPeriod := Model.ModflowStressPeriods.Count;
+          MvrPeriod := Mvr.Periods[PeriodIndex];
+          if PeriodIndex < Mvr.PeriodCount - 1 then
+          begin
+            NextMvrPeriod := Mvr.Periods[PeriodIndex+1];
+            EndPeriod := NextMvrPeriod.Period;
+          end
+          else
+          begin
+            EndPeriod := Model.ModflowStressPeriods.Count;
+          end;
+          for Index := MvrPeriod.Period  to EndPeriod do
+          begin
+            GhbMvrLinkArray[Index-1].MvrPeriod  := MvrPeriod;
+          end;
         end;
-        for Index := MvrPeriod.Period  to EndPeriod do
+      end;
+
+      for var SpcIndex := 0 to SpcList.Count - 1 do
+      begin
+        Spc := SpcList[SpcIndex];
+        if Spc <> nil then
         begin
-          GhbMvrLinkArray[Index-1].MvrPeriod  := MvrPeriod;
+          for PeriodIndex := 0 to Spc.PeriodCount - 1 do
+          begin
+            SpcPeriod := Spc.Periods[PeriodIndex];
+            if PeriodIndex < Spc.PeriodCount - 1 then
+            begin
+              NextSpcPeriod := Spc.Periods[PeriodIndex+1];
+              EndPeriod := NextSpcPeriod.Period;
+            end
+            else
+            begin
+              EndPeriod := Model.ModflowStressPeriods.Count;
+            end;
+            for Index := SpcPeriod.Period to EndPeriod do
+            begin
+              GhbMvrLinkArray[Index-1].SpcPeriods[SpcIndex] := SpcPeriod;
+            end;
+          end;
         end;
       end;
 
       GhbMvrLinkList.Add(GhbMvrLinkArray[0]);
       for Index := 1 to Length(GhbMvrLinkArray) - 1 do
       begin
-        if (GhbMvrLinkArray[Index].GhbPeriod <> GhbMvrLinkArray[Index-1].GhbPeriod)
-          or (GhbMvrLinkArray[Index].MvrPeriod <> GhbMvrLinkArray[Index-1].MvrPeriod) then
+        if not GhbMvrLinkArray[Index].SameContents(
+          GhbMvrLinkArray[Index-1]) then
         begin
           GhbMvrLinkList.Add(GhbMvrLinkArray[Index]);
         end;
@@ -4580,14 +4687,15 @@ begin
       OnUpdateStatusBar(self, 'importing GHB package');
     end;
 
+    TransportSpeciesNames := TStringList.Create;
     TransportAuxNames := TStringList.Create;
     try
       TransportAuxNames.CaseSensitive := False;
-      for ModelIndex := 0 to TransportModels.Count - 1 do
+      for var ModelIndex := 0 to TransportModels.Count - 1 do
       begin
         AModel := TransportModels[ModelIndex];
         TransportModel := AModel.FName as TTransportNameFile;
-        for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+        for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
         begin
           APackage := TransportModel.NfPackages[PackageIndex];
           FoundMatch := False;
@@ -4600,12 +4708,17 @@ begin
               begin
                 FoundMatch := True;
                 TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+                TransportSpeciesNames.Add(TransportModel.SpeciesName);
                 break;
               end;
             end;
-//            Assert(FoundMatch);
             break;
           end;
+        end;
+        if not FoundMatch then
+        begin
+          TransportAuxNames.Add('');
+          TransportSpeciesNames.Add(TransportModel.SpeciesName);
         end;
       end;
 
@@ -4635,10 +4748,21 @@ begin
           CellLists[CellListIndex].Clear;
         end;
 
-        for CellListIndex := 0 to CellLists.Count - 1 do
+        for var SpcIndex := 0 to Length(GhbMvrLink.SpcPeriods) - 1 do
         begin
-          CellLists[CellListIndex].Clear
+          SpcPeriod := GhbMvrLink.SpcPeriods[SpcIndex];
+          SpcDictionary := SpcDictionaries[SpcIndex];
+          if SpcDictionary <> nil then
+          begin
+            SpcDictionary.Clear;
+            for CellIndex := 0 to SpcPeriod.Count - 1 do
+            begin
+              SpcCell := SpcPeriod[CellIndex];
+              SpcDictionary.Add(SpcCell.bndno, SpcCell);
+            end;
+          end;
         end;
+
 
 
         // Assign all cells in the current period to a cell list.
@@ -4667,6 +4791,29 @@ begin
             IFACE := Round(AuxIFACE.NumericValue);
           end;
           KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+
+          for var SpcIndex := 0 to SpcDictionaries.Count - 1 do
+          begin
+            SpcDictionary := SpcDictionaries[SpcIndex];
+            if (SpcDictionary <> nil)
+              and SpcDictionary.TryGetValue(CellIndex+1, SpcCell) then
+            begin
+              case SpcCell.spcsetting.ValueType of
+                vtNumeric:
+                  begin
+                    KeyString := KeyString + ' Num';
+                  end;
+                vtString:
+                  begin
+                    KeyString := KeyString + SpcCell.spcsetting.StringValue;
+                  end;
+              end;
+            end
+            else
+            begin
+              KeyString := KeyString + ' Num';
+            end;
+          end;
 
           MvrUsed := False;
           if GhbMvrLink.MvrPeriod <> nil then
@@ -4745,12 +4892,6 @@ begin
                 ConnectionItem.List := ACellList;
                 AConnectionList.Add(ConnectionItem);
                 OtherCellLists.Add(ACellList);
-  //              CellLists.OwnsObjects := False;
-  //              try
-  //                CellLists[ObjectIndex] := nil;
-  //              finally
-  //                CellLists.OwnsObjects := True;
-  //              end;
                 NewScreenObject := True;
               end
               else
@@ -4799,12 +4940,28 @@ begin
             for AuxIndex := 0 to TransportAuxNames.Count - 1 do
             begin
               ChemSpeciesName := TransportAuxNames[AuxIndex];
-              GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
-              Aux := ACell[GwtAuxIndex];
-              if Aux.ValueType = vtNumeric then
+              if ChemSpeciesName <> '' then
               begin
-                Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
-                Values.Add(Aux.NumericValue);
+                GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+                Aux := ACell[GwtAuxIndex];
+                if Aux.ValueType = vtNumeric then
+                begin
+                  Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                  Values.Add(Aux.NumericValue);
+                end;
+              end
+              else
+              begin
+                SpcDictionary := SpcDictionaries[AuxIndex];
+                if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
+                begin
+                  if SpcItem.spcsetting.ValueType = vtNumeric then
+                  begin
+                    Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                    Values.Add(SpcItem.spcsetting.NumericValue);
+                  end
+                end;
+
               end;
             end;
 
@@ -4838,6 +4995,7 @@ begin
 
     finally
       TransportAuxNames.Free;
+      TransportSpeciesNames.Free;
     end;
   finally
     for CellListIndex := 0 to OtherCellLists.Count - 1 do
@@ -4859,6 +5017,9 @@ begin
     CellIds.Free;
     GhbMvrLinkList.Free;
     OtherCellLists.Free;
+    SpcList.Free;
+    SpcMaps.Free;
+    SpcDictionaries.Free;
   end;
 end;
 
@@ -8375,6 +8536,16 @@ type
   TRchConnectionObjectList = TObjectList<TRchConnection>;
   TRchConnectionObjectLists = TObjectList<TRchConnectionObjectList>;
 
+  TRchLink = record
+    RchPeriod: TRchPeriod;
+    SpcPeriods: TSpcPeriodArray;
+    function Period: Integer;
+    function SameContents(RchLink: TRchLink): Boolean;
+  end;
+  TRchLinkArray = TArray<TRchLink>;
+  TRchLinkList = TList<TRchLink>;
+
+
 procedure TModflow6Importer.ImportRch(Package: TPackage;
   TransportModels: TModelList);
 var
@@ -8382,9 +8553,9 @@ var
   Rch: TRch;
   AModel: TModel;
   APackage: TPackage;
-  ModelIndex: Integer;
+//  ModelIndex: Integer;
   TransportModel: TTransportNameFile;
-  PackageIndex: Integer;
+//  PackageIndex: Integer;
   BoundNameObsDictionary: TBoundNameDictionary;
   CellIdObsDictionary: TCellIdObsDictionary;
   Ssm: TSsm;
@@ -8397,6 +8568,7 @@ var
   SourceIndex: Integer;
   FoundMatch: Boolean;
   TransportAuxNames: TStringList;
+  TransportSpeciesNames: TStringList;
   PeriodIndex: Integer;
   APeriod: TRchPeriod;
   CellIndex: Integer;
@@ -8436,17 +8608,35 @@ var
   CellIds: TCellIdList;
   AddCells: Boolean;
   CellListIndex: Integer;
+  SpcList: TSpcList;
+  Spc: TSpc;
+  SpcPeriod: TSpcPeriod;
+  NextSpcPeriod: TSpcPeriod;
+  SpcMaps: TimeSeriesMaps;
+  SpcDictionaries: TSpcDictionaries;
+  SpcDictionary: TSpcDictionary;
+  SpcCell: TSpcTimeItem;
+  SpcItem: TSpcTimeItem;
+  RchLinkList: TRchLinkList;
+  RchLinkArray: TRchLinkArray;
+  RchLink: TRchLink;
+  RchPeriod: TRchPeriod;
+  NextRchPeriod: TRchPeriod;
+  EndPeriod: Integer;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TRchTimeItem; Period: Integer);
   var
     RchItem: TRchItem;
     ImportedName: string;
     Concentrations: TRchGwtConcCollection;
     ChemSpeciesName: string;
+    SpeciesName: string;
     ConcItem: TGwtConcStringValueItem;
     GwtAuxIndex: Integer;
     AuxIndex: Integer;
     Aux: TMf6BoundaryValue;
     Imported_Chem: TValueArrayItem;
+    SpcDictionary: TSpcDictionary;
+    SpcItem: TSpcTimeItem;
   begin
     RchItem := AScreenObject.ModflowRchBoundary.Values.Add as TRchItem;
     ItemList.Add(RchItem);
@@ -8478,30 +8668,68 @@ var
       Concentrations.Count := TransportAuxNames.Count;
       for AuxIndex := 0 to TransportAuxNames.Count - 1 do
       begin
+        SpeciesName := TransportSpeciesNames[AuxIndex];
         ChemSpeciesName := TransportAuxNames[AuxIndex];
         ConcItem := Concentrations[AuxIndex];
 
-        GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
-        Assert(GwtAuxIndex >= 0);
-        Aux := ACell[GwtAuxIndex];
-        if Aux.ValueType = vtNumeric then
+        if ChemSpeciesName <> '' then
         begin
-          ImportedName := Format('Imported_%s_Period_%d', [ChemSpeciesName, Period]);
-          Imported_Chem := AScreenObject.ImportedValues.Add;
-          Imported_Chem.Name := ImportedName;
-          Imported_Chem.Values.DataType := rdtDouble;
-          ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
-          TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+          GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+          Assert(GwtAuxIndex >= 0);
+          Aux := ACell[GwtAuxIndex];
+          if Aux.ValueType = vtNumeric then
+          begin
+            ImportedName := Format('Imported_%s_Period_%d', [SpeciesName, Period]);
+            Imported_Chem := AScreenObject.ImportedValues.Add;
+            Imported_Chem.Name := ImportedName;
+            Imported_Chem.Values.DataType := rdtDouble;
+            ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+            TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+          end
+          else
+          begin
+            TransportAuxNames.Objects[AuxIndex] := nil;
+            TimeSeries := Aux.StringValue;
+            if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+            begin
+              Assert(False);
+            end;
+            ConcItem.Value := ImportedTimeSeries;
+          end;
         end
         else
         begin
-          TransportAuxNames.Objects[AuxIndex] := nil;
-          TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+          if (AuxIndex < SpcDictionaries.Count)
+            and (SpcDictionaries[AuxIndex] <> nil) then
           begin
-            Assert(False);
+            SpcDictionary := SpcDictionaries[AuxIndex];
+            if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
+            begin
+              if SpcItem.spcsetting.ValueType = vtNumeric then
+              begin
+                ImportedName := Format('Imported_%s_Period_%d', [SpeciesName, Period]);
+                Imported_Chem := AScreenObject.ImportedValues.Add;
+                Imported_Chem.Name := ImportedName;
+                Imported_Chem.Values.DataType := rdtDouble;
+                ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+                TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+              end
+              else
+              begin
+                TransportAuxNames.Objects[AuxIndex] := nil;
+                TimeSeries := SpcItem.spcsetting.StringValue;
+                if not SpcMaps[AuxIndex].TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+                begin
+                  Assert(False);
+                end;
+                ConcItem.Value := ImportedTimeSeries;
+              end;
+            end
+            else
+            begin
+              Assert(False);
+            end;
           end;
-          ConcItem.Value := ImportedTimeSeries;
         end;
       end;
     end;
@@ -8619,6 +8847,8 @@ begin
     Model.ModflowPackages.RchPackage.LayerOption := loTopActive;
   end;
 
+  RchLinkList := TRchLinkList.Create;
+  SpcList := TSpcList.Create;
   CellIds := TCellIdList.Create;
   ConnectionObjectLists := TRchConnectionObjectLists.Create;
   ConnectionDictionary := TDictionary<string, TRchConnectionObjectList>.Create;
@@ -8630,7 +8860,94 @@ begin
   KeyStringDictionary := TDictionary<string, TRchTimeItemList>.Create;
   CellLists := TObjectList<TRchTimeItemList>.Create;
   OtherCellLists := TObjectList<TRchTimeItemList>.Create;
+  SpcMaps := TimeSeriesMaps.Create;
+  SpcDictionaries := TSpcDictionaries.Create;
   try
+    FillSpcList(SpcList, Package, TransportModels, SpcMaps);
+    for var SpcIndex := 0 to SpcList.Count - 1 do
+    begin
+      if SpcList[SpcIndex] <> nil then
+      begin
+        SpcDictionaries.Add(TSpcDictionary.Create);
+      end
+      else
+      begin
+        SpcDictionaries.Add(nil);
+      end;
+    end;
+
+    if SpcList.Count = 0 then
+    begin
+      for PeriodIndex := 0 to Rch.PeriodCount - 1 do
+      begin
+        RchLink.RchPeriod := Rch.Periods[PeriodIndex];
+        RchLinkList.Add(RchLink)
+      end;
+    end
+    else
+    begin
+      SetLength(RchLinkArray, Model.ModflowStressPeriods.Count);
+      for PeriodIndex := 0 to Length(RchLinkArray) - 1 do
+      begin
+        RchLinkArray[PeriodIndex].RchPeriod := nil;
+        SetLength(RchLinkArray[PeriodIndex].SpcPeriods, SpcList.Count)
+      end;
+
+      for PeriodIndex := 0 to Rch.PeriodCount - 1 do
+      begin
+        RchPeriod := Rch.Periods[PeriodIndex];
+        if PeriodIndex < Rch.PeriodCount - 1 then
+        begin
+          NextRchPeriod := Rch.Periods[PeriodIndex+1];
+          EndPeriod := NextRchPeriod.Period;
+        end
+        else
+        begin
+          EndPeriod := Model.ModflowStressPeriods.Count;
+        end;
+        for var Index := RchPeriod.Period  to EndPeriod do
+        begin
+          RchLinkArray[Index-1].RchPeriod  := RchPeriod;
+        end;
+      end;
+
+
+      for var SpcIndex := 0 to SpcList.Count - 1 do
+      begin
+        Spc := SpcList[SpcIndex];
+        if Spc <> nil then
+        begin
+          for PeriodIndex := 0 to Spc.PeriodCount - 1 do
+          begin
+            SpcPeriod := Spc.Periods[PeriodIndex];
+            if PeriodIndex < Spc.PeriodCount - 1 then
+            begin
+              NextSpcPeriod := Spc.Periods[PeriodIndex+1];
+              EndPeriod := NextSpcPeriod.Period;
+            end
+            else
+            begin
+              EndPeriod := Model.ModflowStressPeriods.Count;
+            end;
+            for var Index := SpcPeriod.Period to EndPeriod do
+            begin
+              RchLinkArray[Index-1].SpcPeriods[SpcIndex] := SpcPeriod;
+            end;
+          end;
+        end;
+      end;
+
+      RchLinkList.Add(RchLinkArray[0]);
+      for var Index := 1 to Length(RchLinkArray) - 1 do
+      begin
+        if not RchLinkArray[Index].SameContents(
+          RchLinkArray[Index-1]) then
+        begin
+          RchLinkList.Add(RchLinkArray[Index]);
+        end;
+      end;
+    end;
+
     OtherCellLists.OwnsObjects := False;
     try
       IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
@@ -8661,14 +8978,15 @@ begin
         OnUpdateStatusBar(self, 'importing RCH package');
       end;
 
+      TransportSpeciesNames := TStringList.Create;
       TransportAuxNames := TStringList.Create;
       try
         TransportAuxNames.CaseSensitive := False;
-        for ModelIndex := 0 to TransportModels.Count - 1 do
+        for var ModelIndex := 0 to TransportModels.Count - 1 do
         begin
           AModel := TransportModels[ModelIndex];
           TransportModel := AModel.FName as TTransportNameFile;
-          for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+          for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
           begin
             APackage := TransportModel.NfPackages[PackageIndex];
             FoundMatch := False;
@@ -8681,21 +8999,31 @@ begin
                 begin
                   FoundMatch := True;
                   TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+                  TransportSpeciesNames.Add(TransportModel.SpeciesName);
                   break;
                 end;
               end;
-  //            Assert(FoundMatch);
               break;
             end;
+          end;
+          if not FoundMatch then
+          begin
+            TransportAuxNames.Add('');
+            TransportSpeciesNames.Add(TransportModel.SpeciesName);
           end;
         end;
 
         LastTime := Model.ModflowStressPeriods.Last.EndTime;
 
         ObjectCount := 0;
-        for PeriodIndex := 0 to Rch.PeriodCount - 1 do
+        for PeriodIndex := 0 to RchLinkList.Count - 1 do
         begin
-          APeriod := Rch.Periods[PeriodIndex];
+          RchLink := RchLinkList[PeriodIndex];
+          APeriod := RchLink.RchPeriod;
+          if APeriod = nil then
+          begin
+            Continue;
+          end;
           StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
           for RchIndex := 0 to ItemList.Count - 1 do
           begin
@@ -8706,6 +9034,21 @@ begin
           for CellListIndex := 0 to CellLists.Count - 1 do
           begin
             CellLists[CellListIndex].Clear;
+          end;
+
+          for var SpcIndex := 0 to Length(RchLink.SpcPeriods) - 1 do
+          begin
+            SpcPeriod := RchLink.SpcPeriods[SpcIndex];
+            SpcDictionary := SpcDictionaries[SpcIndex];
+            if SpcDictionary <> nil then
+            begin
+              SpcDictionary.Clear;
+              for CellIndex := 0 to SpcPeriod.Count - 1 do
+              begin
+                SpcCell := SpcPeriod[CellIndex];
+                SpcDictionary.Add(SpcCell.bndno, SpcCell);
+              end;
+            end;
           end;
 
           for CellIndex := 0 to APeriod.Count - 1 do
@@ -8733,6 +9076,30 @@ begin
               IFACE := Round(AuxIFACE.NumericValue);
             end;
             KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+
+            for var SpcIndex := 0 to SpcDictionaries.Count - 1 do
+            begin
+              SpcDictionary := SpcDictionaries[SpcIndex];
+              if (SpcDictionary <> nil)
+                and SpcDictionary.TryGetValue(CellIndex+1, SpcCell) then
+              begin
+                case SpcCell.spcsetting.ValueType of
+                  vtNumeric:
+                    begin
+                      KeyString := KeyString + ' Num';
+                    end;
+                  vtString:
+                    begin
+                      KeyString := KeyString + SpcCell.spcsetting.StringValue;
+                    end;
+                end;
+              end
+              else
+              begin
+                KeyString := KeyString + ' Num';
+              end;
+            end;
+
             if not KeyStringDictionary.TryGetValue(KeyString, ACellList) then
             begin
               ACellList := TRchTimeItemList.Create;
@@ -8791,12 +9158,6 @@ begin
                   ConnectionItem.List := ACellList;
                   AConnectionList.Add(ConnectionItem);
                   OtherCellLists.Add(ACellList);
-  //                CellLists.OwnsObjects := False;
-  //                try
-  //                  CellLists[ObjectIndex] := nil;
-  //                finally
-  //                  CellLists.OwnsObjects := True;
-  //                end;
                 end
                 else
                 begin
@@ -8821,13 +9182,28 @@ begin
               for AuxIndex := 0 to TransportAuxNames.Count - 1 do
               begin
                 ChemSpeciesName := TransportAuxNames[AuxIndex];
-                GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
-                Aux := ACell[GwtAuxIndex];
-                if Aux.ValueType = vtNumeric then
+                if ChemSpeciesName <> '' then
                 begin
-                  Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
-                  Values.Add(Aux.NumericValue);
-                end;
+                  GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+                  Aux := ACell[GwtAuxIndex];
+                  if Aux.ValueType = vtNumeric then
+                  begin
+                    Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                    Values.Add(Aux.NumericValue);
+                  end;
+                end
+                else
+                begin
+                  SpcDictionary := SpcDictionaries[AuxIndex];
+                  if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
+                  begin
+                    if SpcItem.spcsetting.ValueType = vtNumeric then
+                    begin
+                      Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                      Values.Add(SpcItem.spcsetting.NumericValue);
+                    end
+                  end;
+                  end;
               end;
 
               CellIds.Add(ACell.Cellid);
@@ -8846,6 +9222,7 @@ begin
 
       finally
         TransportAuxNames.Free;
+        TransportSpeciesNames.Free;
       end;
 
     finally
@@ -8866,6 +9243,10 @@ begin
     ConnectionDictionary.Free;
     CellIds.Free;
     OtherCellLists.Free;
+    RchLinkList.Free;
+    SpcList.Free;
+    SpcMaps.Free;
+    SpcDictionaries.Free;
   end;
 end;
 
@@ -8883,7 +9264,9 @@ type
   TRivMvrLink = record
     RivPeriod: TRivPeriod;
     MvrPeriod: TMvrPeriod;
+    SpcPeriods: TSpcPeriodArray;
     function Period: Integer;
+    function SameContents(RivMvrLink: TRivMvrLink): Boolean;
   end;
   TRivMvrLinkArray = TArray<TRivMvrLink>;
   TRivMvrLinkList = TList<TRivMvrLink>;
@@ -8901,9 +9284,9 @@ var
   Model: TPhastModel;
   Riv: TRiv;
   AModel: TModel;
-  ModelIndex: Integer;
+//  ModelIndex: Integer;
   TransportModel: TTransportNameFile;
-  PackageIndex: Integer;
+//  PackageIndex: Integer;
   BoundNameObsDictionary: TBoundNameDictionary;
   CellIdObsDictionary: TCellIdObsDictionary;
   Ssm: TSsm;
@@ -8916,6 +9299,7 @@ var
   SourceIndex: Integer;
   FoundMatch: Boolean;
   TransportAuxNames: TStringList;
+  TransportSpeciesNames: TStringList;
   PeriodIndex: Integer;
   APeriod: TRivPeriod;
   CellIndex: Integer;
@@ -8972,18 +9356,30 @@ var
   EndPeriod: Integer;
   NextMvrPeriod: TMvrPeriod;
   CellListIndex: Integer;
+  SpcList: TSpcList;
+  Spc: TSpc;
+  SpcPeriod: TSpcPeriod;
+  NextSpcPeriod: TSpcPeriod;
+  SpcMaps: TimeSeriesMaps;
+  SpcDictionaries: TSpcDictionaries;
+  SpcDictionary: TSpcDictionary;
+  SpcCell: TSpcTimeItem;
+  SpcItem: TSpcTimeItem;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TRivTimeItem; Period: Integer);
   var
     RivItem: TRivItem;
     ImportedName: string;
     Concentrations: TRivGwtConcCollection;
     ChemSpeciesName: string;
+    SpeciesName: string;
     ConcItem: TGwtConcStringValueItem;
     GwtAuxIndex: Integer;
     AuxIndex: Integer;
     Aux: TMf6BoundaryValue;
     Imported_Chem: TValueArrayItem;
     AuxMultiplier: Extended;
+    SpcDictionary: TSpcDictionary;
+    SpcItem: TSpcTimeItem;
   begin
     RivItem := AScreenObject.ModflowRivBoundary.Values.Add as TRivItem;
     ItemList.Add(RivItem);
@@ -9084,30 +9480,68 @@ var
       Concentrations.Count := TransportAuxNames.Count;
       for AuxIndex := 0 to TransportAuxNames.Count - 1 do
       begin
+        SpeciesName := TransportSpeciesNames[AuxIndex];
         ChemSpeciesName := TransportAuxNames[AuxIndex];
         ConcItem := Concentrations[AuxIndex];
 
-        GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
-        Assert(GwtAuxIndex >= 0);
-        Aux := ACell[GwtAuxIndex];
-        if Aux.ValueType = vtNumeric then
+        if ChemSpeciesName <> '' then
         begin
-          ImportedName := Format('Imported_%s_Period_%d', [ChemSpeciesName, Period]);
-          Imported_Chem := AScreenObject.ImportedValues.Add;
-          Imported_Chem.Name := ImportedName;
-          Imported_Chem.Values.DataType := rdtDouble;
-          ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
-          TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+          GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+          Assert(GwtAuxIndex >= 0);
+          Aux := ACell[GwtAuxIndex];
+          if Aux.ValueType = vtNumeric then
+          begin
+            ImportedName := Format('Imported_%s_Period_%d', [SpeciesName, Period]);
+            Imported_Chem := AScreenObject.ImportedValues.Add;
+            Imported_Chem.Name := ImportedName;
+            Imported_Chem.Values.DataType := rdtDouble;
+            ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+            TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+          end
+          else
+          begin
+            TransportAuxNames.Objects[AuxIndex] := nil;
+            TimeSeries := Aux.StringValue;
+            if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+            begin
+              Assert(False);
+            end;
+            ConcItem.Value := ImportedTimeSeries;
+          end;
         end
         else
         begin
-          TransportAuxNames.Objects[AuxIndex] := nil;
-          TimeSeries := Aux.StringValue;
-          if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+          if (AuxIndex < SpcDictionaries.Count)
+            and (SpcDictionaries[AuxIndex] <> nil) then
           begin
-            Assert(False);
+            SpcDictionary := SpcDictionaries[AuxIndex];
+            if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
+            begin
+              if SpcItem.spcsetting.ValueType = vtNumeric then
+              begin
+                ImportedName := Format('Imported_%s_Period_%d', [SpeciesName, Period]);
+                Imported_Chem := AScreenObject.ImportedValues.Add;
+                Imported_Chem.Name := ImportedName;
+                Imported_Chem.Values.DataType := rdtDouble;
+                ConcItem.Value := rsObjectImportedValuesR + '("' + Imported_Chem.Name + '")';
+                TransportAuxNames.Objects[AuxIndex] := Imported_Chem.Values;
+              end
+              else
+              begin
+                TransportAuxNames.Objects[AuxIndex] := nil;
+                TimeSeries := SpcItem.spcsetting.StringValue;
+                if not SpcMaps[AuxIndex].TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+                begin
+                  Assert(False);
+                end;
+                ConcItem.Value := ImportedTimeSeries;
+              end;
+            end
+            else
+            begin
+              Assert(False);
+            end;
           end;
-          ConcItem.Value := ImportedTimeSeries;
         end;
       end;
     end;
@@ -9243,6 +9677,7 @@ begin
     AuxMultIndex := -1;
   end;
 
+  SpcList := TSpcList.Create;
   RivMvrLinkList := TRivMvrLinkList.Create;
   CellIds := TCellIdList.Create;
   ConnectionObjectLists := TRivConnectionObjectLists.Create;
@@ -9255,16 +9690,31 @@ begin
   KeyStringDictionary := TDictionary<string, TMvrRivTimeItemList>.Create;
   CellLists := TObjectList<TMvrRivTimeItemList>.Create;
   OtherCellLists := TObjectList<TMvrRivTimeItemList>.Create;
+  SpcMaps := TimeSeriesMaps.Create;
+  SpcDictionaries := TSpcDictionaries.Create;
   try
+    FillSpcList(SpcList, Package, TransportModels, SpcMaps);
+    for var SpcIndex := 0 to SpcList.Count - 1 do
+    begin
+      if SpcList[SpcIndex] <> nil then
+      begin
+        SpcDictionaries.Add(TSpcDictionary.Create);
+      end
+      else
+      begin
+        SpcDictionaries.Add(nil);
+      end;
+    end;
     OtherCellLists.OwnsObjects := False;
     try
-      if Mvr = nil then
+      if (Mvr = nil) and (SpcList.Count = 0) then
       begin
         RivMvrLink.MvrPeriod := nil;
         for PeriodIndex := 0 to Riv.PeriodCount - 1 do
         begin
           RivMvrLink.RivPeriod := Riv.Periods[PeriodIndex];
-          RivMvrLinkList.Add(RivMvrLink)
+          SetLength(RivMvrLink.SpcPeriods, SpcList.Count);
+          RivMvrLinkList.Add(RivMvrLink);
         end;
       end
       else
@@ -9296,29 +9746,56 @@ begin
           end;
         end;
 
-        for PeriodIndex := 0 to Mvr.PeriodCount - 1 do
+        if Mvr <> nil then
         begin
-          MvrPeriod := Mvr.Periods[PeriodIndex];
-          if PeriodIndex < Mvr.PeriodCount - 1 then
+          for PeriodIndex := 0 to Mvr.PeriodCount - 1 do
           begin
-            NextMvrPeriod := Mvr.Periods[PeriodIndex+1];
-            EndPeriod := NextMvrPeriod.Period;
-          end
-          else
-          begin
-            EndPeriod := Model.ModflowStressPeriods.Count;
+            MvrPeriod := Mvr.Periods[PeriodIndex];
+            if PeriodIndex < Mvr.PeriodCount - 1 then
+            begin
+              NextMvrPeriod := Mvr.Periods[PeriodIndex+1];
+              EndPeriod := NextMvrPeriod.Period;
+            end
+            else
+            begin
+              EndPeriod := Model.ModflowStressPeriods.Count;
+            end;
+            for Index := MvrPeriod.Period  to EndPeriod do
+            begin
+              RivMvrLinkArray[Index-1].MvrPeriod  := MvrPeriod;
+            end;
           end;
-          for Index := MvrPeriod.Period  to EndPeriod do
+        end;
+
+        for var SpcIndex := 0 to SpcList.Count - 1 do
+        begin
+          Spc := SpcList[SpcIndex];
+          if Spc <> nil then
           begin
-            RivMvrLinkArray[Index-1].MvrPeriod  := MvrPeriod;
+            for PeriodIndex := 0 to Spc.PeriodCount - 1 do
+            begin
+              SpcPeriod := Spc.Periods[PeriodIndex];
+              if PeriodIndex < Spc.PeriodCount - 1 then
+              begin
+                NextSpcPeriod := Spc.Periods[PeriodIndex+1];
+                EndPeriod := NextSpcPeriod.Period;
+              end
+              else
+              begin
+                EndPeriod := Model.ModflowStressPeriods.Count;
+              end;
+              for Index := SpcPeriod.Period to EndPeriod do
+              begin
+                RivMvrLinkArray[Index-1].SpcPeriods[SpcIndex] := SpcPeriod;
+              end;
+            end;
           end;
         end;
 
         RivMvrLinkList.Add(RivMvrLinkArray[0]);
         for Index := 1 to Length(RivMvrLinkArray) - 1 do
         begin
-          if (RivMvrLinkArray[Index].RivPeriod <> RivMvrLinkArray[Index-1].RivPeriod)
-            or (RivMvrLinkArray[Index].MvrPeriod <> RivMvrLinkArray[Index-1].MvrPeriod) then
+          if not RivMvrLinkArray[Index].SameContents(RivMvrLinkArray[Index-1]) then
           begin
             RivMvrLinkList.Add(RivMvrLinkArray[Index]);
           end;
@@ -9348,14 +9825,16 @@ begin
         OnUpdateStatusBar(self, 'importing RIV package');
       end;
 
+      TransportSpeciesNames := TStringList.Create;
       TransportAuxNames := TStringList.Create;
       try
         TransportAuxNames.CaseSensitive := False;
-        for ModelIndex := 0 to TransportModels.Count - 1 do
+        for var ModelIndex := 0 to TransportModels.Count - 1 do
         begin
           AModel := TransportModels[ModelIndex];
           TransportModel := AModel.FName as TTransportNameFile;
-          for PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+          FoundMatch := False;
+          for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
           begin
             APackage := TransportModel.NfPackages[PackageIndex];
             FoundMatch := False;
@@ -9368,12 +9847,17 @@ begin
                 begin
                   FoundMatch := True;
                   TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+                  TransportSpeciesNames.Add(TransportModel.SpeciesName);
                   break;
                 end;
               end;
-  //            Assert(FoundMatch);
               break;
             end;
+          end;
+          if not FoundMatch then
+          begin
+            TransportAuxNames.Add('');
+            TransportSpeciesNames.Add(TransportModel.SpeciesName);
           end;
         end;
 
@@ -9399,6 +9883,21 @@ begin
           for CellListIndex := 0 to CellLists.Count - 1 do
           begin
             CellLists[CellListIndex].Clear;
+          end;
+
+          for var SpcIndex := 0 to Length(RivMvrLinkList[PeriodIndex].SpcPeriods) - 1 do
+          begin
+            SpcPeriod := RivMvrLinkList[PeriodIndex].SpcPeriods[SpcIndex];
+            SpcDictionary := SpcDictionaries[SpcIndex];
+            if SpcDictionary <> nil then
+            begin
+              SpcDictionary.Clear;
+              for CellIndex := 0 to SpcPeriod.Count - 1 do
+              begin
+                SpcCell := SpcPeriod[CellIndex];
+                SpcDictionary.Add(SpcCell.bndno, SpcCell);
+              end;
+            end;
           end;
 
           // Assign all cells in the current period to a cell list.
@@ -9427,6 +9926,29 @@ begin
               IFACE := Round(AuxIFACE.NumericValue);
             end;
             KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+
+            for var SpcIndex := 0 to SpcDictionaries.Count - 1 do
+            begin
+              SpcDictionary := SpcDictionaries[SpcIndex];
+              if (SpcDictionary <> nil)
+                and SpcDictionary.TryGetValue(CellIndex+1, SpcCell) then
+              begin
+                case SpcCell.spcsetting.ValueType of
+                  vtNumeric:
+                    begin
+                      KeyString := KeyString + ' Num';
+                    end;
+                  vtString:
+                    begin
+                      KeyString := KeyString + SpcCell.spcsetting.StringValue;
+                    end;
+                end;
+              end
+              else
+              begin
+                KeyString := KeyString + ' Num';
+              end;
+            end;
 
             MvrUsed := False;
             if RivMvrLink.MvrPeriod <> nil then
@@ -9505,12 +10027,6 @@ begin
                   ConnectionItem.List := ACellList;
                   AConnectionList.Add(ConnectionItem);
                   OtherCellLists.Add(ACellList);
-  //                CellLists.OwnsObjects := False;
-  //                try
-  //                  CellLists[ObjectIndex] := nil;
-  //                finally
-  //                  CellLists.OwnsObjects := True;
-  //                end;
                   NewScreenObject := True;
                 end
                 else
@@ -9564,12 +10080,27 @@ begin
               for AuxIndex := 0 to TransportAuxNames.Count - 1 do
               begin
                 ChemSpeciesName := TransportAuxNames[AuxIndex];
-                GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
-                Aux := ACell[GwtAuxIndex];
-                if Aux.ValueType = vtNumeric then
+                if ChemSpeciesName <> '' then
                 begin
-                  Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
-                  Values.Add(Aux.NumericValue);
+                  GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
+                  Aux := ACell[GwtAuxIndex];
+                  if Aux.ValueType = vtNumeric then
+                  begin
+                    Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                    Values.Add(Aux.NumericValue);
+                  end;
+                end
+                else
+                begin
+                  SpcDictionary := SpcDictionaries[AuxIndex];
+                  if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
+                  begin
+                    if SpcItem.spcsetting.ValueType = vtNumeric then
+                    begin
+                      Values := TransportAuxNames.Objects[AuxIndex] as TValueArrayStorage;
+                      Values.Add(SpcItem.spcsetting.NumericValue);
+                    end
+                  end;
                 end;
               end;
 
@@ -9603,6 +10134,7 @@ begin
 
       finally
         TransportAuxNames.Free;
+        TransportSpeciesNames.Free;
       end;
 
     finally
@@ -9612,18 +10144,21 @@ begin
       end;
     end;
   finally
-      BoundNameObsDictionary.Free;
-      CellIdObsDictionary.Free;
-      Map.Free;
-      ObsLists.Free;
-      KeyStringDictionary.Free;
-      CellLists.Free;
-      ItemList.Free;
-      ConnectionObjectLists.Free;
-      ConnectionDictionary.Free;
-      CellIds.Free;
-      RivMvrLinkList.Free;
-      OtherCellLists.Free;
+    BoundNameObsDictionary.Free;
+    CellIdObsDictionary.Free;
+    Map.Free;
+    ObsLists.Free;
+    KeyStringDictionary.Free;
+    CellLists.Free;
+    ItemList.Free;
+    ConnectionObjectLists.Free;
+    ConnectionDictionary.Free;
+    CellIds.Free;
+    RivMvrLinkList.Free;
+    OtherCellLists.Free;
+    SpcList.Free;
+    SpcMaps.Free;
+    SpcDictionaries.Free;
   end;
 end;
 
@@ -13413,7 +13948,7 @@ begin
   end;
 end;
 
-procedure TModflow6Importer.ImportVsc(Package: TPackage);
+procedure TModflow6Importer.ImportVsc(Package: TPackage; TransportModels: TModelList);
 var
   Vsc: TVsc;
   Model: TPhastModel;
@@ -13424,6 +13959,8 @@ var
   Item: TVscItem;
   ChemComponents: TMobileChemSpeciesCollection;
   ChemItem: TMobileChemSpeciesItem;
+  AModel: TModel;
+  TransportModel: TTransportNameFile;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -13478,12 +14015,20 @@ begin
   for index := 0 to PackageData.Count - 1 do
   begin
     Item := PackageData[index];
-    ChemItem := ChemComponents.GetItemByName(Item.auxspeciesname);
-    if ChemItem = nil then
+    AModel := TransportModels.GetModelByName(Item.modelname);
+    TransportModel := AModel.FName as TTransportNameFile;
+
+    if TransportModel.SpeciesName = '' then
     begin
       ChemItem := ChemComponents.Add;
       ChemItem.Name := Item.auxspeciesname;
+      TransportModel.SpeciesName := Item.auxspeciesname;
+    end
+    else
+    begin
+      ChemItem := ChemComponents.GetItemByName(TransportModel.SpeciesName)
     end;
+
     if SameText(ChemItem.Name, 'Viscosity') then
     begin
       ViscosityPackage.ViscositySpecified := True;
@@ -13492,34 +14037,6 @@ begin
     ChemItem.ViscositySlope := Item.dviscdc;
   end;
 end;
-
-type
-  TWelConnection = class(TObject)
-    ScreenObject: TScreenObject;
-    List: TWelTimeItemList;
-    IFACE: Integer;
-    destructor Destroy; override;
-  end;
-
-  TWelConnectionObjectList = TObjectList<TWelConnection>;
-  TWelConnectionObjectLists = TObjectList<TWelConnectionObjectList>;
-
-  TWellMvrLink = record
-    WelPeriod: TWelPeriod;
-    MvrPeriod: TMvrPeriod;
-    SpcPeriods: TSpcPeriodArray;
-    function Period: Integer;
-    function SameContents(WellMvrLink: TWellMvrLink): Boolean;
-  end;
-  TWellMvrLinkArray = TArray<TWellMvrLink>;
-  TWellMvrLinkList = TList<TWellMvrLink>;
-
-  TMvrWelTimeItemList = Class(TWelTimeItemList)
-    FIds: TGenericIntegerList;
-    constructor Create;
-    destructor Destroy; override;
-    procedure Sort;
-  end;
 
 procedure TModflow6Importer.FillSpcList(SpcList: TSpcList; Package: TPackage;
   TransportModels: TModelList; Maps: TimeSeriesMaps);
@@ -13579,6 +14096,34 @@ begin
     Maps.Clear;
   end;
 end;
+
+type
+  TWelConnection = class(TObject)
+    ScreenObject: TScreenObject;
+    List: TWelTimeItemList;
+    IFACE: Integer;
+    destructor Destroy; override;
+  end;
+
+  TWelConnectionObjectList = TObjectList<TWelConnection>;
+  TWelConnectionObjectLists = TObjectList<TWelConnectionObjectList>;
+
+  TWellMvrLink = record
+    WelPeriod: TWelPeriod;
+    MvrPeriod: TMvrPeriod;
+    SpcPeriods: TSpcPeriodArray;
+    function Period: Integer;
+    function SameContents(WellMvrLink: TWellMvrLink): Boolean;
+  end;
+  TWellMvrLinkArray = TArray<TWellMvrLink>;
+  TWellMvrLinkList = TList<TWellMvrLink>;
+
+  TMvrWelTimeItemList = Class(TWelTimeItemList)
+    FIds: TGenericIntegerList;
+    constructor Create;
+    destructor Destroy; override;
+    procedure Sort;
+  end;
 
 procedure TModflow6Importer.ImportWel(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
@@ -13731,11 +14276,11 @@ var
       Concentrations.Count := TransportAuxNames.Count;
       for AuxIndex := 0 to TransportAuxNames.Count - 1 do
       begin
+        SpeciesName := TransportSpeciesNames[AuxIndex];
         ChemSpeciesName := TransportAuxNames[AuxIndex];
         ConcItem := Concentrations[AuxIndex];
         if ChemSpeciesName <> '' then
         begin
-          SpeciesName := TransportSpeciesNames[AuxIndex];
 
           GwtAuxIndex := Options.IndexOfAUXILIARY(ChemSpeciesName);
           Assert(GwtAuxIndex >= 0);
@@ -14195,7 +14740,7 @@ begin
                     end;
                   vtString:
                     begin
-                      KeyString := KeyString + ' TS';
+                      KeyString := KeyString + SpcCell.spcsetting.StringValue;
                     end;
                 end;
               end
@@ -14433,7 +14978,7 @@ end;
 
 function TWellMvrLink.Period: Integer;
 begin
-  result := -1;
+  result := MAXINT;
   if WelPeriod <> nil then
   begin
     result := WelPeriod.Period;
@@ -14465,7 +15010,6 @@ begin
       begin
         Exit;
       end;
-
     end;
   end;
 end;
@@ -14612,17 +15156,21 @@ end;
 
 function TRivMvrLink.Period: Integer;
 begin
-  if MvrPeriod = nil then
+  result := MAXINT;
+  if RivPeriod <> nil then
   begin
     result := RivPeriod.Period;
-  end
-  else if RivPeriod = nil then
+  end;
+  if MvrPeriod <> nil then
   begin
-    result := MvrPeriod.Period;
-  end
-  else
+    result := Min(Result, RivPeriod.Period);
+  end;
+  for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
   begin
-    Result := Max(RivPeriod.Period, MvrPeriod.Period);
+    if SpcPeriods[SpcIndex] <> nil then
+    begin
+      result := Min(Result, SpcPeriods[SpcIndex].Period);
+    end;
   end;
 end;
 
@@ -14669,17 +15217,21 @@ end;
 
 function TGhbMvrLink.Period: Integer;
 begin
-  if MvrPeriod = nil then
+  result := MAXINT;
+  if GhbPeriod <> nil then
   begin
     result := GhbPeriod.Period;
-  end
-  else if GhbPeriod = nil then
+  end;
+  if MvrPeriod <> nil then
   begin
-    result := MvrPeriod.Period;
-  end
-  else
+    result := Min(Result, GhbPeriod.Period);
+  end;
+  for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
   begin
-    Result := Max(GhbPeriod.Period, MvrPeriod.Period);
+    if SpcPeriods[SpcIndex] <> nil then
+    begin
+      result := Min(Result, SpcPeriods[SpcIndex].Period);
+    end;
   end;
 end;
 
@@ -14806,43 +15358,6 @@ begin
   inherited;
 end;
 
-{ TMvrLinks }
-
-//constructor TMvrLinks.Create;
-//begin
-//  inherited;
-//  WellDonors := TMvrDictionarys.Create;
-//  DrainDonors := TMvrDictionarys.Create;
-//  GhbDonors := TMvrDictionarys.Create;
-//  RivDonors := TMvrDictionarys.Create;
-//  MawDonors := TMvrDictionarys.Create;
-//  LakDonors := TMvrDictionarys.Create;
-//  SfrDonors := TMvrDictionarys.Create;
-//  UzfDonors := TMvrDictionarys.Create;
-//  MawReceivers := TMvrDictionarys.Create;
-//  LakReceivers := TMvrDictionarys.Create;
-//  SfrReceivers := TMvrDictionarys.Create;
-//  UzfReceivers := TMvrDictionarys.Create;
-//
-//end;
-
-//destructor TMvrLinks.Destroy;
-//begin
-//  WellDonors.Free;
-//  DrainDonors.Free;
-//  GhbDonors.Free;
-//  RivDonors.Free;
-//  MawDonors.Free;
-//  LakDonors.Free;
-//  SfrDonors.Free;
-//  UzfDonors.Free;
-//  MawReceivers.Free;
-//  LakReceivers.Free;
-//  SfrReceivers.Free;
-//  UzfReceivers.Free;
-//
-//  inherited;
-//end;
 
 { TMawMvrLink }
 
@@ -15021,6 +15536,77 @@ begin
   result.ID := IDs[Index];
   result.PackageName := PackageName;
   result.Period := Period;
+end;
+
+function TRivMvrLink.SameContents(RivMvrLink: TRivMvrLink): Boolean;
+begin
+  result := (RivPeriod = RivMvrLink.RivPeriod)
+    and (MvrPeriod = RivMvrLink.MvrPeriod)
+    and (Length(SpcPeriods) = Length(RivMvrLink.SpcPeriods));
+  if result then
+  begin
+    for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := (SpcPeriods[SpcIndex] = RivMvrLink.SpcPeriods[SpcIndex]);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+function TGhbMvrLink.SameContents(GhbMvrLink: TGhbMvrLink): Boolean;
+begin
+  result := (GhbPeriod = GhbMvrLink.GhbPeriod)
+    and (MvrPeriod = GhbMvrLink.MvrPeriod)
+    and (Length(SpcPeriods) = Length(GhbMvrLink.SpcPeriods));
+  if result then
+  begin
+    for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := (SpcPeriods[SpcIndex] = GhbMvrLink.SpcPeriods[SpcIndex]);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+{ TRchLink }
+
+function TRchLink.Period: Integer;
+begin
+  result := MAXINT;
+  if RchPeriod <> nil then
+  begin
+    result := RchPeriod.Period;
+  end;
+  for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
+  begin
+    if SpcPeriods[SpcIndex] <> nil then
+    begin
+      result := Min(Result, SpcPeriods[SpcIndex].Period);
+    end;
+  end;
+end;
+
+function TRchLink.SameContents(RchLink: TRchLink): Boolean;
+begin
+  result := (RchPeriod = RchLink.RchPeriod)
+    and (Length(SpcPeriods) = Length(RchLink.SpcPeriods));
+  if result then
+  begin
+    for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := (SpcPeriods[SpcIndex] = RchLink.SpcPeriods[SpcIndex]);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
 end;
 
 end.
