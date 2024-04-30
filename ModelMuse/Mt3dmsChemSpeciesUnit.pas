@@ -318,7 +318,8 @@ type
     function Add: TMobileChemSpeciesItem;
     procedure UpdateDataArrays; override;
     procedure UpdateAllDataArrays;
-    function GetItemByName(AName: string): TMobileChemSpeciesItem;
+    function GetItemByName(const AName: string): TMobileChemSpeciesItem;
+    function GetItemIndexByName(const AName: string): Integer;
     function Last: TMobileChemSpeciesItem;
   end;
 
@@ -2832,16 +2833,32 @@ begin
 end;
 
 function TMobileChemSpeciesCollection.GetItemByName(
-  AName: string): TMobileChemSpeciesItem;
+  const AName: string): TMobileChemSpeciesItem;
+var
+  ItemIndex: Integer;
+begin
+  ItemIndex := GetItemIndexByName(AName);
+  if ItemIndex >= 0 then
+  begin
+    result := Items[ItemIndex];
+  end
+  else
+  begin
+    result := nil;
+  end;
+end;
+
+function TMobileChemSpeciesCollection.GetItemIndexByName(
+  const AName: string): Integer;
 var
   index: Integer;
 begin
-  result := nil;
+  result := -1;
   for index := 0 to Count - 1 do
   begin
     if SameText(Items[index].Name, AName) then
     begin
-      result := Items[index];
+      result := index;
       Break;
     end;
   end;

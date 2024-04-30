@@ -5645,9 +5645,22 @@ var
   SpeciesIndex: Integer;
   GridData: TIstGridData;
   DataArrayName: string;
+  ItemIndex: Integer;
+  GwtPackagesItem: TGwtPackagesItem;
 begin
   Model := frmGoPhast.PhastModel;
-  IstPackage := (Model.ModflowPackages.GwtPackages.Last as TGwtPackagesItem).GwtIst;
+  ItemIndex := Model.MobileComponents.GetItemIndexByName(NameFile.SpeciesName);
+  if (ItemIndex < 0) or (Model.ModflowPackages.GwtPackages.Count >= ItemIndex) then
+  begin
+    GwtPackagesItem := Model.ModflowPackages.GwtPackages.Add as TGwtPackagesItem;
+  end
+  else
+  begin
+    GwtPackagesItem := Model.ModflowPackages.GwtPackages[ItemIndex];
+  end;
+
+
+  IstPackage := GwtPackagesItem.GwtIst;
   if not IstPackage.IsSelected then
   begin
     IstPackage.IsSelected := True;
