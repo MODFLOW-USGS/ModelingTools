@@ -32959,5 +32959,10 @@ object TTaskHistory
       Categories.Strings = (
         'Model Viewer SUTRA 4'
         'Import')
+    end
+    item
+      Date = 45413.000000000000000000
+      Categories.Strings = (
+        'Bug fix')
     end>
 end

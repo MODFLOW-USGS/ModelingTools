@@ -668,14 +668,14 @@ begin
     begin
       if ALake.FLakeTable.Count > 0 then
       begin
-        FormatString := '.%.' + Floor(Log10(FLakes.Count)+1).ToString + 'd.laktab';
+        FormatString := '.' + {Floor(Log10(FLakes.Count)).toString +} '%d.laktab';
         Extension := Format(FormatString, [LakeIndex+1]);
         LakeTableFFileName := ChangeFileExt(FFileName,Extension);
         ALake.FLakeTable.FFileName := LakeTableFFileName;
 
-        Model.FilesToDelete.Add(LakeTableFFileName);
         if WritingTemplate then
         begin
+          Model.FilesToDelete.Add(LakeTableFFileName);
           LakeTableFFileName := LakeTableFFileName + '.tpl';
           WritePestTemplateLine(LakeTableFFileName);
         end;
