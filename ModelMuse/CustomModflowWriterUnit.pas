@@ -1318,7 +1318,7 @@ resourcestring
   StrTheFormulaShouldInt = 'The formula should result in an integer';
   StrGetValuesFromArrayFi = 'GetValuesFromArrayFiles.exe not found';
   StrItWasNotPossible = 'It was not possible to move "%:0s" into "%:1s" beca' +
-  'use the file does not exist.';
+  'use the file was not found.';
 
 const
   StrMf6ObsExtractorexe = 'Mf6ObsExtractor.exe';
@@ -1565,7 +1565,7 @@ begin
   if not TFile.Exists(AppFullPath) then
   begin
     frmErrorsAndWarnings.AddError(Model, StrFileNotFound,
-      Format(StrItWasNotPossible, [AppFullPath, Directory]));
+      Format(StrItWasNotPossible, [ExtractFileName(AppFullPath), Directory]));
     Exit;
   end;
   AppName := ExtractFileName(AppFullPath);

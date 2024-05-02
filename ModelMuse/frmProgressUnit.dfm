@@ -5,8 +5,8 @@ inherited frmProgressMM: TfrmProgressMM
   Caption = 'Progress'
   ClientHeight = 235
   ClientWidth = 654
-  ExplicitWidth = 666
-  ExplicitHeight = 273
+  ExplicitWidth = 670
+  ExplicitHeight = 274
   TextHeight = 18
   object memoMessages: TMemo
     Left = 0
@@ -17,8 +17,6 @@ inherited frmProgressMM: TfrmProgressMM
     ScrollBars = ssBoth
     TabOrder = 0
     OnChange = memoMessagesChange
-    ExplicitWidth = 650
-    ExplicitHeight = 173
   end
   object pnlTop: TPanel
     Left = 0
@@ -28,7 +26,6 @@ inherited frmProgressMM: TfrmProgressMM
     Align = alTop
     ParentColor = True
     TabOrder = 1
-    ExplicitWidth = 650
     DesignSize = (
       654
       61)
@@ -47,7 +44,6 @@ inherited frmProgressMM: TfrmProgressMM
       Anchors = [akLeft, akTop, akRight]
       Step = 1
       TabOrder = 0
-      ExplicitWidth = 609
     end
     object btnAbort: TBitBtn
       Left = 546
@@ -77,7 +73,6 @@ inherited frmProgressMM: TfrmProgressMM
       TabOrder = 1
       Visible = False
       OnClick = btnAbortClick
-      ExplicitLeft = 542
     end
   end
 end

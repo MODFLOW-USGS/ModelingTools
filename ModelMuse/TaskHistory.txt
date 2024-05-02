@@ -32968,6 +32968,10 @@ object TTaskHistory
     item
       Date = 45414.000000000000000000
       Categories.Strings = (
-        'Documentation')
+        'Documentation'
+        'Video'
+        'MF-2015'
+        'Model Viewer SUTRA 4'
+        'Testing')
     end>
 end

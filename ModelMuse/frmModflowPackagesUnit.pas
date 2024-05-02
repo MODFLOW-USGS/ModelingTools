@@ -511,7 +511,6 @@ type
     procedure CreateIstNode;
     procedure CreateGwtImsNode;
     procedure MakeIgnoredSpeciesLast;
-//    function CheckMf6LakeOutlet: Boolean;
     { Private declarations }
   protected
     procedure CreateParams(var Params: TCreateParams); override;
@@ -3245,6 +3244,7 @@ end;
 procedure TfrmModflowPackages.CreateParams(var Params: TCreateParams);
 begin
   inherited;
+  // Ensure that this dialog box has a link on the taskbar.
   Params.ExStyle := Params.ExStyle or WS_EX_APPWINDOW;
   Params.WndParent := 0;
 end;

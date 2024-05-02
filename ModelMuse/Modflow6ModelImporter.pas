@@ -155,6 +155,7 @@ type
     procedure ImportDsp(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportMst(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportIst(NameFile: TTransportNameFile; Package: TPackage);
+    procedure ImportSSM(NameFile: TTransportNameFile; Package: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
@@ -4950,7 +4951,7 @@ begin
                   Values.Add(Aux.NumericValue);
                 end;
               end
-              else
+              else if SpcDictionaries.Count > 0 then
               begin
                 SpcDictionary := SpcDictionaries[AuxIndex];
                 if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
@@ -5283,7 +5284,6 @@ var
   ASolutionGroup: TSolutionGroup;
   SolutionIndex: Integer;
   ASolution: TSolution;
-//  APackage: TPackage;
   Ims: TIms;
   ImsPackage: TSmsPackageSelection;
   Options: TImsOptions;
@@ -5302,330 +5302,309 @@ begin
       for SolutionIndex := 0 to ASolutionGroup.Count - 1 do
       begin
         ASolution := ASolutionGroup[SolutionIndex];
-//        if AnsiSameText(ASolution.SolutionType, 'IMS6') then
-        begin
-//          APackage := TPackage.Create;
-          try
-//            APackage.FileType := 'IMS6';
-//            APackage.FileName := ASolution.SolutionFileName;
-//            APackage.PackageName := '';
-
-            Ims := ASolution.Ims;
-//            APackage.Package := Ims;
-//            APackage.ReadPackage(ASimulation.OutFile, 0);
-
-            ImsPackage := TSmsPackageSelection.Create(nil);
-            try
-              {$REGION 'Options'}
-              Options := Ims.Options;
-              if Options.PRINT_OPTION <> '' then
-              begin
-                if AnsiSameText(Options.PRINT_OPTION, 'NONE') then
-                begin
-                  ImsPackage.Print := spPrintNone;
-                end
-                else if AnsiSameText(Options.PRINT_OPTION, 'SUMMARY') then
-                begin
-                  ImsPackage.Print := spSummary;
-                end
-                else if AnsiSameText(Options.PRINT_OPTION, 'ALL') then
-                begin
-                  ImsPackage.Print := spFull;
-                end
-                else
-                begin
-                  Assert(False);
-                end;
-              end;
-
-              if Options.COMPLEXITY <> '' then
-              begin
-                if AnsiSameText(Options.COMPLEXITY, 'SIMPLE') then
-                begin
-                  ImsPackage.Complexity := scoSimple;
-                end
-                else if AnsiSameText(Options.COMPLEXITY, 'MODERATE') then
-                begin
-                  ImsPackage.Complexity := scoModerate;
-                end
-                else if AnsiSameText(Options.COMPLEXITY, 'COMPLEX') then
-                begin
-                  ImsPackage.Complexity := scoComplex;
-                end
-                else
-                begin
-                  Assert(False);
-                end;
-              end;
-
-              if Options.CSV_OUTER_OUTPUT <> '' then
-              begin
-                ImsPackage.CsvOutput := sspAll;
-              end;
-
-              if Options.CSV_INNER_OUTPUT <> '' then
-              begin
-                ImsPackage.CsvInnerOutput := sspAll;
-              end;
-
-              if Options.NO_PTC <> '' then
-              begin
-                if AnsiSameText(Options.NO_PTC, 'NO_PTC') then
-                begin
-                  ImsPackage.UsePTC := upDontUseForAll
-                end;
-
-                if AnsiSameText(Options.no_ptc_option, 'FIRST') then
-                begin
-                  ImsPackage.UsePTC := upDontUseForFirst
-                end;
-              end;
-
-              if Options.ATS_OUTER_MAXIMUM_FRACTION >= 0 then
-              begin
-                ImsPackage.AtsOuterMaxFraction :=
-                  Options.ATS_OUTER_MAXIMUM_FRACTION
-              end;
-              {$ENDREGION}
-
-              SmsOverrides := [];
-              {$REGION 'NonLinear'}
-              NonLinear := Ims.NonLinear;
-
-              if NonLinear.OUTER_DVCLOSE >= 0 then
-              begin
-                Include(SmsOverrides, soOuterHclose);
-                ImsPackage.OuterHclose := NonLinear.OUTER_DVCLOSE;
-              end;
-
-              if NonLinear.OUTER_MAXIMUM >= 0 then
-              begin
-                Include(SmsOverrides, soOuterMaxIt);
-                ImsPackage.MaxOuterIterations := NonLinear.OUTER_MAXIMUM;
-              end;
-
-              if NonLinear.UNDER_RELAXATION <> '' then
-              begin
-                Include(SmsOverrides, soUnderRelax);
-                if AnsiSameText(NonLinear.UNDER_RELAXATION, 'NONE') then
-                begin
-                  ImsPackage.UnderRelaxation := surNone;
-                end
-                else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'SIMPLE') then
-                begin
-                  ImsPackage.UnderRelaxation := surSimple;
-                end
-                else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'COOLEY') then
-                begin
-                  ImsPackage.UnderRelaxation := surCooley;
-                end
-                else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'DBD') then
-                begin
-                  ImsPackage.UnderRelaxation := surDbd;
-                end
-                else
-                begin
-                  Assert(False);
-                end
-              end;
-
-              if NonLinear.UNDER_RELAXATION_GAMMA >= 0 then
-              begin
-                Include(SmsOverrides, soUnderRelaxGamma);
-                ImsPackage.UnderRelaxGamma := NonLinear.UNDER_RELAXATION_GAMMA;
-              end;
-
-              if NonLinear.UNDER_RELAXATION_THETA >= 0 then
-              begin
-                Include(SmsOverrides, soUnderRelaxTheta);
-                ImsPackage.UnderRelaxTheta := NonLinear.UNDER_RELAXATION_THETA;
-              end;
-
-              if NonLinear.UNDER_RELAXATION_KAPPA >= 0 then
-              begin
-                Include(SmsOverrides, soUnderRelaxKappa);
-                ImsPackage.UnderRelaxKappa := NonLinear.UNDER_RELAXATION_KAPPA;
-              end;
-
-              if NonLinear.UNDER_RELAXATION_MOMENTUM >= 0 then
-              begin
-                Include(SmsOverrides, soUnderRelaxMomentum);
-                ImsPackage.UnderRelaxMomentum := NonLinear.UNDER_RELAXATION_MOMENTUM;
-              end;
-
-              if NonLinear.BACKTRACKING_NUMBER >= 0 then
-              begin
-                Include(SmsOverrides, soBacktrackingNumber);
-                ImsPackage.BacktrackingNumber := NonLinear.BACKTRACKING_NUMBER;
-              end;
-
-              if NonLinear.BACKTRACKING_TOLERANCE >= 0 then
-              begin
-                Include(SmsOverrides, soBacktrackingTolerance);
-                ImsPackage.BacktrackingTolerance := NonLinear.BACKTRACKING_TOLERANCE;
-              end;
-
-              if NonLinear.BACKTRACKING_REDUCTION_FACTOR >= 0 then
-              begin
-                Include(SmsOverrides, soBacktrackingReductionFactor);
-                ImsPackage.BacktrackingReductionFactor := NonLinear.BACKTRACKING_REDUCTION_FACTOR;
-              end;
-
-
-              if NonLinear.BACKTRACKING_RESIDUAL_LIMIT >= 0 then
-              begin
-                Include(SmsOverrides, soBacktrackingResidualLimit);
-                ImsPackage.BacktrackingResidualLimit := NonLinear.BACKTRACKING_RESIDUAL_LIMIT;
-              end;
-
-              {$ENDREGION}
-
-            {$REGION 'Linear'}
-              Linear := Ims.Linear;
-
-              if Linear.INNER_MAXIMUM >= 0  then
-              begin
-                Include(SmsOverrides, soInnerMaxIterations);
-                ImsPackage.InnerMaxIterations := Linear.INNER_MAXIMUM;
-              end;
-
-              if Linear.INNER_DVCLOSE >= 0  then
-              begin
-                Include(SmsOverrides, soInnerHclose);
-                ImsPackage.InnerHclose := Linear.INNER_DVCLOSE;
-              end;
-
-              if Linear.INNER_RCLOSE >= 0  then
-              begin
-                Include(SmsOverrides, soInnerRclose);
-                ImsPackage.InnerRclose := Linear.INNER_RCLOSE;
-              end;
-
-              if Linear.rclose_option <> ''  then
-              begin
-                Include(SmsOverrides, soRcloseOption);
-                if AnsiSameText(Linear.rclose_option, 'STRICT') then
-                begin
-                  ImsPackage.RcloseOption := sroStrict;
-                end
-                else if AnsiSameText(Linear.rclose_option, 'L2NORM_RCLOSE') then
-                begin
-                  ImsPackage.RcloseOption := sroL2Norm;
-                end
-                else if AnsiSameText(Linear.rclose_option, 'RELATIVE_RCLOSE') then
-                begin
-                  ImsPackage.RcloseOption := sroRelative;
-                end
-                else
-                begin
-                  Assert(False);
-                end;
-              end;
-
-              if Linear.LINEAR_ACCELERATION <> ''  then
-              begin
-                Include(SmsOverrides, soLinLinearAcceleration);
-                if AnsiSameText(Linear.LINEAR_ACCELERATION, 'CG') then
-                begin
-                  ImsPackage.LinLinearAcceleration := sllaCg;
-                end
-                else if AnsiSameText(Linear.LINEAR_ACCELERATION, 'BICGSTAB') then
-                begin
-                  ImsPackage.LinLinearAcceleration := sllaBiCgStab;
-                end
-                else
-                begin
-                  Assert(False);
-                end;
-              end;
-
-              if Linear.RELAXATION_FACTOR >= 0  then
-              begin
-                Include(SmsOverrides, soRelaxationFactor);
-                ImsPackage.RelaxationFactor := Linear.RELAXATION_FACTOR;
-              end;
-
-              if Linear.PRECONDITIONER_LEVELS >= 0  then
-              begin
-                Include(SmsOverrides, soPreconditionerLevel);
-                ImsPackage.PreconditionerLevel := Linear.PRECONDITIONER_LEVELS;
-              end;
-
-              if Linear.PRECONDITIONER_DROP_TOLERANCE >= 0  then
-              begin
-                Include(SmsOverrides, soPreconditionerDropTolerance);
-                ImsPackage.PreconditionerDropTolerance := Linear.PRECONDITIONER_DROP_TOLERANCE;
-              end;
-
-              if Linear.NUMBER_ORTHOGONALIZATIONS >= 0  then
-              begin
-                Include(SmsOverrides, soNumberOfOrthoganalizations);
-                ImsPackage.NumberOfOrthoganalizations := Linear.NUMBER_ORTHOGONALIZATIONS;
-              end;
-
-              if Linear.SCALING_METHOD <> ''  then
-              begin
-                Include(SmsOverrides, soScalingMethod);
-                if AnsiSameText(Linear.SCALING_METHOD, 'DIAGONAL') then
-                begin
-                  ImsPackage.ScalingMethod := ssmDiagonal;
-                end
-                else if AnsiSameText(Linear.SCALING_METHOD, 'L2NORM') then
-                begin
-                  ImsPackage.ScalingMethod := ssmL2Norm;
-                end
-                else if AnsiSameText(Linear.SCALING_METHOD, 'NONE') then
-                begin
-                  ImsPackage.ScalingMethod := ssmNone;
-                end
-                else
-                begin
-                  Assert(False);
-                end;
-              end;
-
-              if Linear.REORDERING_METHOD <> ''  then
-              begin
-                Include(SmsOverrides, soReorderingMethod);
-                if AnsiSameText(Linear.REORDERING_METHOD, 'RCM') then
-                begin
-                  ImsPackage.ReorderingMethod := srmReverseCuthillMcKee;
-                end
-                else if AnsiSameText(Linear.REORDERING_METHOD, 'MD') then
-                begin
-                  ImsPackage.ReorderingMethod := srmMinimumDegreeOrdering;
-                end
-                else if AnsiSameText(Linear.REORDERING_METHOD, 'NONE') then
-                begin
-                  ImsPackage.ReorderingMethod := srmNone;
-                end
-                else
-                begin
-                  Assert(False);
-                end;
-              end;
-            {$ENDREGION}
-
-            ImsPackage.SmsOverrides := SmsOverrides;
-
-
-            for ModelIndex := 0 to ASolution.FSolutionModelNames.Count - 1 do
+        Ims := ASolution.Ims;
+        ImsPackage := TSmsPackageSelection.Create(nil);
+        try
+          {$REGION 'Options'}
+          Options := Ims.Options;
+          if Options.PRINT_OPTION <> '' then
+          begin
+            if AnsiSameText(Options.PRINT_OPTION, 'NONE') then
             begin
-              ModelIms := GetIms(ASolution.FSolutionModelNames[ModelIndex]);
-              ModelIms.Assign(ImsPackage);
+              ImsPackage.Print := spPrintNone;
+            end
+            else if AnsiSameText(Options.PRINT_OPTION, 'SUMMARY') then
+            begin
+              ImsPackage.Print := spSummary;
+            end
+            else if AnsiSameText(Options.PRINT_OPTION, 'ALL') then
+            begin
+              ImsPackage.Print := spFull;
+            end
+            else
+            begin
+              Assert(False);
             end;
-
-            finally
-              ImsPackage.Free;
-            end;
-
-          finally
-//            APackage.Free;
           end;
-//        end
-//        else
-//        begin
-//          Assert(False);
+
+          if Options.COMPLEXITY <> '' then
+          begin
+            if AnsiSameText(Options.COMPLEXITY, 'SIMPLE') then
+            begin
+              ImsPackage.Complexity := scoSimple;
+            end
+            else if AnsiSameText(Options.COMPLEXITY, 'MODERATE') then
+            begin
+              ImsPackage.Complexity := scoModerate;
+            end
+            else if AnsiSameText(Options.COMPLEXITY, 'COMPLEX') then
+            begin
+              ImsPackage.Complexity := scoComplex;
+            end
+            else
+            begin
+              Assert(False);
+            end;
+          end;
+
+          if Options.CSV_OUTER_OUTPUT <> '' then
+          begin
+            ImsPackage.CsvOutput := sspAll;
+          end;
+
+          if Options.CSV_INNER_OUTPUT <> '' then
+          begin
+            ImsPackage.CsvInnerOutput := sspAll;
+          end;
+
+          if Options.NO_PTC <> '' then
+          begin
+            if AnsiSameText(Options.NO_PTC, 'NO_PTC') then
+            begin
+              ImsPackage.UsePTC := upDontUseForAll
+            end;
+
+            if AnsiSameText(Options.no_ptc_option, 'FIRST') then
+            begin
+              ImsPackage.UsePTC := upDontUseForFirst
+            end;
+          end;
+
+          if Options.ATS_OUTER_MAXIMUM_FRACTION >= 0 then
+          begin
+            ImsPackage.AtsOuterMaxFraction :=
+              Options.ATS_OUTER_MAXIMUM_FRACTION
+          end;
+          {$ENDREGION}
+
+          SmsOverrides := [];
+          {$REGION 'NonLinear'}
+          NonLinear := Ims.NonLinear;
+
+          if NonLinear.OUTER_DVCLOSE >= 0 then
+          begin
+            Include(SmsOverrides, soOuterHclose);
+            ImsPackage.OuterHclose := NonLinear.OUTER_DVCLOSE;
+          end;
+
+          if NonLinear.OUTER_MAXIMUM >= 0 then
+          begin
+            Include(SmsOverrides, soOuterMaxIt);
+            ImsPackage.MaxOuterIterations := NonLinear.OUTER_MAXIMUM;
+          end;
+
+          if NonLinear.UNDER_RELAXATION <> '' then
+          begin
+            Include(SmsOverrides, soUnderRelax);
+            if AnsiSameText(NonLinear.UNDER_RELAXATION, 'NONE') then
+            begin
+              ImsPackage.UnderRelaxation := surNone;
+            end
+            else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'SIMPLE') then
+            begin
+              ImsPackage.UnderRelaxation := surSimple;
+            end
+            else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'COOLEY') then
+            begin
+              ImsPackage.UnderRelaxation := surCooley;
+            end
+            else if AnsiSameText(NonLinear.UNDER_RELAXATION, 'DBD') then
+            begin
+              ImsPackage.UnderRelaxation := surDbd;
+            end
+            else
+            begin
+              Assert(False);
+            end
+          end;
+
+          if NonLinear.UNDER_RELAXATION_GAMMA >= 0 then
+          begin
+            Include(SmsOverrides, soUnderRelaxGamma);
+            ImsPackage.UnderRelaxGamma := NonLinear.UNDER_RELAXATION_GAMMA;
+          end;
+
+          if NonLinear.UNDER_RELAXATION_THETA >= 0 then
+          begin
+            Include(SmsOverrides, soUnderRelaxTheta);
+            ImsPackage.UnderRelaxTheta := NonLinear.UNDER_RELAXATION_THETA;
+          end;
+
+          if NonLinear.UNDER_RELAXATION_KAPPA >= 0 then
+          begin
+            Include(SmsOverrides, soUnderRelaxKappa);
+            ImsPackage.UnderRelaxKappa := NonLinear.UNDER_RELAXATION_KAPPA;
+          end;
+
+          if NonLinear.UNDER_RELAXATION_MOMENTUM >= 0 then
+          begin
+            Include(SmsOverrides, soUnderRelaxMomentum);
+            ImsPackage.UnderRelaxMomentum := NonLinear.UNDER_RELAXATION_MOMENTUM;
+          end;
+
+          if NonLinear.BACKTRACKING_NUMBER >= 0 then
+          begin
+            Include(SmsOverrides, soBacktrackingNumber);
+            ImsPackage.BacktrackingNumber := NonLinear.BACKTRACKING_NUMBER;
+          end;
+
+          if NonLinear.BACKTRACKING_TOLERANCE >= 0 then
+          begin
+            Include(SmsOverrides, soBacktrackingTolerance);
+            ImsPackage.BacktrackingTolerance := NonLinear.BACKTRACKING_TOLERANCE;
+          end;
+
+          if NonLinear.BACKTRACKING_REDUCTION_FACTOR >= 0 then
+          begin
+            Include(SmsOverrides, soBacktrackingReductionFactor);
+            ImsPackage.BacktrackingReductionFactor := NonLinear.BACKTRACKING_REDUCTION_FACTOR;
+          end;
+
+
+          if NonLinear.BACKTRACKING_RESIDUAL_LIMIT >= 0 then
+          begin
+            Include(SmsOverrides, soBacktrackingResidualLimit);
+            ImsPackage.BacktrackingResidualLimit := NonLinear.BACKTRACKING_RESIDUAL_LIMIT;
+          end;
+
+          {$ENDREGION}
+
+        {$REGION 'Linear'}
+          Linear := Ims.Linear;
+
+          if Linear.INNER_MAXIMUM >= 0  then
+          begin
+            Include(SmsOverrides, soInnerMaxIterations);
+            ImsPackage.InnerMaxIterations := Linear.INNER_MAXIMUM;
+          end;
+
+          if Linear.INNER_DVCLOSE >= 0  then
+          begin
+            Include(SmsOverrides, soInnerHclose);
+            ImsPackage.InnerHclose := Linear.INNER_DVCLOSE;
+          end;
+
+          if Linear.INNER_RCLOSE >= 0  then
+          begin
+            Include(SmsOverrides, soInnerRclose);
+            ImsPackage.InnerRclose := Linear.INNER_RCLOSE;
+          end;
+
+          if Linear.rclose_option <> ''  then
+          begin
+            Include(SmsOverrides, soRcloseOption);
+            if AnsiSameText(Linear.rclose_option, 'STRICT') then
+            begin
+              ImsPackage.RcloseOption := sroStrict;
+            end
+            else if AnsiSameText(Linear.rclose_option, 'L2NORM_RCLOSE') then
+            begin
+              ImsPackage.RcloseOption := sroL2Norm;
+            end
+            else if AnsiSameText(Linear.rclose_option, 'RELATIVE_RCLOSE') then
+            begin
+              ImsPackage.RcloseOption := sroRelative;
+            end
+            else
+            begin
+              Assert(False);
+            end;
+          end;
+
+          if Linear.LINEAR_ACCELERATION <> ''  then
+          begin
+            Include(SmsOverrides, soLinLinearAcceleration);
+            if AnsiSameText(Linear.LINEAR_ACCELERATION, 'CG') then
+            begin
+              ImsPackage.LinLinearAcceleration := sllaCg;
+            end
+            else if AnsiSameText(Linear.LINEAR_ACCELERATION, 'BICGSTAB') then
+            begin
+              ImsPackage.LinLinearAcceleration := sllaBiCgStab;
+            end
+            else
+            begin
+              Assert(False);
+            end;
+          end;
+
+          if Linear.RELAXATION_FACTOR >= 0  then
+          begin
+            Include(SmsOverrides, soRelaxationFactor);
+            ImsPackage.RelaxationFactor := Linear.RELAXATION_FACTOR;
+          end;
+
+          if Linear.PRECONDITIONER_LEVELS >= 0  then
+          begin
+            Include(SmsOverrides, soPreconditionerLevel);
+            ImsPackage.PreconditionerLevel := Linear.PRECONDITIONER_LEVELS;
+          end;
+
+          if Linear.PRECONDITIONER_DROP_TOLERANCE >= 0  then
+          begin
+            Include(SmsOverrides, soPreconditionerDropTolerance);
+            ImsPackage.PreconditionerDropTolerance := Linear.PRECONDITIONER_DROP_TOLERANCE;
+          end;
+
+          if Linear.NUMBER_ORTHOGONALIZATIONS >= 0  then
+          begin
+            Include(SmsOverrides, soNumberOfOrthoganalizations);
+            ImsPackage.NumberOfOrthoganalizations := Linear.NUMBER_ORTHOGONALIZATIONS;
+          end;
+
+          if Linear.SCALING_METHOD <> ''  then
+          begin
+            Include(SmsOverrides, soScalingMethod);
+            if AnsiSameText(Linear.SCALING_METHOD, 'DIAGONAL') then
+            begin
+              ImsPackage.ScalingMethod := ssmDiagonal;
+            end
+            else if AnsiSameText(Linear.SCALING_METHOD, 'L2NORM') then
+            begin
+              ImsPackage.ScalingMethod := ssmL2Norm;
+            end
+            else if AnsiSameText(Linear.SCALING_METHOD, 'NONE') then
+            begin
+              ImsPackage.ScalingMethod := ssmNone;
+            end
+            else
+            begin
+              Assert(False);
+            end;
+          end;
+
+          if Linear.REORDERING_METHOD <> ''  then
+          begin
+            Include(SmsOverrides, soReorderingMethod);
+            if AnsiSameText(Linear.REORDERING_METHOD, 'RCM') then
+            begin
+              ImsPackage.ReorderingMethod := srmReverseCuthillMcKee;
+            end
+            else if AnsiSameText(Linear.REORDERING_METHOD, 'MD') then
+            begin
+              ImsPackage.ReorderingMethod := srmMinimumDegreeOrdering;
+            end
+            else if AnsiSameText(Linear.REORDERING_METHOD, 'NONE') then
+            begin
+              ImsPackage.ReorderingMethod := srmNone;
+            end
+            else
+            begin
+              Assert(False);
+            end;
+          end;
+        {$ENDREGION}
+
+          ImsPackage.SmsOverrides := SmsOverrides;
+
+          for ModelIndex := 0 to ASolution.FSolutionModelNames.Count - 1 do
+          begin
+            ModelIms := GetIms(ASolution.FSolutionModelNames[ModelIndex]);
+            ModelIms.Assign(ImsPackage);
+          end;
+
+        finally
+          ImsPackage.Free;
         end;
       end;
     end;
@@ -5650,7 +5629,7 @@ var
 begin
   Model := frmGoPhast.PhastModel;
   ItemIndex := Model.MobileComponents.GetItemIndexByName(NameFile.SpeciesName);
-  if (ItemIndex < 0) or (Model.ModflowPackages.GwtPackages.Count >= ItemIndex) then
+  if (ItemIndex < 0) or (Model.ModflowPackages.GwtPackages.Count <= ItemIndex) then
   begin
     GwtPackagesItem := Model.ModflowPackages.GwtPackages.Add as TGwtPackagesItem;
   end
@@ -5658,7 +5637,6 @@ begin
   begin
     GwtPackagesItem := Model.ModflowPackages.GwtPackages[ItemIndex];
   end;
-
 
   IstPackage := GwtPackagesItem.GwtIst;
   if not IstPackage.IsSelected then
@@ -7810,9 +7788,20 @@ var
   ChemSpecies: TMobileChemSpeciesItem;
   GridData: TMstGridData;
   DataArrayName: string;
+  ItemIndex: Integer;
+  GwtPackagesItem: TGwtPackagesItem;
 begin
   Model := frmGoPhast.PhastModel;
-  MstPackage := (Model.ModflowPackages.GwtPackages.Last as TGwtPackagesItem).GwtMst;
+  ItemIndex := Model.MobileComponents.GetItemIndexByName(NameFile.SpeciesName);
+  if (ItemIndex < 0) or (Model.ModflowPackages.GwtPackages.Count <= ItemIndex) then
+  begin
+    GwtPackagesItem := Model.ModflowPackages.GwtPackages.Add as TGwtPackagesItem;
+  end
+  else
+  begin
+    GwtPackagesItem := Model.ModflowPackages.GwtPackages[ItemIndex];
+  end;
+  MstPackage := GwtPackagesItem.GwtMst;
   MstPackage.IsSelected := True;
 
   Mst := Package.Package as TMst;
@@ -9205,7 +9194,7 @@ begin
                     Values.Add(Aux.NumericValue);
                   end;
                 end
-                else
+                else if SpcDictionaries.Count > 0 then
                 begin
                   SpcDictionary := SpcDictionaries[AuxIndex];
                   if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
@@ -10103,7 +10092,7 @@ begin
                     Values.Add(Aux.NumericValue);
                   end;
                 end
-                else
+                else if SpcDictionaries.Count > 0 then
                 begin
                   SpcDictionary := SpcDictionaries[AuxIndex];
                   if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
@@ -12334,6 +12323,25 @@ begin
   end;
 end;
 
+procedure TModflow6Importer.ImportSSM(NameFile: TTransportNameFile;
+  Package: TPackage);
+var
+//  Ssm: TSsm;
+  Model: TPhastModel;
+  SsmPackage: TGWtSsmPackage;
+begin
+  if Assigned(OnUpdateStatusBar) then
+  begin
+    OnUpdateStatusBar(self, 'importing SSM package');
+  end;
+//  Ssm := Package.Package as TSsm;
+
+  Model := frmGoPhast.PhastModel;
+  SsmPackage := Model.ModflowPackages.GwtSsmPackage;
+  SsmPackage.IsSelected := True;
+
+end;
+
 procedure TModflow6Importer.ImportSto(Package: TPackage);
 var
   Sto: TSto;
@@ -12618,7 +12626,7 @@ begin
     else if APackage.FileType = 'SSM6' then
     begin
       // import SSM6
-      Continue;
+      ImportSSM(NameFile, APackage)
     end
     else if APackage.FileType = 'MST6' then
     begin
@@ -14893,7 +14901,7 @@ begin
                     Values.Add(Aux.NumericValue);
                   end;
                 end
-                else
+                else if SpcDictionaries.Count > 0 then
                 begin
                   SpcDictionary := SpcDictionaries[AuxIndex];
                   if SpcDictionary.TryGetValue(ACell.Id, SpcItem) then
