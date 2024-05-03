@@ -44,6 +44,7 @@ type
     Fhead: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
     Fboundname: string;
+    FId: Integer;
     function GetAux(Index: Integer): TMf6BoundaryValue;
     function GetCount: Integer;
   public
@@ -55,6 +56,7 @@ type
     property Count: Integer read GetCount;
     property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
     property BoundName: string read Fboundname;
+    property Id: Integer read FId;
   end;
 
   TChdTimeItemList = class(TList<TChdTimeItem>)
@@ -462,6 +464,7 @@ begin
             Cell.Fboundname := FSplitter[StartIndex];
           end;
           FCells.Add(Cell);
+          Cell.FId := FCells.Count;
           Cell:= nil;
         end
         else
