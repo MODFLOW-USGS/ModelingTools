@@ -13,11 +13,13 @@ type
     FNonSimulatedLocations: TStringList;
     FReleaseTimes: TStringList;
     FTrackingDirection: TTrackingDirection;
+    FMpathVersion: TMpathVersion;
     function GetNonSimulatedLocation(Index: integer): string;
     function GetSimulatedLocation(Index: integer): string;
   public
     Constructor Create(ScreenObject: TScreenObject;
-      TrackingDirection: TTrackingDirection; StartTime, EndTime: Real);
+      TrackingDirection: TTrackingDirection; StartTime, EndTime: Real;
+      MpathVersion: TMpathVersion);
     Destructor Destroy; override;
     procedure UpdateLocationLines(Lines: TStringList;
       Layer, Row, Column: integer; SimulatedLayer: boolean);
@@ -216,7 +218,7 @@ begin
   ParticleCount := 0;
   ParticleLines := TParticleLines.Create(ScreenObject,
     FOptions.TrackingDirection,
-    FStartTime, FEndTime);
+    FStartTime, FEndTime, Model.ModflowPackages.ModPath.MpathVersion);
   try
 //          WriteDataSet12(ScreenObject, Particles, ParticleLabelBase,
 //            FormatString, ParticleCount, ParticleLines);
@@ -539,7 +541,7 @@ begin
     begin
       ParticleLines := TParticleLines.Create(ScreenObject,
         LocalModel.ModflowPackages.ModPath.TrackingDirection,
-        FStartTime, FEndTime);
+        FStartTime, FEndTime, LocalModel.ModflowPackages.ModPath.MpathVersion);
       FParticleLines.Add(ParticleLines);
       FCellList.Clear;
       ScreenObject.GetModpathCellList(FCellList, LocalModel);
@@ -555,7 +557,8 @@ end;
 { TParticleLines }
 
 constructor TParticleLines.Create(ScreenObject: TScreenObject;
-TrackingDirection: TTrackingDirection; StartTime, EndTime: Real);
+  TrackingDirection: TTrackingDirection; StartTime, EndTime: Real;
+  MpathVersion: TMpathVersion);
 var
   TimeIndex: Integer;
   ParticleReleaseTimes: TModpathTimes;
@@ -566,7 +569,7 @@ var
   XYString: string;
   ReleaseTimeErrorDetected: boolean;
 begin
-
+  FMpathVersion := MpathVersion;
   Assert(ScreenObject <> nil);
   Assert(not ScreenObject.Deleted);
   Assert(ScreenObject.ModpathParticles.Used);
@@ -597,10 +600,19 @@ begin
       ParticleItem := Particles.Items[Index] as TParticleLocation;
       XYString := FortranFloatToStr(ParticleItem.X) + ' '
         + FortranFloatToStr(1-ParticleItem.Y) + ' ';
-      FSimulatedLocations.Add(XYString + FortranFloatToStr(ParticleItem.Z)
-        + ' 0 0 0 ');
-      FNonSimulatedLocations.Add(XYString + FortranFloatToStr(1-ParticleItem.Z)
-        + ' 0 0 0 ');
+      if FMpathVersion in [mp5,mp6] then
+      begin
+        FSimulatedLocations.Add(XYString + FortranFloatToStr(ParticleItem.Z)
+          + ' 0 0 0 ');
+        FNonSimulatedLocations.Add(XYString + FortranFloatToStr(1-ParticleItem.Z)
+          + ' 0 0 0 ');
+      end
+      else
+      begin
+        Assert(FMpathVersion in [mp7]);
+        FSimulatedLocations.Add(XYString + FortranFloatToStr(ParticleItem.Z));
+        FNonSimulatedLocations.Add(XYString + FortranFloatToStr(1-ParticleItem.Z));
+      end;
     end;
   end;
 end;

@@ -10236,12 +10236,15 @@ const
 //                with objects that should intersect the cell around nodes.
 //               bug fix: using lake tables with lakes didn't work if PEST
 //                was active.
+//    '5.2.0.9'  bug fix: With MODPATH 7, extra values were previously included
+//                with the particle locations.
+//               bug fix: Fixed export of budget CSV file with the UZT package.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.8';
+  IIModelVersion = '5.2.0.9';
 
 function IModelVersion: string;
 begin
@@ -45212,12 +45215,6 @@ begin
             finally
               BasicFileWriter.Free;
             end;
-//            StartLocations := TModpathStartingLocationsWriter.Create(Self, etExport);
-//            try
-//              StartLocations.WriteFileVersion6(FileName);
-//            finally
-//              StartLocations.Free;
-//            end;
 
             SimFileWriter := TModpathSimFileWriter.Create(Self, etExport);
             try

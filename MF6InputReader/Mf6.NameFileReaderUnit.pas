@@ -80,6 +80,8 @@ type
     FOptions: Options;
     FPackages: Packages;
     FDimensions: TDimensions;
+    FOCPackage: TPackage;
+    FFmiPackage: TPackage;
   protected
     procedure SetOnUpdataStatusBar(const Value: TOnUpdataStatusBar); override;
   public
@@ -90,6 +92,8 @@ type
     property Dimensions: TDimensions read FDimensions;
     property NfOptions: Options read FOptions;
     property NfPackages: Packages read FPackages;
+    property OCPackage: TPackage read FOCPackage;
+    property FmiPackage: TPackage read FFmiPackage;
   end;
 
   TFlowNameFile = TNameFile<TFlowNameFileOptions, TFlowPackages>;
@@ -438,6 +442,8 @@ begin
   inherited;
   FOptions := Options.Create(PackageType);
   FPackages := Packages.Create(PackageType);
+  FOCPackage := nil;
+  FFmiPackage := nil;
 end;
 
 destructor TNameFile<Options, Packages>.Destroy;
@@ -604,6 +610,7 @@ begin
       OcReader.OnUpdataStatusBar := OnUpdataStatusBar;
       APackage.Package := OcReader;
       APackage.ReadPackage(Unhandled, NPER);
+      FOCPackage := APackage;
     end
     else if APackage.FileType = 'OBS6' then
     begin
@@ -875,6 +882,7 @@ begin
       FmiReader.OnUpdataStatusBar := OnUpdataStatusBar;
       APackage.Package := FmiReader;
       APackage.ReadPackage(Unhandled, NPER);
+      FFmiPackage := APackage;
     end
     else if APackage.FileType = 'MVT6' then
     begin

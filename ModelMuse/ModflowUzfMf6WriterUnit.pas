@@ -1745,7 +1745,6 @@ end;
 
 procedure TModflowUzfMf6Writer.WriteGwtOptions;
 var
-  BaseName: string;
   budgetfile: string;
   budget_csv_file: string;
   ASpecies: TMobileChemSpeciesItem;
@@ -1807,7 +1806,7 @@ begin
   if FUzfPackage.SaveBudgetCsvFile then
   begin
     WriteString('    BUDGETCSV FILEOUT ');
-    budget_csv_file := ChangeFileExt(BaseName, '.uzt_budget.csv');
+    budget_csv_file := ChangeFileExt(BaseFileName, '.uzt_budget.csv');
     Model.AddModelOutputFile(budget_csv_file);
     budget_csv_file := ExtractFileName(budget_csv_file);
     WriteString(budget_csv_file);

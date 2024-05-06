@@ -1,0 +1,5 @@
+MPBAS MP7_Test1.mpbas
+GRBDIS ..\..\output\output.MP7_Test1\MP7_Test1.dis.grb
+TDIS ..\..\model\model.MP7_Test1\MP7_Test1.tdis
+BUDGET ..\..\output\output.MP7_Test1\MP7_Test1.cbc
+HEAD ..\..\output\output.MP7_Test1\MP7_Test1.bhd

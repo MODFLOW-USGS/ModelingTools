@@ -38,11 +38,11 @@ type
   end;
 
   TCncTimeItem = class(TObject)
+  private
     Fcellid: TMfCellId;
     Fconc: TMf6BoundaryValue;
     Faux: TList<TMf6BoundaryValue>;
     Fboundname: string;
-  private
     function GetAux(Index: Integer): TMf6BoundaryValue;
   public
     constructor Create;
@@ -618,7 +618,6 @@ begin
         end;
       end
     ));
-
 end;
 
 end.

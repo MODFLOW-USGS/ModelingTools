@@ -1,0 +1,15 @@
+# TDIS file created on 5/6/2024 by ModelMuse version 5.2.0.9.
+
+BEGIN OPTIONS
+  TIME_UNITS days
+END OPTIONS
+
+BEGIN DIMENSIONS
+  NPER     3
+END DIMENSIONS
+
+BEGIN PERIODDATA
+    2.000000000000E+005      1  1.000000000000E+000  # perlen nstp tsmult, Stress period      1 Time =  0.000000000000E+000  -  2.000000000000E+005 
+    1.000000000000E+004     10  1.500000000000E+000  # perlen nstp tsmult, Stress period      2 Time =  2.000000000000E+005  -  2.100000000000E+005 
+    2.000000000000E+005      1  1.000000000000E+000  # perlen nstp tsmult, Stress period      3 Time =  2.100000000000E+005  -  4.100000000000E+005 
+END PERIODDATA

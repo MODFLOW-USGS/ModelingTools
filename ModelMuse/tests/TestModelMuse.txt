@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5661
+5686
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5661,3 +5661,28 @@ InactiveChdTestMf2005.gpt
 	Archive\InactiveChdTestMf2005.RunModel.Bat
 	Archive\InactiveChdTestMf2005.RunModflow.Bat
 	Archive\usgs.InactiveChdTestMf2005.reference
+MP7 Test1.gpt
+	Archive\MP7_Test1.axml
+	Archive\MP7_Test1.dis
+	Archive\MP7_Test1.gsf
+	Archive\MP7_Test1.ic
+	Archive\MP7_Test1.ims
+	Archive\MP7_Test1.mfsim.nam
+	Archive\MP7_Test1.mpbas
+	Archive\MP7_Test1.mpn
+	Archive\MP7_Test1.mpn.archive
+	Archive\MP7_Test1.mpsim
+	Archive\MP7_Test1.mpsim.archive
+	Archive\MP7_Test1.nam
+	Archive\MP7_Test1.nam.archive
+	Archive\MP7_Test1.npf
+	Archive\MP7_Test1.oc
+	Archive\MP7_Test1.rch
+	Archive\MP7_Test1.riv
+	Archive\MP7_Test1.RunModel.Bat
+	Archive\MP7_Test1.RunModflow.Bat
+	Archive\MP7_Test1.sto
+	Archive\MP7_Test1.tdis
+	Archive\MP7_Test1.wel
+	Archive\usgs.MP7_Test1.reference
+	Archive\usgs.MP7_Test1_Modpath.reference

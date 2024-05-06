@@ -4,13 +4,13 @@ interface
 
 uses
   System.Classes, System.IOUtils, System.SysUtils, Mf6.CustomMf6PersistentUnit,
-  System.Generics.Collections;
+  System.Generics.Collections, System.Generics.Defaults;
 
 type
   TSrcOptions = class(TCustomMf6Persistent)
   private
-    AUXILIARY: TStringList;
-    AUXMULTNAME: string;
+    FAUXILIARY: TStringList;
+    FAUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
@@ -18,11 +18,15 @@ type
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetAUXILIARY(Index: Integer): string;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property AUXILIARY[Index: Integer]: string read GetAUXILIARY;
+    property AUXMULTNAME: string read FAUXMULTNAME;
+    function IndexOfAUXILIARY(const AName: string): Integer;
   end;
 
   TSrcDimensions = class(TCustomMf6Persistent)
@@ -34,16 +38,25 @@ type
   end;
 
   TSrcTimeItem = class(TObject)
-    cellid: TMfCellId;
-    smassrate: TMf6BoundaryValue;
-    aux: TList<TMf6BoundaryValue>;
-    boundname: string;
+  private
+    Fcellid: TMfCellId;
+    Fsmassrate: TMf6BoundaryValue;
+    Faux: TList<TMf6BoundaryValue>;
+    Fboundname: string;
+    function GetAux(Index: Integer): TMf6BoundaryValue;
   public
     constructor Create;
     destructor Destroy; override;
+    property cellid: TMfCellId read Fcellid;
+    property smassrate: TMf6BoundaryValue read Fsmassrate;
+    property boundname: string read Fboundname;
+    property Aux[Index: Integer]: TMf6BoundaryValue read GetAux; default;
   end;
 
-  TSrcTimeItemList = TObjectList<TSrcTimeItem>;
+  TSrcTimeItemList = class(TObjectList<TSrcTimeItem>)
+    procedure Sort;
+    function SameCells(OtherList: TSrcTimeItemList): Boolean;
+  end;
 
   TSrcPeriod = class(TCustomMf6Persistent)
   private
@@ -51,11 +64,16 @@ type
     FCells: TSrcTimeItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean);
+    function GetCell(Index: Integer): TSrcTimeItem;
+    function GetCount: Integer;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPer;
+    property Count: Integer read GetCount;
+    property Cells[Index: Integer]: TSrcTimeItem read GetCell; default;
   end;
 
   TSrcPeriodList = TObjectList<TSrcPeriod>;
@@ -67,10 +85,24 @@ type
     FPeriods: TSrcPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
+    function GetPeriod(Index: Integer): TSrcPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property Options: TSrcOptions read FOptions;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TSrcPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
 implementation
@@ -82,8 +114,8 @@ uses
 
 constructor TSrcOptions.Create(PackageType: string);
 begin
-  AUXILIARY := TStringList.Create;
-  AUXILIARY.CaseSensitive := False;
+  FAUXILIARY := TStringList.Create;
+  FAUXILIARY.CaseSensitive := False;
   TS6_FileNames := TStringList.Create;
   Obs6_FileNames := TStringList.Create;
   inherited;
@@ -92,16 +124,26 @@ end;
 
 destructor TSrcOptions.Destroy;
 begin
-  AUXILIARY.Free;
+  FAUXILIARY.Free;
   TS6_FileNames.Free;
   Obs6_FileNames.Free;
   inherited;
 end;
 
+function TSrcOptions.GetAUXILIARY(Index: Integer): string;
+begin
+  result := FAUXILIARY[Index];
+end;
+
+function TSrcOptions.IndexOfAUXILIARY(const AName: string): Integer;
+begin
+  result := FAUXILIARY.IndexOf(AName)
+end;
+
 procedure TSrcOptions.Initialize;
 begin
   inherited;
-  AUXILIARY.Clear;
+  FAUXILIARY.Clear;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   BOUNDNAMES := False;
@@ -164,14 +206,14 @@ begin
       for AuxIndex := 1 to FSplitter.Count - 1 do
       begin
         AUXILIARY_Name := FSplitter[AuxIndex];
-        AUXILIARY.Add(AUXILIARY_Name);
+        FAUXILIARY.Add(AUXILIARY_Name);
       end;
     end
     else if (FSplitter[0] = 'AUXMULTNAME')
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXMULTNAME := FSplitter[1];
+      FAUXMULTNAME := FSplitter[1];
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -201,16 +243,21 @@ end;
 
 constructor TSrcTimeItem.Create;
 begin
-  cellid.Initialize;
-  smassrate.Initialize;
-  aux := TList<TMf6BoundaryValue>.Create;
-  boundname := '';
+  Fcellid.Initialize;
+  Fsmassrate.Initialize;
+  Faux := TList<TMf6BoundaryValue>.Create;
+  Fboundname := '';
 end;
 
 destructor TSrcTimeItem.Destroy;
 begin
-  aux.Free;
+  Faux.Free;
   inherited;
+end;
+
+function TSrcTimeItem.GetAux(Index: Integer): TMf6BoundaryValue;
+begin
+  result := Faux[Index];
 end;
 
 { TSrcDimensions }
@@ -272,6 +319,16 @@ begin
   inherited;
 end;
 
+function TSrcPeriod.GetCell(Index: Integer): TSrcTimeItem;
+begin
+  result := FCells[Index];
+end;
+
+function TSrcPeriod.GetCount: Integer;
+begin
+  result := FCells.Count;
+end;
+
 procedure TSrcPeriod.Initialize;
 begin
   inherited;
@@ -319,17 +376,17 @@ begin
       end
       else if FSplitter.Count >= NumberOfItems then
       begin
-        if ReadCellID(Cell.CellId, 0, DimensionCount) then
+        if ReadCellID(Cell.Fcellid, 0, DimensionCount) then
         begin
-          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.smassrate.NumericValue) then
+          if TryFortranStrToFloat(FSplitter[DimensionCount], Cell.Fsmassrate.NumericValue) then
           begin
-            Cell.smassrate.ValueType := vtNumeric;
+            Cell.Fsmassrate.ValueType := vtNumeric;
           end
           else
           begin
-            Cell.smassrate.ValueType := vtString;
+            Cell.Fsmassrate.ValueType := vtString;
             FSplitter.DelimitedText := CaseSensitiveLine;
-            Cell.smassrate.StringValue := FSplitter[DimensionCount];
+            Cell.Fsmassrate.StringValue := FSplitter[DimensionCount];
           end;
           StartIndex := DimensionCount + 1;
           for AuxIndex := 0 to naux - 1 do
@@ -346,11 +403,11 @@ begin
               Aux.StringValue := FSplitter[StartIndex];
             end;
             Inc(StartIndex);
-            Cell.aux.Add(Aux);
+            Cell.Faux.Add(Aux);
           end;
           if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
           begin
-            Cell.boundname := FSplitter[StartIndex];
+            Cell.Fboundname := FSplitter[StartIndex];
           end;
           FCells.Add(Cell);
           Cell:= nil;
@@ -394,6 +451,36 @@ begin
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
   inherited;
+end;
+
+function TSrc.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TSrc.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TSrc.GetPeriod(Index: Integer): TSrcPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TSrc.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TSrc.GetTimeSeries(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TSrc.GetTimeSeriesCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
 end;
 
 procedure TSrc.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);
@@ -445,7 +532,7 @@ begin
           APeriod := TSrcPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
-          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.AUXILIARY.Count,
+          APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
             FOptions.BOUNDNAMES);
         end
         else
@@ -491,6 +578,47 @@ begin
     ObsPackage.Package := ObsReader;
     ObsPackage.ReadPackage(Unhandled, NPER);
   end;
+end;
+
+{ TSrcTimeItemList }
+
+function TSrcTimeItemList.SameCells(OtherList: TSrcTimeItemList): Boolean;
+begin
+  Result := Count = OtherList.Count;
+  if Result then
+  begin
+    for var index := 0 to Count - 1 do
+    begin
+      Result := Items[index].Fcellid.SameLocation(OtherList.Items[index].Fcellid);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TSrcTimeItemList.Sort;
+begin
+  inherited Sort(
+    TComparer<TSrcTimeItem>.Construct(
+      function(const Left, Right: TSrcTimeItem): Integer
+      begin
+        Result := AnsiCompareText(Left.Fboundname, Right.Fboundname);
+        if Result = 0 then
+        begin
+          result := Left.Fcellid.Layer - Right.Fcellid.Layer;
+          if Result = 0 then
+          begin
+            result := Left.Fcellid.Row - Right.Fcellid.Row;
+            if Result = 0 then
+            begin
+              result := Left.Fcellid.column - Right.Fcellid.column;
+            end;
+          end;
+        end;
+      end
+    ));
 end;
 
 end.

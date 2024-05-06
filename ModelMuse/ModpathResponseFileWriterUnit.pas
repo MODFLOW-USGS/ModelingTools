@@ -955,7 +955,6 @@ var
   CellIndex: Integer;
   ACell: TCellAssignment;
   IDomainDataArray: TDataArray;
-//  CellCount: Integer;
   ReleaseTimes: TModpathTimes;
   Layer: Integer;
   ParticleIndex: Integer;
@@ -998,7 +997,7 @@ begin
   FEndTime := Model.ModflowFullStressPeriods.Last.EndTime;
   ParticleLines := TParticleLines.Create(AScreenObject,
     FOptions.TrackingDirection,
-    FStartTime, FEndTime);
+    FStartTime, FEndTime, Model.ModflowPackages.ModPath.MpathVersion);
   try
 
     GetParticleCount(AScreenObject, ParticleCount);
