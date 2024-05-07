@@ -2,21 +2,20 @@ inherited frmLayersToExport: TfrmLayersToExport
   HelpType = htKeyword
   HelpKeyword = 'Layers-to-Export-Dialog-Box'
   Caption = 'Layers to Export'
-  ClientHeight = 238
+  ClientHeight = 237
   ClientWidth = 381
-  ExplicitWidth = 393
+  ExplicitWidth = 397
   ExplicitHeight = 276
   TextHeight = 18
   object clbSelectedLayers: TCheckListBox
     Left = 231
     Top = 8
     Width = 142
-    Height = 204
+    Height = 182
     Anchors = [akLeft, akTop, akBottom]
     Enabled = False
     ItemHeight = 18
     TabOrder = 0
-    ExplicitHeight = 178
   end
   object rgLayersToExport: TRadioGroup
     Left = 8
@@ -34,14 +33,13 @@ inherited frmLayersToExport: TfrmLayersToExport
   end
   object pnlBase: TPanel
     Left = 0
-    Top = 197
+    Top = 196
     Width = 381
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 171
-    ExplicitWidth = 377
+    ExplicitTop = 197
     DesignSize = (
       381
       41)
@@ -55,7 +53,6 @@ inherited frmLayersToExport: TfrmLayersToExport
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 16
     end
     object btnOK: TBitBtn
       Left = 134
@@ -66,7 +63,6 @@ inherited frmLayersToExport: TfrmLayersToExport
       Kind = bkOK
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 130
     end
     object btnCancel: TBitBtn
       Left = 248
@@ -77,7 +73,6 @@ inherited frmLayersToExport: TfrmLayersToExport
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 244
     end
   end
   object rgExportAs: TRadioGroup

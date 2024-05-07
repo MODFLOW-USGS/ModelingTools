@@ -28,6 +28,10 @@ type
   TNumberDictionary = TDictionary<Integer, TObservationList>;
   TObsLists = TObjectList<TObservationList>;
 
+  TNumberDictionaries = TObjectList<TNumberDictionary>;
+  TBoundNameDictionaries = TObjectList<TBoundNameDictionary>;
+  TListOfObsLists = TObjectList<TObsLists>;
+
   TMvrKey = record
     ID: Integer;
     PackageName: string;
@@ -199,7 +203,8 @@ uses
   ModflowGncUnit, Mf6.ImsFileReaderUnit, frmImportWarningsUnit,
   Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit, Mf6.MstFileReaderUnit,
   OctTreeClass, ModflowCellUnit, Mf6.IstFileReaderUnit,
-  ModflowGwtSpecifiedConcUnit, Mf6.SrcFileReaderUnit, Mf6.FmiFileReaderUnit;
+  ModflowGwtSpecifiedConcUnit, Mf6.SrcFileReaderUnit, Mf6.FmiFileReaderUnit,
+  Mf6.SftFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -8259,6 +8264,7 @@ begin
   frmGoPhast.Caption := StrModelName;
   frmGoPhast.sdSaveDialog.FileName := '';
   PhastModel.ModelSelection := msModflow2015;
+  PhastModel.ModflowPackages.GwtProcess.SeparateGwt := NameFiles.Count > 1;
 
   FlowModelImported := False;
   for FileIndex := 0 to NameFiles.Count - 1 do
@@ -11414,6 +11420,112 @@ begin
   end;
 end;
 
+function TModflow6Importer.RealValuesToFormula(Values: TOneDRealArray; Name: string;
+  ScreenObject: TScreenObject = nil): string;
+var
+  FirstValue: Double;
+  Uniform: Boolean;
+  Index: Integer;
+  ImportedData: TValueArrayItem;
+begin
+  Assert(Length(Values) > 0);
+  if Length(Values) = 1 then
+  begin
+    result := FortranFloatToStr(Values[0]);
+  end
+  else
+  begin
+    Uniform := True;
+    FirstValue := Values[0];
+    for Index := 1 to Length(Values) - 1 do
+    begin
+      Uniform := Values[Index] = FirstValue;
+      if not Uniform then
+      begin
+        break;
+      end;
+    end;
+    if Uniform then
+    begin
+      result := FortranFloatToStr(Values[0]);
+    end
+    else
+    begin
+      if ScreenObject <> nil then
+      begin
+        ImportedData := ScreenObject.ImportedValues.Add;
+        ImportedData.Name := Name;
+        ImportedData.Values.DataType := rdtDouble;
+        ImportedData.Values.Count := Length(Values);
+        for Index := 0 to Length(Values) - 1 do
+        begin
+          ImportedData.Values.RealValues[Index] := Values[Index];
+        end;
+      end;
+      Result := rsObjectImportedValuesR + '("' + Name + '")';
+    end;
+  end;
+end;
+
+function TModflow6Importer.BoundaryValuesToFormula(
+  Values: TMf6BoundaryValueArray; Name: string;
+  Map: TimeSeriesMap; ScreenObject: TScreenObject = nil): string;
+var
+  Index: Integer;
+  RealValues: TOneDRealArray;
+  UseRealFormula: Boolean;
+  UseTimeSeries: Boolean;
+  ImportedTimeSeries: String;
+begin
+// If the values are all numeric, this function provides a formula for that.
+// If the values all represent the same TimeSeries,
+//    this function returns the name of the TimeSeries.
+// If the values represent a mixture of real values and TimeSeries names,
+//    or a mixture of different TimeSeries names,
+//    this function returns an empty string indicating that the points can
+//    not all belong to the same object.
+  result := '';
+  SetLength(RealValues, Length(Values));
+  UseRealFormula := True;
+  for Index := 0 to Length(Values) - 1 do
+  begin
+    if Values[Index].ValueType = vtNumeric then
+    begin
+      RealValues[Index] := Values[Index].NumericValue
+    end
+    else
+    begin
+      UseRealFormula := False;
+      break;
+    end;
+  end;
+  if UseRealFormula then
+  begin
+    result := RealValuesToFormula(RealValues, Name, ScreenObject);
+  end
+  else
+  begin
+    UseTimeSeries := True;
+    for Index := 0 to Length(Values) - 1 do
+    begin
+      if (Values[Index].ValueType <> vtString)
+        or (Values[Index].StringValue <> Values[0].StringValue) then
+      begin
+        UseTimeSeries := False;
+        break;
+      end;
+    end;
+    if UseTimeSeries then
+    begin
+      if not Map.TryGetValue(UpperCase(Values[0].StringValue), ImportedTimeSeries) then
+      begin
+        Assert(False);
+      end;
+      result := ImportedTimeSeries;
+    end
+  end;
+end;
+
 type
   TSfrReachInfo = class(TObject)
   private
@@ -11425,6 +11537,9 @@ type
     IdObs: TObservationList;
     IsDiversion: Boolean;
     Added: Boolean;
+    SftPackageData: TSftPackageItemList;
+    SftBoundNameObs: TObservationLists;
+    SftIdObs: TObservationLists;
   public
     constructor Create;
     destructor Destroy; override;
@@ -11442,115 +11557,13 @@ type
   TSfrMvrLink = record
     SfrPeriod: TSfrPeriod;
     MvrPeriod: TMvrPeriod;
+    SftPeriods: TSftPeriodArray;
     function Period: Integer;
+    function SameContents(OtherLink: TSfrMvrLink): Boolean;
+    function HasData: Boolean;
   end;
   TSfrMvrLinkArray = TArray<TSfrMvrLink>;
   TSfrMvrLinkList = TList<TSfrMvrLink>;
-
-  function TModflow6Importer.RealValuesToFormula(Values: TOneDRealArray; Name: string;
-    ScreenObject: TScreenObject = nil): string;
-  var
-    FirstValue: Double;
-    Uniform: Boolean;
-    Index: Integer;
-    ImportedData: TValueArrayItem;
-  begin
-    Assert(Length(Values) > 0);
-    if Length(Values) = 1 then
-    begin
-      result := FortranFloatToStr(Values[0]);
-    end
-    else
-    begin
-      Uniform := True;
-      FirstValue := Values[0];
-      for Index := 1 to Length(Values) - 1 do
-      begin
-        Uniform := Values[Index] = FirstValue;
-        if not Uniform then
-        begin
-          break;
-        end;
-      end;
-      if Uniform then
-      begin
-        result := FortranFloatToStr(Values[0]);
-      end
-      else
-      begin
-        if ScreenObject <> nil then
-        begin
-          ImportedData := ScreenObject.ImportedValues.Add;
-          ImportedData.Name := Name;
-          ImportedData.Values.DataType := rdtDouble;
-          ImportedData.Values.Count := Length(Values);
-          for Index := 0 to Length(Values) - 1 do
-          begin
-            ImportedData.Values.RealValues[Index] := Values[Index];
-          end;
-        end;
-        Result := rsObjectImportedValuesR + '("' + Name + '")';
-      end;
-    end;
-  end;
-  function TModflow6Importer.BoundaryValuesToFormula(
-    Values: TMf6BoundaryValueArray; Name: string;
-    Map: TimeSeriesMap; ScreenObject: TScreenObject = nil): string;
-  var
-    Index: Integer;
-    RealValues: TOneDRealArray;
-    UseRealFormula: Boolean;
-    UseTimeSeries: Boolean;
-    ImportedTimeSeries: String;
-  begin
-  // If the values are all numeric, this function provides a formula for that.
-  // If the values all represent the same TimeSeries,
-  //    this function returns the name of the TimeSeries.
-  // If the values represent a mixture of real values and TimeSeries names,
-  //    or a mixture of different TimeSeries names,
-  //    this function returns an empty string indicating that the points can
-  //    not all belong to the same object.
-    result := '';
-    SetLength(RealValues, Length(Values));
-    UseRealFormula := True;
-    for Index := 0 to Length(Values) - 1 do
-    begin
-      if Values[Index].ValueType = vtNumeric then
-      begin
-        RealValues[Index] := Values[Index].NumericValue
-      end
-      else
-      begin
-        UseRealFormula := False;
-        break;
-      end;
-    end;
-    if UseRealFormula then
-    begin
-      result := RealValuesToFormula(RealValues, Name, ScreenObject);
-    end
-    else
-    begin
-      UseTimeSeries := True;
-      for Index := 0 to Length(Values) - 1 do
-      begin
-        if (Values[Index].ValueType <> vtString)
-          or (Values[Index].StringValue <> Values[0].StringValue) then
-        begin
-          UseTimeSeries := False;
-          break;
-        end;
-      end;
-      if UseTimeSeries then
-      begin
-        if not Map.TryGetValue(UpperCase(Values[0].StringValue), ImportedTimeSeries) then
-        begin
-          Assert(False);
-        end;
-        result := ImportedTimeSeries;
-      end
-    end;
-  end;
 
 procedure TModflow6Importer.ImportSfr(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
@@ -11636,6 +11649,24 @@ var
   SfrSources: TIntegerList;
   SfrReceivers: TIntegerList;
   ObsNameIndex: Integer;
+  SftList: TSftList;
+  FoundAny: Boolean;
+  FoundSft: Boolean;
+  AModel: TModel;
+  TransportModel: TTransportNameFile;
+  APackage: TPackage;
+  Sft: TSft;
+  SftPeriod: TSftPeriod;
+  SftMaps: TimeSeriesMaps;
+  SftMap: TimeSeriesMap;
+  SftNumberDictionaries: TNumberDictionaries;
+  SftBoundNameDictionaries: TBoundNameDictionaries;
+  ListOfObsLists: TListOfObsLists;
+  SftItem: TSftPackageItem;
+  SftBoundNameObs: TObservationList;
+  SftIdObs: TObservationList;
+  FlowPackageName: string;
+  SftStrt: TArray<TMf6BoundaryValueArray>;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -12175,14 +12206,7 @@ var
         end;
       end;
 
-      {
-      SfrReachInfoLists[ObjectIndex] := SplitReachLists[0];
-      for SplitIndex := 1 to SplitReachLists.Count - 1 do
-      begin
-        SfrReachInfoLists.Add(SplitReachLists[SplitIndex]);
-      end;
-      }
-    finally
+       finally
       TempList.Free;
     end;
 
@@ -12295,10 +12319,66 @@ begin
   ObsLists := TObsLists.Create;
   SfrSources := TIntegerList.Create;
   SfrReceivers := TIntegerList.Create;
+  SftList := TSftList.Create;
+  SftMaps := TimeSeriesMaps.Create;
+  SftNumberDictionaries := TNumberDictionaries.Create;
+  SftBoundNameDictionaries := TBoundNameDictionaries.Create;
+  ListOfObsLists := TListOfObsLists.Create;
   try
-    if Mvr = nil then
+    FoundAny := False;
+    for var ModelIndex := 0 to TransportModels.Count - 1 do
+    begin
+      FoundSft := False;
+      AModel := TransportModels[ModelIndex];
+      TransportModel := AModel.FName as TTransportNameFile;
+      for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+      begin
+        APackage := TransportModel.NfPackages[PackageIndex];
+        if APackage.FileType = 'SFT6' then
+        begin
+          Sft := APackage.Package as TSft;
+          FlowPackageName := Sft.Options.FLOW_PACKAGE_NAME;
+          if FlowPackageName = '' then
+          begin
+            FlowPackageName := APackage.PackageName;
+          end;
+          if AnsiSameText(Package.PackageName, FlowPackageName) then
+          begin
+            SftList.Add(Sft);
+            FoundSft := True;
+            FoundAny := True;
+            SftMap := TimeSeriesMap.Create;
+            SftMaps.Add(SftMap);
+            for TimeSeriesIndex := 0 to Sft.TimeSeriesCount - 1 do
+            begin
+              TimeSeriesPackage := Sft.TimeSeries[TimeSeriesIndex];
+              ImportTimeSeries(TimeSeriesPackage, SftMap);
+            end;
+            break;
+          end;
+        end;
+      end;
+      if not FoundSft then
+      begin
+        SftList.Add(nil);
+      end;
+    end;
+    if not FoundAny then
+    begin
+      SftList.Clear;
+    end;
+    SetLength(SftStrt, SftList.Count);
+    for var TransportIndex := 0 to SftList.Count - 1 do
+    begin
+      SftNumberDictionaries.Add(TNumberDictionary.Create);
+      SftBoundNameDictionaries.Add(TBoundNameDictionary.Create);
+
+      ListOfObsLists.Add(TObsLists.Create(False))
+    end;
+    if (Mvr = nil) and (SftList.Count = 0) then
     begin
       SfrMvrLink.MvrPeriod := nil;
+      SetLength(SfrMvrLink.SftPeriods, 0);
       for StressPeriodIndex := 0 to Sfr.PeriodCount - 1 do
       begin
         SfrMvrLink.SfrPeriod := Sfr.Periods[StressPeriodIndex];
@@ -12312,13 +12392,33 @@ begin
       begin
         SfrMvrLinkArray[StressPeriodIndex].MvrPeriod := nil;
         SfrMvrLinkArray[StressPeriodIndex].SfrPeriod := nil;
+        SetLength(SfrMvrLinkArray[StressPeriodIndex].SftPeriods, SftList.Count);
       end;
-      for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+
+      if Mvr <> nil then
       begin
-        MvrPeriod := Mvr.Periods[StressPeriodIndex];
-        SfrMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
-        IdentifySourcesAndReceivers(MvrPeriod);
+        for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+        begin
+          MvrPeriod := Mvr.Periods[StressPeriodIndex];
+          SfrMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
+          IdentifySourcesAndReceivers(MvrPeriod);
+        end;
       end;
+
+      for var TransportIndex := 0 to SftList.Count - 1 do
+      begin
+        Sft := SftList[TransportIndex];
+        if Sft <> nil then
+        begin
+          for StressPeriodIndex := 0 to Sft.PeriodCount - 1 do
+          begin
+            SftPeriod := Sft.Periods[StressPeriodIndex];
+            SfrMvrLinkArray[SftPeriod.Period-1].SftPeriods[TransportIndex] := SftPeriod;
+//            IdentifySourcesAndReceivers(SftPeriod);
+          end;
+        end;
+      end;
+
       for StressPeriodIndex := 0 to Sfr.PeriodCount - 1 do
       begin
         SfrPeriod := Sfr.Periods[StressPeriodIndex];
@@ -12330,22 +12430,31 @@ begin
         if SfrMvrLinkArray[StressPeriodIndex].MvrPeriod = nil then
         begin
           SfrMvrLinkArray[StressPeriodIndex].MvrPeriod := SfrMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
+        end;
+        if SfrMvrLinkArray[StressPeriodIndex].SfrPeriod = nil then
+        begin
           SfrMvrLinkArray[StressPeriodIndex].SfrPeriod := SfrMvrLinkArray[StressPeriodIndex-1].SfrPeriod;
+        end;
+        for var TransportIndex := 0 to SftList.Count - 1 do
+        begin
+          if SfrMvrLinkArray[StressPeriodIndex].SftPeriods[TransportIndex] = nil then
+          begin
+            SfrMvrLinkArray[StressPeriodIndex].SftPeriods[TransportIndex] := SfrMvrLinkArray[StressPeriodIndex-1].SftPeriods[TransportIndex];
+          end;
         end;
       end;
 
       for StressPeriodIndex := 0 to Length(SfrMvrLinkArray) - 1 do
       begin
-        if (SfrMvrLinkArray[StressPeriodIndex].MvrPeriod = nil)
-          and (SfrMvrLinkArray[StressPeriodIndex].SfrPeriod = nil) then
+        if not SfrMvrLinkArray[StressPeriodIndex].HasData then
         begin
           Continue;
         end;
 
         if StressPeriodIndex > 0 then
         begin
-          if (SfrMvrLinkArray[StressPeriodIndex].MvrPeriod = SfrMvrLinkArray[StressPeriodIndex - 1].MvrPeriod)
-            and (SfrMvrLinkArray[StressPeriodIndex].SfrPeriod = SfrMvrLinkArray[StressPeriodIndex - 1].SfrPeriod) then
+          if SfrMvrLinkArray[StressPeriodIndex].SameContents(
+            SfrMvrLinkArray[StressPeriodIndex - 1]) then
           begin
             Continue
           end;
@@ -12353,7 +12462,6 @@ begin
 
         SfrMvrLinkList.Add(SfrMvrLinkArray[StressPeriodIndex]);
       end;
-
     end;
 
     for TimeSeriesIndex := 0 to Sfr.TimeSeriesCount - 1 do
@@ -12373,6 +12481,25 @@ begin
         nil, ObsLists, ObsFiles);
     end;
 
+    for var TransportIndex := 0 to SftList.Count - 1 do
+    begin
+      Sft := SftList[TransportIndex];
+      if Sft <> nil then
+      begin
+        if Sft.ObservationCount > 0 then
+        begin
+          Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+        end;
+        for ObsPackageIndex := 0 to Sft.ObservationCount - 1 do
+        begin
+          ObsFiles := Sft.Observations[ObsPackageIndex].Package as TObs;
+          GetObservations(SftNumberDictionaries[TransportIndex],
+            SftBoundNameDictionaries[TransportIndex],
+            nil, ListOfObsLists[TransportIndex], ObsFiles);
+        end;
+      end;
+    end;
+
     if Assigned(OnUpdateStatusBar) then
     begin
       OnUpdateStatusBar(self, 'importing SFR package');
@@ -12389,6 +12516,19 @@ begin
         SfrReachInfo := TSfrReachInfo.Create;
         SfrReachInfoList.Add(SfrReachInfo);
         SfrReachInfo.PackageData := PackageData[Index];
+        for var TransportIndex := 0 to SftList.Count - 1 do
+        begin
+          Sft := SftList[TransportIndex];
+          if Sft <> nil then
+          begin
+            SfrReachInfo.SftPackageData.Add(Sft.PackageData.ItemByID[
+              SfrReachInfo.PackageData.rno]);
+          end
+          else
+          begin
+            SfrReachInfo.SftPackageData.Add(nil);
+          end;
+        end;
 
         if SfrReachInfo.PackageData.Boundname <> '' then
         begin
@@ -12404,6 +12544,42 @@ begin
           SfrReachInfo.IdObs) then
         begin
           SfrReachInfo.IdObs := nil;
+        end;
+
+        for var TransportIndex := 0 to SftList.Count - 1 do
+        begin
+          Sft := SftList[TransportIndex];
+          if Sft = nil then
+          begin
+            SfrReachInfo.SftBoundNameObs.Add(nil);
+            SfrReachInfo.SftIdObs.Add(nil);
+          end
+          else
+          begin
+            SftItem := SfrReachInfo.SftPackageData[TransportIndex];
+            if SftItem <> nil then
+            begin
+              if not SftBoundNameDictionaries[TransportIndex].TryGetValue(
+                UpperCase(SftItem.Boundname),
+                SftBoundNameObs) then
+              begin
+                SftBoundNameObs := nil
+              end;
+              SfrReachInfo.SftBoundNameObs.Add(SftBoundNameObs);
+
+              if not SftNumberDictionaries[TransportIndex].TryGetValue(SftItem.rno,
+                SftIdObs) then
+              begin
+                SftIdObs := nil;
+              end;
+              SfrReachInfo.SftIdObs.Add(SftIdObs);
+            end
+            else
+            begin
+              SfrReachInfo.SftBoundNameObs.Add(nil);
+              SfrReachInfo.SftIdObs.Add(nil);
+            end;
+          end;
         end;
       end;
 
@@ -12584,6 +12760,23 @@ begin
                 if DefaultFormula = '' then
                 begin
                   SplitReachListWithBoundaryValues(AReachList, BoundaryValues);
+                end;
+              end;
+
+              // Assign SFT package data here
+              for var TransportIndex := 0 to Length(SftStrt) - 1 do
+              begin
+                SetLength(SftStrt[TransportIndex], AReachList.Count);
+                for CellIndex := 0 to AReachList.Count - 1 do
+                begin
+                  SftStrt[TransportIndex][CellIndex] :=
+                   AReachList[CellIndex].SftPackageData[TransportIndex].strt;
+                end;
+                DefaultFormula := BoundaryValuesToFormula(SftStrt[TransportIndex],
+                  'dummyvariable', SftMaps[TransportIndex]);
+                if DefaultFormula = '' then
+                begin
+                  SplitReachListWithBoundaryValues(AReachList, SftStrt[TransportIndex]);
                 end;
               end;
 
@@ -12903,7 +13096,6 @@ begin
           PeriodSettings.Free;
         end;
 
-
       finally
         ReachListDictionary.Free;
         SfrReachInfoLists.Free;
@@ -12966,7 +13158,11 @@ begin
     SfrMvrLinkList.Free;
     SfrSources.Free;
     SfrReceivers.Free;
-
+    SftList.Free;
+    SftMaps.Free;
+    SftNumberDictionaries.Free;
+    SftBoundNameDictionaries.Free;
+    ListOfObsLists.Free;
   end;
 
 end;
@@ -13780,14 +13976,14 @@ begin
       // import SRC6
       ImportSRC(NameFile, APackage);
     end
-    else if APackage.FileType = 'LKT6' then
-    begin
-      // import LKT6
-      Continue;
-    end
     else if APackage.FileType = 'SFT6' then
     begin
       // import SFT6
+      Continue;
+    end
+    else if APackage.FileType = 'LKT6' then
+    begin
+      // import LKT6
       Continue;
     end
     else if APackage.FileType = 'MWT6' then
@@ -16547,18 +16743,49 @@ begin
   result := (CrossSectionFile = OtherInfo.CrossSectionFile)
     and (BoundNameObs = OtherInfo.BoundNameObs)
     and (IdObs = nil)
-    and (OtherInfo.IdObs = nil)
+    and (OtherInfo.IdObs = nil);
+  if result then
+  begin
+    Assert(SftBoundNameObs.Count = OtherInfo.SftBoundNameObs.Count);
+    for var TransportIndex := 0 to SftBoundNameObs.Count - 1 do
+    begin
+      result := SftBoundNameObs[TransportIndex] =
+        OtherInfo.SftBoundNameObs[TransportIndex];
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+    Assert(SftIdObs.Count = OtherInfo.SftIdObs.Count);
+    for var TransportIndex := 0 to SftIdObs.Count - 1 do
+    begin
+      result := (SftIdObs[TransportIndex] = nil)
+        and (OtherInfo.SftIdObs[TransportIndex] = nil);
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
 end;
 
 constructor TSfrReachInfo.Create;
 begin
   inherited;
   Diversions := TSfrDiversionItemList.Create;
+  SftPackageData := TSftPackageItemList.Create;
+  SftPackageData.OwnsObjects := False;
+  SftBoundNameObs := TObservationLists.Create;
+  SftIdObs := TObservationLists.Create;
+
 end;
 
 destructor TSfrReachInfo.Destroy;
 begin
   Diversions.Free;
+  SftPackageData.Free;
+  SftBoundNameObs.Free;
+  SftIdObs.Free;
   inherited;
 end;
 
@@ -16636,19 +16863,69 @@ end;
 
 { TSfrMvrLink }
 
+function TSfrMvrLink.HasData: Boolean;
+begin
+  result := (SfrPeriod <> nil) or (MvrPeriod <> nil);
+  if not result then
+  begin
+    for var TransportIndex := 0 to Length(SftPeriods) - 1 do
+    begin
+      result := SftPeriods[TransportIndex] <> nil;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
 function TSfrMvrLink.Period: Integer;
 begin
-  if MvrPeriod = nil then
+  if not HasData then
   begin
-    result := SfrPeriod.Period;
-  end
-  else if SfrPeriod = nil then
-  begin
-    result := MvrPeriod.Period;
+    result := -1;
   end
   else
   begin
-    Result := Max(SfrPeriod.Period, MvrPeriod.Period);
+    if SfrPeriod <> nil then
+    begin
+      result := SfrPeriod.Period;
+    end
+    else
+    begin
+      result := MAXINT;
+    end;
+
+    if MvrPeriod <> nil then
+    begin
+      result := Min(result, MvrPeriod.Period);
+    end;
+
+    for var TransportIndex := 0 to Length(SftPeriods) - 1 do
+    begin
+      if SftPeriods[TransportIndex] <> nil then
+      begin
+        result := Min(result, SftPeriods[TransportIndex].Period);
+      end;
+    end;
+  end;
+end;
+
+function TSfrMvrLink.SameContents(OtherLink: TSfrMvrLink): Boolean;
+begin
+  result := (SfrPeriod = OtherLink.SfrPeriod)
+    and (MvrPeriod = OtherLink.MvrPeriod)
+    and (Length(SftPeriods) = Length(OtherLink.SftPeriods));
+  if result then
+  begin
+    for var Index := 0 to Length(SftPeriods) - 1 do
+    begin
+      result := SftPeriods[Index] = OtherLink.SftPeriods[Index];
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
   end;
 end;
 

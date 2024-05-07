@@ -37,6 +37,7 @@ type
   end;
 
   TObservationList = TList<TObservation>;
+  TObservationLists = TObjectList<TObservationList>;
 
   TObsFile = class(TCustomMf6Persistent)
   private

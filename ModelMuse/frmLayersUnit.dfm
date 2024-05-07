@@ -4,8 +4,8 @@ inherited frmLayers: TfrmLayers
   Caption = 'MODFLOW Layer Groups'
   ClientHeight = 480
   ClientWidth = 579
-  ExplicitWidth = 591
-  ExplicitHeight = 518
+  ExplicitWidth = 595
+  ExplicitHeight = 519
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 137
@@ -23,8 +23,6 @@ inherited frmLayers: TfrmLayers
     Align = alClient
     TabOrder = 1
     OnChange = pcLayerGroupsChange
-    ExplicitWidth = 433
-    ExplicitHeight = 438
     object tabBasics: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Basics_Tab'
@@ -112,7 +110,6 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Convertible'
           end>
-        ExplicitWidth = 395
       end
       object comboInterblockMethod: TJvImageComboBox
         Left = 3
@@ -145,7 +142,6 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Arithmetic and logarithmic (2)'
           end>
-        ExplicitWidth = 395
       end
       object comboVertKMethod: TJvImageComboBox
         Left = 3
@@ -173,7 +169,6 @@ inherited frmLayers: TfrmLayers
             Indent = 0
             Text = 'Ratio of horizontal to vertical hydraulic conductivity (1)'
           end>
-        ExplicitWidth = 395
       end
       object edName: TRbwEdit
         Left = 3
@@ -184,7 +179,6 @@ inherited frmLayers: TfrmLayers
         TabOrder = 0
         OnChange = edNameChange
         OnExit = edNameExit
-        ExplicitWidth = 395
       end
       object cbComputeSaturatedThickness: TJvCheckBox
         Left = 3
@@ -204,7 +198,6 @@ inherited frmLayers: TfrmLayers
         HotTrackFont.Name = 'Arial'
         HotTrackFont.Pitch = fpVariable
         HotTrackFont.Style = []
-        ExplicitWidth = 395
       end
       object rdeAnisotropy: TRbwDataEntry
         Left = 3
@@ -273,7 +266,6 @@ inherited frmLayers: TfrmLayers
             ExplicitWidth = 165
             inherited lbl3: TLabel
               Width = 165
-              Height = 41
               ExplicitWidth = 142
               ExplicitHeight = 36
             end
@@ -861,8 +853,6 @@ inherited frmLayers: TfrmLayers
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 438
-    ExplicitWidth = 575
     DesignSize = (
       579
       41)
@@ -876,11 +866,10 @@ inherited frmLayers: TfrmLayers
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 210
     end
     object btnOK: TBitBtn
       Left = 328
-      Top = 4
+      Top = 5
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -891,14 +880,13 @@ inherited frmLayers: TfrmLayers
     end
     object btnCancel: TBitBtn
       Left = 442
-      Top = 4
+      Top = 5
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 438
     end
   end
   object Panel3: TPanel
@@ -908,7 +896,6 @@ inherited frmLayers: TfrmLayers
     Height = 439
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 438
     object GridPanel1: TGridPanel
       Left = 1
       Top = 406
@@ -946,7 +933,6 @@ inherited frmLayers: TfrmLayers
           Value = 100.000000000000000000
         end>
       TabOrder = 1
-      ExplicitTop = 405
       DesignSize = (
         135
         32)
@@ -1049,7 +1035,6 @@ inherited frmLayers: TfrmLayers
       StateImages = ilTreeView
       TabOrder = 0
       OnChange = tvLayerGroupsChange
-      ExplicitHeight = 404
     end
   end
   object ilCombo: TImageList
