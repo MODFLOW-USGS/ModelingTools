@@ -141,7 +141,7 @@ type
     FExternalFileName: string;
     FBinary: Boolean;
     FConstantValue: DataType;
-    function StrToDataType(AValue: string): DataType; virtual; abstract;
+    function StrToDataType(AValue: string; var DataValue: DataType): Boolean; virtual; abstract;
     procedure ReadControlLine(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -179,7 +179,7 @@ type
   TDouble1DArrayReader = class(T1DArrayReader<Double>)
   private
     procedure ReadDataFromTextFile(Stream: TStreamReader);
-    function StrToDataType(AValue: string): Double; override;
+    function StrToDataType(AValue: string; var DataValue: Double): Boolean; override;
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -187,7 +187,7 @@ type
   TInteger1DArrayReader = class(T1DArrayReader<Integer>)
   private
     procedure ReadDataFromTextFile(Stream: TStreamReader);
-    function StrToDataType(AValue: string): Integer; override;
+    function StrToDataType(AValue: string; var DataValue: Integer): Boolean; override;
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -202,7 +202,7 @@ type
 
   TDouble2DArrayReader = class(T2DArrayReader<Double>)
   private
-    function StrToDataType(AValue: string): Double; override;
+    function StrToDataType(AValue: string; var DataValue: Double): Boolean; override;
     procedure Read2DArrayFromTextFile(Stream: TStreamReader);
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -220,7 +220,7 @@ type
 
   TDouble3DArrayReader = class(T3DArrayReader<Double>)
   private
-    function StrToDataType(AValue: string): Double; override;
+    function StrToDataType(AValue: string; var DataValue: Double): Boolean; override;
     procedure Read2DArrayFromTextFile(Stream: TStreamReader; LayerIndex: Integer);
     procedure Read3DArrayFromTextFile(Stream: TStreamReader);
   public
@@ -229,7 +229,7 @@ type
 
   TInteger3DArrayReader = class(T3DArrayReader<Integer>)
   private
-    function StrToDataType(AValue: string): Integer; override;
+    function StrToDataType(AValue: string; var DataValue: Integer): Boolean; override;
     procedure Read2DArrayFromTextFile(Stream: TStreamReader; LayerIndex: Integer);
     procedure Read3DArrayFromTextFile(Stream: TStreamReader);
   public
@@ -499,11 +499,11 @@ procedure TCustomArrayReader<DataType>.Initialize;
 begin
   inherited;
   ArrayType := atUndefined;
-  FFactor := StrToDataType('1');;
+  StrToDataType('1', FFactor);
   IPRN := -1;
   FExternalFileName := '';
   FBinary := False;
-  FConstantValue := StrToDataType('0');
+  StrToDataType('0', FConstantValue);
 end;
 
 procedure TCustomArrayReader<DataType>.ReadControlLine(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -549,7 +549,7 @@ begin
     case ArrayType of
       atConstant:
         begin
-          FConstantValue := StrToDataType(FSplitter[1])
+          Assert(StrToDataType(FSplitter[1], FConstantValue));
         end;
       atInternal:
         begin
@@ -558,7 +558,7 @@ begin
             Option := FSplitter[1];
             if Option = 'FACTOR' then
             begin
-              FFactor := StrToDataType(FSplitter[2]);
+              Assert(StrToDataType(FSplitter[2], FFactor));
             end
             else if Option = 'IPRN' then
             begin
@@ -577,7 +577,7 @@ begin
               Option := FSplitter[3];
               if Option = 'FACTOR' then
               begin
-                FFactor := StrToDataType(FSplitter[4]);
+                Assert(StrToDataType(FSplitter[4], FFactor));
               end
               else if Option = 'IPRN' then
               begin
@@ -604,7 +604,7 @@ begin
             if Option = 'FACTOR' then
             begin
               Inc(OptionIndex);
-              FFactor := StrToDataType(FSplitter[OptionIndex]);
+              Assert(StrToDataType(FSplitter[OptionIndex], FFactor));
               Inc(OptionIndex);
             end
             else if Option = 'IPRN' then
@@ -699,6 +699,7 @@ var
   ErrorLine: string;
   ItemIndex: Integer;
   Index: Integer;
+  DataValue: Double;
 begin
   Index := 0;
   while Index < FDimension do
@@ -708,15 +709,21 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      FData[Index] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
-      Inc(Index);
+      if StrToDataType(FSplitter[ItemIndex], DataValue) then
+      begin
+        FData[Index] := DataValue * FFactor;
+        Inc(Index);
+      end;
     end;
   end;
 end;
 
-function TDouble1DArrayReader.StrToDataType(AValue: string): Double;
+function TDouble1DArrayReader.StrToDataType(AValue: string; var DataValue: Double): Boolean;
+var
+  TestValue: Extended;
 begin
-  result := FortranStrToFloat(AValue);
+  result := TryFortranStrToFloat(AValue, TestValue);
+  DataValue := TestValue;
 end;
 
 
@@ -932,6 +939,7 @@ var
   ItemIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
+  DataValue: Double;
 begin
   RowIndex := 0;
   ColIndex := 0;
@@ -942,12 +950,15 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      FData[LayerIndex, RowIndex, ColIndex] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
-      Inc(ColIndex);
-      if ColIndex = FDimensions.NCol then
+      if StrToDataType(FSplitter[ItemIndex], DataValue) then
       begin
-        ColIndex := 0;
-        Inc(RowIndex);
+        FData[LayerIndex, RowIndex, ColIndex] := DataValue * FFactor;
+        Inc(ColIndex);
+        if ColIndex = FDimensions.NCol then
+        begin
+          ColIndex := 0;
+          Inc(RowIndex);
+        end;
       end;
     end;
   end;
@@ -961,6 +972,7 @@ var
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
+  DataValue: Double;
 begin
   LayerIndex := 0;
   RowIndex := 0;
@@ -973,26 +985,32 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      FData[LayerIndex, RowIndex, ColIndex] :=
-        StrToDataType(FSplitter[ItemIndex]) * FFactor;
-      Inc(ColIndex);
-      if ColIndex = FDimensions.NCol then
+      if StrToDataType(FSplitter[ItemIndex], DataValue) then
       begin
-        ColIndex := 0;
-        Inc(RowIndex);
-        if RowIndex = FDimensions.NRow then
+        FData[LayerIndex, RowIndex, ColIndex] :=
+          DataValue * FFactor;
+        Inc(ColIndex);
+        if ColIndex = FDimensions.NCol then
         begin
-          RowIndex := 0;
-          Inc(LayerIndex);
+          ColIndex := 0;
+          Inc(RowIndex);
+          if RowIndex = FDimensions.NRow then
+          begin
+            RowIndex := 0;
+            Inc(LayerIndex);
+          end;
         end;
       end;
     end;
   end;
 end;
 
-function TDouble3DArrayReader.StrToDataType(AValue: string): Double;
+function TDouble3DArrayReader.StrToDataType(AValue: string; var DataValue: Double): Boolean;
+var
+  TestValue: Extended;
 begin
-  result := FortranStrToFloat(AValue);
+  result := TryFortranStrToFloat(AValue, TestValue);
+  DataValue := TestValue;
 end;
 
 { TCellId }
@@ -1162,6 +1180,7 @@ var
   ItemIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
+  DataValue: Double;
 begin
   RowIndex := 0;
   ColIndex := 0;
@@ -1172,20 +1191,26 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      FData[RowIndex, ColIndex] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
-      Inc(ColIndex);
-      if ColIndex = FDimensions.NCol then
+      if StrToDataType(FSplitter[ItemIndex], DataValue) then
       begin
-        ColIndex := 0;
-        Inc(RowIndex);
+        FData[RowIndex, ColIndex] := DataValue * FFactor;
+        Inc(ColIndex);
+        if ColIndex = FDimensions.NCol then
+        begin
+          ColIndex := 0;
+          Inc(RowIndex);
+        end;
       end;
     end;
   end;
 end;
 
-function TDouble2DArrayReader.StrToDataType(AValue: string): Double;
+function TDouble2DArrayReader.StrToDataType(AValue: string; var DataValue: Double): Boolean;
+var
+  TestValue: Extended;
 begin
-  result := FortranStrToFloat(AValue);
+  result := TryFortranStrToFloat(AValue, TestValue);
+  DataValue := TestValue;
 end;
 
 { TInteger3DArrayReader }
@@ -1197,16 +1222,6 @@ var
   RowIndex: Integer;
   ColIndex: Integer;
   ExternalFileStream: TStreamReader;
-//  ExternalBinaryFileStream: TFileStream;
-//  KSTP: Integer;
-//  KPER: Integer;
-//  PERTIM: TModflowDouble;
-//  TOTIM: TModflowDouble;
-//  DESC: TModflowDesc;
-//  NCOL: Integer;
-//  NROW: Integer;
-//  ILAY: Integer;
-//  AnArray: TModflowDoubleArray;
 begin
   inherited;
   if FLayered then
@@ -1234,37 +1249,6 @@ begin
           if FBinary then
           begin
             Assert(False);
-//            if TFile.Exists(FExternalFileName) then
-//            begin
-//              try
-//                ExternalBinaryFileStream := TFile.Create(FExternalFileName,
-//                  fmOpenRead or fmShareDenyWrite);
-//                try
-//                  ReadDoublePrecisionModflowBinaryRealArray(ExternalBinaryFileStream,
-//                  KSTP, KPER, PERTIM, TOTIM, DESC, NCOL, NROW, ILAY, AnArray, True);
-//                  for RowIndex := 0 to FDimensions.NRow - 1 do
-//                  begin
-//                    for ColIndex := 0 to FDimensions.NCol - 1 do
-//                    begin
-//                      FData[LayerIndex,RowIndex, ColIndex] :=
-//                        AnArray[RowIndex, ColIndex] * FFactor;
-//                    end;
-//                  end;
-//                finally
-//                  ExternalBinaryFileStream.Free;
-//                end;
-//              except on E: Exception do
-//                begin
-//                  Unhandled.WriteLine('ERROR');
-//                  Unhandled.WriteLine(E.Message);
-//                end;
-//              end;
-//            end
-//            else
-//            begin
-//              Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
-//                [FExternalFileName]));
-//            end;
           end
           else
           begin
@@ -1401,6 +1385,7 @@ var
   ItemIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
+  DataValue: Integer;
 begin
   RowIndex := 0;
   ColIndex := 0;
@@ -1411,12 +1396,15 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      FData[LayerIndex, RowIndex, ColIndex] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
-      Inc(ColIndex);
-      if ColIndex = FDimensions.NCol then
+      if StrToDataType(FSplitter[ItemIndex], DataValue) then
       begin
-        ColIndex := 0;
-        Inc(RowIndex);
+        FData[LayerIndex, RowIndex, ColIndex] := DataValue * FFactor;
+        Inc(ColIndex);
+        if ColIndex = FDimensions.NCol then
+        begin
+          ColIndex := 0;
+          Inc(RowIndex);
+        end;
       end;
     end;
   end;
@@ -1430,6 +1418,7 @@ var
   LayerIndex: Integer;
   RowIndex: Integer;
   ColIndex: Integer;
+  DataValue: Integer;
 begin
   LayerIndex := 0;
   RowIndex := 0;
@@ -1442,26 +1431,29 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      FData[LayerIndex, RowIndex, ColIndex] :=
-        StrToDataType(FSplitter[ItemIndex]) * FFactor;
-      Inc(ColIndex);
-      if ColIndex = FDimensions.NCol then
+      if StrToDataType(FSplitter[ItemIndex], DataValue) then
       begin
-        ColIndex := 0;
-        Inc(RowIndex);
-        if RowIndex = FDimensions.NRow then
+        FData[LayerIndex, RowIndex, ColIndex] :=
+          DataValue * FFactor;
+        Inc(ColIndex);
+        if ColIndex = FDimensions.NCol then
         begin
-          RowIndex := 0;
-          Inc(LayerIndex);
+          ColIndex := 0;
+          Inc(RowIndex);
+          if RowIndex = FDimensions.NRow then
+          begin
+            RowIndex := 0;
+            Inc(LayerIndex);
+          end;
         end;
       end;
     end;
   end;
 end;
 
-function TInteger3DArrayReader.StrToDataType(AValue: string): Integer;
+function TInteger3DArrayReader.StrToDataType(AValue: string; var DataValue: Integer): Boolean;
 begin
-  result := StrToInt(AValue);
+  result := TryStrToInt(AValue, DataValue);
 end;
 
 { TInteger1DArrayReader }
@@ -1530,6 +1522,7 @@ var
   ErrorLine: string;
   ItemIndex: Integer;
   Index: Integer;
+  DataValue: Integer;
 begin
   Index := 0;
   while Index < FDimension do
@@ -1539,15 +1532,18 @@ begin
     FSplitter.DelimitedText := ALine;
     for ItemIndex := 0 to FSplitter.Count - 1 do
     begin
-      FData[Index] := StrToDataType(FSplitter[ItemIndex]) * FFactor;
+      if StrToDataType(FSplitter[ItemIndex], DataValue) then
+      begin
+        FData[Index] := DataValue * FFactor;
+      end;
       Inc(Index);
     end;
   end;
 end;
 
-function TInteger1DArrayReader.StrToDataType(AValue: string): Integer;
+function TInteger1DArrayReader.StrToDataType(AValue: string; var DataValue: Integer): Boolean;
 begin
-  result := StrToInt(AValue);
+  result := TryStrToInt(AValue, DataValue);
 end;
 
 { TPrintFormat }

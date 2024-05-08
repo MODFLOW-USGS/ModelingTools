@@ -89,7 +89,7 @@ type
     destructor Destroy; override;
     property Period: Integer read IPER;
     property Count: Integer read GetCount;
-    property Items[Index: Integer]: TNumberedItem read GetItem;
+    property Items[Index: Integer]: TNumberedItem read GetItem; default;
   end;
 
   TSftPeriodList = TObjectList<TSftPeriod>;

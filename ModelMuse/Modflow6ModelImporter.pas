@@ -204,7 +204,7 @@ uses
   Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit, Mf6.MstFileReaderUnit,
   OctTreeClass, ModflowCellUnit, Mf6.IstFileReaderUnit,
   ModflowGwtSpecifiedConcUnit, Mf6.SrcFileReaderUnit, Mf6.FmiFileReaderUnit,
-  Mf6.SftFileReaderUnit;
+  Mf6.SftFileReaderUnit, GwtStatusUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -6332,6 +6332,7 @@ begin
   end;
 
   Model.DataArrayManager.CreateInitialDataSets;
+  Model.MobileComponents.UpdateDataArrays;
 
   SpeciesIndex := Model.MobileComponents.IndexOfName(NameFile.SpeciesName);
   Assert(SpeciesIndex >= 0);
@@ -11565,6 +11566,9 @@ type
   TSfrMvrLinkArray = TArray<TSfrMvrLink>;
   TSfrMvrLinkList = TList<TSfrMvrLink>;
 
+  TPeriodSettings = TObjectList<TNumberedItemLists>;
+  TSftPeriodSettings = TObjectList<TPeriodSettings>;
+
 procedure TModflow6Importer.ImportSfr(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
 var
@@ -11612,7 +11616,11 @@ var
   SettingIndex: Integer;
   ASetting: TNumberedItem;
   ASettingList: TNumberedItemLists;
-  PeriodSettings: TObjectList<TNumberedItemLists>;
+  SftSetingList: TNumberedItemLists;
+  SftSettingList: TNumberedItemLists;
+  PeriodSettings: TPeriodSettings;
+  SftPeriodSettingsList: TSftPeriodSettings;
+  SftPeriodSettings: TPeriodSettings;
   AReachSettingsList: TNumberedItemList;
   SplitReachLists: TObjectList<TSfrReachInfoList>;
   AuxIndex: Integer;
@@ -11667,6 +11675,14 @@ var
   SftIdObs: TObservationList;
   FlowPackageName: string;
   SftStrt: TArray<TMf6BoundaryValueArray>;
+  SftCONCENTRATION: TArray<TMf6BoundaryValueArray>;
+  SftRAINFALL: TArray<TMf6BoundaryValueArray>;
+  SftEVAPORATION: TArray<TMf6BoundaryValueArray>;
+  SftRUNOFF: TArray<TMf6BoundaryValueArray>;
+  SftINFLOW: TArray<TMf6BoundaryValueArray>;
+  SftStringValues: TArray<TOneDStringArray>;
+  ValidSfrSettings: TStringList;
+  ValidSftSettings: TStringList;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -11681,7 +11697,7 @@ var
       AReachList.Terminated := True;
     end;
   end;
-  procedure UpdateReachSettings(AReachList: TSfrReachInfoList;
+  procedure UpdateReachSettings(AReachList: TSfrReachInfoList; ASettingList: TNumberedItemLists;
     var BoundaryValues: TMf6BoundaryValueArray; const Key: string; AuxName: string = '');
   var
     ReachIndex: Integer;
@@ -11955,6 +11971,24 @@ var
     end;
     SfrBoundary.HydraulicConductivity := RealValuesToFormula(Values, 'ReachK', result);
 
+    for var TransportIndex := 0 to SftList.Count - 1 do
+    begin
+      for CellIndex := 0 to AReachList.Count - 1 do
+      begin
+        if AReachList[CellIndex].SftPackageData[TransportIndex] <> nil then
+        begin
+          Values[CellIndex] := AReachList[CellIndex].SftPackageData[TransportIndex].strt.NumericValue;
+        end
+        else
+        begin
+          Values[CellIndex] := 0;
+        end;
+      end;
+      SfrBoundary.StartingConcentrations[TransportIndex].Value :=
+        RealValuesToFormula(Values, Format('Strt_%d', [TransportIndex+1]), result);
+    end;
+
+
     CrossSectionFileName := '';
     if AReachList[0].CrossSectionFile <> '' then
     begin
@@ -12082,33 +12116,82 @@ var
         end;
       end;
 
-      UpdateReachSettings(AReachList, ManningBoundaryValues, 'MANNING');
+      UpdateReachSettings(AReachList,ASettingList, ManningBoundaryValues, 'MANNING');
       SfrItem.Roughness := BoundaryValuesToFormula(ManningBoundaryValues,
         Format('Roughness_%d', [SfrMvrLink.Period]), Map, result);
 
-      UpdateReachSettings(AReachList, UpstreamFractionBoundaryValues, 'UPSTREAM_FRACTION');
+      UpdateReachSettings(AReachList, ASettingList, UpstreamFractionBoundaryValues, 'UPSTREAM_FRACTION');
       SfrItem.UpstreamFraction := BoundaryValuesToFormula(UpstreamFractionBoundaryValues,
         Format('UpstreamFraction_%d', [SfrMvrLink.Period]), Map, result);
 
-      UpdateReachSettings(AReachList, StageBoundaryValues, 'STAGE');
+      UpdateReachSettings(AReachList, ASettingList, StageBoundaryValues, 'STAGE');
       SfrItem.Stage := BoundaryValuesToFormula(StageBoundaryValues,
         Format('Stage_%d', [SfrMvrLink.Period]), Map, result);
 
-      UpdateReachSettings(AReachList, InflowBoundaryValues, 'INFLOW');
+      UpdateReachSettings(AReachList, ASettingList, InflowBoundaryValues, 'INFLOW');
       SfrItem.Inflow := BoundaryValuesToFormula(InflowBoundaryValues,
         Format('Inflow_%d', [SfrMvrLink.Period]), Map, result);
 
-      UpdateReachSettings(AReachList, RainfallBoundaryValues, 'RAINFALL');
+      UpdateReachSettings(AReachList, ASettingList, RainfallBoundaryValues, 'RAINFALL');
       SfrItem.Rainfall := BoundaryValuesToFormula(RainfallBoundaryValues,
         Format('Inflow_%d', [SfrMvrLink.Period]), Map, result);
 
-      UpdateReachSettings(AReachList, EvaporationBoundaryValues, 'EVAPORATION');
+      UpdateReachSettings(AReachList, ASettingList, EvaporationBoundaryValues, 'EVAPORATION');
       SfrItem.Evaporation := BoundaryValuesToFormula(EvaporationBoundaryValues,
         Format('Evaporation_%d', [SfrMvrLink.Period]), Map, result);
 
-      UpdateReachSettings(AReachList, RunoffBoundaryValues, 'RUNOFF');
+      UpdateReachSettings(AReachList, ASettingList, RunoffBoundaryValues, 'RUNOFF');
       SfrItem.Runoff := BoundaryValuesToFormula(RunoffBoundaryValues,
         Format('Runoff_%d', [SfrMvrLink.Period]), Map, result);
+
+      for var TransportIndex := 0 to SftList.Count - 1 do
+      begin
+        SftPeriodSettings := SftPeriodSettingsList[TransportIndex];
+        SftSetingList  := SftPeriodSettings[PeriodIndex];
+        AReachSettingsList := SftSetingList[AReachList[0].PackageData.rno-1];
+
+        for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+        begin
+          ASetting := AReachSettingsList[SettingIndex];
+          if AnsiSameText(ASetting.Name, 'STATUS') then
+          begin
+            if AnsiSameText(ASetting.StringValue, 'INACTIVE') then
+            begin
+              SfrItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsInactive;
+            end
+            else if AnsiSameText(ASetting.StringValue, 'CONSTANT') then
+            begin
+              SfrItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsConstant;
+            end
+            else
+            begin
+              Assert(AnsiSameText(ASetting.StringValue, 'ACTIVE'));
+            end;
+            Break;
+          end;
+        end;
+
+        UpdateReachSettings(AReachList, SftSetingList, SftCONCENTRATION[TransportIndex], 'CONCENTRATION');
+        SfrItem.SpecifiedConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftCONCENTRATION[TransportIndex],
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+
+        UpdateReachSettings(AReachList, SftSetingList, SftRAINFALL[TransportIndex], 'RAINFALL');
+        SfrItem.RainfallConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftRAINFALL[TransportIndex],
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+
+        UpdateReachSettings(AReachList, SftSetingList, SftEVAPORATION[TransportIndex], 'EVAPORATION');
+        SfrItem.EvapConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftEVAPORATION[TransportIndex],
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+
+        UpdateReachSettings(AReachList, SftSetingList, SftRUNOFF[TransportIndex], 'RUNOFF');
+        SfrItem.RunoffConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftRUNOFF[TransportIndex],
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+
+        UpdateReachSettings(AReachList, SftSetingList, SftINFLOW[TransportIndex], 'INFLOW');
+        SfrItem.InflowConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftINFLOW[TransportIndex],
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+
+      end;
     end;
 
     if SfrBoundary.CrossSections.Count > 0 then
@@ -12324,7 +12407,29 @@ begin
   SftNumberDictionaries := TNumberDictionaries.Create;
   SftBoundNameDictionaries := TBoundNameDictionaries.Create;
   ListOfObsLists := TListOfObsLists.Create;
+  ValidSfrSettings := TStringList.Create;
+  ValidSftSettings := TStringList.Create;
   try
+    ValidSfrSettings.Add('STATUS');
+    ValidSfrSettings.Add('MANNING');
+    ValidSfrSettings.Add('STAGE');
+    ValidSfrSettings.Add('INFLOW');
+    ValidSfrSettings.Add('RAINFALL');
+    ValidSfrSettings.Add('EVAPORATION');
+    ValidSfrSettings.Add('RUNOFF');
+    ValidSfrSettings.Add('DIVERSION');
+    ValidSfrSettings.Add('UPSTREAM_FRACTION');
+    ValidSfrSettings.Add('CROSS_SECTION');
+    ValidSfrSettings.Add('AUXILIARY');
+
+    ValidSftSettings.Add('STATUS');
+    ValidSftSettings.Add('CONCENTRATION');
+    ValidSftSettings.Add('RAINFALL');
+    ValidSftSettings.Add('EVAPORATION');
+    ValidSftSettings.Add('RUNOFF');
+    ValidSftSettings.Add('INFLOW');
+    ValidSftSettings.Add('AUXILIARY');
+
     FoundAny := False;
     for var ModelIndex := 0 to TransportModels.Count - 1 do
     begin
@@ -12368,6 +12473,13 @@ begin
       SftList.Clear;
     end;
     SetLength(SftStrt, SftList.Count);
+    SetLength(SftCONCENTRATION, SftList.Count);
+    SetLength(SftRAINFALL, SftList.Count);
+    SetLength(SftEVAPORATION, SftList.Count);
+    SetLength(SftRUNOFF, SftList.Count);
+    SetLength(SftINFLOW, SftList.Count);
+    SetLength(SftStringValues, SftList.Count);
+
     for var TransportIndex := 0 to SftList.Count - 1 do
     begin
       SftNumberDictionaries.Add(TNumberDictionary.Create);
@@ -12439,7 +12551,8 @@ begin
         begin
           if SfrMvrLinkArray[StressPeriodIndex].SftPeriods[TransportIndex] = nil then
           begin
-            SfrMvrLinkArray[StressPeriodIndex].SftPeriods[TransportIndex] := SfrMvrLinkArray[StressPeriodIndex-1].SftPeriods[TransportIndex];
+            SfrMvrLinkArray[StressPeriodIndex].SftPeriods[TransportIndex] :=
+              SfrMvrLinkArray[StressPeriodIndex-1].SftPeriods[TransportIndex];
           end;
         end;
       end;
@@ -12693,17 +12806,36 @@ begin
           Assert(SfrReachInfo.Added);
         end;
 
-        PeriodSettings := TObjectList<TNumberedItemLists>.Create;
+        PeriodSettings := TPeriodSettings.Create;
+        SftPeriodSettingsList := TSftPeriodSettings.Create;
         try
+          for var TransportIndex := 0 to SftList.Count - 1 do
+          begin
+            SftPeriodSettingsList.Add(TPeriodSettings.Create);
+          end;
+
           for PeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
           begin
             ASettingList := TNumberedItemLists.Create;
             PeriodSettings.Add(ASettingList);
 
+
             for ReachIndex := 0 to PackageData.Count - 1 do
             begin
               AReachSettingsList := TNumberedItemList.Create;
               ASettingList.Add(AReachSettingsList);
+            end;
+
+            for var TransportIndex := 0 to SftList.Count - 1 do
+            begin
+              SftPeriodSettings := SftPeriodSettingsList[TransportIndex];
+              SftSettingList := TNumberedItemLists.Create;
+              SftPeriodSettings.Add(SftSettingList);
+              for ReachIndex := 0 to PackageData.Count - 1 do
+              begin
+                AReachSettingsList := TNumberedItemList.Create;
+                SftSettingList.Add(AReachSettingsList);
+              end;
             end;
 
             APeriod := SfrMvrLinkList[PeriodIndex].SfrPeriod;
@@ -12712,8 +12844,28 @@ begin
               for SettingIndex := 0 to APeriod.Count - 1 do
               begin
                 ASetting := APeriod[SettingIndex];
+                Assert(ValidSfrSettings.IndexOf(UpperCase(ASetting.Name))>=0);
                 AReachSettingsList := ASettingList[ASetting.IdNumber-1];
                 AReachSettingsList.Add(ASetting);
+              end;
+            end;
+
+            for var TransportIndex := 0 to SftList.Count - 1 do
+            begin
+              SftPeriod := SfrMvrLinkList[PeriodIndex].SftPeriods[TransportIndex];
+              if SftPeriod <> nil then
+              begin
+//                SftPeriodSettings: TPeriodSettings;
+
+                SftPeriodSettings := SftPeriodSettingsList[TransportIndex];
+                SftSetingList  := SftPeriodSettings.Last;
+                for SettingIndex := 0 to SftPeriod.Count - 1 do
+                begin
+                  ASetting := SftPeriod[SettingIndex];
+                  Assert(ValidSftSettings.IndexOf(UpperCase(ASetting.Name))>=0);
+                  AReachSettingsList := SftSetingList[ASetting.IdNumber-1];
+                  AReachSettingsList.Add(ASetting);
+                end;
               end;
             end;
           end;
@@ -12725,6 +12877,19 @@ begin
             ObjectIndex := 0;
             While ObjectIndex < SfrReachInfoLists.Count do
             begin
+              // In this loop, each AReachList will be tested to see if
+              // all the data for all the reaches in AReachList are compatible
+              // with being assigned using a single formula.
+              // Two reaches would be incompatible if one was assigned using
+              // a time series and another was assigned with a number.
+              // They would also be incompatible if there assigned different
+              // time lists.
+              // They would be compatible if they both were assigned with the
+              // same time series.
+              // They would be compatible if they both were assigned with numbers
+              // even if the numbers were different.
+              //
+              // If the reaches are incompatible, AReachList will be split.
               AReachList := SfrReachInfoLists[ObjectIndex];
 
               SetLength(ManningBoundaryValues, AReachList.Count);
@@ -12763,12 +12928,13 @@ begin
                 end;
               end;
 
-              // Assign SFT package data here
+              // Check SFT package data here
               for var TransportIndex := 0 to Length(SftStrt) - 1 do
               begin
                 SetLength(SftStrt[TransportIndex], AReachList.Count);
                 for CellIndex := 0 to AReachList.Count - 1 do
                 begin
+
                   SftStrt[TransportIndex][CellIndex] :=
                    AReachList[CellIndex].SftPackageData[TransportIndex].strt;
                 end;
@@ -12780,6 +12946,8 @@ begin
                 end;
               end;
 
+              // check period data
+              // First SFR then SFT
               for PeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
               begin
                 ASettingList := PeriodSettings[PeriodIndex];
@@ -12795,6 +12963,7 @@ begin
                   for SettingIndex := 0 to AReachSettingsList.Count - 1 do
                   begin
                     ASetting := AReachSettingsList[SettingIndex];
+                    Assert(ValidSfrSettings.IndexOf(UpperCase(ASetting.Name)) >= 0);
                     if AnsiSameText(ASetting.Name, 'STATUS') then
                     begin
                       StringValues[ReachIndex] := ASetting.StringValue;
@@ -12823,6 +12992,7 @@ begin
                   for SettingIndex := 0 to AReachSettingsList.Count - 1 do
                   begin
                     ASetting := AReachSettingsList[SettingIndex];
+                    Assert(ValidSfrSettings.IndexOf(UpperCase(ASetting.Name)) >= 0);
                     if AnsiSameText(ASetting.Name, 'CROSS_SECTION') then
                     begin
                       StringValues[ReachIndex] := ASetting.StringValue;
@@ -12842,7 +13012,7 @@ begin
                 end;
 
                 SetLength(ManningBoundaryValues, AReachList.Count);
-                UpdateReachSettings(AReachList, ManningBoundaryValues, 'MANNING');
+                UpdateReachSettings(AReachList, ASettingList, ManningBoundaryValues, 'MANNING');
                 DefaultFormula := BoundaryValuesToFormula(ManningBoundaryValues, 'dummyvariable', Map);
                 if DefaultFormula = '' then
                 begin
@@ -12850,7 +13020,7 @@ begin
                 end;
 
                 SetLength(UpstreamFractionBoundaryValues, AReachList.Count);
-                UpdateReachSettings(AReachList, UpstreamFractionBoundaryValues, 'UPSTREAM_FRACTION');
+                UpdateReachSettings(AReachList, ASettingList, UpstreamFractionBoundaryValues, 'UPSTREAM_FRACTION');
                 DefaultFormula := BoundaryValuesToFormula(UpstreamFractionBoundaryValues, 'dummyvariable', Map);
                 if DefaultFormula = '' then
                 begin
@@ -12867,7 +13037,7 @@ begin
                       AReachList[ReachIndex].PackageData.rtp;
                   end;
                 end;
-                UpdateReachSettings(AReachList, StageBoundaryValues, 'STAGE');
+                UpdateReachSettings(AReachList, ASettingList, StageBoundaryValues, 'STAGE');
                 DefaultFormula := BoundaryValuesToFormula(StageBoundaryValues, 'dummyvariable', Map);
                 if DefaultFormula = '' then
                 begin
@@ -12883,7 +13053,7 @@ begin
                     InflowBoundaryValues[ReachIndex].NumericValue := 0;
                   end;
                 end;
-                UpdateReachSettings(AReachList, InflowBoundaryValues, 'INFLOW');
+                UpdateReachSettings(AReachList, ASettingList, InflowBoundaryValues, 'INFLOW');
                 DefaultFormula := BoundaryValuesToFormula(InflowBoundaryValues, 'dummyvariable', Map);
                 if DefaultFormula = '' then
                 begin
@@ -12899,7 +13069,7 @@ begin
                     RainfallBoundaryValues[ReachIndex].NumericValue := 0;
                   end;
                 end;
-                UpdateReachSettings(AReachList, RainfallBoundaryValues, 'RAINFALL');
+                UpdateReachSettings(AReachList, ASettingList, RainfallBoundaryValues, 'RAINFALL');
                 DefaultFormula := BoundaryValuesToFormula(RainfallBoundaryValues, 'dummyvariable', Map);
                 if DefaultFormula = '' then
                 begin
@@ -12915,7 +13085,7 @@ begin
                     EvaporationBoundaryValues[ReachIndex].NumericValue := 0;
                   end;
                 end;
-                UpdateReachSettings(AReachList, EvaporationBoundaryValues, 'EVAPORATION');
+                UpdateReachSettings(AReachList, ASettingList, EvaporationBoundaryValues, 'EVAPORATION');
                 DefaultFormula := BoundaryValuesToFormula(EvaporationBoundaryValues, 'dummyvariable', Map);
                 if DefaultFormula = '' then
                 begin
@@ -12931,7 +13101,7 @@ begin
                     RunoffBoundaryValues[ReachIndex].NumericValue := 0;
                   end;
                 end;
-                UpdateReachSettings(AReachList, RunoffBoundaryValues, 'RUNOFF');
+                UpdateReachSettings(AReachList, ASettingList, RunoffBoundaryValues, 'RUNOFF');
                 DefaultFormula := BoundaryValuesToFormula(RunoffBoundaryValues, 'dummyvariable', Map);
                 if DefaultFormula = '' then
                 begin
@@ -12950,7 +13120,7 @@ begin
                       AuxArrays[AuxIndex][ReachIndex] := AReach.PackageData.Aux[AuxIndex];
                     end;
                   end;
-                  UpdateReachSettings(AReachList, AuxArrays[AuxIndex], 'AUXILIARY', AuxName);
+                  UpdateReachSettings(AReachList, ASettingList, AuxArrays[AuxIndex], 'AUXILIARY', AuxName);
                   DefaultFormula := BoundaryValuesToFormula(AuxArrays[AuxIndex], 'dummyvariable', Map);
                   if DefaultFormula = '' then
                   begin
@@ -12958,6 +13128,123 @@ begin
                   end;
                 end;
 
+                // Set SFT period data here.
+                for var TransportIndex := 0 to Length(SftStrt) - 1 do
+                begin
+                  SftMap := SftMaps[TransportIndex];
+                  SftPeriodSettings := SftPeriodSettingsList[TransportIndex];
+                  SftSetingList  := SftPeriodSettings[PeriodIndex];
+
+                  SetLength(SftStringValues[TransportIndex], AReachList.Count);
+                  for ReachIndex := 0 to AReachList.Count - 1 do
+                  begin
+                    SftStringValues[TransportIndex][ReachIndex] := 'ACTIVE';
+                  end;
+                  NeedToSplit := False;
+                  for ReachIndex := 0 to AReachList.Count - 1 do
+                  begin
+                    AReachSettingsList := SftSetingList[AReachList[ReachIndex].PackageData.rno-1];
+                    for SettingIndex := 0 to AReachSettingsList.Count - 1 do
+                    begin
+                      ASetting := AReachSettingsList[SettingIndex];
+                      if AnsiSameText(ASetting.Name, 'STATUS') then
+                      begin
+                        SftStringValues[TransportIndex][ReachIndex] := ASetting.StringValue;
+                      end;
+                    end;
+                    if (ReachIndex > 0) and not AnsiSameText(SftStringValues[TransportIndex][ReachIndex],
+                      SftStringValues[TransportIndex][ReachIndex-1]) then
+                    begin
+                      NeedToSplit := True;
+                    end;
+                  end;
+                  if NeedToSplit then
+                  begin
+                    SplitReachListWithStrings(AReachList, SftStringValues[TransportIndex]);
+                    SetLength(SftStringValues[TransportIndex], AReachList.Count);
+                  end;
+
+                  SetLength(SftCONCENTRATION[TransportIndex], AReachList.Count);
+                  if PeriodIndex = 0 then
+                  begin
+                    for ReachIndex := 0 to AReachList.Count - 1 do
+                    begin
+                      SftCONCENTRATION[TransportIndex][ReachIndex].ValueType := vtNumeric;
+                      SftCONCENTRATION[TransportIndex][ReachIndex].NumericValue :=
+                        AReachList[ReachIndex].SftPackageData[TransportIndex].strt.NumericValue;
+                    end;
+                  end;
+                  UpdateReachSettings(AReachList, SftSetingList, SftCONCENTRATION[TransportIndex], 'CONCENTRATION');
+                  DefaultFormula := BoundaryValuesToFormula(SftCONCENTRATION[TransportIndex], 'dummyvariable', SftMap);
+                  if DefaultFormula = '' then
+                  begin
+                    SplitReachListWithBoundaryValues(AReachList, SftCONCENTRATION[TransportIndex]);
+                  end;
+
+                  SetLength(SftRAINFALL[TransportIndex], AReachList.Count);
+                  if PeriodIndex = 0 then
+                  begin
+                    for ReachIndex := 0 to AReachList.Count - 1 do
+                    begin
+                      SftRAINFALL[TransportIndex][ReachIndex].ValueType := vtNumeric;
+                      SftRAINFALL[TransportIndex][ReachIndex].NumericValue := 0;
+                    end;
+                  end;
+                  UpdateReachSettings(AReachList, SftSetingList, SftRAINFALL[TransportIndex], 'RAINFALL');
+                  DefaultFormula := BoundaryValuesToFormula(SftRAINFALL[TransportIndex], 'dummyvariable', SftMap);
+                  if DefaultFormula = '' then
+                  begin
+                    SplitReachListWithBoundaryValues(AReachList, SftRAINFALL[TransportIndex]);
+                  end;
+
+                  SetLength(SftEVAPORATION[TransportIndex], AReachList.Count);
+                  if PeriodIndex = 0 then
+                  begin
+                    for ReachIndex := 0 to AReachList.Count - 1 do
+                    begin
+                      SftEVAPORATION[TransportIndex][ReachIndex].ValueType := vtNumeric;
+                      SftEVAPORATION[TransportIndex][ReachIndex].NumericValue := 0;
+                    end;
+                  end;
+                  UpdateReachSettings(AReachList, SftSetingList, SftEVAPORATION[TransportIndex], 'EVAPORATION');
+                  DefaultFormula := BoundaryValuesToFormula(SftEVAPORATION[TransportIndex], 'dummyvariable', SftMap);
+                  if DefaultFormula = '' then
+                  begin
+                    SplitReachListWithBoundaryValues(AReachList, SftEVAPORATION[TransportIndex]);
+                  end;
+
+                  SetLength(SftRUNOFF[TransportIndex], AReachList.Count);
+                  if PeriodIndex = 0 then
+                  begin
+                    for ReachIndex := 0 to AReachList.Count - 1 do
+                    begin
+                      SftRUNOFF[TransportIndex][ReachIndex].ValueType := vtNumeric;
+                      SftRUNOFF[TransportIndex][ReachIndex].NumericValue := 0;
+                    end;
+                  end;
+                  UpdateReachSettings(AReachList, SftSetingList, SftRUNOFF[TransportIndex], 'RUNOFF');
+                  DefaultFormula := BoundaryValuesToFormula(SftRUNOFF[TransportIndex], 'dummyvariable', SftMap);
+                  if DefaultFormula = '' then
+                  begin
+                    SplitReachListWithBoundaryValues(AReachList, SftRUNOFF[TransportIndex]);
+                  end;
+
+                  SetLength(SftINFLOW[TransportIndex], AReachList.Count);
+                  if PeriodIndex = 0 then
+                  begin
+                    for ReachIndex := 0 to AReachList.Count - 1 do
+                    begin
+                      SftINFLOW[TransportIndex][ReachIndex].ValueType := vtNumeric;
+                      SftINFLOW[TransportIndex][ReachIndex].NumericValue := 0;
+                    end;
+                  end;
+                  UpdateReachSettings(AReachList, SftSetingList, SftINFLOW[TransportIndex], 'INFLOW');
+                  DefaultFormula := BoundaryValuesToFormula(SftINFLOW[TransportIndex], 'dummyvariable', SftMap);
+                  if DefaultFormula = '' then
+                  begin
+                    SplitReachListWithBoundaryValues(AReachList, SftINFLOW[TransportIndex]);
+                  end;
+                end;
               end;
 
               AScreenObject := CreateScreenObject(AReachList);
@@ -12967,7 +13254,6 @@ begin
                 ReachListDictionary.Add(SfrReachInfo.PackageData.rno, AReachList);
                 ScreenObjectDictionary.Add(SfrReachInfo.PackageData.rno, AScreenObject);
               end;
-
 
               Inc(ObjectIndex);
             end;
@@ -13094,6 +13380,7 @@ begin
           end;
         finally
           PeriodSettings.Free;
+          SftPeriodSettingsList.Free;
         end;
 
       finally
@@ -13163,6 +13450,8 @@ begin
     SftNumberDictionaries.Free;
     SftBoundNameDictionaries.Free;
     ListOfObsLists.Free;
+    ValidSfrSettings.Free;
+    ValidSftSettings.Free;
   end;
 
 end;
