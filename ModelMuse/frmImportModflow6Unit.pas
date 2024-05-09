@@ -42,7 +42,7 @@ type
 implementation
 
 uses
-  Modflow6ModelImporter;
+  Modflow6ModelImporter, frmShowHideObjectsUnit, frmDataSetsUnits;
 
 {$R *.dfm}
 
@@ -82,6 +82,9 @@ begin
         Exit;
       end;
     end;
+
+    FreeAndNil(frmShowHideObjects);
+    FreeAndNil(frmDataSets);
 
     Importer := TModflow6Importer.Create;
     ErrorMessages := TStringList.Create;

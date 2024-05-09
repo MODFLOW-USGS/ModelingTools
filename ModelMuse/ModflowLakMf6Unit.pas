@@ -615,7 +615,6 @@ type
         read FPestInflowConcentrations write SetPestInflowConcentrations;
     property PestInflowConcentrationMethods: TGwtPestMethodCollection
       read FPestInflowConcentrationMethods write SetPestInflowConcentrationMethods;
-//    property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
   end;
 
 function TryGetLakOb(const LakObName: string; var LakOb: TLakOb): Boolean;

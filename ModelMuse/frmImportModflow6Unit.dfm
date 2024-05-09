@@ -3,8 +3,8 @@ inherited frmImportModflow6: TfrmImportModflow6
   ClientHeight = 343
   ClientWidth = 625
   OnActivate = FormActivate
-  ExplicitWidth = 637
-  ExplicitHeight = 381
+  ExplicitWidth = 641
+  ExplicitHeight = 382
   TextHeight = 18
   inline frameTransportNameFiles: TframeGrid
     Left = 0
@@ -14,13 +14,13 @@ inherited frmImportModflow6: TfrmImportModflow6
     Align = alClient
     TabOrder = 0
     ExplicitTop = 68
-    ExplicitWidth = 621
-    ExplicitHeight = 214
+    ExplicitWidth = 625
+    ExplicitHeight = 215
     inherited Panel: TPanel
       Top = 174
       Width = 625
-      ExplicitTop = 173
-      ExplicitWidth = 621
+      ExplicitTop = 174
+      ExplicitWidth = 625
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -74,8 +74,8 @@ inherited frmImportModflow6: TfrmImportModflow6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 621
-      ExplicitHeight = 173
+      ExplicitWidth = 625
+      ExplicitHeight = 174
       ColWidths = (
         615)
     end
@@ -87,7 +87,6 @@ inherited frmImportModflow6: TfrmImportModflow6
     Height = 68
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 621
     DesignSize = (
       625
       68)
@@ -107,7 +106,6 @@ inherited frmImportModflow6: TfrmImportModflow6
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       Text = ''
-      ExplicitWidth = 577
     end
   end
   object pnlBottom: TPanel
@@ -117,8 +115,6 @@ inherited frmImportModflow6: TfrmImportModflow6
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 282
-    ExplicitWidth = 621
     DesignSize = (
       625
       41)
@@ -131,7 +127,6 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 317
     end
     object btnOK: TBitBtn
       Left = 409
@@ -143,7 +138,6 @@ inherited frmImportModflow6: TfrmImportModflow6
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 405
     end
     object btnCancel: TBitBtn
       Left = 497
@@ -154,7 +148,6 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 493
     end
   end
   object stat1: TStatusBar
@@ -163,8 +156,6 @@ inherited frmImportModflow6: TfrmImportModflow6
     Width = 625
     Height = 19
     Panels = <>
-    ExplicitTop = 323
-    ExplicitWidth = 621
   end
   object odSimFiles: TOpenDialog
     Filter = 'Simulation Name File|*mfsim.nam'

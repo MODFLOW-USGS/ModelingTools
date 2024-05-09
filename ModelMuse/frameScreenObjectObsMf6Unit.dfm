@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 590
     Height = 448
-    ActivePage = tabSFR
+    ActivePage = tabBasic
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -115,10 +115,11 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
       object cbConcentration: TCheckBox
         Left = 296
         Top = 3
-        Width = 283
-        Height = 17
+        Width = 217
+        Height = 42
         Caption = 'Concentration observation (conc)'
         TabOrder = 5
+        WordWrap = True
         OnClick = cbConcentrationClick
       end
       object chklstGWT: TCheckListBox

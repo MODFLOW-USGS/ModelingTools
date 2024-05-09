@@ -5,7 +5,7 @@ interface
 uses Windows, Types, SysUtils, Classes, Contnrs, Forms, CustomModflowWriterUnit,
   ModflowPackageSelectionUnit, PhastModelUnit, System.Generics.Collections,
   ScreenObjectUnit, ModflowSfr6Unit, ModflowBoundaryDisplayUnit,
-  Modflow6ObsUnit, IntListUnit;
+  Modflow6ObsUnit, IntListUnit, System.UITypes;
 
 type
   TSfr6Observation = record
@@ -2547,9 +2547,6 @@ begin
       WriteString(NameOfFile);
       NewLine;
     end;
-
-
-  //  [TS6 FILEIN <ts6_filename>]
   finally
     WriteEndOptions
   end;

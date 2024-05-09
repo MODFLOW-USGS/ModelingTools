@@ -11,8 +11,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
   KeyPreview = True
   OnClose = FormClose
   OnKeyUp = FormKeyUp
-  ExplicitWidth = 760
-  ExplicitHeight = 597
+  ExplicitWidth = 764
+  ExplicitHeight = 598
   TextHeight = 19
   object pageMain: TPageControl
     Left = 0
@@ -2454,14 +2454,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           006F0075006E00640061007200790020007000610063006B0061006700650029
           00}
         Items.Links = {020000000000000000000000}
-        ExplicitHeight = 479
       end
       object jvplModflowBoundaries: TJvPageList
         Left = 195
         Top = 0
         Width = 545
         Height = 480
-        ActivePage = jvspMVR
+        ActivePage = jvspMf6Obs
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -12657,13 +12656,13 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pgcMain: TPageControl
               Width = 545
               Height = 409
-              ActivePage = frameObsMf6.tabCalibration
               OnChange = frameObsMf6pgcMainChange
               ExplicitWidth = 545
               ExplicitHeight = 409
               inherited tabBasic: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 414
+                ExplicitWidth = 537
+                ExplicitHeight = 375
                 inherited lblTypesOfFlowObservation: TLabel
                   Width = 183
                   Height = 19
@@ -12728,7 +12727,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited tabSFR: TTabSheet
                 ExplicitTop = 30
-                ExplicitHeight = 414
+                ExplicitWidth = 537
+                ExplicitHeight = 375
                 inherited lblSFR: TLabel
                   Width = 32
                   Height = 19
@@ -13355,8 +13355,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
           HelpType = htKeyword
           HelpKeyword = 'MVR_Water_Mover_Package_Pane'
           Caption = 'jvspMVR'
-          ExplicitWidth = 541
-          ExplicitHeight = 479
           inline frameMVR: TframeScreenObjectMvr
             Left = 0
             Top = 0
@@ -13365,24 +13363,24 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             Align = alClient
             TabOrder = 0
             TabStop = True
-            ExplicitWidth = 541
-            ExplicitHeight = 479
+            ExplicitWidth = 545
+            ExplicitHeight = 480
             inherited pnlTop: TPanel
               Width = 545
-              ExplicitWidth = 541
+              ExplicitWidth = 545
               inherited pnlCaption: TPanel
                 Width = 543
-                ExplicitWidth = 539
+                ExplicitWidth = 543
               end
             end
             inherited pnlGrid: TPanel
               Top = 345
               Width = 545
-              ExplicitTop = 344
-              ExplicitWidth = 541
+              ExplicitTop = 345
+              ExplicitWidth = 545
               inherited pnlEditGrid: TPanel
                 Width = 543
-                ExplicitWidth = 539
+                ExplicitWidth = 543
                 inherited lblFormula: TLabel
                   Width = 59
                   Height = 19
@@ -13405,7 +13403,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 OnButtonClick = frameMVRrdgModflowBoundaryButtonClick
                 ExplicitLeft = 1
                 ExplicitTop = 51
-                ExplicitWidth = 539
+                ExplicitWidth = 543
                 ColWidths = (
                   64
                   64
@@ -13416,12 +13414,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pcMain: TPageControl
               Width = 545
               Height = 280
-              ExplicitWidth = 541
-              ExplicitHeight = 279
+              ExplicitWidth = 545
+              ExplicitHeight = 280
               inherited tabConnections: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 537
-                ExplicitHeight = 246
+                ExplicitHeight = 205
                 inherited lblSourcePackage: TLabel
                   Width = 120
                   Height = 19
@@ -13433,12 +13430,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   ExplicitHeight = 27
                 end
                 inherited frameReceivers: TframeGrid
-                  Width = 537
-                  Height = 182
+                  Height = 141
                   ExplicitHeight = 141
                   inherited Panel: TPanel
-                    Top = 141
-                    Width = 537
+                    Top = 100
                     ExplicitTop = 100
                     inherited lbNumber: TLabel
                       Width = 148
@@ -13447,15 +13442,15 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                       ExplicitHeight = 19
                     end
                     inherited sbAdd: TSpeedButton
-                      Left = 410
+                      Left = 306
                       ExplicitLeft = 306
                     end
                     inherited sbInsert: TSpeedButton
-                      Left = 448
+                      Left = 334
                       ExplicitLeft = 334
                     end
                     inherited sbDelete: TSpeedButton
-                      Left = 486
+                      Left = 363
                       ExplicitLeft = 363
                     end
                     inherited seNumber: TJvSpinEdit
@@ -13464,16 +13459,14 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                     end
                   end
                   inherited Grid: TRbwDataGrid4
-                    Width = 537
-                    Height = 141
+                    Height = 100
                     ExplicitHeight = 100
                   end
                 end
               end
               inherited tabTime: TTabSheet
                 ExplicitTop = 30
-                ExplicitWidth = 537
-                ExplicitHeight = 246
+                ExplicitHeight = 205
               end
               inherited tabMvrMap: TTabSheet
                 ExplicitTop = 30
@@ -13485,10 +13478,10 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 end
                 inherited frameMapNames: TframeGrid
                   Height = 246
-                  ExplicitHeight = 245
+                  ExplicitHeight = 246
                   inherited Panel: TPanel
                     Top = 157
-                    ExplicitTop = 156
+                    ExplicitTop = 157
                     inherited lbNumber: TLabel
                       Width = 57
                       Height = 19
@@ -13502,26 +13495,26 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   end
                   inherited Grid: TRbwDataGrid4
                     Height = 157
-                    ExplicitHeight = 156
+                    ExplicitHeight = 157
                   end
                 end
                 inherited pnl1: TPanel
                   Width = 417
                   Height = 246
-                  ExplicitWidth = 413
-                  ExplicitHeight = 245
+                  ExplicitWidth = 417
+                  ExplicitHeight = 246
                   inherited rdgMap: TRbwDataGrid4
                     Width = 415
                     Height = 203
                     FixedCols = 0
-                    ExplicitWidth = 411
-                    ExplicitHeight = 202
+                    ExplicitWidth = 415
+                    ExplicitHeight = 203
                   end
                   inherited pnl2: TPanel
                     Top = 204
                     Width = 415
-                    ExplicitTop = 203
-                    ExplicitWidth = 411
+                    ExplicitTop = 204
+                    ExplicitWidth = 415
                     inherited lblReceiverNumber: TLabel
                       Width = 226
                       Height = 19
@@ -13539,8 +13532,8 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
             inherited pnlBottom: TPanel
               Top = 305
               Width = 545
-              ExplicitTop = 304
-              ExplicitWidth = 541
+              ExplicitTop = 305
+              ExplicitWidth = 545
               inherited lblNumTimes: TLabel
                 Width = 119
                 Height = 19
@@ -13554,11 +13547,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               end
               inherited btnDelete: TBitBtn
                 Left = 351
-                ExplicitLeft = 347
+                ExplicitLeft = 351
               end
               inherited btnInsert: TBitBtn
                 Left = 267
-                ExplicitLeft = 263
+                ExplicitLeft = 267
               end
             end
           end
@@ -19357,13 +19350,11 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 517
-    ExplicitWidth = 744
     DesignSize = (
       748
       41)
     object btnOK: TBitBtn
-      Left = 520
+      Left = 554
       Top = 6
       Width = 89
       Height = 33
@@ -19390,10 +19381,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnOKClick
-      ExplicitLeft = 516
     end
     object btnCancel: TBitBtn
-      Left = 615
+      Left = 649
       Top = 6
       Width = 91
       Height = 33
@@ -19402,10 +19392,9 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 5
       OnClick = btnCancelClick
-      ExplicitLeft = 611
     end
     object btnHelp: TBitBtn
-      Left = 435
+      Left = 469
       Top = 6
       Width = 79
       Height = 33
@@ -19414,7 +19403,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 431
     end
     object btnCopyVertices: TButton
       Left = 4
@@ -19439,7 +19427,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
     object btnEditFeatureFormulas: TButton
       Left = 294
       Top = 6
-      Width = 177
+      Width = 169
       Height = 33
       Caption = 'Edit feature formulas'
       TabOrder = 2

@@ -247,6 +247,7 @@ type
     // If may be different from the one that defines the boundary
     // with for the observation.
     property ScreenObject: TObject read FScreenObject;
+    // @name is the collection of chemical species used for these observations.
     property Genus: TGenus read FGenus write SetGenus;
   published
     property Name: string read GetName write SetName;
@@ -269,6 +270,7 @@ type
     property CalibrationObservations: TMf6CalibrationObservations
       read FCalibrationObservations write SetCalibrationObservations
         stored StoreCalibObs;
+      // @link(Genus)
     property GenusColl: Integer read GetGenusColl write SetGenusColl stored True;
     property GwtSpecies: Integer read FGwtSpecies write SetGwtSpecies
       stored False;

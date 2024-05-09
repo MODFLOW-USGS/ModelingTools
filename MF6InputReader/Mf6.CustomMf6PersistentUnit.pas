@@ -262,7 +262,9 @@ type
     procedure Sort;
   end;
 
-  TNumberedItemLists = TObjectList<TNumberedItemList>;
+  TNumberedItemLists = class(TObjectList<TNumberedItemList>)
+    function HasData: boolean;
+  end;
 
   TExtendedList = TList<Extended>;
 
@@ -1826,6 +1828,21 @@ begin
         end;
       end
     ));
+end;
+
+{ TNumberedItemLists }
+
+function TNumberedItemLists.HasData: boolean;
+begin
+  result := False;
+  for var Index := 0 to Count - 1 do
+  begin
+    result := Items[Index].Count > 0;
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
 end;
 
 end.

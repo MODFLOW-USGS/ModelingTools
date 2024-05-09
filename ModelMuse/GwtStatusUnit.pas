@@ -37,6 +37,7 @@ type
       write SetItems; default;
     function IsSame(OtherCollection: TGwtBoundaryStatusCollection): Boolean;
     property Count: Integer read GetCount write SetCount;
+    function Add: TGwtBoundaryStatusItem;
   end;
 
 
@@ -67,6 +68,11 @@ begin
 end;
 
 { TGwtBoundaryStatusCollection }
+
+function TGwtBoundaryStatusCollection.Add: TGwtBoundaryStatusItem;
+begin
+  result := inherited Add as TGwtBoundaryStatusItem;
+end;
 
 procedure TGwtBoundaryStatusCollection.Assign(Source: TPersistent);
 begin

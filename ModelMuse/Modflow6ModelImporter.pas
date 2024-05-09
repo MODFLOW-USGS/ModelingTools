@@ -204,7 +204,7 @@ uses
   Mf6.AdvFileReaderUnit, Mf6.DspFileReaderUnit, Mf6.MstFileReaderUnit,
   OctTreeClass, ModflowCellUnit, Mf6.IstFileReaderUnit,
   ModflowGwtSpecifiedConcUnit, Mf6.SrcFileReaderUnit, Mf6.FmiFileReaderUnit,
-  Mf6.SftFileReaderUnit, GwtStatusUnit;
+  Mf6.SftFileReaderUnit, GwtStatusUnit, Mf6.LktFileReaderUnit, Mt3dmsChemUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -6407,6 +6407,8 @@ type
     FOutletSettings: TOutletDictionary;
     FNumberedItemLists: TNumberedItemLists;
     HasOutletSettings: Boolean;
+    LktPackageItems: TLktPackageItemList;
+    LktSetting: TNumberedItemLists;
   public
     constructor Create(LakPackageItem: TLakPackageItem);
     destructor Destroy; override;
@@ -6417,7 +6419,10 @@ Type
   TLakMvrLink = record
     LakPeriod: TLakPeriod;
     MvrPeriod: TMvrPeriod;
+    LktPeriods: TLktPeriodArray;
     function Period: Integer;
+    function SameContents(OtherLink: TLakMvrLink): Boolean;
+    function HasData: Boolean;
   end;
   TLakMvrLinkArray = TArray<TLakMvrLink>;
   TLakMvrLinkList = TList<TLakMvrLink>;
@@ -6468,6 +6473,22 @@ var
   BoundNameObsDictionary: TBoundNameDictionary;
   ObsLists: TObsLists;
   ObsNameIndex: Integer;
+  FoundAny: Boolean;
+  FoundLkt: Boolean;
+  AModel: TModel;
+  TransportModel: TTransportNameFile;
+  APackage: TPackage;
+  Lkt: TLkt;
+  FlowPackageName: string;
+  LktList: TLktList;
+  LktMaps: TimeSeriesMaps;
+  LktMap: TimeSeriesMap;
+  OutputControl: TModflowOutputControl;
+  LktNumberDictionaries: TNumberDictionaries;
+  LktBoundNameDictionaries: TBoundNameDictionaries;
+  ListOfObsLists: TListOfObsLists;
+  LktPeriod: TLktPeriod;
+  OutletKeyArray: TArray<TPair<Integer,TNumberedItemList>>;
   procedure ApplyLakeSettings(ALake: TImportLake);
   var
     PriorValueItem: TLakeTimeItem;
@@ -6481,7 +6502,14 @@ var
     ASettingsList: TNumberedItemList;
     PriorOutletItem: TLakeOutletTimeItem;
     NewOutletItem: TLakeOutletTimeItem;
-    function GetFloatFormulaFromSetting(ASetting: TNumberedItem): string;
+    LktSettings: TNumberedItemList;
+    NewStatus: TGwtBoundaryStatusItem;
+    NewConcentration: TGwtConcStringValueItem;
+    NewRainfallConcentration: TGwtConcStringValueItem;
+    NewEvapConcentration: TGwtConcStringValueItem;
+    NewRunoffConcentration: TGwtConcStringValueItem;
+    NewInflowConcentration: TGwtConcStringValueItem;
+    function GetFloatFormulaFromSetting(ASetting: TNumberedItem; Map: TimeSeriesMap): string;
     begin
       result := '';
       if ASetting.StringValue <> '' then
@@ -6501,7 +6529,8 @@ var
       end;
     end;
   begin
-    if (ALake.FLakeSettings.Count > 0) or (ALake.HasOutletSettings) then
+    if (ALake.FLakeSettings.Count > 0) or (ALake.HasOutletSettings)
+      or ALake.LktSetting.HasData then
     begin
       PriorValueItem := ALake.LakeBoundary.Values.Last as TLakeTimeItem;
       if Period > 1 then
@@ -6540,27 +6569,27 @@ var
         end
         else if AnsiSameText(SettingName, 'STAGE') then
         begin
-          NewTimeItem.Stage := GetFloatFormulaFromSetting(ASetting);
+          NewTimeItem.Stage := GetFloatFormulaFromSetting(ASetting, Map);
         end
         else if AnsiSameText(SettingName, 'RAINFALL') then
         begin
-          NewTimeItem.Rainfall := GetFloatFormulaFromSetting(ASetting);
+          NewTimeItem.Rainfall := GetFloatFormulaFromSetting(ASetting, Map);
         end
         else if AnsiSameText(SettingName, 'EVAPORATION') then
         begin
-          NewTimeItem.Evaporation := GetFloatFormulaFromSetting(ASetting);
+          NewTimeItem.Evaporation := GetFloatFormulaFromSetting(ASetting, Map);
         end
         else if AnsiSameText(SettingName, 'RUNOFF') then
         begin
-          NewTimeItem.Runoff := GetFloatFormulaFromSetting(ASetting);
+          NewTimeItem.Runoff := GetFloatFormulaFromSetting(ASetting, Map);
         end
         else if AnsiSameText(SettingName, 'INFLOW') then
         begin
-          NewTimeItem.Inflow := GetFloatFormulaFromSetting(ASetting);
+          NewTimeItem.Inflow := GetFloatFormulaFromSetting(ASetting, Map);
         end
         else if AnsiSameText(SettingName, 'WITHDRAWAL') then
         begin
-          NewTimeItem.Withdrawal := GetFloatFormulaFromSetting(ASetting);
+          NewTimeItem.Withdrawal := GetFloatFormulaFromSetting(ASetting, Map);
         end
         else if AnsiSameText(SettingName, 'AUXILIARY') then
         begin
@@ -6594,23 +6623,23 @@ var
             SettingName := ASetting.Name;
             if AnsiSameText(SettingName, 'RATE') then
             begin
-              NewOutletItem.Rate := GetFloatFormulaFromSetting(ASetting);
+              NewOutletItem.Rate := GetFloatFormulaFromSetting(ASetting, Map);
             end
             else if AnsiSameText(SettingName, 'INVERT') then
             begin
-              NewOutletItem.Invert := GetFloatFormulaFromSetting(ASetting);
+              NewOutletItem.Invert := GetFloatFormulaFromSetting(ASetting, Map);
             end
             else if AnsiSameText(SettingName, 'WIDTH') then
             begin
-              NewOutletItem.Width := GetFloatFormulaFromSetting(ASetting);
+              NewOutletItem.Width := GetFloatFormulaFromSetting(ASetting, Map);
             end
             else if AnsiSameText(SettingName, 'SLOPE') then
             begin
-              NewOutletItem.Slope := GetFloatFormulaFromSetting(ASetting);
+              NewOutletItem.Slope := GetFloatFormulaFromSetting(ASetting, Map);
             end
             else if AnsiSameText(SettingName, 'ROUGH') then
             begin
-              NewOutletItem.Roughness := GetFloatFormulaFromSetting(ASetting);
+              NewOutletItem.Roughness := GetFloatFormulaFromSetting(ASetting, Map);
             end
             else
             begin
@@ -6623,6 +6652,110 @@ var
           Assert(False);
         end;
       end;
+
+      for var TransportIndex := 0 to ALake.LktSetting.Count - 1 do
+      begin
+        LktSettings := ALake.LktSetting[TransportIndex];
+        if TransportIndex < NewTimeItem.GwtStatus.Count then
+        begin
+          NewStatus := NewTimeItem.GwtStatus[TransportIndex];
+        end
+        else
+        begin
+          NewStatus := NewTimeItem.GwtStatus.Add;
+        end;
+        if TransportIndex < NewTimeItem.SpecifiedConcentrations.Count then
+        begin
+          NewConcentration := NewTimeItem.SpecifiedConcentrations[TransportIndex];
+        end
+        else
+        begin
+          NewConcentration := NewTimeItem.SpecifiedConcentrations.Add;
+        end;
+        if TransportIndex < NewTimeItem.RainfallConcentrations.Count then
+        begin
+          NewRainfallConcentration := NewTimeItem.RainfallConcentrations[TransportIndex];
+        end
+        else
+        begin
+          NewRainfallConcentration := NewTimeItem.RainfallConcentrations.Add;
+        end;
+        if TransportIndex < NewTimeItem.EvapConcentrations.Count then
+        begin
+          NewEvapConcentration := NewTimeItem.EvapConcentrations[TransportIndex];
+        end
+        else
+        begin
+          NewEvapConcentration := NewTimeItem.EvapConcentrations.Add;
+        end;
+        if TransportIndex < NewTimeItem.RunoffConcentrations.Count then
+        begin
+          NewRunoffConcentration := NewTimeItem.RunoffConcentrations[TransportIndex];
+        end
+        else
+        begin
+          NewRunoffConcentration := NewTimeItem.RunoffConcentrations.Add;
+        end;
+        if TransportIndex < NewTimeItem.InflowConcentrations.Count then
+        begin
+          NewInflowConcentration := NewTimeItem.InflowConcentrations[TransportIndex];
+        end
+        else
+        begin
+          NewInflowConcentration := NewTimeItem.InflowConcentrations.Add;
+        end;
+        for SettingIndex := 0 to LktSettings.Count - 1 do
+        begin
+          ASetting := LktSettings[SettingIndex];
+          SettingName := ASetting.Name;
+          if AnsiSameText(SettingName, 'STATUS') then
+          begin
+            if AnsiSameText(ASetting.StringValue, 'ACTIVE') then
+            begin
+              NewStatus.GwtBoundaryStatus := gbsActive;
+            end
+            else if AnsiSameText(ASetting.StringValue, 'INACTIVE') then
+            begin
+              NewStatus.GwtBoundaryStatus := gbsInactive;
+            end
+            else if AnsiSameText(ASetting.StringValue, 'CONSTANT') then
+            begin
+              NewStatus.GwtBoundaryStatus := gbsConstant;
+            end
+            else
+            begin
+              Assert(False);
+            end;
+          end
+          else if AnsiSameText(SettingName, 'CONCENTRATION') then
+          begin
+            NewConcentration.Value := GetFloatFormulaFromSetting(ASetting, LktMaps[TransportIndex]);
+          end
+          else if AnsiSameText(SettingName, 'RAINFALL') then
+          begin
+            NewRainfallConcentration.Value := GetFloatFormulaFromSetting(ASetting, LktMaps[TransportIndex]);
+          end
+          else if AnsiSameText(SettingName, 'EVAPORATION') then
+          begin
+            NewEvapConcentration.Value := GetFloatFormulaFromSetting(ASetting, LktMaps[TransportIndex]);
+          end
+          else if AnsiSameText(SettingName, 'RUNOFF') then
+          begin
+            NewRunoffConcentration.Value := GetFloatFormulaFromSetting(ASetting, LktMaps[TransportIndex]);
+          end
+          else if AnsiSameText(SettingName, 'EXT-INFLOW') then
+          begin
+            NewInflowConcentration.Value := GetFloatFormulaFromSetting(ASetting, LktMaps[TransportIndex]);
+          end
+          else if AnsiSameText(SettingName, 'AUXILIARY') then
+          begin
+          end
+          else
+          begin
+          end;
+        end
+      end;
+
     end;
   end;
   procedure CreateLakeTable(ALake: TImportLake; TablePackage: TPackage);
@@ -6774,8 +6907,111 @@ var
     BoundName: string;
     Obs: TObservationList;
     LakeObs: TLakObs;
+    LktObs: TLktObs;
     OutletIndex: Integer;
     outletno: Integer;
+    LktPackageItem: TLktPackageItem;
+    LktBoundNameDictionary: TBoundNameDictionary;
+    LktNumberDictionary: TNumberDictionary;
+    Genus: TGenus;
+    procedure AssignLktObs(LktObsList: TObservationList; OutletOnly: Boolean);
+    var
+      ObsIndex: Integer;
+      AnObs: TObservation;
+    begin
+      for ObsIndex := 0 to LktObsList.Count - 1 do
+      begin
+        AnObs := LktObsList[ObsIndex];
+        if AnsiSameText('concentration', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoConcentration);
+          end;
+        end
+        else if AnsiSameText('flow-ja-face', AnObs.ObsType) then
+        begin
+          // ignore
+        end
+        else if AnsiSameText('storage', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoStorage);
+          end;
+        end
+        else if AnsiSameText('constant', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoConstant);
+          end;
+        end
+        else if AnsiSameText('from-mvr', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoFromMvr);
+          end;
+        end
+        else if AnsiSameText('to-mvr', AnObs.ObsType) then
+        begin
+          if OutletOnly then
+          begin
+            Include(LktObs, ltoToMvr);
+          end;
+        end
+        else if AnsiSameText('lkt', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoLKT);
+          end;
+        end
+        else if AnsiSameText('rainfall', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoRainfall);
+          end;
+        end
+        else if AnsiSameText('evaporation', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoEvaporation);
+          end;
+        end
+        else if AnsiSameText('runoff', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoRunoff);
+          end;
+        end
+        else if AnsiSameText('ext-inflow', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoExtInflow);
+          end;
+        end
+        else if AnsiSameText('withdrawal', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoWithdrawal);
+          end;
+        end
+        else if AnsiSameText('ext-outflow', AnObs.ObsType) then
+        begin
+          if not OutletOnly then
+          begin
+            Include(LktObs, ltoExtOutflow);
+          end;
+        end
+      end;
+    end;
     procedure AssignObs(OutletOnly, ObsAllowed: Boolean);
     var
       ObsIndex: Integer;
@@ -6960,13 +7196,77 @@ var
         if Name = '' then
         begin
           Inc(ObsNameIndex);
-          ALake.LakeScreenObject.Modflow6Obs.Name := 'LAK_Obs_' + IntToStr(ObsNameIndex);
+          ALake.LakeScreenObject.Modflow6Obs.Name := 'LAK_' + IntToStr(ObsNameIndex);
         end
         else
         begin
           ALake.LakeScreenObject.Modflow6Obs.Name := Name;
         end;
       end;
+    end;
+    Genus := [];
+    for var TransportIndex := 0 to ALake.LktPackageItems.Count - 1 do
+    begin
+      LktObs := [];
+      LktPackageItem := ALake.LktPackageItems[TransportIndex];
+      if LktPackageItem <> nil then
+      begin
+        LktBoundNameDictionary := LktBoundNameDictionaries[TransportIndex];
+        LktNumberDictionary := LktNumberDictionaries[TransportIndex];
+        BoundName := LktPackageItem.boundname;
+        if BoundName <> '' then
+        begin
+          if LktBoundNameDictionary.TryGetValue(UpperCase(BoundName), Obs) then
+          begin
+            if Obs.Count > 0 then
+            begin
+              AssignLktObs(Obs,False);
+            end;
+          end;
+        end;
+        if LktNumberDictionary.TryGetValue(ALake.FLakPackageItem.lakeno, Obs) then
+        begin
+          if Obs.Count > 0 then
+          begin
+            AssignLktObs(Obs,False);
+          end;
+        end;
+        for OutletIndex := 0 to ALake.FOutlets.Count - 1 do
+        begin
+          outletno := ALake.FOutlets[OutletIndex].outletno;
+          if NumberObsDictionary.TryGetValue(outletno, Obs) then
+          begin
+            if Obs.Count > 0 then
+            begin
+              AssignLktObs(Obs,True);
+            end;
+          end;
+        end;
+      end;
+      if LktObs <> [] then
+      begin
+        Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+        ALake.LakeScreenObject.CreateMf6Obs;
+        ALake.LakeScreenObject.Modflow6Obs.LktObs :=
+          ALake.LakeScreenObject.Modflow6Obs.LktObs + LktObs;
+        if ALake.LakeScreenObject.Modflow6Obs.Name = '' then
+        begin
+          if Name = '' then
+          begin
+            Inc(ObsNameIndex);
+            ALake.LakeScreenObject.Modflow6Obs.Name := 'Lkt_' + IntToStr(ObsNameIndex);
+          end
+          else
+          begin
+            ALake.LakeScreenObject.Modflow6Obs.Name := Name;
+          end;
+        end;
+        Include(Genus, TransportIndex);
+      end;
+    end;
+    if Genus <> [] then
+    begin
+      ALake.LakeScreenObject.Modflow6Obs.Genus := Genus;
     end;
   end;
   procedure CreateScreenObject(ALake: TImportLake);
@@ -7000,6 +7300,8 @@ var
     Z: double;
     Data: TPointerArray;
     UseNeigbor: Boolean;
+    LktPackageItem: TLktPackageItem;
+    SrtItem: TStringConcValueItem;
     procedure CreateDataSetScreenObject;
     var
       CellIds: TCellIdList;
@@ -7036,85 +7338,6 @@ var
       ALake.DataSetsScreenObject.ElevationFormula :=
         rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
     end;
-//    procedure GetLakeInteriorCells;
-//    var
-//      Points: TPoint2DList;
-//      ConnectionIndex: Integer;
-//      CellId: TMfCellId;
-//      ElementCenter: TDualLocation;
-//      APoint: TPoint2D;
-//      InputPolyGon: TPolygon2D;
-//      OutputPolyGon: TPolygon2D;
-//      PointIndex: Integer;
-//      Temp: TScreenObject;
-//      UndoCreateScreenObject: TCustomUndo;
-//      CellList: TCellAssignmentList;
-//      CellIndex: Integer;
-//      ACellLocation: TCellAssignment;
-//      BoundaryCells: T2DBoolArray;
-//    begin
-//      // This method may add extra cells to the lake if the lake outline is concave.
-//      Points := TPoint2DList.Create;
-//      try
-//        SetLength(BoundaryCells, Model.RowCount, Model.ColumnCount);
-//        for ConnectionIndex := 0 to ALake.FConnections.Count - 1 do
-//        begin
-//          CellId := ALake.FConnections[ConnectionIndex].cellid;
-//          if Model.DisvUsed then
-//          begin
-//            CellId.Row := 1;
-//          end;
-//          ElementCenter := Model.ElementLocation[CellId.Layer - 1,
-//            CellId.Row - 1, CellId.Column - 1];
-//          BoundaryCells[CellId.Row - 1, CellId.Column - 1] := True;
-//          APoint.x := ElementCenter.RotatedLocation.x;
-//          APoint.y := ElementCenter.RotatedLocation.y;
-//          Points.Add(APoint)
-//        end;
-//        SetLength(InputPolyGon, Points.Count);
-//        for PointIndex := 0 to Points.Count - 1 do
-//        begin
-//          InputPolyGon[PointIndex] := Points[PointIndex];
-//        end;
-//        ConvexHull(InputPolyGon, OutputPolyGon);
-//        Temp := TScreenObject.CreateWithViewDirection(
-//          Model, vdTop, UndoCreateScreenObject, False);
-//        try
-//          Temp.ElevationCount := ecZero;
-//          Temp.SetPropertiesOfEnclosedCells := True;
-//          Temp.Capacity := Length(OutputPolyGon) + 1;
-//          Temp.AddPoint(OutputPolyGon[Length(OutputPolyGon)-1], True);
-//          for PointIndex := 0 to Length(OutputPolyGon) - 1 do
-//          begin
-//            Temp.AddPoint(OutputPolyGon[PointIndex], False);
-//          end;
-//
-//          CellList := TCellAssignmentList.Create;
-//          try
-//            Temp.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
-//            ALake.LakeScreenObject.Capacity := CellList.Count;
-//            for CellIndex := 0 to CellList.Count - 1 do
-//            begin
-//              ACellLocation := CellList[CellIndex];
-//              if not BoundaryCells[ACellLocation.Row, ACellLocation.Column] then
-//              begin
-//                ElementCenter := Model.ElementLocation[ACellLocation.Layer,
-//                  ACellLocation.Row, ACellLocation.Column];
-//                APoint.x := ElementCenter.RotatedLocation.x;
-//                APoint.y := ElementCenter.RotatedLocation.y;
-//                ALake.LakeScreenObject.AddPoint(APoint, True);
-//              end;
-//            end;
-//          finally
-//            CellList.Free;
-//          end;
-//        finally
-//          Temp.Free;
-//        end;
-//      finally
-//        Points.Free;
-//      end;
-//    end;
   begin
     ObsNameIndex := 0;
     Assert(ALake <> nil);
@@ -7232,10 +7455,6 @@ var
       if CellIds.Count > 0 then
       begin
         AddPointsToScreenObject(CellIds, ALake.LakeScreenObject, True);
-//      end
-//      else
-//      begin
-//        GetLakeInteriorCells;
       end;
     finally
       CellIds.Free;
@@ -7427,6 +7646,26 @@ var
       ALake.LakeBoundary.TopElevation := DataArrayName;
     end;
 
+    for var TransportIndex := 0 to ALake.LktPackageItems.Count - 1 do
+    begin
+      LktPackageItem := ALake.LktPackageItems[TransportIndex];
+      if LktPackageItem <> nil then
+      begin
+        if TransportIndex < ALake.LakeBoundary.StartingConcentrations.Count then
+        begin
+          SrtItem := ALake.LakeBoundary.StartingConcentrations[TransportIndex];
+        end
+        else
+        begin
+          SrtItem := ALake.LakeBoundary.StartingConcentrations.Add;
+        end;
+        SrtItem.Value := FortranFloatToStr(LktPackageItem.strt.NumericValue);
+
+        AModel := TransportModels[TransportIndex];
+        TransportModel := AModel.FName as TTransportNameFile;
+        SrtItem.Name := TransportModel.SpeciesName;
+      end;
+    end;
 
   end;
 begin
@@ -7476,11 +7715,92 @@ begin
   NumberObsDictionary := TNumberDictionary.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
   ObsLists := TObsLists.Create;
+  LktList := TLktList.Create;
+  LktMaps := TimeSeriesMaps.Create;
+  LktNumberDictionaries := TNumberDictionaries.Create;
+  LktBoundNameDictionaries := TBoundNameDictionaries.Create;
+  ListOfObsLists := TListOfObsLists.Create;
   try
+    FoundAny := False;
+    for var ModelIndex := 0 to TransportModels.Count - 1 do
+    begin
+      FoundLkt := False;
+      AModel := TransportModels[ModelIndex];
+      TransportModel := AModel.FName as TTransportNameFile;
+      for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+      begin
+        APackage := TransportModel.NfPackages[PackageIndex];
+        if APackage.FileType = 'LKT6' then
+        begin
+          Lkt := APackage.Package as TLkt;
+          FlowPackageName := Lkt.Options.FLOW_PACKAGE_NAME;
+          if FlowPackageName = '' then
+          begin
+            FlowPackageName := APackage.PackageName;
+          end;
+          if AnsiSameText(Package.PackageName, FlowPackageName) then
+          begin
+            LktList.Add(Lkt);
+            FoundLkt := True;
+            FoundAny := True;
+            LktMap := TimeSeriesMap.Create;
+            LktMaps.Add(LktMap);
+            for TimeSeriesIndex := 0 to Lkt.TimeSeriesCount - 1 do
+            begin
+              TimeSeriesPackage := Lkt.TimeSeries[TimeSeriesIndex];
+              ImportTimeSeries(TimeSeriesPackage, LktMap);
+            end;
+            break;
+          end;
+        end;
+      end;
+      if not FoundLkt then
+      begin
+        LktList.Add(nil);
+      end;
+    end;
+    if not FoundAny then
+    begin
+      LktList.Clear;
+    end;
 
-    if Mvr = nil then
+    if LktList.Count > 0 then
+    begin
+      OutputControl := Model.ModflowOutputControl;
+      for var TransportIndex := 0 to LktList.Count - 1 do
+      begin
+        Lkt := LktList[TransportIndex];
+        if Lkt <> nil then
+        begin
+          if Lkt.Options.PRINT_CONCENTRATION then
+          begin
+            OutputControl.ConcentrationOC.PrintInListing := True;
+          end;
+          if Lkt.Options.CONCENTRATION then
+          begin
+            LakPackage.SaveGwtConcentration := True;
+          end;
+          if Lkt.Options.BUDGET then
+          begin
+            LakPackage.SaveGwtBudget := True;
+          end;
+          if Lkt.Options.BUDGETCSV then
+          begin
+            LakPackage.SaveGwtBudgetCsv := True;
+          end;
+        end;
+      end;
+    end;
+    for var TransportIndex := 0 to LktList.Count - 1 do
+    begin
+      LktNumberDictionaries.Add(TNumberDictionary.Create);
+      LktBoundNameDictionaries.Add(TBoundNameDictionary.Create);
+      ListOfObsLists.Add(TObsLists.Create(False))
+    end;
+    if (Mvr = nil) and (LktList.Count = 0) then
     begin
       LakMvrLink.MvrPeriod := nil;
+      SetLength(LakMvrLink.LktPeriods, 0);
       for StressPeriodIndex := 0 to Lak.PeriodCount - 1 do
       begin
         LakMvrLink.LakPeriod := Lak.Periods[StressPeriodIndex];
@@ -7494,12 +7814,31 @@ begin
       begin
         LakMvrLinkArray[StressPeriodIndex].MvrPeriod := nil;
         LakMvrLinkArray[StressPeriodIndex].LakPeriod := nil;
+        SetLength(LakMvrLinkArray[StressPeriodIndex].LktPeriods, LktList.Count);
       end;
-      for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+
+      if Mvr <> nil then
       begin
-        MvrPeriod := Mvr.Periods[StressPeriodIndex];
-        LakMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
+        for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+        begin
+          MvrPeriod := Mvr.Periods[StressPeriodIndex];
+          LakMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
+        end;
       end;
+
+      for var TransportIndex := 0 to LktList.Count - 1 do
+      begin
+        Lkt := LktList[TransportIndex];
+        if Lkt <> nil then
+        begin
+          for StressPeriodIndex := 0 to Lkt.PeriodCount - 1 do
+          begin
+            LktPeriod := Lkt.Periods[StressPeriodIndex];
+            LakMvrLinkArray[LktPeriod.Period-1].LktPeriods[TransportIndex] := LktPeriod;
+          end;
+        end;
+      end;
+
       for StressPeriodIndex := 0 to Lak.PeriodCount - 1 do
       begin
         LakPeriod := Lak.Periods[StressPeriodIndex];
@@ -7508,25 +7847,37 @@ begin
 
       for StressPeriodIndex := 1 to Length(LakMvrLinkArray) - 1 do
       begin
+        if LakMvrLinkArray[StressPeriodIndex].LakPeriod = nil then
+        begin
+          LakMvrLinkArray[StressPeriodIndex].LakPeriod :=
+            LakMvrLinkArray[StressPeriodIndex-1].LakPeriod;
+        end;
         if LakMvrLinkArray[StressPeriodIndex].MvrPeriod = nil then
         begin
-          LakMvrLinkArray[StressPeriodIndex].MvrPeriod := LakMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
-          LakMvrLinkArray[StressPeriodIndex].LakPeriod := LakMvrLinkArray[StressPeriodIndex-1].LakPeriod;
+          LakMvrLinkArray[StressPeriodIndex].MvrPeriod :=
+            LakMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
+        end;
+        for var TransportIndex := 0 to LktList.Count - 1 do
+        begin
+          if LakMvrLinkArray[StressPeriodIndex].LktPeriods[TransportIndex] = nil then
+          begin
+            LakMvrLinkArray[StressPeriodIndex].LktPeriods[TransportIndex] :=
+              LakMvrLinkArray[StressPeriodIndex-1].LktPeriods[TransportIndex];
+          end;
         end;
       end;
 
       for StressPeriodIndex := 0 to Length(LakMvrLinkArray) - 1 do
       begin
-        if (LakMvrLinkArray[StressPeriodIndex].MvrPeriod = nil)
-          and (LakMvrLinkArray[StressPeriodIndex].LakPeriod = nil) then
+        if not LakMvrLinkArray[StressPeriodIndex].HasData then
         begin
           Continue;
         end;
 
         if StressPeriodIndex > 0 then
         begin
-          if (LakMvrLinkArray[StressPeriodIndex].MvrPeriod = LakMvrLinkArray[StressPeriodIndex - 1].MvrPeriod)
-            and (LakMvrLinkArray[StressPeriodIndex].LakPeriod = LakMvrLinkArray[StressPeriodIndex - 1].LakPeriod) then
+          if LakMvrLinkArray[StressPeriodIndex].SameContents(
+            LakMvrLinkArray[StressPeriodIndex - 1]) then
           begin
             Continue
           end;
@@ -7553,6 +7904,30 @@ begin
         nil, ObsLists, ObsFiles);
     end;
 
+    for var TransportIndex := 0 to LktList.Count - 1 do
+    begin
+      Lkt := LktList[TransportIndex];
+      if Lkt <> nil then
+      begin
+        if Lkt.ObservationCount > 0 then
+        begin
+          Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+        end;
+        for ObsPackageIndex := 0 to Lkt.ObservationCount - 1 do
+        begin
+          ObsFiles := Lkt.Observations[ObsPackageIndex].Package as TObs;
+          GetObservations(LktNumberDictionaries[TransportIndex],
+            LktBoundNameDictionaries[TransportIndex],
+            nil, ListOfObsLists[TransportIndex], ObsFiles);
+        end;
+      end;
+    end;
+
+    if Assigned(OnUpdateStatusBar) then
+    begin
+      OnUpdateStatusBar(self, 'importing LAK package');
+    end;
+
     for LakeIndex := 0 to Lak.PackageData.Count - 1 do
     begin
       LakPackageItem := Lak.PackageData[LakeIndex];
@@ -7561,7 +7936,23 @@ begin
         Lakes.Add(nil)
       end;
       Assert(Lakes[LakPackageItem.lakeno - 1] = nil);
-      Lakes[LakPackageItem.lakeno - 1] := TImportLake.Create(LakPackageItem);
+      ALake := TImportLake.Create(LakPackageItem);
+      Lakes[LakPackageItem.lakeno - 1] := ALake;
+      ALake.LktPackageItems.Capacity := LktList.Count;
+      for var TransportIndex := 0 to LktList.Count - 1 do
+      begin
+        Lkt := LktList[TransportIndex];
+        if Lkt = nil then
+        begin
+          ALake.LktPackageItems.Add(nil);
+          ALake.LktSetting.Add(nil);
+        end
+        else
+        begin
+          ALake.LktPackageItems.Add(Lkt.PackageData[LakPackageItem.lakeno - 1]);
+          ALake.LktSetting.Add(TNumberedItemList.Create);
+        end;
+      end;
     end;
 
     DummyConnectionItem.Initialize;
@@ -7596,7 +7987,7 @@ begin
       CreateOutlets(Lakes[LakeIndex]);
     end;
 
-    if Lak.ObservationCount > 0 then
+//    if Lak.ObservationCount > 0 then
     begin
       for LakeIndex := 0 to Lakes.Count - 1 do
       begin
@@ -7612,10 +8003,10 @@ begin
       CreateLakeTable(ALake, TablePackage);
     end;
 
-    for PeriodIndex := 0 to Lak.PeriodCount - 1 do
+    for PeriodIndex := 0 to LakMvrLinkList.Count - 1 do
     begin
-      APeriod := Lak.Periods[PeriodIndex];
-      Period := APeriod.Period;
+      APeriod := LakMvrLinkList[PeriodIndex].LakPeriod;
+      Period := LakMvrLinkList[PeriodIndex].Period;
       StartTime := Model.ModflowStressPeriods[Period-1].StartTime;
 
       for SettingIndex := 0 to APeriod.Count - 1 do
@@ -7662,9 +8053,50 @@ begin
           Assert(False);
         end;
       end;
+      for var TransportIndex := 0 to Length(LakMvrLinkList[PeriodIndex].LktPeriods) - 1 do
+      begin
+        LktPeriod := LakMvrLinkList[PeriodIndex].LktPeriods[TransportIndex];
+        if LktPeriod <> nil then
+        begin
+          for SettingIndex := 0 to LktPeriod.Count - 1 do
+          begin
+            ASetting := LktPeriod[SettingIndex];
+            SettingName := ASetting.Name;
+            if AnsiSameText(SettingName, 'STATUS')
+              or AnsiSameText(SettingName, 'CONCENTRATION')
+              or AnsiSameText(SettingName, 'RAINFALL')
+              or AnsiSameText(SettingName, 'EVAPORATION')
+              or AnsiSameText(SettingName, 'RUNOFF')
+              or AnsiSameText(SettingName, 'EXT-INFLOW')
+              or AnsiSameText(SettingName, 'AUXILIARY')
+              then
+            begin
+              LakeNo := ASetting.IdNumber;
+              ALake := Lakes[LakeNo-1];
+              ALake.LktSetting[TransportIndex].Add(ASetting);
+            end
+            else
+            begin
+              Assert(False);
+            end;
+          end
+        end;
+      end;
+
       for LakeIndex := 0 to Lakes.Count - 1 do
       begin
-        ApplyLakeSettings(Lakes[LakeIndex])
+        ALake := Lakes[LakeIndex];
+        ApplyLakeSettings(ALake);
+        ALake.FLakeSettings.Clear;
+        OutletKeyArray := ALake.FOutletSettings.ToArray;
+        for OutletIndex := 0 to Length(OutletKeyArray) - 1 do
+        begin
+          OutletKeyArray[OutletIndex].Value.Clear;
+        end;
+        for var TransportIndex := 0 to ALake.LktSetting.Count - 1 do
+        begin
+          ALake.LktSetting[TransportIndex].Clear;
+        end;
       end;
     end;
   finally
@@ -7674,6 +8106,11 @@ begin
     NumberObsDictionary.Free;
     BoundNameObsDictionary.Free;
     ObsLists.Free;
+    LktList.Free;
+    LktMaps.Free;
+    LktNumberDictionaries.Free;
+    LktBoundNameDictionaries.Free;
+    ListOfObsLists.Free;
   end;
 end;
 
@@ -11683,6 +12120,7 @@ var
   SftStringValues: TArray<TOneDStringArray>;
   ValidSfrSettings: TStringList;
   ValidSftSettings: TStringList;
+  OutputControl: TModflowOutputControl;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -11755,6 +12193,8 @@ var
     BoundName: string;
     ObsList: TObservationList;
     SfrObs: TSfrObs;
+    SftObs: TSftObs;
+    Genus: TGenus;
     AuxIFACE: TMf6BoundaryValue;
     IFACE: Integer;
     FirstReachNo: Integer;
@@ -11762,6 +12202,9 @@ var
     MvrSource: TMvrSource;
     MvrReceiver: TMvrReceiver;
     StressPeriodIndex: Integer;
+    SftPackage: TSftPackageItem;
+    SftBoundNameDictionary: TBoundNameDictionary;
+    SftNumberDictionary: TNumberDictionary;
     procedure ReadCrossSection(ACrossSection: TSfr6CrossSection; CrossSection: TCrossSection);
     var
       RowIndex: Integer;
@@ -11789,6 +12232,68 @@ var
           end;
         end;
       end
+    end;
+    procedure IncludeSftObservations(ObsList: TObservationList);
+    var
+      ObsIndex: Integer;
+      AnObs: TObservation;
+    begin
+      for ObsIndex := 0 to ObsList.Count - 1 do
+      begin
+        AnObs := ObsList[ObsIndex];
+        if AnsiSameText(AnObs.ObsType, 'concentration') then
+        begin
+          Include(SftObs, stoConcentration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'flow-ja-face') then
+        begin
+          // ignore
+        end
+        else if AnsiSameText(AnObs.ObsType, 'storage') then
+        begin
+          Include(SftObs, stoStorage);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'constant') then
+        begin
+          Include(SftObs, stoConstant);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'from-mvr') then
+        begin
+          Include(SftObs, stoFromMvr);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'to-mvr') then
+        begin
+          Include(SftObs, stoToMvr);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'sft') then
+        begin
+          Include(SftObs, stoSFT);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'rainfall') then
+        begin
+          Include(SftObs, stoRainfall);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'evaporation') then
+        begin
+          Include(SftObs, stoEvaporation);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'runoff') then
+        begin
+          Include(SftObs, stoRunoff);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'ext-inflow') then
+        begin
+          Include(SftObs, stoExtInflow);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'ext-outflow') then
+        begin
+          Include(SftObs, stoExtOutflow);
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end;
     end;
     procedure IncludeObservations(ObsList: TObservationList);
     var
@@ -12234,6 +12739,49 @@ var
     begin
       result.Modflow6Obs.SfrObs := SfrObs;
     end;
+    Genus := [];
+    for var TransportIndex := 0 to FirstReach.SftPackageData.Count - 1 do
+    begin
+      SftObs := [];
+      SftPackage := FirstReach.SftPackageData[TransportIndex];
+      if SftPackage <> nil then
+      begin
+        BoundName := SftPackage.boundname;
+        if BoundName <> '' then
+        begin
+          SftBoundNameDictionary := SftBoundNameDictionaries[TransportIndex];
+          if SftBoundNameDictionary.TryGetValue(UpperCase(Boundname), ObsList) then
+          begin
+            Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+            result.CreateMf6Obs;
+            IncludeSftObservations(ObsList);
+            result.Modflow6Obs.Name := ValidName(Boundname);
+          end;
+        end;
+
+        SftNumberDictionary := SftNumberDictionaries[TransportIndex];
+        if SftNumberDictionary.TryGetValue(FirstReach.PackageData.rno, ObsList) then
+        begin
+          Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+          result.CreateMf6Obs;
+          IncludeSftObservations(ObsList);
+          if result.Modflow6Obs.Name = '' then
+          begin
+            Inc(ObsNameIndex);
+            result.Modflow6Obs.Name := 'SFT_' + IntToStr(ObsNameIndex);
+          end;
+        end;
+      end;
+      if SftObs <> [] then
+      begin
+        result.Modflow6Obs.SftObs := result.Modflow6Obs.SftObs + SftObs;
+        Include(Genus, TransportIndex);
+      end;
+    end;
+    if Genus <> [] then
+    begin
+      result.Modflow6Obs.Genus := Genus;
+    end;
 
     if IfaceIndex >= 0 then
     begin
@@ -12480,11 +13028,38 @@ begin
     SetLength(SftINFLOW, SftList.Count);
     SetLength(SftStringValues, SftList.Count);
 
+    if SftList.Count > 0 then
+    begin
+      OutputControl := Model.ModflowOutputControl;
+      for var TransportIndex := 0 to SftList.Count - 1 do
+      begin
+        Sft := SftList[TransportIndex];
+        if Sft <> nil then
+        begin
+          if Sft.Options.PRINT_CONCENTRATION then
+          begin
+            OutputControl.ConcentrationOC.PrintInListing := True;
+          end;
+          if Sft.Options.CONCENTRATION then
+          begin
+            SfrPackage.SaveGwtConcentration := True;
+          end;
+          if Sft.Options.BUDGET then
+          begin
+            SfrPackage.SaveGwtBudget := True;
+          end;
+          if Sft.Options.BUDGETCSV then
+          begin
+            SfrPackage.SaveGwtBudgetCsv := True;
+          end;
+        end;
+      end;
+    end;
+
     for var TransportIndex := 0 to SftList.Count - 1 do
     begin
       SftNumberDictionaries.Add(TNumberDictionary.Create);
       SftBoundNameDictionaries.Add(TBoundNameDictionary.Create);
-
       ListOfObsLists.Add(TObsLists.Create(False))
     end;
     if (Mvr = nil) and (SftList.Count = 0) then
@@ -12526,7 +13101,6 @@ begin
           begin
             SftPeriod := Sft.Periods[StressPeriodIndex];
             SfrMvrLinkArray[SftPeriod.Period-1].SftPeriods[TransportIndex] := SftPeriod;
-//            IdentifySourcesAndReceivers(SftPeriod);
           end;
         end;
       end;
@@ -12541,11 +13115,13 @@ begin
       begin
         if SfrMvrLinkArray[StressPeriodIndex].MvrPeriod = nil then
         begin
-          SfrMvrLinkArray[StressPeriodIndex].MvrPeriod := SfrMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
+          SfrMvrLinkArray[StressPeriodIndex].MvrPeriod :=
+            SfrMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
         end;
         if SfrMvrLinkArray[StressPeriodIndex].SfrPeriod = nil then
         begin
-          SfrMvrLinkArray[StressPeriodIndex].SfrPeriod := SfrMvrLinkArray[StressPeriodIndex-1].SfrPeriod;
+          SfrMvrLinkArray[StressPeriodIndex].SfrPeriod :=
+            SfrMvrLinkArray[StressPeriodIndex-1].SfrPeriod;
         end;
         for var TransportIndex := 0 to SftList.Count - 1 do
         begin
@@ -17119,10 +17695,14 @@ begin
   FOutletSettings := TOutletDictionary.Create;
   FNumberedItemLists := TNumberedItemLists.Create;
   HasOutletSettings := False;
+  LktPackageItems := TLktPackageItemList.Create(False);
+  LktSetting := TNumberedItemLists.Create;
 end;
 
 destructor TImportLake.Destroy;
 begin
+  LktSetting.Free;
+  LktPackageItems.Free;
   FNumberedItemLists.Free;
   FLakeSettings.Free;
   FOutletSettings.Free;
@@ -17220,19 +17800,69 @@ end;
 
 { TLakMvrLink }
 
+function TLakMvrLink.HasData: Boolean;
+begin
+  result := (LakPeriod <> nil) or (MvrPeriod <> nil);
+  if not result then
+  begin
+    for var TransportIndex := 0 to Length(LktPeriods) - 1 do
+    begin
+      result := LktPeriods[TransportIndex] <> nil;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+end;
+
 function TLakMvrLink.Period: Integer;
 begin
-  if MvrPeriod = nil then
+  if not HasData then
   begin
-    result := LakPeriod.Period;
-  end
-  else if LakPeriod = nil then
-  begin
-    result := MvrPeriod.Period;
+    result := -1;
   end
   else
   begin
-    Result := Max(LakPeriod.Period, MvrPeriod.Period);
+    if LakPeriod <> nil then
+    begin
+      result := LakPeriod.Period;
+    end
+    else
+    begin
+      result := MAXINT;
+    end;
+
+    if MvrPeriod <> nil then
+    begin
+      result := Min(result, MvrPeriod.Period);
+    end;
+
+    for var TransportIndex := 0 to Length(LktPeriods) - 1 do
+    begin
+      if LktPeriods[TransportIndex] <> nil then
+      begin
+        result := Min(result, LktPeriods[TransportIndex].Period);
+      end;
+    end;
+  end;
+end;
+
+function TLakMvrLink.SameContents(OtherLink: TLakMvrLink): Boolean;
+begin
+  result := (LakPeriod = OtherLink.LakPeriod)
+    and (MvrPeriod = OtherLink.MvrPeriod)
+    and (Length(LktPeriods) = Length(OtherLink.LktPeriods));
+  if result then
+  begin
+    for var Index := 0 to Length(LktPeriods) - 1 do
+    begin
+      result := LktPeriods[Index] = OtherLink.LktPeriods[Index];
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
   end;
 end;
 

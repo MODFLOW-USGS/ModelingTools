@@ -110,7 +110,6 @@ type
 
   TStringConcCollection = class(TCustomObjectOrderedCollection)
   private
-//    FScreenObject: TObject;
     FMt3dmsConcCollection: TCollection;
     function GetItem(Index: integer): TStringConcValueItem;
     procedure SetItem(Index: integer; const Value: TStringConcValueItem);
