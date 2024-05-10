@@ -9,17 +9,17 @@ uses
 type
   TMwtOptions = class(TCustomMf6Persistent)
   private
-    FLOW_PACKAGE_NAME: string;
+    FFLOW_PACKAGE_NAME: string;
     AUXILIARY: TStringList;
     FLOW_PACKAGE_AUXILIARY_NAME: string;
     BOUNDNAMES: Boolean;
-    PRINT_INPUT: Boolean;
-    PRINT_CONCENTRATION: Boolean;
-    PRINT_FLOWS: Boolean;
-    SAVE_FLOWS: Boolean;
-    CONCENTRATION: Boolean;
-    BUDGET: Boolean;
-    BUDGETCSV: Boolean;
+    FPRINT_INPUT: Boolean;
+    FPRINT_CONCENTRATION: Boolean;
+    FPRINT_FLOWS: Boolean;
+    FSAVE_FLOWS: Boolean;
+    FCONCENTRATION: Boolean;
+    FBUDGET: Boolean;
+    FBUDGETCSV: Boolean;
     TS6_FileNames: TStringList;
     Obs6_FileNames: TStringList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -28,17 +28,28 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property FLOW_PACKAGE_NAME: string read FFLOW_PACKAGE_NAME;
+    property PRINT_INPUT: Boolean read FPRINT_INPUT;
+    property PRINT_CONCENTRATION: Boolean read FPRINT_CONCENTRATION;
+    property PRINT_FLOWS: Boolean read FPRINT_FLOWS;
+    property SAVE_FLOWS: Boolean read FSAVE_FLOWS;
+    property CONCENTRATION: Boolean read FCONCENTRATION;
+    property BUDGET: Boolean read FBUDGET;
+    property BUDGETCSV: Boolean read FBUDGETCSV;
   end;
 
   TMwtPackageItem = class(TObject)
   private
-    mawno: Integer;
-    strt: TMf6BoundaryValue;
+    Fmawno: Integer;
+    Fstrt: TMf6BoundaryValue;
     aux: TBoundaryValueList;
-    boundname: string;
+    Fboundname: string;
   public
     constructor Create;
     destructor Destroy; override;
+    property mawno: Integer read Fmawno;
+    property strt: TMf6BoundaryValue read Fstrt;
+    property boundname: string read Fboundname;
   end;
 
   TMwtPackageItemList= TObjectList<TMwtPackageItem>;
@@ -48,11 +59,15 @@ type
     FItems: TMwtPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
       BOUNDNAMES: Boolean);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TMwtPackageItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TMwtPackageItem read GetItem; default;
   end;
 
   TMwtPeriod = class(TCustomMf6Persistent)
@@ -60,14 +75,20 @@ type
     IPER: Integer;
     FItems: TNumberedItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(Index: Integer): TNumberedItem;
   protected
     procedure Initialize; override;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Period: Integer read IPER;
+    property Count: Integer read GetCount;
+    property Items[Index: Integer]: TNumberedItem read GetItem; default;
   end;
 
   TMwtPeriodList = TObjectList<TMwtPeriod>;
+  TMwtPeriodArray = TArray<TMwtPeriod>;
 
   TMwt = class(TDimensionedPackageReader)
   private
@@ -76,12 +97,27 @@ type
     FPeriods: TMwtPeriodList;
     FTimeSeriesPackages: TPackageList;
     FObservationsPackages: TPackageList;
+    function GetObservation(Index: Integer): TPackage;
+    function GetObservationCount: Integer;
+    function GetPeriod(Index: Integer): TMwtPeriod;
+    function GetPeriodCount: Integer;
+    function GetTimeSeries(Index: Integer): TPackage;
+    function GetTimeSeriesCount: Integer;
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    property Options: TMwtOptions read FOptions;
+    property PackageData: TMwtPackageData read FPackageData;
+    property PeriodCount: Integer read GetPeriodCount;
+    property Periods[Index: Integer]: TMwtPeriod read GetPeriod;
+    property TimeSeriesCount: Integer read GetTimeSeriesCount;
+    property TimeSeries[Index: Integer]: TPackage read GetTimeSeries;
+    property ObservationCount: Integer read GetObservationCount;
+    property Observations[Index: Integer]: TPackage read GetObservation;
   end;
 
+  TMwtList = TList<TMwt>;
 
 implementation
 
@@ -111,17 +147,17 @@ end;
 procedure TMwtOptions.Initialize;
 begin
   inherited;
-  FLOW_PACKAGE_NAME := '';
+  FFLOW_PACKAGE_NAME := '';
   AUXILIARY.Clear;
   FLOW_PACKAGE_AUXILIARY_NAME := '';
   BOUNDNAMES := False;
-  PRINT_INPUT := False;
-  PRINT_CONCENTRATION := False;
-  PRINT_FLOWS := False;
-  SAVE_FLOWS := False;
-  CONCENTRATION := False;
-  BUDGET := False;
-  BUDGETCSV := False;
+  FPRINT_INPUT := False;
+  FPRINT_CONCENTRATION := False;
+  FPRINT_FLOWS := False;
+  FSAVE_FLOWS := False;
+  FCONCENTRATION := False;
+  FBUDGET := False;
+  FBUDGETCSV := False;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
 end;
@@ -161,7 +197,7 @@ begin
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      FLOW_PACKAGE_NAME := FSplitter[1];
+      FFLOW_PACKAGE_NAME := FSplitter[1];
     end
     else if (FSplitter[0] = 'AUXILIARY')
       and (FSplitter.Count >= 2) then
@@ -185,37 +221,37 @@ begin
     end
     else if FSplitter[0] = 'PRINT_INPUT' then
     begin
-      PRINT_INPUT := True;
+      FPRINT_INPUT := True;
     end
     else if FSplitter[0] = 'PRINT_CONCENTRATION' then
     begin
-      PRINT_CONCENTRATION := True;
+      FPRINT_CONCENTRATION := True;
     end
     else if FSplitter[0] = 'PRINT_FLOWS' then
     begin
-      PRINT_FLOWS := True;
+      FPRINT_FLOWS := True;
     end
     else if FSplitter[0] = 'SAVE_FLOWS' then
     begin
-      SAVE_FLOWS := True;
+      FSAVE_FLOWS := True;
     end
     else if (FSplitter[0] = 'CONCENTRATION')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      CONCENTRATION := True;
+      FCONCENTRATION := True;
     end
     else if (FSplitter[0] = 'BUDGET')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGET := True;
+      FBUDGET := True;
     end
     else if (FSplitter[0] = 'BUDGETCSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGETCSV := True;
+      FBUDGETCSV := True;
     end
     else if (FSplitter[0] = 'TS6')
       and (FSplitter.Count >= 3)
@@ -245,10 +281,10 @@ end;
 
 constructor TMwtPackageItem.Create;
 begin
-  mawno := 0;
-  strt.Initialize;
+  Fmawno := 0;
+  Fstrt.Initialize;
   aux := TBoundaryValueList.Create;
-  boundname := ''
+  Fboundname := ''
 end;
 
 destructor TMwtPackageItem.Destroy;
@@ -270,6 +306,16 @@ destructor TMwtPackageData.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TMwtPackageData.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TMwtPackageData.GetItem(Index: Integer): TMwtPackageItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TMwtPackageData.Initialize;
@@ -309,7 +355,7 @@ begin
         TComparer<TMwtPackageItem>.Construct(
           function(const Left, Right: TMwtPackageItem): Integer
           begin
-            Result := Left.mawno - Right.mawno;
+            Result := Left.Fmawno - Right.Fmawno;
           end
         ));
       Exit;
@@ -323,17 +369,17 @@ begin
         // do nothing
       end
       else if (FSplitter.Count >= NumberOfItems)
-        and TryStrToInt(FSplitter[0],Item.mawno)
+        and TryStrToInt(FSplitter[0],Item.Fmawno)
         then
       begin
-        if TryFortranStrToFloat(FSplitter[1],Item.strt.NumericValue) then
+        if TryFortranStrToFloat(FSplitter[1],Item.Fstrt.NumericValue) then
         begin
-          Item.strt.ValueType := vtNumeric;
+          Item.Fstrt.ValueType := vtNumeric;
         end
         else
         begin
-          Item.strt.ValueType := vtString;
-          Item.strt.StringValue := FSplitter[1];
+          Item.Fstrt.ValueType := vtString;
+          Item.Fstrt.StringValue := FSplitter[1];
         end;
 
         ItemStart := 2;
@@ -356,7 +402,7 @@ begin
         if BOUNDNAMES and (FSplitter.Count >= NumberOfItems+1) then
         begin
           FSplitter.DelimitedText := CaseSensitiveLine;
-          Item.boundname := FSplitter[ItemStart];
+          Item.Fboundname := FSplitter[ItemStart];
         end;
         FItems.Add(Item);
         Item := nil;
@@ -384,6 +430,16 @@ destructor TMwtPeriod.Destroy;
 begin
   FItems.Free;
   inherited;
+end;
+
+function TMwtPeriod.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TMwtPeriod.GetItem(Index: Integer): TNumberedItem;
+begin
+  result := FItems[Index];
 end;
 
 procedure TMwtPeriod.Initialize;
@@ -501,6 +557,36 @@ begin
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
   inherited;
+end;
+
+function TMwt.GetObservation(Index: Integer): TPackage;
+begin
+  result := FObservationsPackages[Index];
+end;
+
+function TMwt.GetObservationCount: Integer;
+begin
+  result := FObservationsPackages.Count;
+end;
+
+function TMwt.GetPeriod(Index: Integer): TMwtPeriod;
+begin
+  result := FPeriods[Index];
+end;
+
+function TMwt.GetPeriodCount: Integer;
+begin
+  result := FPeriods.Count;
+end;
+
+function TMwt.GetTimeSeries(Index: Integer): TPackage;
+begin
+  result := FTimeSeriesPackages[Index];
+end;
+
+function TMwt.GetTimeSeriesCount: Integer;
+begin
+  result := FTimeSeriesPackages.Count;
 end;
 
 procedure TMwt.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);

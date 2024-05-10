@@ -905,24 +905,24 @@ type
     property StartingConcentrations: TStringConcCollection
       read GetStartingConcentrations
       write SetStartingConcentrations;
-      property PestInjectionConcentrations: TMawGwtConcCollection
-        read FPestInjectionConcentrations write SetPestInjectionConcentrations;
-      property PestSpecifiedConcentrations: TMawGwtConcCollection
-        read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations;
-      property PestInjectionConcentrationMethods: TGwtPestMethodCollection
-        read FPestInjectionConcentrationMethods write SetPestInjectionConcentrationMethods;
-      property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
-        read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
-        // Buoyancy
-      property PestDensity: TMawGwtConcCollection
-        read FPestDensity write SetPestDensity;
-      property PestDensityMethods: TGwtPestMethodCollection
-        read FPestDensityMethods write SetPestDensityMethods;
-        // Viscosity
-      property PestViscosity: TMawGwtConcCollection
-        read FPestViscosity write SetPestViscosity;
-      property PestViscosityMethods: TGwtPestMethodCollection
-        read FPestViscosityMethods write SetPestViscosityMethods;
+    property PestInjectionConcentrations: TMawGwtConcCollection
+      read FPestInjectionConcentrations write SetPestInjectionConcentrations;
+    property PestSpecifiedConcentrations: TMawGwtConcCollection
+      read FPestSpecifiedConcentrations write SetPestSpecifiedConcentrations;
+    property PestInjectionConcentrationMethods: TGwtPestMethodCollection
+      read FPestInjectionConcentrationMethods write SetPestInjectionConcentrationMethods;
+    property PestSpecifiedConcentrationMethods: TGwtPestMethodCollection
+      read FPestSpecifiedConcentrationMethods write SetPestSpecifiedConcentrationMethods;
+      // Buoyancy
+    property PestDensity: TMawGwtConcCollection
+      read FPestDensity write SetPestDensity;
+    property PestDensityMethods: TGwtPestMethodCollection
+      read FPestDensityMethods write SetPestDensityMethods;
+      // Viscosity
+    property PestViscosity: TMawGwtConcCollection
+      read FPestViscosity write SetPestViscosity;
+    property PestViscosityMethods: TGwtPestMethodCollection
+      read FPestViscosityMethods write SetPestViscosityMethods;
     end;
 
 const
@@ -6598,7 +6598,7 @@ var
   GwtSource: Integer;
   SpeciesIndex: Integer;
 begin
-  result := 0;
+//  result := 0;
   case Index of
     MawFlowingWellElevationPosition:
       result := FlowingWellElevation;

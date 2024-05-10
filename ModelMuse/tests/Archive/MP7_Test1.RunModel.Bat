@@ -5,7 +5,6 @@ for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (
 )
 @echo on
 C:\WRDAPP\mf6.4.4_win64\bin\mf6.exe
-call RunModpath.bat
 @echo off
 rem Get end time:
 for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (
