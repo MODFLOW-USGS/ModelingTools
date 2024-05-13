@@ -1686,16 +1686,6 @@ begin
         begin
           AddPointsToScreenObject(CellIds, AScreenObject);
         end;
-//
-//        if ACellList.FIds.Count > 0 then
-//        begin
-//          MvrSource.ScreenObject := AScreenObject;
-//          MvrSource.PackageName := Package.PackageName;
-//          MvrSource.Period := WellMvrLink.Period;
-//          MvrSource.IDs := ACellList.FIds.ToArray;
-//          MvrSource.SourceType := mspcWel;
-//          FMvrSources.Add(MvrSource);
-//        end;
       end
     end;
 
@@ -7796,7 +7786,7 @@ begin
     begin
       LktNumberDictionaries.Add(TNumberDictionary.Create);
       LktBoundNameDictionaries.Add(TBoundNameDictionary.Create);
-      ListOfObsLists.Add(TObsLists.Create(False))
+      ListOfObsLists.Add(TObsLists.Create)
     end;
     if (Mvr = nil) and (LktList.Count = 0) then
     begin
@@ -8461,7 +8451,7 @@ begin
     begin
       MwtNumberDictionaries.Add(TNumberDictionary.Create);
       MwtBoundNameDictionaries.Add(TBoundNameDictionary.Create);
-      ListOfObsLists.Add(TObsLists.Create(False))
+      ListOfObsLists.Add(TObsLists.Create)
     end;
 
     if (Mvr = nil) and (MwtList.Count = 0) then
@@ -13422,7 +13412,7 @@ begin
     begin
       SftNumberDictionaries.Add(TNumberDictionary.Create);
       SftBoundNameDictionaries.Add(TBoundNameDictionary.Create);
-      ListOfObsLists.Add(TObsLists.Create(False))
+      ListOfObsLists.Add(TObsLists.Create)
     end;
 
     if (Mvr = nil) and (SftList.Count = 0) then
@@ -14606,7 +14596,7 @@ var
       for ObsIndex := 0 to ObsList.Count - 1 do
       begin
         AnObs := ObsList[ObsIndex];
-        if AnsiSameText(AnObs.ObsType, 'cnc') then
+        if AnsiSameText(AnObs.ObsType, 'src') then
         begin
           Include(ObGwts, ogwtSRC);
         end
@@ -15887,7 +15877,7 @@ type
     mvrtype: string;
     BoundNameObs: TObservationList;
     NumberObs: TObservationList;
-    UztPackageData: TUztPackageItemList;
+//    UztPackageData: TUztPackageItemList;
     UztBoundNameObs: TObservationLists;
     UztIdObs: TObservationLists;
     UztPackageItemArray: TUztPackageItemArray;
@@ -15999,6 +15989,11 @@ var
   ImportUztPeriodItem: TImportUztPeriodItem;
   UztItem: TNumberedItem;
   ItemList: TUztPeriodItemList;
+  Genus: TGenus;
+  UztNumberDictionary: TNumberDictionary;
+  UztBoundNameDictionary: TBoundNameDictionary;
+  BoundName: string;
+  UztObs: TUztObs;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
     ItemIndex: Integer;
@@ -16049,6 +16044,76 @@ var
       result := Value.StringValue;
     end;
   end;
+  procedure AssignUztObservations(Obs: TObservationList; AScreenObject: TScreenObject;
+    out UztObs: TUztObs; Name: string = '');
+  var
+    ObsIndex: Integer;
+    AnObs: TObservation;
+  begin
+    UztObs := [];
+    if Obs <> nil then
+    begin
+      Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+      AScreenObject.CreateMf6Obs;
+      if AScreenObject.Modflow6Obs.Name = '' then
+      begin
+        if Name = '' then
+        begin
+          Inc(ObsNameIndex);
+          AScreenObject.Modflow6Obs.Name := 'Uzt_' + IntToStr(ObsNameIndex);
+        end
+        else
+        begin
+          AScreenObject.Modflow6Obs.Name := Name;
+        end;
+      end;
+
+      for ObsIndex := 0 to Obs.Count - 1 do
+      begin
+        AnObs := Obs[ObsIndex];
+        if AnsiSameText(AnObs.ObsType, 'concentration') then
+        begin
+          Include(UztObs, utoConcentration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'storage') then
+        begin
+          Include(UztObs, utoStorage);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'constant') then
+        begin
+          Include(UztObs, utoConstant);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'from-mvr') then
+        begin
+          Include(UztObs, utoFromMvr);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'uzt') then
+        begin
+          Include(UztObs, utoUZT);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'infiltration') then
+        begin
+          Include(UztObs, utoInfiltration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'rej-inf') then
+        begin
+          Include(UztObs, utoRejInfiltration);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'uzet') then
+        begin
+          Include(UztObs, utoUzEt);
+        end
+        else if AnsiSameText(AnObs.ObsType, 'rej-inf-to-mvr') then
+        begin
+          Include(UztObs, utoRejInflToMvr);
+        end
+        else
+        begin
+          Assert(False);
+        end;
+      end;
+    end;
+  end;
   procedure AssignObservations(Obs: TObservationList; AScreenObject: TScreenObject;
     Name: string = '');
   var
@@ -16065,7 +16130,7 @@ var
         if Name = '' then
         begin
           Inc(ObsNameIndex);
-          AScreenObject.Modflow6Obs.Name := 'UzfObs_' + IntToStr(ObsNameIndex);
+          AScreenObject.Modflow6Obs.Name := 'Uzf_' + IntToStr(ObsNameIndex);
         end
         else
         begin
@@ -16282,7 +16347,7 @@ begin
     begin
       UztNumberDictionaries.Add(TNumberDictionary.Create);
       UztBoundNameDictionaries.Add(TBoundNameDictionary.Create);
-      ListOfObsLists.Add(TObsLists.Create(False))
+      ListOfObsLists.Add(TObsLists.Create);
     end;
 
     for TimeSeriesIndex := 0 to Uzf.TimeSeriesPackageCount - 1 do
@@ -16300,6 +16365,21 @@ begin
       ObsFiles := Uzf.Observations[ObsPackageIndex].Package as TObs;
       GetObservations(NumberObsDictionary, BoundNameObsDictionary,
         nil, ObsLists, ObsFiles);
+    end;
+
+    for var TransportIndex := 0 to UztList.Count - 1 do
+    begin
+      Uzt := UztList[TransportIndex];
+      if Uzt <> nil then
+      begin
+        for ObsPackageIndex := 0 to Uzt.ObservationCount - 1 do
+        begin
+          ObsFiles := Uzt.Observations[ObsPackageIndex].Package as TObs;
+          GetObservations(UztNumberDictionaries[TransportIndex],
+            UztBoundNameDictionaries[TransportIndex],
+            nil, ListOfObsLists[TransportIndex], ObsFiles);
+        end;
+      end;
     end;
 
     if (Mvr = nil) and (UztList.Count = 0) then
@@ -16321,11 +16401,14 @@ begin
         UzfMvrLinkArray[StressPeriodIndex].UzfPeriod := nil;
         SetLength(UzfMvrLinkArray[StressPeriodIndex].UztPeriods, UztList.Count);
       end;
-      for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+      if Mvr <> nil then
       begin
-        MvrPeriod := Mvr.Periods[StressPeriodIndex];
-        UzfMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
-        IdentifySourcesAndReceivers(MvrPeriod);
+        for StressPeriodIndex := 0 to Mvr.PeriodCount - 1 do
+        begin
+          MvrPeriod := Mvr.Periods[StressPeriodIndex];
+          UzfMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
+          IdentifySourcesAndReceivers(MvrPeriod);
+        end;
       end;
       for StressPeriodIndex := 0 to Uzf.PeriodCount - 1 do
       begin
@@ -16423,8 +16506,29 @@ begin
         Uzt := UztList[TransportIndex];
         if Uzt <> nil then
         begin
-          UzfDataItem.UztPackageItemArray[TransportIndex] := 
+          UzfDataItem.UztPackageItemArray[TransportIndex] :=
             Uzt.PackageData[CellIndex];
+          BoundName := Uzt.PackageData[CellIndex].boundname;
+          if BoundName <> '' then
+          begin
+            if UztBoundNameDictionaries[TransportIndex].TryGetValue(UpperCase(BoundName), Obs) then
+            begin
+              UzfDataItem.UztBoundNameObs.Add(Obs);
+            end
+            else
+            begin
+              UzfDataItem.UztBoundNameObs.Add(nil);
+            end;
+          end;
+
+          if UztNumberDictionaries[TransportIndex].TryGetValue(PackageItem.iuzno, Obs) then
+          begin
+            UzfDataItem.UztIdObs.Add(Obs);
+          end
+          else
+          begin
+            UzfDataItem.UztIdObs.Add(nil);
+          end;
         end
         else
         begin
@@ -16992,6 +17096,50 @@ begin
       end;
       AssignObservations(UzfDataItem.BoundNameObs, AScreenObject, UzfDataItem.PackageData.boundname);
       AssignObservations(UzfDataItem.NumberObs, AScreenObject);
+
+      Genus := [];
+      for var TransportIndex := 0 to UztList.Count - 1 do
+      begin
+        Uzt := UztList[TransportIndex];
+        if Uzt <> nil then
+        begin
+          UztNumberDictionary := UztNumberDictionaries[TransportIndex];
+          UztBoundNameDictionary := UztBoundNameDictionaries[TransportIndex];
+
+//          UztBoundNameObs: TObservationLists;
+//          UztIdObs: TObservationLists;
+
+          BoundName := UzfDataItem.UztPackageItemArray[TransportIndex].boundname;
+          if BoundName <> '' then
+          begin
+            if UztBoundNameDictionary.TryGetValue(UpperCase(BoundName), Obs) then
+            begin
+              if Obs.Count > 0 then
+              begin
+                AssignUztObservations(Obs, AScreenObject, UztObs, BoundName);
+                if UztObs <> [] then
+                begin
+                  AScreenObject.Modflow6Obs.UztObs := AScreenObject.Modflow6Obs.UztObs + UztObs;
+                  Include(Genus, TransportIndex);
+                end;
+              end;
+            end;
+          end;
+          if UztNumberDictionary.TryGetValue(UzfDataItem.PackageData.iuzno, Obs) then
+          begin
+            if Obs.Count > 0 then
+            begin
+              AssignUztObservations(Obs, AScreenObject, UztObs, BoundName);
+              if UztObs <> [] then
+              begin
+                AScreenObject.Modflow6Obs.UztObs := AScreenObject.Modflow6Obs.UztObs + UztObs;
+                Include(Genus, TransportIndex);
+              end;
+            end;
+          end;
+
+        end;
+      end;
     end;
   finally
     UzfReceivers.Free;
@@ -18042,20 +18190,20 @@ end;
 
 function TWellMvrLink.Period: Integer;
 begin
-  result := MAXINT;
+  result := -1;
   if WelPeriod <> nil then
   begin
     result := WelPeriod.Period;
   end;
   if MvrPeriod <> nil then
   begin
-    result := Min(Result, WelPeriod.Period);
+    result := Max(Result, WelPeriod.Period);
   end;
   for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
   begin
     if SpcPeriods[SpcIndex] <> nil then
     begin
-      result := Min(Result, SpcPeriods[SpcIndex].Period);
+      result := Max(Result, SpcPeriods[SpcIndex].Period);
     end;
   end;
 end;
@@ -18220,20 +18368,20 @@ end;
 
 function TRivMvrLink.Period: Integer;
 begin
-  result := MAXINT;
+  result := -1;
   if RivPeriod <> nil then
   begin
     result := RivPeriod.Period;
   end;
   if MvrPeriod <> nil then
   begin
-    result := Min(Result, RivPeriod.Period);
+    result := Max(Result, RivPeriod.Period);
   end;
   for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
   begin
     if SpcPeriods[SpcIndex] <> nil then
     begin
-      result := Min(Result, SpcPeriods[SpcIndex].Period);
+      result := Max(Result, SpcPeriods[SpcIndex].Period);
     end;
   end;
 end;
@@ -18281,20 +18429,20 @@ end;
 
 function TGhbMvrLink.Period: Integer;
 begin
-  result := MAXINT;
+  result := -1;
   if GhbPeriod <> nil then
   begin
     result := GhbPeriod.Period;
   end;
   if MvrPeriod <> nil then
   begin
-    result := Min(Result, GhbPeriod.Period);
+    result := Max(Result, GhbPeriod.Period);
   end;
   for var SpcIndex := 0 to Length(SpcPeriods) - 1 do
   begin
     if SpcPeriods[SpcIndex] <> nil then
     begin
-      result := Min(Result, SpcPeriods[SpcIndex].Period);
+      result := Max(Result, SpcPeriods[SpcIndex].Period);
     end;
   end;
 end;
@@ -18386,8 +18534,8 @@ begin
   Diversions := TSfrDiversionItemList.Create;
   SftPackageData := TSftPackageItemList.Create;
   SftPackageData.OwnsObjects := False;
-  SftBoundNameObs := TObservationLists.Create;
-  SftIdObs := TObservationLists.Create;
+  SftBoundNameObs := TObservationLists.Create(False);
+  SftIdObs := TObservationLists.Create(False);
 
 end;
 
@@ -18478,32 +18626,27 @@ end;
 
 function TMawMvrLink.Period: Integer;
 begin
+  result := -1;
   if not HasData then
   begin
-    result := -1;
-  end
-  else
+    Exit;
+  end;
+
+  if MawPeriod <> nil then
   begin
-    if MawPeriod <> nil then
-    begin
-      result := MawPeriod.Period;
-    end
-    else
-    begin
-      result := MAXINT;
-    end;
+    result := MawPeriod.Period;
+  end;
 
-    if MvrPeriod <> nil then
-    begin
-      result := Min(result, MvrPeriod.Period);
-    end;
+  if MvrPeriod <> nil then
+  begin
+    result := Max(result, MvrPeriod.Period);
+  end;
 
-    for var TransportIndex := 0 to Length(MwtPeriods) - 1 do
+  for var TransportIndex := 0 to Length(MwtPeriods) - 1 do
+  begin
+    if MwtPeriods[TransportIndex] <> nil then
     begin
-      if MwtPeriods[TransportIndex] <> nil then
-      begin
-        result := Min(result, MwtPeriods[TransportIndex].Period);
-      end;
+      result := Max(result, MwtPeriods[TransportIndex].Period);
     end;
   end;
 end;
@@ -18546,31 +18689,28 @@ end;
 
 function TSfrMvrLink.Period: Integer;
 begin
+  result := -1;
   if not HasData then
   begin
-    result := -1;
+    Exit;
   end
   else
   begin
     if SfrPeriod <> nil then
     begin
       result := SfrPeriod.Period;
-    end
-    else
-    begin
-      result := MAXINT;
     end;
 
     if MvrPeriod <> nil then
     begin
-      result := Min(result, MvrPeriod.Period);
+      result := Max(result, MvrPeriod.Period);
     end;
 
     for var TransportIndex := 0 to Length(SftPeriods) - 1 do
     begin
       if SftPeriods[TransportIndex] <> nil then
       begin
-        result := Min(result, SftPeriods[TransportIndex].Period);
+        result := Max(result, SftPeriods[TransportIndex].Period);
       end;
     end;
   end;
@@ -18614,31 +18754,28 @@ end;
 
 function TLakMvrLink.Period: Integer;
 begin
+  result := -1;
   if not HasData then
   begin
-    result := -1;
+    Exit;
   end
   else
   begin
     if LakPeriod <> nil then
     begin
       result := LakPeriod.Period;
-    end
-    else
-    begin
-      result := MAXINT;
     end;
 
     if MvrPeriod <> nil then
     begin
-      result := Min(result, MvrPeriod.Period);
+      result := Max(result, MvrPeriod.Period);
     end;
 
     for var TransportIndex := 0 to Length(LktPeriods) - 1 do
     begin
       if LktPeriods[TransportIndex] <> nil then
       begin
-        result := Min(result, LktPeriods[TransportIndex].Period);
+        result := Max(result, LktPeriods[TransportIndex].Period);
       end;
     end;
   end;
@@ -18682,31 +18819,28 @@ end;
 
 function TUzfMvrLink.Period: Integer;
 begin
+  result := -1;
   if not HasData then
   begin
-    result := -1;
+    Exit;
   end
   else
   begin
     if UzfPeriod <> nil then
     begin
       result := UzfPeriod.Period;
-    end
-    else
-    begin
-      result := MAXINT;
     end;
 
     if MvrPeriod <> nil then
     begin
-      result := Min(result, MvrPeriod.Period);
+      result := Max(result, MvrPeriod.Period);
     end;
 
     for var TransportIndex := 0 to Length(UztPeriods) - 1 do
     begin
       if UztPeriods[TransportIndex] <> nil then
       begin
-        result := Min(result, UztPeriods[TransportIndex].Period);
+        result := Max(result, UztPeriods[TransportIndex].Period);
       end;
     end;
   end;
@@ -18779,6 +18913,8 @@ begin
         end;
       end;
     end;
+    Result := (UztIdObs[TransportIndex] = nil)
+      and (UzfData.UztIdObs[TransportIndex] = nil);
   end;
 
 end;
@@ -18786,15 +18922,15 @@ end;
 constructor TUzfData.Create;
 begin
   PeriodData := TImportUzfPeriodItemList.Create;
-  UztPackageData := TUztPackageItemList.Create;
-  UztBoundNameObs := TObservationLists.Create;
-  UztIdObs := TObservationLists.Create;
+//  UztPackageData := TUztPackageItemList.Create(False);
+  UztBoundNameObs := TObservationLists.Create(False);
+  UztIdObs := TObservationLists.Create(False);
 end;
 
 destructor TUzfData.Destroy;
 begin
   PeriodData.Free;
-  UztPackageData.Free;
+//  UztPackageData.Free;
   UztBoundNameObs.Free;
   UztIdObs.Free;
   SetTransportCounts(0,0);
@@ -18920,7 +19056,7 @@ end;
 
 function TRchLink.Period: Integer;
 begin
-  result := MAXINT;
+  result := -1;
   if RchPeriod <> nil then
   begin
     result := RchPeriod.Period;
@@ -18929,7 +19065,7 @@ begin
   begin
     if SpcPeriods[SpcIndex] <> nil then
     begin
-      result := Min(Result, SpcPeriods[SpcIndex].Period);
+      result := Max(Result, SpcPeriods[SpcIndex].Period);
     end;
   end;
 end;
@@ -18955,7 +19091,7 @@ end;
 
 function TChdSpcLink.Period: Integer;
 begin
-  result := MAXINT;
+  result := -1;
   if ChdPeriod <> nil then
   begin
     result := ChdPeriod.Period;
@@ -18964,7 +19100,7 @@ begin
   begin
     if SpcPeriods[SpcIndex] <> nil then
     begin
-      result := Min(Result, SpcPeriods[SpcIndex].Period);
+      result := Max(Result, SpcPeriods[SpcIndex].Period);
     end;
   end;
 
@@ -18991,7 +19127,7 @@ end;
 
 destructor TCncConnection.Destroy;
 begin
-  List.Free;
+//  List.Free;
   inherited;
 end;
 
@@ -19015,7 +19151,7 @@ end;
 
 destructor TSrcConnection.Destroy;
 begin
-  List.Free;
+//  List.Free;
   inherited;
 end;
 

@@ -584,12 +584,12 @@ end;
 
 function TUzt.GetTimeSeries(Index: Integer): TPackage;
 begin
-  result := FObservationsPackages[Index]
+  result := FTimeSeriesPackages[Index]
 end;
 
 function TUzt.GetTimeSeriesCount: Integer;
 begin
-  result := FObservationsPackages.Count
+  result := FTimeSeriesPackages.Count
 end;
 
 procedure TUzt.Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer);

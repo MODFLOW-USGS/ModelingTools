@@ -150,7 +150,7 @@ begin
     GetQuantum(Model.RowCount), GetQuantum(Model.ColumnCount));
   FObsList := TUzfObservationList.Create;
   FGwtObservations := TUztObservationLists.Create;
-  if Model.GwtUsed then
+  if Model.GwtUsed and Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
   begin
     for Index := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -217,7 +217,7 @@ begin
           Obs.FModflow6Obs := MfObs;
           FObsList.Add(Obs);
         end;
-        if Model.GwtUsed then
+        if Model.GwtUsed and Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
         begin
           for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
           begin
@@ -276,7 +276,7 @@ begin
 
           FObsList.Add(Obs);
         end;
-        if Model.GwtUsed then
+        if Model.GwtUsed and Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
         begin
           for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
           begin
@@ -1242,12 +1242,15 @@ begin
 
   WriteTimeSeriesFiles(FInputFileName);
 
-  if FObsList.Count > 0 then
+  if Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
   begin
-    ObsFileName := ExtractFileName(ChangeFileExt(BaseName, ObservationExtension));
-    WriteString('  OBS6 FILEIN ');
-    WriteString(ObsFileName);
-    NewLine;
+    if FObsList.Count > 0 then
+    begin
+      ObsFileName := ExtractFileName(ChangeFileExt(BaseName, ObservationExtension));
+      WriteString('  OBS6 FILEIN ');
+      WriteString(ObsFileName);
+      NewLine;
+    end;
   end;
 
   WriteAdditionalAuxVariables;
@@ -1724,14 +1727,17 @@ begin
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
-  if FGwtObservations[SpeciesIndex].Count > 0 then
+  if Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
   begin
-    UztObsWriter := TUztObsWriter.Create(Model, etExport,
-      FGwtObservations[SpeciesIndex], SpeciesIndex);
-    try
-      UztObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
-    finally
-      UztObsWriter.Free;
+    if FGwtObservations[SpeciesIndex].Count > 0 then
+    begin
+      UztObsWriter := TUztObsWriter.Create(Model, etExport,
+        FGwtObservations[SpeciesIndex], SpeciesIndex);
+      try
+        UztObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
+      finally
+        UztObsWriter.Free;
+      end;
     end;
   end;
 

@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 590
     Height = 448
-    ActivePage = tabBasic
+    ActivePage = tabUZF
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -459,6 +459,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Items.Strings = (
             'UZT_Concentration'
             'UZT_Storage'
+            'UZT_Constant'
             'UZT_FromMvr'
             'UZT_Mass_Flow_Rate (UZT)'
             'UZT_Infiltration'

@@ -10239,12 +10239,15 @@ const
 //    '5.2.0.9'  bug fix: With MODPATH 7, extra values were previously included
 //                with the particle locations.
 //               bug fix: Fixed export of budget CSV file with the UZT package.
+//    '5.2.0.10' bug fix: fixed bug in exporting MAW and UZF package input
+//                files in MODFLOW 6 when observations have been defined but
+//                the observation utility is not active.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.9';
+  IIModelVersion = '5.2.0.10';
 
 function IModelVersion: string;
 begin

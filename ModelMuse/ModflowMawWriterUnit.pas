@@ -182,7 +182,7 @@ begin
   FMawObservations := TMawObservationList.Create;
   FMawPackage := Package as TMawPackage;
   FGwtObservations := TMwtObservationLists.Create;
-  if Model.GwtUsed then
+  if Model.GwtUsed and Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
   begin
     for index := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -567,14 +567,17 @@ begin
       NewLine;
     end;
 
-    if FGwtObservations[FSpeciesIndex].Count > 0 then
+    if Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
     begin
-      WriteString('    OBS6 FILEIN ');
-      NameOfFile := BaseFileName + GwtObservationExtension;
-      Model.AddModelInputFile(NameOfFile);
-      NameOfFile := ExtractFileName(NameOfFile);
-      WriteString(NameOfFile);
-      NewLine;
+      if FGwtObservations[FSpeciesIndex].Count > 0 then
+      begin
+        WriteString('    OBS6 FILEIN ');
+        NameOfFile := BaseFileName + GwtObservationExtension;
+        Model.AddModelInputFile(NameOfFile);
+        NameOfFile := ExtractFileName(NameOfFile);
+        WriteString(NameOfFile);
+        NewLine;
+      end;
     end;
 
   //  [TS6 FILEIN <ts6_filename>]
@@ -782,15 +785,17 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     WriteGwtFileInternal;
-
-    if FGwtObservations[SpeciesIndex].Count > 0 then
+    if Model.ModflowPackages.Mf6ObservationUtility.IsSelected  then
     begin
-      ObsWriter := TMwtObsWriter.Create(Model, etExport,
-        FGwtObservations[SpeciesIndex], SpeciesIndex);
-      try
-        ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
-      finally
-        ObsWriter.Free;
+      if FGwtObservations[SpeciesIndex].Count > 0 then
+      begin
+        ObsWriter := TMwtObsWriter.Create(Model, etExport,
+          FGwtObservations[SpeciesIndex], SpeciesIndex);
+        try
+          ObsWriter.WriteFile(ChangeFileExt(FNameOfFile, GwtObservationExtension));
+        finally
+          ObsWriter.Free;
+        end;
       end;
     end;
 
@@ -1382,14 +1387,17 @@ begin
   WriteFloat(FMawPackage.ShutDownKappa);
   NewLine;
 
-  if FMawObservations.Count > 0 then
+  if Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
   begin
-    WriteString('    OBS6 FILEIN ');
-    NameOfFile := ObservationFileName(BaseName);
-    Model.AddModelInputFile(NameOfFile);
-    NameOfFile := ExtractFileName(NameOfFile);
-    WriteString(NameOfFile);
-    NewLine;
+    if FMawObservations.Count > 0 then
+    begin
+      WriteString('    OBS6 FILEIN ');
+      NameOfFile := ObservationFileName(BaseName);
+      Model.AddModelInputFile(NameOfFile);
+      NameOfFile := ExtractFileName(NameOfFile);
+      WriteString(NameOfFile);
+      NewLine;
+    end;
   end;
 
   if Model.ModflowPackages.MvrPackage.IsSelected then
@@ -2108,7 +2116,7 @@ begin
     AScreenObject := Model.GetScreenObjectByName(AWellSteady.ScreenObjectName);
 
     IsGwtObs := False;
-    if Model.GwtUsed then
+    if Model.GwtUsed and Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
     begin
       for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
       begin

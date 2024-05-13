@@ -83,13 +83,11 @@ begin
   inherited;
   FCSubPackage := Package as TCSubPackageSelection;
   FObservations := TCSubObservationList.Create;
-//  FValues := TObjectList.Create;
 end;
 
 destructor TCSubWriter.Destroy;
 begin
   FObservations.Free;
-//  FValues.Free;
   inherited;
 end;
 

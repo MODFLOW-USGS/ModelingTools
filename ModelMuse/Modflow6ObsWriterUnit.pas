@@ -5247,6 +5247,12 @@ begin
             ObservationType := 'storage';
             Prefix := 'uts_';
           end;
+        utoConstant:
+          begin
+            OutputExtension := '.uzt-constant_ob' + OutputTypeExtension;
+            ObservationType := 'constant';
+            Prefix := 'uts_';
+          end;
         utoFromMvr:
           begin
             OutputExtension := '.uzt-from_mvr_ob' + OutputTypeExtension;

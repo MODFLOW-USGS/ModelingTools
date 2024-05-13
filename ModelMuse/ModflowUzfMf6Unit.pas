@@ -17,8 +17,8 @@ type
     uoUnsatZoneEvapotranspiration, uoStorage, uoNetInfiltration, uoWaterContent);
   TUzfObs = set of TUzfOb;
 
-  TUztOb = (utoConcentration, utoStorage, utoFromMvr, utoUZT, utoInfiltration,
-    utoRejInfiltration, utoUzEt, utoRejInflToMvr);
+  TUztOb = (utoConcentration, utoStorage, utoConstant, utoFromMvr, utoUZT,
+    utoInfiltration, utoRejInfiltration, utoUzEt, utoRejInflToMvr);
   TUztObs = set of TUztOb;
 
   TUzfMf6Record = record
@@ -711,17 +711,13 @@ const
   UztObsNames: array[TUztOb] of string = (
     'UZT_Concentration',
     'UZT_Storage',
+    'UZT_Constant',
     'UZT_FromMvr',
     'UZT_Mass_Flow_Rate (UZT)',
     'UZT_Infiltration',
     'UZT_Rejected_Infiltration',
     'UZT_ET',
     'UZT_Rej_Infil_to_MVR');
-
-  {
-  TUztOb = (utoConcentration, utoStorage, utoFromMvr, utoUZT, utoInfiltration,
-    utoRejInfiltration, utoUzEt, utoRejInflToMvr);
-  }
 
 var
   UzfObsNameList: TStringList;
