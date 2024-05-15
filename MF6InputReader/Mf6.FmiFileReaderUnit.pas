@@ -10,10 +10,12 @@ type
   TFmiOptions = class(TCustomMf6Persistent)
   private
     SAVE_FLOWS: Boolean;
-    FLOW_IMBALANCE_CORRECTION: Boolean;
+    FFLOW_IMBALANCE_CORRECTION: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property FLOW_IMBALANCE_CORRECTION: Boolean read FFLOW_IMBALANCE_CORRECTION;
   end;
 
   TFmiItem = record
@@ -51,6 +53,7 @@ type
     destructor Destroy; override;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     property FullBudgetFileName: string read GetFullBudgetFileName;
+    property Options: TFmiOptions read FOptions;
   end;
 
 
@@ -62,7 +65,7 @@ procedure TFmiOptions.Initialize;
 begin
   inherited;
   SAVE_FLOWS := False;
-  FLOW_IMBALANCE_CORRECTION := False;
+  FFLOW_IMBALANCE_CORRECTION := False;
 end;
 
 procedure TFmiOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -96,7 +99,7 @@ begin
     end
     else if FSplitter[0] = 'FLOW_IMBALANCE_CORRECTION' then
     begin
-      FLOW_IMBALANCE_CORRECTION := True;
+      FFLOW_IMBALANCE_CORRECTION := True;
     end
     else
     begin

@@ -12,11 +12,14 @@ type
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
     SAVE_FLOWS: Boolean;
-    BUDGET: Boolean;
-    BUDGETCSV: Boolean;
+    FBUDGET: Boolean;
+    FBUDGETCSV: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property BUDGET: Boolean read FBUDGET;
+    property BUDGETCSV: Boolean read FBUDGETCSV;
   end;
 
   TMvt = class(TPackageReader)
@@ -25,7 +28,9 @@ type
   public
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
-    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
+      const NPER: Integer); override;
+    property Options: TMvtOptions read FOptions;
   end;
 
 
@@ -39,8 +44,8 @@ begin
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
   SAVE_FLOWS := False;
-  BUDGET := False;
-  BUDGETCSV := False;
+  FBUDGET := False;
+  FBUDGETCSV := False;
 
 end;
 
@@ -85,13 +90,13 @@ begin
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGET := True;
+      FBUDGET := True;
     end
     else if (FSplitter[0] = 'BUDGETCSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGETCSV := True;
+      FBUDGETCSV := True;
     end
     else
     begin

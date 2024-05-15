@@ -401,7 +401,12 @@ begin
       FSimulationFile.Free;
     end;
 
-    except on E: Exception do
+  except
+    on E: EEncodingError do
+    begin
+      raise;
+    end;
+    on E: Exception do
     begin
       WriteLn('ERROR');
       WriteLn(E.Message);
@@ -628,7 +633,12 @@ begin
           FTDis := TTDis.Create('TDIS6');
           FTDis.Read(TDisFile, Unhandled);
           FTDis.ReadInput(Unhandled);
-        except on E: Exception do
+        except
+          on E: EEncodingError do
+          begin
+            raise;
+          end;
+          on E: Exception do
           begin
             Unhandled.WriteLine('ERROR');
             Unhandled.WriteLine(E.Message);
@@ -904,7 +914,12 @@ begin
       finally
         ImsFileStream.Free;
       end;
-    except on E: Exception do
+    except
+      on E: EEncodingError do
+      begin
+        raise;
+      end;
+      on E: Exception do
       begin
         Unhandled.WriteLine('ERROR');
         Unhandled.WriteLine(E.Message);
@@ -1129,7 +1144,12 @@ begin
       finally
         NameFileStream.Free;
       end;
-    except on E: Exception do
+    except
+      on E: EEncodingError do
+      begin
+        raise;
+      end;
+      on E: Exception do
       begin
         Unhandled.WriteLine('ERROR');
         Unhandled.WriteLine(E.Message);

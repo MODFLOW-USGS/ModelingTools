@@ -20,6 +20,19 @@ type
 
   TMvrReceiverPackageChoice = (mrpcLak, mrpcMaw, mrpcSfr, mrpcUzf);
 
+  TImportGeoRef = record
+    xul: Extended;
+    yul: Extended;
+    rotation: Extended;
+    length_units: string;
+    time_units: string;
+    start_date: string;
+    start_time: string;
+    model: string;
+    EPSG: integer;
+    proj4: string;
+    procedure Initialize;
+  end;
 
   TimeSeriesMap = TDictionary<string, string>;
   TimeSeriesMaps = TObjectList<TimeSeriesMap>;
@@ -89,6 +102,7 @@ type
     FMinPointAssigned: Boolean;
     FFLowTransportLinks: TDictionary<string,string>;
     FFlowModelName: string;
+    FImportGeoRef: TImportGeoRef;
     procedure ImportFlowModelTiming;
     procedure ImportTransportModelTiming;
     procedure ImportSimulationOptions;
@@ -152,7 +166,7 @@ type
     procedure ImportLak(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     procedure ImportUzf(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     function GetMvr(MvrPackage, Package: TPackage): TMvr;
-    procedure ImportMvr(Package: TPackage);
+    procedure ImportMvr(Package: TPackage; TransportModels: TModelList);
     procedure ImportGnc(Package: TPackage);
     function GetIms(ModelName: string): TSmsPackageSelection;
     procedure ImportIMS;
@@ -164,10 +178,11 @@ type
     procedure ImportSSM(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportCNC(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportSRC(NameFile: TTransportNameFile; Package: TPackage);
+    procedure ImportFMI(NameFile: TTransportNameFile; Package: TPackage);
   public
     Constructor Create;
     destructor Destroy; override;
-    procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
+    procedure ImportModflow6Model(NameFiles, ErrorMessages: TStringList; usgs_model_reference: string);
     property OnUpdateStatusBar: TOnUpdataStatusBar read FOnUpdataStatusBar
       write SetOnUpdataStatusBar;
   end;
@@ -205,14 +220,15 @@ uses
   OctTreeClass, ModflowCellUnit, Mf6.IstFileReaderUnit,
   ModflowGwtSpecifiedConcUnit, Mf6.SrcFileReaderUnit, Mf6.FmiFileReaderUnit,
   Mf6.SftFileReaderUnit, GwtStatusUnit, Mf6.LktFileReaderUnit, Mt3dmsChemUnit,
-  Mf6.MwtFileReaderUnit, Mf6.UztFileReaderUnit;
+  Mf6.MwtFileReaderUnit, Mf6.UztFileReaderUnit, Mf6.MvtFileReaderUnit,
+  ModelMuseUtilities, GeoRefUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
-  StrModelMuseCanNotIm = 'ModelMuse can not import AUXMULTNAME specified as ' +
-  'a time series.';
+  StrModelMuseCanNotIm = 'ModelMuse can not import AUXMULTNAME specified for ' +
+  'a time series in the %s package.';
   StrModelMuseCanNotAp = 'ModelMuse can not apply AUXMULTNAME values to data' +
-  ' specified as a time series.';
+  ' specified as a time series in the %s package.';
   StrModelMuseCanNotSpPetm0 = 'ModelMuse can not specify a separate value fo' +
   'r petm0 in the EVt package.';
 
@@ -1371,7 +1387,7 @@ var
       else
       begin
         AuxMultiplier := 1;
-        FErrorMessages.Add(StrModelMuseCanNotIm);
+        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['CNC']));
       end;
     end
     else
@@ -1398,7 +1414,7 @@ var
       CncItem.Concentration := ImportedTimeSeries;
       if AuxMultiplier <> 1 then
       begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
+        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['CNC']));
       end;
     end;
   end;
@@ -1660,7 +1676,7 @@ begin
               else
               begin
                 AuxMultiplier := 1;
-                FErrorMessages.Add(StrModelMuseCanNotIm);
+                FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['CNC']));
               end;
             end
             else
@@ -2620,6 +2636,14 @@ begin
   SetLength(ColumnPositions, Length(Delr) + 1);
   Delc := Dis.GridData.DELC;
   SetLength(RowPositions, Length(Delc) + 1);
+  if (XOrigin = 0) and (YOrigin = 0) and (GridAngle = 0) then
+  begin
+    if (FImportGeoRef.xul <> 0) or (FImportGeoRef.yul <> 0)
+      or (FImportGeoRef.rotation <> 0) then
+    begin
+      FErrorMessages.Add('XORIGIN, YORIGIN, and ANGROT need to be specified in the DIS file for the model to be geolocated correctly.');
+    end;
+  end;
 
   if GridAngle = 0 then
   begin
@@ -2903,7 +2927,7 @@ var
       else
       begin
         AuxMultiplier := 1;
-        FErrorMessages.Add(StrModelMuseCanNotIm);
+        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['DRN']));
       end;
     end
     else
@@ -2977,7 +3001,7 @@ var
       DrnItem.Conductance := ImportedTimeSeries;
       if AuxMultiplier <> 1 then
       begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
+        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['DRN']));
       end;
     end;
   end;
@@ -3397,7 +3421,7 @@ begin
               else
               begin
                 AuxMultiplier := 1;
-                FErrorMessages.Add(StrModelMuseCanNotIm);
+                FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['DRN']));
               end;
             end
             else
@@ -4561,7 +4585,7 @@ begin
         APackage := Packages[PackageIndex];
         if APackage.FileType = 'MVR6' then
         begin
-          ImportMvr(APackage);
+          ImportMvr(APackage, TransportModels);
         end
       end;
 
@@ -4685,6 +4709,20 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TModflow6Importer.ImportFMI(NameFile: TTransportNameFile;
+  Package: TPackage);
+var
+  Model: TPhastModel;
+  GwtProcess: TGwtProcess;
+  Fmi: TFmi;
+begin
+  Model := frmGoPhast.PhastModel;
+  GwtProcess := Model.ModflowPackages.GwtProcess;
+
+  Fmi := Package.Package as TFmi;
+  GwtProcess.FLOW_IMBALANCE_CORRECTION := Fmi.Options.FLOW_IMBALANCE_CORRECTION;
 end;
 
 procedure TModflow6Importer.ImportGnc(Package: TPackage);
@@ -4919,7 +4957,7 @@ var
       else
       begin
         AuxMultiplier := 1;
-        FErrorMessages.Add(StrModelMuseCanNotIm);
+        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['GHB']));
       end;
     end
     else
@@ -4946,7 +4984,7 @@ var
       GhbItem.Conductance := ImportedTimeSeries;
       if AuxMultiplier <> 1 then
       begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
+        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['GHB']));
       end;
     end;
 
@@ -4967,10 +5005,6 @@ var
         Assert(False);
       end;
       GhbItem.BoundaryHead := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
-      begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
-      end;
     end;
 
     if TransportAuxNames.Count > 0 then
@@ -5559,7 +5593,7 @@ begin
                 else
                 begin
                   AuxMultiplier := 1;
-                  FErrorMessages.Add(StrModelMuseCanNotIm);
+                  FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['GHB']));
                 end;
               end
               else
@@ -5941,6 +5975,7 @@ begin
         Ims := ASolution.Ims;
         ImsPackage := TSmsPackageSelection.Create(nil);
         try
+          ImsPackage.IsSelected := True;
           {$REGION 'Options'}
           Options := Ims.Options;
           if Options.PRINT_OPTION <> '' then
@@ -8337,7 +8372,6 @@ begin
   end;
   Mvr := GetMvr(MvrPackage, Package);
 
-
   Model := frmGoPhast.PhastModel;
   MawPackage := Model.ModflowPackages.MawPackage;
   MawPackage.IsSelected := True;
@@ -9016,7 +9050,7 @@ begin
 
 end;
 
-procedure TModflow6Importer.ImportModflow6Model(NameFiles, ErrorMessages: TStringList);
+procedure TModflow6Importer.ImportModflow6Model(NameFiles, ErrorMessages: TStringList; usgs_model_reference: string);
 var
   FileIndex: Integer;
   OutFile: string;
@@ -9035,7 +9069,10 @@ var
   OCPackage: TPackage;
   BudgetFile: string;
   FmiPackage: TPackage;
-  ModelName: string;
+  GeoRef: TStringList;
+  Splitter: TStringList;
+  LineIndex: Integer;
+  proj4Pos: Integer;
 begin
   FFlowModel := nil;
   frmErrorsAndWarnings.Clear;
@@ -9056,229 +9093,344 @@ begin
   PhastModel.ModelSelection := msModflow2015;
   PhastModel.ModflowPackages.GwtProcess.SeparateGwt := NameFiles.Count > 1;
 
-  FlowModelImported := False;
-  for FileIndex := 0 to NameFiles.Count - 1 do
+  FImportGeoRef.Initialize;
+  if TFile.Exists(usgs_model_reference) then
   begin
-    FSimulation := TMf6Simulation.Create('Simulation');
+    GeoRef := TStringList.Create  ;
     try
-      FSimulation.OnUpdataStatusBar := OnUpdateStatusBar;
-      FSimulations.Add(FSimulation);
-      FSimulation.ReadSimulation(NameFiles[FileIndex]);
-    finally
-      FSimulation := nil;
-    end;
-  end;
-
-  for FileIndex := 0 to FSimulations.Count - 1 do
-  begin
-    FSimulation := FSimulations[FileIndex];
-    try
-      for ExchangeIndex := 0 to FSimulation.Exchanges.Count - 1 do
-      begin
-        Exchange := FSimulation.Exchanges[ExchangeIndex];
-        if AnsiSameText(Exchange.ExchangeType, 'GWF6-GWT6') then
-        begin
-          FlowModelName := Exchange.ExchangeModelNameA;
-          TransportModelName := Exchange.ExchangeModelNameB;
-          FFLowTransportLinks.Add(UpperCase(TransportModelName), FlowModelName);
-        end
-        else
-        begin
-          ErrorMessages.Add('The following error was encountered when reading '
-            + NameFiles[FileIndex]);
-          ErrorMessages.Add('ModelMuse does not currently support MODFLOW 6 exchanges');
-        end;
-      end;
-    finally
-      FSimulation := nil;
-    end;
-  end;
-
-  HeadFileModelNameDictionary := TDictionary<string, string>.Create;
-  try
-    for FileIndex := 0 to FSimulations.Count - 1 do
-    begin
-      FSimulation := FSimulations[FileIndex];
       try
-        for ModelIndex := 0 to FSimulation.Models.Count - 1 do
-        begin
-          AModel := FSimulation.Models[ModelIndex];
-          if AModel.ModelType = 'GWF6' then
+        GeoRef.LoadFromFile(usgs_model_reference);
+      except
+        Beep;
+        MessageDlg(Format('Error reading %s.]', [usgs_model_reference]), mtError, [mbOK], 0);
+        Exit;
+        Splitter := TStringList.Create;
+        try
+          for LineIndex := 0 to GeoRef.Count - 1 do
           begin
-            OCPackage := (AModel.FName as TFlowNameFile).OCPackage;
-            if OCPackage <> nil then
+            Splitter.DelimitedText := GeoRef[LineIndex];
+            if Splitter.Count >= 2 then
             begin
-              BudgetFile := (OCPackage.Package as TOc).Options.FullBudgetFileName;
-              if BudgetFile <> '' then
+              if LowerCase(Splitter[0]) = 'xul' then
               begin
-                HeadFileModelNameDictionary.Add(UpperCase(BudgetFile), AModel.ModelName);
-              end;
-            end;
-          end;
-        end;
-      finally
-        FSimulation := nil;
-      end;
-    end;
-
-    for FileIndex := 0 to FSimulations.Count - 1 do
-    begin
-      FSimulation := FSimulations[FileIndex];
-      try
-        for ModelIndex := 0 to FSimulation.Models.Count - 1 do
-        begin
-          AModel := FSimulation.Models[ModelIndex];
-          if AModel.ModelType = 'GWT6' then
-          begin
-            FmiPackage := (AModel.FName as TTransportNameFile).FmiPackage;
-            if FmiPackage <> nil then
-            begin
-              Budgetfile := (FmiPackage.Package as TFmi).FullBudgetFileName;
-              if Budgetfile <> '' then
+                FImportGeoRef.xul := FortranStrToFloatDef(Splitter[1], 0)
+              end
+              else if LowerCase(Splitter[0]) = 'yul' then
               begin
-                if HeadFileModelNameDictionary.TryGetValue(UpperCase(Budgetfile), FlowModelName) then
+                FImportGeoRef.yul := FortranStrToFloatDef(Splitter[1], 0)
+              end
+              else if LowerCase(Splitter[0]) = 'rotation' then
+              begin
+                FImportGeoRef.rotation := FortranStrToFloatDef(Splitter[1], 0)
+              end
+              else if LowerCase(Splitter[0]) = 'length_units' then
+              begin
+                FImportGeoRef.length_units := Splitter[1];
+              end
+              else if LowerCase(Splitter[0]) = 'time_units' then
+              begin
+                FImportGeoRef.time_units := Splitter[1];
+              end
+              else if LowerCase(Splitter[0]) = 'start_date' then
+              begin
+                FImportGeoRef.start_date := Splitter[1];
+              end
+              else if LowerCase(Splitter[0]) = 'start_time' then
+              begin
+                FImportGeoRef.start_time := Splitter[1];
+              end
+              else if LowerCase(Splitter[0]) = 'model' then
+              begin
+                FImportGeoRef.model := Splitter[1];
+              end
+              else if UpperCase(Splitter[0]) = 'EPSG' then
+              begin
+                FImportGeoRef.EPSG := StrToIntDef(Splitter[1], 0);
+                PhastModel.GeoRef.ProjectionType := ptEpsg;
+                PhastModel.GeoRef.Projection := IntToStr(FImportGeoRef.EPSG);
+              end
+              else if LowerCase(Splitter[0]) = 'proj4' then
+              begin
+                proj4Pos := Pos('proj4', LowerCase(GeoRef[LineIndex]));
+                FImportGeoRef.proj4 := Trim(Copy(GeoRef[LineIndex], proj4Pos + Length('proj4'), MAXINT));
+                PhastModel.GeoRef.ProjectionType := ptProj4;
+                PhastModel.GeoRef.Projection := FImportGeoRef.proj4;
+              end
+              else
+              begin
+                if Pos('proj', lowercase(GeoRef[LineIndex])) > 0 then
                 begin
-                  FFLowTransportLinks.Add(UpperCase(AModel.ModelName), FlowModelName);
+                  FImportGeoRef.proj4 := GeoRef[LineIndex];
+                  PhastModel.GeoRef.ProjectionType := ptProj4;
+                  PhastModel.GeoRef.Projection := FImportGeoRef.proj4;
                 end;
-
               end;
-            end;
-          end;
-        end;
-      finally
-        FSimulation := nil;
-      end;
-    end;
-  finally
-    HeadFileModelNameDictionary.Free;
-  end;
-
-  for FileIndex := 0 to FSimulations.Count - 1 do
-  begin
-    FSimulation := FSimulations[FileIndex];
-    try
-      FlowModelNames := TStringList.Create;
-      try
-        for ModelIndex := 0 to FSimulation.Models.Count - 1 do
-        begin
-          AModel := FSimulation.Models[ModelIndex];
-          if AModel.ModelType = 'GWF6' then
-          begin
-            FlowModelNames.Add(AModel.NameFile)
-          end;
-        end;
-        if FlowModelImported and (FlowModelNames.Count > 0) then
-        begin
-          ErrorMessages.Add('The following error was encountered when reading '
-            + NameFiles[FileIndex]);
-          ErrorMessages.Add('Another flow model name file was already in another simulation name file');
-          ErrorMessages.Add('ModelMuse can only import a single flow model.');
-          Continue;
-        end;
-        FModelNameFile := '';
-        if FlowModelNames.Count > 1 then
-        begin
-          frmSelectFlowModel := TfrmSelectFlowModel.Create(nil);
-          try
-            frmSelectFlowModel.rgFlowModels.Items := FlowModelNames;
-            frmSelectFlowModel.rgFlowModels.ItemIndex := 0;
-            if frmSelectFlowModel.ShowModal = mrOK then
-            begin
-              FModelNameFile := frmSelectFlowModel.rgFlowModels.Items[frmSelectFlowModel.rgFlowModels.ItemIndex];
             end
             else
             begin
-              Exit;
+              if Pos('proj', lowercase(GeoRef[LineIndex])) > 0 then
+              begin
+                FImportGeoRef.proj4 := GeoRef[LineIndex];
+                PhastModel.GeoRef.ProjectionType := ptProj4;
+                PhastModel.GeoRef.Projection := FImportGeoRef.proj4;
+              end;
+            end;
+          end;
+        finally
+          Splitter.Free;
+        end;
+      end;
+    finally
+      GeoRef.Free;
+    end;
+  end;
+
+  PhastModel.DisvGrid.CanDraw := False;
+  try
+    try
+      FlowModelImported := False;
+      for FileIndex := 0 to NameFiles.Count - 1 do
+      begin
+        FSimulation := TMf6Simulation.Create('Simulation');
+        try
+          FSimulation.OnUpdataStatusBar := OnUpdateStatusBar;
+          FSimulations.Add(FSimulation);
+          FSimulation.ReadSimulation(NameFiles[FileIndex]);
+        finally
+          FSimulation := nil;
+        end;
+      end;
+
+      for FileIndex := 0 to FSimulations.Count - 1 do
+      begin
+        FSimulation := FSimulations[FileIndex];
+        try
+          for ExchangeIndex := 0 to FSimulation.Exchanges.Count - 1 do
+          begin
+            Exchange := FSimulation.Exchanges[ExchangeIndex];
+            if AnsiSameText(Exchange.ExchangeType, 'GWF6-GWT6') then
+            begin
+              FlowModelName := Exchange.ExchangeModelNameA;
+              TransportModelName := Exchange.ExchangeModelNameB;
+              FFLowTransportLinks.Add(UpperCase(TransportModelName), FlowModelName);
+            end
+            else
+            begin
+              ErrorMessages.Add('The following error was encountered when reading '
+                + NameFiles[FileIndex]);
+              ErrorMessages.Add('ModelMuse does not currently support MODFLOW 6 exchanges');
+            end;
+          end;
+        finally
+          FSimulation := nil;
+        end;
+      end;
+
+      HeadFileModelNameDictionary := TDictionary<string, string>.Create;
+      try
+        for FileIndex := 0 to FSimulations.Count - 1 do
+        begin
+          FSimulation := FSimulations[FileIndex];
+          try
+            for ModelIndex := 0 to FSimulation.Models.Count - 1 do
+            begin
+              AModel := FSimulation.Models[ModelIndex];
+              if AModel.ModelType = 'GWF6' then
+              begin
+                OCPackage := (AModel.FName as TFlowNameFile).OCPackage;
+                if OCPackage <> nil then
+                begin
+                  BudgetFile := (OCPackage.Package as TOc).Options.FullBudgetFileName;
+                  if BudgetFile <> '' then
+                  begin
+                    HeadFileModelNameDictionary.Add(UpperCase(BudgetFile), AModel.ModelName);
+                  end;
+                end;
+              end;
             end;
           finally
-            frmSelectFlowModel.Free
+            FSimulation := nil;
           end;
-        end
-        else
+        end;
+
+        for FileIndex := 0 to FSimulations.Count - 1 do
         begin
-          if FlowModelNames.Count > 0 then
-          begin
-            FModelNameFile := FlowModelNames[0];
-          end
-          else
-          begin
+          FSimulation := FSimulations[FileIndex];
+          try
+            for ModelIndex := 0 to FSimulation.Models.Count - 1 do
+            begin
+              AModel := FSimulation.Models[ModelIndex];
+              if AModel.ModelType = 'GWT6' then
+              begin
+                FmiPackage := (AModel.FName as TTransportNameFile).FmiPackage;
+                if FmiPackage <> nil then
+                begin
+                  Budgetfile := (FmiPackage.Package as TFmi).FullBudgetFileName;
+                  if Budgetfile <> '' then
+                  begin
+                    if HeadFileModelNameDictionary.TryGetValue(UpperCase(Budgetfile), FlowModelName) then
+                    begin
+                      FFLowTransportLinks.Add(UpperCase(AModel.ModelName), FlowModelName);
+                    end;
+
+                  end;
+                end;
+              end;
+            end;
+          finally
+            FSimulation := nil;
+          end;
+        end;
+      finally
+        HeadFileModelNameDictionary.Free;
+      end;
+
+      for FileIndex := 0 to FSimulations.Count - 1 do
+      begin
+        FSimulation := FSimulations[FileIndex];
+        try
+          FlowModelNames := TStringList.Create;
+          try
+            for ModelIndex := 0 to FSimulation.Models.Count - 1 do
+            begin
+              AModel := FSimulation.Models[ModelIndex];
+              if AModel.ModelType = 'GWF6' then
+              begin
+                FlowModelNames.Add(AModel.NameFile)
+              end;
+            end;
+            if FlowModelImported and (FlowModelNames.Count > 0) then
+            begin
+              ErrorMessages.Add('The following error was encountered when reading '
+                + NameFiles[FileIndex]);
+              ErrorMessages.Add('Another flow model name file was already in another simulation name file');
+              ErrorMessages.Add('ModelMuse can only import a single flow model.');
+              Continue;
+            end;
             FModelNameFile := '';
+            if FlowModelNames.Count > 1 then
+            begin
+              frmSelectFlowModel := TfrmSelectFlowModel.Create(nil);
+              try
+                frmSelectFlowModel.rgFlowModels.Items := FlowModelNames;
+                frmSelectFlowModel.rgFlowModels.ItemIndex := 0;
+                if frmSelectFlowModel.ShowModal = mrOK then
+                begin
+                  FModelNameFile := frmSelectFlowModel.rgFlowModels.Items[frmSelectFlowModel.rgFlowModels.ItemIndex];
+                end
+                else
+                begin
+                  Exit;
+                end;
+              finally
+                frmSelectFlowModel.Free
+              end;
+            end
+            else
+            begin
+              if FlowModelNames.Count > 0 then
+              begin
+                FModelNameFile := FlowModelNames[0];
+              end
+              else
+              begin
+                FModelNameFile := '';
+              end;
+            end;
+            if FModelNameFile <> '' then
+            begin
+              FFlowModel := FSimulation.Models.GetModelByNameFile(FModelNameFile);
+              FFlowModelName := FFlowModel.ModelName;
+            end
+            else
+            begin
+              FFlowModel := nil;
+            end;
+            ImportSimulationOptions;
+            if FFlowModel <> nil then
+            begin
+              ImportFlowModelTiming;
+            end
+            else
+            begin
+              ImportTransportModelTiming;
+            end;
+            ImportSolutionGroups;
+            if not ImportFlowModel then
+            begin
+              Exit;
+            end;
+
+            ImportIMS;
+
+
+
+          finally
+            FlowModelNames.Free
           end;
+
+        finally
+          FSimulation := nil;
         end;
-        if FModelNameFile <> '' then
+      end;
+      for FileIndex := 0 to FSimulations.Count - 1 do
+      begin
+        FSimulation := FSimulations[FileIndex];
+        FSimulation.OutFile.close
+      end;
+
+
+      for FileIndex := 0 to NameFiles.Count - 1 do
+      begin
+        OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
+        if TFile.Exists(OutFile) then
         begin
-          FFlowModel := FSimulation.Models.GetModelByNameFile(FModelNameFile);
-          FFlowModelName := FFlowModel.ModelName;
+          ListFile := TStringList.Create;
+          try
+            ListFile.LoadFromFile(OutFile);
+            if ListFile.Count > 0 then
+            begin
+              ErrorMessages.Add('The following errors were encountered when reading '
+                + NameFiles[FileIndex]);
+              ErrorMessages.AddStrings(ListFile);
+              ErrorMessages.Add('');
+            end;
+          finally
+            ListFile.Free;
+          end;
         end
         else
         begin
-          FFlowModel := nil;
+          ErrorMessages.Add(OutFile + ' does not exist.')
         end;
-        ImportSimulationOptions;
-        if FFlowModel <> nil then
-        begin
-          ImportFlowModelTiming;
-        end
-        else
-        begin
-          ImportTransportModelTiming;
-        end;
-        ImportSolutionGroups;
-        if not ImportFlowModel then
-        begin
-          Exit;
-        end;
-
-        ImportIMS;
-
-
-
-      finally
-        FlowModelNames.Free
       end;
 
-    finally
-      FSimulation := nil;
-    end;
-  end;
-  for FileIndex := 0 to FSimulations.Count - 1 do
-  begin
-    FSimulation := FSimulations[FileIndex];
-    FSimulation.OutFile.close
-  end;
+      PhastModel.Exaggeration := frmGoPhast.DefaultVE;
+      frmGoPhast.RestoreDefault2DView1Click(nil);
+      Application.ProcessMessages;
 
-
-  for FileIndex := 0 to NameFiles.Count - 1 do
-  begin
-    OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
-    if TFile.Exists(OutFile) then
-    begin
-      ListFile := TStringList.Create;
-      try
-        ListFile.LoadFromFile(OutFile);
-        if ListFile.Count > 0 then
-        begin
-          ErrorMessages.Add('The following errors were encountered when reading '
-            + NameFiles[FileIndex]);
-          ErrorMessages.AddStrings(ListFile);
-          ErrorMessages.Add('');
-        end;
-      finally
-        ListFile.Free;
+    except
+      on E: EEncodingError do
+      begin
+        MessageDlg('One or more input files appear to be corrupt.', mtError, [mbOK], 0);
       end;
-    end
-    else
+      on E: Exception do
+      begin
+        ErrorMessages.Add('ERROR');
+        ErrorMessages.Add(E.Message);
+      end;
+    end;
+  finally
+    PhastModel.DisvGrid.CanDraw := True;
+    if PhastModel.DisvUsed then
     begin
-      ErrorMessages.Add(OutFile + ' does not exist.')
+      frmGoPhast.acDefaultCrossSectionExecute(nil);
     end;
   end;
-
-  PhastModel.Exaggeration := frmGoPhast.DefaultVE;
-  frmGoPhast.RestoreDefault2DView1Click(nil);
-  Application.ProcessMessages;
 
   if ErrorMessages.Count > 0 then
   begin
+    ErrorMessages.AddStrings(NameFiles);
     if frmImportWarnings = nil then
     begin
       frmImportWarnings := TfrmImportWarnings.Create(frmGoPhast)
@@ -9404,7 +9556,7 @@ begin
 
 end;
 
-procedure TModflow6Importer.ImportMvr(Package: TPackage);
+procedure TModflow6Importer.ImportMvr(Package: TPackage; TransportModels: TModelList);
 var
   SourceDictionary: TMvrSourceDictionary;
   ReceiverDictionary: TMvrReceiverDictionary;
@@ -9444,6 +9596,13 @@ var
   SearchIndex: Integer;
   ReceiverSectionsValues: TReceiverSectionValues;
   ReceiverSectionsValue: TReceiverSectionValue;
+  MvrPackage: TMvrPackage;
+  Options: TMvrOptions;
+  AModel: TModel;
+  TransportModel: TTransportNameFile;
+  APackage: TPackage;
+  Mvt: TMvt;
+  MvtOptions: TMvtOptions;
   function GetMapName(AScreenObject: TScreenObject): string;
   begin
     result := AScreenObject.Name + ' Per ' + IntToStr(PeriodIndex+1);
@@ -9454,7 +9613,9 @@ begin
     OnUpdateStatusBar(self, 'importing MVR package');
   end;
   Model := frmGoPhast.PhastModel;
-  Model.ModflowPackages.MvrPackage.IsSelected := True;
+  MvrPackage := Model.ModflowPackages.MvrPackage;
+  MvrPackage.IsSelected := True;
+
   EndTime := Model.ModflowStressPeriods.Last.EndTime;
   SourceDictionary := TMvrSourceDictionary.Create(TTMvrKeyComparer.Create);
   ReceiverDictionary := TMvrReceiverDictionary.Create(TTMvrKeyComparer.Create);
@@ -9478,6 +9639,35 @@ begin
       end;
     end;
     Mvr := Package.Package as TMvr;
+    Options := Mvr.Options;
+
+    MvrPackage.SaveBudgetFile := Options.BUDGET;
+    MvrPackage.SaveCsvBudgetFile := Options.BUDGETCSV;
+
+    for var ModelIndex := 0 to TransportModels.Count - 1 do
+    begin
+      AModel := TransportModels[ModelIndex];
+      TransportModel := AModel.FName as TTransportNameFile;
+      for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+      begin
+        APackage := TransportModel.NfPackages[PackageIndex];
+        if APackage.FileType = 'MVT6' then
+        begin
+          Mvt := APackage.Package as TMvt;
+          MvtOptions := Mvt.Options;
+          if MvtOptions.BUDGET then
+          begin
+            MvrPackage.SaveBudgetFile := True;
+          end;
+          if MvtOptions.BUDGETCSV then
+          begin
+            MvrPackage.SaveCsvBudgetFile := True;
+          end;
+        end;
+      end;
+    end;
+
+
     for PeriodIndex := 0 to Mvr.PeriodCount - 1 do
     begin
       MvrPeriod := Mvr.Periods[PeriodIndex];
@@ -9994,9 +10184,12 @@ begin
     Assign3DRealDataSet(KXT3DAngle3, GridData.ANGLE3);
   end;
 
-  if GridData.WETDRY <> nil then
+  if Options.REWET.Used then
   begin
-    Assign3DRealDataSet(rsWetDry, GridData.WETDRY);
+    if GridData.WETDRY <> nil then
+    begin
+      Assign3DRealDataSet(rsWetDry, GridData.WETDRY);
+    end;
   end;
 
   if Npf.Count > 0 then
@@ -10910,7 +11103,7 @@ var
       else
       begin
         AuxMultiplier := 1;
-        FErrorMessages.Add(StrModelMuseCanNotIm);
+        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['RIV']));
       end;
     end
     else
@@ -10937,7 +11130,7 @@ var
       RivItem.Conductance := ImportedTimeSeries;
       if AuxMultiplier <> 1 then
       begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
+        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['RIV']));
       end;
     end;
 
@@ -10958,10 +11151,6 @@ var
         Assert(False);
       end;
       RivItem.RiverStage := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
-      begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
-      end;
     end;
 
     if ACell.RBot.ValueType = vtNumeric then
@@ -10981,10 +11170,6 @@ var
         Assert(False);
       end;
       RivItem.RiverBottom := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
-      begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
-      end;
     end;
 
 
@@ -11571,7 +11756,7 @@ begin
                   else
                   begin
                     AuxMultiplier := 1;
-                    FErrorMessages.Add(StrModelMuseCanNotIm);
+                    FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['RIV']));
                   end;
                 end
                 else
@@ -12733,10 +12918,12 @@ var
     MvrSource.LakeOutlet := nil;
     Inc(ObjectCount);
 
+    FirstReachNo := AReachList.First.PackageData.rno;
+
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
     NewName := ValidName(Format('Imported_%s_Sfr_%d',
-      [Package.PackageName, ObjectCount]));
+      [Package.PackageName, FirstReachNo]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -14528,7 +14715,7 @@ var
       else
       begin
         AuxMultiplier := 1;
-        FErrorMessages.Add(StrModelMuseCanNotIm);
+        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['SRC']));
       end;
     end
     else
@@ -14555,7 +14742,7 @@ var
       SrcItem.Concentration := ImportedTimeSeries;
       if AuxMultiplier <> 1 then
       begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
+        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['SRC']));
       end;
     end;
   end;
@@ -14817,7 +15004,7 @@ begin
               else
               begin
                 AuxMultiplier := 1;
-                FErrorMessages.Add(StrModelMuseCanNotIm);
+                FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['SRC']));
               end;
             end
             else
@@ -15154,6 +15341,7 @@ begin
     end
     else if APackage.FileType = 'FMI6' then
     begin
+      ImportFMI(NameFile, APackage);
       Continue;
     end
     else if APackage.FileType = 'IC6' then
@@ -15196,22 +15384,22 @@ begin
     end
     else if APackage.FileType = 'SFT6' then
     begin
-      // import SFT6
+      // SFT6 is imported with the SFR6 package.
       Continue;
     end
     else if APackage.FileType = 'LKT6' then
     begin
-      // import LKT6
+      // LKT6 is imported with the LAK6 package.
       Continue;
     end
     else if APackage.FileType = 'MWT6' then
     begin
-      // import MWT6
+      // MWT6 is imported with the MAW6 package.
       Continue;
     end
     else if APackage.FileType = 'UZT6' then
     begin
-      // import UZT6
+      // import UZT6 is imported with the UZF6 package.
       Continue;
     end
     else if APackage.FileType = 'MVT6' then
@@ -15877,11 +16065,9 @@ type
     mvrtype: string;
     BoundNameObs: TObservationList;
     NumberObs: TObservationList;
-//    UztPackageData: TUztPackageItemList;
     UztBoundNameObs: TObservationLists;
     UztIdObs: TObservationLists;
     UztPackageItemArray: TUztPackageItemArray;
-    FTransportModelCount: Integer;
     FTransportSettings: TTransportSettings;
   public
     constructor Create;
@@ -17452,7 +17638,7 @@ var
       else
       begin
         AuxMultiplier := 1;
-        FErrorMessages.Add(StrModelMuseCanNotIm);
+        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['WEL']));
       end;
     end
     else
@@ -17479,7 +17665,7 @@ var
       WelItem.PumpingRate := ImportedTimeSeries;
       if AuxMultiplier <> 1 then
       begin
-        FErrorMessages.Add(StrModelMuseCanNotAp);
+        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['WEL']));
       end;
     end;
 
@@ -18069,7 +18255,7 @@ begin
                   else
                   begin
                     AuxMultiplier := 1;
-                    FErrorMessages.Add(StrModelMuseCanNotIm);
+                    FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['WEL']));
                   end;
                 end
                 else
@@ -19170,8 +19356,6 @@ function TUztPeriodItemList.ConvertToFormula(Name: string;
 var
   Index: Integer;
   RealValues: TOneDRealArray;
-  UseRealFormula: Boolean;
-  UseTimeSeries: Boolean;
   ImportedTimeSeries: String;
 begin
    Assert(Count > 0);
@@ -19200,6 +19384,22 @@ begin
     end;
     result := TModflow6Importer.RealValuesToFormula(RealValues, Name, ScreenObject);
   end;
+end;
+
+{ TImportGeoRef }
+
+procedure TImportGeoRef.Initialize;
+begin
+  xul := 0;
+  yul := 0;
+  rotation := 0;
+  length_units := '';
+  time_units := '';
+  start_date := '';
+  start_time := '';
+  model := '';
+  EPSG := 0;
+  proj4 := '';
 end;
 
 end.

@@ -12,12 +12,15 @@ type
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
     FMODELNAMES: Boolean;
-    BUDGET: Boolean;
-    BUDGETCSV: Boolean;
+    FBUDGET: Boolean;
+    FBUDGETCSV: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
     property MODELNAMES: Boolean read FMODELNAMES;
+  public
+    property BUDGET: Boolean read FBUDGET;
+    property BUDGETCSV: Boolean read FBUDGETCSV;
   end;
 
   TMvrDimensions = class(TCustomMf6Persistent)
@@ -136,8 +139,8 @@ begin
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
   FMODELNAMES := False;
-  BUDGET := False;
-  BUDGETCSV := False;
+  FBUDGET := False;
+  FBUDGETCSV := False;
 end;
 
 procedure TMvrOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -181,13 +184,13 @@ begin
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGET := True;
+      FBUDGET := True;
     end
     else if (FSplitter[0] = 'BUDGETCSV')
       and (FSplitter.Count >= 3)
       and (FSplitter[1] = 'FILEOUT') then
     begin
-      BUDGETCSV := True;
+      FBUDGETCSV := True;
     end
     else
     begin

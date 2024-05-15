@@ -3,24 +3,24 @@ inherited frmImportModflow6: TfrmImportModflow6
   ClientHeight = 343
   ClientWidth = 625
   OnActivate = FormActivate
-  ExplicitWidth = 641
-  ExplicitHeight = 382
+  ExplicitWidth = 637
+  ExplicitHeight = 381
   TextHeight = 18
   inline frameTransportNameFiles: TframeGrid
     Left = 0
-    Top = 68
+    Top = 129
     Width = 625
-    Height = 215
+    Height = 154
     Align = alClient
     TabOrder = 0
     ExplicitTop = 68
-    ExplicitWidth = 625
-    ExplicitHeight = 215
+    ExplicitWidth = 621
+    ExplicitHeight = 214
     inherited Panel: TPanel
-      Top = 174
+      Top = 113
       Width = 625
-      ExplicitTop = 174
-      ExplicitWidth = 625
+      ExplicitTop = 173
+      ExplicitWidth = 621
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -28,15 +28,15 @@ inherited frmImportModflow6: TfrmImportModflow6
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 322
+        Left = 320
         ExplicitLeft = 332
       end
       inherited sbInsert: TSpeedButton
-        Left = 382
+        Left = 379
         ExplicitLeft = 393
       end
       inherited sbDelete: TSpeedButton
-        Left = 439
+        Left = 436
         ExplicitLeft = 454
       end
       inherited seNumber: TJvSpinEdit
@@ -46,7 +46,7 @@ inherited frmImportModflow6: TfrmImportModflow6
     end
     inherited Grid: TRbwDataGrid4
       Width = 625
-      Height = 174
+      Height = 113
       OnExit = frameTransportNameFilesGridExit
       OnButtonClick = frameTransportNameFilesGridButtonClick
       Columns = <
@@ -74,8 +74,8 @@ inherited frmImportModflow6: TfrmImportModflow6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 625
-      ExplicitHeight = 174
+      ExplicitWidth = 621
+      ExplicitHeight = 173
       ColWidths = (
         615)
     end
@@ -84,12 +84,12 @@ inherited frmImportModflow6: TfrmImportModflow6
     Left = 0
     Top = 0
     Width = 625
-    Height = 68
+    Height = 129
     Align = alTop
     TabOrder = 1
     DesignSize = (
       625
-      68)
+      129)
     object lblFlowSimFile: TLabel
       Left = 8
       Top = 8
@@ -97,14 +97,31 @@ inherited frmImportModflow6: TfrmImportModflow6
       Height = 18
       Caption = 'MODFLOW 6 Simulation Name File for flow'
     end
+    object lbGeoRef: TLabel
+      Left = 8
+      Top = 64
+      Width = 246
+      Height = 18
+      Caption = 'usgs.model.reference file (Optional)'
+    end
     object edFlowSimFile: TJvFilenameEdit
       Left = 8
       Top = 32
-      Width = 581
+      Width = 609
       Height = 26
       Filter = 'Simulation Name File|*mfsim.nam'
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
+      Text = ''
+    end
+    object fedGeoRef: TJvFilenameEdit
+      Left = 8
+      Top = 88
+      Width = 609
+      Height = 26
+      Filter = 'usgs.model.reference file|*.reference'
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 1
       Text = ''
     end
   end
@@ -115,11 +132,13 @@ inherited frmImportModflow6: TfrmImportModflow6
     Height = 41
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 282
+    ExplicitWidth = 621
     DesignSize = (
       625
       41)
     object btnHelp: TBitBtn
-      Left = 321
+      Left = 317
       Top = 6
       Width = 82
       Height = 27
@@ -127,9 +146,10 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
+      ExplicitLeft = 313
     end
     object btnOK: TBitBtn
-      Left = 409
+      Left = 405
       Top = 6
       Width = 82
       Height = 27
@@ -138,9 +158,10 @@ inherited frmImportModflow6: TfrmImportModflow6
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
+      ExplicitLeft = 401
     end
     object btnCancel: TBitBtn
-      Left = 497
+      Left = 493
       Top = 6
       Width = 83
       Height = 27
@@ -148,6 +169,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
+      ExplicitLeft = 489
     end
   end
   object stat1: TStatusBar
@@ -156,6 +178,8 @@ inherited frmImportModflow6: TfrmImportModflow6
     Width = 625
     Height = 19
     Panels = <>
+    ExplicitTop = 323
+    ExplicitWidth = 621
   end
   object odSimFiles: TOpenDialog
     Filter = 'Simulation Name File|*mfsim.nam'

@@ -673,7 +673,12 @@ begin
               finally
                 ExternalFileStream.Free;
               end;
-            except on E: Exception do
+            except
+              on E: EEncodingError do
+              begin
+                raise;
+              end;
+              on E: Exception do
               begin
                 Unhandled.WriteLine('ERROR');
                 Unhandled.WriteLine(E.Message);
@@ -794,7 +799,12 @@ begin
                 finally
                   ExternalBinaryFileStream.Free;
                 end;
-              except on E: Exception do
+              except
+                on E: EEncodingError do
+                begin
+                  raise;
+                end;
+                on E: Exception do
                 begin
                   Unhandled.WriteLine('ERROR');
                   Unhandled.WriteLine(E.Message);
@@ -818,7 +828,12 @@ begin
                 finally
                   ExternalFileStream.Free;
                 end;
-              except on E: Exception do
+              except
+                on E: EEncodingError do
+                begin
+                  raise;
+                end;
+                on E: Exception do
                 begin
                   Unhandled.WriteLine('ERROR');
                   Unhandled.WriteLine(E.Message);
@@ -887,7 +902,12 @@ begin
                 finally
                   ExternalBinaryFileStream.Free;
                 end;
-              except on E: Exception do
+              except
+                on E: EEncodingError do
+                begin
+                  raise;
+                end;
+                on E: Exception do
                 begin
                   Unhandled.WriteLine('ERROR');
                   Unhandled.WriteLine(E.Message);
@@ -911,7 +931,12 @@ begin
                 finally
                   ExternalFileStream.Free;
                 end;
-              except on E: Exception do
+              except
+                on E: EEncodingError do
+                begin
+                  raise;
+                end;
+                on E: Exception do
                 begin
                   Unhandled.WriteLine('ERROR');
                   Unhandled.WriteLine(E.Message);
@@ -1130,7 +1155,12 @@ begin
               finally
                 ExternalBinaryFileStream.Free;
               end;
-            except on E: Exception do
+            except
+              on E: EEncodingError do
+              begin
+                raise;
+              end;
+              on E: Exception do
               begin
                 Unhandled.WriteLine('ERROR');
                 Unhandled.WriteLine(E.Message);
@@ -1154,7 +1184,12 @@ begin
               finally
                 ExternalFileStream.Free;
               end;
-            except on E: Exception do
+            except
+              on E: EEncodingError do
+              begin
+                raise;
+              end;
+              on E: Exception do
               begin
                 Unhandled.WriteLine('ERROR');
                 Unhandled.WriteLine(E.Message);
@@ -1263,7 +1298,12 @@ begin
                 finally
                   ExternalFileStream.Free;
                 end;
-              except on E: Exception do
+              except
+                on E: EEncodingError do
+                begin
+                  raise;
+                end;
+                on E: Exception do
                 begin
                   Unhandled.WriteLine('ERROR');
                   Unhandled.WriteLine(E.Message);
@@ -1356,7 +1396,12 @@ begin
                 finally
                   ExternalFileStream.Free;
                 end;
-              except on E: Exception do
+              except
+                on E: EEncodingError do
+                begin
+                  raise;
+                end;
+                on E: Exception do
                 begin
                   Unhandled.WriteLine('ERROR');
                   Unhandled.WriteLine(E.Message);
@@ -1496,7 +1541,12 @@ begin
               finally
                 ExternalFileStream.Free;
               end;
-            except on E: Exception do
+            except
+              on E: EEncodingError do
+              begin
+                raise;
+              end;
+              on E: Exception do
               begin
                 Unhandled.WriteLine('ERROR');
                 Unhandled.WriteLine(E.Message);
@@ -1665,7 +1715,12 @@ begin
         try
           try
             FPackage.Read(PackageFile, Unhandled, NPER);
-          except on E: Exception do
+          except
+            on E: EEncodingError do
+            begin
+              raise;
+            end;
+            on E: Exception do
             begin
               Unhandled.WriteLine('ERROR');
               Unhandled.WriteLine(E.Message);
@@ -1674,7 +1729,12 @@ begin
         finally
           PackageFile.Free;
         end;
-      except on E: Exception do
+      except
+        on E: EEncodingError do
+        begin
+          raise;
+        end;
+        on E: Exception do
         begin
           Unhandled.WriteLine('ERROR');
           Unhandled.WriteLine(E.Message);

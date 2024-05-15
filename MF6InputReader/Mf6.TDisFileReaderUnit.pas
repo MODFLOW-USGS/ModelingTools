@@ -445,7 +445,12 @@ begin
           try
             FAts := TAts.Create('ATS');
             FAts.Read(AtsFile, Unhandled);
-          except on E: Exception do
+          except
+            on E: EEncodingError do
+            begin
+              raise;
+            end;
+            on E: Exception do
             begin
               Unhandled.WriteLine('ERROR');
               Unhandled.WriteLine(E.Message);

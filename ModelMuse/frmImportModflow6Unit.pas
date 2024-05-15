@@ -20,6 +20,8 @@ type
     btnCancel: TBitBtn;
     odSimFiles: TOpenDialog;
     stat1: TStatusBar;
+    lbGeoRef: TLabel;
+    fedGeoRef: TJvFilenameEdit;
     procedure frameTransportNameFilesGridButtonClick(Sender: TObject; ACol,
       ARow: Integer);
     procedure FormCreate(Sender: TObject); override;
@@ -64,6 +66,15 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
+
+  if (Trim(fedGeoRef.FileName) <> '') and not TFile.Exists(Trim(fedGeoRef.FileName)) then
+  begin
+    Beep;
+    MessageDlg('You specified a usgs.model.reference file that does not exist. Either don''t specify one or specify a file that exists.', mtError, [mbOK], 0);
+    ModalResult := mrNone;
+    Exit;
+  end;
+
   NameFiles := TStringList.Create;
   try
     NameFiles.Add(Trim(edFlowSimFile.FileName));
@@ -90,7 +101,7 @@ begin
     ErrorMessages := TStringList.Create;
     try
       Importer.OnUpdateStatusBar := UpdateStatusBar;
-      Importer.ImportModflow6Model(NameFiles, ErrorMessages);
+      Importer.ImportModflow6Model(NameFiles, ErrorMessages, fedGeoRef.FileName);
     finally
       Importer.Free;
       ErrorMessages.Free;

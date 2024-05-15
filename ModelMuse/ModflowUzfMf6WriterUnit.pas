@@ -1819,14 +1819,17 @@ begin
     NewLine;
   end;
 
-  if FGwtObservations[FSpeciesIndex].Count > 0 then
+  if Model.ModflowPackages.Mf6ObservationUtility.IsSelected then
   begin
-    WriteString('    OBS6 FILEIN ');
-    NameOfUztObFile := BaseFileName + GwtObservationExtension;
-    Model.AddModelInputFile(NameOfUztObFile);
-    NameOfUztObFile := ExtractFileName(NameOfUztObFile);
-    WriteString(NameOfUztObFile);
-    NewLine;
+    if FGwtObservations[FSpeciesIndex].Count > 0 then
+    begin
+      WriteString('    OBS6 FILEIN ');
+      NameOfUztObFile := BaseFileName + GwtObservationExtension;
+      Model.AddModelInputFile(NameOfUztObFile);
+      NameOfUztObFile := ExtractFileName(NameOfUztObFile);
+      WriteString(NameOfUztObFile);
+      NewLine;
+    end;
   end;
 
 //  WriteTimeSeriesFiles(FInputFileName);
