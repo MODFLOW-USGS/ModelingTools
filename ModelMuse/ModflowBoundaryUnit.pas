@@ -3879,6 +3879,10 @@ begin
                 CellList.Clear;
                 AScreenObject.GetCellsToAssign(Formula, nil, nil, CellList,
                   alAll, LocalModel);
+                if CellList.Count = 0 then
+                begin
+                  AssignOutsideGridCell(CellList)
+                end;
                 for Index := 0 to EliminateIndicies.Count - 1  do
                 begin
                   CellList.Delete(EliminateIndicies[Index]);
@@ -4351,6 +4355,10 @@ begin
                   CellList.Clear;
                   AScreenObject.GetCellsToAssign(Formula, nil, nil,
                     CellList, alAll, LocalModel);
+                  if CellList.Count = 0 then
+                  begin
+                    AssignOutsideGridCell(CellList)
+                  end;
                   for Index := 0 to EliminateIndicies.Count - 1  do
                   begin
                     CellList.Delete(EliminateIndicies[Index]);

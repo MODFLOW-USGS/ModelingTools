@@ -103,6 +103,7 @@ type
     FFLowTransportLinks: TDictionary<string,string>;
     FFlowModelName: string;
     FImportGeoRef: TImportGeoRef;
+    FFlowModelOptions: TFlowNameFileOptions;
     procedure ImportFlowModelTiming;
     procedure ImportTransportModelTiming;
     procedure ImportSimulationOptions;
@@ -169,7 +170,7 @@ type
     procedure ImportMvr(Package: TPackage; TransportModels: TModelList);
     procedure ImportGnc(Package: TPackage);
     function GetIms(ModelName: string): TSmsPackageSelection;
-    procedure ImportIMS;
+    procedure ImportIMS(FlowModelOptions: TFlowNameFileOptions);
     procedure ImportTransportIC(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportAdv(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportDsp(NameFile: TTransportNameFile; Package: TPackage);
@@ -4247,7 +4248,6 @@ end;
 function TModflow6Importer.ImportFlowModel: Boolean;
 var
   NameFile: TFlowNameFile;
-  Options: TFlowNameFileOptions;
   Packages: TFlowPackages;
   Model: TPhastModel;
   MfOptions: TModflowOptions;
@@ -4421,11 +4421,11 @@ begin
         SoluteNames.Free;
       end;
 
-      Options := NameFile.NfOptions;
+      FFlowModelOptions := NameFile.NfOptions;
       MfOptions := Model.ModflowOptions;
-      MfOptions.NewtonMF6 := Options.NEWTON;
-      MfOptions.UnderRelaxationMF6 := Options.UNDER_RELAXATION;
-      if Options.PRINT_INPUT then
+      MfOptions.NewtonMF6 := FFlowModelOptions.NEWTON;
+      MfOptions.UnderRelaxationMF6 := FFlowModelOptions.UNDER_RELAXATION;
+      if FFlowModelOptions.PRINT_INPUT then
       begin
         OC := Model.ModflowOutputControl;
         OC.PrintInputCellLists := True;
@@ -5946,7 +5946,7 @@ begin
   Assign3DRealDataSet(rsModflow_Initial_Head, IC.GridData.STRT);
 end;
 
-procedure TModflow6Importer.ImportIMS;
+procedure TModflow6Importer.ImportIMS(FlowModelOptions: TFlowNameFileOptions);
 var
   SimIndex: Integer;
   ASimulation: TMf6Simulation;
@@ -5976,6 +5976,10 @@ begin
         ImsPackage := TSmsPackageSelection.Create(nil);
         try
           ImsPackage.IsSelected := True;
+          ImsPackage.NewtonMF6 := FlowModelOptions.NEWTON;
+          ImsPackage.UnderRelaxationMF6 := FlowModelOptions.UNDER_RELAXATION;
+          ImsPackage.ContinueModel := FSimulation.Options.ContinueOption;
+
           {$REGION 'Options'}
           Options := Ims.Options;
           if Options.PRINT_OPTION <> '' then
@@ -9361,7 +9365,7 @@ begin
               Exit;
             end;
 
-            ImportIMS;
+            ImportIMS(FFlowModelOptions);
 
 
 
@@ -12742,6 +12746,7 @@ var
     SftPackage: TSftPackageItem;
     SftBoundNameDictionary: TBoundNameDictionary;
     SftNumberDictionary: TNumberDictionary;
+    Comment: string;
     procedure ReadCrossSection(ACrossSection: TSfr6CrossSection; CrossSection: TCrossSection);
     var
       RowIndex: Integer;
@@ -12925,7 +12930,14 @@ var
     NewName := ValidName(Format('Imported_%s_Sfr_%d',
       [Package.PackageName, FirstReachNo]));
     result.Name := NewName;
-    result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+    Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now) + sLineBreak;
+    Comment := Comment + 'The following are the original reach numbers:';
+    for CellIndex := 0 to AReachList.Count - 1 do
+    begin
+      Comment := Comment + IntToStr(AReachList[CellIndex].PackageData.rno) + ', ';
+    end;
+    SetLength(Comment, Length(Comment)-2);
+    result.Comment := Comment;
 
     Model.AddScreenObject(result);
     result.ElevationCount := ecOne;
@@ -18688,7 +18700,9 @@ begin
   result := (CrossSectionFile = OtherInfo.CrossSectionFile)
     and (BoundNameObs = OtherInfo.BoundNameObs)
     and (IdObs = nil)
-    and (OtherInfo.IdObs = nil);
+    and (OtherInfo.IdObs = nil)
+    and (PackageData.cellid.Layer <> 0)
+    and (OtherInfo.PackageData.cellid.Layer <> 0);
   if result then
   begin
     Assert(SftBoundNameObs.Count = OtherInfo.SftBoundNameObs.Count);

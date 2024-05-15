@@ -596,7 +596,7 @@ begin
       alAll, Model);
     if CellList.Count = 0 then
     begin
-      CellList.Add(TCellAssignment.Create(1,1,1, nil, 0,
+      CellList.Add(TCellAssignment.Create(0,0,0, nil, 0,
         'dummy assignment outside of model area', amIntersect));
       OutsideGridCell := True;
     end;
@@ -1004,7 +1004,10 @@ begin
         ASegment.FSfr6Boundary := Boundary;
         ASegment.FScreenObject := ScreenObject;
         AssignSteadyData(ASegment);
-        ASegment.EliminateInactiveReaches;
+        if not (Boundary.Values  as TSfrMf6Collection).OutsideGridCell then
+        begin
+          ASegment.EliminateInactiveReaches;
+        end;
         ASegment.AssignReachNumbers(NextReachNumber);
 
         for TimeIndex := 0 to ASegment.FReaches.Count - 1 do

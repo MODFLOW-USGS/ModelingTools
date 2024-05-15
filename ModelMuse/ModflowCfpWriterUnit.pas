@@ -182,6 +182,10 @@ resourcestring
   StrTheCFPSpecifiedHe = 'The CFP specified head defined by %0:s is %1:g. (Layer, Row, Column) = (%2:d, %3:d, %4:d)';
   StrCFPDrainableStorag = 'CFP Drainable Storage Width is not assigned in th' +
   'e following objects';
+  StrInvalidCFPInitial = 'Invalid CFP initial time';
+  StrWithTransientCFPB = 'With transient CFP boundary conditions, the first ' +
+  'time in the series must always be the same as the start of the model. Thi' +
+  's is violated in %s';
 
 { TModflowCfpWriter }
 
@@ -1830,6 +1834,14 @@ begin
     for TimeIndex := 0 to CfpBoundary.Values.Count - 1 do
     begin
       AnItem := CfpBoundary.Values[TimeIndex];
+      if TimeIndex = 0 then
+      begin
+        if AnItem.StartTime <> StartTime then
+        begin
+          frmErrorsAndWarnings.AddError(Model, StrInvalidCFPInitial,
+           Format(StrWithTransientCFPB, [ANode.FScreenObject.Name]), ANode.FScreenObject)
+        end;
+      end;
       AFormula := AnItem.BoundaryFormula[0];
       TempFormula := AFormula;
       try
