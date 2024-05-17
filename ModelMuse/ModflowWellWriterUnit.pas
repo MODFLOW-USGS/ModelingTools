@@ -18,6 +18,7 @@ type
     FWellBoundaryList: TList<TMfWellBoundary>;
     MXACTW: integer;
     FAbbreviation: string;
+    FWelPackage: TWellPackage;
     procedure WriteNWT_Options;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -160,6 +161,7 @@ begin
             NewItem.StartTime := StartTime;
             NewItem.EndTime := AnItem.StartTime;
             NewItem.PumpingRate := '0.';
+            NewItem.Multiplier := '1.';
           end;
           AnItem :=  Boundary.Values.Last as TWellItem;
           if AnItem.Endtime < Endtime then
@@ -168,6 +170,7 @@ begin
             NewItem.StartTime := AnItem.Endtime;
             NewItem.EndTime := Endtime;
             NewItem.PumpingRate := '0.';
+            NewItem.Multiplier := '1.';
           end;
         end;
       end;
@@ -324,7 +327,8 @@ end;
 
 function TModflowWEL_Writer.Package: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.WelPackage;
+  FWelPackage := Model.ModflowPackages.WelPackage;
+  result := FWelPackage;
 end;
 
 function TModflowWEL_Writer.ParameterType: TParameterType;
@@ -344,6 +348,10 @@ begin
       ASpecies := Model.MobileComponents[SpeciesIndex];
       WriteString(' ' + ASpecies.Name);
     end;
+  end;
+  if FWelPackage.UseMultiplier then
+  begin
+      WriteString(' multiplier');
   end;
 end;
 
@@ -513,10 +521,25 @@ begin
       WriteString(',');
     end;
 
-  if (Well_Cell.PumpingRatePest <> '')
-    or (Well_Cell.PumpingRatePestSeries <> '') then
+  if Well_Cell.PumpingRateTimeSeriesName = '' then
   begin
-    FPestParamUsed := True;
+    if (Well_Cell.PumpingRatePest <> '')
+      or (Well_Cell.PumpingRatePestSeries <> '') then
+    begin
+      FPestParamUsed := True;
+    end;
+  end;
+
+  if FWelPackage.UseMultiplier then
+  begin
+    if (Well_Cell.MultiplierTimeSeriesName = '') then
+    begin
+      if (Well_Cell.MultiplierPest <> '')
+        or (Well_Cell.MultiplierPestSeries <> '') then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
   end;
 
   if Model.GwtUsed then
@@ -583,6 +606,10 @@ begin
     end;
   end;
 
+  if FWelPackage.UseMultiplier and (Model.ModelSelection = msModflow2015) then
+  begin
+    WriteValueOrFormula(Well_Cell, WelMultiplierPosition);
+  end;
 
   if FEvaluationType <> etExportCsv then
   begin
@@ -908,6 +935,11 @@ var
 begin
   inherited;
   WellPackage := Package as TWellPackage;
+  if WellPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
   PhiRamp := WellPackage.PhiRamp;
   if PhiRamp > 0 then
   begin

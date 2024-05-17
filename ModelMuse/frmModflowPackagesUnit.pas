@@ -58,7 +58,7 @@ uses System.UITypes,
   framePackageFmp4SurfaceWaterUnit, framePackageFmp4WellsUnit,
   framePackageFmp4AllotmentsUnit, framePackageFmp4LandUseUnit,
   framePackageFmp4SalinityFlushUnit, framePackageBuoyancyUnit,
-  framePackageViscosityUnit, framePackageTvsUnit;
+  framePackageViscosityUnit, framePackageTvsUnit, framePackageUseMultiplierUnit;
 
 type
 
@@ -100,7 +100,7 @@ type
     jvplPackages: TJvPageList;
     jvspLPF: TJvStandardPage;
     jvspCHD: TJvStandardPage;
-    framePkgCHD: TframePackage;
+    framePkgCHD: TframePackageUseMultiplier;
     pnlBottom: TPanel;
     btnHelp: TBitBtn;
     btnOK: TBitBtn;

@@ -943,7 +943,8 @@ uses
   frmSelectFlowModelUnit in 'frmSelectFlowModelUnit.pas' {frmSelectFlowModel},
   Modflow6ModelImporter in 'Modflow6ModelImporter.pas',
   InputDataObservationsUnit in 'InputDataObservationsUnit.pas',
-  frmImportWarningsUnit in 'frmImportWarningsUnit.pas' {frmImportWarnings};
+  frmImportWarningsUnit in 'frmImportWarningsUnit.pas' {frmImportWarnings},
+  framePackageUseMultiplierUnit in 'framePackageUseMultiplierUnit.pas' {framePackageUseMultiplier: TFrame};
 
 {$R *.res}
 

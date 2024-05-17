@@ -304,6 +304,7 @@ const
 
   //
   StrMODFLOWWellPumping = 'WEL Pumping Rate';
+  StrMODFLOWWellMultiplier = 'WEL Multiplier';
   StrMODFLOWGhbConductance = 'GHB Conductance';
   StrMODFLOWGhbHead = 'GHB Boundary Head';
   StrMODFLOWDrainConductance = 'DRN Conductance';
@@ -319,6 +320,7 @@ const
   StrMODFLOWCHDStartingHead = 'CHD Starting Head';
   StrMODFLOWCHDEndingHead = 'CHD Ending Head';
   StrModflowChdActive = 'CHD Active';
+  StrMODFLOWCHDMultiplier = 'CHD Multiplier';
   StrMODFLOWEtsRateFraction = 'ETS Evapotranspiration Rate Fraction';
   StrMODFLOWEtsDepthFraction = 'ETS Evapotranspiration Depth Fraction';
   StrMODFLOWEtsRate = 'ETS Evapotranspiration Rate';

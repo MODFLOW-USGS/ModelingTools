@@ -657,6 +657,7 @@ var
   CellIndex: Integer;
   ACell: TChdTimeItem;
   IfaceIndex: Integer;
+  MultIndex: Integer;
   KeyStringDictionary: TDictionary<string, TChdTimeItemList>;
   CellLists: TObjectList<TChdTimeItemList>;
   ACellList: TChdTimeItemList;
@@ -664,6 +665,7 @@ var
   IFace: Integer;
   LastTime: Double;
   Imported_Heads: TValueArrayItem;
+  Imported_Multiplier: TValueArrayItem;
   ItemList: TList<TChdItem>;
   StartTime: Double;
   ChdIndex: Integer;
@@ -682,6 +684,7 @@ var
   ConnectionItem: TChdConnection;
   AScreenObject: TScreenObject;
   AuxIFACE: TMf6BoundaryValue;
+  AuxMult: TMf6BoundaryValue;
   AuxIndex: Integer;
   ChemSpeciesName: string;
   Aux: TMf6BoundaryValue;
@@ -743,6 +746,29 @@ var
       ChdItem.StartHead := ImportedTimeSeries;
     end;
     ChdItem.EndHead := ChdItem.StartHead;
+
+    if MultIndex >= 0 then
+    begin
+      AuxMult := ACell[MultIndex];
+      if AuxMult.ValueType = vtNumeric then
+      begin
+        ImportedName := Format('Imported_%s_ Multiplier Period_%d', [Package.PackageName, Period]);
+        Imported_Multiplier := AScreenObject.ImportedValues.Add;
+        Imported_Multiplier.Name := ImportedName;
+        Imported_Multiplier.Values.DataType := rdtDouble;
+        ChdItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_Multiplier.Name + '")';
+      end
+      else
+      begin
+        Imported_Multiplier := nil;
+        TimeSeries := AuxMult.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        ChdItem.Multiplier := ImportedTimeSeries;
+      end;
+    end;
 
     if TransportAuxNames.Count > 0 then
     begin
@@ -1024,6 +1050,8 @@ begin
 
 
       IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
+      MultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+      Model.ModflowPackages.ChdBoundary.UseMultiplier := MultIndex >= 0;
       for TimeSeriesIndex := 0 to Chd.TimeSeriesCount - 1 do
       begin
         TimeSeriesPackage := Chd.TimeSeries[TimeSeriesIndex];
@@ -1141,6 +1169,19 @@ begin
             end;
             KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
 
+            if MultIndex >= 0 then
+            begin
+              AuxMult := ACell[MultIndex];
+              if AuxMult.ValueType = vtNumeric then
+              begin
+                KeyString := KeyString + 'num';
+              end
+              else
+              begin
+                KeyString := KeyString + AuxMult.StringValue;
+              end;
+            end;
+
             for var SpcIndex := 0 to SpcDictionaries.Count - 1 do
             begin
               SpcDictionary := SpcDictionaries[SpcIndex];
@@ -1240,6 +1281,15 @@ begin
               if ACell.Head.ValueType = vtNumeric then
               begin
                 Imported_Heads.Values.Add(ACell.Head.NumericValue);
+              end;
+
+              if MultIndex >= 0 then
+              begin
+                AuxMult := ACell[MultIndex];
+                if AuxMult.ValueType = vtNumeric then
+                begin
+                  Imported_Multiplier.Values.Add(AuxMult.NumericValue);
+                end;
               end;
 
               for AuxIndex := 0 to TransportAuxNames.Count - 1 do
@@ -1359,7 +1409,7 @@ var
   ConnectionItem: TCncConnection;
   Options: TCncOptions;
   AuxMultIndex: Integer;
-  Imported_Heads: TValueArrayItem;
+  Imported_Cnc: TValueArrayItem;
   TimeSeries: string;
   ImportedTimeSeries: string;
   OtherCellLists: TObjectList<TCncTimeItemIDList>;
@@ -1399,14 +1449,14 @@ var
     if ACell.conc.ValueType = vtNumeric then
     begin
       ImportedName := Format('Imported_CNC_Period_%d', [Period]);
-      Imported_Heads := AScreenObject.ImportedValues.Add;
-      Imported_Heads.Name := ImportedName;
-      Imported_Heads.Values.DataType := rdtDouble;
-      CncItem.Concentration := rsObjectImportedValuesR + '("' + Imported_Heads.Name + '")';
+      Imported_Cnc := AScreenObject.ImportedValues.Add;
+      Imported_Cnc.Name := ImportedName;
+      Imported_Cnc.Values.DataType := rdtDouble;
+      CncItem.Concentration := rsObjectImportedValuesR + '("' + Imported_Cnc.Name + '")';
     end
     else
     begin
-      Imported_Heads := nil;
+      Imported_Cnc := nil;
       TimeSeries := ACell.conc.StringValue;
       if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
@@ -1684,7 +1734,7 @@ begin
             begin
               AuxMultiplier := 1;
             end;
-            Imported_Heads.Values.Add(ACell.conc.NumericValue * AuxMultiplier);
+            Imported_Cnc.Values.Add(ACell.conc.NumericValue * AuxMultiplier);
           end;
 
 
@@ -17579,13 +17629,15 @@ var
   CellIndex: Integer;
   ACell: TWelTimeItem;
   IfaceIndex: Integer;
+  MultIndex: Integer;
   KeyStringDictionary: TDictionary<string, TMvrWelTimeItemList>;
   CellLists: TObjectList<TMvrWelTimeItemList>;
   ACellList: TMvrWelTimeItemList;
   Options: TWelOptions;
   IFace: Integer;
   LastTime: Double;
-  Imported_Heads: TValueArrayItem;
+  Imported_PumpRate: TValueArrayItem;
+  Imported_Mutiplier: TValueArrayItem;
   ItemList: TList<TWellItem>;
   StartTime: Double;
   WelIndex: Integer;
@@ -17604,6 +17656,7 @@ var
   ConnectionItem: TWelConnection;
   AScreenObject: TScreenObject;
   AuxIFACE: TMf6BoundaryValue;
+  AuxMult: TMf6BoundaryValue;
   AuxIndex: Integer;
   ChemSpeciesName: string;
   Aux: TMf6BoundaryValue;
@@ -17619,8 +17672,8 @@ var
   NewScreenObject: Boolean;
   MvrSource: TMvrSource;
   APackage: TPackage;
-  AuxMultIndex: Integer;
-  AuxMultiplier: Extended;
+//  AuxMultIndex: Integer;
+//  AuxMultiplier: Extended;
   WellMvrLinkArray: TWellMvrLinkArray;
   WellPeriod: TWelPeriod;
   NextWelPeriod: TWelPeriod;
@@ -17649,7 +17702,7 @@ var
     AuxIndex: Integer;
     Aux: TMf6BoundaryValue;
     Imported_Chem: TValueArrayItem;
-    AuxMultiplier: Extended;
+//    AuxMultiplier: Extended;
     SpcDictionary: TSpcDictionary;
     SpcItem: TSpcTimeItem;
   begin
@@ -17658,44 +17711,45 @@ var
     WelItem.EndTime := LastTime;
     WelItem.StartTime := StartTime;
 
-    if AuxMultIndex >= 0 then
-    begin
-      Aux := ACell.Aux[AuxMultIndex];
-      if Aux.ValueType = vtNumeric then
-      begin
-        AuxMultiplier := Aux.NumericValue
-      end
-      else
-      begin
-        AuxMultiplier := 1;
-        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['WEL']));
-      end;
-    end
-    else
-    begin
-      AuxMultiplier := 1;
-    end;
-
     if ACell.Q.ValueType = vtNumeric then
     begin
-      ImportedName := Format('Imported_Heads_Period_%d', [Period]);
-      Imported_Heads := AScreenObject.ImportedValues.Add;
-      Imported_Heads.Name := ImportedName;
-      Imported_Heads.Values.DataType := rdtDouble;
-      WelItem.PumpingRate := rsObjectImportedValuesR + '("' + Imported_Heads.Name + '")';
+      ImportedName := Format('Imported_Q Period_%d', [Period]);
+      Imported_PumpRate := AScreenObject.ImportedValues.Add;
+      Imported_PumpRate.Name := ImportedName;
+      Imported_PumpRate.Values.DataType := rdtDouble;
+      WelItem.PumpingRate := rsObjectImportedValuesR + '("' + Imported_PumpRate.Name + '")';
     end
     else
     begin
-      Imported_Heads := nil;
+      Imported_PumpRate := nil;
       TimeSeries := ACell.Q.StringValue;
       if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
       begin
         Assert(False);
       end;
       WelItem.PumpingRate := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
+    end;
+
+    if MultIndex >= 0 then
+    begin
+      Aux := ACell.Aux[MultIndex];
+      if Aux.ValueType = vtNumeric then
       begin
-        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['WEL']));
+        ImportedName := Format('Imported Multiplier_Period_%d', [Period]);
+        Imported_Mutiplier := AScreenObject.ImportedValues.Add;
+        Imported_Mutiplier.Name := ImportedName;
+        Imported_Mutiplier.Values.DataType := rdtDouble;
+        WelItem.PumpingRate := rsObjectImportedValuesR + '("' + Imported_Mutiplier.Name + '")';
+      end
+      else
+      begin
+        Imported_Mutiplier := nil;
+        TimeSeries := Aux.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        WelItem.PumpingRate := ImportedTimeSeries;
       end;
     end;
 
@@ -17895,15 +17949,8 @@ begin
 
   Wel := Package.Package as TWel;
   Options := Wel.Options;
-
-  if Options.AUXMULTNAME <> '' then
-  begin
-    AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  end
-  else
-  begin
-    AuxMultIndex := -1;
-  end;
+  MultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  Model.ModflowPackages.WelPackage.UseMultiplier := MultIndex >= 0;
 
   SpcList := TSpcList.Create;
   OtherCellLists := TObjectList<TMvrWelTimeItemList>.Create;
@@ -18154,6 +18201,18 @@ begin
               IFACE := Round(AuxIFACE.NumericValue);
             end;
             KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+            if MultIndex >= 0 then
+            begin
+              AuxMult := ACell[MultIndex];
+              if AuxMult.ValueType = vtNumeric then
+              begin
+                KeyString := KeyString + 'Num';
+              end
+              else
+              begin
+                KeyString := KeyString + AuxMult.StringValue;
+              end;
+            end;
 
             for var SpcIndex := 0 to SpcDictionaries.Count - 1 do
             begin
@@ -18275,24 +18334,16 @@ begin
               ACell := ACellList[CellIndex];
               if ACell.Q.ValueType = vtNumeric then
               begin
-                if AuxMultIndex >= 0 then
+                Imported_PumpRate.Values.Add(ACell.Q.NumericValue);
+              end;
+
+              if MultIndex >= 0 then
+              begin
+                Aux := ACell.Aux[MultIndex];
+                if Aux.ValueType = vtNumeric then
                 begin
-                  Aux := ACell.Aux[AuxMultIndex];
-                  if Aux.ValueType = vtNumeric then
-                  begin
-                    AuxMultiplier := Aux.NumericValue
-                  end
-                  else
-                  begin
-                    AuxMultiplier := 1;
-                    FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['WEL']));
-                  end;
-                end
-                else
-                begin
-                  AuxMultiplier := 1;
+                  Imported_Mutiplier.Values.Add(Aux.NumericValue)
                 end;
-                Imported_Heads.Values.Add(ACell.Q.NumericValue * AuxMultiplier);
               end;
 
               for AuxIndex := 0 to TransportAuxNames.Count - 1 do

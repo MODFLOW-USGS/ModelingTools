@@ -1,14 +1,14 @@
 inherited framePackageWell: TframePackageWell
   Width = 429
-  Height = 183
+  Height = 207
   ExplicitWidth = 429
-  ExplicitHeight = 183
+  ExplicitHeight = 207
   DesignSize = (
     429
-    183)
+    207)
   inherited lblComments: TLabel
-    Top = 82
-    ExplicitTop = 82
+    Top = 106
+    ExplicitTop = 106
   end
   object lblPhiRamp: TLabel [2]
     Left = 104
@@ -18,11 +18,11 @@ inherited framePackageWell: TframePackageWell
     Caption = 'Cell adjustment fraction (PHIRAMP - MODFLOW-NWT)'
   end
   inherited memoComments: TMemo
-    Top = 101
+    Top = 125
     Width = 398
     Height = 71
     TabOrder = 2
-    ExplicitTop = 101
+    ExplicitTop = 125
     ExplicitWidth = 398
     ExplicitHeight = 71
   end
@@ -48,7 +48,11 @@ inherited framePackageWell: TframePackageWell
     Height = 17
     Caption = 'Use tabfiles to define well pumpage (TABFILES) (MODFLOW-NWT 1.1)'
     Enabled = False
-    TabOrder = 1
+    TabOrder = 3
+  end
+  inherited cbUseMultiplierMODFLOW6: TCheckBox
+    Top = 82
+    ExplicitTop = 82
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -63,6 +67,9 @@ inherited framePackageWell: TframePackageWell
       end
       item
         Control = cbTabfiles
+      end
+      item
+        Control = cbUseMultiplierMODFLOW6
       end>
   end
 end

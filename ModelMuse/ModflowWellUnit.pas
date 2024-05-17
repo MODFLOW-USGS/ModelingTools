@@ -28,6 +28,14 @@ type
     PumpingParameterName: string;
     PumpingParameterValue: double;
     PumpingRateTimeSeriesName: string;
+    // MF6
+    Multiplier: double;
+    MultiplierAnnotation: string;
+    MultiplierPest: string;
+    MultiplierPestSeriesName: string;
+    MultiplierPestSeriesMethod: TPestParamMethod;
+    MultiplierTimeSeriesName: string;
+
     // GWT Concentrations
     GwtConcentrations: TGwtCellData;
     procedure Assign(const Item: TWellRecord);
@@ -66,10 +74,14 @@ type
   private
     // See @link(PumpingRate).
     FPumpingRate: IFormulaObject;
+    FMultiplier: IFormulaObject;
+
     FGwtConcentrations: TWelGwtConcCollection;
     // See @link(PumpingRate).
     procedure SetPumpingRate(const Value: string);
     function GetPumpingRate: string;
+    function GetMultiplier: string;
+    procedure SetMultiplier(const Value: string);
     procedure SetGwtConcentrations(const Value: TWelGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
@@ -93,6 +105,7 @@ type
     // @name is the formula used to set the pumping rate
     // or the pumping rate multiplier of this boundary.
     property PumpingRate: string read GetPumpingRate write SetPumpingRate;
+    property Multiplier: string read GetMultiplier write SetMultiplier;
     property GwtConcentrations: TWelGwtConcCollection read FGwtConcentrations
       write SetGwtConcentrations;
   end;
@@ -102,6 +115,7 @@ type
     // @name is used to compute the pumping rates for a series of
     // Wells over a series of time intervals.
     FPumpingRateData: TModflowTimeList;
+    FMultiplierData: TModflowTimeList;
     FConcList: TModflowTimeLists;
     procedure AddGwtTimeLists(SpeciesIndex: Integer);
     procedure RemoveGwtTimeLists(SpeciesIndex: Integer);
@@ -117,6 +131,7 @@ type
   TWellCollection = class(TCustomMF_ListBoundColl)
   private
     procedure InvalidatePumpingRateData(Sender: TObject);
+    procedure InvalidateMultiplierData(Sender: TObject);
     procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -162,6 +177,13 @@ type
     function GetPumpingRateTimeSeriesName: string;
     procedure SetPumpingRateTimeSeriesName(const Value: string);
     function GetGwtConcentrations: TGwtCellData;
+    function GetMultiplier: double;
+    function GetMultiplierAnnotation: string;
+    function GetMultiplierPest: string;
+    function GetMultiplierPestSeriesMethod: TPestParamMethod;
+    function GetMultiplierPestSeriesName: string;
+    function GetMultiplierTimeSeriesName: string;
+    procedure SetMultiplierTimeSeriesName(const Value: string);
   protected
     property Values: TWellRecord read FValues;
     function GetColumn: integer; override;
@@ -186,9 +208,11 @@ type
   public
     property PumpingRate: double read GetPumpingRate;
     property PumpingRateAnnotation: string read GetPumpingRateAnnotation;
+
     property MvrUsed: Boolean read GetMvrUsed;
     property MvrIndex: Integer read GetMvrIndex;
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    // modflow 2005
     property PumpingParameterName: string read GetPumpingParameterName;
     property PumpingParameterValue: double read GetPumpingParameterValue;
     // PEST parameters
@@ -199,6 +223,16 @@ type
     // Time Series
     property PumpingRateTimeSeriesName: string read GetPumpingRateTimeSeriesName
       write SetPumpingRateTimeSeriesName;
+    // MF6
+    property Multiplier: double read GetMultiplier;
+    property MultiplierAnnotation: string read GetMultiplierAnnotation;
+    property MultiplierPest: string read GetMultiplierPest;
+    property MultiplierPestSeries: string read GetMultiplierPestSeriesName;
+    property MultiplierPestSeriesMethod: TPestParamMethod
+      read GetMultiplierPestSeriesMethod;
+    property MultiplierTimeSeriesName: string read GetMultiplierTimeSeriesName
+      write SetMultiplierTimeSeriesName;
+
     // GWT
     property GwtConcentrations: TGwtCellData read GetGwtConcentrations;
   end;
@@ -227,6 +261,10 @@ type
     FPestConcentrationFormulas: TWelGwtConcCollection;
     FPestConcentrationMethods: TGwtPestMethodCollection;
     FConcentrationObservers: TObserverList;
+
+    FPestMultiplierFormula: IFormulaObject;
+    FPestMultiplierMethod: TPestParamMethod;
+    FPestMultiplierObserver: TObserver;
     procedure SetTabFileName(const Value: string);
     function GetRelativeTabFileName: string;
     procedure SetRelativeTabFileName(const Value: string);
@@ -240,6 +278,12 @@ type
     procedure SetPestConcentrationFormulas(const Value: TWelGwtConcCollection);
     procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
+
+    function GetPestMultiplierFormula: string;
+    procedure SetPestMultiplierFormula(const Value: string);
+    procedure SetPestMultiplierMethod(const Value: TPestParamMethod);
+    procedure InvalidateMultiplierData(Sender: TObject);
+    function GetPestMultiplierObserver: TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -262,6 +306,8 @@ type
     procedure CreateObservers; //override;
     property PestPumpingRateObserver: TObserver
       read GetPestPumpingRateObserver;
+    property PestMultiplierObserver: TObserver
+      read GetPestMultiplierObserver;
     property ConcentrationObserver[const Index: Integer]: TObserver
       read GetConcentrationObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
@@ -303,6 +349,12 @@ type
       write SetPestPumpingRateFormula;
     property PestPumpingRateMethod: TPestParamMethod read FPestPumpingRateMethod
       write SetPestPumpingRateMethod;
+
+    property PestMultiplierFormula: string read GetPestMultiplierFormula
+      write SetPestMultiplierFormula;
+    property PestMultiplierMethod: TPestParamMethod read FPestMultiplierMethod
+      write SetPestMultiplierMethod;
+
     property PestConcentrationFormulas: TWelGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TGwtPestMethodCollection
@@ -311,12 +363,14 @@ type
 
 resourcestring
   StrWellFormulaError = 'Pumping rate set to zero because of a math error';
+  StrWellMultiplierFormulaError = 'Well multiplier set to one because of a math error';
   StrWellConcentrationS = 'Well Concentration set to zero because of a math ' +
   'error';
 
 const
   WelPumpingRatePosition = 0;
-  WelStartConcentration = 1;
+  WelMultiplierPosition = 1;
+  WelStartConcentration = 2;
 
 implementation
 
@@ -339,6 +393,7 @@ begin
   begin
     WellSource := TWellItem(Source);
     PumpingRate := WellSource.PumpingRate;
+    Multiplier := WellSource.Multiplier;
     GwtConcentrations := WellSource.GwtConcentrations;
   end;
   inherited;
@@ -348,11 +403,15 @@ procedure TWellItem.AssignObserverEvents(Collection: TCollection);
 var
   ParentCollection: TWellCollection;
   PumpingRateObserver: TObserver;
+  MultiplierObserver: TObserver;
   ConcIndex: Integer;
 begin
   ParentCollection := Collection as TWellCollection;
   PumpingRateObserver := FObserverList[WelPumpingRatePosition];
   PumpingRateObserver.OnUpToDateSet := ParentCollection.InvalidatePumpingRateData;
+
+  MultiplierObserver := FObserverList[WelMultiplierPosition];
+  MultiplierObserver.OnUpToDateSet := ParentCollection.InvalidateMultiplierData;
 
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
@@ -363,7 +422,7 @@ end;
 
 function TWellItem.BoundaryFormulaCount: integer;
 begin
-  result := 1;
+  result := 2;
   if GwtConcentrations <> nil then
   begin
     if (Model <> nil) and Model.GwtUsed then
@@ -382,14 +441,15 @@ var
   WelCol: TWellCollection;
 begin
   WelCol := Collection as TWellCollection;
-  FGwtConcentrations := TWelGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
-    WelCol);
+  FGwtConcentrations := TWelGwtConcCollection.Create(Model as TCustomModel,
+    ScreenObject, WelCol);
   inherited;
 end;
 
 procedure TWellItem.CreateFormulaObjects;
 begin
   FPumpingRate := CreateFormulaObject(dso3D);
+  FMultiplier := CreateFormulaObject(dso3D);
 end;
 
 destructor TWellItem.Destroy;
@@ -397,6 +457,7 @@ var
   Index: Integer;
 begin
   PumpingRate := '0';
+  Multiplier := '1';
   for Index := 0 to FGwtConcentrations.Count - 1 do
   begin
     FGwtConcentrations[Index].Value := '0';
@@ -411,9 +472,10 @@ var
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRate;
+    WelMultiplierPosition: result := Multiplier;
     else
       begin
-        Dec(Index, 1);
+        Dec(Index, WelStartConcentration);
         while GwtConcentrations.Count <= Index do
         begin
           GwtConcentrations.Add;
@@ -424,6 +486,17 @@ begin
   end;
 end;
 
+function TWellItem.GetMultiplier: string;
+begin
+  FMultiplier.ScreenObject := ScreenObjectI;
+  try
+    Result := FMultiplier.Formula;
+  finally
+    FMultiplier.ScreenObject := nil;
+  end;
+  ResetItemObserver(WelMultiplierPosition);
+end;
+
 procedure TWellItem.GetPropertyObserver(Sender: TObject; List: TList);
 var
   Item: TGwtConcStringValueItem;
@@ -432,6 +505,10 @@ begin
   if (Sender = FPumpingRate as TObject) then
   begin
     List.Add(FObserverList[WelPumpingRatePosition]);
+  end;
+  if (Sender = FMultiplier as TObject) then
+  begin
+    List.Add(FObserverList[WelMultiplierPosition]);
   end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
@@ -465,6 +542,7 @@ begin
     and not PhastModel.Clearing then
   begin
     PhastModel.InvalidateMfWellPumpage(self);
+    PhastModel.InvalidateMfWellMultiplier(self);
     PhastModel.InvalidateMfWellConc(self);
   end;
 end;
@@ -478,6 +556,7 @@ begin
   begin
     Item := TWellItem(AnotherItem);
     result := (Item.PumpingRate = PumpingRate)
+      and (Item.Multiplier = Multiplier)
       and (Item.GwtConcentrations.IsSame(GwtConcentrations));
   end;
 end;
@@ -485,6 +564,9 @@ end;
 procedure TWellItem.RemoveFormulaObjects;
 begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FPumpingRate,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FMultiplier,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
@@ -496,9 +578,10 @@ begin
   inherited;
   case Index of
     WelPumpingRatePosition: PumpingRate := Value;
+    WelMultiplierPosition: Multiplier := Value;
     else
       begin
-        Dec(Index, 1);
+        Dec(Index, WelStartConcentration);
         while Index >= GwtConcentrations.Count do
         begin
           GwtConcentrations.Add;
@@ -512,6 +595,11 @@ end;
 procedure TWellItem.SetGwtConcentrations(const Value: TWelGwtConcCollection);
 begin
   FGwtConcentrations.Assign(Value);
+end;
+
+procedure TWellItem.SetMultiplier(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, WelMultiplierPosition, FMultiplier);
 end;
 
 procedure TWellItem.SetPumpingRate(const Value: string);
@@ -566,7 +654,7 @@ begin
   DynamicTimeSeries := CellAssignmentData.DynamicTimeSeries;
 
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
-  AllowedIndicies := [0];
+  AllowedIndicies := [WelPumpingRatePosition,WelMultiplierPosition];
   LocalModel := AModel as TCustomModel;
   if LocalModel.GwtUsed then
   begin
@@ -606,6 +694,18 @@ begin
               PumpingRateTimeSeriesName := TimeSeriesName;
             end;
           end;
+        WelMultiplierPosition:
+          begin
+            with WellStorage.WellArray[Index] do
+            begin
+              Multiplier := Expression.DoubleResult;
+              MultiplierAnnotation := ACell.Annotation;
+              MultiplierPest := PestName;
+              MultiplierPestSeriesName := PestSeriesName;
+              MultiplierPestSeriesMethod := PestSeriesMethod;
+              MultiplierTimeSeriesName := TimeSeriesName;
+            end;
+          end;
         else
           begin
             ConcIndex := BoundaryFunctionIndex - WelStartConcentration;
@@ -635,6 +735,19 @@ begin
                 PumpingRatePestSeriesName := PestSeriesName;
                 PumpingRatePestSeriesMethod := PestSeriesMethod;
                 PumpingRateTimeSeriesName := TimeSeriesName;
+              end;
+            end;
+          WelMultiplierPosition:
+            begin
+              with WellStorage.WellArray[Index] do
+              begin
+                ErrorMessage := StrWellMultiplierFormulaError;
+                Multiplier := 1;
+                MultiplierAnnotation := ErrorMessage;
+                MultiplierPest := PestName;
+                MultiplierPestSeriesName := PestSeriesName;
+                MultiplierPestSeriesMethod := PestSeriesMethod;
+                MultiplierTimeSeriesName := TimeSeriesName;
               end;
             end;
           else
@@ -672,6 +785,19 @@ begin
                 PumpingRatePestSeriesName := PestSeriesName;
                 PumpingRatePestSeriesMethod := PestSeriesMethod;
                 PumpingRateTimeSeriesName := TimeSeriesName;
+              end;
+            end;
+          WelMultiplierPosition:
+            begin
+              with WellStorage.WellArray[Index] do
+              begin
+                ErrorMessage := StrWellMultiplierFormulaError;
+                Multiplier := 1;
+                MultiplierAnnotation := ErrorMessage;
+                MultiplierPest := PestName;
+                MultiplierPestSeriesName := PestSeriesName;
+                MultiplierPestSeriesMethod := PestSeriesMethod;
+                MultiplierTimeSeriesName := TimeSeriesName;
               end;
             end;
           else
@@ -844,6 +970,34 @@ begin
   end;
 end;
 
+procedure TWellCollection.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TMfWelTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TMfWelTimeListLink;
+    Link.FMultiplierData.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TMfWelTimeListLink;
+        Link.FMultiplierData.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TWellCollection.InvalidatePumpingRateData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -988,12 +1142,43 @@ var
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRateTimeSeriesName;
+    WelMultiplierPosition: result := MultiplierTimeSeriesName;
     else
       begin
         ConcIndex := Index - WelStartConcentration;
         result := FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex];
       end;
   end;
+end;
+
+function TWell_Cell.GetMultiplier: double;
+begin
+  result := Values.Multiplier;
+end;
+
+function TWell_Cell.GetMultiplierAnnotation: string;
+begin
+  result := Values.MultiplierAnnotation;
+end;
+
+function TWell_Cell.GetMultiplierPest: string;
+begin
+  result := Values.MultiplierPest;
+end;
+
+function TWell_Cell.GetMultiplierPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.MultiplierPestSeriesMethod;
+end;
+
+function TWell_Cell.GetMultiplierPestSeriesName: string;
+begin
+  result := Values.MultiplierPestSeriesName;
+end;
+
+function TWell_Cell.GetMultiplierTimeSeriesName: string;
+begin
+  result := Values.MultiplierTimeSeriesName;
 end;
 
 function TWell_Cell.GetMvrIndex: Integer;
@@ -1012,6 +1197,7 @@ var
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRatePest;
+    WelMultiplierPosition: result := MultiplierPest;
     else
       begin
         ConcIndex := Index - WelStartConcentration;
@@ -1026,6 +1212,7 @@ var
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRatePestSeriesMethod;
+    WelMultiplierPosition: result := MultiplierPestSeriesMethod;
     else
       begin
         ConcIndex := Index - WelStartConcentration;
@@ -1040,6 +1227,7 @@ var
 begin
   case Index of
     WelPumpingRatePosition: result := PumpingRatePestSeries;
+    WelMultiplierPosition: result := MultiplierPestSeries;
     else
       begin
         ConcIndex := Index - WelStartConcentration;
@@ -1095,6 +1283,7 @@ begin
 //  result := '';
   case Index of
     WelPumpingRatePosition: result := PumpingRateAnnotation;
+    WelMultiplierPosition: result := MultiplierAnnotation;
     else
       begin
         ConcIndex := Index - WelStartConcentration;
@@ -1110,6 +1299,7 @@ begin
 //  result := 0;
   case Index of
     WelPumpingRatePosition: result := PumpingRate;
+    WelMultiplierPosition: result := Multiplier;
     else
       begin
         ConcIndex := Index - WelStartConcentration;
@@ -1173,12 +1363,19 @@ begin
   case Index of
     WelPumpingRatePosition:
       PumpingRateTimeSeriesName := Value;
+    WelMultiplierPosition:
+      MultiplierTimeSeriesName := Value;
     else
       begin
         ConcIndex := Index - WelStartConcentration;
         FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := Value;
       end;
   end;
+end;
+
+procedure TWell_Cell.SetMultiplierTimeSeriesName(const Value: string);
+begin
+  FValues.MultiplierTimeSeriesName := Value;
 end;
 
 procedure TWell_Cell.SetPumpingRateTimeSeriesName(const Value: string);
@@ -1203,6 +1400,8 @@ begin
     RelativeTabFileName := SourceWell.RelativeTabFileName;
     PestPumpingRateFormula := SourceWell.PestPumpingRateFormula;
     PestPumpingRateMethod := SourceWell.PestPumpingRateMethod;
+    PestMultiplierFormula := SourceWell.PestMultiplierFormula;
+    PestMultiplierMethod := SourceWell.PestMultiplierMethod;
     PestConcentrationFormulas := SourceWell.PestConcentrationFormulas;
     PestConcentrationMethods := SourceWell.PestConcentrationMethods;
   end;
@@ -1312,6 +1511,8 @@ begin
 
   PestPumpingRateFormula := '';
   FPestPumpingRateMethod := DefaultBoundaryMethod(WelPumpingRatePosition);
+  PestMultiplierFormula := '';
+  FPestMultiplierMethod := DefaultBoundaryMethod(WelMultiplierPosition);
 end;
 
 procedure TMfWellBoundary.CreateFormulaObjects;
@@ -1320,6 +1521,7 @@ var
   ConcIndex: Integer;
 begin
   FPestPumpingRateFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestMultiplierFormula := CreateFormulaObjectBlocks(dso3D);
   LocalModel := ParentModel as TPhastModel;
   if (LocalModel <> nil) and LocalModel.GwtUsed then
   begin
@@ -1337,6 +1539,7 @@ begin
   if ScreenObject <> nil then
   begin
     FObserverList.Add(PestPumpingRateObserver);
+    FObserverList.Add(PestMultiplierObserver);
     for Index := 0 to FPestConcentrationFormulas.Count - 1 do
     begin
       FObserverList.Add(ConcentrationObserver[Index]);
@@ -1352,6 +1555,10 @@ begin
       begin
         result := ppmMultiply;
       end;
+    WelMultiplierPosition:
+      begin
+        result := ppmMultiply;
+      end;
     else
       begin
         result := inherited;
@@ -1364,6 +1571,7 @@ var
   Index: Integer;
 begin
   PestPumpingRateFormula := '';
+  PestMultiplierFormula := '';
 
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
@@ -1472,6 +1680,10 @@ begin
       begin
         result := PestPumpingRateFormula;
       end;
+    WelMultiplierPosition:
+      begin
+        result := PestMultiplierFormula;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - WelStartConcentration;
@@ -1494,6 +1706,10 @@ begin
       begin
         result := PestPumpingRateMethod;
       end;
+    WelMultiplierPosition:
+      begin
+        result := PestMultiplierMethod;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - WelStartConcentration;
@@ -1504,6 +1720,25 @@ begin
         result := FPestConcentrationMethods[ConcIndex].PestParamMethod;
       end;
   end;
+end;
+
+function TMfWellBoundary.GetPestMultiplierFormula: string;
+begin
+  Result := FPestMultiplierFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(WelMultiplierPosition);
+  end;
+end;
+
+function TMfWellBoundary.GetPestMultiplierObserver: TObserver;
+begin
+  if FPestMultiplierObserver = nil then
+  begin
+    CreateObserver('PestMultiplier_', FPestMultiplierObserver, nil);
+    FPestMultiplierObserver.OnUpToDateSet := InvalidateMultiplierData;
+  end;
+  result := FPestMultiplierObserver;
 end;
 
 function TMfWellBoundary.GetPestPumpingRateFormula: string;
@@ -1534,6 +1769,13 @@ begin
     if WelPumpingRatePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[WelPumpingRatePosition]);
+    end;
+  end;
+  if Sender = FPestMultiplierFormula as TObject then
+  begin
+    if WelMultiplierPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[WelMultiplierPosition]);
     end;
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
@@ -1597,7 +1839,38 @@ begin
   begin
     Model := ParentModel as TPhastModel;
     Model.InvalidateMfWellPumpage(self);
+    Model.InvalidateMfWellMultiplier(self);
     Model.InvalidateMfWellConc(self);
+  end;
+end;
+
+procedure TMfWellBoundary.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfWellMultiplier(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfWellMultiplier(self);
+      end;
+    end;
   end;
 end;
 
@@ -1651,6 +1924,10 @@ begin
       begin
         PestPumpingRateFormula := Value;
       end;
+    WelMultiplierPosition:
+      begin
+        PestMultiplierFormula := Value;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - WelStartConcentration;
@@ -1672,6 +1949,10 @@ begin
     WelPumpingRatePosition:
       begin
         PestPumpingRateMethod := Value;
+      end;
+    WelMultiplierPosition:
+      begin
+        PestMultiplierMethod := Value;
       end;
     else
       begin
@@ -1695,6 +1976,17 @@ procedure TMfWellBoundary.SetPestConcentrationMethods(
   const Value: TGwtPestMethodCollection);
 begin
   FPestConcentrationMethods.Assign(Value);
+end;
+
+procedure TMfWellBoundary.SetPestMultiplierFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, WelMultiplierPosition, FPestMultiplierFormula);
+end;
+
+procedure TMfWellBoundary.SetPestMultiplierMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMultiplierMethod, Value);
 end;
 
 procedure TMfWellBoundary.SetPestPumpingRateFormula(const Value: string);
@@ -1755,8 +2047,6 @@ begin
   begin
     inherited;
   end;
-
-
 end;
 
 { TWellRecord }
@@ -1781,6 +2071,14 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(PumpingParameterName));
   WriteCompInt(Comp, Strings.IndexOf(PumpingRateTimeSeriesName));
 
+  WriteCompReal(Comp, Multiplier);
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPest));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPestSeriesName));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierTimeSeriesName));
+  WriteCompInt(Comp, Ord(MultiplierPestSeriesMethod));
+
+
   GwtConcentrations.Cache(Comp, Strings);
 
   WriteCompBoolean(Comp, MvrUsed);
@@ -1794,6 +2092,12 @@ begin
   Strings.Add(PumpingRatePestSeriesName);
   Strings.Add(PumpingParameterName);
   Strings.Add(PumpingRateTimeSeriesName);
+
+  Strings.Add(MultiplierAnnotation);
+  Strings.Add(MultiplierPest);
+  Strings.Add(MultiplierPestSeriesName);
+  Strings.Add(MultiplierTimeSeriesName);
+
   GwtConcentrations.RecordStrings(Strings);
 end;
 
@@ -1810,6 +2114,13 @@ begin
   PumpingRatePestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   PumpingParameterName := Annotations[ReadCompInt(Decomp)];
   PumpingRateTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  Multiplier := ReadCompReal(Decomp);
+  MultiplierAnnotation := Annotations[ReadCompInt(Decomp)];
+  MultiplierPest := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  MultiplierTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   GwtConcentrations.Restore(Decomp,Annotations);
 
@@ -1898,6 +2209,15 @@ begin
   end;
   AddTimeList(FPumpingRateData);
 
+  FMultiplierData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FMultiplierData.NonParamDescription := StrWellMultiplier;
+  FMultiplierData.ParamDescription := ' ' + StrWellMultiplier;
+  if Model <> nil then
+  begin
+    FMultiplierData.OnInvalidate := (Model as TCustomModel).InvalidateMfWellPumpage;
+  end;
+  AddTimeList(FMultiplierData);
+
   PhastModel := frmGoPhast.PhastModel;
   if PhastModel.GwtUsed then
   begin
@@ -1912,6 +2232,7 @@ end;
 destructor TMfWelTimeListLink.Destroy;
 begin
   FConcList.Free;
+  FMultiplierData.Free;
   FPumpingRateData.Free;
   inherited;
 end;
@@ -1955,7 +2276,7 @@ begin
   PhastModel := frmGoPhast.PhastModel;
   ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  ConcTimeList.ParamDescription := ' ' + ConcTimeList.NonParamDescription;
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;

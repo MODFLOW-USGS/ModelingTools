@@ -124,15 +124,28 @@ Type
 
   TPackageClass = class of TModflowPackageSelection;
 
-  TWellPackage = class(TModflowPackageSelection)
+  TMultiplierPackage = class(TModflowPackageSelection)
+  private
+    FUseMultiplier: boolean;
+    procedure SetUseMultiplier(const Value: boolean);
+  public
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+    property UseMultiplier: boolean read FUseMultiplier write SetUseMultiplier;
+  end;
+
+  TWellPackage = class(TMultiplierPackage)
   private
     FGwtConcentrationList: TMfBoundDispObjectList;
     FMfWellPumpage: TModflowBoundaryDisplayTimeList;
+    FMfWellMultiplier: TModflowBoundaryDisplayTimeList;
     FPublishedPhiRamp: TRealStorage;
     FUseTabFiles: boolean;
     procedure InvalidateMfWellPumpage(Sender: TObject);
+    procedure InvalidateMfWellMultiplier(Sender: TObject);
     procedure InitializeMfWellPumpage(Sender: TObject);
     procedure GetMfWellUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMfWellMultiplierUseList(Sender: TObject; NewUseList: TStringList);
     function GetPhiRamp: Double;
     procedure SetPhiRamp(const Value: Double);
 
@@ -147,6 +160,8 @@ Type
     Destructor Destroy; override;
     property MfWellPumpage: TModflowBoundaryDisplayTimeList
       read FMfWellPumpage;
+    property MfWellMultiplier: TModflowBoundaryDisplayTimeList
+      read FMfWellMultiplier;
     procedure InvalidateAllTimeLists; override;
     procedure InitializeVariables; override;
     property PhiRamp: Double read GetPhiRamp write SetPhiRamp;
@@ -158,7 +173,7 @@ Type
       write SetPublishedPhiRamp;
     // TABFILES
     property UseTabFiles: boolean read FUseTabFiles write SetUseTabFiles;
-//    property NewtonFormulation;
+    property UseMultiplier;
   end;
 
   TGhbPackage = class(TModflowPackageSelection)
@@ -267,18 +282,21 @@ Type
     procedure AddRemoveRenameGwtConcentrationTimeLists;
   end;
 
-  TChdPackage = class(TModflowPackageSelection)
+  TChdPackage = class(TMultiplierPackage)
   private
     FGwtConcentrationList: TMfBoundDispObjectList;
     FMfChdActive: TModflowBoundaryDisplayTimeList;
     FMfChdStartingHead: TModflowBoundaryDisplayTimeList;
     FMfChdEndingHead: TModflowBoundaryDisplayTimeList;
+    FMfChdMultiplier: TModflowBoundaryDisplayTimeList;
     procedure InitializeChdDisplay(Sender: TObject);
     procedure GetMfChdActiveUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfChdStartingHeadUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfChdEndingHeadUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure GetMfChdMultiplierUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetGwtConcUseList(Sender: TObject; NewUseList: TStringList);
   public
@@ -292,9 +310,13 @@ Type
       read FMfChdStartingHead;
     property MfChdEndingHead: TModflowBoundaryDisplayTimeList
       read FMfChdEndingHead;
+    property MfChdMultiplier: TModflowBoundaryDisplayTimeList
+      read FMfChdMultiplier;
     procedure InvalidateAllTimeLists; override;
     procedure InvalidateConcentrations;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
+  published
+    property UseMultiplier;
   end;
 
   TCustomTransientArrayItem = class(TCollectionItem)
@@ -7519,7 +7541,7 @@ uses Contnrs , PhastModelUnit, ModflowOptionsUnit,
   ModflowCSubWriterUnit,
   ModflowGwtSpecifiedConcUnit, ModflowCncWriterUnit, ModflowFmp4WriterUnit, DataSetNamesUnit,
   ModflowTvkUnit, ModflowTvsUnit,
-  ModflowTvkWriterUnit, ModflowTvsWriterUnit;
+  ModflowTvkWriterUnit, ModflowTvsWriterUnit, ModflowConstantHeadBoundaryUnit, ModflowWellUnit;
 
 resourcestring
   StrInTheSubsidencePa = 'In the Subsidence package, one or more starting ti' +
@@ -7530,6 +7552,7 @@ resourcestring
   StrStartingTime0g = 'StartingTime: %:0g; EndingTime: %1:g';
   StrXYOrZCoordinat = 'X, Y, or Z coordinate formula';
   StrWellPumpingRate = 'Well Pumping Rate';
+  StrWellMultiplier = 'Well Multiplier';
   StrGHBBoundaryHead = 'GHB Boundary Head';
   StrGHBConductance = 'GHB Conductance';
   StrDrainConductance = 'Drain Conductance';
@@ -7541,6 +7564,7 @@ resourcestring
   StrCHDEndingHead = 'CHD Ending Head';
   StrCHDStartingHead = 'CHD Starting Head';
   StrChdActive = 'CHD Active';
+  StrChdMultiplier = 'CHD Multiplier';
   StrRechargeLayer = 'Recharge layer';
   StrEvapotranspirationS = 'Evapotranspiration Segments layer';
   StrEvapotranspirationL = 'Evapotranspiration layer';
@@ -12414,6 +12438,13 @@ begin
     MfWellPumpage.Name := StrMODFLOWWellPumping;
     AddTimeList(MfWellPumpage);
 
+    FMfWellMultiplier := TModflowBoundaryDisplayTimeList.Create(Model);
+    MfWellMultiplier.OnInitialize := InitializeMfWellPumpage;
+    MfWellMultiplier.OnGetUseList := GetMfWellMultiplierUseList;
+    MfWellMultiplier.OnTimeListUsed := PackageUsed;
+    MfWellMultiplier.Name := StrMODFLOWWellMultiplier;
+    AddTimeList(MfWellMultiplier);
+
     FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
   InitializeVariables;
@@ -12423,6 +12454,7 @@ destructor TWellPackage.Destroy;
 begin
   FGwtConcentrationList.Free;
   FMfWellPumpage.Free;
+  FMfWellMultiplier.Free;
   FPublishedPhiRamp.Free;
   inherited;
 end;
@@ -12441,14 +12473,20 @@ begin
   Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
   DataSetName := Format(StrWelS,
      [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
-  Index := Index+1;
+  Index := Index+WelStartConcentration;
   UpdatePkgUseList(NewUseList, ptQ, Index, DataSetName);
+end;
+
+procedure TWellPackage.GetMfWellMultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptQ, WelMultiplierPosition, StrWellMultiplier);
 end;
 
 procedure TWellPackage.GetMfWellUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptQ, 0, StrWellPumpingRate);
+  UpdateDisplayUseList(NewUseList, ptQ, WelPumpingRatePosition, StrWellPumpingRate);
 end;
 
 function TWellPackage.GetPhiRamp: Double;
@@ -12464,10 +12502,12 @@ var
   TimeList: TModflowBoundaryDisplayTimeList;
 begin
   MfWellPumpage.CreateDataSets;
+  MfWellMultiplier.CreateDataSets;
   List := TModflowBoundListOfTimeLists.Create;
   WellWriter := TModflowWEL_Writer.Create(FModel as TCustomModel, etDisplay);
   try
     List.Add(MfWellPumpage);
+    List.Add(MfWellMultiplier);
 
     for Index := 0 to FGwtConcentrationList.Count - 1 do
     begin
@@ -12482,6 +12522,7 @@ begin
     List.Free;
   end;
   MfWellPumpage.LabelAsSum;
+  MfWellMultiplier.ComputeAverage;
   for Index := 0 to FGwtConcentrationList.Count - 1 do
   begin
     TimeList := FGwtConcentrationList[Index];
@@ -12502,6 +12543,7 @@ begin
 //  if PackageUsed(FModel) then
   begin
     InvalidateMfWellPumpage(FModel);
+    InvalidateMfWellMultiplier(FModel);
     InvalidateConcentrations;
   end;
 end;
@@ -12516,6 +12558,11 @@ begin
     TimeList := FGwtConcentrationList[Index];
     TimeList.Invalidate;
   end;
+end;
+
+procedure TWellPackage.InvalidateMfWellMultiplier(Sender: TObject);
+begin
+  FMfWellMultiplier.Invalidate
 end;
 
 procedure TWellPackage.InvalidateMfWellPumpage(Sender: TObject);
@@ -13081,6 +13128,13 @@ begin
     MfChdEndingHead.Name := StrMODFLOWCHDEndingHead;
     AddTimeList(MfChdEndingHead);
 
+    FMfChdMultiplier := TModflowBoundaryDisplayTimeList.Create(Model);
+    MfChdMultiplier.OnInitialize := InitializeChdDisplay;
+    MfChdMultiplier.OnGetUseList := GetMfChdMultiplierUseList;
+    MfChdMultiplier.OnTimeListUsed := PackageUsed;
+    MfChdMultiplier.Name := StrMODFLOWCHDMultiplier;
+    AddTimeList(MfChdMultiplier);
+
     FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
 end;
@@ -13091,6 +13145,7 @@ begin
   FGwtConcentrationList.Free;
   FMfChdStartingHead.Free;
   FMfChdEndingHead.Free;
+  FMfChdMultiplier.Free;
   inherited;
 end;
 
@@ -13103,26 +13158,32 @@ begin
   Index := FGwtConcentrationList.IndexOf(Sender as TModflowBoundaryDisplayTimeList);
   DataSetName := Format(StrCHDS,
      [frmGoPhast.PhastModel.MobileComponents[Index].Name]);
-  Index := Index+2;
+  Index := Index+ChdStartConcentration;
   UpdatePkgUseList(NewUseList, ptCHD, Index, DataSetName);
 end;
 
 procedure TChdPackage.GetMfChdActiveUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptCHD, 0, StrChdActive);
+  UpdateDisplayUseList(NewUseList, ptCHD, ChdActivePosition, StrChdActive);
 end;
 
 procedure TChdPackage.GetMfChdEndingHeadUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptCHD, 1, StrCHDEndingHead);
+  UpdateDisplayUseList(NewUseList, ptCHD, ChdEndHeadPosition, StrCHDEndingHead);
+end;
+
+procedure TChdPackage.GetMfChdMultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptCHD, ChdMultiplierPosition, StrChdMultiplier);
 end;
 
 procedure TChdPackage.GetMfChdStartingHeadUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
-  UpdateDisplayUseList(NewUseList, ptCHD, 1, StrCHDStartingHead);
+  UpdateDisplayUseList(NewUseList, ptCHD, ChdStartHeadPosition, StrCHDStartingHead);
 end;
 
 procedure TChdPackage.InitializeChdDisplay(Sender: TObject);
@@ -13135,6 +13196,7 @@ begin
   MfChdActive.CreateDataSets;
   MfChdStartingHead.CreateDataSets;
   MfChdEndingHead.CreateDataSets;
+  MfChdMultiplier.CreateDataSets;
 
   List := TModflowBoundListOfTimeLists.Create;
   ChdWriter := TModflowCHD_Writer.Create(FModel as TCustomModel, etDisplay);
@@ -13142,6 +13204,7 @@ begin
     List.Add(MfChdActive);
     List.Add(MfChdStartingHead);
     List.Add(MfChdEndingHead);
+    List.Add(MfChdMultiplier);
 
     for Index := 0 to FGwtConcentrationList.Count - 1 do
     begin
@@ -13158,6 +13221,7 @@ begin
   MfChdActive.ComputeAverage;
   MfChdStartingHead.LabelAsSum;
   MfChdEndingHead.LabelAsSum;
+  MfChdMultiplier.ComputeAverage;
   for Index := 0 to FGwtConcentrationList.Count - 1 do
   begin
     TimeList := FGwtConcentrationList[Index];
@@ -13173,6 +13237,7 @@ begin
     FMfChdActive.Invalidate;
     FMfChdStartingHead.Invalidate;
     FMfChdEndingHead.Invalidate;
+    MfChdMultiplier.Invalidate;
     InvalidateConcentrations;
   end;
 end;
@@ -13188,7 +13253,6 @@ begin
     TimeList.Invalidate;
   end;
 end;
-
 { THufPackageSelection }
 
 procedure THufPackageSelection.Assign(Source: TPersistent);
@@ -29082,7 +29146,7 @@ begin
       LocalModel := frmGoPhast.PhastModel;
     end;
     result := LocalModel.IrrigationTypes.Count > 0;
-  end;  
+  end;
 end;
 
 procedure TFarmProcess4LandUse.InvalidateTransientCropID;
@@ -29307,7 +29371,7 @@ begin
       LocalModel := frmGoPhast.PhastModel;
     end;
     result := LocalModel.IrrigationTypes.Count > 0;
-  end;  
+  end;
 end;
 
 function TFarmProcess4LandUse.TransientLandUseAreaFractionarrayUsed(
@@ -30693,6 +30757,30 @@ procedure TTvsPackage.SetEnable_Storage_Change_Integration(
   const Value: Boolean);
 begin
   SetBooleanProperty(FEnable_Storage_Change_Integration, Value)
+end;
+
+procedure TMultiplierPackage.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TMultiplierPackage then
+  begin
+    UseMultiplier := TMultiplierPackage(Source).UseMultiplier;
+  end;
+end;
+
+procedure TMultiplierPackage.InitializeVariables;
+begin
+  inherited;
+  FUseMultiplier := False;
+end;
+
+procedure TMultiplierPackage.SetUseMultiplier(const Value: boolean);
+begin
+  if FUseMultiplier <> Value then
+  begin
+    FUseMultiplier := Value;
+    InvalidateModel;
+  end;
 end;
 
 end.

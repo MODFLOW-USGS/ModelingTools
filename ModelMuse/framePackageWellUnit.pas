@@ -4,11 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
-  Controls, Forms, Dialogs, framePackageUnit, RbwController,
+  Controls, Forms, Dialogs, framePackageUseMultiplierUnit, RbwController,
   StdCtrls, ArgusDataEntry, ModflowPackageSelectionUnit;
 
 type
-  TframePackageWell = class(TframePackage)
+  TframePackageWell = class(TframePackageUseMultiplier)
     rdePhiRamp: TRbwDataEntry;
     lblPhiRamp: TLabel;
     cbTabfiles: TCheckBox;

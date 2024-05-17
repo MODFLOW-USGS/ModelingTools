@@ -39,7 +39,6 @@ type
     ActiveAnnotation: string;
     StartAnnotation: string;
     EndAnnotation: string;
-//    TimeSeriesName: string;
     HeadParameterName: string;
     HeadParameterValue: double;
     // PEST
@@ -47,9 +46,18 @@ type
     EndHeadPest: string;
     StartHeadPestSeriesName: string;
     EndHeadPestSeriesName: string;
-    HeadTimeSeriesName: string;
     StartHeadPestSeriesMethod: TPestParamMethod;
     EndHeadPestSeriesMethod: TPestParamMethod;
+    // MF6
+    Multiplier: double;
+    MultiplierAnnotation: string;
+    MultiplierPest: string;
+    MultiplierPestSeriesName: string;
+    MultiplierPestSeriesMethod: TPestParamMethod;
+
+    HeadTimeSeriesName: string;
+    MultiplierTimeSeriesName: string;
+
     // GWT Concentrations
     GwtConcentrations: TGwtCellData;
     procedure Assign(const Item: TChdRecord);
@@ -77,6 +85,7 @@ type
     FStartData: TModflowTimeList;
     FEndData: TModflowTimeList;
     FActiveData: TModflowTimeList;
+    FMultiplierData: TModflowTimeList;
     FConcList: TModflowTimeLists;
     procedure AddGwtTimeLists(SpeciesIndex: Integer);
     procedure RemoveGwtTimeLists(SpeciesIndex: Integer);
@@ -103,6 +112,7 @@ type
     procedure InvalidateActiveData(Sender: TObject);
     procedure InvalidateStartData(Sender: TObject);
     procedure InvalidateEndData(Sender: TObject);
+    procedure InvalidateMultiplierData(Sender: TObject);
     procedure InvalidateGwtConcentrations(Sender: TObject);
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -145,6 +155,7 @@ type
     FEndHead: IFormulaObject;
     // See @link(StartHead).
     FStartHead: IFormulaObject;
+    FMultiplier: IFormulaObject;
     FGwtConcentrations: TChdGwtConcCollection;
     // See @link(EndHead).
     procedure SetEndHead(const Value: string);
@@ -155,6 +166,8 @@ type
     procedure SetGwtConcentrations(const Value: TChdGwtConcCollection);
     function GetActive: string;
     procedure SetActive(const Value: string);
+    function GetMultiplier: string;
+    procedure SetMultiplier(const Value: string);
   protected
     procedure RemoveFormulaObjects; override;
     procedure CreateFormulaObjects; override;
@@ -183,6 +196,9 @@ type
     // @name is the formula used to set the starting head
     // or the starting head multiplier of this boundary.
     property StartHead: string read GetStartHead write SetStartHead;
+    // @name is AuxMultiplier in MODFLOW 6
+    property Multiplier: string read GetMultiplier write SetMultiplier;
+    // @name is Concentrations in MODFLOW 6 GWT.
     property GwtConcentrations: TChdGwtConcCollection read FGwtConcentrations
       write SetGwtConcentrations;
   end;
@@ -203,8 +219,10 @@ type
     function GetStartHeadPest: string;
     function GetStartHeadPestSeriesMethod: TPestParamMethod;
     function GetStartHeadPestSeriesName: string;
+
     function GetHeadTimeSeriesName: string;
     procedure SetHeadTimeSeriesName(const Value: string);
+
     function GetConcentration(const Index: Integer): double;
     function GetConcentrationAnnotation(const Index: Integer): string;
     function GetConcentrationPestName(const Index: Integer): string;
@@ -214,6 +232,14 @@ type
     function GetConcentrationTimeSeriesName(const Index: Integer): string;
     function GetActive: Boolean;
     function GetActiveAnnotation: String;
+
+    function GetMultiplier: double;
+    function GetMultiplierAnnotation: string;
+    function GetMultiplierPest: string;
+    function GetMultiplierPestSeriesMethod: TPestParamMethod;
+    function GetMultiplierPestSeriesName: string;
+    function GetMultiplierTimeSeriesName: string;
+    procedure SetMultiplierTimeSeriesName(const Value: string);
   protected
     property Values: TChdRecord read FValues;
     function GetColumn: integer; override;
@@ -252,7 +278,14 @@ type
     property EndingHead: double read GetEndingHead;
     property StartingHeadAnnotation: string read GetStartingHeadAnnotation;
     property EndingHeadAnnotation: string read GetEndingHeadAnnotation;
-    function IsIdentical(AnotherCell: TValueCell): boolean; override;
+
+    // MF6
+    property Multiplier: double read GetMultiplier;
+    property MultiplierAnnotation: string read GetMultiplierAnnotation;
+    property MultiplierPest: string read GetMultiplierPest;
+    property MultiplierPestSeriesName: string read GetMultiplierPestSeriesName;
+    property MultiplierPestSeriesMethod: TPestParamMethod read GetMultiplierPestSeriesMethod;
+    // MODFLOW-2005
     property HeadParameterName: string read GetHeadParameterName;
     property HeadParameterValue: double read GetHeadParameterValue;
     //PEST properties
@@ -264,8 +297,11 @@ type
       read GetStartHeadPestSeriesMethod;
     property EndHeadPestSeriesMethod: TPestParamMethod
       read GetEndHeadPestSeriesMethod;
+    //MF6
     property HeadTimeSeriesName: string read GetHeadTimeSeriesName
       write SetHeadTimeSeriesName;
+    property MultiplierTimeSeriesName: string read GetMultiplierTimeSeriesName
+      write SetMultiplierTimeSeriesName;
     // GWT
     property Concentrations[const Index: Integer]: double
       read GetConcentration;
@@ -279,6 +315,8 @@ type
       read GetConcentrationPestSeriesMethod;
     property ConcentrationTimeSeriesNames[const Index: Integer]: string
       read GetConcentrationTimeSeriesName;
+
+    function IsIdentical(AnotherCell: TValueCell): boolean; override;
   end;
 
 
@@ -289,33 +327,51 @@ type
   TChdBoundary = class(TModflowParamBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
+
     FPestStartingHeadMethod: TPestParamMethod;
     FPestEndingHeadMethod: TPestParamMethod;
+    FPestMultiplierMethod: TPestParamMethod;
+
     FPestStartingHeadFormula: IFormulaObject;
     FPestEndingHeadFormula: IFormulaObject;
+    FPestMultiplierFormula: IFormulaObject;
+
     FPestEndingObserver: TObserver;
     FPestStartingObserver: TObserver;
+    FPestActiveObserver: TObserver;
+    FPestMultiplierObserver: TObserver;
+
     FUsedObserver: TObserver;
+
     FPestConcentrationMethods: TGwtPestMethodCollection;
     FPestConcentrationFormulas: TChdGwtConcCollection;
     FConcentrationObservers: TObserverList;
-    FPestActiveObserver: TObserver;
+
     function GetPestEndingHeadObserver: TObserver;
-    function GetPestStartingHeadObserver: TObserver;
     function GetPestEndingHeadFormula: string;
-    function GetPestStartingHeadFormula: string;
     procedure SetPestEndingHeadFormula(const Value: string);
     procedure SetPestEndingHeadMethod(const Value: TPestParamMethod);
+    procedure InvalidateEndingHeadData(Sender: TObject);
+
+    function GetPestStartingHeadObserver: TObserver;
+    function GetPestStartingHeadFormula: string;
     procedure SetPestStartingHeadFormula(const Value: string);
     procedure SetPestStartingHeadMethod(const Value: TPestParamMethod);
-    procedure InvalidateActiveData(Sender: TObject);
     procedure InvalidateStartingHeadData(Sender: TObject);
-    procedure InvalidateEndingHeadData(Sender: TObject);
+
+    function GetDummyPestActiveObserver: TObserver;
+    procedure InvalidateActiveData(Sender: TObject);
+
     procedure InvalidateConcData(Sender: TObject);
     procedure SetPestConcentrationFormulas(const Value: TChdGwtConcCollection);
     procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
-    function GetDummyPestActiveObserver: TObserver;
+
+    function GetPestMultiplierObserver: TObserver;
+    function GetPestMultiplierFormula: string;
+    procedure SetPestMultiplierFormula(const Value: string);
+    procedure SetPestMultiplierMethod(const Value: TPestParamMethod);
+    procedure InvalidateMultiplierData(Sender: TObject);
   protected
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
@@ -334,6 +390,7 @@ type
     property DummyPestActiveObserver: TObserver read GetDummyPestActiveObserver;
     property PestStartingHeadObserver: TObserver read GetPestStartingHeadObserver;
     property PestEndingHeadObserver: TObserver read GetPestEndingHeadObserver;
+    property PestMultiplierObserver: TObserver read GetPestMultiplierObserver;
     property ConcentrationObserver[const Index: Integer]: TObserver
       read GetConcentrationObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
@@ -363,6 +420,12 @@ type
       write SetPestStartingHeadMethod;
     property PestEndingHeadMethod: TPestParamMethod
       read FPestEndingHeadMethod write SetPestEndingHeadMethod;
+
+    property PestMultiplierFormula: string read GetPestMultiplierFormula
+      write SetPestMultiplierFormula;
+    property PestMultiplierMethod: TPestParamMethod read FPestMultiplierMethod
+      write SetPestMultiplierMethod;
+
     property PestConcentrationFormulas: TChdGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TGwtPestMethodCollection
@@ -373,7 +436,8 @@ const
   ChdActivePosition = 0;
   ChdStartHeadPosition = 1;
   ChdEndHeadPosition = 2;
-  ChdStartConcentration = 3;
+  ChdMultiplierPosition = 3;
+  ChdStartConcentration = 4;
 
 resourcestring
   StrCHDStartingHeadSe = 'CHD Starting Head set to zero because of a math er' +
@@ -381,6 +445,7 @@ resourcestring
   StrCHDEndingHeadSet = 'CHD Ending Head set to zero because of a math error';
   StrCHDConcentrationSe = 'CHD Concentration set to zero because of a math e' +
   'rror';
+  StrCHDMultiplierSet = 'CHD Multiplier set to one because of a math error';
 
 implementation
 
@@ -399,6 +464,7 @@ resourcestring
   'arameter ';
   StrActiveSpecifiedHeaError = 'Active Specified Head set to false because of a m' +
   'ath error';
+  StrMultiplier = 'Multiplier';
 
 
 { TChdItem }
@@ -414,6 +480,7 @@ begin
     Active := Chd.Active;
     StartHead := Chd.StartHead;
     EndHead := Chd.EndHead;
+    Multiplier := Chd.Multiplier;
     GwtConcentrations := Chd.GwtConcentrations;
   end;
   inherited;
@@ -427,6 +494,8 @@ begin
     GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FEndHead,
     GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FMultiplier,
+    GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
 constructor TChdItem.Create(Collection: TCollection);
@@ -438,6 +507,7 @@ begin
     ChdCol);
   inherited;
   Active := 'True';
+  Multiplier := '1';
 end;
 
 procedure TChdItem.CreateFormulaObjects;
@@ -445,6 +515,7 @@ begin
   FActive := CreateFormulaObject(dso3D);
   FStartHead := CreateFormulaObject(dso3D);
   FEndHead := CreateFormulaObject(dso3D);
+  FMultiplier := CreateFormulaObject(dso3D);
 end;
 
 destructor TChdItem.Destroy;
@@ -453,6 +524,7 @@ begin
   Active := 'False';
   StartHead := '0';
   EndHead := '0';
+  Multiplier := '0';
   inherited;
 end;
 
@@ -461,6 +533,7 @@ var
   ActiveObserver: TObserver;
   EndObserver: TObserver;
   StartObserver: TObserver;
+  MultiplierObserver: TObserver;
   ParentCollection: TChdCollection;
   ConcIndex: Integer;
 begin
@@ -471,6 +544,8 @@ begin
   StartObserver.OnUpToDateSet := ParentCollection.InvalidateStartData;
   EndObserver := FObserverList[ChdEndHeadPosition];
   EndObserver.OnUpToDateSet := ParentCollection.InvalidateEndData;
+  MultiplierObserver := FObserverList[ChdMultiplierPosition];
+  MultiplierObserver.OnUpToDateSet := ParentCollection.InvalidateMultiplierData;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
@@ -513,6 +588,7 @@ begin
     ChdActivePosition: result := Active;
     ChdStartHeadPosition: result := StartHead;
     ChdEndHeadPosition: result := EndHead;
+    ChdMultiplierPosition: result := Multiplier;
     else
       begin
         Dec(Index, ChdStartConcentration);
@@ -531,10 +607,25 @@ begin
   FEndHead.ScreenObject := ScreenObjectI;
   try
     Result := FEndHead.Formula;
+    if result = '' then
+    begin
+      result := '1';
+    end;
   finally
     FEndHead.ScreenObject := nil;
   end;
   ResetItemObserver(ChdEndHeadPosition);
+end;
+
+function TChdItem.GetMultiplier: string;
+begin
+  FMultiplier.ScreenObject := ScreenObjectI;
+  try
+    Result := FMultiplier.Formula;
+  finally
+    FMultiplier.ScreenObject := nil;
+  end;
+  ResetItemObserver(ChdMultiplierPosition);
 end;
 
 procedure TChdItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -553,6 +644,10 @@ begin
   if Sender = FEndHead as TObject then
   begin
     List.Add(FObserverList[ChdEndHeadPosition]);
+  end;
+  if Sender = FMultiplier as TObject then
+  begin
+    List.Add(FObserverList[ChdMultiplierPosition]);
   end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
@@ -588,6 +683,7 @@ begin
     PhastModel.InvalidateMfChdActive(self);
     PhastModel.InvalidateMfChdStartingHead(self);
     PhastModel.InvalidateMfChdEndingHead(self);
+    PhastModel.InvalidateMfChdMultiplier(self);
     PhastModel.InvalidateMfChdConc(self);
   end;
 end;
@@ -603,6 +699,7 @@ begin
     result := (Item.Active = Active)
       and (Item.EndHead = EndHead)
       and (Item.StartHead = StartHead)
+      and (Item.Multiplier = Multiplier)
       and (Item.GwtConcentrations.IsSame(GwtConcentrations));
   end;
 end;
@@ -622,6 +719,7 @@ begin
     ChdActivePosition: Active := Value;
     ChdStartHeadPosition: StartHead := Value;
     ChdEndHeadPosition: EndHead := Value;
+    ChdMultiplierPosition: Multiplier := Value;
     else
       begin
         Dec(Index, ChdStartConcentration);
@@ -643,6 +741,12 @@ end;
 procedure TChdItem.SetGwtConcentrations(const Value: TChdGwtConcCollection);
 begin
   FGwtConcentrations.Assign(Value);
+end;
+
+procedure TChdItem.SetMultiplier(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ChdMultiplierPosition, FMultiplier);
+
 end;
 
 procedure TChdItem.SetStartHead(const Value: string);
@@ -754,6 +858,14 @@ begin
               EndHeadPestSeriesName := PestSeriesName;
               EndHeadPestSeriesMethod := PestSeriesMethod;
             end;
+          ChdMultiplierPosition:
+            begin
+              Multiplier := Expression.DoubleResult;
+              MultiplierAnnotation := ACell.Annotation;
+              MultiplierPest := PestName;
+              MultiplierPestSeriesName := PestSeriesName;
+              MultiplierPestSeriesMethod := PestSeriesMethod;
+            end;
           else
             begin
               ConcIndex := BoundaryFunctionIndex - ChdStartConcentration;
@@ -792,6 +904,15 @@ begin
               begin
                 ErrorMessage :=  StrCHDEndingHeadSet;
                 EndingHead := 0;
+                EndAnnotation := ErrorMessage;
+                EndHeadPest := PestName;
+                EndHeadPestSeriesName := PestSeriesName;
+                EndHeadPestSeriesMethod := PestSeriesMethod;
+              end;
+            ChdMultiplierPosition:
+              begin
+                ErrorMessage :=  StrCHDMultiplierSet;
+                EndingHead := 1;
                 EndAnnotation := ErrorMessage;
                 EndHeadPest := PestName;
                 EndHeadPestSeriesName := PestSeriesName;
@@ -842,6 +963,15 @@ begin
               begin
                 ErrorMessage :=  StrCHDEndingHeadSet;
                 EndingHead := 0;
+                EndAnnotation := ErrorMessage;
+                EndHeadPest := PestName;
+                EndHeadPestSeriesName := PestSeriesName;
+                EndHeadPestSeriesMethod := PestSeriesMethod;
+              end;
+            ChdMultiplierPosition:
+              begin
+                ErrorMessage :=  StrCHDMultiplierSet;
+                EndingHead := 1;
                 EndAnnotation := ErrorMessage;
                 EndHeadPest := PestName;
                 EndHeadPestSeriesName := PestSeriesName;
@@ -1041,6 +1171,34 @@ begin
   end;
 end;
 
+procedure TChdCollection.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TChdTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TChdTimeListLink;
+    Link.FMultiplierData.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TChdTimeListLink;
+        Link.FMultiplierData.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TChdCollection.InvalidateStartData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -1098,8 +1256,12 @@ begin
 //    Interp := SourceChd.Interp;
     PestStartingHeadFormula := SourceChd.PestStartingHeadFormula;
     PestEndingHeadFormula := SourceChd.PestEndingHeadFormula;
+    PestMultiplierFormula := SourceChd.PestMultiplierFormula;
+
     PestStartingHeadMethod := SourceChd.PestStartingHeadMethod;
     PestEndingHeadMethod := SourceChd.PestEndingHeadMethod;
+    PestMultiplierMethod := SourceChd.PestMultiplierMethod;
+
     PestConcentrationFormulas := SourceChd.PestConcentrationFormulas;
     PestConcentrationMethods := SourceChd.PestConcentrationMethods;
   end;
@@ -1266,8 +1428,10 @@ begin
 
   PestStartingHeadFormula := '';
   PestEndingHeadFormula := '';
+  PestMultiplierFormula := '';
   FPestStartingHeadMethod := DefaultBoundaryMethod(ChdStartHeadPosition);
   FPestEndingHeadMethod := DefaultBoundaryMethod(ChdEndHeadPosition);
+  FPestMultiplierMethod := DefaultBoundaryMethod(ChdMultiplierPosition);
 
 end;
 
@@ -1278,6 +1442,7 @@ var
 begin
   FPestStartingHeadFormula := CreateFormulaObjectBlocks(dso3D);
   FPestEndingHeadFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestMultiplierFormula := CreateFormulaObjectBlocks(dso3D);
   LocalModel := ParentModel as TPhastModel;
   if (LocalModel <> nil) and LocalModel.GwtUsed then
   begin
@@ -1297,6 +1462,7 @@ begin
     FObserverList.Add(DummyPestActiveObserver);
     FObserverList.Add(PestStartingHeadObserver);
     FObserverList.Add(PestEndingHeadObserver);
+    FObserverList.Add(PestMultiplierObserver);
     for Index := 0 to FPestConcentrationFormulas.Count - 1 do
     begin
       FObserverList.Add(ConcentrationObserver[Index]);
@@ -1320,6 +1486,10 @@ begin
       begin
         result := ppmAdd;
       end;
+    ChdMultiplierPosition:
+      begin
+        result := ppmMultiply;
+      end;
     else
       result := inherited;
 //      Assert(False);
@@ -1332,6 +1502,7 @@ var
 begin
   PestStartingHeadFormula := '';
   PestEndingHeadFormula := '';
+  PestMultiplierFormula := '';
 
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
@@ -1420,7 +1591,7 @@ begin
   if FPestActiveObserver = nil then
   begin
     CreateObserver('PestActive_', FPestActiveObserver, nil);
-    FPestActiveObserver.OnUpToDateSet := nil;
+    FPestActiveObserver.OnUpToDateSet := InvalidateActiveData;
   end;
   result := FPestActiveObserver;
 end;
@@ -1442,6 +1613,10 @@ begin
     ChdEndHeadPosition:
       begin
         result := PestEndingHeadFormula;
+      end;
+    ChdMultiplierPosition:
+      begin
+        result := PestMultiplierFormula;
       end;
     else
       begin
@@ -1473,6 +1648,10 @@ begin
       begin
         result := PestEndingHeadMethod;
       end;
+    ChdMultiplierPosition:
+      begin
+        result := PestMultiplierMethod;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - ChdStartConcentration;
@@ -1493,6 +1672,25 @@ begin
     FPestEndingObserver.OnUpToDateSet := InvalidateEndingHeadData;
   end;
   result := FPestEndingObserver;
+end;
+
+function TChdBoundary.GetPestMultiplierFormula: string;
+begin
+  Result := FPestMultiplierFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(ChdMultiplierPosition);
+  end;
+end;
+
+function TChdBoundary.GetPestMultiplierObserver: TObserver;
+begin
+  if FPestMultiplierObserver = nil then
+  begin
+    CreateObserver('PestMultiplierHead_', FPestMultiplierObserver, nil);
+    FPestMultiplierObserver.OnUpToDateSet := InvalidateMultiplierData;
+  end;
+  result := FPestMultiplierObserver;
 end;
 
 function TChdBoundary.GetPestStartingHeadObserver: TObserver;
@@ -1539,6 +1737,13 @@ begin
     if ChdEndHeadPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[ChdEndHeadPosition]);
+    end;
+  end;
+  if Sender = FPestMultiplierFormula as TObject then
+  begin
+    if ChdMultiplierPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[ChdMultiplierPosition]);
     end;
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
@@ -1618,6 +1823,7 @@ begin
     Model.InvalidateMfChdActive(self);
     Model.InvalidateMfChdStartingHead(self);
     Model.InvalidateMfChdEndingHead(self);
+    Model.InvalidateMfChdMultiplier(self);
     Model.InvalidateMfChdConc(self);
   end;
 end;
@@ -1647,6 +1853,36 @@ begin
       if ChildModel <> nil then
       begin
         ChildModel.InvalidateMfChdEndingHead(self);
+      end;
+    end;
+  end;
+end;
+
+procedure TChdBoundary.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfChdMultiplier(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfChdMultiplier(self);
       end;
     end;
   end;
@@ -1710,6 +1946,10 @@ begin
       begin
         PestEndingHeadFormula := Value;
       end;
+    ChdMultiplierPosition:
+      begin
+        PestMultiplierFormula := Value;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - ChdStartConcentration;
@@ -1739,6 +1979,10 @@ begin
     ChdEndHeadPosition:
       begin
         PestEndingHeadMethod := Value;
+      end;
+    ChdMultiplierPosition:
+      begin
+        PestMultiplierMethod := Value;
       end;
     else
       begin
@@ -1772,6 +2016,16 @@ end;
 procedure TChdBoundary.SetPestEndingHeadMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestEndingHeadMethod, Value);
+end;
+
+procedure TChdBoundary.SetPestMultiplierFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, ChdMultiplierPosition, FPestMultiplierFormula);
+end;
+
+procedure TChdBoundary.SetPestMultiplierMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMultiplierMethod, Value);
 end;
 
 procedure TChdBoundary.SetPestStartingHeadFormula(const Value: string);
@@ -1946,11 +2200,45 @@ begin
   begin
     result := HeadTimeSeriesName;
   end
+  else if Index = ChdMultiplierPosition then
+  begin
+    result := MultiplierTimeSeriesName;
+  end
   else
     begin
       ConcIndex := Index - ChdStartConcentration;
       result := FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex];
     end;
+end;
+
+function TCHD_Cell.GetMultiplier: double;
+begin
+  result := FValues.Multiplier;
+end;
+
+function TCHD_Cell.GetMultiplierAnnotation: string;
+begin
+  result := FValues.MultiplierAnnotation;
+end;
+
+function TCHD_Cell.GetMultiplierPest: string;
+begin
+  result := FValues.MultiplierPest;
+end;
+
+function TCHD_Cell.GetMultiplierPestSeriesMethod: TPestParamMethod;
+begin
+  result := FValues.MultiplierPestSeriesMethod;
+end;
+
+function TCHD_Cell.GetMultiplierPestSeriesName: string;
+begin
+  result := FValues.MultiplierPestSeriesName;
+end;
+
+function TCHD_Cell.GetMultiplierTimeSeriesName: string;
+begin
+  result := Values.MultiplierTimeSeriesName;
 end;
 
 function TCHD_Cell.GetPestName(Index: Integer): string;
@@ -1961,6 +2249,7 @@ begin
     ChdActivePosition: result := inherited;
     ChdStartHeadPosition: result := StartHeadPest;
     ChdEndHeadPosition: result := EndHeadPest;
+    ChdMultiplierPosition: result := MultiplierPest;
     else
       begin
         ConcIndex := Index - ChdStartConcentration;
@@ -1977,6 +2266,7 @@ begin
     ChdActivePosition: result := inherited;
     ChdStartHeadPosition: result := StartHeadPestSeriesMethod;
     ChdEndHeadPosition: result := EndHeadPestSeriesMethod;
+    ChdMultiplierPosition: result := MultiplierPestSeriesMethod;
     else
       begin
         ConcIndex := Index - ChdStartConcentration;
@@ -1993,6 +2283,7 @@ begin
     ChdActivePosition: result := inherited;
     ChdStartHeadPosition: result := StartHeadPestSeriesName;
     ChdEndHeadPosition: result := EndHeadPestSeriesName;
+    ChdMultiplierPosition: result := MultiplierPestSeriesName;
     else
       begin
         ConcIndex := Index - ChdStartConcentration;
@@ -2012,6 +2303,7 @@ begin
       end;
     ChdStartHeadPosition: result := StartingHeadAnnotation;
     ChdEndHeadPosition: result := EndingHeadAnnotation;
+    ChdMultiplierPosition: result := MultiplierAnnotation;
     else
       begin
         ConcIndex := Index - ChdStartConcentration;
@@ -2031,6 +2323,7 @@ begin
       end;
     ChdStartHeadPosition: result := StartingHead;
     ChdEndHeadPosition: result := EndingHead;
+    ChdMultiplierPosition: result := Multiplier;
     else
       begin
         ConcIndex := Index - ChdStartConcentration;
@@ -2086,6 +2379,7 @@ begin
       (Active = CHD_Cell.Active)
       and (StartingHead = CHD_Cell.StartingHead)
       and (EndingHead = CHD_Cell.EndingHead)
+      and (Multiplier = CHD_Cell.Multiplier)
       and (IFace = CHD_Cell.IFace)
       and (Values.Cell = CHD_Cell.Values.Cell);
 //      and (EndingHead = StartingHead);
@@ -2136,11 +2430,20 @@ begin
   begin
     // do nothing
   end
+  else if Index = ChdMultiplierPosition then
+  begin
+    MultiplierTimeSeriesName := Value;
+  end
   else
     begin
       ConcIndex := Index - ChdStartConcentration;
       FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := Value;
     end;
+end;
+
+procedure TCHD_Cell.SetMultiplierTimeSeriesName(const Value: string);
+begin
+  FValues.MultiplierTimeSeriesName := Value;
 end;
 
 procedure TCHD_Cell.SetRow(const Value: integer);
@@ -2177,6 +2480,13 @@ begin
   WriteCompInt(Comp, Ord(StartHeadPestSeriesMethod));
   WriteCompInt(Comp, Ord(EndHeadPestSeriesMethod));
 
+  WriteCompReal(Comp, Multiplier);
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPest));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPestSeriesName));
+  WriteCompInt(Comp, Ord(MultiplierPestSeriesMethod));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierTimeSeriesName));
+
   GwtConcentrations.Cache(Comp, Strings);
 end;
 
@@ -2190,7 +2500,14 @@ begin
   Strings.Add(EndHeadPest);
   Strings.Add(StartHeadPestSeriesName);
   Strings.Add(EndHeadPestSeriesName);
+
   Strings.Add(HeadTimeSeriesName);
+  Strings.Add(MultiplierTimeSeriesName);
+
+
+  Strings.Add(MultiplierAnnotation);
+  Strings.Add(MultiplierPest);
+  Strings.Add(MultiplierPestSeriesName);
 
   GwtConcentrations.RecordStrings(Strings);
 end;
@@ -2216,6 +2533,13 @@ begin
   HeadTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   StartHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
   EndHeadPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
+  Multiplier := ReadCompReal(Decomp);
+  MultiplierAnnotation := Annotations[ReadCompInt(Decomp)];
+  MultiplierPest := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestSeriesName := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+  MultiplierTimeSeriesName := Annotations[ReadCompInt(Decomp)];
 
   GwtConcentrations.Restore(Decomp,Annotations);
 end;
@@ -2296,22 +2620,29 @@ begin
   FStartData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FEndData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FActiveData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FMultiplierData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+
   FStartData.NonParamDescription := StrStartingHead;
   FStartData.ParamDescription := StrStartingHeadMulti;
   FEndData.NonParamDescription := StrEndingHead;
   FEndData.ParamDescription := StrEndingHeadMultipl;
   FActiveData.NonParamDescription := StrActiveSpecifiedHea;
   FActiveData.ParamDescription := ' '+ StrActiveSpecifiedHea;
+  FMultiplierData.NonParamDescription := StrMultiplier;
+  FMultiplierData.ParamDescription := ' ' + StrMultiplier;
+
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
     FStartData.OnInvalidate := LocalModel.InvalidateMfChdStartingHead;
     FEndData.OnInvalidate := LocalModel.InvalidateMfChdEndingHead;
     FActiveData.OnInvalidate := LocalModel.InvalidateMfChdActive;
+    FMultiplierData.OnInvalidate := LocalModel.InvalidateMfChdMultiplier;
   end;
   AddTimeList(FActiveData);
   AddTimeList(FStartData);
   AddTimeList(FEndData);
+  AddTimeList(FMultiplierData);
 
   PhastModel := frmGoPhast.PhastModel;
   if PhastModel.GwtUsed then
@@ -2326,6 +2657,7 @@ end;
 destructor TChdTimeListLink.Destroy;
 begin
   FConcList.Free;
+  FMultiplierData.Free;
   FActiveData.Free;
   FStartData.Free;
   FEndData.Free;
@@ -2372,7 +2704,7 @@ begin
   PhastModel := frmGoPhast.PhastModel;
   ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-  ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
+  ConcTimeList.ParamDescription := ' ' + ConcTimeList.NonParamDescription;
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;

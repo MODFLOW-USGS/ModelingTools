@@ -2722,11 +2722,13 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfChdStartingHead(Sender: TObject);
     procedure InvalidateMfChdEndingHead(Sender: TObject);
     procedure InvalidateMfChdActive(Sender: TObject);
+    procedure InvalidateMfChdMultiplier(Sender: TObject);
     procedure InvalidateMfChdConc(Sender: TObject);
     procedure InvalidateMfGhbConductance(Sender: TObject);
     procedure InvalidateMfGhbBoundaryHead(Sender: TObject);
     procedure InvalidateMfGhbConc(Sender: TObject);
     procedure InvalidateMfWellPumpage(Sender: TObject);
+    procedure InvalidateMfWellMultiplier(Sender: TObject);
     procedure InvalidateMfWellConc(Sender: TObject);
     procedure InvalidateMfRivConductance(Sender: TObject);
     procedure InvalidateMfRivStage(Sender: TObject);
@@ -26932,6 +26934,11 @@ begin
   ModflowPackages.ChdBoundary.MfChdEndingHead.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfChdMultiplier(Sender: TObject);
+begin
+  ModflowPackages.ChdBoundary.MfChdMultiplier.Invalidate;;
+end;
+
 procedure TCustomModel.InvalidateMfChdStartingHead(Sender: TObject);
 begin
   ModflowPackages.ChdBoundary.MfChdStartingHead.Invalidate;
@@ -28687,6 +28694,11 @@ end;
 procedure TCustomModel.InvalidateMfWellConc(Sender: TObject);
 begin
   ModflowPackages.WelPackage.InvalidateConcentrations;
+end;
+
+procedure TCustomModel.InvalidateMfWellMultiplier(Sender: TObject);
+begin
+  ModflowPackages.WelPackage.MfWellMultiplier.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfWellPumpage(Sender: TObject);

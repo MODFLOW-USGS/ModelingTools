@@ -28,6 +28,7 @@ type
     property Count: Integer read GetCount;
     property AUXILIARY[Index: Integer]: string read GetAUXILIARY; default;
     function IndexOfAUXILIARY(const AName: string): Integer;
+    property AUXMULTNAME: string read FAUXMULTNAME;
   end;
 
   TChdDimensions = class(TCustomMf6Persistent)

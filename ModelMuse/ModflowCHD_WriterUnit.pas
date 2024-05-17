@@ -15,6 +15,7 @@ type
     MXL: integer;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FChdBoundary: TChdPackage;
     FChdCells: array of array of array of TCHD_Cell;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -232,6 +233,10 @@ begin
       WriteString(' ' + ASpecies.Name);
     end;
   end;
+  if FChdBoundary.UseMultiplier then
+  begin
+      WriteString(' multiplier');
+  end;
 end;
 
 procedure TModflowCHD_Writer.WriteCell(Cell: TValueCell;
@@ -298,6 +303,18 @@ begin
     end;
   end;
 
+  if FChdBoundary.UseMultiplier then
+  begin
+    if (CHD_Cell.MultiplierTimeSeriesName = '') then
+    begin
+      if (CHD_Cell.MultiplierPest <> '')
+        or (CHD_Cell.MultiplierPestSeriesName <> '') then
+      begin
+        FPestParamUsed := True;
+      end;
+    end;
+  end;
+
   if Model.GwtUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
@@ -344,6 +361,11 @@ begin
     begin
       WriteValueOrFormula(CHD_Cell, ChdStartConcentration + SpeciesIndex);
     end;
+  end;
+
+  if FChdBoundary.UseMultiplier and (Model.ModelSelection = msModflow2015) then
+  begin
+    WriteValueOrFormula(CHD_Cell, ChdMultiplierPosition);
   end;
 
   WriteBoundName(CHD_Cell);
@@ -395,6 +417,10 @@ begin
         VarID := VarID + ' ' + Model.MobileComponents[SpeciesIndex].Name;
       end;
     end;
+    if FChdBoundary.UseMultiplier then
+    begin
+      VarID := VarID + ' multiplier';
+    end;
     VarID := VarID + ' boundname';
   end
   else
@@ -408,6 +434,11 @@ end;
 procedure TModflowCHD_Writer.WriteListOptions(InputFileName: string);
 begin
   inherited;
+  if FChdBoundary.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
   WriteMf6ParamListOption;
 end;
 
@@ -431,7 +462,6 @@ begin
       StrBecauseTheCHDPack);
     Exit;
   end;
-
 
   if Model.ModelSelection = msModflow2015 then
   begin
@@ -658,7 +688,6 @@ var
   CellIndex: Integer;
   ACell: TCHD_Cell;
 begin
-  Cell := nil;
   for CellIndex := 0 to CellList.Count - 1 do
   begin
     Cell := CellList[CellIndex] as TCHD_Cell;
@@ -774,11 +803,6 @@ function TModflowCHD_Writer.Mf6ObservationsUsed: Boolean;
 begin
   result := (Model.ModelSelection = msModflow2015)
     and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
-//  result := inherited ObservationsUsed;
-//  if result then
-//  begin
-//    Model.ModflowPackages.
-//  end;
 end;
 
 function TModflowCHD_Writer.ObsFactors: TFluxObservationGroups;
@@ -810,7 +834,8 @@ end;
 
 function TModflowCHD_Writer.Package: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.ChdBoundary;
+  FChdBoundary := Model.ModflowPackages.ChdBoundary;
+  result := FChdBoundary
 end;
 
 function TModflowCHD_Writer.ParameterType: TParameterType;

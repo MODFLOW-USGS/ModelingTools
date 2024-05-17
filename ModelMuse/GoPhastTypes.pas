@@ -1060,6 +1060,7 @@ resourcestring
   StrEndingTime = 'Ending time';
   StrStatus = 'Status';
   StrPumpingRate = 'Pumping rate';
+  StrWellMultiplier = 'Well Multiplier';
   StrConductance = 'Conductance';
   StrConductanceMultipl = ' conductance multiplier';
   StrRiverStage = 'River stage';
