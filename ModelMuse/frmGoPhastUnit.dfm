@@ -16,6 +16,7 @@ inherited frmGoPhast: TfrmGoPhast
   OnKeyUp = FormKeyUp
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
+  ExplicitWidth = 788
   ExplicitHeight = 613
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
@@ -674,7 +675,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 484
+      Left = 178
       Top = 66
       Width = 212
       Height = 28
@@ -776,7 +777,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 227
+      Left = 403
       Top = 66
       Width = 244
       Height = 28
@@ -891,7 +892,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView3D: TToolBar
-      Left = 73
+      Left = 24
       Top = 66
       Width = 141
       Height = 28
@@ -1118,7 +1119,7 @@ inherited frmGoPhast: TfrmGoPhast
     object tbarPilotPoints: TToolBar
       Left = 11
       Top = 66
-      Width = 49
+      Width = 0
       Height = 28
       ButtonHeight = 23
       Caption = 'tbarPilotPoints'

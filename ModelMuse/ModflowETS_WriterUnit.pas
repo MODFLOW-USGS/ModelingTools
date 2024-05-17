@@ -1004,7 +1004,7 @@ begin
   for TimeIndex := 0 to Values.Count - 1 do
   begin
     EtRateList := Values[TimeIndex];
-    MAXBOUND := Max(MAXBOUND, CountCellsMF6(EtRateList, FEtsPackage.LayerOption));
+    MAXBOUND := Max(MAXBOUND, CountCellsMF6(EtRateList, FEtsPackage.LayerOption, umAssign));
   end;
 
   CountParametersAndParameterCells(NPETS, MXL);

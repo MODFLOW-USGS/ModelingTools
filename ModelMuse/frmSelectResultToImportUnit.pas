@@ -490,6 +490,7 @@ resourcestring
   StrMAWHeadDesc = 'MAW Head';
   StrUZFWAterConent = 'UZF WAter Conent';
   StrMAWBudget = 'MAW Budget';
+  StrHds = '.hds';
 
 {$R *.dfm}
 
@@ -4045,6 +4046,9 @@ begin
     FilterDescriptions.Add(StrBinaryHeadFiles);
     FileExtensions.Add(StrBhd);
 
+    FilterDescriptions.Add('Alternate ' + StrBinaryHeadFiles);
+    FileExtensions.Add(StrHds);
+
     FilterDescriptions.Add(StrBinaryDrawdownFile);
     FileExtensions.Add(StrBdn);
 
@@ -5760,6 +5764,7 @@ begin
     or (SameText(Extension, StrConc))
     or (SameText(Extension, StrDensityExt))
     or (SameText(Extension, StrViscosityExt))
+    or (SameText(Extension, StrHds))
     then
   begin
     FResultFormat := mrBinary;

@@ -9430,6 +9430,7 @@ begin
     begin
       frmGoPhast.acDefaultCrossSectionExecute(nil);
     end;
+    PhastModel.Mf6TimesSeries.Loaded;
   end;
 
   if ErrorMessages.Count > 0 then
@@ -10311,6 +10312,7 @@ var
   ConnectionItem: TRchConnection;
   AScreenObject: TScreenObject;
   AuxIFACE: TMf6BoundaryValue;
+  AuxMult: TMf6BoundaryValue;
   AuxIndex: Integer;
   ChemSpeciesName: string;
   Aux: TMf6BoundaryValue;
@@ -10334,6 +10336,7 @@ var
   RchPeriod: TRchPeriod;
   NextRchPeriod: TRchPeriod;
   EndPeriod: Integer;
+  AuxMultIndex: Integer;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TRchTimeItem; Period: Integer);
   var
     RchItem: TRchItem;
@@ -10557,6 +10560,8 @@ begin
   begin
     Model.ModflowPackages.RchPackage.LayerOption := loTopActive;
   end;
+
+  AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
 
   RchLinkList := TRchLinkList.Create;
   SpcList := TSpcList.Create;
@@ -10787,6 +10792,19 @@ begin
               IFACE := Round(AuxIFACE.NumericValue);
             end;
             KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+
+            if AuxMultIndex >= 0 then
+            begin
+              AuxMult := ACell[AuxMultIndex];
+              if AuxMult.ValueType = vtNumeric then
+              begin
+                KeyString := KeyString + ' Num';
+              end
+              else
+              begin
+                KeyString := KeyString + AuxMult.StringValue;
+              end;
+            end;
 
             for var SpcIndex := 0 to SpcDictionaries.Count - 1 do
             begin

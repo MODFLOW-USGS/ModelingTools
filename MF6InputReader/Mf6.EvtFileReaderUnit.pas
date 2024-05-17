@@ -537,11 +537,7 @@ var
   Layered: Boolean;
   IntThreeDReader: TInteger3DArrayReader;
   Double2DDReader: TDouble2DArrayReader;
-//  SURFACE: TArrayItem;
-//  RATE: TArrayItem;
-//  DEPTH: TArrayItem;
   AuxArray: TArrayItem;
-//  AuxList: TArrayItemList;
   RowIndex: Integer;
   ColIndex: Integer;
   SegIndex: Integer;
@@ -582,7 +578,6 @@ begin
         SetLength(IEVT, Length(IEVT), Length(IEVT[0]), Length(IEVT[0,0]));
       end;
     end;
-//    AuxList := TArrayItemList.Create;
     try
       AuxIndex := 0;
       while not Stream.EndOfStream do
@@ -867,7 +862,10 @@ begin
               end;
               Cell.Fpxdp.Add(ABoundValue);
               Inc(StartIndex);
+            end;
 
+            for SegIndex := 0 to nseg - 2 do
+            begin
               ABoundValue.Initialize;
               if TryFortranStrToFloat(FSplitter[StartIndex], ABoundValue.NumericValue) then
               begin

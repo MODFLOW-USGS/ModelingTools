@@ -1022,7 +1022,8 @@ end;
     function OkLocationMF6(IDomain: TDataArray;
       UsedLocations: T2DSparseBooleanArray;
       var Layer: integer; Row, Column: integer; Option: TLayerOption): boolean;
-    function CountCellsMF6(RateList: TValueCellList; Option: TLayerOption): integer;
+    function CountCellsMF6(RateList: TValueCellList; Option: TLayerOption;
+      AssignmentMethod: TUpdateMethod): integer;
   public
     Constructor Create(Model: TCustomModel; EvaluationType: TEvaluationType); override;
     // @name destroys the current instance of @classname.
@@ -10912,7 +10913,8 @@ begin
 end;
 
 function TCustomTransientArrayWriter.CountCellsMF6
-  (RateList: TValueCellList; Option: TLayerOption): integer;
+  (RateList: TValueCellList; Option: TLayerOption;
+  AssignmentMethod: TUpdateMethod): integer;
 var
   CellIndex: integer;
   // ValueCell: TRch_Cell;
@@ -10938,7 +10940,10 @@ begin
       if OkLocationMF6(IDomain, UsedLocations, Layer, ValueCell.Row,
         ValueCell.Column, Option) then
       begin
-        UsedLocations.Items[ValueCell.Row, ValueCell.Column] := True;
+        if AssignmentMethod = umAssign then
+        begin
+          UsedLocations.Items[ValueCell.Row, ValueCell.Column] := True;
+        end;
         Inc(result);
       end;
     end;

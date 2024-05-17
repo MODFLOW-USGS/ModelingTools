@@ -397,8 +397,6 @@ begin
 end;
 
 procedure TModflowRCH_Writer.WriteDimensions;
-//var
-//  MAXBOUND: Integer;
 var
   RchRateList: TValueCellList;
   TimeIndex: Integer;
@@ -416,7 +414,7 @@ begin
   for TimeIndex := 0 to Values.Count - 1 do
   begin
     RchRateList := Values[TimeIndex];
-    MAXBOUND := Max(MAXBOUND, CountCellsMF6(RchRateList, FRchPackage.LayerOption));
+    MAXBOUND := Max(MAXBOUND, CountCellsMF6(RchRateList, FRchPackage.LayerOption, FRchPackage.AssignmentMethod));
   end;
 
   CountParametersAndParameterCells(NPRCH, MXL);
@@ -677,7 +675,10 @@ begin
       if OkLocationMF6(IDomain, UsedLocations, Layer, RchCell.Row,
         RchCell.Column, FRchPackage.LayerOption) then
       begin
-        UsedLocations.Items[RchCell.Row, RchCell.Column] := True;
+        if FRchPackage.AssignmentMethod = umAssign then
+        begin
+          UsedLocations.Items[RchCell.Row, RchCell.Column] := True;
+        end;
         WriteInteger(Layer+1);
         if not Model.DisvUsed then
         begin

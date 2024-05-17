@@ -9,7 +9,6 @@ inherited frmFormulaErrors: TfrmFormulaErrors
   ClientWidth = 534
   Font.Height = 19
   FormStyle = fsStayOnTop
-  OnResize = FormResize
   ExplicitWidth = 546
   ExplicitHeight = 256
   PixelsPerInch = 120
@@ -28,7 +27,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       534
       45)
     object btnClose: TBitBtn
-      Left = 397
+      Left = 393
       Top = 6
       Width = 83
       Height = 33
@@ -36,7 +35,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
-      ExplicitLeft = 393
+      ExplicitLeft = 389
     end
     object btnCopy: TButton
       Left = 8
@@ -51,7 +50,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       OnClick = btnCopyClick
     end
     object btnHelp: TBitBtn
-      Left = 308
+      Left = 304
       Top = 6
       Width = 83
       Height = 33
@@ -60,7 +59,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 304
+      ExplicitLeft = 300
     end
     object btnClear: TButton
       Left = 182

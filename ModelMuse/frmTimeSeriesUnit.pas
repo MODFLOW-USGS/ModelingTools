@@ -34,6 +34,7 @@ type
     btnCancel: TBitBtn;
     btnAddGroup: TButton;
     btnDeleteGroup: TButton;
+    spl1: TSplitter;
     procedure btnAddGroupClick(Sender: TObject);
     procedure btnDeleteGroupClick(Sender: TObject);
     procedure tvTimeSeriesChange(Sender: TObject; Node: TTreeNode);

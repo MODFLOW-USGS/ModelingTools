@@ -1343,7 +1343,7 @@ begin
 
   if  FMawPackage.SaveBudgetCsv then
   begin
-    WriteString('  BUDGET FILEOUT ');
+    WriteString('  BUDGETCSV FILEOUT ');
     AFileName := ChangeFileExt(BaseName, StrMawbudCsv);
     Model.AddModelOutputFile(AFileName);
     AFileName := ExtractFileName(AFileName);
