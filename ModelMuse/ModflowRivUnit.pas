@@ -53,6 +53,14 @@ type
     ConductanceTimeSeriesName: string;
     RiverStageTimeSeriesName: string;
     RiverBottomTimeSeriesName: string;
+
+    // MF6
+    Multiplier: double;
+    MultiplierAnnotation: string;
+    MultiplierPest: string;
+    MultiplierPestSeries: string;
+    MultiplierPestSeriesMethod: TPestParamMethod;
+    MultiplierTimeSeriesName: string;
     // GWT Concentrations
     GwtConcentrations: TGwtCellData;
     procedure Assign(const Item: TRivRecord);
@@ -92,6 +100,7 @@ type
     FRiverStage: IFormulaObject;
     // See @link(Conductance).
     FConductance: IFormulaObject;
+    FMultiplier: IFormulaObject;
     FGwtConcentrations: TRivGwtConcCollection;
     // See @link(RiverBottom).
     procedure SetRiverBottom(const Value: string);
@@ -102,6 +111,8 @@ type
     function GetConductance: string;
     function GetRiverBottom: string;
     function GetRiverStage: string;
+    procedure SetMultiplier(const Value: string);
+    function GetMultiplier: string;
     procedure SetGwtConcentrations(const Value: TRivGwtConcCollection);
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
@@ -132,6 +143,7 @@ type
     // @name is the formula used to set the conductance
     // or the conductance multiplier of this boundary.
     property Conductance: string read GetConductance write SetConductance;
+    property Multiplier: string read GetMultiplier write SetMultiplier;
     property GwtConcentrations: TRivGwtConcCollection read FGwtConcentrations
       write SetGwtConcentrations;
   end;
@@ -147,6 +159,7 @@ type
     // @name is used to compute the Conductances for a series of
     // River Boundaries over a series of time intervals.
     FConductanceData: TModflowTimeList;
+    FMultiplierData: TModflowTimeList;
     FConcList: TModflowTimeLists;
     procedure AddGwtTimeLists(SpeciesIndex: Integer);
     procedure RemoveGwtTimeLists(SpeciesIndex: Integer);
@@ -164,6 +177,7 @@ type
     procedure InvalidateStageData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateRiverBottomData(Sender: TObject);
+    procedure InvalidateMultiplierData(Sender: TObject);
     procedure InvalidateGwtConcentrations(Sender: TObject);
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
@@ -233,6 +247,13 @@ type
       const Index: Integer): TPestParamMethod;
     function GetConcentrationPestSeriesName(const Index: Integer): string;
     function GetConcentrationTimeSeriesName(const Index: Integer): string;
+    function GetMultiplier: Double;
+    function GetMultiplierAnnotation: string;
+    function GetMultiplierPest: string;
+    function GetMultiplierPestSeries: string;
+    function GetMultiplierPestSeriesMethod: TPestParamMethod;
+    function GetMultiplierTimeSeriesName: string;
+    procedure SetMultiplierTimeSeriesName(const Value: string);
   protected
     property Values: TRivRecord read FValues;
     function GetColumn: integer; override;
@@ -301,6 +322,15 @@ type
       write SetRiverStageTimeSeriesName;
     property RiverBottomTimeSeriesName: string read GetRiverBottomTimeSeriesName
       write SetRiverBottomTimeSeriesName;
+
+      // Multiplier
+    property Multiplier: Double read GetMultiplier;
+    property MultiplierAnnotation: string read GetMultiplierAnnotation;
+    property MultiplierPest: string read GetMultiplierPest;
+    property MultiplierPestSeries: string read GetMultiplierPestSeries;
+    property MultiplierPestSeriesMethod: TPestParamMethod read GetMultiplierPestSeriesMethod;
+    property MultiplierTimeSeriesName: string read GetMultiplierTimeSeriesName
+      write SetMultiplierTimeSeriesName;
     // GWT
     property Concentrations[const Index: Integer]: double
       read GetConcentration;
@@ -330,39 +360,58 @@ type
   TRivBoundary = class(TSpecificModflowBoundary)
   private
     FCurrentParameter: TModflowTransientListParameter;
+
     FPestConductanceMethod: TPestParamMethod;
     FPestRiverBottomMethod: TPestParamMethod;
     FPestRiverStageMethod: TPestParamMethod;
+    FPestMultiplierMethod: TPestParamMethod;
 
-    FPestCondFormula: IFormulaObject;
+    FPestConductanceFormula: IFormulaObject;
     FPestRiverStageFormula: IFormulaObject;
     FPestRiverBottomFormula: IFormulaObject;
+    FPestMultiplierFormula: IFormulaObject;
+
     FPestConductanceObserver: TObserver;
     FPestRiverBottomObserver: TObserver;
     FUsedObserver: TObserver;
     FPestRiverStageObserver: TObserver;
+    FPestMultiplierObserver: TObserver;
+
     FPestConcentrationMethods: TGwtPestMethodCollection;
     FPestConcentrationFormulas: TRivGwtConcCollection;
     FConcentrationObservers: TObserverList;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
+
     function GetPestConductanceFormula: string;
     function GetPestRiverBottomFormula: string;
     function GetPestRiverStageFormula: string;
+    function GetPestMultiplierFormula: string;
+
     procedure SetPestConductanceFormula(const Value: string);
     procedure SetPestConductanceMethod(const Value: TPestParamMethod);
+
+    procedure SetPestMultiplierFormula(const Value: string);
+    procedure SetPestMultiplierMethod(const Value: TPestParamMethod);
+
     procedure SetPestRiverBottomFormula(const Value: string);
     procedure SetPestRiverBottomMethod(const Value: TPestParamMethod);
+
     procedure SetPestRiverStageFormula(const Value: string);
     procedure SetPestRiverStageMethod(const Value: TPestParamMethod);
+
     function GetPestConductanceObserver: TObserver;
     function GetPestRiverBottomObserver: TObserver;
     function GetPestRiverStageObserver: TObserver;
+    function GetPestMultiplierObserver: TObserver;
+
     procedure InvalidateStageData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateRiverBottomData(Sender: TObject);
     procedure InvalidateConcData(Sender: TObject);
+    procedure InvalidateMultiplierData(Sender: TObject);
+
     procedure SetPestConcentrationFormulas(const Value: TRivGwtConcCollection);
     procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
@@ -389,6 +438,7 @@ type
     property PestRiverStageObserver: TObserver read GetPestRiverStageObserver;
     property PestRiverBottomObserver: TObserver read GetPestRiverBottomObserver;
     property PestConductanceObserver: TObserver read GetPestConductanceObserver;
+    property PestMultiplierObserver: TObserver read GetPestMultiplierObserver;
     property ConcentrationObserver[const Index: Integer]: TObserver
       read GetConcentrationObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
@@ -425,12 +475,16 @@ type
       write SetPestRiverStageFormula;
     property PestConductanceFormula: string read GetPestConductanceFormula
       write SetPestConductanceFormula;
+    property PestMultiplierFormula: string read GetPestMultiplierFormula
+      write SetPestMultiplierFormula;
     property PestRiverBottomMethod: TPestParamMethod read FPestRiverBottomMethod
       write SetPestRiverBottomMethod;
     property PestRiverStageMethod: TPestParamMethod read FPestRiverStageMethod
       write SetPestRiverStageMethod;
     property PestConductanceMethod: TPestParamMethod
       read FPestConductanceMethod write SetPestConductanceMethod;
+    property PestMultiplierMethod: TPestParamMethod
+      read FPestMultiplierMethod write SetPestMultiplierMethod;
     property PestConcentrationFormulas: TRivGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TGwtPestMethodCollection
@@ -441,7 +495,8 @@ const
   RivStagePosition = 0;
   RivConductancePosition = 1;
   RivBottomPosition = 2;
-  RivStartConcentration = 3;
+  RivMultiplierPosition = 3;
+  RivStartConcentration = 4;
 
 resourcestring
   StrRIVStageSetToZer = 'RIV stage set to zero because of a math error';
@@ -450,6 +505,8 @@ resourcestring
   StrRIVBottomSetToZe = 'RIV bottom set to zero because of a math error';
   StrRIVConcentrationSe = 'RIV Concentration set to zero because of a math e' +
   'rror';
+  StrRIVMultiplierSet = 'RIV multiplier set to one because of a math erro' +
+  'r';
 
 
 implementation
@@ -457,6 +514,9 @@ implementation
 uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
   frmGoPhastUnit, GIS_Functions, ModflowMvrUnit,
   frmErrorsAndWarningsUnit, CellLocationUnit;
+
+resourcestring
+  StrRiverMultiplier = 'River Multiplier';
 
 { TRivItem }
 
@@ -471,6 +531,7 @@ begin
     RiverStage := Riv.RiverStage;
     Conductance := Riv.Conductance;
     RiverBottom := Riv.RiverBottom;
+    Multiplier := Riv.Multiplier;
     GwtConcentrations := Riv.GwtConcentrations;
   end;
   inherited;
@@ -482,6 +543,7 @@ var
   StageObserver: TObserver;
   ConductanceObserver: TObserver;
   BottomObserver: TObserver;
+  MultiplierObserver: TObserver;
   ConcIndex: Integer;
 begin
   ParentCollection := Collection as TRivCollection;
@@ -491,6 +553,8 @@ begin
   ConductanceObserver.OnUpToDateSet := ParentCollection.InvalidateConductanceData;
   BottomObserver := FObserverList[RivBottomPosition];
   BottomObserver.OnUpToDateSet := ParentCollection.InvalidateRiverBottomData;
+  MultiplierObserver := FObserverList[RivMultiplierPosition];
+  MultiplierObserver.OnUpToDateSet := ParentCollection.InvalidateMultiplierData;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
     GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
@@ -500,7 +564,7 @@ end;
 
 function TRivItem.BoundaryFormulaCount: integer;
 begin
-  result := 3;
+  result := 4;
   if GwtConcentrations <> nil then
   begin
     if (Model <> nil) and Model.GwtUsed then
@@ -522,6 +586,7 @@ begin
   FGwtConcentrations := TRivGwtConcCollection.Create(Model as TCustomModel, ScreenObject,
     RivCol);
   inherited;
+  Multiplier := '1';
 end;
 
 procedure TRivItem.CreateFormulaObjects;
@@ -529,6 +594,7 @@ begin
   FRiverStage := CreateFormulaObject(dso3D);
   FConductance := CreateFormulaObject(dso3D);
   FRiverBottom := CreateFormulaObject(dso3D);
+  FMultiplier := CreateFormulaObject(dso3D);
 end;
 
 destructor TRivItem.Destroy;
@@ -537,6 +603,7 @@ begin
   RiverBottom := '0';
   RiverStage := '0';
   Conductance := '0';
+  Multiplier := '1';
   inherited;
 end;
 
@@ -548,9 +615,10 @@ begin
     RivStagePosition: result := RiverStage;
     RivConductancePosition: result := Conductance;
     RivBottomPosition: result := RiverBottom;
+    RivMultiplierPosition: result := Multiplier;
     else
       begin
-        Dec(Index, 3);
+        Dec(Index, RivStartConcentration);
         while GwtConcentrations.Count <= Index do
         begin
           GwtConcentrations.Add;
@@ -577,6 +645,17 @@ begin
   result := RivConductancePosition;
 end;
 
+function TRivItem.GetMultiplier: string;
+begin
+  FMultiplier.ScreenObject := ScreenObjectI;
+  try
+    Result := FMultiplier.Formula;
+  finally
+    FMultiplier.ScreenObject := nil;
+  end;
+  ResetItemObserver(RivMultiplierPosition);
+end;
+
 procedure TRivItem.GetPropertyObserver(Sender: TObject; List: TList);
 var
   ConcIndex: Integer;
@@ -593,6 +672,10 @@ begin
   if Sender = FRiverBottom as TObject then
   begin
     List.Add( FObserverList[RivBottomPosition]);
+  end;
+  if Sender = FMultiplier as TObject then
+  begin
+    List.Add( FObserverList[RivMultiplierPosition]);
   end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
@@ -640,6 +723,7 @@ begin
     PhastModel.InvalidateMfRivStage(self);
     PhastModel.InvalidateMfRivBottom(self);
     PhastModel.InvalidateMfRivConc(self);
+    PhastModel.InvalidateMfRivMultiplier(self);
   end;
 end;
 
@@ -654,6 +738,7 @@ begin
     result := (Item.RiverStage = RiverStage)
       and (Item.Conductance = Conductance)
       and (Item.RiverBottom = RiverBottom)
+      and (Item.Multiplier = Multiplier)
       and (Item.GwtConcentrations.IsSame(GwtConcentrations));
   end;
 end;
@@ -666,6 +751,8 @@ begin
     GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FRiverStage,
     GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FMultiplier,
+    GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
 procedure TRivItem.SetBoundaryFormula(Index: integer; const Value: string);
@@ -677,9 +764,10 @@ begin
     RivStagePosition: RiverStage := Value;
     RivConductancePosition: Conductance := Value;
     RivBottomPosition: RiverBottom := Value;
+    RivMultiplierPosition: Multiplier := Value;
     else
       begin
-        Dec(Index, 3);
+        Dec(Index, RivStartConcentration);
         while Index >= GwtConcentrations.Count do
         begin
           GwtConcentrations.Add;
@@ -708,6 +796,11 @@ end;
 procedure TRivItem.SetGwtConcentrations(const Value: TRivGwtConcCollection);
 begin
   FGwtConcentrations.Assign(Value);
+end;
+
+procedure TRivItem.SetMultiplier(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, RivMultiplierPosition, FMultiplier);
 end;
 
 { TRivCollection }
@@ -840,7 +933,8 @@ begin
 
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
 
-  AllowedIndicies := [RivStagePosition,RivConductancePosition, RivBottomPosition];
+  AllowedIndicies := [RivStagePosition,RivConductancePosition,
+    RivBottomPosition, RivMultiplierPosition];
   LocalModel := AModel as TCustomModel;
   if LocalModel.GwtUsed then
   begin
@@ -895,6 +989,15 @@ begin
               RiverBottomPestSeriesMethod := PestSeriesMethod;
               RiverBottomTimeSeriesName := TimeSeriesName;
             end;
+          RivMultiplierPosition:
+            begin
+              Multiplier := Expression.DoubleResult;
+              MultiplierAnnotation := ACell.Annotation;
+              MultiplierPest := PestName;
+              MultiplierPestSeries := PestSeriesName;
+              MultiplierPestSeriesMethod := PestSeriesMethod;
+              MultiplierTimeSeriesName := TimeSeriesName;
+            end;
           else
             begin
               ConcIndex := BoundaryFunctionIndex - RivStartConcentration;
@@ -942,6 +1045,16 @@ begin
                 RiverBottomPestSeriesName := PestSeriesName;
                 RiverBottomPestSeriesMethod := PestSeriesMethod;
                 RiverBottomTimeSeriesName := TimeSeriesName;
+              end;
+            RivMultiplierPosition:
+              begin
+                ErrorMessage :=  StrRIVMultiplierSet;
+                Multiplier := 1;
+                MultiplierAnnotation := ErrorMessage;
+                MultiplierPest := PestName;
+                MultiplierPestSeries := PestSeriesName;
+                MultiplierPestSeriesMethod := PestSeriesMethod;
+                MultiplierTimeSeriesName := TimeSeriesName;
               end;
             else
               begin
@@ -997,6 +1110,16 @@ begin
                 RiverBottomPestSeriesName := PestSeriesName;
                 RiverBottomPestSeriesMethod := PestSeriesMethod;
                 RiverBottomTimeSeriesName := TimeSeriesName;
+              end;
+            RivMultiplierPosition:
+              begin
+                ErrorMessage :=  StrRIVMultiplierSet;
+                Multiplier := 1;
+                MultiplierAnnotation := ErrorMessage;
+                MultiplierPest := PestName;
+                MultiplierPestSeries := PestSeriesName;
+                MultiplierPestSeriesMethod := PestSeriesMethod;
+                MultiplierTimeSeriesName := TimeSeriesName;
               end;
             else
               begin
@@ -1157,7 +1280,36 @@ begin
     PhastModel.InvalidateMfRivConductance(self);
     PhastModel.InvalidateMfRivStage(self);
     PhastModel.InvalidateMfRivBottom(self);
+    PhastModel.InvalidateMfRivMultiplier(self);
     PhastModel.InvalidateMfRivConc(self);
+  end;
+end;
+
+procedure TRivCollection.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TRivTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TRivTimeListLink;
+    Link.FMultiplierData.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TRivTimeListLink;
+        Link.FMultiplierData.Invalidate;
+      end;
+    end;
   end;
 end;
 
@@ -1240,6 +1392,7 @@ begin
     RivStagePosition: result := RiverStageAnnotation;
     RivConductancePosition: result := ConductanceAnnotation;
     RivBottomPosition: result := RiverBottomAnnotation;
+    RivMultiplierPosition: result := MultiplierAnnotation;
     else
       begin
         ConcIndex := Index - RivStartConcentration;
@@ -1256,6 +1409,7 @@ begin
     RivStagePosition: result := RiverStage;
     RivConductancePosition: result := Conductance;
     RivBottomPosition: result := RiverBottom;
+    RivMultiplierPosition: result := Multiplier;
     else
       begin
         ConcIndex := Index - RivStartConcentration;
@@ -1433,12 +1587,43 @@ begin
     RivStagePosition: result := RiverStageTimeSeriesName;
     RivConductancePosition: result := ConductanceTimeSeriesName;
     RivBottomPosition: result := RiverBottomTimeSeriesName;
+    RivMultiplierPosition: result := MultiplierTimeSeriesName;
     else
       begin
         ConcIndex := Index - RivStartConcentration;
         result := FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex];
       end;
   end;
+end;
+
+function TRiv_Cell.GetMultiplier: Double;
+begin
+  result := Values.Multiplier;
+end;
+
+function TRiv_Cell.GetMultiplierAnnotation: string;
+begin
+  result := Values.MultiplierAnnotation;
+end;
+
+function TRiv_Cell.GetMultiplierPest: string;
+begin
+  result := Values.MultiplierPest;
+end;
+
+function TRiv_Cell.GetMultiplierPestSeries: string;
+begin
+  result := Values.MultiplierPestSeries;
+end;
+
+function TRiv_Cell.GetMultiplierPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.MultiplierPestSeriesMethod;
+end;
+
+function TRiv_Cell.GetMultiplierTimeSeriesName: string;
+begin
+  result := Values.MultiplierTimeSeriesName;
 end;
 
 function TRiv_Cell.GetMvrIndex: Integer;
@@ -1459,6 +1644,7 @@ begin
     RivStagePosition: result := RiverStagePest;
     RivConductancePosition: result := ConductancePest;
     RivBottomPosition: result := RiverBottomPest;
+    RivMultiplierPosition: result := MultiplierPest;
     else
       begin
         ConcIndex := Index - RivStartConcentration;
@@ -1475,6 +1661,7 @@ begin
     RivStagePosition: result := RiverStagePestSeriesMethod;
     RivConductancePosition: result := ConductancePestSeriesMethod;
     RivBottomPosition: result := RiverBottomPestSeriesMethod;
+    RivMultiplierPosition: result := MultiplierPestSeriesMethod;
     else
       begin
         ConcIndex := Index - RivStartConcentration;
@@ -1491,6 +1678,7 @@ begin
     RivStagePosition: result := RiverStagePestSeries;
     RivConductancePosition: result := ConductancePestSeries;
     RivBottomPosition: result := RiverBottomPestSeries;
+    RivMultiplierPosition: result := MultiplierPestSeries;
     else
       begin
         ConcIndex := Index - RivStartConcentration;
@@ -1571,12 +1759,19 @@ begin
       ConductanceTimeSeriesName := Value;
     RivBottomPosition:
       RiverBottomTimeSeriesName := Value;
+    RivMultiplierPosition:
+      MultiplierTimeSeriesName := Value;
     else
       begin
         ConcIndex := Index - RivStartConcentration;
         FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := Value;
       end;
   end;
+end;
+
+procedure TRiv_Cell.SetMultiplierTimeSeriesName(const Value: string);
+begin
+
 end;
 
 procedure TRiv_Cell.SetRiverBottomTimeSeriesName(const Value: string);
@@ -1607,9 +1802,11 @@ begin
     PestRiverBottomFormula := SourceRiv.PestRiverBottomFormula;
     PestRiverStageFormula := SourceRiv.PestRiverStageFormula;
     PestConductanceFormula := SourceRiv.PestConductanceFormula;
+    PestMultiplierFormula := SourceRiv.PestMultiplierFormula;
     PestRiverBottomMethod := SourceRiv.PestRiverBottomMethod;
     PestRiverStageMethod := SourceRiv.PestRiverStageMethod;
     PestConductanceMethod := SourceRiv.PestConductanceMethod;
+    PestMultiplierMethod := SourceRiv.PestMultiplierMethod;
     PestConcentrationFormulas := SourceRiv.PestConcentrationFormulas;
     PestConcentrationMethods := SourceRiv.PestConcentrationMethods;
   end;
@@ -1659,7 +1856,6 @@ begin
       begin
         Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.RivArray), Cells.Count div 4);
       end;
-//      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.RivArray) - 1 do
       begin
         BoundaryValues := LocalBoundaryStorage.RivArray[BoundaryIndex];
@@ -1669,9 +1865,6 @@ begin
         begin
           BoundaryValues.Conductance :=
             BoundaryValues.Conductance * FCurrentParameter.Value;
-//          BoundaryValues.ConductanceAnnotation :=
-//            BoundaryValues.ConductanceAnnotation
-//            + ' multiplied by the parameter value for "'+ FCurrentParameter.ParameterName + '."';
           BoundaryValues.ConductanceAnnotation := Format(Str0sMultipliedByT, [
             BoundaryValues.ConductanceAnnotation, FCurrentParameter.ParameterName]);
           BoundaryValues.ConductanceParameterName := FCurrentParameter.ParameterName;
@@ -1723,9 +1916,11 @@ begin
   PestRiverStageFormula := '';
   PestRiverBottomFormula := '';
   PestConductanceFormula := '';
+  PestMultiplierFormula := '';
   FPestRiverStageMethod := DefaultBoundaryMethod(RivStagePosition);
   FPestRiverBottomMethod := DefaultBoundaryMethod(RivBottomPosition);
   FPestConductanceMethod := DefaultBoundaryMethod(RivConductancePosition);
+  FPestMultiplierMethod := DefaultBoundaryMethod(RivMultiplierPosition);
 
 end;
 
@@ -1735,8 +1930,9 @@ var
   ConcIndex: Integer;
 begin
   FPestRiverStageFormula := CreateFormulaObjectBlocks(dso3D);
-  FPestCondFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestConductanceFormula := CreateFormulaObjectBlocks(dso3D);
   FPestRiverBottomFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestMultiplierFormula := CreateFormulaObjectBlocks(dso3D);
   LocalModel := ParentModel as TPhastModel;
   if (LocalModel <> nil) and LocalModel.GwtUsed then
   begin
@@ -1756,6 +1952,7 @@ begin
     FObserverList.Add(PestRiverStageObserver);
     FObserverList.Add(PestConductanceObserver);
     FObserverList.Add(PestRiverBottomObserver);
+    FObserverList.Add(PestMultiplierObserver);
     for Index := 0 to FPestConcentrationFormulas.Count - 1 do
     begin
       FObserverList.Add(ConcentrationObserver[Index]);
@@ -1779,6 +1976,10 @@ begin
       begin
         result := ppmAdd;
       end;
+    RivMultiplierPosition:
+      begin
+        result := ppmMultiply;
+      end;
     else
       begin
         result := ppmMultiply;
@@ -1793,6 +1994,7 @@ begin
   PestRiverStageFormula := '';
   PestRiverBottomFormula := '';
   PestConductanceFormula := '';
+  PestMultiplierFormula := '';
 
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
@@ -1961,6 +2163,10 @@ begin
       begin
         result := PestRiverBottomFormula;
       end;
+    RivMultiplierPosition:
+      begin
+        result := PestMultiplierFormula;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - RivStartConcentration;
@@ -1991,6 +2197,10 @@ begin
       begin
         result := PestRiverBottomMethod;
       end;
+    RivMultiplierPosition:
+      begin
+        result := PestMultiplierMethod;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - RivStartConcentration;
@@ -2005,7 +2215,7 @@ end;
 
 function TRivBoundary.GetPestConductanceFormula: string;
 begin
-  Result := FPestCondFormula.Formula;
+  Result := FPestConductanceFormula.Formula;
   if ScreenObject <> nil then
   begin
     ResetBoundaryObserver(RivConductancePosition);
@@ -2020,6 +2230,25 @@ begin
     FPestConductanceObserver.OnUpToDateSet := InvalidateConductanceData;
   end;
   result := FPestConductanceObserver;
+end;
+
+function TRivBoundary.GetPestMultiplierFormula: string;
+begin
+  Result := FPestMultiplierFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(RivMultiplierPosition);
+  end;
+end;
+
+function TRivBoundary.GetPestMultiplierObserver: TObserver;
+begin
+  if FPestMultiplierObserver = nil then
+  begin
+    CreateObserver('PestMultiplier_', FPestMultiplierObserver, nil);
+    FPestMultiplierObserver.OnUpToDateSet := InvalidateMultiplierData;
+  end;
+  result := FPestMultiplierObserver;
 end;
 
 function TRivBoundary.GetPestRiverBottomFormula: string;
@@ -2071,7 +2300,7 @@ begin
       List.Add(FObserverList[RivStagePosition]);
     end;
   end;
-  if Sender = FPestCondFormula as TObject then
+  if Sender = FPestConductanceFormula as TObject then
   begin
     if RivConductancePosition < FObserverList.Count then
     begin
@@ -2083,6 +2312,13 @@ begin
     if RivBottomPosition < FObserverList.Count then
     begin
       List.Add(FObserverList[RivBottomPosition]);
+    end;
+  end;
+  if Sender = FPestMultiplierFormula as TObject then
+  begin
+    if RivMultiplierPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[RivMultiplierPosition]);
     end;
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
@@ -2162,7 +2398,38 @@ begin
     Model.InvalidateMfRivConductance(self);
     Model.InvalidateMfRivStage(self);
     Model.InvalidateMfRivBottom(self);
+    Model.InvalidateMfRivMultiplier(self);
     Model.InvalidateMfRivConc(self);
+  end;
+end;
+
+procedure TRivBoundary.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfRivMultiplier(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfRivMultiplier(self);
+      end;
+    end;
   end;
 end;
 
@@ -2254,6 +2521,10 @@ begin
       begin
         PestRiverBottomFormula := Value;
       end;
+    RivMultiplierPosition:
+      begin
+        PestMultiplierFormula := Value;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - RivStartConcentration;
@@ -2284,6 +2555,10 @@ begin
       begin
         PestRiverBottomMethod := Value;
       end;
+    RivMultiplierPosition:
+      begin
+        PestMultiplierMethod := Value;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - RivStartConcentration;
@@ -2310,12 +2585,22 @@ end;
 
 procedure TRivBoundary.SetPestConductanceFormula(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, RivConductancePosition, FPestCondFormula);
+  UpdateFormulaBlocks(Value, RivConductancePosition, FPestConductanceFormula);
 end;
 
 procedure TRivBoundary.SetPestConductanceMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestConductanceMethod, Value);
+end;
+
+procedure TRivBoundary.SetPestMultiplierFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, RivMultiplierPosition, FPestMultiplierFormula);
+end;
+
+procedure TRivBoundary.SetPestMultiplierMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMultiplierMethod, Value);
 end;
 
 procedure TRivBoundary.SetPestRiverBottomFormula(const Value: string);
@@ -2380,18 +2665,9 @@ procedure TRivRecord.Assign(const Item: TRivRecord);
 begin
   self := Item;
   GwtConcentrations.Assign(Item.GwtConcentrations);
-//  SetLength(Concentrations, Length(Concentrations));
-//  SetLength(ConcentrationAnnotations, Length(ConcentrationAnnotations));
-//  SetLength(ConcentrationPestNames, Length(ConcentrationPestNames));
-//  SetLength(ConcentrationPestSeriesNames, Length(ConcentrationPestSeriesNames));
-//  SetLength(ConcentrationPestSeriesMethods, Length(ConcentrationPestSeriesMethods));
-//  SetLength(ConcentrationTimeSeriesNames, Length(ConcentrationTimeSeriesNames));
 end;
 
 procedure TRivRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
-//var
-//  Index: Integer;
-//  Count: Integer;
 begin
   WriteCompCell(Comp, Cell);
   WriteCompReal(Comp, Conductance);
@@ -2422,33 +2698,14 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(RiverStageTimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(RiverBottomTimeSeriesName));
 
+  WriteCompReal(Comp, Multiplier);
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPest));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPestSeries));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierTimeSeriesName));
+  WriteCompInt(Comp, Ord(MultiplierPestSeriesMethod));
+
   GwtConcentrations.Cache(Comp, Strings);
-//  Count := Length(Concentrations);
-//  WriteCompInt(Comp, Count);
-//  for Index := 0 to Count - 1 do
-//  begin
-//    WriteCompReal(Comp, Concentrations[Index]);
-//  end;
-//  for Index := 0 to Count - 1 do
-//  begin
-//    WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotations[Index]));
-//  end;
-//  for Index := 0 to Count - 1 do
-//  begin
-//    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestNames[Index]));
-//  end;
-//  for Index := 0 to Count - 1 do
-//  begin
-//    WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesNames[Index]));
-//  end;
-//  for Index := 0 to Count - 1 do
-//  begin
-//    WriteCompInt(Comp, Ord(ConcentrationPestSeriesMethods[Index]));
-//  end;
-//  for Index := 0 to Count - 1 do
-//  begin
-//    WriteCompInt(Comp, Strings.IndexOf(ConcentrationTimeSeriesNames[Index]));
-//  end;
 
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
@@ -2473,13 +2730,15 @@ begin
   Strings.Add(RiverStageTimeSeriesName);
   Strings.Add(RiverBottomTimeSeriesName);
 
+  Strings.Add(MultiplierAnnotation);
+  Strings.Add(MultiplierPest);
+  Strings.Add(MultiplierPestSeries);
+  Strings.Add(MultiplierTimeSeriesName);
+
   GwtConcentrations.RecordStrings(Strings);
 end;
 
 procedure TRivRecord.Restore(Decomp: TDecompressionStream; Annotations: TStringList);
-//var
-//  Count: Integer;
-//  Index: Integer;
 begin
   Cell := ReadCompCell(Decomp);
   Conductance := ReadCompReal(Decomp);
@@ -2511,49 +2770,18 @@ begin
   RiverStageTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RiverBottomTimeSeriesName := Annotations[ReadCompInt(Decomp)];
 
+  Multiplier := ReadCompReal(Decomp);
+  MultiplierAnnotation := Annotations[ReadCompInt(Decomp)];
+  MultiplierPest := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestSeries := Annotations[ReadCompInt(Decomp)];
+  MultiplierTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
   GwtConcentrations.Restore(Decomp,Annotations);
 
-//  Count := ReadCompInt(Decomp);
-//  SetLength(Concentrations, Count);
-//  for Index := 0 to Count - 1 do
-//  begin
-//    Concentrations[Index] := ReadCompReal(Decomp);
-//  end;
-//  SetLength(ConcentrationAnnotations, Count);
-//  for Index := 0 to Count - 1 do
-//  begin
-//    ConcentrationAnnotations[Index] := Annotations[ReadCompInt(Decomp)];
-//  end;
-//  SetLength(ConcentrationPestNames, Count);
-//  for Index := 0 to Count - 1 do
-//  begin
-//    ConcentrationPestNames[Index] := Annotations[ReadCompInt(Decomp)];
-//  end;
-//  SetLength(ConcentrationPestSeriesNames, Count);
-//  for Index := 0 to Count - 1 do
-//  begin
-//    ConcentrationPestSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
-//  end;
-//  SetLength(ConcentrationPestSeriesMethods, Count);
-//  for Index := 0 to Count - 1 do
-//  begin
-//    ConcentrationPestSeriesMethods[Index] := TPestParamMethod(ReadCompInt(Decomp));
-//  end;
-//  SetLength(ConcentrationTimeSeriesNames, Count);
-//  for Index := 0 to Count - 1 do
-//  begin
-//    ConcentrationTimeSeriesNames[Index] := Annotations[ReadCompInt(Decomp)];
-//  end;
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
-//  ConductanceAnnotation := ReadCompString(Decomp, Annotations);
-//  RiverStageAnnotation := ReadCompString(Decomp, Annotations);
-//  RiverBottomAnnotation := ReadCompString(Decomp, Annotations);
-{
-    ConductanceParameterName: string;
-    ConductanceParameterValue: double;
-}
 end;
 
 { TRivStorage }
@@ -2632,22 +2860,30 @@ begin
   FRiverBottomData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FRiverStageData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FConductanceData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FMultiplierData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+
   FRiverStageData.NonParamDescription := StrRiverStage;
   FRiverStageData.ParamDescription := ' ' + LowerCase(StrRiverStage);
   FConductanceData.NonParamDescription := StrConductance;
   FConductanceData.ParamDescription := StrConductanceMultipl;
   FRiverBottomData.NonParamDescription := StrRiverBottom;
   FRiverBottomData.ParamDescription := ' ' + LowerCase(StrRiverBottom);
+  FMultiplierData.NonParamDescription := StrRiverMultiplier;
+  FMultiplierData.ParamDescription := ' ' + StrRiverMultiplier;
+
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
     FRiverStageData.OnInvalidate := LocalModel.InvalidateMfRivStage;
     FConductanceData.OnInvalidate := LocalModel.InvalidateMfRivConductance;
     FRiverBottomData.OnInvalidate := LocalModel.InvalidateMfRivBottom;
+    FMultiplierData.OnInvalidate := LocalModel.InvalidateMfRivMultiplier;
   end;
+
   AddTimeList(FRiverStageData);
   AddTimeList(FConductanceData);
   AddTimeList(FRiverBottomData);
+  AddTimeList(FMultiplierData);
 
   PhastModel := frmGoPhast.PhastModel;
   if PhastModel.GwtUsed then
@@ -2665,6 +2901,7 @@ begin
   FRiverStageData.Free;
   FConductanceData.Free;
   FRiverBottomData.Free;
+  FMultiplierData.Free;
   inherited;
 end;
 

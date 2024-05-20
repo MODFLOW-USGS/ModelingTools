@@ -16,6 +16,7 @@ type
     MXACTC: integer;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FRivPackage: TRivPackage;
 //    FPestParamUsed: Boolean;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
@@ -351,7 +352,8 @@ end;
 
 function TModflowRIV_Writer.Package: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.RivPackage;
+  FRivPackage := Model.ModflowPackages.RivPackage;
+  result := FRivPackage;
 end;
 
 procedure TModflowRIV_Writer.WriteAdditionalAuxVariables;
@@ -367,6 +369,10 @@ begin
       WriteString(' ' + ASpecies.Name);
     end;
   end;
+  if FRivPackage.UseMultiplier then
+  begin
+    WriteString(' multiplier');
+  end;
 end;
 
 procedure TModflowRIV_Writer.WriteCell(Cell: TValueCell;
@@ -380,7 +386,6 @@ var
   ParameterName: string;
   MultiplierValue: double;
   SpeciesIndex: Integer;
-//  ASpecies: TMobileChemSpeciesItem;
 begin
     { Add PEST support for PEST here }
     // handle pest parameter
@@ -453,6 +458,14 @@ begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
       WriteValueOrFormula(Riv_Cell, RivStartConcentration + SpeciesIndex);
+    end;
+  end;
+
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    if FRivPackage.UseMultiplier then
+    begin
+      WriteValueOrFormula(Riv_Cell, RivMultiplierPosition);
     end;
   end;
 
@@ -570,6 +583,10 @@ begin
       VI := VI + ' ' + Model.MobileComponents[SpeciesIndex].Name;
     end;
   end;
+  if FRivPackage.UseMultiplier then
+  begin
+    VI := VI + ' multiplier';
+  end;
   if Model.modelSelection = msModflow2015 then
   begin
     VI := VI + ' boundname';
@@ -684,17 +701,14 @@ begin
 end;
 
 procedure TModflowRIV_Writer.WriteListOptions(InputFileName: string);
-//var
-//  RivPackage: TRivPackage;
 begin
   inherited;
   WriteMf6ParamListOption;
-//  RivPackage := Package as TRivPackage;
-//  if RivPackage.NewtonFormulation = nfOn then
-//  begin
-//    WriteString('    NEWTON');
-//    NewLine;
-//  end;
+  if FRivPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
 end;
 
 procedure TModflowRIV_Writer.WriteMoverOption;

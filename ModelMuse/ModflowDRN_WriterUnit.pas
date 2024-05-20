@@ -16,6 +16,7 @@ type
     MXACTD: integer;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FDrnPackage: TDrnPackage;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;
@@ -300,13 +301,18 @@ end;
 
 function TModflowDRN_Writer.Package: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.DrnPackage;
+  FDrnPackage := Model.ModflowPackages.DrnPackage;
+  result := FDrnPackage;
 end;
 
 procedure TModflowDRN_Writer.WriteAdditionalAuxVariables;
 begin
   inherited;
   WriteString(' DDRN');
+  if FDrnPackage.UseMultiplier then
+  begin
+    WriteString(' multiplier');
+  end;
 end;
 
 procedure TModflowDRN_Writer.WriteCell(Cell: TValueCell;
@@ -385,6 +391,11 @@ begin
   if Model.ModelSelection = msModflow2015 then
   begin
     WriteValueOrFormula(Drn_Cell, DDRN_Position);
+
+    if FDrnPackage.UseMultiplier then
+    begin
+      WriteValueOrFormula(Drn_Cell, DrnMultiplier_Position);
+    end;
   end;
 
   WriteBoundName(Drn_Cell);
@@ -471,12 +482,20 @@ const
   DataSetIdentifier = 'Data Set 6:';
   VariableIdentifiers = 'Cond IFACE';
   Mf6VariableIdentifiers = 'Cond IFACE DDRN boundname';
+  Mf6VariableIdentifiersMul = 'Cond IFACE DDRN multiplier boundname';
 var
   VI: string;
 begin
   if Model.modelSelection = msModflow2015 then
   begin
-    VI := Mf6VariableIdentifiers
+    if FDrnPackage.UseMultiplier then
+    begin
+      VI := Mf6VariableIdentifiersMul;
+    end
+    else
+    begin
+      VI := Mf6VariableIdentifiers
+    end;
   end
   else
   begin
@@ -488,7 +507,6 @@ end;
 
 procedure TModflowDRN_Writer.WriteFile(const AFileName: string);
 var
-//  NameOfFile: string;
   ShouldWriteObservationFile: Boolean;
 begin
   FPestParamUsed := False;
@@ -679,29 +697,20 @@ begin
     WriteFluxObsFile(AFileName, StrIUDROBSV, PackageAbbreviation,
       DataSet1Comment, DataSet2Comment, DataSet3Comment,
       Model.DrainObservations, Purpose);
-//  end
-//  else
-//  begin
-//    WriteFluxObsFileMF6(AFileName, StrIUDROBSV, PackageAbbreviation,
-//      DataSet1Comment, DataSet2Comment, DataSet3Comment,
-//      Model.DrainObservations, Purpose);
   end;
 end;
 
 procedure TModflowDRN_Writer.WriteListOptions(InputFileName: string);
-//var
-//  DrnPackage: TDrnPackage;
 begin
   inherited;
   WriteMf6ParamListOption;
-  WriteString('    AUXDEPTHNAME DDRN');
+  WriteString('  AUXDEPTHNAME DDRN');
   NewLine;
-//  DrnPackage := Package as TDrnPackage;
-//  if DrnPackage.NewtonFormulation = nfOn then
-//  begin
-//    WriteString('    NEWTON');
-//    NewLine;
-//  end;
+  if FDrnPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
 end;
 
 procedure TModflowDRN_Writer.WriteMoverOption;

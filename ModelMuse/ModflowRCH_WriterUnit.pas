@@ -724,7 +724,7 @@ begin
         end
         else
         begin
-          WriteValueOrFormula(RchCell, RechPosition);
+          WriteValueOrFormula(RchCell, RechargeRatePosition);
         end;
 
         WriteIface(RchCell.IFace);

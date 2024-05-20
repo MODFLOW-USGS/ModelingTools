@@ -2947,7 +2947,7 @@ var
   NewScreenObject: Boolean;
   MvrSource: TMvrSource;
   AuxMultIndex: Integer;
-  AuxMultiplier: Extended;
+//  AuxMultiplier: Extended;
   DrnlMvrLinkArray: TDrnlMvrLinkArray;
   DrnlPeriod: TDrnPeriod;
   NextDrnPeriod: TDrnPeriod;
@@ -2956,12 +2956,13 @@ var
   AuxDepthIndex: Integer;
   CellListIndex: Integer;
   Imported_Ddrn: TValueArrayItem;
+  Imported_Multiplier: TValueArrayItem;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TDrnTimeItem; Period: Integer);
   var
     DrnItem: TDrnItem;
     ImportedName: string;
     Aux: TMf6BoundaryValue;
-    AuxMultiplier: Extended;
+//    AuxMultiplier: Extended;
   begin
     DrnItem := AScreenObject.ModflowDrnBoundary.Values.Add as TDrnItem;
     ItemList.Add(DrnItem);
@@ -2973,17 +2974,27 @@ var
       Aux := ACell.Aux[AuxMultIndex];
       if Aux.ValueType = vtNumeric then
       begin
-        AuxMultiplier := Aux.NumericValue
+        ImportedName := Format('Imported_Multiplier_%s_Period_%d', [Package.PackageName, Period]);
+        Imported_Multiplier := AScreenObject.ImportedValues.Add;
+        Imported_Multiplier.Name := ImportedName;
+        Imported_Multiplier.Values.DataType := rdtDouble;
+        DrnItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_Multiplier.Name + '")';
       end
       else
       begin
-        AuxMultiplier := 1;
-        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['DRN']));
+        Imported_Multiplier := nil;
+
+        TimeSeries := Aux.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        DrnItem.Multiplier := ImportedTimeSeries;
       end;
     end
     else
     begin
-      AuxMultiplier := 1;
+      Imported_Multiplier := nil;
     end;
 
     if AuxDepthIndex >= 0 then
@@ -2991,7 +3002,7 @@ var
       Aux := ACell.Aux[AuxDepthIndex];
       if Aux.ValueType = vtNumeric then
       begin
-        ImportedName := Format('Imported_DDRNs_Period_%d', [Period]);
+        ImportedName := Format('Imported_DDRN_%s_Period_%d', [Package.PackageName, Period]);
         Imported_Ddrn := AScreenObject.ImportedValues.Add;
         Imported_Ddrn.Name := ImportedName;
         Imported_Ddrn.Values.DataType := rdtDouble;
@@ -3050,10 +3061,6 @@ var
         Assert(False);
       end;
       DrnItem.Conductance := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
-      begin
-        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['DRN']));
-      end;
     end;
   end;
   procedure CreateObsScreenObject(ACell: TDrnTimeItem);
@@ -3459,27 +3466,18 @@ begin
               Imported_Ddrn.Values.Add(Aux.NumericValue);
             end;
           end;
+          if AuxMultIndex >= 0 then
+          begin
+            Aux := ACell.Aux[AuxMultIndex];
+            if Aux.ValueType = vtNumeric then
+            begin
+              Imported_Multiplier.Values.Add(Aux.NumericValue);
+            end;
+          end;
 
           if ACell.cond.ValueType = vtNumeric then
           begin
-            if AuxMultIndex >= 0 then
-            begin
-              Aux := ACell.Aux[AuxMultIndex];
-              if Aux.ValueType = vtNumeric then
-              begin
-                AuxMultiplier := Aux.NumericValue
-              end
-              else
-              begin
-                AuxMultiplier := 1;
-                FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['DRN']));
-              end;
-            end
-            else
-            begin
-              AuxMultiplier := 1;
-            end;
-            Imported_Drain_Conductance.Values.Add(ACell.cond.NumericValue * AuxMultiplier);
+             Imported_Drain_Conductance.Values.Add(ACell.cond.NumericValue);
           end;
 
           if NewScreenObject then
@@ -4896,9 +4894,7 @@ var
   Model: TPhastModel;
   Ghb: TGhb;
   AModel: TModel;
-//  ModelIndex: Integer;
   TransportModel: TTransportNameFile;
-//  PackageIndex: Integer;
   BoundNameObsDictionary: TBoundNameDictionary;
   CellIdObsDictionary: TCellIdObsDictionary;
   Ssm: TSsm;
@@ -4925,6 +4921,7 @@ var
   IFace: Integer;
   LastTime: Double;
   Imported_Ghb_Conductance: TValueArrayItem;
+  Imported_Ghb_Multiplier: TValueArrayItem;
   Imported_Ghb_Stage: TValueArrayItem;
   ItemList: TList<TGhbItem>;
   StartTime: Double;
@@ -4960,7 +4957,7 @@ var
   MvrSource: TMvrSource;
   APackage: TPackage;
   AuxMultIndex: Integer;
-  AuxMultiplier: Extended;
+//  AuxMultiplier: Extended;
   GhbMvrLinkArray: TGhbMvrLinkArray;
   GhbPeriod: TGhbPeriod;
   NextGhbPeriod: TGhbPeriod;
@@ -4988,7 +4985,7 @@ var
     AuxIndex: Integer;
     Aux: TMf6BoundaryValue;
     Imported_Chem: TValueArrayItem;
-    AuxMultiplier: Extended;
+//    AuxMultiplier: Extended;
     SpcDictionary: TSpcDictionary;
     SpcItem: TSpcTimeItem;
   begin
@@ -5002,22 +4999,33 @@ var
       Aux := ACell.Aux[AuxMultIndex];
       if Aux.ValueType = vtNumeric then
       begin
-        AuxMultiplier := Aux.NumericValue
+        ImportedName := Format('Imported_Ghb_%s Multiplier Period_%d',
+          [Package.PackageName, Period]);
+        Imported_Ghb_Multiplier := AScreenObject.ImportedValues.Add;
+        Imported_Ghb_Multiplier.Name := ImportedName;
+        Imported_Ghb_Multiplier.Values.DataType := rdtDouble;
+        GhbItem.Conductance := rsObjectImportedValuesR + '("' + Imported_Ghb_Multiplier.Name + '")';
       end
       else
       begin
-        AuxMultiplier := 1;
-        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['GHB']));
+        Imported_Ghb_Multiplier := nil;
+        TimeSeries := ACell.Cond.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        GhbItem.Conductance := ImportedTimeSeries;
       end;
     end
     else
     begin
-      AuxMultiplier := 1;
+      Imported_Ghb_Multiplier := nil;
     end;
 
     if ACell.Cond.ValueType = vtNumeric then
     begin
-      ImportedName := Format('Imported_Ghb_Conductance_Period_%d', [Period]);
+      ImportedName := Format('Imported_Ghb_%s Conductance Period_%d',
+        [Package.PackageName, Period]);
       Imported_Ghb_Conductance := AScreenObject.ImportedValues.Add;
       Imported_Ghb_Conductance.Name := ImportedName;
       Imported_Ghb_Conductance.Values.DataType := rdtDouble;
@@ -5032,10 +5040,6 @@ var
         Assert(False);
       end;
       GhbItem.Conductance := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
-      begin
-        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['GHB']));
-      end;
     end;
 
     if ACell.BHead.ValueType = vtNumeric then
@@ -5638,19 +5642,10 @@ begin
                 Aux := ACell.Aux[AuxMultIndex];
                 if Aux.ValueType = vtNumeric then
                 begin
-                  AuxMultiplier := Aux.NumericValue
-                end
-                else
-                begin
-                  AuxMultiplier := 1;
-                  FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['GHB']));
+                  Imported_Ghb_Multiplier.Values.Add(Aux.NumericValue);
                 end;
-              end
-              else
-              begin
-                AuxMultiplier := 1;
               end;
-              Imported_Ghb_Conductance.Values.Add(ACell.Cond.NumericValue * AuxMultiplier);
+              Imported_Ghb_Conductance.Values.Add(ACell.Cond.NumericValue);
             end;
 
             if ACell.BHead.ValueType = vtNumeric then
@@ -11063,9 +11058,7 @@ var
   Model: TPhastModel;
   Riv: TRiv;
   AModel: TModel;
-//  ModelIndex: Integer;
   TransportModel: TTransportNameFile;
-//  PackageIndex: Integer;
   BoundNameObsDictionary: TBoundNameDictionary;
   CellIdObsDictionary: TCellIdObsDictionary;
   Ssm: TSsm;
@@ -11092,6 +11085,7 @@ var
   IFace: Integer;
   LastTime: Double;
   Imported_River_Conductance: TValueArrayItem;
+  Imported_River_Multiplier: TValueArrayItem;
   Imported_River_Stage: TValueArrayItem;
   Imported_River_RBot: TValueArrayItem;
   ItemList: TList<TRivItem>;
@@ -11128,7 +11122,7 @@ var
   MvrSource: TMvrSource;
   APackage: TPackage;
   AuxMultIndex: Integer;
-  AuxMultiplier: Extended;
+//  AuxMultiplier: Extended;
   RivMvrLinkArray: TRivMvrLinkArray;
   RivlPeriod: TRivPeriod;
   NextRivPeriod: TRivPeriod;
@@ -11156,7 +11150,7 @@ var
     AuxIndex: Integer;
     Aux: TMf6BoundaryValue;
     Imported_Chem: TValueArrayItem;
-    AuxMultiplier: Extended;
+//    AuxMultiplier: Extended;
     SpcDictionary: TSpcDictionary;
     SpcItem: TSpcTimeItem;
   begin
@@ -11170,22 +11164,33 @@ var
       Aux := ACell.Aux[AuxMultIndex];
       if Aux.ValueType = vtNumeric then
       begin
-        AuxMultiplier := Aux.NumericValue
+        ImportedName := Format('Imported_River_Multipliler_%s_Period_%d',
+          [Package.PackageName, Period]);
+        Imported_River_Multiplier := AScreenObject.ImportedValues.Add;
+        Imported_River_Multiplier.Name := ImportedName;
+        Imported_River_Multiplier.Values.DataType := rdtDouble;
+        RivItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_River_Multiplier.Name + '")';
       end
       else
       begin
-        AuxMultiplier := 1;
-        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['RIV']));
+        Imported_River_Multiplier := nil;
+        TimeSeries := ACell.Cond.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        RivItem.Multiplier := ImportedTimeSeries;
       end;
     end
     else
     begin
-      AuxMultiplier := 1;
+      Imported_River_Multiplier := nil;
     end;
 
     if ACell.Cond.ValueType = vtNumeric then
     begin
-      ImportedName := Format('Imported_River_Conductance_Period_%d', [Period]);
+      ImportedName := Format('Imported_River_Conductance_%s_Period_%d',
+        [Package.PackageName, Period]);
       Imported_River_Conductance := AScreenObject.ImportedValues.Add;
       Imported_River_Conductance.Name := ImportedName;
       Imported_River_Conductance.Values.DataType := rdtDouble;
@@ -11200,10 +11205,6 @@ var
         Assert(False);
       end;
       RivItem.Conductance := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
-      begin
-        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['RIV']));
-      end;
     end;
 
     if ACell.Stage.ValueType = vtNumeric then
@@ -11816,26 +11817,19 @@ begin
             for CellIndex := 0 to ACellList.Count - 1 do
             begin
               ACell := ACellList[CellIndex];
+
+              if AuxMultIndex >= 0 then
+              begin
+                Aux := ACell.Aux[AuxMultIndex];
+                if Aux.ValueType = vtNumeric then
+                begin
+                  Imported_River_Multiplier.Values.Add(Aux.NumericValue);
+                end;
+              end;
+
               if ACell.Cond.ValueType = vtNumeric then
               begin
-                if AuxMultIndex >= 0 then
-                begin
-                  Aux := ACell.Aux[AuxMultIndex];
-                  if Aux.ValueType = vtNumeric then
-                  begin
-                    AuxMultiplier := Aux.NumericValue
-                  end
-                  else
-                  begin
-                    AuxMultiplier := 1;
-                    FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['RIV']));
-                  end;
-                end
-                else
-                begin
-                  AuxMultiplier := 1;
-                end;
-                Imported_River_Conductance.Values.Add(ACell.Cond.NumericValue * AuxMultiplier);
+                Imported_River_Conductance.Values.Add(ACell.Cond.NumericValue);
               end;
 
               if ACell.Stage.ValueType = vtNumeric then

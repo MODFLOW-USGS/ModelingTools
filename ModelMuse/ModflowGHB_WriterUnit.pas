@@ -17,6 +17,7 @@ type
     MXACTC: integer;
     FShouldWriteFile: Boolean;
     FAbbreviation: string;
+    FGhbBoundary: TGhbPackage;
     procedure WriteDataSet1;
     procedure WriteDataSet2;
     procedure WriteDataSets3And4;
@@ -295,7 +296,8 @@ end;
 
 function TModflowGHB_Writer.Package: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.GhbBoundary;
+  FGhbBoundary := Model.ModflowPackages.GhbBoundary;
+  result := FGhbBoundary;
 end;
 
 function TModflowGHB_Writer.ParameterType: TParameterType;
@@ -315,6 +317,10 @@ begin
       ASpecies := Model.MobileComponents[SpeciesIndex];
       WriteString(' ' + ASpecies.Name);
     end;
+  end;
+  if FGhbBoundary.UseMultiplier then
+  begin
+    WriteString(' multiplier');
   end;
 end;
 
@@ -397,6 +403,14 @@ begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
       WriteValueOrFormula(Ghb_Cell, GhbStartConcentration + SpeciesIndex);
+    end;
+  end;
+
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    if FGhbBoundary.UseMultiplier then
+    begin
+      WriteValueOrFormula(Ghb_Cell, GhbMultiplierPosition);
     end;
   end;
 
@@ -488,6 +502,10 @@ begin
     begin
       VI := VI + ' ' + Model.MobileComponents[SpeciesIndex].Name;
     end;
+  end;
+  if FGhbBoundary.UseMultiplier then
+  begin
+    VI := VI + ' multiplier';
   end;
   if Model.modelSelection = msModflow2015 then
   begin
@@ -695,8 +713,12 @@ end;
 procedure TModflowGHB_Writer.WriteListOptions(InputFileName: string);
 begin
   inherited;
-
   WriteMf6ParamListOption;
+  if FGhbBoundary.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
 end;
 
 procedure TModflowGHB_Writer.WriteMoverOption;

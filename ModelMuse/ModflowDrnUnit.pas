@@ -42,12 +42,20 @@ type
     ConductancePestSeriesMethod: TPestParamMethod;
     ElevTimeSeriesName: string;
     ConductanceTimeSeriesName: string;
+    // MF6
     DDRN: double;
     DDRN_Annotation: string;
     DDRN_Pest: string;
     DDRN_PestSeries: string;
     DDRN_PestSeriesMethod: TPestParamMethod;
     DDRN_TimeSeriesName: string;
+
+    Multiplier: double;
+    Multiplier_Annotation: string;
+    Multiplier_Pest: string;
+    Multiplier_PestSeries: string;
+    Multiplier_PestSeriesMethod: TPestParamMethod;
+    Multiplier_TimeSeriesName: string;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList);
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
@@ -79,12 +87,15 @@ type
     function GetElevation: string;
     function GetDDRN: string;
     procedure SetDDRN(const Value: string);
+    function GetMultiplier: string;
+    procedure SetMultiplier(const Value: string);
   protected
     // See @link(Elevation).
     FElevation: IFormulaObject;
     // See @link(Conductance).
     FConductance: IFormulaObject;
     FDDRN: IFormulaObject;
+    FMultiplier: IFormulaObject;
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
     procedure GetPropertyObserver(Sender: TObject; List: TList); override;
@@ -100,6 +111,7 @@ type
     function GetConductanceIndex: Integer; override;
   public
     // @name copies Source to this @classname.
+    constructor Create(Collection: TCollection); override;
     procedure Assign(Source: TPersistent); override;
     Destructor Destroy; override;
   published
@@ -110,6 +122,7 @@ type
     // or the conductance multiplier of this boundary.
     property Conductance: string read GetConductance write SetConductance;
     property DDRN: string read GetDDRN write SetDDRN;
+    property Multiplier: string read GetMultiplier write SetMultiplier;
   end;
 
   TDrnTimeListLink = class(TTimeListsModelLink)
@@ -122,6 +135,7 @@ type
     // Drain Boundaries over a series of time intervals.
     FConductanceData: TModflowTimeList;
     FDdrnData: TModflowTimeList;
+    FMultiplierData: TModflowTimeList;
   protected
     procedure CreateTimeLists; override;
   public
@@ -135,6 +149,7 @@ type
     procedure InvalidateElevationData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateDdrnData(Sender: TObject);
+    procedure InvalidateMultiplierData(Sender: TObject);
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
@@ -198,6 +213,14 @@ type
     function GetDdrnPestSeriesMethod: TPestParamMethod;
     function GetDdrnTimeSeriesName: string;
     procedure SetDdrnTimeSeriesName(const Value: string);
+
+    function GetMultiplier: double;
+    function GetMultiplierAnnotation: string;
+    function GetMultiplierPest: string;
+    function GetMultiplierPestSeries: string;
+    function GetMultiplierPestSeriesMethod: TPestParamMethod;
+    function GetMultiplierTimeSeriesName: string;
+    procedure SetMultiplierTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -263,6 +286,14 @@ type
     property DDRNPestSeriesMethod: TPestParamMethod read GetDDRNPestSeriesMethod;
     property DDRNTimeSeriesName: string read GetDDRNTimeSeriesName
       write SetDDRNTimeSeriesName;
+      // Multiplier
+    property Multiplier: Double read GetMultiplier;
+    property MultiplierAnnotation: string read GetMultiplierAnnotation;
+    property MultiplierPest: string read GetMultiplierPest;
+    property MultiplierPestSeries: string read GetMultiplierPestSeries;
+    property MultiplierPestSeriesMethod: TPestParamMethod read GetMultiplierPestSeriesMethod;
+    property MultiplierTimeSeriesName: string read GetMultiplierTimeSeriesName
+      write SetMultiplierTimeSeriesName;
   end;
 
   // @name represents the MODFLOW Drain boundaries associated with
@@ -282,13 +313,16 @@ type
     FPestElevFormula: IFormulaObject;
     FPestCondFormula: IFormulaObject;
     FPestDdrnFormula: IFormulaObject;
+    FPestMultiplierFormula: IFormulaObject;
     FUsedObserver: TObserver;
     FPestElevationObserver: TObserver;
     FPestConductanceObserver: TObserver;
     FPestDdrnObserver: TObserver;
+    FPestMultiplierObserver: TObserver;
     FPestConductanceMethod: TPestParamMethod;
     FPestElevMethod: TPestParamMethod;
     FPestDdrnMethod: TPestParamMethod;
+    FPestMultiplierMethod: TPestParamMethod;
     procedure TestIfObservationsPresent(var EndOfLastStressPeriod: Double;
       var StartOfFirstStressPeriod: Double;
       var ObservationsPresent: Boolean);
@@ -303,11 +337,17 @@ type
     procedure InvalidateElevationData(Sender: TObject);
     procedure InvalidateConductanceData(Sender: TObject);
     procedure InvalidateDdrnData(Sender: TObject);
+    procedure InvalidateMultiplierData(Sender: TObject);
 
     function GetPestDdrnFormula: string;
     procedure SetPestDdrnFormula(const Value: string);
     procedure SetPestDdrnMethod(const Value: TPestParamMethod);
     function GetPestDdrnObserver: TObserver;
+
+    function GetPestMultiplierFormula: string;
+    procedure SetPestMultiplierFormula(const Value: string);
+    procedure SetPestMultiplierMethod(const Value: TPestParamMethod);
+    function GetPestMultiplierObserver: TObserver;
   protected
     // @name fills ValueTimeList with a series of TObjectLists - one for
     // each stress period.  Each such TObjectList is filled with
@@ -337,6 +377,7 @@ type
     property PestElevationObserver: TObserver read GetPestElevationObserver;
     property PestConductanceObserver: TObserver read GetPestConductanceObserver;
     property PestDdrnObserver: TObserver read GetPestDdrnObserver;
+    property PestMultiplierObserver: TObserver read GetPestMultiplierObserver;
   public
     Constructor Create(Model: TBaseModel; ScreenObject: TObject);
     destructor Destroy; override;
@@ -371,12 +412,17 @@ type
       write SetPestDdrnFormula;
     property PestDdrnMethod: TPestParamMethod
       read FPestDdrnMethod write SetPestDdrnMethod;
+    property PestMultiplierFormula: string read GetPestMultiplierFormula
+      write SetPestMultiplierFormula;
+    property PestMultiplierMethod: TPestParamMethod
+      read FPestMultiplierMethod write SetPestMultiplierMethod;
   end;
 
 const
   DrnElevationPosition = 0;
   DrnConductancePosition = 1;
   DDRN_Position = 2;
+  DrnMultiplier_Position = 3;
 
 implementation
 
@@ -385,6 +431,7 @@ uses PhastModelUnit, ScreenObjectUnit, ModflowTimeUnit,
 
 resourcestring
   StrDDRN = 'Discharge Scaling Length (DDRN)';
+  StrDrnMultiplier = 'Conductance Multiplier';
 
 { TDrnItem }
 
@@ -399,6 +446,7 @@ begin
     Elevation := Drn.Elevation;
     Conductance := Drn.Conductance;
     DDRN := Drn.DDRN;
+    Multiplier := Drn.Multiplier;
   end;
   inherited;
 end;
@@ -414,6 +462,15 @@ begin
   frmGoPhast.PhastModel.FormulaManager.Remove(FDDRN,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FMultiplier,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+end;
+
+constructor TDrnItem.Create(Collection: TCollection);
+begin
+  inherited;
+  Multiplier := '1';
 end;
 
 procedure TDrnItem.CreateFormulaObjects;
@@ -421,6 +478,7 @@ begin
   FElevation := CreateFormulaObject(dso3D);
   FConductance := CreateFormulaObject(dso3D);
   FDDRN := CreateFormulaObject(dso3D);
+  FMultiplier := CreateFormulaObject(dso3D);
 end;
 
 destructor TDrnItem.Destroy;
@@ -428,6 +486,7 @@ begin
   Elevation := '0';
   Conductance := '0';
   DDRN := '0';
+  Multiplier := '0';
   inherited;
 end;
 
@@ -437,6 +496,7 @@ var
   ElevationObserver: TObserver;
   ConductanceObserver: TObserver;
   DDRNObserver: TObserver;
+  MultiplierObserver: TObserver;
 begin
   ParentCollection := Collection as TDrnCollection;
   ElevationObserver := FObserverList[DrnElevationPosition];
@@ -445,6 +505,8 @@ begin
   ConductanceObserver.OnUpToDateSet := ParentCollection.InvalidateConductanceData;
   DDRNObserver := FObserverList[DDRN_Position];
   DDRNObserver.OnUpToDateSet := ParentCollection.InvalidateDdrnData;
+  MultiplierObserver := FObserverList[DrnMultiplier_Position];
+  MultiplierObserver.OnUpToDateSet := ParentCollection.InvalidateMultiplierData;
 end;
 
 procedure TDrnItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -461,11 +523,15 @@ begin
   begin
     List.Add(FObserverList[DDRN_Position]);
   end;
+  if Sender = FMultiplier as TObject then
+  begin
+    List.Add(FObserverList[DrnMultiplier_Position]);
+  end;
 end;
 
 function TDrnItem.BoundaryFormulaCount: integer;
 begin
-  result := 3;
+  result := 4;
 end;
 
 function TDrnItem.GetBoundaryFormula(Index: integer): string;
@@ -474,6 +540,7 @@ begin
     DrnElevationPosition: result := Elevation;
     DrnConductancePosition: result := Conductance;
     DDRN_Position: result := DDRN;
+    DrnMultiplier_Position: result := Multiplier;
     else Assert(False);
   end;
 end;
@@ -520,6 +587,17 @@ begin
   ResetItemObserver(DrnElevationPosition);
 end;
 
+function TDrnItem.GetMultiplier: string;
+begin
+  FMultiplier.ScreenObject := ScreenObjectI;
+  try
+    Result := FMultiplier.Formula;
+  finally
+    FMultiplier.ScreenObject := nil;
+  end;
+  ResetItemObserver(DrnMultiplier_Position);
+end;
+
 procedure TDrnItem.InvalidateModel;
 var
   PhastModel: TPhastModel;
@@ -533,6 +611,7 @@ begin
     PhastModel.InvalidateMfDrnConductance(self);
     PhastModel.InvalidateMfDrnElevation(self);
     PhastModel.InvalidateMfDrnDDRN(self);
+    PhastModel.InvalidateMfDrnMultiplier(self);
   end;
 end;
 
@@ -546,7 +625,8 @@ begin
     Item := TDrnItem(AnotherItem);
     result := (Item.Elevation = Elevation)
       and (Item.Conductance = Conductance)
-      and (Item.DDRN = DDRN);
+      and (Item.DDRN = DDRN)
+      and (Item.Multiplier = Multiplier);
   end;
 end;
 
@@ -556,6 +636,7 @@ begin
     DrnElevationPosition: Elevation := Value;
     DrnConductancePosition: Conductance := Value;
     DDRN_Position: DDRN := Value;
+    DrnMultiplier_Position: Multiplier := Value;
     else Assert(False);
   end;
 end;
@@ -563,6 +644,11 @@ end;
 procedure TDrnItem.SetElevation(const Value: string);
 begin
   UpdateFormulaBlocks(Value, DrnElevationPosition, FElevation);
+end;
+
+procedure TDrnItem.SetMultiplier(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DrnMultiplier_Position, FMultiplier);
 end;
 
 procedure TDrnItem.SetConductance(const Value: string);
@@ -699,7 +785,8 @@ begin
 
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
   { DONE -cPEST : Handle PestSeriesName }
-  Assert(BoundaryFunctionIndex in [DrnElevationPosition, DrnConductancePosition, DDRN_Position]);
+  Assert(BoundaryFunctionIndex in [DrnElevationPosition, DrnConductancePosition,
+    DDRN_Position, DrnMultiplier_Position]);
   Assert(Expression <> nil);
 
   DrnStorage := BoundaryStorage as TDrnStorage;
@@ -743,6 +830,15 @@ begin
             DDRN_PestSeries := PestSeriesName;
             DDRN_PestSeriesMethod := PestSeriesMethod;
             DDRN_TimeSeriesName := TimeSeriesName;
+          end;
+        DrnMultiplier_Position:
+          begin
+            Multiplier := Expression.DoubleResult;
+            Multiplier_Annotation := ACell.Annotation;
+            Multiplier_Pest := PestName;
+            Multiplier_PestSeries := PestSeriesName;
+            Multiplier_PestSeriesMethod := PestSeriesMethod;
+            Multiplier_TimeSeriesName := TimeSeriesName;
           end;
         else
           Assert(False);
@@ -864,6 +960,34 @@ begin
       begin
         Link := TimeListLink.GetLink(ChildModel) as TDrnTimeListLink;
         Link.FElevationData.Invalidate;
+      end;
+    end;
+  end;
+end;
+
+procedure TDrnCollection.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TDrnTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TDrnTimeListLink;
+    Link.FMultiplierData.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TDrnTimeListLink;
+        Link.FMultiplierData.Invalidate;
       end;
     end;
   end;
@@ -1018,12 +1142,43 @@ begin
     DrnElevationPosition: result := ElevTimeSeriesName;
     DrnConductancePosition: result := ConductanceTimeSeriesName;
     DDRN_Position: result := DDRNTimeSeriesName;
+    DrnMultiplier_Position: result := MultiplierTimeSeriesName;
     else
       begin
         result := Inherited;
         Assert(False);
       end;
   end;
+end;
+
+function TDrn_Cell.GetMultiplier: double;
+begin
+  result := Values.Multiplier;
+end;
+
+function TDrn_Cell.GetMultiplierAnnotation: string;
+begin
+  result := Values.Multiplier_Annotation;
+end;
+
+function TDrn_Cell.GetMultiplierPest: string;
+begin
+  result := Values.Multiplier_Pest;
+end;
+
+function TDrn_Cell.GetMultiplierPestSeries: string;
+begin
+  result := Values.Multiplier_PestSeries;
+end;
+
+function TDrn_Cell.GetMultiplierPestSeriesMethod: TPestParamMethod;
+begin
+  result := Values.Multiplier_PestSeriesMethod;
+end;
+
+function TDrn_Cell.GetMultiplierTimeSeriesName: string;
+begin
+  result := Values.Multiplier_TimeSeriesName;
 end;
 
 function TDrn_Cell.GetMvrIndex: Integer;
@@ -1042,6 +1197,7 @@ begin
     DrnElevationPosition: result := ElevationPest;
     DrnConductancePosition: result := ConductancePest;
     DDRN_Position: result := DdrnPest;
+    DrnMultiplier_Position: result := MultiplierPest;
     else
       begin
         result := Inherited;
@@ -1056,6 +1212,7 @@ begin
     DrnElevationPosition: result := ElevationPestSeriesMethod;
     DrnConductancePosition: result := ConductancePestSeriesMethod;
     DDRN_Position: result := DDRNPestSeriesMethod;
+    DrnMultiplier_Position: result := MultiplierPestSeriesMethod;
     else
       begin
         result := Inherited;
@@ -1070,6 +1227,7 @@ begin
     DrnElevationPosition: result := ElevationPestSeries;
     DrnConductancePosition: result := ConductancePestSeries;
     DDRN_Position: result := DDRNPestSeries;
+    DrnMultiplier_Position: result := MultiplierPestSeries;
     else
       begin
         result := Inherited;
@@ -1085,6 +1243,7 @@ begin
     DrnElevationPosition: result := ElevationAnnotation;
     DrnConductancePosition: result := ConductanceAnnotation;
     DDRN_Position: result := DDRNAnnotation;
+    DrnMultiplier_Position: result := MultiplierAnnotation;
     else Assert(False);
   end;
 end;
@@ -1096,6 +1255,7 @@ begin
     DrnElevationPosition: result := Elevation;
     DrnConductancePosition: result := Conductance;
     DDRN_Position: result := DDRN;
+    DrnMultiplier_Position: result := Multiplier;
     else Assert(False);
   end;
 end;
@@ -1126,6 +1286,8 @@ begin
     result :=
       (Conductance = DRN_Cell.Conductance)
       and (Elevation = DRN_Cell.Elevation)
+      and (DDRN = DRN_Cell.DDRN)
+      and (Multiplier = DRN_Cell.Multiplier)
       and (IFace = DRN_Cell.IFace)
       and (Values.Cell = DRN_Cell.Values.Cell);
   end;
@@ -1178,12 +1340,19 @@ begin
       ConductanceTimeSeriesName := Value;
     DDRN_Position:
       DDRNTimeSeriesName := Value;
+    DrnMultiplier_Position:
+      MultiplierTimeSeriesName := Value;
     else
       begin
         Inherited;
         Assert(False);
       end;
   end;
+end;
+
+procedure TDrn_Cell.SetMultiplierTimeSeriesName(const Value: string);
+begin
+  Values.Multiplier_TimeSeriesName := Value;
 end;
 
 procedure TDrn_Cell.SetRow(const Value: integer);
@@ -1202,9 +1371,11 @@ begin
     PestElevFormula := SourceDrn.PestElevFormula;
     PestConductanceFormula := SourceDrn.PestConductanceFormula;
     PestDdrnFormula := SourceDrn.PestDdrnFormula;
+    PestMultiplierFormula := SourceDrn.PestMultiplierFormula;
     PestElevMethod := SourceDrn.PestElevMethod;
     PestConductanceMethod := SourceDrn.PestConductanceMethod;
     PestDdrnMethod := SourceDrn.PestDdrnMethod;
+    PestMultiplierMethod := SourceDrn.PestMultiplierMethod;
   end;
   inherited;
 end;
@@ -1252,7 +1423,6 @@ begin
       begin
         Cells.Capacity := Cells.Count + Max(Length(LocalBoundaryStorage.DrnArray), Cells.Count div 4);
       end;
-//      Cells.CheckRestore;
       for BoundaryIndex := 0 to Length(LocalBoundaryStorage.DrnArray) - 1 do
       begin
         BoundaryValues := LocalBoundaryStorage.DrnArray[BoundaryIndex];
@@ -1276,7 +1446,6 @@ begin
         Cell.BoundaryIndex := BoundaryIndex;
         Cell.IFace := LocalScreenObject.IFace;
         Cells.Add(Cell);
-//        Cell.StressPeriod := TimeIndex;
         Cell.Values := BoundaryValues;
         Cell.ScreenObject := ScreenObjectI;
         LocalModel.AdjustCellPosition(Cell);
@@ -1307,9 +1476,11 @@ begin
   PestElevFormula := '';
   PestConductanceFormula := '';
   PestDdrnFormula := '';
+  PestMultiplierFormula := '';
   FPestElevMethod := DefaultBoundaryMethod(DrnElevationPosition);
   FPestConductanceMethod := DefaultBoundaryMethod(DrnConductancePosition);
   FPestDdrnMethod := DefaultBoundaryMethod(DDRN_Position);
+  FPestMultiplierMethod := DefaultBoundaryMethod(DrnMultiplier_Position);
 end;
 
 procedure TDrnBoundary.CreateFormulaObjects;
@@ -1317,6 +1488,7 @@ begin
   FPestElevFormula := CreateFormulaObjectBlocks(dso3D);
   FPestCondFormula := CreateFormulaObjectBlocks(dso3D);
   FPestDdrnFormula := CreateFormulaObjectBlocks(dso3D);
+  FPestMultiplierFormula := CreateFormulaObjectBlocks(dso3D);
 end;
 
 procedure TDrnBoundary.CreateObservers;
@@ -1326,6 +1498,7 @@ begin
     FObserverList.Add(PestElevationObserver);
     FObserverList.Add(PestConductanceObserver);
     FObserverList.Add(PestDdrnObserver);
+    FObserverList.Add(PestMultiplierObserver);
   end;
 end;
 
@@ -1345,6 +1518,10 @@ begin
       begin
         result := ppmMultiply;
       end;
+    DrnMultiplier_Position:
+      begin
+        result := ppmMultiply;
+      end;
     else
       begin
         result := inherited;
@@ -1358,6 +1535,7 @@ begin
   PestElevFormula := '';
   PestConductanceFormula := '';
   PestDdrnFormula := '';
+  PestMultiplierFormula := '';
 
   inherited;
 end;
@@ -1507,6 +1685,10 @@ begin
       begin
         result := PestDdrnFormula;
       end;
+    DrnMultiplier_Position:
+      begin
+        result := PestMultiplierFormula;
+      end;
     else
       Assert(False);
   end;
@@ -1527,6 +1709,10 @@ begin
     DDRN_Position:
       begin
         result := PestDdrnMethod;
+      end;
+    DrnMultiplier_Position:
+      begin
+        result := PestMultiplierMethod;
       end;
     else
       result := PestConductanceMethod;
@@ -1591,6 +1777,25 @@ begin
   end;
 end;
 
+function TDrnBoundary.GetPestMultiplierFormula: string;
+begin
+  Result := FPestMultiplierFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(DrnMultiplier_Position);
+  end;
+end;
+
+function TDrnBoundary.GetPestMultiplierObserver: TObserver;
+begin
+  if FPestMultiplierObserver = nil then
+  begin
+    CreateObserver('PestMultiplier_', FPestMultiplierObserver, nil);
+    FPestMultiplierObserver.OnUpToDateSet := InvalidateMultiplierData;
+  end;
+  result := FPestMultiplierObserver;
+end;
+
 procedure TDrnBoundary.GetPropertyObserver(Sender: TObject; List: TList);
 begin
   if Sender = FPestElevFormula as TObject then
@@ -1612,6 +1817,13 @@ begin
     if DDrn_Position < FObserverList.Count then
     begin
       List.Add(FObserverList[DDrn_Position]);
+    end;
+  end;
+  if Sender = FPestMultiplierFormula as TObject then
+  begin
+    if DrnMultiplier_Position < FObserverList.Count then
+    begin
+      List.Add(FObserverList[DrnMultiplier_Position]);
     end;
   end;
 end;
@@ -1702,6 +1914,7 @@ begin
     Model.InvalidateMfDrnConductance(self);
     Model.InvalidateMfDrnElevation(self);
     Model.InvalidateMfDrnDdrn(self);
+    Model.InvalidateMfDrnMultiplier(self);
   end;
 end;
 
@@ -1735,6 +1948,36 @@ begin
   end;
 end;
 
+procedure TDrnBoundary.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfDrnMultiplier(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfDrnMultiplier(self);
+      end;
+    end;
+  end;
+end;
+
 class function TDrnBoundary.ModflowParamItemClass: TModflowParamItemClass;
 begin
   result := TDrnParamItem;
@@ -1761,6 +2004,10 @@ begin
       begin
         PestDdrnFormula := Value;
       end;
+    DrnMultiplier_Position:
+      begin
+        PestMultiplierFormula := Value;
+      end;
     else
       Assert(False);
   end;
@@ -1781,6 +2028,10 @@ begin
     DDRN_Position:
       begin
         PestDdrnMethod := Value;
+      end;
+    DrnMultiplier_Position:
+      begin
+        PestMultiplierMethod := Value;
       end;
     else
       Assert(False);
@@ -1815,6 +2066,16 @@ end;
 procedure TDrnBoundary.SetPestElevMethod(const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestElevMethod, Value);
+end;
+
+procedure TDrnBoundary.SetPestMultiplierFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DrnMultiplier_Position, FPestMultiplierFormula);
+end;
+
+procedure TDrnBoundary.SetPestMultiplierMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMultiplierMethod, Value);
 end;
 
 procedure TDrnBoundary.TestIfObservationsPresent(var EndOfLastStressPeriod,
@@ -1870,6 +2131,12 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(DDRN_TimeSeriesName));
   WriteCompInt(Comp, Ord(DDRN_PestSeriesMethod));
 
+  WriteCompReal(Comp, Multiplier);
+  WriteCompInt(Comp, Strings.IndexOf(Multiplier_Annotation));
+  WriteCompInt(Comp, Strings.IndexOf(Multiplier_Pest));
+  WriteCompInt(Comp, Strings.IndexOf(Multiplier_PestSeries));
+  WriteCompInt(Comp, Strings.IndexOf(Multiplier_TimeSeriesName));
+  WriteCompInt(Comp, Ord(Multiplier_PestSeriesMethod));
 end;
 
 procedure TDrnRecord.RecordStrings(Strings: TStringList);
@@ -1890,6 +2157,10 @@ begin
   Strings.Add(DDRN_PestSeries);
   Strings.Add(DDRN_TimeSeriesName);
 
+  Strings.Add(Multiplier_Annotation);
+  Strings.Add(Multiplier_Pest);
+  Strings.Add(Multiplier_PestSeries);
+  Strings.Add(Multiplier_TimeSeriesName);
 
 end;
 
@@ -1923,6 +2194,13 @@ begin
   DDRN_PestSeries := Annotations[ReadCompInt(Decomp)];
   DDRN_TimeSeriesName := Annotations[ReadCompInt(Decomp)];
   DDRN_PestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
+
+  Multiplier := ReadCompReal(Decomp);
+  Multiplier_Annotation := Annotations[ReadCompInt(Decomp)];
+  Multiplier_Pest := Annotations[ReadCompInt(Decomp)];
+  Multiplier_PestSeries := Annotations[ReadCompInt(Decomp)];
+  Multiplier_TimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  Multiplier_PestSeriesMethod := TPestParamMethod(ReadCompInt(Decomp));
 end;
 
 { TDrnStorage }
@@ -1997,26 +2275,32 @@ begin
   FElevationData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FConductanceData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FDdrnData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FMultiplierData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FElevationData.NonParamDescription := StrElevation;
   FElevationData.ParamDescription := ' ' + LowerCase(StrElevation);
   FConductanceData.NonParamDescription := StrConductance;
   FConductanceData.ParamDescription := StrConductanceMultipl;
   FDdrnData.NonParamDescription := StrDDRN;
-  FDdrnData.ParamDescription := StrDDRN;
+  FDdrnData.ParamDescription := ' ' + StrDDRN;
+  FMultiplierData.NonParamDescription := StrDrnMultiplier;
+  FMultiplierData.ParamDescription := ' ' + StrDrnMultiplier;
   if Model <> nil then
   begin
     LocalModel := Model as TCustomModel;
     FElevationData.OnInvalidate := LocalModel.InvalidateMfDrnElevation;
     FConductanceData.OnInvalidate := LocalModel.InvalidateMfDrnConductance;
     FDdrnData.OnInvalidate := LocalModel.InvalidateMfDrnDDRN;
+    FMultiplierData.OnInvalidate := LocalModel.InvalidateMfDrnMultiplier;
   end;
   AddTimeList(FElevationData);
   AddTimeList(FConductanceData);
   AddTimeList(FDdrnData);
+  AddTimeList(FMultiplierData);
 end;
 
 destructor TDrnTimeListLink.Destroy;
 begin
+  FMultiplierData.Free;
   FDdrnData.Free;
   FElevationData.Free;
   FConductanceData.Free;

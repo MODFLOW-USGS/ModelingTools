@@ -235,7 +235,7 @@ begin
   end;
   if FChdBoundary.UseMultiplier then
   begin
-      WriteString(' multiplier');
+    WriteString(' multiplier');
   end;
 end;
 

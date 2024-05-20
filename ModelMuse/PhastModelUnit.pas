@@ -2725,22 +2725,26 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfChdMultiplier(Sender: TObject);
     procedure InvalidateMfChdConc(Sender: TObject);
     procedure InvalidateMfGhbConductance(Sender: TObject);
+    procedure InvalidateMfGhbMultiplier(Sender: TObject);
     procedure InvalidateMfGhbBoundaryHead(Sender: TObject);
     procedure InvalidateMfGhbConc(Sender: TObject);
     procedure InvalidateMfWellPumpage(Sender: TObject);
     procedure InvalidateMfWellMultiplier(Sender: TObject);
     procedure InvalidateMfWellConc(Sender: TObject);
     procedure InvalidateMfRivConductance(Sender: TObject);
+    procedure InvalidateMfRivMultiplier(Sender: TObject);
     procedure InvalidateMfRivStage(Sender: TObject);
     procedure InvalidateMfRivBottom(Sender: TObject);
     procedure InvalidateMfRivConc(Sender: TObject);
     procedure InvalidateMfDrnConductance(Sender: TObject);
     procedure InvalidateMfDrnElevation(Sender: TObject);
     procedure InvalidateMfDrnDdrn(Sender: TObject);
+    procedure InvalidateMfDrnMultiplier(Sender: TObject);
     procedure InvalidateMfDrtConductance(Sender: TObject);
     procedure InvalidateMfDrtElevation(Sender: TObject);
     procedure InvalidateMfDrtReturnFraction(Sender: TObject);
     procedure InvalidateMfRchRate(Sender: TObject);
+    procedure InvalidateMfRchMultiplier(Sender: TObject);
     procedure InvalidateMfRchConc(Sender: TObject);
     procedure InvalidateMfUzfInfiltration(Sender: TObject);
     procedure InvalidateMfEvtEvapRate(Sender: TObject);
@@ -26969,6 +26973,11 @@ begin
   ModflowPackages.DrnPackage.MfDrnElevation.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfDrnMultiplier(Sender: TObject);
+begin
+  ModflowPackages.DrnPackage.MfDrnMultiplier.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateMfDrtConductance(Sender: TObject);
 begin
   ModflowPackages.DrtPackage.MfDrtConductance.Invalidate;
@@ -27222,6 +27231,11 @@ begin
   ModflowPackages.GhbBoundary.MfGhbConductance.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfGhbMultiplier(Sender: TObject);
+begin
+  ModflowPackages.GhbBoundary.MfGhbMultiplier.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateMt3dTobConcs(Sender: TObject);
 begin
   Mt3dTobCond.Invalidate;
@@ -27283,6 +27297,11 @@ begin
   ModflowPackages.RchPackage.InvalidateMfRchLayer(Sender);
 end;
 
+procedure TCustomModel.InvalidateMfRchMultiplier(Sender: TObject);
+begin
+
+end;
+
 procedure TCustomModel.InvalidateMfRchRate(Sender: TObject);
 begin
   ModflowPackages.RchPackage.MfRchRate.Invalidate;
@@ -27301,6 +27320,11 @@ end;
 procedure TCustomModel.InvalidateMfRivConductance(Sender: TObject);
 begin
   ModflowPackages.RivPackage.MfRivConductance.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateMfRivMultiplier(Sender: TObject);
+begin
+  ModflowPackages.RivPackage.MfRivMultiplier.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfRivStage(Sender: TObject);

@@ -444,6 +444,7 @@ begin
   FGwtConcentrations := TWelGwtConcCollection.Create(Model as TCustomModel,
     ScreenObject, WelCol);
   inherited;
+  Multiplier := '1';
 end;
 
 procedure TWellItem.CreateFormulaObjects;
@@ -967,6 +968,7 @@ begin
   begin
     PhastModel.InvalidateMfWellPumpage(self);
     PhastModel.InvalidateMfWellConc(self);
+    PhastModel.InvalidateMfWellMultiplier(self);
   end;
 end;
 

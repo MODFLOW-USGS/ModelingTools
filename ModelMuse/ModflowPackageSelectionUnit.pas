@@ -176,12 +176,15 @@ Type
     property UseMultiplier;
   end;
 
-  TGhbPackage = class(TModflowPackageSelection)
+  TGhbPackage = class(TMultiplierPackage)
   private
     FGwtConcentrationList: TMfBoundDispObjectList;
     FMfGhbConductance: TModflowBoundaryDisplayTimeList;
     FMfGhbBoundaryHead: TModflowBoundaryDisplayTimeList;
+    FMfGhbMultiplier: TModflowBoundaryDisplayTimeList;
     procedure GetMfGhbConductanceUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure GetMfGhbMultiplierUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfGhbBoundaryHeadUseList(Sender: TObject;
       NewUseList: TStringList);
@@ -196,22 +199,27 @@ Type
       read FMfGhbConductance;
     property MfGhbBoundaryHead: TModflowBoundaryDisplayTimeList
       read FMfGhbBoundaryHead;
+    property MfGhbMultiplier: TModflowBoundaryDisplayTimeList
+      read FMfGhbMultiplier;
     procedure InvalidateAllTimeLists; override;
     procedure InvalidateConcentrations;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
   end;
 
-  TDrnPackage = class(TModflowPackageSelection)
+  TDrnPackage = class(TMultiplierPackage)
   private
     FMfDrnElevation: TModflowBoundaryDisplayTimeList;
     FMfDrnConductance: TModflowBoundaryDisplayTimeList;
     FMfDrnDdrn: TModflowBoundaryDisplayTimeList;
+    FMfDrnMultiplier: TModflowBoundaryDisplayTimeList;
     procedure InitializeDrnDisplay(Sender: TObject);
     procedure GetMfDrnConductanceUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfDrnElevationUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfDrnDdrnUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure GetMfDrnMultiplierUseList(Sender: TObject;
       NewUseList: TStringList);
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -224,9 +232,11 @@ Type
       read FMfDrnElevation;
     property MfDrnDdrn: TModflowBoundaryDisplayTimeList
       read FMfDrnDdrn;
+    property MfDrnMultiplier: TModflowBoundaryDisplayTimeList
+      read FMfDrnMultiplier;
     procedure InvalidateAllTimeLists; override;
-//  published
-//    property NewtonFormulation;
+  published
+    property UseMultiplier;
   end;
 
   TDrtPackage = class(TModflowPackageSelection)
@@ -255,14 +265,17 @@ Type
     procedure InvalidateAllTimeLists; override;
   end;
 
-  TRivPackage = class(TModflowPackageSelection)
+  TRivPackage = class(TMultiplierPackage)
   private
     FGwtConcentrationList: TMfBoundDispObjectList;
     FMfRivConductance: TModflowBoundaryDisplayTimeList;
     FMfRivBottom: TModflowBoundaryDisplayTimeList;
     FMfRivStage: TModflowBoundaryDisplayTimeList;
+    FMfRivMultiplier: TModflowBoundaryDisplayTimeList;
     procedure InitializeRivDisplay(Sender: TObject);
     procedure GetMfRivConductanceUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure GetMfRivMultiplierUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfRivStageUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMfRivBottomUseList(Sender: TObject; NewUseList: TStringList);
@@ -276,10 +289,14 @@ Type
       read FMfRivConductance;
     property MfRivStage: TModflowBoundaryDisplayTimeList read FMfRivStage;
     property MfRivBottom: TModflowBoundaryDisplayTimeList read FMfRivBottom;
+    property MfRivMultiplier: TModflowBoundaryDisplayTimeList
+      read FMfRivMultiplier;
     procedure InvalidateAllTimeLists; override;
     procedure InitializeVariables; override;
     procedure InvalidateConcentrations;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
+  published
+    property UseMultiplier;
   end;
 
   TChdPackage = class(TMultiplierPackage)
@@ -1439,7 +1456,7 @@ Type
   // @name is used for MODFLOW packages in which
   // the user specifies an array of layer numbers
   // to which the package applies.
-  TCustomLayerPackageSelection = class(TModflowPackageSelection)
+  TCustomLayerPackageSelection = class(TMultiplierPackage)
   private
     FLayerOption: TLayerOption;
     FOnLayerChoiceChange: TNotifyEvent;
@@ -1542,6 +1559,7 @@ Type
   published
     property AssignmentMethod: TUpdateMethod read FAssignmentMethod
       write SetAssignmentMethod Stored True;
+    property UseMultiplier;
   end;
 
   TEtsPackageSelection = class(TCustomTransientLayerPackageSelection)
@@ -7693,6 +7711,8 @@ resourcestring
   StrHasSalinityDemandsS = 'FMP4 Crop Has Salinity Demand %s';
   StrFMP4CropHasSalini = 'FMP4 Crop_Has_Salinity_Demand';
   StrMAWFluidDensity = 'MAW Fluid Density';
+  StrGHBConductanceMult = 'GHB Conductance Multiplier';
+  StrRiverMultiplier = 'River Multiplier';
 //  StrDrainDDRN = 'Drain Discharge Scaling';
 //  StrDRNDDRN = 'DRN Discharge Scaling';
 
@@ -12632,6 +12652,13 @@ begin
     MfGhbBoundaryHead.Name := StrMODFLOWGhbHead;
     AddTimeList(MfGhbBoundaryHead);
 
+    FMfGhbMultiplier := TModflowBoundaryDisplayTimeList.Create(FModel);
+    MfGhbMultiplier.OnInitialize := InitializeGhbDisplay;
+    MfGhbMultiplier.OnGetUseList := GetMfGhbMultiplierUseList;
+    MfGhbMultiplier.OnTimeListUsed := PackageUsed;
+    MfGhbMultiplier.Name := StrMODFLOWGhbMultiplier;
+    AddTimeList(MfGhbMultiplier);
+
     FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
   InitializeVariables;
@@ -12640,6 +12667,7 @@ end;
 destructor TGhbPackage.Destroy;
 begin
   FGwtConcentrationList.Free;
+  FMfGhbMultiplier.Free;
   FMfGhbConductance.Free;
   FMfGhbBoundaryHead.Free;
   inherited;
@@ -12670,6 +12698,12 @@ begin
   UpdateDisplayUseList(NewUseList, ptGHB, 1, StrGHBConductance);
 end;
 
+procedure TGhbPackage.GetMfGhbMultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptGHB, 2, StrGHBConductanceMult);
+end;
+
 procedure TGhbPackage.InitializeGhbDisplay(Sender: TObject);
 var
   GhbWriter: TModflowGHB_Writer;
@@ -12679,12 +12713,14 @@ var
 begin
   MfGhbConductance.CreateDataSets;
   MfGhbBoundaryHead.CreateDataSets;
+  MfGhbMultiplier.CreateDataSets;
 
   List := TModflowBoundListOfTimeLists.Create;
   GhbWriter := TModflowGHB_Writer.Create(FModel as TCustomModel, etDisplay);
   try
     List.Add(MfGhbBoundaryHead);
     List.Add(MfGhbConductance);
+    List.Add(MfGhbMultiplier);
 
     for Index := 0 to FGwtConcentrationList.Count - 1 do
     begin
@@ -12699,6 +12735,7 @@ begin
     List.Free;
   end;
   MfGhbConductance.ComputeAverage;
+  MfGhbMultiplier.ComputeAverage;
   MfGhbBoundaryHead.ComputeAverage;
   for Index := 0 to FGwtConcentrationList.Count - 1 do
   begin
@@ -12713,6 +12750,7 @@ begin
   begin
     MfGhbBoundaryHead.Invalidate;
     MfGhbConductance.Invalidate;
+    MfGhbMultiplier.Invalidate;
     InvalidateConcentrations;
   end;
 end;
@@ -12787,6 +12825,13 @@ begin
     MfDrnDdrn.OnTimeListUsed := PackageUsed;
     MfDrnDdrn.Name := StrDRNDDRN;
     AddTimeList(MfDrnDdrn);
+
+    FMfDrnMultiplier := TModflowBoundaryDisplayTimeList.Create(Model);
+    MfDrnMultiplier.OnInitialize := InitializeDrnDisplay;
+    MfDrnMultiplier.OnGetUseList := GetMfDrnMultiplierUseList;
+    MfDrnMultiplier.OnTimeListUsed := PackageUsed;
+    MfDrnMultiplier.Name := StrDRNMultiplier;
+    AddTimeList(MfDrnMultiplier);
   end;
   InitializeVariables;
 end;
@@ -12796,7 +12841,14 @@ begin
   FMfDrnConductance.Free;
   FMfDrnElevation.Free;
   FMfDrnDdrn.Free;
+  FMfDrnMultiplier.Free;
   inherited;
+end;
+
+procedure TDrnPackage.GetMfDrnMultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptDRN, 3, StrDrainMultiplier);
 end;
 
 procedure TDrnPackage.GetMfDrnConductanceUseList(Sender: TObject;
@@ -12825,6 +12877,7 @@ begin
   MfDrnConductance.CreateDataSets;
   MfDrnElevation.CreateDataSets;
   MfDrnDdrn.CreateDataSets;
+  MfDrnMultiplier.CreateDataSets;
 
   List := TModflowBoundListOfTimeLists.Create;
   DrnWriter := TModflowDRN_Writer.Create(FModel as TCustomModel, etDisplay);
@@ -12832,6 +12885,7 @@ begin
     List.Add(MfDrnElevation);
     List.Add(MfDrnConductance);
     List.Add(MfDrnDdrn);
+    List.Add(MfDrnMultiplier);
     DrnWriter.UpdateDisplay(List, [1]);
   finally
     DrnWriter.Free;
@@ -12840,6 +12894,7 @@ begin
   MfDrnConductance.ComputeAverage;
   MfDrnElevation.ComputeAverage;
   MfDrnDdrn.ComputeAverage;
+  MfDrnMultiplier.ComputeAverage;
 end;
 
 procedure TDrnPackage.InvalidateAllTimeLists;
@@ -12849,6 +12904,7 @@ begin
     MfDrnElevation.Invalidate;
     MfDrnConductance.Invalidate;
     MfDrnDdrn.Invalidate;
+    MfDrnMultiplier.Invalidate;
   end;
 end;
 
@@ -12978,6 +13034,13 @@ begin
     MfRivBottom.Name := StrMODFLOWRiverBottom;
     AddTimeList(MfRivBottom);
 
+    FMfRivMultiplier := TModflowBoundaryDisplayTimeList.Create(Model);
+    MfRivMultiplier.OnInitialize := InitializeRivDisplay;
+    MfRivMultiplier.OnGetUseList := GetMfRivMultiplierUseList;
+    MfRivMultiplier.OnTimeListUsed := PackageUsed;
+    MfRivMultiplier.Name := StrMODFLOWRiverMultiplier;
+    AddTimeList(MfRivMultiplier);
+
     FGwtConcentrationList := TMfBoundDispObjectList.Create;
   end;
   InitializeVariables;
@@ -12987,6 +13050,7 @@ destructor TRivPackage.Destroy;
 begin
   FGwtConcentrationList.Free;
   FMfRivConductance.Free;
+  FMfRivMultiplier.Free;
   FMfRivBottom.Free;
   FMfRivStage.Free;
   inherited;
@@ -13017,6 +13081,12 @@ begin
   UpdateDisplayUseList(NewUseList, ptRIV, 1, StrRiverConductance);
 end;
 
+procedure TRivPackage.GetMfRivMultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptRIV, 2, StrRiverMultiplier);
+end;
+
 procedure TRivPackage.GetMfRivStageUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
@@ -13033,6 +13103,7 @@ begin
   MfRivConductance.CreateDataSets;
   MfRivStage.CreateDataSets;
   MfRivBottom.CreateDataSets;
+  MfRivMultiplier.CreateDataSets;
 
   List := TModflowBoundListOfTimeLists.Create;
   RivWriter := TModflowRIV_Writer.Create(FModel as TCustomModel, etDisplay);
@@ -13040,6 +13111,7 @@ begin
     List.Add(MfRivStage);
     List.Add(MfRivConductance);
     List.Add(MfRivBottom);
+    List.Add(MfRivMultiplier);
 
     for Index := 0 to FGwtConcentrationList.Count - 1 do
     begin
@@ -13054,6 +13126,7 @@ begin
     List.Free;
   end;
   MfRivConductance.ComputeAverage;
+  MfRivMultiplier.ComputeAverage;
   MfRivStage.ComputeAverage;
   MfRivBottom.ComputeAverage;
   for Index := 0 to FGwtConcentrationList.Count - 1 do
@@ -13075,6 +13148,7 @@ begin
 //  if PackageUsed(FModel) then
   begin
     MfRivConductance.Invalidate;
+    MfRivMultiplier.Invalidate;
     MfRivStage.Invalidate;
     MfRivBottom.Invalidate;
     InvalidateConcentrations;

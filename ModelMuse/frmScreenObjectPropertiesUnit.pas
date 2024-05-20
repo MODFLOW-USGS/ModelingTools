@@ -868,6 +868,10 @@ type
     procedure btnSectionFontClick(Sender: TObject);
     procedure frameWellParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure frameRivParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
+    procedure frameGhbParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -2145,8 +2149,8 @@ type
     procedure StoreGhbBoundary;
     procedure GetGhbBoundary(ScreenObjectList: TList);
     procedure StoreWellBoundary;
-    procedure StoreFarmWell;
     procedure GetWellBoundary(ScreenObjectList: TList);
+    procedure StoreFarmWell;
     procedure GetFarmWell(ScreenObjectList: TList);
     procedure GetRivBoundary(ScreenObjectList: TList);
     procedure StoreRivBoundary;
@@ -3088,19 +3092,19 @@ begin
   end
   else if (Sender = frameGhbParam.rdgModflowBoundary) then
   begin
-    PestParameterColumns := [2,3];
+    PestParameterColumns := [2,3,4];
     if frmGoPhast.PhastModel.GwtUsed
       or frmGoPhast.PhastModel.BuoyancyDensityUsed then
     begin
       for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
       begin
-        Include(PestParameterColumns, SpeciesIndex + 4);
+        Include(PestParameterColumns, SpeciesIndex + 5);
       end;
     end;
   end
   else if (Sender = frameDrnParam.rdgModflowBoundary) then
   begin
-    PestParameterColumns := [2,3,4];
+    PestParameterColumns := [2,3,4,5];
   end
   else if (Sender = frameHfbMf6.rdgModflowBoundary)
     or (Sender = frameRes.rdgModflowBoundary)
@@ -3158,12 +3162,12 @@ begin
   end
   else if (Sender = frameRivParam.rdgModflowBoundary) then
   begin
-    PestParameterColumns := [2,3,4];
+    PestParameterColumns := [2,3,4,5];
     if frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.BuoyancyDensityUsed then
     begin
       for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
       begin
-        Include(PestParameterColumns, SpeciesIndex + 5);
+        Include(PestParameterColumns, SpeciesIndex + 6);
       end;
     end;
   end
@@ -7668,10 +7672,10 @@ var
 begin
   MobileSpeciesCount := GwtColumnCount;
   frameChdParam.rdgModflowBoundary.ColCount := 6 + MobileSpeciesCount;
-  frameGhbParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
+  frameGhbParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
   frameWellParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
-  frameRivParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
-  frameDrnParam.rdgModflowBoundary.ColCount := 5;
+  frameRivParam.rdgModflowBoundary.ColCount := 6 + MobileSpeciesCount;
+  frameDrnParam.rdgModflowBoundary.ColCount := 6;
   frameDrtParam.rdgModflowBoundary.ColCount := 5;
   CropIrrigationRequirement :=
     frmGoPhast.PhastModel.ModflowPackages.FarmProcess.CropIrrigationRequirement;
@@ -21608,6 +21612,7 @@ procedure TfrmScreenObjectProperties.GetGhbBoundary(ScreenObjectList: TList);
 const
   HeadPosition = 0;
   ConductancePosition = 1;
+  MultiplierPosition = 2;
   ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
@@ -21629,6 +21634,8 @@ begin
     TGhbBoundary.DefaultBoundaryMethod(HeadPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
     TGhbBoundary.DefaultBoundaryMethod(ConductancePosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+MultiplierPosition] :=
+    TGhbBoundary.DefaultBoundaryMethod(MultiplierPosition);
   if frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.BuoyancyDensityUsed then
   begin
     for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
@@ -21751,6 +21758,7 @@ const
   StagePosition = 0;
   ConductancePosition = 1;
   BottomPosition = 2;
+  MultiplierPosition = 3;
   ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
@@ -21774,11 +21782,13 @@ begin
     TRivBoundary.DefaultBoundaryMethod(ConductancePosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+BottomPosition] :=
     TRivBoundary.DefaultBoundaryMethod(BottomPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+MultiplierPosition] :=
+    TRivBoundary.DefaultBoundaryMethod(MultiplierPosition);
   if frmGoPhast.PhastModel.GwtUsed then
   begin
     for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
     begin
-      ColIndex := SpeciesIndex + ColumnOffset+BottomPosition+1;
+      ColIndex := SpeciesIndex + ColumnOffset+MultiplierPosition+1;
       PestMethod[Frame.rdgModflowBoundary, ColIndex] :=
         TRivBoundary.DefaultBoundaryMethod(ColIndex- ColumnOffset);
     end;
@@ -22220,6 +22230,8 @@ procedure TfrmScreenObjectProperties.GetDrnBoundary(ScreenObjectList: TList);
 const
   ElevationPosition = 0;
   ConductancePosition = 1;
+  DdrnPosition = 2;
+  MultiplierPosition = 3;
   ColumnOffset = 2;
 var
   Frame: TframeScreenObjectCondParam;
@@ -22239,6 +22251,10 @@ begin
     TDrnBoundary.DefaultBoundaryMethod(ElevationPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+ConductancePosition] :=
     TDrnBoundary.DefaultBoundaryMethod(ConductancePosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+DdrnPosition] :=
+    TDrnBoundary.DefaultBoundaryMethod(DdrnPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColumnOffset+MultiplierPosition] :=
+    TDrnBoundary.DefaultBoundaryMethod(MultiplierPosition);
   GetPestModifiers(Frame, Parameter, ScreenObjectList);
 
   Frame.rdgModflowBoundary.HideEditor;
@@ -27027,6 +27043,46 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.frameRivParamrdgModflowBoundarySelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+  function IsMultiplierColumn(ACol: Integer): Boolean;
+  const
+    MultiplierPosition = 3;
+    FirstMultiplierCol = 5;
+    NonGWTProperties = 4;
+    FirstDataColumn = 2;
+  var
+    DataColumnCount: Integer;
+    DC: Integer;
+  begin
+    result := (ACol >= FirstMultiplierCol);
+    if result then
+    begin
+      DataColumnCount := NonGWTProperties;
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        Inc(DataColumnCount, frmGoPhast.PhastModel.MobileComponents.Count);
+      end;
+      DC := ACol-FirstDataColumn;
+      result := ((DC mod DataColumnCount) = MultiplierPosition);
+    end;
+  end;
+begin
+  inherited;
+  frameRivParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
+  if CanSelect and IsMultiplierColumn(ACol) then
+  begin
+    if (frmGoPhast.ModelSelection = msModflow2015) then
+    begin
+      CanSelect := frmGoPhast.PhastModel.ModflowPackages.RivPackage.UseMultiplier;
+    end
+    else
+    begin
+      CanSelect := False;
+    end;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.frameRivParamseNumberOfTimesChange(
   Sender: TObject);
 begin
@@ -30669,9 +30725,20 @@ procedure TfrmScreenObjectProperties.frameDrnParamrdgModflowBoundarySelectCell(
 begin
   inherited;
   frameDrnParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
-  if (ACol = 5) and (frmGoPhast.ModelSelection <> msModflow2015) then
+  if CanSelect and (ACol = 4) and (frmGoPhast.ModelSelection <> msModflow2015) then
   begin
     CanSelect := False;
+  end;
+  if CanSelect and (ACol = 5) then
+  begin
+    if (frmGoPhast.ModelSelection <> msModflow2015) then
+    begin
+      CanSelect := False;
+    end
+    else
+    begin
+      CanSelect := frmGoPhast.PhastModel.ModflowPackages.DrnPackage.UseMultiplier;
+    end;
   end;
 end;
 
@@ -30958,6 +31025,46 @@ begin
   if not frameGhbParam.rdgModflowBoundary.DistributingText then
   begin
     StoreGhbBoundary;  
+  end;
+end;
+
+procedure TfrmScreenObjectProperties.frameGhbParamrdgModflowBoundarySelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+  function IsMultiplierColumn(ACol: Integer): Boolean;
+  const
+    MultiplierPosition = 2;
+    FirstMultiplierCol = 4;
+    NonGWTProperties = 3;
+    FirstDataColumn = 2;
+  var
+    DataColumnCount: Integer;
+    DC: Integer;
+  begin
+    result := (ACol >= FirstMultiplierCol);
+    if result then
+    begin
+      DataColumnCount := NonGWTProperties;
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        Inc(DataColumnCount, frmGoPhast.PhastModel.MobileComponents.Count);
+      end;
+      DC := ACol-FirstDataColumn;
+      result := ((DC mod DataColumnCount) = MultiplierPosition);
+    end;
+  end;
+begin
+  inherited;
+  frameGhbParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
+  if CanSelect and IsMultiplierColumn(ACol) then
+  begin
+    if (frmGoPhast.ModelSelection = msModflow2015) then
+    begin
+      CanSelect := frmGoPhast.PhastModel.ModflowPackages.GhbBoundary.UseMultiplier;
+    end
+    else
+    begin
+      CanSelect := False;
+    end;
   end;
 end;
 

@@ -1067,6 +1067,7 @@ resourcestring
   StrRiverBottom = 'River bottom';
   StrBoundaryHead = 'Boundary head';
   StrDrainElevation = 'Drain elevation';
+  StrDrainMultiplier = 'Drain multiplier';
   StrStartingHead = 'Starting head';
   StrEndingHead = 'Ending head';
   StrActiveSpecifiedHea = 'Active Specified Head';

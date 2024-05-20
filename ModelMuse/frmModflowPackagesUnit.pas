@@ -108,13 +108,13 @@ type
     jvspPCG: TJvStandardPage;
     framePCG: TframePCG;
     jvspGHB: TJvStandardPage;
-    framePkgGHB: TframePackage;
+    framePkgGHB: TframePackageUseMultiplier;
     jvspWEL: TJvStandardPage;
     framePkgWEL: TframePackageWell;
     jvspRIV: TJvStandardPage;
-    framePkgRIV: TframePackage;
+    framePkgRIV: TframePackageUseMultiplier;
     jvspDRN: TJvStandardPage;
-    framePkgDRN: TframePackage;
+    framePkgDRN: TframePackageUseMultiplier;
     jvspDRT: TJvStandardPage;
     framePkgDRT: TframePackage;
     rbwLpfParamCountController: TRbwController;

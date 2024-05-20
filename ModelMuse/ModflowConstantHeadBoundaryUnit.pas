@@ -1167,6 +1167,7 @@ begin
     PhastModel.InvalidateMfChdActive(self);
     PhastModel.InvalidateMfChdStartingHead(self);
     PhastModel.InvalidateMfChdEndingHead(self);
+    PhastModel.InvalidateMfChdMultiplier(self);
     PhastModel.InvalidateMfChdConc(self);
   end;
 end;
