@@ -9,6 +9,144 @@ uses Windows, ZLib, SysUtils, Classes, Contnrs, OrderedCollectionUnit,
   ModflowTransientListParameterUnit, Modflow6DynamicTimeSeriesInterfaceUnit,
   ScreenObjectInterfaceUnit, Modflow6TimeSeriesInterfaceUnit, System.Math;
 type
+  {
+     @name stores the location, time and evapotranspiration rate for a cell.
+     @name is used with the ETS packages.
+  }
+
+  TEtsRecord = record
+    Cell: TCellLocation;
+    EvapotranspirationRate: double;
+    StartingTime: double;
+    EndingTime: double;
+    EvapotranspirationRateAnnotation: string;
+    ETParameterName: string;
+    ETParameterValue: double;
+    // PEST
+    RatePest: string;
+    RatePestSeries: string;
+    RatePestMethod: TPestParamMethod;
+    RateTimeSeries: string;
+    // MF6
+    Multiplier: double;
+    MultiplierAnnotation: string;
+    MultiplierPest: string;
+    MultiplierPestSeries: string;
+    MultiplierPestMethod: TPestParamMethod;
+    MultiplierTimeSeriesName: string;
+    // GWT Concentrations
+    GwtConcentrations: TGwtCellData;
+    procedure Assign(const Item: TEtsRecord);
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList);
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
+    procedure RecordStrings(Strings: TStringList);
+  end;
+
+  // @name is an array of @link(TEvtRecord)s.
+  TEtsArray = array of TEtsRecord;
+
+  TEtsStorage = class(TCustomBoundaryStorage)
+  private
+    FEvtArray: TEtsArray;
+    function GetEvtArray: TEtsArray;
+  protected
+    procedure Restore(DecompressionStream: TDecompressionStream; Annotations: TStringList); override;
+    procedure Store(Compressor: TCompressionStream); override;
+    procedure Clear; override;
+  public
+    property EvtArray: TEtsArray read GetEvtArray;
+  end;
+
+  TEtsItem = class(TEvtItem)
+  private
+    FMultiplier: IFormulaObject;
+    function GetMultiplier: string;
+    procedure SetMultiplier(const Value: string);
+  protected
+    procedure AssignObserverEvents(Collection: TCollection); override;
+    procedure CreateFormulaObjects; override;
+    procedure GetPropertyObserver(Sender: TObject; List: TList); override;
+    procedure RemoveFormulaObjects; override;
+    // See @link(BoundaryFormula).
+    function GetBoundaryFormula(Index: integer): string; override;
+    // See @link(BoundaryFormula).
+    procedure SetBoundaryFormula(Index: integer; const Value: string); override;
+    // @name checks whether AnotherItem is the same as the current @classname.
+    function IsSame(AnotherItem: TOrderedItem): boolean; override;
+    function BoundaryFormulaCount: integer; override;
+  published
+    property Multiplier: string read GetMultiplier write SetMultiplier;
+  end;
+
+  TEts_Cell = class(TEvapotranspirationCell)
+  private
+    FValues: TEtsRecord;
+  protected
+    function GetEvapotranspirationRate: double; override;
+    function GetEvapotranspirationRateAnnotation: string; override;
+    function GetETParameterName: string; override;
+    function GetETParameterValue: double; override;
+    function GetRatePest: string; override;
+    function GetRatePestMethod: TPestParamMethod; override;
+    function GetRatePestSeries: string; override;
+    function GetRateTimeSeries: string; override;
+    procedure SetRateTimeSeries(const Value: string); override;
+    function GetConcentration(const Index: integer): double; override;
+    function GetConcentrationAnnotation(const Index: integer): string; override;
+    function GetConcentrationPestName(const Index: integer): string; override;
+    function GetConcentrationPestSeriesMethod(const Index: integer)
+      : TPestParamMethod; override;
+    function GetConcentrationPestSeriesName(const Index: integer)
+      : string; override;
+    function GetConcentrationTimeSeriesName(const Index: integer)
+      : string; override;
+    function GetColumn: integer; override;
+    function GetLayer: integer; override;
+    function GetRow: integer; override;
+    procedure SetColumn(const Value: integer); override;
+    procedure SetLayer(const Value: integer); override;
+    procedure SetRow(const Value: integer); override;
+    function GetIntegerValue(Index: integer; AModel: TBaseModel): integer; override;
+    function GetRealValue(Index: integer; AModel: TBaseModel): double; override;
+    function GetRealAnnotation(Index: integer; AModel: TBaseModel): string; override;
+    function GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string; override;
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
+    function GetSection: integer; override;
+    procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
+  public
+    property EvapotranspirationRate: double read GetEvapotranspirationRate;
+    property EvapotranspirationRateAnnotation: string
+      read GetEvapotranspirationRateAnnotation;
+    property Values: TEtsRecord read FValues write FValues;
+    function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    property ETParameterName: string read GetETParameterName;
+    property ETParameterValue: double read GetETParameterValue;
+    // PEST
+    property RatePest: string read GetRatePest;
+    property RatePestSeries: string read GetRatePestSeries;
+    property RatePestMethod: TPestParamMethod read GetRatePestMethod;
+    property RateTimeSeries: string read GetRateTimeSeries
+      write SetRateTimeSeries;
+    // GWT
+    property Concentrations[const Index: Integer]: double
+      read GetConcentration;
+    property ConcentrationAnnotations[const Index: Integer]: string
+      read GetConcentrationAnnotation;
+    property ConcentrationPestNames[const Index: Integer]: string
+      read GetConcentrationPestName;
+    property ConcentrationPestSeriesNames[const Index: Integer]: string
+      read GetConcentrationPestSeriesName;
+    property ConcentrationPestSeriesMethods[const Index: Integer]: TPestParamMethod
+      read GetConcentrationPestSeriesMethod;
+    property ConcentrationTimeSeriesNames[const Index: Integer]: string
+      read GetConcentrationTimeSeriesName;
+  end;
 
   TEtsSurfDepthRecord = record
     Cell: TCellLocation;
@@ -250,10 +388,11 @@ type
 
   TEtsTimeListLink = class(TEvtTimeListLink)
   private
+    FMultiplierData: TModflowTimeList;
     FConcList: TModflowTimeLists;
   protected
     procedure CreateTimeLists; override;
-//    procedure UpdateGwtTimeLists;
+    property MultiplierData: TModflowTimeList read FMultiplierData;
   public
     Destructor Destroy; override;
   end;
@@ -276,7 +415,13 @@ type
       PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject); override;
     function SpeciesCount: Integer; override;
     procedure InvalidateGwtConcentrations(Sender: TObject); override;
-  public
+
+    class function ItemClass: TBoundaryItemClass; override;
+    procedure InvalidateEtsMultiplierData(Sender: TObject);
+
+    procedure AssignArrayCellValues(DataSets: TList; ItemIndex: Integer;
+      AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
+      PestItemNames, TimeSeriesNames: TStringListObjectList); override;
   end;
 
   // @name represents the MODFLOW Evapotranspiration boundaries associated with
@@ -290,15 +435,19 @@ type
     FEvtSurfDepthCollection: TEtsSurfDepthCollection;
     FNonParameterColumns: integer;
     FCurrentParameter: TModflowTransientListParameter;
+
     FPestDepthMethod: TPestParamMethod;
     FPestEvapotranspirationRateMethod: TPestParamMethod;
     FPestSurfaceMethod: TPestParamMethod;
+
     FPestEvapotranspirationRateFormula: IFormulaObject;
     FPestSurfaceFormula: IFormulaObject;
     FPestDepthFormula: IFormulaObject;
+
     FPestDepthObserver: TObserver;
     FPestEvapotranspirationRateObserver: TObserver;
     FPestSurfaceObserver: TObserver;
+
     FUsedObserver: TObserver;
     FPestConcentrationMethods: TGwtPestMethodCollection;
     FPestConcentrationFormulas: TEtsGwtConcCollection;
@@ -429,6 +578,11 @@ resourcestring
   StrEvaporationDepthFr = 'Evaporation depth or rate fractions not assigned';
 
 const
+  EtsRatePosition = 0;
+  EtsMultiplierPosition = 1;
+  EtsStartConcentration = 2;
+
+  const
   EtsSurfacePosition = 0;
   EtsDepthPosition = 1;
 
@@ -436,7 +590,8 @@ const
   RateBoundaryPosition = 0;
   SurfaceBoundaryPosition = 1;
   DepthBoundaryPosition = 2;
-  EtsStartConcentration = 3;
+  MultiplierBoundaryPosition = 3;
+  EtsBoundaryStartConcentration = 4;
 
 implementation
 
@@ -448,6 +603,7 @@ resourcestring
   StrFractionalRateS = 'Fractional rate %s';
   StrInSEvaportionsDe = 'In %s evaporation depth or rate fractions have not been ass' +
   'igned.';
+  StrEVTMultiplier = 'EVT Multiplier';
 
 { TEtsBoundary }
 
@@ -861,14 +1017,6 @@ begin
         result := PestDepthFormula;
       end;
     else
-//      begin
-//        ConcIndex := FormulaIndex - EtsStartConcentration;
-//        while ConcIndex >= PestConcentrationFormulas.Count do
-//        begin
-//          PestConcentrationFormulas.Add;
-//        end;
-//        result := PestConcentrationFormulas[ConcIndex].Value;
-//      end;
       Assert(False);
   end;
 end;
@@ -893,14 +1041,6 @@ begin
       end;
     else
       result := inherited;
-//      begin
-//        ConcIndex := FormulaIndex - EtsStartConcentration;
-//        while ConcIndex >= FPestConcentrationMethods.Count do
-//        begin
-//          FPestConcentrationMethods.Add;
-//        end;
-//        result := FPestConcentrationMethods[ConcIndex].PestParamMethod;
-//      end;
   end;
 end;
 
@@ -1380,14 +1520,6 @@ begin
       end;
     else
       Assert(False);
-//      begin
-//        ConcIndex := FormulaIndex - EtsStartConcentration;
-//        while ConcIndex >= PestConcentrationFormulas.Count do
-//        begin
-//          PestConcentrationFormulas.Add;
-//        end;
-//        PestConcentrationFormulas[ConcIndex].Value := Value;
-//      end;
   end;
 end;
 
@@ -1411,14 +1543,6 @@ begin
       end;
     else
       Assert(False);
-//      begin
-//        ConcIndex := FormulaIndex - EtsStartConcentration;
-//        while ConcIndex >= FPestConcentrationMethods.Count do
-//        begin
-//          FPestConcentrationMethods.Add;
-//        end;
-//        FPestConcentrationMethods[ConcIndex].PestParamMethod := Value;
-//      end;
   end;
 end;
 
@@ -2905,6 +3029,173 @@ end;
 
 { TEtsCollection }
 
+procedure TEtsCollection.AssignArrayCellValues(DataSets: TList;
+  ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
+  PestMethods: TPestMethodList; PestItemNames,
+  TimeSeriesNames: TStringListObjectList);
+var
+  EvapotranspirationRateArray: TDataArray;
+  Boundary: TEtsStorage;
+  LayerIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  BoundaryIndex: Integer;
+  LocalModel: TCustomModel;
+  LayerMin: Integer;
+  RowMin: Integer;
+  ColMin: Integer;
+  LayerMax: Integer;
+  RowMax: Integer;
+  ColMax: Integer;
+  LocalRatePestSeries: string;
+  LocalRatePestMethod: TPestParamMethod;
+  RatePestItems: TStringList;
+  LocalRatePest: string;
+  RateTimeItems: TStringList;
+  LocalRateTimeSeries: string;
+  LocalScreenObject: IScreenObjectForDynamicTimeSeries;
+  TimeSeriesLocation: TTimeSeriesLocation;
+  StaticTimeSeries: IMf6TimeSeries;
+  CustomWriter: TCustomFileWriter;
+  DyanmicTimeSeries: IDynamicTimeSeries;
+  MultiplierArray: TDataArray;
+  LocalMultiplierPestSeries: string;
+  LocalMultiplierPestMethod: TPestParamMethod;
+  MultiplierPestItems: TStringList;
+  LocalMultiplierPest: string;
+  MultiplierTimeItems: TStringList;
+  LocalMultiplierTimeSeries: string;
+  MultiplierDynamicTimeSeries: IDynamicTimeSeries;
+begin
+  CustomWriter := nil;
+  LocalModel := AModel as TCustomModel;
+  Boundary := Boundaries[ItemIndex, AModel] as TEtsStorage;
+  // TEvtCollection is used in the EVT, ETS and UZF packages.
+  EvapotranspirationRateArray := DataSets[EtsRatePosition];
+  EvapotranspirationRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
+    LayerMax, RowMax, ColMax);
+  MultiplierArray := DataSets[EtsMultiplierPosition];
+
+  // Even when TEvtCollection is used with TUzfBoundary,
+  // EtsRatePosition is the right variable to use here.
+
+  LocalRatePestSeries := PestSeries[EtsRatePosition];
+  LocalRatePestMethod := PestMethods[EtsRatePosition];
+  RatePestItems := PestItemNames[EtsRatePosition];
+  LocalRatePest := RatePestItems[ItemIndex];
+
+  RateTimeItems := TimeSeriesNames[EtsRatePosition];
+  LocalRateTimeSeries := RateTimeItems[ItemIndex];
+
+  LocalMultiplierPestSeries := PestSeries[EtsMultiplierPosition];
+  LocalMultiplierPestMethod := PestMethods[EtsMultiplierPosition];
+  MultiplierPestItems := PestItemNames[EtsMultiplierPosition];
+  LocalMultiplierPest := MultiplierPestItems[ItemIndex];
+  MultiplierTimeItems := TimeSeriesNames[EtsMultiplierPosition];
+  LocalMultiplierTimeSeries := MultiplierTimeItems[ItemIndex];
+
+
+  DyanmicTimeSeries := nil;
+  if ScreenObject <> nil then
+  begin
+    if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
+      LocalScreenObject) <> 0 then
+    begin
+      Assert(False);
+    end;
+    DyanmicTimeSeries := LocalScreenObject.
+      GetDynamicTimeSeriesIByName(LocalRateTimeSeries);
+
+    MultiplierDynamicTimeSeries := LocalScreenObject.
+      GetDynamicTimeSeriesIByName(LocalMultiplierTimeSeries);
+  end;
+
+  BoundaryIndex := 0;
+  if LayerMin >= 0 then
+  begin
+    for LayerIndex := LayerMin to LayerMax do
+    begin
+      if LocalModel.IsLayerSimulated(LayerIndex) then
+      begin
+        for RowIndex := RowMin to RowMax do
+        begin
+          for ColIndex := ColMin to ColMax do
+          begin
+            if EvapotranspirationRateArray.IsValue[LayerIndex, RowIndex, ColIndex] then
+            begin
+              Assert(MultiplierArray.IsValue[LayerIndex, RowIndex, ColIndex]);
+              with Boundary.EvtArray[BoundaryIndex] do
+              begin
+                Cell.Layer := LayerIndex;
+                Cell.Row := RowIndex;
+                Cell.Column := ColIndex;
+//                Cell.Section := Sections[LayerIndex, RowIndex, ColIndex];
+                EvapotranspirationRate := EvapotranspirationRateArray.
+                  RealData[LayerIndex, RowIndex, ColIndex];
+                EvapotranspirationRateAnnotation := EvapotranspirationRateArray.
+                  Annotation[LayerIndex, RowIndex, ColIndex];
+                RatePest := LocalRatePest;
+                RatePestSeries := LocalRatePestSeries;
+                RatePestMethod := LocalRatePestMethod;
+                if DyanmicTimeSeries = nil then
+                begin
+                  RateTimeSeries := LocalRateTimeSeries;
+                end
+                else
+                begin
+                  TimeSeriesLocation.Layer := LayerIndex;
+                  TimeSeriesLocation.Row := RowIndex;
+                  TimeSeriesLocation.Column := ColIndex;
+                  StaticTimeSeries := DyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                  RateTimeSeries := string(StaticTimeSeries.SeriesName);
+                  if CustomWriter = nil then
+                  begin
+                    CustomWriter := FWriter as TCustomFileWriter;
+                  end;
+                  CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                end;
+
+                Multiplier := MultiplierArray.
+                  RealData[LayerIndex, RowIndex, ColIndex];
+                MultiplierAnnotation := MultiplierArray.
+                  Annotation[LayerIndex, RowIndex, ColIndex];
+                MultiplierPest := LocalMultiplierPest;
+                MultiplierPestSeries := LocalMultiplierPestSeries;
+                MultiplierPestMethod := LocalMultiplierPestMethod;
+                if MultiplierDynamicTimeSeries = nil then
+                begin
+                  MultiplierTimeSeriesName := LocalMultiplierTimeSeries;
+                end
+                else
+                begin
+                  TimeSeriesLocation.Layer := LayerIndex;
+                  TimeSeriesLocation.Row := RowIndex;
+                  TimeSeriesLocation.Column := ColIndex;
+                  StaticTimeSeries := MultiplierDynamicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                  MultiplierTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                  if CustomWriter = nil then
+                  begin
+                    CustomWriter := FWriter as TCustomFileWriter;
+                  end;
+                  CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                end;
+              end;
+              Inc(BoundaryIndex);
+            end;
+          end;
+        end;
+      end;
+    end;
+  end;
+  EvapotranspirationRateArray.CacheData;
+  MultiplierArray.CacheData;
+
+  AssignConcentrationArrayCellValues(DataSets, ItemIndex, AModel, PestSeries,
+    PestMethods, PestItemNames, TimeSeriesNames);
+
+  Boundary.CacheData;
+end;
+
 procedure TEtsCollection.AssignConcentrationArrayCellValues(DataSets: TList;
   ItemIndex: Integer; AModel: TBaseModel; PestSeries: TStringList;
   PestMethods: TPestMethodList; PestItemNames,
@@ -2921,8 +3212,92 @@ end;
 procedure TEtsCollection.InitializeTimeLists(ListOfTimeLists: TList;
   AModel: TBaseModel; PestSeries: TStringList; PestMethods: TPestMethodList;
   PestItemNames, TimeSeriesNames: TStringListObjectList; Writer: TObject);
+var
+  TimeIndex: Integer;
+  BoundaryValues: TBoundaryValueArray;
+  Index: Integer;
+  Item: TEvtItem;
+  ScreenObject: TScreenObject;
+  ALink: TEtsTimeListLink;
+  FEvapotranspirationRateData: TModflowTimeList;
+  PestRateSeriesName: string;
+  RateMethod: TPestParamMethod;
+  RateItems: TStringList;
+  BoundaryPosition: Integer;
+  ItemFormula: string;
+  TimeSeriesItems: TStringList;
 begin
-  inherited;
+  ScreenObject := BoundaryGroup.ScreenObject as TScreenObject;
+  SetLength(BoundaryValues, Count);
+
+  // Note that TRchTEvtCollectionCollection is also used in UZF where RateBoundaryPosition
+  // is different. See UzfETDemandBoundaryPosition.
+  BoundaryPosition := RateBoundaryPosition;
+//  if BoundaryGroup is TUzfBoundary then
+//  begin
+//    BoundaryPosition := UzfETDemandBoundaryPosition
+//  end;
+
+  PestRateSeriesName := BoundaryGroup.PestBoundaryFormula[BoundaryPosition];
+  PestSeries.Add(PestRateSeriesName);
+  RateMethod := BoundaryGroup.PestBoundaryMethod[BoundaryPosition];
+  PestMethods.Add(RateMethod);
+
+  RateItems := TStringList.Create;
+  PestItemNames.Add(RateItems);
+
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
+
+  for Index := 0 to Count - 1 do
+  begin
+    Item := Items[Index] as TEvtItem;
+    BoundaryValues[Index].Time := Item.StartTime;
+
+    ItemFormula := Item.EvapotranspirationRate;
+    AssignBoundaryFormula(AModel, PestRateSeriesName, RateMethod,
+      RateItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+  end;
+  ALink := TimeListLink.GetLink(AModel) as TEtsTimeListLink;
+  FEvapotranspirationRateData := ALink.EvapotranspirationRateData;
+  FEvapotranspirationRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(FEvapotranspirationRateData.Count = Count);
+
+  ClearBoundaries(AModel);
+  SetBoundaryCapacity(FEvapotranspirationRateData.Count, AModel);
+  for TimeIndex := 0 to FEvapotranspirationRateData.Count - 1 do
+  begin
+    AddBoundary(TEvtStorage.Create(AModel));
+  end;
+  ListOfTimeLists.Add(FEvapotranspirationRateData);
+end;
+
+procedure TEtsCollection.InvalidateEtsMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TEtsTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TEtsTimeListLink;
+    Link.FMultiplierData.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TEtsTimeListLink;
+        Link.FMultiplierData.Invalidate;
+      end;
+    end;
+  end;
 end;
 
 procedure TEtsCollection.InvalidateGwtConcentrations(Sender: TObject);
@@ -2963,6 +3338,11 @@ begin
   end;
 end;
 
+
+class function TEtsCollection.ItemClass: TBoundaryItemClass;
+begin
+  result := TEtsItem;
+end;
 
 function TEtsCollection.SpeciesCount: Integer;
 var
@@ -3044,13 +3424,15 @@ end;
 { TUzfEvtTimeListLink }
 
 procedure TEtsTimeListLink.CreateTimeLists;
-//var
-//  PhastModel: TPhastModel;
-//  SpeciesIndex: Integer;
-//  ConcTimeList: TModflowTimeList;
-//  LocalModel: TCustomModel;
 begin
   inherited;
+  FMultiplierData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+
+  FMultiplierData.NonParamDescription := StrEVTMultiplier;
+  FMultiplierData.ParamDescription := ' ' + StrEVTMultiplier;
+
+  AddTimeList(FMultiplierData);
+
   if Model <> nil then
   begin
     EvapotranspirationRateData.OnInvalidate :=
@@ -3058,24 +3440,6 @@ begin
   end;
 
   FConcList := TModflowTimeLists.Create;
-
-//  PhastModel := frmGoPhast.PhastModel;
-//  if PhastModel.GwtUsed then
-//  begin
-//    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
-//    begin
-//      ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-//      ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-//      ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-//      if Model <> nil then
-//      begin
-//        LocalModel := Model as TCustomModel;
-//        ConcTimeList.OnInvalidate := LocalModel.InvalidateEtsConc;
-//      end;
-//      AddTimeList(ConcTimeList);
-//      FConcList.Add(ConcTimeList);
-//    end;
-//  end;
 end;
 
 { TEtsLayerTimeListLink }
@@ -3123,6 +3487,7 @@ end;
 
 destructor TEtsTimeListLink.Destroy;
 begin
+  FMultiplierData.Free;
   FConcList.Free;
   inherited;
 end;
@@ -3168,6 +3533,540 @@ constructor TEtsGwtConcCollection.Create(Model: TBaseModel;
   AScreenObject: TObject; ParentCollection: TEtsCollection);
 begin
   inherited Create(Model, AScreenObject, ParentCollection);
+end;
+
+{ TEtsRecord }
+
+procedure TEtsRecord.Assign(const Item: TEtsRecord);
+begin
+  self := Item;
+  GwtConcentrations.Assign(Item.GwtConcentrations);
+end;
+
+procedure TEtsRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
+begin
+  Comp.Write(Cell, SizeOf(Cell));
+  Comp.Write(EvapotranspirationRate, SizeOf(EvapotranspirationRate));
+  Comp.Write(StartingTime, SizeOf(StartingTime));
+  Comp.Write(EndingTime, SizeOf(EndingTime));
+  Comp.Write(EndingTime, SizeOf(ETParameterValue));
+
+  WriteCompInt(Comp, Strings.IndexOf(EvapotranspirationRateAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(ETParameterName));
+
+  WriteCompInt(Comp, Strings.IndexOf(RatePest));
+  WriteCompInt(Comp, Strings.IndexOf(RatePestSeries));
+  WriteCompInt(Comp, Ord(RatePestMethod));
+  WriteCompInt(Comp, Strings.IndexOf(RateTimeSeries));
+
+  WriteCompReal(Comp, Multiplier);
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPest));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPestSeries));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierTimeSeriesName));
+  WriteCompInt(Comp, Ord(MultiplierPestMethod));
+
+   GwtConcentrations.Cache(Comp, Strings);
+end;
+
+procedure TEtsRecord.RecordStrings(Strings: TStringList);
+begin
+  Strings.Add(EvapotranspirationRateAnnotation);
+  Strings.Add(ETParameterName);
+  Strings.Add(RatePest);
+  Strings.Add(RatePestSeries);
+  Strings.Add(RateTimeSeries);
+
+  Strings.Add(MultiplierAnnotation);
+  Strings.Add(MultiplierPest);
+  Strings.Add(MultiplierPestSeries);
+  Strings.Add(MultiplierTimeSeriesName);
+
+  GwtConcentrations.RecordStrings(Strings);
+end;
+
+procedure TEtsRecord.Restore(Decomp: TDecompressionStream;
+  Annotations: TStringList);
+begin
+  Cell := ReadCompCell(Decomp);
+  EvapotranspirationRate := ReadCompReal(Decomp);
+  StartingTime := ReadCompReal(Decomp);
+  EndingTime := ReadCompReal(Decomp);
+  ETParameterValue := ReadCompReal(Decomp);
+  EvapotranspirationRateAnnotation := Annotations[ReadCompInt(Decomp)];
+  ETParameterName := Annotations[ReadCompInt(Decomp)];
+  RatePest := Annotations[ReadCompInt(Decomp)];
+  RatePestSeries := Annotations[ReadCompInt(Decomp)];
+  RatePestMethod := TPestParamMethod(ReadCompInt(Decomp));
+  RateTimeSeries := Annotations[ReadCompInt(Decomp)];
+
+  Multiplier := ReadCompReal(Decomp);
+  MultiplierAnnotation := Annotations[ReadCompInt(Decomp)];
+  MultiplierPest := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestSeries := Annotations[ReadCompInt(Decomp)];
+  MultiplierTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestMethod := TPestParamMethod(ReadCompInt(Decomp));
+
+  GwtConcentrations.Restore(Decomp,Annotations);
+end;
+
+{ TEts_Cell }
+
+procedure TEts_Cell.Cache(Comp: TCompressionStream; Strings: TStringList);
+begin
+  inherited;
+  Values.Cache(Comp, Strings);
+  WriteCompInt(Comp, StressPeriod);
+end;
+
+function TEts_Cell.GetColumn: integer;
+begin
+  result := Values.Cell.Column;
+end;
+
+function TEts_Cell.GetConcentration(const Index: integer): double;
+begin
+  result := FValues.GwtConcentrations.Values[Index];
+end;
+
+function TEts_Cell.GetConcentrationAnnotation(const Index: integer): string;
+begin
+  result := FValues.GwtConcentrations.ValueAnnotations[Index];
+end;
+
+function TEts_Cell.GetConcentrationPestName(const Index: integer): string;
+begin
+  result := FValues.GwtConcentrations.ValuePestNames[Index];
+end;
+
+function TEts_Cell.GetConcentrationPestSeriesMethod(
+  const Index: integer): TPestParamMethod;
+begin
+  result := FValues.GwtConcentrations.ValuePestSeriesMethods[Index];
+end;
+
+function TEts_Cell.GetConcentrationPestSeriesName(const Index: integer): string;
+begin
+  result := FValues.GwtConcentrations.ValuePestSeriesNames[Index];
+end;
+
+function TEts_Cell.GetConcentrationTimeSeriesName(const Index: integer): string;
+begin
+  result := FValues.GwtConcentrations.ValueTimeSeriesNames[Index];
+end;
+
+function TEts_Cell.GetETParameterName: string;
+begin
+  result := Values.ETParameterName;
+end;
+
+function TEts_Cell.GetETParameterValue: double;
+begin
+  result := Values.ETParameterValue;
+end;
+
+function TEts_Cell.GetEvapotranspirationRate: double;
+begin
+  result := Values.EvapotranspirationRate;
+end;
+
+function TEts_Cell.GetEvapotranspirationRateAnnotation: string;
+begin
+  result := Values.EvapotranspirationRateAnnotation;
+end;
+
+function TEts_Cell.GetIntegerAnnotation(Index: integer;
+  AModel: TBaseModel): string;
+begin
+  result := '';
+  case Index of
+    EtsRatePosition: result := 'Assigned from the cell''s layer';
+    else Assert(False);
+  end;
+end;
+
+function TEts_Cell.GetIntegerValue(Index: integer; AModel: TBaseModel): integer;
+begin
+  result := 0;
+  case Index of
+    EtsRatePosition: result := (AModel as TCustomModel).
+      DataSetLayerToModflowLayer(Layer);
+    else Assert(False);
+  end;
+end;
+
+function TEts_Cell.GetLayer: integer;
+begin
+  result := Values.Cell.Layer;
+end;
+
+function TEts_Cell.GetMf6TimeSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
+begin
+  case Index of
+    EtsRatePosition:
+      begin
+        result := RateTimeSeries;
+      end;
+    else
+      begin
+        ConcIndex := Index - EtsStartConcentration;
+        result := FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex];
+      end;
+  end;
+end;
+
+function TEts_Cell.GetPestName(Index: Integer): string;
+var
+  ConcIndex: Integer;
+begin
+  case Index of
+    EtsRatePosition:
+      begin
+        result := RatePest;
+      end;
+    else
+      begin
+        ConcIndex := Index - EtsStartConcentration;
+        result := FValues.GwtConcentrations.ValuePestNames[ConcIndex];
+      end;
+  end;
+end;
+
+function TEts_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
+var
+  ConcIndex: Integer;
+begin
+  case Index of
+    EtsRatePosition:
+      begin
+        result := RatePestMethod;
+      end;
+    else
+      begin
+        ConcIndex := Index - EtsStartConcentration;
+        result := FValues.GwtConcentrations.ValuePestSeriesMethods[ConcIndex];
+      end;
+  end;
+end;
+
+function TEts_Cell.GetPestSeriesName(Index: Integer): string;
+var
+  ConcIndex: Integer;
+begin
+  case Index of
+    EtsRatePosition:
+      begin
+        result := RatePestSeries;
+      end;
+    else
+      begin
+        ConcIndex := Index - EtsStartConcentration;
+        result := FValues.GwtConcentrations.ValuePestSeriesNames[ConcIndex];
+      end;
+  end;
+end;
+
+function TEts_Cell.GetRatePest: string;
+begin
+  result := Values.RatePest;
+end;
+
+function TEts_Cell.GetRatePestMethod: TPestParamMethod;
+begin
+  result := Values.RatePestMethod;
+end;
+
+function TEts_Cell.GetRatePestSeries: string;
+begin
+  result := Values.RatePestSeries
+end;
+
+function TEts_Cell.GetRateTimeSeries: string;
+begin
+  result := Values.RateTimeSeries;
+end;
+
+function TEts_Cell.GetRealAnnotation(Index: integer;
+  AModel: TBaseModel): string;
+var
+  ConcIndex: Integer;
+begin
+  case Index of
+    EtsRatePosition: result := EvapotranspirationRateAnnotation;
+    else
+      begin
+        ConcIndex := Index - EtsStartConcentration;
+        result := FValues.GwtConcentrations.ValueAnnotations[ConcIndex];
+      end;
+  end;
+end;
+
+function TEts_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
+var
+  ConcIndex: Integer;
+begin
+  case Index of
+    EtsRatePosition: result := EvapotranspirationRate;
+    else
+      begin
+        ConcIndex := Index - EtsStartConcentration;
+        result := FValues.GwtConcentrations.Values[ConcIndex];
+      end;
+  end;
+end;
+
+function TEts_Cell.GetRow: integer;
+begin
+  result := Values.Cell.Row;
+end;
+
+function TEts_Cell.GetSection: integer;
+begin
+  result := Values.Cell.Section;
+end;
+
+function TEts_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
+begin
+  result := inherited;
+end;
+
+procedure TEts_Cell.RecordStrings(Strings: TStringList);
+begin
+  inherited;
+  Values.RecordStrings(Strings);
+end;
+
+procedure TEts_Cell.Restore(Decomp: TDecompressionStream;
+  Annotations: TStringList);
+begin
+  inherited;
+  Values.Restore(Decomp, Annotations);
+  StressPeriod := ReadCompInt(Decomp);
+end;
+
+procedure TEts_Cell.SetColumn(const Value: integer);
+begin
+  FValues.Cell.Column := Value;
+end;
+
+procedure TEts_Cell.SetLayer(const Value: integer);
+begin
+  FValues.Cell.Layer := Value;
+end;
+
+procedure TEts_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
+var
+  ConcIndex: Integer;
+begin
+  case Index of
+    EtsRatePosition:
+      begin
+        RateTimeSeries := Value;
+      end;
+    else
+      begin
+        ConcIndex := Index - EtsStartConcentration;
+        FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := Value;
+      end;
+  end;
+end;
+
+procedure TEts_Cell.SetRateTimeSeries(const Value: string);
+begin
+  FValues.RateTimeSeries := Value;
+end;
+
+procedure TEts_Cell.SetRow(const Value: integer);
+begin
+  FValues.Cell.Row := Value;
+end;
+
+{ TEtsItem }
+
+procedure TEtsItem.AssignObserverEvents(Collection: TCollection);
+var
+  ParentCollection: TEtsCollection;
+  RateObserver: TObserver;
+  ConcIndex: Integer;
+  MultiplierObserver: TObserver;
+begin
+  ParentCollection := Collection as TEtsCollection;
+  RateObserver := FObserverList[EtsRatePosition];
+  RateObserver.OnUpToDateSet := ParentCollection.InvalidateEtRateData;
+
+  MultiplierObserver := FObserverList[EtsRatePosition];
+  MultiplierObserver.OnUpToDateSet := ParentCollection.InvalidateEtsMultiplierData;
+
+  for ConcIndex := 0 to GwtConcentrations.Count - 1 do
+  begin
+    GwtConcentrations[ConcIndex].Observer.OnUpToDateSet
+      := ParentCollection.InvalidateGwtConcentrations;
+  end;
+end;
+
+function TEtsItem.BoundaryFormulaCount: integer;
+begin
+  result := inherited + 1;
+end;
+
+procedure TEtsItem.CreateFormulaObjects;
+begin
+  inherited;
+  FMultiplier := CreateFormulaObject(dsoTop);
+end;
+
+function TEtsItem.GetBoundaryFormula(Index: integer): string;
+var
+  Item: TGwtConcStringValueItem;
+begin
+  case Index of
+    EtsRatePosition: result := EvapotranspirationRate;
+    EtsMultiplierPosition: result := Multiplier;
+    else
+      begin
+        Dec(Index, EtsStartConcentration);
+        while GwtConcentrations.Count <= Index do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        result := Item.Value;
+      end;
+  end;
+end;
+
+function TEtsItem.GetMultiplier: string;
+begin
+  FMultiplier.ScreenObject := ScreenObjectI;
+  try
+    Result := FMultiplier.Formula;
+  finally
+    FMultiplier.ScreenObject := nil;
+  end;
+  ResetItemObserver(ETSMultiplierPosition);
+end;
+
+procedure TEtsItem.GetPropertyObserver(Sender: TObject; List: TList);
+begin
+  inherited;
+  if (Sender = FMultiplier as TObject) then
+  begin
+    List.Add(FObserverList[ETSMultiplierPosition]);
+  end;
+end;
+
+function TEtsItem.IsSame(AnotherItem: TOrderedItem): boolean;
+var
+  Item: TEtsItem;
+begin
+  result := (AnotherItem is TEtsItem) and inherited IsSame(AnotherItem);
+  if result then
+  begin
+    Item := TEtsItem(AnotherItem);
+    result := (Item.Multiplier = Multiplier);
+  end;
+end;
+
+procedure TEtsItem.RemoveFormulaObjects;
+begin
+  inherited;
+  frmGoPhast.PhastModel.FormulaManager.Remove(FMultiplier,
+    GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
+end;
+
+procedure TEtsItem.SetBoundaryFormula(Index: integer; const Value: string);
+var
+  Item: TGwtConcStringValueItem;
+begin
+  case Index of
+    EtsRatePosition: EvapotranspirationRate := Value;
+    EtsMultiplierPosition: Multiplier := Value;
+    else
+      begin
+        Dec(Index, EtsStartConcentration);
+        while Index >= GwtConcentrations.Count do
+        begin
+          GwtConcentrations.Add;
+        end;
+        Item := GwtConcentrations[Index];
+        Item.Value := Value;
+      end;
+  end;
+end;
+
+procedure TEtsItem.SetMultiplier(const Value: string);
+begin
+  FMultiplier.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, EtsMultiplierPosition, FMultiplier);
+  finally
+    FMultiplier.ScreenObject := nil;
+  end;
+end;
+
+{ TEtsStorage }
+
+procedure TEtsStorage.Clear;
+begin
+  SetLength(FEvtArray, 0);
+  FCleared := True;
+end;
+
+function TEtsStorage.GetEvtArray: TEtsArray;
+begin
+  if FCached and FCleared then
+  begin
+    RestoreData;
+  end;
+  result := FEvtArray;
+end;
+
+procedure TEtsStorage.Restore(DecompressionStream: TDecompressionStream;
+  Annotations: TStringList);
+var
+  Index: Integer;
+  Count: Integer;
+begin
+  DecompressionStream.Read(Count, SizeOf(Count));
+  SetLength(FEvtArray, Count);
+  for Index := 0 to Count - 1 do
+  begin
+    FEvtArray[Index].Restore(DecompressionStream, Annotations);
+  end;
+end;
+
+procedure TEtsStorage.Store(Compressor: TCompressionStream);
+var
+  Index: Integer;
+  Count: Integer;
+  Strings: TStringList;
+begin
+  Strings := TStringList.Create;
+  try
+    InitializeStrings(Strings);
+    Count := Length(FEvtArray);
+    for Index := 0 to Count - 1 do
+    begin
+      FEvtArray[Index].RecordStrings(Strings);
+    end;
+    WriteCompInt(Compressor, Strings.Count);
+
+    for Index := 0 to Strings.Count - 1 do
+    begin
+      WriteCompString(Compressor, Strings[Index]);
+    end;
+
+    Compressor.Write(Count, SizeOf(Count));
+    for Index := 0 to Count - 1 do
+    begin
+      FEvtArray[Index].Cache(Compressor, Strings);
+    end;
+
+  finally
+    Strings.Free;
+  end;
 end;
 
 end.

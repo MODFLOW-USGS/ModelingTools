@@ -270,7 +270,7 @@ type
       write SetConductanceTimeSeriesName;
     property BoundaryHeadTimeSeriesName: string
       read GetBoundaryHeadTimeSeriesName write SetBoundaryHeadTimeSeriesName;
-      // Multiplier
+    // Multiplier
     property Multiplier: Double read GetMultiplier;
     property MultiplierAnnotation: string read GetMultiplierAnnotation;
     property MultiplierPest: string read GetMultiplierPest;

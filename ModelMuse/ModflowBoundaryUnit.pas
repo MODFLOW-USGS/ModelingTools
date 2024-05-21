@@ -2387,9 +2387,11 @@ end;
 
 procedure TModflowBoundary.EvaluateArrayBoundaries(AModel: TBaseModel;
   Writer: TObject);
+var
+  ListArrayBoundColl: TCustomListArrayBoundColl;
 begin
-  (Values as TCustomListArrayBoundColl).
-    EvaluateArrayBoundaries(AModel, Writer);
+  ListArrayBoundColl := Values as TCustomListArrayBoundColl;
+  ListArrayBoundColl.EvaluateArrayBoundaries(AModel, Writer);
 end;
 
 procedure TModflowBoundary.EvaluateListBoundaries(AModel: TBaseModel);

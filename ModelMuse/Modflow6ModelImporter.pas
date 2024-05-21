@@ -5004,17 +5004,17 @@ var
         Imported_Ghb_Multiplier := AScreenObject.ImportedValues.Add;
         Imported_Ghb_Multiplier.Name := ImportedName;
         Imported_Ghb_Multiplier.Values.DataType := rdtDouble;
-        GhbItem.Conductance := rsObjectImportedValuesR + '("' + Imported_Ghb_Multiplier.Name + '")';
+        GhbItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_Ghb_Multiplier.Name + '")';
       end
       else
       begin
         Imported_Ghb_Multiplier := nil;
-        TimeSeries := ACell.Cond.StringValue;
+        TimeSeries := Aux.StringValue;
         if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
         begin
           Assert(False);
         end;
-        GhbItem.Conductance := ImportedTimeSeries;
+        GhbItem.Multiplier := ImportedTimeSeries;
       end;
     end
     else
@@ -5637,15 +5637,15 @@ begin
             ACell := ACellList[CellIndex];
             if ACell.Cond.ValueType = vtNumeric then
             begin
-              if AuxMultIndex >= 0 then
-              begin
-                Aux := ACell.Aux[AuxMultIndex];
-                if Aux.ValueType = vtNumeric then
-                begin
-                  Imported_Ghb_Multiplier.Values.Add(Aux.NumericValue);
-                end;
-              end;
               Imported_Ghb_Conductance.Values.Add(ACell.Cond.NumericValue);
+            end;
+            if AuxMultIndex >= 0 then
+            begin
+              Aux := ACell.Aux[AuxMultIndex];
+              if Aux.ValueType = vtNumeric then
+              begin
+                Imported_Ghb_Multiplier.Values.Add(Aux.NumericValue);
+              end;
             end;
 
             if ACell.BHead.ValueType = vtNumeric then
@@ -10339,6 +10339,7 @@ var
   IFace: Integer;
   LastTime: Double;
   Imported_Recharge: TValueArrayItem;
+  Imported_Rch_Multiplier: TValueArrayItem;
   ItemList: TList<TRchItem>;
   StartTime: Double;
   RchIndex: Integer;
@@ -10402,9 +10403,37 @@ var
     RchItem.EndTime := LastTime;
     RchItem.StartTime := StartTime;
 
+    if AuxMultIndex >= 0 then
+    begin
+      Aux := ACell.Aux[AuxMultIndex];
+      if Aux.ValueType = vtNumeric then
+      begin
+        ImportedName := Format('Imported_RCH_%s Multiplier Period_%d',
+          [Package.PackageName, Period]);
+        Imported_Rch_Multiplier := AScreenObject.ImportedValues.Add;
+        Imported_Rch_Multiplier.Name := ImportedName;
+        Imported_Rch_Multiplier.Values.DataType := rdtDouble;
+        RchItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_Rch_Multiplier.Name + '")';
+      end
+      else
+      begin
+        Imported_Rch_Multiplier := nil;
+        TimeSeries := Aux.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        RchItem.Multiplier := ImportedTimeSeries;
+      end;
+    end
+    else
+    begin
+      Imported_Rch_Multiplier := nil;
+    end;
+
     if ACell.Recharge.ValueType = vtNumeric then
     begin
-      ImportedName := Format('Imported_Recharge_Period_%d', [Period]);
+      ImportedName := Format('Imported_Recharge_%s Period_%d', [Package.PackageName, Period]);
       Imported_Recharge := AScreenObject.ImportedValues.Add;
       Imported_Recharge.Name := ImportedName;
       Imported_Recharge.Values.DataType := rdtDouble;
@@ -10952,6 +10981,14 @@ begin
               begin
                 Imported_Recharge.Values.Add(ACell.Recharge.NumericValue);
               end;
+              if AuxMultIndex >= 0 then
+              begin
+                Aux := ACell.Aux[AuxMultIndex];
+                if Aux.ValueType = vtNumeric then
+                begin
+                  Imported_Rch_Multiplier.Values.Add(Aux.NumericValue);
+                end;
+              end;
 
               for AuxIndex := 0 to TransportAuxNames.Count - 1 do
               begin
@@ -11174,7 +11211,7 @@ var
       else
       begin
         Imported_River_Multiplier := nil;
-        TimeSeries := ACell.Cond.StringValue;
+        TimeSeries := Aux.StringValue;
         if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
         begin
           Assert(False);
@@ -17733,7 +17770,7 @@ var
         Imported_Mutiplier := AScreenObject.ImportedValues.Add;
         Imported_Mutiplier.Name := ImportedName;
         Imported_Mutiplier.Values.DataType := rdtDouble;
-        WelItem.PumpingRate := rsObjectImportedValuesR + '("' + Imported_Mutiplier.Name + '")';
+        WelItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_Mutiplier.Name + '")';
       end
       else
       begin
@@ -17743,7 +17780,7 @@ var
         begin
           Assert(False);
         end;
-        WelItem.PumpingRate := ImportedTimeSeries;
+        WelItem.Multiplier := ImportedTimeSeries;
       end;
     end;
 

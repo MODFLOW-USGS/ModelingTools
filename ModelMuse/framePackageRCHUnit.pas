@@ -10,6 +10,7 @@ uses
 type
   TframePackageRCH = class(TframePackageTransientLayerChoice)
     rgAssignmentMethod: TRadioGroup;
+    cbUseMultiplierMODFLOW6: TCheckBox;
   private
     { Private declarations }
   public
@@ -31,17 +32,23 @@ uses
 { TframePackageRCH }
 
 procedure TframePackageRCH.GetData(Package: TModflowPackageSelection);
+var
+  RchPackage: TRchPackageSelection;
 begin
   inherited;
-  rgAssignmentMethod.ItemIndex :=
-    Ord((Package as TRchPackageSelection).AssignmentMethod);
+  RchPackage := Package as TRchPackageSelection;
+  rgAssignmentMethod.ItemIndex := Ord(RchPackage.AssignmentMethod);
+  cbUseMultiplierMODFLOW6.Checked := RchPackage.UseMultiplier;
 end;
 
 procedure TframePackageRCH.SetData(Package: TModflowPackageSelection);
+var
+  RchPackage: TRchPackageSelection;
 begin
   inherited;
-  (Package as TRchPackageSelection).AssignmentMethod :=
-     TUpdateMethod(rgAssignmentMethod.ItemIndex);
+  RchPackage := Package as TRchPackageSelection;
+  RchPackage.AssignmentMethod := TUpdateMethod(rgAssignmentMethod.ItemIndex);
+  RchPackage.UseMultiplier := cbUseMultiplierMODFLOW6.Checked;
 end;
 
 end.

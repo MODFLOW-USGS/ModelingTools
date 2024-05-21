@@ -1538,8 +1538,10 @@ Type
     FGwtConcentrationList: TMfBoundDispObjectList;
     FMfRchLayer: TModflowBoundaryDisplayTimeList;
     FMfRchRate: TModflowBoundaryDisplayTimeList;
+    FMfRchMultiplier: TModflowBoundaryDisplayTimeList;
     FAssignmentMethod: TUpdateMethod;
     procedure GetMfRchRateUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMfRchMultiplierUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMfRchLayerUseList(Sender: TObject; NewUseList: TStringList);
     procedure InitializeRchDisplay(Sender: TObject);
     procedure SetAssignmentMethod(const Value: TUpdateMethod);
@@ -1551,6 +1553,7 @@ Type
     Constructor Create(Model: TBaseModel); override;
     Destructor Destroy; override;
     property MfRchRate: TModflowBoundaryDisplayTimeList read FMfRchRate;
+    property MfRchMultiplier: TModflowBoundaryDisplayTimeList read FMfRchMultiplier;
     property MfRchLayer: TModflowBoundaryDisplayTimeList read FMfRchLayer;
     procedure InvalidateAllTimeLists; override;
     procedure InvalidateMfRchLayer(Sender: TObject);
@@ -1607,11 +1610,10 @@ Type
     procedure InvalidateEtsRateFractions(Sender: TObject);
     procedure UpdateEtsSegmentCount;
     procedure InvalidateAllTimeLists; override;
-//    procedure InvalidateConcentrations;
-//    procedure AddRemoveRenameGwtConcentrationTimeLists;
   published
     property SegmentCount: integer read FSegmentCount
       write SetSegmentCount default 1;
+    property UseMultiplier;
   end;
 
   TResPackageSelection = class(TCustomTransientLayerPackageSelection)
@@ -8286,6 +8288,13 @@ begin
     MfRchRate.Name := StrMODFLOWRchRate;
     AddTimeList(MfRchRate);
 
+    FMfRchMultiplier := TModflowBoundaryDisplayTimeList.Create(Model);
+    MfRchMultiplier.OnInitialize := InitializeRchDisplay;
+    MfRchMultiplier.OnGetUseList := GetMfRchMultiplierUseList;
+    MfRchMultiplier.OnTimeListUsed := PackageUsed;
+    MfRchMultiplier.Name := StrMODFLOWRchMultiplier;
+    AddTimeList(MfRchMultiplier);
+
     FMfRchLayer := TModflowBoundaryDisplayTimeList.Create(Model);
     MfRchLayer.OnInitialize := InitializeRchDisplay;
     MfRchLayer.OnGetUseList := GetMfRchLayerUseList;
@@ -8301,6 +8310,7 @@ destructor TRchPackageSelection.Destroy;
 begin
   FGwtConcentrationList.Free;
   FMfRchRate.Free;
+  FMfRchMultiplier.Free;
   FMfRchLayer.Free;
   inherited;
 end;
@@ -8374,6 +8384,12 @@ begin
   end;
 end;
 
+procedure TRchPackageSelection.GetMfRchMultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  UpdateDisplayUseList(NewUseList, ptRCH, 1, StrMODFLOWRchMultiplier);
+end;
+
 procedure TRchPackageSelection.GetMfRchRateUseList(Sender: TObject;
   NewUseList: TStringList);
 begin
@@ -8388,6 +8404,7 @@ var
   TimeList: TModflowBoundaryDisplayTimeList;
 begin
   MfRchRate.CreateDataSets;
+  MfRchMultiplier.CreateDataSets;
   if LayerOption = loSpecified then
   begin
     MfRchLayer.CreateDataSets;
@@ -8404,6 +8421,8 @@ begin
   RchWriter := TModflowRCH_Writer.Create(FModel as TCustomModel, etDisplay);
   try
     List.Add(MfRchRate);
+    List.Add(MfRchMultiplier);
+
     if LayerOption = loSpecified then
     begin
       List.Add(MfRchLayer);
@@ -8426,6 +8445,7 @@ begin
     List.Free;
   end;
   MfRchRate.LabelAsSum;
+  MfRchMultiplier.ComputeAverage;
 end;
 
 procedure TRchPackageSelection.InvalidateAllTimeLists;
@@ -8434,6 +8454,7 @@ begin
 //  if PackageUsed(FModel) then
   begin
     MfRchRate.Invalidate;
+    MfRchMultiplier.Invalidate;
     MfRchLayer.Invalidate;
     InvalidateConcentrations;
   end;
@@ -8466,6 +8487,7 @@ begin
     if FModel <> nil then
     begin
       MfRchRate.Invalidate;
+      MfRchMultiplier.Invalidate;
     end;
   end;
 end;

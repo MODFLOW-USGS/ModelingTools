@@ -376,54 +376,37 @@ type
     class function BoundaryClass: TMF_BoundCollClass; override;
   end;
 
-  TEvapotranspirationCell = class(TValueCell);
-
-  TEvt_Cell = class(TEvapotranspirationCell)
+  TEvapotranspirationCell = class abstract(TValueCell)
   private
-    FValues: TEvtRecord;
     FStressPeriod: integer;
-    function GetEvapotranspirationRate: double;
-    function GetEvapotranspirationRateAnnotation: string;
-    function GetETParameterName: string;
-    function GetETParameterValue: double;
-    function GetRatePest: string;
-    function GetRatePestMethod: TPestParamMethod;
-    function GetRatePestSeries: string;
-    function GetRateTimeSeries: string;
-    procedure SetRateTimeSeries(const Value: string);
-    function GetConcentration(const Index: Integer): double;
-    function GetConcentrationAnnotation(const Index: Integer): string;
-    function GetConcentrationPestName(const Index: Integer): string;
-    function GetConcentrationPestSeriesMethod(
-      const Index: Integer): TPestParamMethod;
-    function GetConcentrationPestSeriesName(const Index: Integer): string;
-    function GetConcentrationTimeSeriesName(const Index: Integer): string;
+    FValues: TEvtRecord;
   protected
-    function GetColumn: integer; override;
-    function GetLayer: integer; override;
-    function GetRow: integer; override;
-    procedure SetColumn(const Value: integer); override;
-    procedure SetLayer(const Value: integer); override;
-    procedure SetRow(const Value: integer); override;
-    function GetIntegerValue(Index: integer; AModel: TBaseModel): integer; override;
-    function GetRealValue(Index: integer; AModel: TBaseModel): double; override;
-    function GetRealAnnotation(Index: integer; AModel: TBaseModel): string; override;
-    function GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string; override;
-    procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
-    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
-    function GetSection: integer; override;
-    procedure RecordStrings(Strings: TStringList); override;
-    function GetPestName(Index: Integer): string; override;
-    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
-    function GetPestSeriesName(Index: Integer): string; override;
-    function GetMf6TimeSeriesName(Index: Integer): string; override;
-    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
+    function GetEvapotranspirationRate: double; virtual; abstract;
+    function GetEvapotranspirationRateAnnotation: string; virtual; abstract;
+    function GetETParameterName: string; virtual; abstract;
+    function GetETParameterValue: double; virtual; abstract;
+    function GetRatePest: string; virtual; abstract;
+    function GetRatePestMethod: TPestParamMethod; virtual; abstract;
+    function GetRatePestSeries: string; virtual; abstract;
+    function GetRateTimeSeries: string; virtual; abstract;
+    procedure SetRateTimeSeries(const Value: string); virtual; abstract;
+    function GetConcentration(const Index: integer): double; virtual; abstract;
+    function GetConcentrationAnnotation(const Index: integer): string;
+      virtual; abstract;
+    function GetConcentrationPestName(const Index: integer): string;
+      virtual; abstract;
+    function GetConcentrationPestSeriesMethod(const Index: integer)
+      : TPestParamMethod; virtual; abstract;
+    function GetConcentrationPestSeriesName(const Index: integer): string;
+      virtual; abstract;
+    function GetConcentrationTimeSeriesName(const Index: integer): string;
+      virtual; abstract;
   public
-    property EvapotranspirationRate: double read GetEvapotranspirationRate;
-    property EvapotranspirationRateAnnotation: string read GetEvapotranspirationRateAnnotation;
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
+    property EvapotranspirationRate: double read GetEvapotranspirationRate;
+    property EvapotranspirationRateAnnotation: string
+      read GetEvapotranspirationRateAnnotation;
     property Values: TEvtRecord read FValues write FValues;
-    function IsIdentical(AnotherCell: TValueCell): boolean; override;
     property ETParameterName: string read GetETParameterName;
     property ETParameterValue: double read GetETParameterValue;
     // PEST
@@ -445,9 +428,53 @@ type
       read GetConcentrationPestSeriesMethod;
     property ConcentrationTimeSeriesNames[const Index: Integer]: string
       read GetConcentrationTimeSeriesName;
+    function IsIdentical(AnotherCell: TValueCell): boolean; override;
   end;
 
-  TEvapotranspirationLayerCell = class(TEvapotranspirationCell)
+  TEvt_Cell = class(TEvapotranspirationCell)
+  private
+    FValues: TEvtRecord;
+  protected
+    function GetEvapotranspirationRate: double; override;
+    function GetEvapotranspirationRateAnnotation: string; override;
+    function GetETParameterName: string; override;
+    function GetETParameterValue: double; override;
+    function GetRatePest: string; override;
+    function GetRatePestMethod: TPestParamMethod; override;
+    function GetRatePestSeries: string; override;
+    function GetRateTimeSeries: string; override;
+    procedure SetRateTimeSeries(const Value: string); override;
+    function GetConcentration(const Index: integer): double; override;
+    function GetConcentrationAnnotation(const Index: integer): string; override;
+    function GetConcentrationPestName(const Index: integer): string; override;
+    function GetConcentrationPestSeriesMethod(const Index: integer)
+      : TPestParamMethod; override;
+    function GetConcentrationPestSeriesName(const Index: integer)
+      : string; override;
+    function GetConcentrationTimeSeriesName(const Index: integer)
+      : string; override;
+    function GetColumn: integer; override;
+    function GetLayer: integer; override;
+    function GetRow: integer; override;
+    procedure SetColumn(const Value: integer); override;
+    procedure SetLayer(const Value: integer); override;
+    procedure SetRow(const Value: integer); override;
+    function GetIntegerValue(Index: integer; AModel: TBaseModel): integer; override;
+    function GetRealValue(Index: integer; AModel: TBaseModel): double; override;
+    function GetRealAnnotation(Index: integer; AModel: TBaseModel): string; override;
+    function GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string; override;
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
+    function GetSection: integer; override;
+    procedure RecordStrings(Strings: TStringList); override;
+    function GetPestName(Index: Integer): string; override;
+    function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
+    function GetPestSeriesName(Index: Integer): string; override;
+    function GetMf6TimeSeriesName(Index: Integer): string; override;
+    procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
+  end;
+
+  TEvapotranspirationLayerCell = class abstract(TValueCell)
   private
     FValues: TEvtLayerRecord;
     FStressPeriod: integer;
@@ -474,7 +501,7 @@ type
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
   end;
 
-  TEvtSurfDepth_Cell = class(TEvapotranspirationCell)
+  TEvtSurfDepth_Cell = class abstract(TValueCell)
   private
     Values: TEvtSurfDepthRecord;
     StressPeriod: integer;
@@ -764,7 +791,7 @@ begin
     EvtRatePosition: result := EvapotranspirationRate;
     else
       begin
-        Dec(Index, 1);
+        Dec(Index, EvtStartConcentration);
         while GwtConcentrations.Count <= Index do
         begin
           GwtConcentrations.Add;
@@ -832,7 +859,7 @@ begin
     EvtRatePosition: EvapotranspirationRate := Value;
     else
       begin
-        Dec(Index, 1);
+        Dec(Index, EvtStartConcentration);
         while Index >= GwtConcentrations.Count do
         begin
           GwtConcentrations.Add;
@@ -1351,7 +1378,7 @@ begin
   result := Values.Cell.Section;
 end;
 
-function TEvt_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
+function TEvapotranspirationCell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
   Evt_Cell: TEvt_Cell;
 begin
@@ -1400,7 +1427,6 @@ begin
       begin
         ConcIndex := Index - EvtStartConcentration;
         FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := Value;
-//        Assert(False);
       end;
   end;
 end;

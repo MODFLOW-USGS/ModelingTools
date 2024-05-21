@@ -337,6 +337,7 @@ const
   StrMODFLOWEvtSurface = 'EVT Evapotranspiration Surface';
   StrMODFLOWEvtLayer = 'EVT Evapotranspiration Layer';
   StrMODFLOWRchRate = 'RCH Rate';
+  StrMODFLOWRchMultiplier = 'RCH Multiplier';
   StrMODFLOWRchLayer = 'RCH Layer';
 
   StrModflowSfrSegment = 'SFR Segment';

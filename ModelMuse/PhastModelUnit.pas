@@ -27299,7 +27299,7 @@ end;
 
 procedure TCustomModel.InvalidateMfRchMultiplier(Sender: TObject);
 begin
-
+  ModflowPackages.RchPackage.MfRchMultiplier.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateMfRchRate(Sender: TObject);

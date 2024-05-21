@@ -27,7 +27,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 583
     Height = 513
-    ActivePage = jvspRIV
+    ActivePage = jvspETS
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -557,6 +557,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         TabOrder = 0
         TabStop = True
         ExplicitWidth = 583
+        ExplicitHeight = 161
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -1324,15 +1325,12 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 480
           Height = 81
-          ExplicitWidth = 480
           ExplicitHeight = 81
         end
         inherited pnLayerOption: TPanel
-          Top = 149
+          Top = 135
           Width = 583
-          ExplicitTop = 149
           ExplicitWidth = 583
           inherited lblLayerOption: TLabel
             Width = 173
@@ -1347,10 +1345,6 @@ inherited frmModflowPackages: TfrmModflowPackages
           end
           inherited cbTimeVaryingLayers: TCheckBox
             Caption = 'Time varying recharge layers'
-          end
-          inherited rgAssignmentMethod: TRadioGroup
-            Width = 320
-            ExplicitWidth = 320
           end
         end
         inherited rcSelectionController: TRbwController
@@ -1372,6 +1366,9 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = framePkgRCH.rgAssignmentMethod
+            end
+            item
+              Control = framePkgRCH.cbUseMultiplierMODFLOW6
             end
             item
               Control = frameRchParameterDefinition
@@ -1549,11 +1546,14 @@ inherited frmModflowPackages: TfrmModflowPackages
         Left = 0
         Top = 0
         Width = 583
-        Height = 226
+        Height = 237
         Align = alTop
         TabOrder = 0
         TabStop = True
         ExplicitWidth = 583
+        DesignSize = (
+          583
+          237)
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -1622,15 +1622,18 @@ inherited frmModflowPackages: TfrmModflowPackages
               Control = framePkgETS.lblSegments
             end
             item
+              Control = framePkgETS.cbUseMultiplierMODFLOW6
+            end
+            item
               Control = frameEtsParameterDefinition
             end>
         end
       end
       inline frameEtsParameterDefinition: TframeListParameterDefinition
         Left = 0
-        Top = 226
+        Top = 237
         Width = 583
-        Height = 287
+        Height = 276
         Align = alClient
         Enabled = False
         TabOrder = 1
@@ -1639,7 +1642,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         ExplicitWidth = 583
         ExplicitHeight = 287
         inherited pnlParameterCount: TPanel
-          Top = 239
+          Top = 228
           Width = 583
           ExplicitTop = 239
           ExplicitWidth = 583
@@ -1662,7 +1665,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited dgParameters: TRbwDataGrid4
           Width = 577
-          Height = 233
+          Height = 222
           ExplicitWidth = 577
           ExplicitHeight = 233
         end

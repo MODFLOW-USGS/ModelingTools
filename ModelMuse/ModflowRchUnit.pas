@@ -268,7 +268,6 @@ type
     FStressPeriod: integer;
     function GetRechargeRate: double;
     function GetRechargeRateAnnotation: string;
-//    function GetTimeSeriesName: string;
     function GetRechargeParameterName: string;
     function GetRechargeParameterValue: double;
     function GetRechargePest: string;
@@ -283,6 +282,13 @@ type
       const Index: Integer): TPestParamMethod;
     function GetConcentrationPestSeriesName(const Index: Integer): string;
     function GetConcentrationTimeSeriesName(const Index: Integer): string;
+    function GetMultiplier: Double;
+    function GetMultiplierAnnotation: string;
+    function GetMultiplierPest: string;
+    function GetMultiplierPestSeries: string;
+    function GetMultiplierPestSeriesMethod: TPestParamMethod;
+    function GetMultiplierTimeSeriesName: string;
+    procedure SetMultiplierTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -294,15 +300,15 @@ type
     function GetRealValue(Index: integer; AModel: TBaseModel): double; override;
     function GetRealAnnotation(Index: integer; AModel: TBaseModel): string; override;
     function GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string; override;
-    procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
-    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
-    function GetSection: integer; override;
-    procedure RecordStrings(Strings: TStringList); override;
     function GetPestName(Index: Integer): string; override;
     function GetPestSeriesMethod(Index: Integer): TPestParamMethod; override;
     function GetPestSeriesName(Index: Integer): string; override;
     function GetMf6TimeSeriesName(Index: Integer): string; override;
     procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
+    procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
+    procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
+    procedure RecordStrings(Strings: TStringList); override;
+    function GetSection: integer; override;
   public
     property StressPeriod: integer read FStressPeriod write FStressPeriod;
     property Values: TRchRecord read FValues write FValues;
@@ -318,6 +324,14 @@ type
     property RechargePestMethod: TPestParamMethod read GetRechargePestMethod;
     property RechargeTimeSeriesName: string read GetRechargeTimeSeriesName
       write SetRechargeTimeSeriesName;
+    // Multiplier
+    property Multiplier: Double read GetMultiplier;
+    property MultiplierAnnotation: string read GetMultiplierAnnotation;
+    property MultiplierPest: string read GetMultiplierPest;
+    property MultiplierPestSeries: string read GetMultiplierPestSeries;
+    property MultiplierPestSeriesMethod: TPestParamMethod read GetMultiplierPestSeriesMethod;
+    property MultiplierTimeSeriesName: string read GetMultiplierTimeSeriesName
+      write SetMultiplierTimeSeriesName;
     // GWT
     property Concentrations[const Index: Integer]: double
       read GetConcentration;
@@ -365,9 +379,15 @@ type
   private
     FRechargeLayers: TRchLayerCollection;
     FCurrentParameter: TModflowTransientListParameter;
+
     FPestRechargeMethod: TPestParamMethod;
     FPestRechargeFormula: IFormulaObject;
     FPestRechargeObserver: TObserver;
+
+    FPestMultiplierMethod: TPestParamMethod;
+    FPestMultiplierFormula: IFormulaObject;
+    FPestMultiplierObserver: TObserver;
+
     FUsedObserver: TObserver;
     FPestConcentrationMethods: TGwtPestMethodCollection;
     FPestConcentrationFormulas: TRchGwtConcCollection;
@@ -376,12 +396,20 @@ type
     function GetTimeVaryingRechargeLayers: boolean;
     procedure AssignRechargeLayerCells(BoundaryStorage: TRchLayerStorage;
       ValueTimeList: TList);
+
     function GetPestRechargeFormula: string;
     procedure SetPestRechargeFormula(const Value: string);
     procedure SetPestRechargeMethod(const Value: TPestParamMethod);
     procedure InvalidateRechargeData(Sender: TObject);
-    procedure InvalidateConcData(Sender: TObject);
     function GetPestRechargeObserver: TObserver;
+
+    function GetPestMultiplierFormula: string;
+    procedure SetPestMultiplierFormula(const Value: string);
+    procedure SetPestMultiplierMethod(const Value: TPestParamMethod);
+    procedure InvalidateMultiplierData(Sender: TObject);
+    function GetPestMultiplierObserver: TObserver;
+
+    procedure InvalidateConcData(Sender: TObject);
     procedure SetPestConcentrationFormulas(const Value: TRchGwtConcCollection);
     procedure SetPestConcentrationMethods(const Value: TGwtPestMethodCollection);
     function GetConcentrationObserver(const Index: Integer): TObserver;
@@ -406,6 +434,7 @@ type
     function BoundaryObserverPrefix: string; override;
     procedure CreateObservers; //override;
     property PestRechargeObserver: TObserver read GetPestRechargeObserver;
+    property PestMultiplierObserver: TObserver read GetPestMultiplierObserver;
     function GetPestBoundaryFormula(FormulaIndex: integer): string; override;
     procedure SetPestBoundaryFormula(FormulaIndex: integer;
       const Value: string); override;
@@ -447,10 +476,17 @@ type
     property RechargeLayers: TRchLayerCollection read FRechargeLayers
       write SetRechargeLayers;
     property Interp;
+
     property PestRechargeFormula: string read GetPestRechargeFormula
       write SetPestRechargeFormula;
     property PestRechargeMethod: TPestParamMethod read FPestRechargeMethod
       write SetPestRechargeMethod;
+
+    property PestMultiplierFormula: string read GetPestMultiplierFormula
+      write SetPestMultiplierFormula;
+    property PestMultiplierMethod: TPestParamMethod read FPestMultiplierMethod
+      write SetPestMultiplierMethod;
+
     property PestConcentrationFormulas: TRchGwtConcCollection
       read FPestConcentrationFormulas write SetPestConcentrationFormulas;
     property PestConcentrationMethods: TGwtPestMethodCollection
@@ -459,7 +495,7 @@ type
 
 const
   RechargeRatePosition = 0;
-  MultiplierPosition = 1;
+  RchMultiplierPosition = 1;
   RchStartConcentration = 2;
 
 implementation
@@ -507,7 +543,7 @@ begin
   ParentCollection := Collection as TRchCollection;
   RechObserver := FObserverList[RechargeRatePosition];
   RechObserver.OnUpToDateSet := ParentCollection.InvalidateRechargeData;
-  MultiplierObserver := FObserverList[MultiplierPosition];
+  MultiplierObserver := FObserverList[RchMultiplierPosition];
   MultiplierObserver.OnUpToDateSet := ParentCollection.InvalidateMultiplierData;
 
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
@@ -571,7 +607,7 @@ var
 begin
   case Index of
     RechargeRatePosition: result := RechargeRate;
-    MultiplierPosition: result := Multiplier;
+    RchMultiplierPosition: result := Multiplier;
     else
       begin
         Dec(Index, RchStartConcentration);
@@ -593,7 +629,7 @@ begin
   finally
     FMultiplier.ScreenObject := nil;
   end;
-  ResetItemObserver(RechargeRatePosition);
+  ResetItemObserver(RchMultiplierPosition);
 end;
 
 procedure TRchItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -607,7 +643,7 @@ begin
   end;
   if (Sender = FMultiplier as TObject) then
   begin
-    List.Add(FObserverList[MultiplierPosition]);
+    List.Add(FObserverList[RchMultiplierPosition]);
   end;
   for ConcIndex := 0 to GwtConcentrations.Count - 1 do
   begin
@@ -676,7 +712,7 @@ var
 begin
   case Index of
     RechargeRatePosition: RechargeRate := Value;
-    MultiplierPosition: Multiplier := Value;
+    RchMultiplierPosition: Multiplier := Value;
     else
       begin
         Dec(Index, RchStartConcentration);
@@ -699,7 +735,7 @@ procedure TRchItem.SetMultiplier(const Value: string);
 begin
   FMultiplier.ScreenObject := ScreenObjectI;
   try
-    UpdateFormulaBlocks(Value, RechargeRatePosition, FMultiplier);
+    UpdateFormulaBlocks(Value, RchMultiplierPosition, FMultiplier);
   finally
     FMultiplier.ScreenObject := nil;
   end;
@@ -778,7 +814,7 @@ begin
   RechargeRateArray := DataSets[RechargeRatePosition];
   RechargeRateArray.GetMinMaxStoredLimits(LayerMin, RowMin, ColMin,
     LayerMax, RowMax, ColMax);
-  MultiplierArray := DataSets[MultiplierPosition];
+  MultiplierArray := DataSets[RchMultiplierPosition];
 
   LocalRechargePestSeries := PestSeries[RechargeRatePosition];
   LocalRechargePestMethod := PestMethods[RechargeRatePosition];
@@ -787,11 +823,11 @@ begin
   RechargeTimeItems := TimeSeriesNames[RechargeRatePosition];
   LocalRechargeTimeSeries := RechargeTimeItems[ItemIndex];
 
-  LocalMultiplierPestSeries := PestSeries[MultiplierPosition];
-  LocalMultiplierPestMethod := PestMethods[MultiplierPosition];
-  MultiplierPestItems := PestItemNames[MultiplierPosition];
+  LocalMultiplierPestSeries := PestSeries[RchMultiplierPosition];
+  LocalMultiplierPestMethod := PestMethods[RchMultiplierPosition];
+  MultiplierPestItems := PestItemNames[RchMultiplierPosition];
   LocalMultiplierPest := MultiplierPestItems[ItemIndex];
-  MultiplierTimeItems := TimeSeriesNames[MultiplierPosition];
+  MultiplierTimeItems := TimeSeriesNames[RchMultiplierPosition];
   LocalMultiplierTimeSeries := MultiplierTimeItems[ItemIndex];
 
   RechargeDynamicTimeSeries := nil;
@@ -804,16 +840,7 @@ begin
     end;
     RechargeDynamicTimeSeries := LocalScreenObject.
       GetDynamicTimeSeriesIByName(LocalRechargeTimeSeries);
-  end;
 
-  MultiplierDynamicTimeSeries := nil;
-  if ScreenObject <> nil then
-  begin
-    if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
-      LocalScreenObject) <> 0 then
-    begin
-      Assert(False);
-    end;
     MultiplierDynamicTimeSeries := LocalScreenObject.
       GetDynamicTimeSeriesIByName(LocalMultiplierTimeSeries);
   end;
@@ -978,7 +1005,7 @@ var
   RechargeRateData: TModflowTimeList;
   MultiplierData: TModflowTimeList;
   DataArrayIndex: Integer;
-  DataArray: TTransientRealSparseDataSet;
+  RechargeDataArray: TTransientRealSparseDataSet;
   RowIndex: Integer;
   ColIndex: Integer;
   LayerIndex: Integer;
@@ -1006,6 +1033,7 @@ var
   ConcTimeSeriesItemList: TList<TStringList>;
   ConcentrationData: TModflowTimeList;
   ConcDataArray: TTransientRealSparseDataSet;
+  MultiplierDataArray: TTransientRealSparseDataSet;
 begin
   ConcPestItemList := TList<TStringList>.Create;
   ConcTimeSeriesItemList := TList<TStringList>.Create;
@@ -1015,7 +1043,7 @@ begin
     SetLength(BoundaryValues, Count);
     SpeciesCount := LocalModel.MobileComponents.Count;
 
-    // Note that TRchCollection is also used in UZF where RechPosition
+    // Note that TRchCollection is also used in UZF for MODFLOW-2005 where RechPosition
     // is the same as UzfInfiltrationBoundaryPosition.
     PestRechargeSeriesName := BoundaryGroup.PestBoundaryFormula[RechargeRatePosition];
     PestSeries.Add(PestRechargeSeriesName);
@@ -1027,6 +1055,17 @@ begin
 
     RechargeTimeSeriesItems := TStringList.Create;
     TimeSeriesNames.Add(RechargeTimeSeriesItems);
+
+    PestMultiplierSeriesName := BoundaryGroup.PestBoundaryFormula[RchMultiplierPosition];
+    PestSeries.Add(PestMultiplierSeriesName);
+    MultiplierMethod := BoundaryGroup.PestBoundaryMethod[RchMultiplierPosition];
+    PestMethods.Add(MultiplierMethod);
+
+    MultiplierItems := TStringList.Create;
+    PestItemNames.Add(MultiplierItems);
+
+    MultiplierTimeSeriesItems := TStringList.Create;
+    TimeSeriesNames.Add(MultiplierTimeSeriesItems);
 
     if LocalModel.GwtUsed then
     begin
@@ -1063,6 +1102,20 @@ begin
     RechargeRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
     Assert(RechargeRateData.Count = Count);
 
+    for Index := 0 to Count - 1 do
+    begin
+      Item := Items[Index] as TRchItem;
+      BoundaryValues[Index].Time := Item.StartTime;
+
+      ItemFormula := Item.Multiplier;
+      AssignBoundaryFormula(AModel, PestMultiplierSeriesName, MultiplierMethod,
+        MultiplierItems, MultiplierTimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+    end;
+    ALink := TimeListLink.GetLink(AModel) as TRchTimeListLink;
+    MultiplierData := ALink.FMultiplierData;
+    MultiplierData.Initialize(BoundaryValues, ScreenObject, lctUse);
+    Assert(MultiplierData.Count = Count);
+
     if LocalModel.GwtUsed then
     begin
       for SpeciesIndex := 0 to SpeciesCount - 1 do
@@ -1094,7 +1147,8 @@ begin
       LayerCount := LocalModel.LayerCount;
       for DataArrayIndex := 0 to RechargeRateData.Count - 1 do
       begin
-        DataArray := RechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
+        RechargeDataArray := RechargeRateData[DataArrayIndex] as TTransientRealSparseDataSet;
+        MultiplierDataArray := MultiplierData[DataArrayIndex] as TTransientRealSparseDataSet;
         for RowIndex := 0 to RowCount - 1 do
         begin
           for ColIndex := 0 to ColumnCount - 1 do
@@ -1104,7 +1158,8 @@ begin
             begin
               if ShouldRemove then
               begin
-                DataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
+                MultiplierDataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
+                RechargeDataArray.RemoveValue(LayerIndex, RowIndex, ColIndex);
                 if LocalModel.GwtUsed then
                 begin
                   for SpeciesIndex := 0 to SpeciesCount - 1 do
@@ -1117,7 +1172,7 @@ begin
               end
               else
               begin
-                ShouldRemove := DataArray.IsValue[LayerIndex, RowIndex, ColIndex];
+                ShouldRemove := RechargeDataArray.IsValue[LayerIndex, RowIndex, ColIndex];
               end;
             end;
           end;
@@ -1132,6 +1187,8 @@ begin
       AddBoundary(TRchStorage.Create(AModel));
     end;
     ListOfTimeLists.Add(RechargeRateData);
+    ListOfTimeLists.Add(MultiplierData);
+
     if LocalModel.GwtUsed then
     begin
       for SpeciesIndex := 0 to SpeciesCount - 1 do
@@ -1367,12 +1424,46 @@ begin
       begin
         result := RechargeTimeSeriesName;
       end;
+    RchMultiplierPosition:
+      begin
+        result := MultiplierTimeSeriesName;
+      end;
     else
       begin
         ConcIndex := Index - RchStartConcentration;
         result := FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex];
       end;
   end;
+end;
+
+function TRch_Cell.GetMultiplier: Double;
+begin
+  result := FValues.Multiplier;
+end;
+
+function TRch_Cell.GetMultiplierAnnotation: string;
+begin
+  result := FValues.MultiplierAnnotation;
+end;
+
+function TRch_Cell.GetMultiplierPest: string;
+begin
+  result := FValues.MultiplierPest;
+end;
+
+function TRch_Cell.GetMultiplierPestSeries: string;
+begin
+  result := FValues.MultiplierPestSeries;
+end;
+
+function TRch_Cell.GetMultiplierPestSeriesMethod: TPestParamMethod;
+begin
+  result := FValues.MultiplierPestMethod;
+end;
+
+function TRch_Cell.GetMultiplierTimeSeriesName: string;
+begin
+  result := FValues.MultiplierTimeSeriesName;
 end;
 
 function TRch_Cell.GetPestName(Index: Integer): string;
@@ -1383,6 +1474,10 @@ begin
     RechargeRatePosition:
       begin
         result := RechargePest;
+      end;
+    RchMultiplierPosition:
+      begin
+        result := MultiplierPest;
       end;
     else
       begin
@@ -1401,6 +1496,10 @@ begin
       begin
         result := RechargePestMethod;
       end;
+    RchMultiplierPosition:
+      begin
+        result := MultiplierPestSeriesMethod;
+      end;
     else
       begin
         ConcIndex := Index - RchStartConcentration;
@@ -1418,6 +1517,10 @@ begin
       begin
         result := RechargePestSeries;
       end;
+    RchMultiplierPosition:
+      begin
+        result := MultiplierPestSeries;
+      end;
     else
       begin
         ConcIndex := Index - RchStartConcentration;
@@ -1433,6 +1536,7 @@ begin
   result := '';
   case Index of
     RechargeRatePosition: result := RechargeRateAnnotation;
+    RchMultiplierPosition: result := MultiplierAnnotation;
     else
       begin
         ConcIndex := Index - RchStartConcentration;
@@ -1447,6 +1551,7 @@ var
 begin
   case Index of
     RechargeRatePosition: result := RechargeRate;
+    RchMultiplierPosition: result := Multiplier;
     else
       begin
         ConcIndex := Index - RchStartConcentration;
@@ -1555,12 +1660,21 @@ begin
       begin
         RechargeTimeSeriesName := Value;
       end;
+    RchMultiplierPosition:
+      begin
+        MultiplierTimeSeriesName := Value;
+      end;
     else
       begin
         ConcIndex := Index - RchStartConcentration;
         FValues.GwtConcentrations.ValueTimeSeriesNames[ConcIndex] := Value;
       end;
   end;
+end;
+
+procedure TRch_Cell.SetMultiplierTimeSeriesName(const Value: string);
+begin
+  FValues.MultiplierTimeSeriesName := Value;
 end;
 
 procedure TRch_Cell.SetRechargeTimeSeriesName(const Value: string);
@@ -1586,6 +1700,8 @@ begin
 
     PestRechargeFormula := SourceBoundary.PestRechargeFormula;
     PestRechargeMethod := SourceBoundary.PestRechargeMethod;
+    PestMultiplierFormula := SourceBoundary.PestMultiplierFormula;
+    PestMultiplierMethod := SourceBoundary.PestMultiplierMethod;
     PestConcentrationFormulas := SourceBoundary.PestConcentrationFormulas;
     PestConcentrationMethods := SourceBoundary.PestConcentrationMethods;
   end;
@@ -1716,7 +1832,7 @@ end;
 
 class function TRchBoundary.BFCount: Integer;
 begin
-  result := 1;
+  result := 2;
   if frmGoPhast.PhastModel.GwtUsed then
   begin
     result := result + frmGoPhast.PhastModel.MobileComponents.Count;
@@ -1754,6 +1870,9 @@ begin
   PestRechargeFormula := '';
   FPestRechargeMethod := DefaultBoundaryMethod(RechargeRatePosition);
 
+  PestMultiplierFormula := '';
+  FPestMultiplierMethod := DefaultBoundaryMethod(RchMultiplierPosition);
+
   FRechargeLayers := TRchLayerCollection.Create(self, Model as TCustomModel, ScreenObject);
 end;
 
@@ -1763,6 +1882,7 @@ var
   ConcIndex: Integer;
 begin
   FPestRechargeFormula := CreateFormulaObjectBlocks(dsoTop);
+  FPestMultiplierFormula := CreateFormulaObjectBlocks(dsoTop);
   LocalModel := ParentModel as TPhastModel;
   if (LocalModel <> nil) and LocalModel.GwtUsed then
   begin
@@ -1785,6 +1905,7 @@ begin
   if ScreenObject <> nil then
   begin
     FObserverList.Add(PestRechargeObserver);
+    FObserverList.Add(PestMultiplierObserver);
     for Index := 0 to FPestConcentrationFormulas.Count - 1 do
     begin
       FObserverList.Add(ConcentrationObserver[Index]);
@@ -1797,6 +1918,10 @@ class function TRchBoundary.DefaultBoundaryMethod(
 begin
   case FormulaIndex of
     RechargeRatePosition:
+      begin
+        result := ppmMultiply;
+      end;
+    RchMultiplierPosition:
       begin
         result := ppmMultiply;
       end;
@@ -1813,6 +1938,7 @@ var
   Index: Integer;
 begin
   PestRechargeFormula := '';
+  PestMultiplierFormula := '';
   FRechargeLayers.Free;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
   begin
@@ -1961,6 +2087,10 @@ begin
       begin
         result := PestRechargeFormula;
       end;
+    RchMultiplierPosition:
+      begin
+        result := PestMultiplierFormula;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - RchStartConcentration;
@@ -1983,6 +2113,10 @@ begin
       begin
         result := PestRechargeMethod;
       end;
+    RchMultiplierPosition:
+      begin
+        result := PestMultiplierMethod;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - RchStartConcentration;
@@ -1993,6 +2127,25 @@ begin
         result := FPestConcentrationMethods[ConcIndex].PestParamMethod;
       end;
   end;
+end;
+
+function TRchBoundary.GetPestMultiplierFormula: string;
+begin
+  Result := FPestMultiplierFormula.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(RchMultiplierPosition);
+  end;
+end;
+
+function TRchBoundary.GetPestMultiplierObserver: TObserver;
+begin
+  if FPestMultiplierObserver = nil then
+  begin
+    CreateObserver('PestMultiplier_', FPestMultiplierObserver, nil);
+    FPestMultiplierObserver.OnUpToDateSet := InvalidateMultiplierData;
+  end;
+  result := FPestMultiplierObserver;
 end;
 
 function TRchBoundary.GetPestRechargeFormula: string;
@@ -2023,6 +2176,13 @@ begin
     if RechargeRatePosition < FObserverList.Count then
     begin
       List.Add(FObserverList[RechargeRatePosition]);
+    end;
+  end;
+  if Sender = FPestMultiplierFormula as TObject then
+  begin
+    if RchMultiplierPosition < FObserverList.Count then
+    begin
+      List.Add(FObserverList[RchMultiplierPosition]);
     end;
   end;
   for Index := 0 to FPestConcentrationFormulas.Count - 1 do
@@ -2084,8 +2244,39 @@ begin
   begin
     Model := ParentModel as TCustomModel;
     Model.InvalidateMfRchRate(self);
+    Model.InvalidateMfRchMultiplier(self);
     Model.InvalidateMfRchLayer(self);
     Model.InvalidateMfRchConc(self);
+  end;
+end;
+
+procedure TRchBoundary.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateMfRchMultiplier(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateMfRchMultiplier(self);
+      end;
+    end;
   end;
 end;
 
@@ -2148,6 +2339,10 @@ begin
       begin
         PestRechargeFormula := Value;
       end;
+    RchMultiplierPosition:
+      begin
+        PestMultiplierFormula := Value;
+      end;
     else
       begin
         ConcIndex := FormulaIndex - RchStartConcentration;
@@ -2169,6 +2364,10 @@ begin
     RechargeRatePosition:
       begin
         PestRechargeMethod := Value;
+      end;
+    RchMultiplierPosition:
+      begin
+        PestMultiplierMethod := Value;
       end;
     else
       begin
@@ -2192,6 +2391,16 @@ procedure TRchBoundary.SetPestConcentrationMethods(
   const Value: TGwtPestMethodCollection);
 begin
   FPestConcentrationMethods.Assign(Value);
+end;
+
+procedure TRchBoundary.SetPestMultiplierFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, RchMultiplierPosition, FPestMultiplierFormula);
+end;
+
+procedure TRchBoundary.SetPestMultiplierMethod(const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMultiplierMethod, Value);
 end;
 
 procedure TRchBoundary.SetPestRechargeFormula(const Value: string);
@@ -2892,9 +3101,11 @@ begin
   FMultiplierData.ParamDescription := ' ' + StrRCHMultiplier;
 
   AddTimeList(FRechargeRateData);
+  AddTimeList(FMultiplierData);
   if Model <> nil then
   begin
     FRechargeRateData.OnInvalidate := (Model as TCustomModel).InvalidateMfRchRate;
+    FMultiplierData.OnInvalidate := (Model as TCustomModel).InvalidateMfRchMultiplier;
   end;
 
   CreateGwtTimeLists;

@@ -20,6 +20,7 @@ type
   TframeEtsPackage = class(TframePackageTransientLayerChoice)
     seSegments: TJvSpinEdit;
     lblSegments: TLabel;
+    cbUseMultiplierMODFLOW6: TCheckBox;
   private
     { Private declarations }
   public

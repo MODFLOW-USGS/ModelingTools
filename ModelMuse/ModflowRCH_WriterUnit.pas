@@ -386,6 +386,10 @@ begin
   if Model.ModelSelection = msModflow2015 then
   begin
     VariableIdentifiers := 'RECHARGE';
+    if FRchPackage.UseMultiplier then
+    begin
+      VariableIdentifiers := VariableIdentifiers + ' multiplier';
+    end;
   end
   else
   begin
@@ -577,6 +581,12 @@ begin
   WriteMF6ObsOption(InputFileName);
   WriteMf6ParamListOption;
 
+  if FRchPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
+
   WriteEndOptions;
 end;
 
@@ -592,6 +602,10 @@ begin
       ASpecies := Model.MobileComponents[SpeciesIndex];
       WriteString(' ' + ASpecies.Name);
     end;
+  end;
+  if FRchPackage.UseMultiplier then
+  begin
+    WriteString(' multiplier');
   end;
 end;
 
@@ -735,6 +749,11 @@ begin
           begin
             WriteValueOrFormula(RchCell, RchStartConcentration + SpeciesIndex);
           end;
+        end;
+
+        if FRchPackage.UseMultiplier then
+        begin
+          WriteValueOrFormula(RchCell, RchMultiplierPosition);
         end;
 
         WriteBoundName(RchCell);

@@ -67,38 +67,42 @@ begin
 end;
 
 procedure CreateDirectoryAndParents(DirName: string);
-var
-  Parents: TStringList;
-  Index: integer;
-  function ParentDir(const DirName: string): string;
-  var
-    Index: integer;
-  begin
-    result := '';
-    for Index := Length(DirName) downto 1 do
-    begin
-      if DirName[Index] = '\' then
-      begin
-        result := Copy(DirName, 1, Index-1);
-        Exit;
-      end;
-    end;
-  end;
+//var
+//  Parents: TStringList;
+//  Index: integer;
+//  function ParentDir(const DirName: string): string;
+//  var
+//    Index: integer;
+//  begin
+//    result := '';
+//    for Index := Length(DirName) downto 1 do
+//    begin
+//      if DirName[Index] = '\' then
+//      begin
+//        result := Copy(DirName, 1, Index-1);
+//        Exit;
+//      end;
+//    end;
+//  end;
 begin
-  Parents := TStringList.Create;
-  try
-    while (not DirectoryExists(DirName)) and (DirName <> '') do
-    begin
-      Parents.Add(DirName);
-      DirName := ParentDir(DirName);
-    end;
-    for Index := Parents.Count -1 downto 0 do
-    begin
-      if not CreateDir(Parents[Index]) then RaiseLastOSError;
-    end;
-  finally
-    Parents.Free;
+  if not ForceDirectories(DirName) then
+  begin
+    RaiseLastOSError;
   end;
+//  Parents := TStringList.Create;
+//  try
+//    while (not DirectoryExists(DirName)) and (DirName <> '') do
+//    begin
+//      Parents.Add(DirName);
+//      DirName := ParentDir(DirName);
+//    end;
+//    for Index := Parents.Count -1 downto 0 do
+//    begin
+//      if not CreateDir(Parents[Index]) then RaiseLastOSError;
+//    end;
+//  finally
+//    Parents.Free;
+//  end;
 
 end;
 

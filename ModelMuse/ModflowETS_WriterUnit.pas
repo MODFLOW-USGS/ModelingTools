@@ -623,6 +623,10 @@ begin
   if Model.ModelSelection = msModflow2015 then
   begin
     VariableIdentifiers := 'RATE';
+    if FEtsPackage.UseMultiplier then
+    begin
+      VariableIdentifiers := VariableIdentifiers + ' multiplier';
+    end;
   end
   else
   begin
@@ -779,6 +783,12 @@ begin
   WriteMF6ObsOption(InputFileName);
   WriteMf6ParamListOption;
 
+  if FEtsPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
+
   WriteEndOptions;
 end;
 
@@ -794,6 +804,10 @@ begin
       ASpecies := Model.MobileComponents[SpeciesIndex];
       WriteString(' ' + ASpecies.Name);
     end;
+  end;
+  if FEtsPackage.UseMultiplier then
+  begin
+    WriteString(' multiplier');
   end;
 end;
 
@@ -818,7 +832,7 @@ procedure TModflowETS_Writer.WriteCellsMF6(DepthSurfaceCellList, EtRateList: TVa
 var
   CellIndex: Integer;
   SurfDepthCell: TEtsSurfDepth_Cell;
-  EvtCell: TEvt_Cell;
+  EvtCell: TEts_Cell;
   SegmentIndex: Integer;
   IDomain: TDataArray;
   UsedLocations: T2DSparseBooleanArray;
@@ -837,7 +851,7 @@ begin
     Assert(DepthSurfaceCellList.Count = EtRateList.Count);
     for CellIndex := EtRateList.Count - 1 downto 0 do
     begin
-      EvtCell := EtRateList[CellIndex] as TEvt_Cell;
+      EvtCell := EtRateList[CellIndex] as TEts_Cell;
       if (FEtsPackage.LayerOption = loTop) and (EvtCell.Layer <> 0) then
       begin
         EvtCell.Layer := 0;
@@ -898,7 +912,7 @@ begin
         end
         else
         begin
-          WriteValueOrFormula(EvtCell, EvtRatePosition);
+          WriteValueOrFormula(EvtCell, EtsRatePosition);
         end;
 
         WriteValueOrFormula(SurfDepthCell, EtsDepthPosition);
@@ -918,8 +932,13 @@ begin
         begin
           for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
           begin
-            WriteValueOrFormula(EvtCell, EvtStartConcentration + SpeciesIndex);
+            WriteValueOrFormula(EvtCell, EtsStartConcentration + SpeciesIndex);
           end;
+        end;
+
+        if FEtsPackage.UseMultiplier then
+        begin
+          WriteValueOrFormula(EvtCell, EtsMultiplierPosition);
         end;
 
         WriteBoundName(EvtCell);

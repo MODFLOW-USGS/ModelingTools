@@ -474,11 +474,6 @@ const
   UzfExtinctDepthPosition = 0;
   UzfWaterContentPosition = 0;
 
-//  UzfInfiltrationBoundaryPosition = 0;
-//  UzfETDemandBoundaryPosition = 1;
-//  UzfExtinctionDepthBoundaryPosition = 2;
-//  UzfWaterContentBoundaryPosition = 3;
-
 { TUzfBoundary }
 
 procedure TUzfBoundary.Assign(Source: TPersistent);

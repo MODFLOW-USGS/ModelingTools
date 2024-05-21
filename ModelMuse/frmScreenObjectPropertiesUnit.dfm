@@ -2460,7 +2460,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
         Top = 0
         Width = 545
         Height = 480
-        ActivePage = jvspGHB
+        ActivePage = jvspETS
         PropagateEnable = False
         Align = alClient
         OnChange = jvplModflowBoundariesChange
@@ -4293,6 +4293,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Height = 263
                 ColCount = 4
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
+                OnSelectCell = frameRchParamrdgModflowBoundarySelectCell
                 OnSetEditText = frameRchParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameRchParamdgModflowBoundaryEndUpdate
@@ -4718,6 +4719,7 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 Width = 543
                 Height = 260
                 Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goTabs, goAlwaysShowEditor]
+                OnSelectCell = frameEtsParamrdgModflowBoundarySelectCell
                 OnSetEditText = frameEtsParamdgModflowBoundarySetEditText
                 OnButtonClick = frameChdParamdgModflowBoundaryButtonClick
                 OnEndUpdate = frameEtsParamdgModflowBoundaryEndUpdate
@@ -6024,7 +6026,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboMultiIprior: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                 end
@@ -8811,9 +8812,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
               inherited tabBasic: TTabSheet
                 ExplicitWidth = 537
                 ExplicitHeight = 425
-                inherited comboLossType: TJvImageComboBox
-                  ItemIndex = -1
-                end
                 inherited edPartialPenetration: TJvComboEdit
                   Left = 227
                   OnButtonClick = frameScreenObjectSFRjceButtonClick
@@ -11124,7 +11122,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                   inherited comboRouteType: TJvImageComboBox
                     Height = 29
                     ItemHeight = 23
-                    ItemIndex = -1
                     ExplicitHeight = 29
                   end
                   inherited cbbObservationTypes: TJvCheckedComboBox
@@ -12513,7 +12510,6 @@ inherited frmScreenObjectProperties: TfrmScreenObjectProperties
                 inherited comboConductEq: TJvImageComboBox
                   Height = 29
                   ItemHeight = 23
-                  ItemIndex = -1
                   ExplicitHeight = 29
                 end
               end

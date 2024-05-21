@@ -1,14 +1,14 @@
 inherited frameEtsPackage: TframeEtsPackage
-  Height = 226
-  ExplicitHeight = 226
+  Height = 237
+  ExplicitHeight = 237
   DesignSize = (
     477
-    226)
+    237)
   inherited pnLayerOption: TPanel
-    Top = 161
-    Height = 65
-    ExplicitTop = 161
-    ExplicitHeight = 65
+    Top = 156
+    Height = 81
+    ExplicitTop = 184
+    ExplicitHeight = 81
     object lblSegments: TLabel [1]
       Left = 64
       Top = 28
@@ -33,6 +33,15 @@ inherited frameEtsPackage: TframeEtsPackage
       Enabled = False
       TabOrder = 2
     end
+    object cbUseMultiplierMODFLOW6: TCheckBox
+      Left = 16
+      Top = 54
+      Width = 273
+      Height = 17
+      Caption = 'Use Multiplier (MODFLOW 6)'
+      Enabled = False
+      TabOrder = 3
+    end
   end
   inherited rcSelectionController: TRbwController
     ControlList = <
@@ -56,6 +65,9 @@ inherited frameEtsPackage: TframeEtsPackage
       end
       item
         Control = lblSegments
+      end
+      item
+        Control = cbUseMultiplierMODFLOW6
       end>
   end
 end

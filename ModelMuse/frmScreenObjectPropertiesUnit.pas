@@ -872,6 +872,10 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure frameGhbParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
       ARow: Integer; var CanSelect: Boolean);
+    procedure frameRchParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
+    procedure frameEtsParamrdgModflowBoundarySelectCell(Sender: TObject; ACol,
+      ARow: Integer; var CanSelect: Boolean);
   published
     // Clicking @name closes the @classname without changing anything.
     // See @link(btnCancelClick),
@@ -3121,12 +3125,12 @@ begin
   else if (Sender = frameRchParam.rdgModflowBoundary)
     then
   begin
-    PestParameterColumns := [2];
+    PestParameterColumns := [2,3];
     if frmGoPhast.PhastModel.GwtUsed then
     begin
       for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
       begin
-        Include(PestParameterColumns, SpeciesIndex + 3);
+        Include(PestParameterColumns, SpeciesIndex + 4);
       end;
     end;
   end
@@ -3151,12 +3155,12 @@ begin
   end
   else if (Sender = frameEtsParam.rdgModflowBoundary) then
   begin
-    PestParameterColumns := [2,3,4];
+    PestParameterColumns := [2,3,4,5];
     if frmGoPhast.PhastModel.GwtUsed then
     begin
       for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
       begin
-        Include(PestParameterColumns, SpeciesIndex + 5);
+        Include(PestParameterColumns, SpeciesIndex + 6);
       end;
     end;
   end
@@ -6849,9 +6853,9 @@ begin
   FFormulaEdit := nil;
   FDataEdits := TObjectList.Create;
 
-  frameRchParam.UnselectableColumnsIfParametersUsed := [2];
+  frameRchParam.UnselectableColumnsIfParametersUsed := [2,3];
   frameEvtParam.UnselectableColumnsIfParametersUsed := [2];
-  frameEtsParam.UnselectableColumnsIfParametersUsed := [2];
+  frameEtsParam.UnselectableColumnsIfParametersUsed := [2,3];
 
   frameScreenObjectSFR.OnEdited := UpdateSfrNode;
   frameScreenObjectSTR.OnEdited := UpdateStrNode;
@@ -7691,11 +7695,11 @@ begin
   end;
   if frmGoPhast.PhastModel.RchTimeVaryingLayers then
   begin
-    frameRchParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
+    frameRchParam.rdgModflowBoundary.ColCount := 5 + MobileSpeciesCount;
   end
   else
   begin
-    frameRchParam.rdgModflowBoundary.ColCount := 3 + MobileSpeciesCount;
+    frameRchParam.rdgModflowBoundary.ColCount := 4 + MobileSpeciesCount;
   end;
   if frmGoPhast.PhastModel.EvtTimeVaryingLayers then
   begin
@@ -7708,14 +7712,12 @@ begin
   if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
   begin
     frameEtsParam.rdgModflowBoundary.ColCount :=
-      6 //+ MobileSpeciesCount
-      + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
+      7 + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
   end
   else
   begin
     frameEtsParam.rdgModflowBoundary.ColCount :=
-      5 //+ MobileSpeciesCount
-      + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
+      6 + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
   end;
   frameMT3DMS_SSM.rdgModflowBoundary.ColCount :=
     2 + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
@@ -20278,7 +20280,7 @@ begin
   ;
   if (DataGrid = frameRchParam.rdgModflowBoundary)
     and frmGoPhast.PhastModel.RchTimeVaryingLayers
-    and (ACol = 3 + GwtColumnCount) then
+    and (ACol = 4 + GwtColumnCount) then
   begin
     // We are setting the formula for  the layer
     // to which the recharge will be applied.
@@ -20287,7 +20289,7 @@ begin
   if (DataGrid = frameEtsParam.rdgModflowBoundary)
     and frmGoPhast.PhastModel.EtsTimeVaryingLayers then
   begin
-    EtsLayerCol := 5 + GwtColumnCount +
+    EtsLayerCol := 6 + GwtColumnCount +
       (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
     if ACol = EtsLayerCol then
     begin
@@ -20299,9 +20301,9 @@ begin
   if (DataGrid = frameEtsParam.rdgModflowBoundary) and
     (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount > 1) then
   begin
-    EtsLayerCol := 5 + GwtColumnCount +
+    EtsLayerCol := 6 + GwtColumnCount +
       (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
-    FirstSegmentLayer := 5 + GwtColumnCount;
+    FirstSegmentLayer := 6 + GwtColumnCount;
     if (ACol >= FirstSegmentLayer) and (ACol < EtsLayerCol) then
     begin
       // We are setting the formula for  the segment fractions
@@ -20736,23 +20738,23 @@ begin
 
     if frmGoPhast.PhastModel.RchTimeVaryingLayers then
     begin
-      frameRchParam.rdgModflowBoundary.ColCount := 4 + GwtColumnCount;
+      frameRchParam.rdgModflowBoundary.ColCount := 5 + GwtColumnCount;
     end
     else
     begin
-      frameRchParam.rdgModflowBoundary.ColCount := 3 + GwtColumnCount;
+      frameRchParam.rdgModflowBoundary.ColCount := 4 + GwtColumnCount;
     end;
     AScreenObject.CreateRchBoundary;
     frameRchParam.InitializeFrame(AScreenObject.ModflowRchBoundary);
     if frmGoPhast.PhastModel.RchTimeVaryingLayers then
     begin
 //      frameRchParam.rdgModflowBoundary.Columns[3].WordWrapCaptions := True;
-      frameRchParam.rdgModflowBoundary.Columns[3 + GwtColumnCount].AutoAdjustColWidths := True;
+      frameRchParam.rdgModflowBoundary.Columns[4 + GwtColumnCount].AutoAdjustColWidths := True;
       TimeList := AScreenObject.ModflowRchBoundary.RechargeLayers.TimeLists[0, frmGoPhast.PhastModel];
-      frameRchParam.rdgModflowBoundary.Cells[3 + GwtColumnCount, 0] := TimeList.NonParamDescription;
-      frameRchParam.rdgModflowBoundary.Columns[3 + GwtColumnCount].AutoAdjustColWidths := False;
-      frameRchParam.rdgModflowBoundary.ColWidths[3 + GwtColumnCount] :=
-        frameRchParam.rdgModflowBoundary.WidthNeededToFitText(3 + GwtColumnCount,0);
+      frameRchParam.rdgModflowBoundary.Cells[4 + GwtColumnCount, 0] := TimeList.NonParamDescription;
+      frameRchParam.rdgModflowBoundary.Columns[4 + GwtColumnCount].AutoAdjustColWidths := False;
+      frameRchParam.rdgModflowBoundary.ColWidths[4 + GwtColumnCount] :=
+        frameRchParam.rdgModflowBoundary.WidthNeededToFitText(4 + GwtColumnCount,0);
     end;
     if (AScreenObject.ModflowRchBoundary <> nil)
       and not AScreenObject.ModflowRchBoundary.Used then
@@ -20801,12 +20803,12 @@ begin
     NumberOfSpecies := GwtColumnCount;
     if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
     begin
-      EtsColCount := 6 + NumberOfSpecies
+      EtsColCount := 7 + NumberOfSpecies
         + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount -1) * 2;
     end
     else
     begin
-      EtsColCount := 5 + NumberOfSpecies
+      EtsColCount := 6 + NumberOfSpecies
         + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount -1) * 2;
     end;
     frameEtsParam.rdgModflowBoundary.ColCount := EtsColCount;
@@ -20816,7 +20818,6 @@ begin
     if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
     begin
       frameEtsParam.rdgModflowBoundary.Columns[EtsColCount-1].WordWrapCaptions := True;
-//      frameEtsParam.rdgModflowBoundary.Columns[EtsColCount-1].AutoAdjustColWidths := True;
       TimeList := AScreenObject.ModflowEtsBoundary.EvapotranspirationLayers.TimeLists[0, frmGoPhast.PhastModel];
       frameEtsParam.rdgModflowBoundary.Cells[EtsColCount-1, 0] := TimeList.NonParamDescription;
       frameEtsParam.rdgModflowBoundary.Columns[EtsColCount-1].AutoAdjustColWidths := False;
@@ -20828,11 +20829,11 @@ begin
     for Index := 0 to AScreenObject.ModflowEtsBoundary.
       EtsSurfDepthCollection.TimeListCount(frmGoPhast.PhastModel) - 1 do
     begin
-      frameEtsParam.rdgModflowBoundary.Columns[3+Index + NumberOfSpecies].WordWrapCaptions := True;
-      frameEtsParam.rdgModflowBoundary.Columns[3+Index + NumberOfSpecies].AutoAdjustColWidths := True;
+      frameEtsParam.rdgModflowBoundary.Columns[4+Index + NumberOfSpecies].WordWrapCaptions := True;
+      frameEtsParam.rdgModflowBoundary.Columns[4+Index + NumberOfSpecies].AutoAdjustColWidths := True;
       TimeList := AScreenObject.ModflowEtsBoundary.EtsSurfDepthCollection.TimeLists[Index, frmGoPhast.PhastModel];
-      frameEtsParam.rdgModflowBoundary.Cells[3+Index + NumberOfSpecies, 0] := TimeList.NonParamDescription;
-      frameEtsParam.rdgModflowBoundary.Columns[3+Index + NumberOfSpecies].AutoAdjustColWidths := False;
+      frameEtsParam.rdgModflowBoundary.Cells[4+Index + NumberOfSpecies, 0] := TimeList.NonParamDescription;
+      frameEtsParam.rdgModflowBoundary.Columns[4+Index + NumberOfSpecies].AutoAdjustColWidths := False;
     end;
     if (AScreenObject.ModflowEtsBoundary <> nil)
       and not AScreenObject.ModflowEtsBoundary.Used then
@@ -22293,6 +22294,7 @@ end;
 procedure TfrmScreenObjectProperties.GetRchBoundary(ScreenObjectList: TList);
 const
   RechPosition = 0;
+  MultPosition = 1;
   ColOffset = 2;
 var
   Frame: TframeScreenObjectParam;
@@ -22312,13 +22314,13 @@ begin
   GetModflowBoundary(Frame, Parameter, ScreenObjectList, FRCH_Node);
   GetModflowTimeInterpolation(Frame, Parameter, ScreenObjectList, FRCH_Node);
 
-  ColumnOffset := 2;
+  ColumnOffset := 3;
   if frmGoPhast.PhastModel.RchTimeVaryingLayers then
   begin
     TimeList := TParameterTimeList.Create;
     try
       GetModflowBoundaryTimes(ScreenObjectList, Parameter, TimeList);
-      ColumnOffset := 3;
+      ColumnOffset := 4;
       ValuesFunction := GetRechargeLayers;
 
       GetModflowBoundaryCollection(Frame.rdgModflowBoundary, ValuesFunction,
@@ -22329,6 +22331,8 @@ begin
   end;
 
   PestMethod[Frame.rdgModflowBoundary, ColOffset+RechPosition] :=
+    TRchBoundary.DefaultBoundaryMethod(RechPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+MultPosition] :=
     TRchBoundary.DefaultBoundaryMethod(RechPosition);
   if frmGoPhast.PhastModel.GwtUsed then
   begin
@@ -22509,6 +22513,7 @@ const
   RateBoundaryPosition = 0;
   SurfaceBoundaryPosition = 1;
   DepthBoundaryPosition = 2;
+  MultiplierPosition = 3;
   ColOffset = 2;
 var
   Frame: TframeScreenObjectParam;
@@ -22564,7 +22569,7 @@ var
         end
         else
         begin
-          StorageIndex := BoundaryIndex + EtsStartConcentration -1;
+          StorageIndex := BoundaryIndex + EtsBoundaryStartConcentration -1;
         end;
         First := True;
         Identical := True;
@@ -22608,7 +22613,7 @@ var
         end
         else
         begin
-          StorageIndex := BoundaryIndex + EtsStartConcentration -1;
+          StorageIndex := BoundaryIndex + EtsBoundaryStartConcentration -1;
         end;
         First := True;
         Identical := True;
@@ -22790,6 +22795,8 @@ begin
     TEtsBoundary.DefaultBoundaryMethod(SurfaceBoundaryPosition);
   PestMethod[Frame.rdgModflowBoundary, ColOffset+DepthBoundaryPosition+NumberOfSpecies] :=
     TEtsBoundary.DefaultBoundaryMethod(DepthBoundaryPosition);
+  PestMethod[Frame.rdgModflowBoundary, ColOffset+MultiplierPosition+NumberOfSpecies] :=
+    TEtsBoundary.DefaultBoundaryMethod(MultiplierPosition);
   GetEvtModifiers;
   GetSurfDepthModifiers;
   if frmGoPhast.PhastModel.GwtUsed then
@@ -23936,7 +23943,7 @@ begin
     end
     else if (DataGrid = frameRchParam.rdgModflowBoundary)
       and frmGoPhast.PhastModel.RchTimeVaryingLayers
-      and (ACol = 3 + GwtColumnCount) then
+      and (ACol = 4 + GwtColumnCount) then
     begin
       // We are setting the formula for  the layer
       // to which the recharge will be applied.
@@ -23953,7 +23960,7 @@ begin
     else if (DataGrid = frameEtsParam.rdgModflowBoundary)
       and frmGoPhast.PhastModel.EtsTimeVaryingLayers then
     begin
-      EtsLayerCol := 5 + GwtColumnCount +
+      EtsLayerCol := 6 + GwtColumnCount +
         (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount-1)*2;
       if ACol = EtsLayerCol then
       begin
@@ -26878,6 +26885,46 @@ begin
   end;
 end;
 
+procedure TfrmScreenObjectProperties.frameRchParamrdgModflowBoundarySelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+  function IsMultiplierColumn(ACol: Integer): Boolean;
+  const
+    MultiplierPosition = 1;
+    FirstMultiplierCol = 3;
+    NonGWTProperties = 2;
+    FirstDataColumn = 2;
+  var
+    DataColumnCount: Integer;
+    DC: Integer;
+  begin
+    result := (ACol >= FirstMultiplierCol);
+    if result then
+    begin
+      DataColumnCount := NonGWTProperties;
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        Inc(DataColumnCount, frmGoPhast.PhastModel.MobileComponents.Count);
+      end;
+      DC := ACol-FirstDataColumn;
+      result := ((DC mod DataColumnCount) = MultiplierPosition);
+    end;
+  end;
+begin
+  inherited;
+  frameRchParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
+  if CanSelect and IsMultiplierColumn(ACol) then
+  begin
+    if (frmGoPhast.ModelSelection = msModflow2015) then
+    begin
+      CanSelect := frmGoPhast.PhastModel.ModflowPackages.RchPackage.UseMultiplier;
+    end
+    else
+    begin
+      CanSelect := False;
+    end;
+  end;
+end;
+
 procedure TfrmScreenObjectProperties.frameRchParamseNumberOfTimesChange(
   Sender: TObject);
 begin
@@ -29317,7 +29364,7 @@ begin
         Item := FNewProperties[Index];
         Item.ScreenObject.CreateRchBoundary;
         Boundary := Item.ScreenObject.ModflowRchBoundary;
-        ColumnOffset := 3 + GwtColumnCount;
+        ColumnOffset := 4 + GwtColumnCount;
         BoundaryLayers := Boundary.RechargeLayers;
         if ShouldStoreBoundary(FRCH_Node, Boundary) then
         begin
@@ -29503,7 +29550,7 @@ var
           end
           else
           begin
-            StorageIndex := EtsStartConcentration + BoundaryIndex -1;
+            StorageIndex := EtsBoundaryStartConcentration + BoundaryIndex -1;
           end;
           if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
           begin
@@ -30237,9 +30284,9 @@ begin
     or ((DataGrid = frameFarmWell.rdgModflowBoundary) and (ACol = 2))
     or (DataGrid = frameFhbHead.rdgModflowBoundary)
     or (DataGrid = frameFhbFlow.rdgModflowBoundary)
-    or ((DataGrid = frameRchParam.rdgModflowBoundary) and (ACol = 2))
+    or ((DataGrid = frameRchParam.rdgModflowBoundary) and (ACol in [2,3]))
     or ((DataGrid = frameEvtParam.rdgModflowBoundary) and (ACol in [2,3,4]))
-    or ((DataGrid = frameEtsParam.rdgModflowBoundary) and (ACol in [2,3,4]))
+    or ((DataGrid = frameEtsParam.rdgModflowBoundary) and (ACol in [2,3,4,5]))
     or (DataGrid = frameScreenObjectUZF.rdgModflowBoundary)
     or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
     or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol in [3..9]))
@@ -30883,6 +30930,38 @@ begin
   begin
     StoreEtsBoundary;  
   end;
+end;
+
+procedure TfrmScreenObjectProperties.frameEtsParamrdgModflowBoundarySelectCell(
+  Sender: TObject; ACol, ARow: Integer; var CanSelect: Boolean);
+  function IsMultiplierColumn(ACol: Integer): Boolean;
+  const
+    MultiplierPosition = 1;
+    FirstMultiplierCol = 2;
+
+    FirstDataColumn = 2;
+  var
+    DataColumnCount: Integer;
+    DC: Integer;
+    NonGWTProperties: Integer;
+  begin
+    NonGWTProperties := 2 ;
+    result := (ACol >= FirstMultiplierCol);
+    if result then
+    begin
+      DataColumnCount := NonGWTProperties;
+      if frmGoPhast.PhastModel.GwtUsed then
+      begin
+        Inc(DataColumnCount, frmGoPhast.PhastModel.MobileComponents.Count);
+      end;
+      DC := ACol-FirstDataColumn;
+      result := ((DC mod DataColumnCount) = MultiplierPosition);
+    end;
+  end;
+begin
+  inherited;
+  frameEtsParam.rdgModflowBoundarySelectCell(Sender, ACol, ARow, CanSelect);
+
 end;
 
 procedure TfrmScreenObjectProperties.frameEtsParamseNumberOfTimesChange(
