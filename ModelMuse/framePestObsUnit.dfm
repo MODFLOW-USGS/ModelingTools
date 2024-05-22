@@ -36,7 +36,7 @@ object framePestObs: TframePestObs
         Top = 192
         Width = 596
         Height = 32
-        ExplicitTop = 194
+        ExplicitTop = 187
         ExplicitWidth = 596
         ExplicitHeight = 32
         inherited lbNumber: TLabel
@@ -281,7 +281,7 @@ object framePestObs: TframePestObs
         Top = 118
         Width = 596
         Height = 35
-        ExplicitTop = 120
+        ExplicitTop = 113
         ExplicitWidth = 596
         ExplicitHeight = 35
         inherited lbNumber: TLabel

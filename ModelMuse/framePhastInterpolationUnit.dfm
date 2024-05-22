@@ -47,8 +47,8 @@ object framePhastInterpolation: TframePhastInterpolation
   object cbPhastInterpolation: TJvCheckBox
     Left = 8
     Top = 16
-    Width = 179
-    Height = 17
+    Width = 182
+    Height = 20
     Caption = 'Use PHAST-style interpolation'
     Enabled = False
     TabOrder = 1
@@ -132,7 +132,7 @@ object framePhastInterpolation: TframePhastInterpolation
     Left = 392
     Top = 88
     Width = 101
-    Height = 21
+    Height = 23
     Cursor = crIBeam
     Color = clBtnFace
     Enabled = False

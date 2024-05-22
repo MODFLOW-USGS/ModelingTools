@@ -47,7 +47,7 @@ inherited frameScreenObjectStr: TframeScreenObjectStr
         Left = 7
         Top = 14
         Width = 121
-        Height = 21
+        Height = 23
         MaxValue = 2147483647.000000000000000000
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000

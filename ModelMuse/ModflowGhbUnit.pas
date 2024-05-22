@@ -708,7 +708,14 @@ end;
 
 procedure TGhbItem.SetMultiplier(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, GhbMultiplierPosition, FMultiplier);
+  if Value <> '' then
+  begin
+    UpdateFormulaBlocks(Value, GhbMultiplierPosition, FMultiplier);
+  end
+  else
+  begin
+    UpdateFormulaBlocks('1', GhbMultiplierPosition, FMultiplier);
+  end;
 end;
 
 { TGhbCollection }

@@ -41,15 +41,23 @@ implementation
 { TframeEtsPackage }
 
 procedure TframeEtsPackage.GetData(Package: TModflowPackageSelection);
+var
+  EtsPackage: TEtsPackageSelection;
 begin
   inherited GetData(Package);
-  seSegments.AsInteger := (Package as TEtsPackageSelection).SegmentCount;
+  EtsPackage := Package as TEtsPackageSelection;
+  seSegments.AsInteger := EtsPackage.SegmentCount;
+  cbUseMultiplierMODFLOW6.Checked := EtsPackage.UseMultiplier;
 end;
 
 procedure TframeEtsPackage.SetData(Package: TModflowPackageSelection);
+var
+  EtsPackage: TEtsPackageSelection;
 begin
   inherited SetData(Package);
-  (Package as TEtsPackageSelection).SegmentCount := seSegments.AsInteger;
+  EtsPackage := Package as TEtsPackageSelection;
+  EtsPackage.SegmentCount := seSegments.AsInteger;
+  EtsPackage.UseMultiplier := cbUseMultiplierMODFLOW6.Checked;
 end;
 
 end.

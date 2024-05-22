@@ -37,7 +37,7 @@ inherited frameScreenObjectTabbed: TframeScreenObjectTabbed
           Left = 9
           Top = 5
           Width = 49
-          Height = 21
+          Height = 23
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0

@@ -209,7 +209,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Left = 9
           Top = 12
           Width = 49
-          Height = 28
+          Height = 23
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0
@@ -438,7 +438,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Left = 9
           Top = 12
           Width = 49
-          Height = 28
+          Height = 23
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0
@@ -667,7 +667,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           Left = 9
           Top = 12
           Width = 49
-          Height = 28
+          Height = 23
           ButtonKind = bkClassic
           MaxValue = 2147483647.000000000000000000
           TabOrder = 0

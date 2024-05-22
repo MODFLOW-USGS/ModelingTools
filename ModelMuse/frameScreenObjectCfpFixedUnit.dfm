@@ -147,7 +147,7 @@ inherited frameScreenObjectCfpFixed: TframeScreenObjectCfpFixed
         inherited Panel: TPanel
           Top = 359
           Width = 555
-          ExplicitTop = 359
+          ExplicitTop = 354
           ExplicitWidth = 555
           inherited sbAdd: TSpeedButton
             Left = 290

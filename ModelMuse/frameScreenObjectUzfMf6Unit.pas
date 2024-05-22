@@ -11,7 +11,7 @@ uses
   JvPageListTreeView, frameUzfGwtConcentrationsUnit;
 
 type
-  TUzfColumns = (ucStartTime, ucEndTime, ucInfiltration, ucPotentialEt,
+  TUzfColumns = (ucStartTime, ucEndTime, ucInfiltration, ucMultiplier, ucPotentialEt,
     ucExtinctionDepth, ucExtinctionWaterContent, ucAirEntryPotential,
     ucRootPotential, ucRootActivity);
 
@@ -80,6 +80,7 @@ resourcestring
   StrAirEntryPotential = 'Air entry potential (ha)';
   StrRootPotential = 'Root potential (hroot)';
   StrRootActivity = 'Root activity (rootact)';
+  StrUZFMultiplier = 'UZF Multiplier';
 
 {$R *.dfm}
 
@@ -94,6 +95,7 @@ const
   AirEntryPotentialPosition = 10;
   RootPotentialPosition = 11;
   RootActivityPosition = 12;
+  MultiplierPosition = 13;
 var
 //  RowIndex: Integer;
   ColIndex: Integer;
@@ -122,6 +124,8 @@ begin
     TUzfMf6Boundary.DefaultBoundaryMethod(RootPotentialPosition);
   PestMethod[Ord(ucRootActivity)] :=
     TUzfMf6Boundary.DefaultBoundaryMethod(RootActivityPosition);
+  PestMethod[Ord(ucMultiplier)] :=
+    TUzfMf6Boundary.DefaultBoundaryMethod(MultiplierPosition);
 
   if FIntializedFrame then
   begin
@@ -142,6 +146,7 @@ begin
   rdgModflowBoundary.Cells[Ord(ucAirEntryPotential), 0] := StrAirEntryPotential;
   rdgModflowBoundary.Cells[Ord(ucRootPotential), 0] := StrRootPotential;
   rdgModflowBoundary.Cells[Ord(ucRootActivity), 0] := StrRootActivity;
+  rdgModflowBoundary.Cells[Ord(ucMultiplier), 0] := StrUZFMultiplier;
 
 
   for ColIndex := 0 to rdgModflowBoundary.ColCount - 1 do
@@ -199,6 +204,10 @@ begin
             CanSelect :=
               (FGroundwaterET in [ugecSimulateUnsatOnly, ugecLinear, ugecSquare])
               and (FUnsatET = uuecCapillaryPressure);
+          end;
+        ucMultiplier:
+          begin
+            CanSelect := frmGoPhast.PhastModel.ModflowPackages.UzfMf6Package.UseMultiplier;
           end;
       end;
     end;
@@ -353,6 +362,8 @@ begin
           PestMethod[Ord(ucRootPotential)] := UzfBoundary.PestRootPotentialMethod;
           PestModifier[Ord(ucRootActivity)] := UzfBoundary.PestRootActivityFormula;
           PestMethod[Ord(ucRootActivity)] := UzfBoundary.PestRootActivityMethod;
+          PestModifier[Ord(ucMultiplier)] := UzfBoundary.PestMultiplierFormula;
+          PestMethod[Ord(ucMultiplier)] := UzfBoundary.PestMultiplierMethod;
 
           seNumberOfTimes.asInteger := UzfBoundary.Values.Count;
           seNumberOfTimes.OnChange(seNumberOfTimes);
@@ -378,6 +389,8 @@ begin
               := AnItem.RootPotential;
             rdgModflowBoundary.Cells[Ord(ucRootActivity), ItemIndex+1+PestRowOffset]
               := AnItem.RootActivity;
+            rdgModflowBoundary.Cells[Ord(ucMultiplier), ItemIndex+1+PestRowOffset]
+              := AnItem.Multiplier;
           end;
 
           FirstUzf := UzfBoundary;
@@ -472,6 +485,15 @@ begin
             rdgModflowBoundary.Cells[Ord(ucRootActivity), PestMethodRow] := '';
           end;
 
+          if FirstUzf.PestMultiplierFormula <> UzfBoundary.PestMultiplierFormula then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucMultiplier), PestModifierRow] := '';
+          end;
+          if FirstUzf.PestMultiplierMethod <> UzfBoundary.PestMultiplierMethod then
+          begin
+            rdgModflowBoundary.Cells[Ord(ucMultiplier), PestMethodRow] := '';
+          end;
+
           if FirstUzf.PestInfiltrationFormula <> UzfBoundary.PestInfiltrationFormula then
           begin
             PestModifierAssigned[Ord(ucInfiltration)] := False;
@@ -533,6 +555,15 @@ begin
           if FirstUzf.PestRootActivityMethod <> UzfBoundary.PestRootActivityMethod then
           begin
             PestMethodAssigned[Ord(ucRootActivity)] := False;
+          end;
+
+          if FirstUzf.PestMultiplierFormula <> UzfBoundary.PestMultiplierFormula then
+          begin
+            PestModifierAssigned[Ord(ucMultiplier)] := False;
+          end;
+          if FirstUzf.PestMultiplierMethod <> UzfBoundary.PestMultiplierMethod then
+          begin
+            PestMethodAssigned[Ord(ucMultiplier)] := False;
           end;
 
           if TimeDataIdentical
@@ -702,6 +733,8 @@ begin
             Ord(ucRootPotential), TimeIndex+1+PestRowOffset]);
           NewItem.RootActivity := NonBlank(rdgModflowBoundary.Cells[
             Ord(ucRootActivity), TimeIndex+1+PestRowOffset]);
+          NewItem.Multiplier := NonBlank(rdgModflowBoundary.Cells[
+            Ord(ucMultiplier), TimeIndex+1+PestRowOffset]);
         end;
       end;
     end;
@@ -851,6 +884,15 @@ begin
         if rdgModflowBoundary.Cells[Ord(ucRootActivity), PestMethodRow] <> '' then
         begin
           Boundary.PestRootActivityMethod := PestMethod[Ord(ucRootActivity)];
+        end;
+
+        if rdgModflowBoundary.Cells[Ord(ucMultiplier), PestModifierRow] <> '' then
+        begin
+          Boundary.PestMultiplierFormula := PestModifier[Ord(ucMultiplier)];
+        end;
+        if rdgModflowBoundary.Cells[Ord(ucMultiplier), PestMethodRow] <> '' then
+        begin
+          Boundary.PestMultiplierMethod := PestMethod[Ord(ucMultiplier)];
         end;
 
         if NewValues.Count > 0 then

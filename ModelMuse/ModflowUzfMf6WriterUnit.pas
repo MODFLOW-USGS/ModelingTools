@@ -989,15 +989,30 @@ procedure TModflowUzfMf6Writer.WriteAdditionalAuxVariables;
 var
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
+  AuxUsed: Boolean;
 begin
+  AuxUsed := False;
   if Model.GwtUsed and (Model.MobileComponents.Count > 0) then
   begin
+    AuxUsed := True;
     WriteString('  AUXILIARY');
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
       ASpecies := Model.MobileComponents[SpeciesIndex];
       WriteString(' ' + ASpecies.Name);
     end;
+  end;
+  if FUzfPackage.UseMultiplier then
+  begin
+    if not AuxUsed then
+    begin
+      WriteString('  AUXILIARY');
+    end;
+    WriteString(' multiplier');
+    AuxUsed := True;
+  end;
+  if AuxUsed then
+  begin
     NewLine;
   end;
 end;
@@ -1254,6 +1269,11 @@ begin
   end;
 
   WriteAdditionalAuxVariables;
+  if FUzfPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
 
   WriteEndOptions;
 end;
@@ -1625,6 +1645,11 @@ begin
                     WriteFloat(0);
 //                    NewLine;
                   end;
+                end;
+
+                if FUzfPackage.UseMultiplier then
+                begin
+                  WriteValueOrFormula(UzfCell, UzfMf6MultiplierPosition);
                 end;
 
                 NewLine;

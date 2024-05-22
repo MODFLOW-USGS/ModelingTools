@@ -152,10 +152,13 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitLeft = 4
-      ExplicitTop = 53
       ExplicitWidth = 410
       ExplicitHeight = 83
+      ColWidths = (
+        64
+        64
+        64
+        74)
     end
   end
   object pcMain: TPageControl [2]
@@ -213,7 +216,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         inherited Panel: TPanel
           Top = 104
           Width = 404
-          ExplicitTop = 104
+          ExplicitTop = 99
           ExplicitWidth = 404
           inherited lbNumber: TLabel
             Width = 107
@@ -383,7 +386,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           ColWidths = (
             64
             64
-            172
+            229
             64
             64)
         end
@@ -420,7 +423,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           Top = 120
           Width = 110
           Height = 89
-          ExplicitTop = 120
+          ExplicitTop = 115
           ExplicitWidth = 110
           ExplicitHeight = 89
           inherited lbNumber: TLabel

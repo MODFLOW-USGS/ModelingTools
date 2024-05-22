@@ -326,11 +326,13 @@ const
   StrModflowChdActive = 'CHD Active';
   StrMODFLOWCHDMultiplier = 'CHD Multiplier';
   StrMODFLOWEtsRateFraction = 'ETS Evapotranspiration Rate Fraction';
+  StrMODFLOWEtsMultiplier = 'ETS Multiplier';
   StrMODFLOWEtsDepthFraction = 'ETS Evapotranspiration Depth Fraction';
   StrMODFLOWEtsRate = 'ETS Evapotranspiration Rate';
   StrMODFLOWEtsDepth = 'ETS Evapotranspiration Depth';
   StrMODFLOWEtsSurface = 'ETS Evapotranspiration Surface';
   StrMODFLOWEtsLayer = 'ETS Evapotranspiration Layer';
+  StrEVTMultiplier = 'EVT Multiplier';
 
   StrMODFLOWEvtRate = 'EVT Evapotranspiration Rate';
   StrMODFLOWEvtDepth = 'EVT Evapotranspiration Depth';
@@ -434,6 +436,7 @@ const
   StrUzfMf6AirEntryPotential = 'UZF Mf6 Air Entry Potential';
   StrUzfMf6RootPotential = 'UZF Mf6 Root Potential';
   StrUzfMf6RootActivity = 'UZF Mf6 Root Activity';
+  StrUzfMf6Multiplier = 'UZF Mf6 Multiplier';
 
   StrCSUBStressOffset = 'CSUB Stress Offset';
   StrMVRValue = 'MVR Value';

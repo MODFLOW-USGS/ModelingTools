@@ -527,7 +527,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           Left = 5
           Top = 63
           Width = 445
-          Height = 21
+          Height = 23
           OnAfterDialog = feLakeBathymetryAfterDialog
           DisabledColor = clBtnFace
           Filter = '(*.lak_bath, *.txt)|*.lak_bath;*.txt|All files (*.*)|*.*'
@@ -549,7 +549,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 455
-        ExplicitHeight = 297
+        ExplicitHeight = 292
         inherited splObservations: TSplitter
           Top = 120
           Width = 455
@@ -560,16 +560,17 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           Width = 455
           Height = 120
           ExplicitWidth = 455
-          ExplicitHeight = 120
+          ExplicitHeight = 115
           inherited frameObservations: TframeGrid
             Width = 451
             Height = 101
+            ExplicitTop = 17
             ExplicitWidth = 451
-            ExplicitHeight = 101
+            ExplicitHeight = 96
             inherited Panel: TPanel
               Top = 69
               Width = 451
-              ExplicitTop = 69
+              ExplicitTop = 64
               ExplicitWidth = 451
             end
             inherited Grid: TRbwDataGrid4
@@ -583,13 +584,16 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         inherited grpObsComparisons: TGroupBox
           Top = 125
           Width = 455
-          ExplicitTop = 125
+          ExplicitTop = 120
           ExplicitWidth = 455
           inherited frameObsComparisons: TframeGrid
             Width = 451
+            ExplicitTop = 17
             ExplicitWidth = 451
+            ExplicitHeight = 153
             inherited Panel: TPanel
               Width = 451
+              ExplicitTop = 118
               ExplicitWidth = 451
             end
             inherited Grid: TRbwDataGrid4

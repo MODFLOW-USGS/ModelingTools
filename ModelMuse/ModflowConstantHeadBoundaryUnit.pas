@@ -745,8 +745,14 @@ end;
 
 procedure TChdItem.SetMultiplier(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, ChdMultiplierPosition, FMultiplier);
-
+  if Value <> '' then
+  begin
+    UpdateFormulaBlocks(Value, ChdMultiplierPosition, FMultiplier);
+  end
+  else
+  begin
+    UpdateFormulaBlocks('1', ChdMultiplierPosition, FMultiplier);
+  end;
 end;
 
 procedure TChdItem.SetStartHead(const Value: string);

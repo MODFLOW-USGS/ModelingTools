@@ -203,11 +203,11 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 541
-        ExplicitHeight = 230
+        ExplicitHeight = 225
         inherited Panel: TPanel
           Top = 189
           Width = 541
-          ExplicitTop = 189
+          ExplicitTop = 184
           ExplicitWidth = 541
           inherited lbNumber: TLabel
             Width = 124

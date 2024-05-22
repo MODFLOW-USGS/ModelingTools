@@ -3675,6 +3675,7 @@ var
   CellIndex: Integer;
   ACell: TEvtTimeItem;
   IfaceIndex: Integer;
+  MultIndex: Integer;
   KeyStringDictionary: TDictionary<string, TEvtTimeItemList>;
   CellLists: TObjectList<TEvtTimeItemList>;
   OtherCellLists: TObjectList<TEvtTimeItemList>;
@@ -3683,6 +3684,7 @@ var
   IFace: Integer;
   LastTime: Double;
   Imported_Et: TValueArrayItem;
+  Imported_Multiplier: TValueArrayItem;
   Imported_Et_surf: TValueArrayItem;
   Imported_Et_Depth: TValueArrayItem;
   DepthFractions: TValueArrayItemList;
@@ -3722,7 +3724,7 @@ var
   CellListIndex: Integer;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TEvtTimeItem; Period: Integer);
   var
-    EvtItem: TEvtItem;
+    EvtItem: TEtsItem;
     ImportedName: string;
     Concentrations: TEvtGwtConcCollection;
     ChemSpeciesName: string;
@@ -3737,14 +3739,41 @@ var
     ImportedPetm: TValueArrayItem;
     IntermediateIndex: Integer;
   begin
-    EvtItem := AScreenObject.ModflowEtsBoundary.Values.Add as TEvtItem;
+    EvtItem := AScreenObject.ModflowEtsBoundary.Values.Add as TEtsItem;
     ItemList.Add(EvtItem);
     EvtItem.EndTime := LastTime;
     EvtItem.StartTime := StartTime;
 
+    if MultIndex >= 0 then
+    begin
+      Aux := ACell[MultIndex];
+      if Aux.ValueType = vtNumeric then
+      begin
+        ImportedName := Format('Imported_Et_multiplier_%s Period_%d', [Package.PackageName, Period]);
+        Imported_Multiplier := AScreenObject.ImportedValues.Add;
+        Imported_Multiplier.Name := ImportedName;
+        Imported_Multiplier.Values.DataType := rdtDouble;
+        EvtItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_Multiplier.Name + '")';
+      end
+      else
+      begin
+        Imported_Multiplier := nil;
+        TimeSeries := ACell.Rate.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        EvtItem.Multiplier := ImportedTimeSeries;
+      end;
+    end
+    else
+    begin
+      Imported_Multiplier := nil;
+    end;
+
     if ACell.Rate.ValueType = vtNumeric then
     begin
-      ImportedName := Format('Imported_Et_Period_%d', [Period]);
+      ImportedName := Format('Imported_Et_%s Period_%d', [Package.PackageName, Period]);
       Imported_Et := AScreenObject.ImportedValues.Add;
       Imported_Et.Name := ImportedName;
       Imported_Et.Values.DataType := rdtDouble;
@@ -4001,6 +4030,8 @@ begin
   begin
     Model.ModflowPackages.EtsPackage.LayerOption := loTopActive;
   end;
+  IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
+  MultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
 
   DepthFractions := TValueArrayItemList.Create;
   EdtFractions := TValueArrayItemList.Create;
@@ -4019,7 +4050,6 @@ begin
   try
     OtherCellLists.OwnsObjects := False;
     try
-      IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
       for TimeSeriesIndex := 0 to Evt.TimeSeriesCount - 1 do
       begin
         TimeSeriesPackage := Evt.TimeSeries[TimeSeriesIndex];
@@ -4130,6 +4160,20 @@ begin
               IFACE := Round(AuxIFACE.NumericValue);
             end;
             KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+
+            if MultIndex >= 0 then
+            begin
+              Aux := ACell[MultIndex];
+              if Aux.ValueType = vtNumeric then
+              begin
+                KeyString := KeyString + ' Num';
+              end
+              else
+              begin
+                KeyString := KeyString + ' ' + Aux.StringValue;
+              end;
+            end;
+
             if not KeyStringDictionary.TryGetValue(KeyString, ACellList) then
             begin
               ACellList := TEvtTimeItemList.Create;
@@ -4237,6 +4281,14 @@ begin
                   ImportedPetm := EdtFractions[IntermediateIndex];
                   ImportedPetm.Values.Add(ACell.Petm[IntermediateIndex].NumericValue);
                 end;
+              end;
+              if MultIndex >= 0 then
+              begin
+                Aux := ACell[MultIndex];
+                if Aux.ValueType = vtNumeric then
+                begin
+                  Imported_Multiplier.Values.Add(Aux.NumericValue)
+                end
               end;
 
               for AuxIndex := 0 to TransportAuxNames.Count - 1 do

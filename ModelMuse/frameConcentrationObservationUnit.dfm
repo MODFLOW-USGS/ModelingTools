@@ -200,7 +200,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
           end>
         ExplicitHeight = 110
         ColWidths = (
-          40
+          142
           40
           40
           40
@@ -233,7 +233,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
       Left = 11
       Top = 27
       EditLabel.ExplicitLeft = 11
-      EditLabel.ExplicitTop = 11
+      EditLabel.ExplicitTop = 9
       ExplicitLeft = 11
       ExplicitTop = 27
     end

@@ -1,6 +1,6 @@
 ptf @
 etf %
-# MAW: Multi-Aquifer Well package file created on 2/5/2024 by ModelMuse version 5.1.1.53.
+# MAW: Multi-Aquifer Well package file created on 5/22/2024 by ModelMuse version 5.2.0.11.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     BOUNDNAMES
@@ -9,7 +9,7 @@ BEGIN OPTIONS
   HEAD FILEOUT MF6_TestSfrMawLakMvrUzf.maw_head
     SAVE_FLOWS
   BUDGET FILEOUT MF6_TestSfrMawLakMvrUzf.maw_bud
-  BUDGET FILEOUT MF6_TestSfrMawLakMvrUzf.maw_bud.csv
+  BUDGETCSV FILEOUT MF6_TestSfrMawLakMvrUzf.maw_bud.csv
   SHUTDOWN_THETA  7.000000000000E-001 
   SHUTDOWN_KAPPA  1.000000000000E-004 
     OBS6 FILEIN MF6_TestSfrMawLakMvrUzf.ob_maw

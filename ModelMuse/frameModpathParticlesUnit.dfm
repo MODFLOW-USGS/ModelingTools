@@ -107,8 +107,8 @@ object frameModpathParticles: TframeModpathParticles
     object lblMessage: TLabel
       Left = 16
       Top = 136
-      Width = 105
-      Height = 60
+      Width = 99
+      Height = 75
       Caption = 
         'Image hidden because your computer may not be able to display it' +
         '.'
@@ -156,24 +156,24 @@ object frameModpathParticles: TframeModpathParticles
         object lblX: TLabel
           Left = 64
           Top = 101
-          Width = 47
-          Height = 60
+          Width = 58
+          Height = 45
           Caption = 'Number of rows in X direction'
           WordWrap = True
         end
         object lblY: TLabel
           Left = 64
           Top = 136
-          Width = 47
-          Height = 60
+          Width = 58
+          Height = 45
           Caption = 'Number of rows in Y direction'
           WordWrap = True
         end
         object lblZ: TLabel
           Left = 64
           Top = 171
-          Width = 47
-          Height = 60
+          Width = 58
+          Height = 45
           Caption = 'Number of rows in Z direction'
           WordWrap = True
         end
@@ -278,7 +278,7 @@ object frameModpathParticles: TframeModpathParticles
         object lblCylParticleCount: TLabel
           Left = 72
           Top = 90
-          Width = 61
+          Width = 58
           Height = 60
           Caption = 'Number of particles around cylinder'
           WordWrap = True
@@ -286,7 +286,7 @@ object frameModpathParticles: TframeModpathParticles
         object lblClylLayerCount: TLabel
           Left = 72
           Top = 125
-          Width = 61
+          Width = 58
           Height = 45
           Caption = 'Number of layers of particles'
           WordWrap = True
@@ -355,7 +355,7 @@ object frameModpathParticles: TframeModpathParticles
         object lblSpherParticleCount: TLabel
           Left = 72
           Top = 90
-          Width = 79
+          Width = 76
           Height = 45
           Caption = 'Number of particles around sphere '
           WordWrap = True
@@ -363,7 +363,7 @@ object frameModpathParticles: TframeModpathParticles
         object lblSpherelLayerCount: TLabel
           Left = 72
           Top = 125
-          Width = 61
+          Width = 58
           Height = 45
           Caption = 'Number of layers of particles'
           WordWrap = True
@@ -750,6 +750,9 @@ object frameModpathParticles: TframeModpathParticles
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
+      ColWidths = (
+        20
+        24)
     end
   end
   object OctTree: TRbwOctTree

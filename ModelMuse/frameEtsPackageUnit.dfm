@@ -7,7 +7,7 @@ inherited frameEtsPackage: TframeEtsPackage
   inherited pnLayerOption: TPanel
     Top = 156
     Height = 81
-    ExplicitTop = 184
+    ExplicitTop = 156
     ExplicitHeight = 81
     object lblSegments: TLabel [1]
       Left = 64

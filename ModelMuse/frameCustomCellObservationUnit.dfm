@@ -53,7 +53,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
           Left = 8
           Top = 6
           Width = 49
-          Height = 21
+          Height = 23
           CheckMinValue = True
           ButtonKind = bkClassic
           TabOrder = 0
@@ -259,7 +259,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
           Left = 8
           Top = 6
           Width = 49
-          Height = 21
+          Height = 23
           CheckMinValue = True
           ButtonKind = bkClassic
           TabOrder = 0
@@ -378,7 +378,6 @@ object frameCustomCellObservation: TframeCustomCellObservation
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitHeight = 130
       end
     end
   end
@@ -409,7 +408,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
       Left = 8
       Top = 22
       Width = 137
-      Height = 21
+      Height = 23
       EditLabel.Width = 97
       EditLabel.Height = 15
       EditLabel.Caption = 'Observation name'

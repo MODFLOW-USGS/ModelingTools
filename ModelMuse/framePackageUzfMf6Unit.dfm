@@ -139,6 +139,15 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
     TabOrder = 9
     WordWrap = True
   end
+  object cbUseMultiplierMODFLOW6: TCheckBox [14]
+    Left = 323
+    Top = 39
+    Width = 273
+    Height = 17
+    Caption = 'Use Multiplier (MODFLOW 6)'
+    Enabled = False
+    TabOrder = 10
+  end
   inherited rcSelectionController: TRbwController
     ControlList = <
       item
@@ -176,6 +185,9 @@ inherited framePackageUzfMf6: TframePackageUzfMf6
       end
       item
         Control = cbSaveWaterContent
+      end
+      item
+        Control = cbUseMultiplierMODFLOW6
       end>
     OnEnabledChange = rcSelectionControllerEnabledChange
   end

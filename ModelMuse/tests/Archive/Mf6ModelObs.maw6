@@ -1,4 +1,4 @@
-# MAW: Multi-Aquifer Well package file created on 2/8/2024 by ModelMuse version 5.1.1.53.
+# MAW: Multi-Aquifer Well package file created on 5/22/2024 by ModelMuse version 5.2.0.11.
 BEGIN OPTIONS
   AUXILIARY Chem
     BOUNDNAMES
@@ -7,7 +7,7 @@ BEGIN OPTIONS
   HEAD FILEOUT Mf6ModelObs.maw_head
     SAVE_FLOWS
   BUDGET FILEOUT Mf6ModelObs.maw_bud
-  BUDGET FILEOUT Mf6ModelObs.maw_bud.csv
+  BUDGETCSV FILEOUT Mf6ModelObs.maw_bud.csv
   FLOWING_WELLS
   SHUTDOWN_THETA  7.000000000000E-001 
   SHUTDOWN_KAPPA  1.000000000000E-004 

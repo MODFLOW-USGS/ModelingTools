@@ -1,8 +1,8 @@
 inherited UndoForm: TUndoForm
   Caption = 'UndoForm'
-  ClientHeight = 192
-  ClientWidth = 768
-  ExplicitWidth = 784
-  ExplicitHeight = 231
+  ClientHeight = 201
+  ClientWidth = 774
+  ExplicitWidth = 786
+  ExplicitHeight = 239
   TextHeight = 18
 end

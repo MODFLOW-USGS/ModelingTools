@@ -55,7 +55,6 @@ object frameScreenObjectHydmod: TframeScreenObjectHydmod
       Width = 249
       Height = 91
       Align = alClient
-      ItemHeight = 15
       Items.Strings = (
         'Head (HD)'
         'Drawdown (DD)')
@@ -96,7 +95,6 @@ object frameScreenObjectHydmod: TframeScreenObjectHydmod
       Width = 293
       Height = 66
       Align = alTop
-      ItemHeight = 15
       Items.Strings = (
         'PreconsolidationHead (HC)'
         'Instantaneous compaction (CP)'
@@ -140,7 +138,6 @@ object frameScreenObjectHydmod: TframeScreenObjectHydmod
       Top = 120
       Width = 135
       Height = 81
-      ItemHeight = 15
       TabOrder = 2
     end
   end
@@ -157,7 +154,6 @@ object frameScreenObjectHydmod: TframeScreenObjectHydmod
       Width = 297
       Height = 91
       Align = alClient
-      ItemHeight = 15
       Items.Strings = (
         'Stream stage (ST)'
         'Streamflow into reach (SI)'

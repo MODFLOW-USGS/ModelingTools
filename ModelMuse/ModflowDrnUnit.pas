@@ -648,7 +648,14 @@ end;
 
 procedure TDrnItem.SetMultiplier(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, DrnMultiplier_Position, FMultiplier);
+  if Value <> '' then
+  begin
+    UpdateFormulaBlocks(Value, DrnMultiplier_Position, FMultiplier);
+  end
+  else
+  begin
+    UpdateFormulaBlocks('1', DrnMultiplier_Position, FMultiplier);
+  end;
 end;
 
 procedure TDrnItem.SetConductance(const Value: string);

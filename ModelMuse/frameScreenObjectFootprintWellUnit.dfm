@@ -27,7 +27,7 @@ object frameScreenObjectFootprintWell: TframeScreenObjectFootprintWell
     Left = 176
     Top = 60
     Width = 225
-    Height = 24
+    Height = 23
     Color = clBtnFace
     Enabled = False
     TabOrder = 2

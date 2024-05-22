@@ -41,7 +41,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
     inherited rdgModflowBoundary: TRbwDataGrid4
       Width = 452
       Height = 100
-      ColCount = 9
+      ColCount = 10
       Columns = <
         item
           AutoAdjustRowHeights = False
@@ -258,10 +258,35 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
           CaseSensitivePicklist = False
           CheckStyle = csCheck
           AutoAdjustColWidths = True
+        end
+        item
+          AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
+          ButtonCaption = 'F()'
+          ButtonFont.Charset = DEFAULT_CHARSET
+          ButtonFont.Color = clWindowText
+          ButtonFont.Height = -11
+          ButtonFont.Name = 'Tahoma'
+          ButtonFont.Style = []
+          ButtonUsed = True
+          ButtonWidth = 35
+          CheckMax = False
+          CheckMin = False
+          ComboUsed = False
+          Format = rcf4String
+          LimitToList = False
+          MaxLength = 0
+          ParentButtonFont = False
+          WordWrapCaptions = True
+          WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
+          AutoAdjustColWidths = True
         end>
       ExplicitWidth = 452
       ExplicitHeight = 100
       ColWidths = (
+        64
         64
         64
         64
@@ -278,7 +303,7 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
     Top = 177
     Width = 454
     Height = 212
-    ActivePage = tabGWT
+    ActivePage = tabTime
     Align = alClient
     TabOrder = 3
     object tabSteadyProperties: TTabSheet
@@ -541,8 +566,6 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
         Height = 182
         PropagateEnable = False
         Align = alClient
-        ExplicitLeft = 127
-        ExplicitTop = -2
       end
     end
   end

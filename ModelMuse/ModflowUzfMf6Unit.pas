@@ -74,6 +74,14 @@ type
     RootPotentialTimeSeriesName: string;
     RootActivityTimeSeriesName: string;
 
+    // MF6
+    Multiplier: double;
+    MultiplierAnnotation: string;
+    MultiplierPest: string;
+    MultiplierPestSeries: string;
+    MultiplierPestMethod: TPestParamMethod;
+    MultiplierTimeSeriesName: string;
+
     MvrUsed: Boolean;
     MvrIndex: Integer;
 
@@ -124,6 +132,7 @@ type
     FAirEntryPotential: IFormulaObject;
     FRootPotential: IFormulaObject;
     FRootActivity: IFormulaObject;
+    FMultiplier: IFormulaObject;
     // GWT
     FGwtStatus: TGwtBoundaryStatusCollection;
     FSpecifiedConcentrations: TUztGwtConcCollection;
@@ -148,6 +157,8 @@ type
     procedure SetGwtStatus(const Value: TGwtBoundaryStatusCollection);
     procedure SetInfiltrationConcentrations(const Value: TUztGwtConcCollection);
     procedure SetSpecifiedConcentrations(const Value: TUztGwtConcCollection);
+    procedure SetMultiplier(const Value: string);
+    function GetMultiplier: string;
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -180,6 +191,7 @@ type
     property RootPotential: string read GetRootPotential write SetRootPotential;
     // rootact (Use only if SIMULATE_ET and UNSAT_ETAE have been specified.)
     property RootActivity: string read GetRootActivity write SetRootActivity;
+    property Multiplier: string read GetMultiplier write SetMultiplier;
     property GwtStatus: TGwtBoundaryStatusCollection read FGwtStatus write SetGwtStatus;
     property SpecifiedConcentrations: TUztGwtConcCollection read FSpecifiedConcentrations
       write SetSpecifiedConcentrations;
@@ -200,6 +212,7 @@ type
     FAirEntryPotentialData: TModflowTimeList;
     FRootPotentialData: TModflowTimeList;
     FRootActivityData: TModflowTimeList;
+    FMultiplierData: TModflowTimeList;
     // GWT
     FGwtStatusList: TModflowTimeLists;
     FSpecifiedConcList: TModflowTimeLists;
@@ -224,6 +237,7 @@ type
     procedure InvalidateUzfAirEntryPotentialData(Sender: TObject);
     procedure InvalidateUzfRootPotentialData(Sender: TObject);
     procedure InvalidateUzfRootActivityData(Sender: TObject);
+    procedure InvalidateUzfMultiplierData(Sender: TObject);
     // GWT
     procedure InvalidateGwtStatus(Sender: TObject);
     procedure InvalidateSpecifiedConcentrations(Sender: TObject);
@@ -315,6 +329,13 @@ type
     function GetEvapConcentrations: TGwtCellData;
     function GetGwtStatus: TGwtBoundaryStatusArray;
     function GetSpecifiedConcentrations: TGwtCellData;
+    function GetMultiplier: Double;
+    function GetMultiplierAnnotation: string;
+    function GetMultiplierPest: string;
+    function GetMultiplierPestSeries: string;
+    function GetMultiplierPestSeriesMethod: TPestParamMethod;
+    function GetMultiplierTimeSeriesName: string;
+    procedure SetMultiplierTimeSeriesName(const Value: string);
   protected
     function GetColumn: integer; override;
     function GetLayer: integer; override;
@@ -397,6 +418,14 @@ type
     property RootActivityTimeSeriesName: string
       read GetRootActivityTimeSeriesName
       write SetRootActivityTimeSeriesName;
+    // Multiplier
+    property Multiplier: Double read GetMultiplier;
+    property MultiplierAnnotation: string read GetMultiplierAnnotation;
+    property MultiplierPest: string read GetMultiplierPest;
+    property MultiplierPestSeries: string read GetMultiplierPestSeries;
+    property MultiplierPestSeriesMethod: TPestParamMethod read GetMultiplierPestSeriesMethod;
+    property MultiplierTimeSeriesName: string read GetMultiplierTimeSeriesName
+      write SetMultiplierTimeSeriesName;
     // GWT
     Property GwtStatus: TGwtBoundaryStatusArray read GetGwtStatus;
     Property SpecifiedConcentrations: TGwtCellData read GetSpecifiedConcentrations;
@@ -406,7 +435,6 @@ type
 
   TUzfMf6Boundary = class(TModflowBoundary)
   private
-
     FSurfaceDepressionDepth: IFormulaObject;
     FVerticalSaturatedK: IFormulaObject;
     FResidualWaterContent: IFormulaObject;
@@ -426,6 +454,7 @@ type
     FPestAirEntryPotentialMethod: TPestParamMethod;
     FPestRootPotentialMethod: TPestParamMethod;
     FPestRootActivityMethod: TPestParamMethod;
+    FPestMultiplierMethod: TPestParamMethod;
     FPestInfiltrationMethod: TPestParamMethod;
     FInfiltration: IFormulaObject;
     FPotentialET: IFormulaObject;
@@ -434,6 +463,7 @@ type
     FAirEntryPotential: IFormulaObject;
     FRootPotential: IFormulaObject;
     FRootActivity: IFormulaObject;
+    FMultiplier: IFormulaObject;
     FPestAirEntryPotentialObserver: TObserver;
     FPestExtinctionDepthObserver: TObserver;
     FPestExtinctionWaterContentObserver: TObserver;
@@ -442,6 +472,7 @@ type
     FPestRootActivityObserver: TObserver;
     FPestRootPotentialObserver: TObserver;
     FUsedObserver: TObserver;
+    FPestMultiplierObserver: TObserver;
     // GWT
     FStartingConcentrations: TStringConcCollection;
     FPestSpecifiedConcentrations: TUztGwtConcCollection;
@@ -479,6 +510,7 @@ type
     procedure InvalidateAirEntryPotentialData(Sender: TObject);
     procedure InvalidateRootPotentialData(Sender: TObject);
     procedure InvalidateRootActivityData(Sender: TObject);
+    procedure InvalidateMultiplierData(Sender: TObject);
     function GetPestAirEntryPotentialFormula: string;
     function GetPestAirEntryPotentialObserver: TObserver;
     function GetPestExtinctionDepthFormula: string;
@@ -491,6 +523,8 @@ type
     function GetPestPotentialETObserver: TObserver;
     function GetPestRootActivityFormula: string;
     function GetPestRootActivityObserver: TObserver;
+    function GetPestMultiplierFormula: string;
+    function GetPestMultiplierObserver: TObserver;
     function GetPestRootPotentialFormula: string;
     function GetPestRootPotentialObserver: TObserver;
     procedure SetPestAirEntryPotentialFormula(const Value: string);
@@ -506,6 +540,8 @@ type
     procedure SetPestPotentialETMethod(const Value: TPestParamMethod);
     procedure SetPestRootActivityFormula(const Value: string);
     procedure SetPestRootActivityMethod(const Value: TPestParamMethod);
+    procedure SetPestMultiplierFormula(const Value: string);
+    procedure SetPestMultiplierMethod(const Value: TPestParamMethod);
     procedure SetPestRootPotentialFormula(const Value: string);
     procedure SetPestRootPotentialMethod(const Value: TPestParamMethod);
     procedure SetPestEvaporationConcentrationMethods(
@@ -565,6 +601,7 @@ type
     property PestAirEntryPotentialObserver: TObserver read GetPestAirEntryPotentialObserver;
     property PestRootPotentialObserver: TObserver read GetPestRootPotentialObserver;
     property PestRootActivityObserver: TObserver read GetPestRootActivityObserver;
+    property PestMultiplierObserver: TObserver read GetPestMultiplierObserver;
 
     property PestSpecifiedConcentrationObserver[const Index: Integer]: TObserver
       read GetPestSpecifiedConcentrationObserver;
@@ -652,6 +689,12 @@ type
     property PestRootActivityMethod: TPestParamMethod
       read FPestRootActivityMethod
       write SetPestRootActivityMethod;
+    property PestMultiplierFormula: string
+      read GetPestMultiplierFormula
+      write SetPestMultiplierFormula;
+    property PestMultiplierMethod: TPestParamMethod
+      read FPestMultiplierMethod
+      write SetPestMultiplierMethod;
     // GWT
     property StartingConcentrations: TStringConcCollection
       read GetStartingConcentrations write SetStartingConcentrations;
@@ -677,8 +720,9 @@ const
   UzfMf6AirEntryPotentialPosition = 4;
   UzfMf6RootPotentialPosition = 5;
   UzfMf6RootActivityPosition = 6;
+  UzfMf6MultiplierPosition = 7;
 //  UzfGwtStart = 7;
-  UzfBoundaryGwtStart = 13;
+  UzfBoundaryGwtStart = 14;
 
   UztGwtConcCount = 3;
   UzfGwtSpecifiedConcentrationPosition = 0;
@@ -799,6 +843,7 @@ resourcestring
   StrUZFAirEntryPotent = 'UZF air entry potential';
   StrUZFRootPotential = 'UZF root potential';
   StrUZFRootActivity = 'UZF root activity';
+  StrUZFMultiplier = 'UZF Multiplier';
 
 const
   SurfaceDepressionDepthPosition = 0;
@@ -815,6 +860,7 @@ const
   AirEntryPotentialPosition = 10;
   RootPotentialPosition = 11;
   RootActivityPosition = 12;
+  MultiplierPosition = 13;
 
 
 { TUzfMf6Record }
@@ -885,6 +931,13 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(RootPotentialTimeSeriesName));
   WriteCompInt(Comp, Strings.IndexOf(RootActivityTimeSeriesName));
 
+  WriteCompReal(Comp, Multiplier);
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPest));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierPestSeries));
+  WriteCompInt(Comp, Strings.IndexOf(MultiplierTimeSeriesName));
+  WriteCompInt(Comp, Ord(MultiplierPestMethod));
+
   WriteCompBoolean(Comp, MvrUsed);
   WriteCompInt(Comp, MvrIndex);
 
@@ -935,6 +988,11 @@ begin
   Strings.Add(AirEntryPotentialTimeSeriesName);
   Strings.Add(RootPotentialTimeSeriesName);
   Strings.Add(RootActivityTimeSeriesName);
+
+  Strings.Add(MultiplierAnnotation);
+  Strings.Add(MultiplierPest);
+  Strings.Add(MultiplierPestSeries);
+  Strings.Add(MultiplierTimeSeriesName);
 
   // GWT
   SpecifiedConcentrations.RecordStrings(Strings);
@@ -1000,6 +1058,13 @@ begin
   AirEntryPotentialTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RootPotentialTimeSeriesName := Annotations[ReadCompInt(Decomp)];
   RootActivityTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+
+  Multiplier := ReadCompReal(Decomp);
+  MultiplierAnnotation := Annotations[ReadCompInt(Decomp)];
+  MultiplierPest := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestSeries := Annotations[ReadCompInt(Decomp)];
+  MultiplierTimeSeriesName := Annotations[ReadCompInt(Decomp)];
+  MultiplierPestMethod := TPestParamMethod(ReadCompInt(Decomp));
 
   MvrUsed := ReadCompBoolean(Decomp);
   MvrIndex := ReadCompInt(Decomp);
@@ -1115,6 +1180,7 @@ begin
     AirEntryPotential := UzfMf6Item.AirEntryPotential;
     RootPotential := UzfMf6Item.RootPotential;
     RootActivity := UzfMf6Item.RootActivity;
+    Multiplier := UzfMf6Item.Multiplier;
 
     // GWT
     GwtStatus := UzfMf6Item.GwtStatus;
@@ -1175,6 +1241,9 @@ begin
   Observer := FObserverList[UzfMf6RootActivityPosition];
   Observer.OnUpToDateSet := ParentCollection.InvalidateUzfRootActivityData;
 
+  Observer := FObserverList[UzfMf6MultiplierPosition];
+  Observer.OnUpToDateSet := ParentCollection.InvalidateUzfMultiplierData;
+
   for ConcIndex := 0 to SpecifiedConcentrations.Count - 1 do
   begin
     SpecifiedConcentrations[ConcIndex].Observer.OnUpToDateSet
@@ -1199,7 +1268,7 @@ function TUzfMf6Item.BoundaryFormulaCount: integer;
 const
   OffSet = 6;
 begin
-  result := 7;
+  result := 8;
   if frmGoPhast.PhastModel.GwtUsed then
   begin
     result := result
@@ -1222,6 +1291,7 @@ begin
 
   inherited;
   FGwtStatus := TGwtBoundaryStatusCollection.Create(Model as TCustomModel);
+  Multiplier :='1';
 end;
 
 procedure TUzfMf6Item.CreateFormulaObjects;
@@ -1234,6 +1304,7 @@ begin
   FAirEntryPotential := CreateFormulaObject(dso3D);
   FRootPotential := CreateFormulaObject(dso3D);
   FRootActivity := CreateFormulaObject(dso3D);
+  FMultiplier := CreateFormulaObject(dso3D);
 end;
 
 destructor TUzfMf6Item.Destroy;
@@ -1267,6 +1338,7 @@ begin
   AirEntryPotential := '0';
   RootPotential := '0';
   RootActivity := '0';
+  Multiplier := '0';
   inherited;
 end;
 
@@ -1294,6 +1366,7 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotential;
     UzfMf6RootPotentialPosition: result := RootPotential;
     UzfMf6RootActivityPosition: result := RootActivity;
+    UzfMf6MultiplierPosition: result := Multiplier;
     else
       begin
         // GWT
@@ -1377,6 +1450,17 @@ begin
   ResetItemObserver(UzfMf6InfiltrationPosition);
 end;
 
+function TUzfMf6Item.GetMultiplier: string;
+begin
+  FMultiplier.ScreenObject := ScreenObjectI;
+  try
+    Result := FMultiplier.Formula;
+  finally
+    FMultiplier.ScreenObject := nil;
+  end;
+  ResetItemObserver(UzfMf6MultiplierPosition);
+end;
+
 function TUzfMf6Item.GetPotentialET: string;
 begin
   FPotentialET.ScreenObject := ScreenObjectI;
@@ -1420,6 +1504,10 @@ begin
   else if (Sender = FRootActivity as TObject) then
   begin
     List.Add( FObserverList[UzfMf6RootActivityPosition]);
+  end
+  else if (Sender = FMultiplier as TObject) then
+  begin
+    List.Add( FObserverList[UzfMf6MultiplierPosition]);
   end
   else
   begin
@@ -1490,6 +1578,7 @@ begin
       and (Item.AirEntryPotential = AirEntryPotential)
       and (Item.RootPotential = RootPotential)
       and (Item.RootActivity = RootActivity)
+      and (Item.Multiplier = Multiplier)
       and Item.SpecifiedConcentrations.IsSame(SpecifiedConcentrations)
       and Item.InfiltrationConcentrations.IsSame(InfiltrationConcentrations)
       and Item.EvapConcentrations.IsSame(EvapConcentrations)
@@ -1518,6 +1607,9 @@ begin
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FRootActivity,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FMultiplier,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
@@ -1551,6 +1643,8 @@ begin
       RootPotential := Value;
     UzfMf6RootActivityPosition:
       RootActivity := Value;
+    UzfMf6MultiplierPosition:
+      Multiplier := Value;
     else
       begin
         // GWT
@@ -1660,6 +1754,16 @@ begin
   FInfiltrationConcentrations.Assign(Value);
 end;
 
+procedure TUzfMf6Item.SetMultiplier(const Value: string);
+begin
+  FMultiplier.ScreenObject := ScreenObjectI;
+  try
+    UpdateFormulaBlocks(Value, UzfMf6MultiplierPosition, FMultiplier);
+  finally
+    FMultiplier.ScreenObject := nil;
+  end;
+end;
+
 procedure TUzfMf6Item.SetRootActivity(const Value: string);
 begin
   FRootActivity.ScreenObject := ScreenObjectI;
@@ -1707,6 +1811,7 @@ var
   AirEntryPotentialArray: TDataArray;
   RootPotentialArray: TDataArray;
   RootActivityArray: TDataArray;
+  MultiplierArray: TDataArray;
   Boundary: TUzfMf6Storage;
   LayerIndex: Integer;
   RowIndex: Integer;
@@ -1734,6 +1839,8 @@ var
   LocalRootPotentialPest: string;
   RootActivityItems: TStringList;
   LocalRootActivityPest: string;
+  MultiplierItems: TStringList;
+  LocalMultiplierPest: string;
   LocalPotentialETPestSeriesName: string;
   LocalInfiltrationPestSeriesName: string;
   LocalInfiltrationPestSeriesMethod: TPestParamMethod;
@@ -1747,6 +1854,8 @@ var
   LocalRootPotentialPestSeriesMethod: TPestParamMethod;
   LocalRootActivityPestSeriesName: string;
   LocalRootActivityPestSeriesMethod: TPestParamMethod;
+  LocalMultiplierPestSeriesName: string;
+  LocalMultiplierPestSeriesMethod: TPestParamMethod;
   InfiltrationTimeSeries: TStringList;
   LocalInfiltrationTimeSeriesName: String;
   PotentialETTimeSeries: TStringList;
@@ -1761,6 +1870,8 @@ var
   LocalRootPotentialTimeSeriesName: String;
   RootActivityTimeSeries: TStringList;
   LocalRootActivityTimeSeriesName: String;
+  MultiplierTimeSeries: TStringList;
+  LocalMultiplierTimeSeriesName: String;
   LocalSpecifiedConcentrations: TDataArrayList;
   LocalInfiltrationConcentrations: TDataArrayList;
   LocalEvapConcentrations: TDataArrayList;
@@ -1797,6 +1908,7 @@ var
   AirEntryPotentialDyanmicTimeSeries: IDynamicTimeSeries;
   RootPotentialDyanmicTimeSeries: IDynamicTimeSeries;
   RootActivitylDyanmicTimeSeries: IDynamicTimeSeries;
+  MultiplierlDyanmicTimeSeries: IDynamicTimeSeries;
 begin
   CustomWriter := nil;
   LocalSpecifiedConcentrations := TDataArrayList.Create;
@@ -1831,6 +1943,7 @@ begin
     AirEntryPotentialArray := DataSets[UzfMf6AirEntryPotentialPosition];
     RootPotentialArray := DataSets[UzfMf6RootPotentialPosition];
     RootActivityArray := DataSets[UzfMf6RootActivityPosition];
+    MultiplierArray := DataSets[UzfMf6MultiplierPosition];
     if LocalModel.GwtUsed then
     begin
       DataSetIndex := UzfBoundaryGwtStart;
@@ -1936,6 +2049,13 @@ begin
     RootActivityTimeSeries := TimeSeriesNames[RootActivityPosition-PestOffset];
     LocalRootActivityTimeSeriesName := RootActivityTimeSeries[ItemIndex];
 
+    LocalMultiplierPestSeriesName := PestSeries[MultiplierPosition-PestOffset];
+    LocalMultiplierPestSeriesMethod := PestMethods[MultiplierPosition-PestOffset];
+    MultiplierItems := PestItemNames[MultiplierPosition-PestOffset];
+    LocalMultiplierPest := MultiplierItems[ItemIndex];
+
+    MultiplierTimeSeries := TimeSeriesNames[MultiplierPosition-PestOffset];
+    LocalMultiplierTimeSeriesName := MultiplierTimeSeries[ItemIndex];
 
     InfiltrationDyanmicTimeSeries := nil;
     PotentialEtDyanmicTimeSeries := nil;
@@ -1944,6 +2064,7 @@ begin
     AirEntryPotentialDyanmicTimeSeries := nil;
     RootPotentialDyanmicTimeSeries := nil;
     RootActivitylDyanmicTimeSeries := nil;
+    MultiplierlDyanmicTimeSeries := nil;
     if ScreenObject <> nil then
     begin
       if ScreenObject.QueryInterface(IScreenObjectForDynamicTimeSeries,
@@ -1965,6 +2086,8 @@ begin
         GetDynamicTimeSeriesIByName(LocalRootPotentialTimeSeriesName);
       RootActivitylDyanmicTimeSeries := LocalScreenObject.
         GetDynamicTimeSeriesIByName(LocalRootActivityTimeSeriesName);
+      MultiplierlDyanmicTimeSeries := LocalScreenObject.
+        GetDynamicTimeSeriesIByName(LocalMultiplierTimeSeriesName);
     end;
 
 
@@ -1990,6 +2113,7 @@ begin
                 Assert(AirEntryPotentialArray.IsValue[LayerIndex, RowIndex, ColIndex]);
                 Assert(RootPotentialArray.IsValue[LayerIndex, RowIndex, ColIndex]);
                 Assert(RootActivityArray.IsValue[LayerIndex, RowIndex, ColIndex]);
+                Assert(MultiplierArray.IsValue[LayerIndex, RowIndex, ColIndex]);
 
                 with Boundary.UzfMf6Array[BoundaryIndex] do
                 begin
@@ -2172,6 +2296,31 @@ begin
                     CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
                   end;
 
+                  Multiplier := MultiplierArray.
+                    RealData[LayerIndex, RowIndex, ColIndex];
+                  MultiplierAnnotation := MultiplierArray.
+                    Annotation[LayerIndex, RowIndex, ColIndex];
+                  MultiplierPest := LocalMultiplierPest;
+                  MultiplierPestMethod := LocalMultiplierPestSeriesMethod;
+                  MultiplierPestSeries := LocalMultiplierPestSeriesName;
+                  if MultiplierlDyanmicTimeSeries = nil then
+                  begin
+                    MultiplierTimeSeriesName := LocalMultiplierTimeSeriesName;
+                  end
+                  else
+                  begin
+                    TimeSeriesLocation.Layer := LayerIndex;
+                    TimeSeriesLocation.Row := RowIndex;
+                    TimeSeriesLocation.Column := ColIndex;
+                    StaticTimeSeries := MultiplierlDyanmicTimeSeries.StaticTimeSeries[TimeSeriesLocation];
+                    MultiplierTimeSeriesName := string(StaticTimeSeries.SeriesName);
+                    if CustomWriter = nil then
+                    begin
+                      CustomWriter := FWriter as TCustomFileWriter;
+                    end;
+                    CustomWriter.TimeSeriesNames.Add(string(StaticTimeSeries.SeriesName));
+                  end;
+
                   if LocalModel.GwtUsed then
                   begin
                     SpecifiedConcentrations.SpeciesCount := ChemSpeciesCount;
@@ -2240,6 +2389,7 @@ begin
     AirEntryPotentialArray.CacheData;
     RootPotentialArray.CacheData;
     RootActivityArray.CacheData;
+    MultiplierArray.CacheData;
 
     Boundary.CacheData;
   finally
@@ -2501,6 +2651,30 @@ begin
   TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
   Assert(TimeList.Count = Count);
 
+  // Multiplier
+  SeriesName := BoundaryGroup.PestBoundaryFormula[MultiplierPosition];
+  PestSeries.Add(SeriesName);
+  SeriesMethod := BoundaryGroup.PestBoundaryMethod[MultiplierPosition];
+  PestMethods.Add(SeriesMethod);
+
+  PestItems := TStringList.Create;
+  PestItemNames.Add(PestItems);
+  TimeSeriesItems := TStringList.Create;
+  TimeSeriesNames.Add(TimeSeriesItems);
+
+  for Index := 0 to Count - 1 do
+  begin
+    Item := Items[Index] as TUzfMf6Item;
+    BoundaryValues[Index].Time := Item.StartTime;
+
+    ItemFormula := Item.Multiplier;
+    AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
+      PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+  end;
+  TimeList := ALink.FMultiplierData;
+  TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(TimeList.Count = Count);
+
   ChemSpeciesCount := 0;
   if LocalModel.GwtUsed then
   begin
@@ -2604,6 +2778,7 @@ begin
   ListOfTimeLists.Add(ALink.FAirEntryPotentialData);
   ListOfTimeLists.Add(ALink.FRootPotentialData);
   ListOfTimeLists.Add(ALink.FRootActivityData);
+  ListOfTimeLists.Add(ALink.FMultiplierData);
   if LocalModel.GwtUsed then
   begin
     for SpeciesIndex := 0 to ChemSpeciesCount - 1 do
@@ -2859,6 +3034,34 @@ begin
   end;
 end;
 
+procedure TUzfMf6Collection.InvalidateUzfMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TUzfMf6TimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TUzfMf6TimeListLink;
+    Link.FMultiplierData.Invalidate;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TUzfMf6TimeListLink;
+        Link.FMultiplierData.Invalidate;
+      end;
+    end;
+  end;
+end;
+
 procedure TUzfMf6Collection.InvalidateUzfPotentialETData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -3036,6 +3239,16 @@ begin
       (Model as TCustomModel).InvalidateUzfMf6RootActivity;
   end;
 
+  FMultiplierData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FMultiplierData.NonParamDescription := StrUZFMultiplier ;
+  FMultiplierData.ParamDescription := ' ' + StrUZFMultiplier;
+  AddTimeList(FMultiplierData);
+  if Model <> nil then
+  begin
+    FMultiplierData.OnInvalidate :=
+      (Model as TCustomModel).InvalidateUzfMf6Multiplier;
+  end;
+
   FGwtStatusList := TModflowTimeLists.Create;
   FSpecifiedConcList := TModflowTimeLists.Create;
   FInfiltrationConcList := TModflowTimeLists.Create;
@@ -3066,6 +3279,7 @@ begin
   FAirEntryPotentialData.Free;
   FRootPotentialData.Free;
   FRootActivityData.Free;
+  FMultiplierData.Free;
   inherited;
 end;
 
@@ -3348,6 +3562,7 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialTimeSeriesName;
     UzfMf6RootPotentialPosition: result := RootPotentialTimeSeriesName;
     UzfMf6RootActivityPosition: result := RootActivityTimeSeriesName;
+    UzfMf6MultiplierPosition: result := MultiplierTimeSeriesName;
     else
       begin
         GwtPosition := Index - UzfBoundaryGwtStart;
@@ -3396,6 +3611,36 @@ begin
   end;
 end;
 
+function TUzfMf6_Cell.GetMultiplier: Double;
+begin
+  result := FValues.Multiplier;
+end;
+
+function TUzfMf6_Cell.GetMultiplierAnnotation: string;
+begin
+  result := FValues.MultiplierAnnotation;
+end;
+
+function TUzfMf6_Cell.GetMultiplierPest: string;
+begin
+  result := FValues.MultiplierPest;
+end;
+
+function TUzfMf6_Cell.GetMultiplierPestSeries: string;
+begin
+  result := FValues.MultiplierPestSeries;
+end;
+
+function TUzfMf6_Cell.GetMultiplierPestSeriesMethod: TPestParamMethod;
+begin
+  result := FValues.MultiplierPestMethod;
+end;
+
+function TUzfMf6_Cell.GetMultiplierTimeSeriesName: string;
+begin
+  result := FValues.MultiplierTimeSeriesName;
+end;
+
 function TUzfMf6_Cell.GetMvrIndex: Integer;
 begin
   result := FValues.MvrIndex;
@@ -3420,6 +3665,7 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialPest;
     UzfMf6RootPotentialPosition: result := RootPotentialPest;
     UzfMf6RootActivityPosition: result := RootActivityPest;
+    UzfMf6MultiplierPosition: result := MultiplierPest;
     else
       begin
         GwtPosition := Index - UzfBoundaryGwtStart;
@@ -3460,6 +3706,7 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialPestSeriesMethod;
     UzfMf6RootPotentialPosition: result := RootPotentialPestSeriesMethod;
     UzfMf6RootActivityPosition: result := RootActivityPestSeriesMethod;
+    UzfMf6MultiplierPosition: result := MultiplierPestSeriesMethod;
     else
       begin
         GwtPosition := Index - UzfBoundaryGwtStart;
@@ -3503,6 +3750,7 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialPestSeriesName;
     UzfMf6RootPotentialPosition: result := RootPotentialPestSeriesName;
     UzfMf6RootActivityPosition: result := RootActivityPestSeriesName;
+    UzfMf6MultiplierPosition: result := MultiplierPestSeries;
     else
       begin
         GwtPosition := Index - UzfBoundaryGwtStart;
@@ -3575,6 +3823,7 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotentialAnnotation;
     UzfMf6RootPotentialPosition: result := RootPotentialAnnotation;
     UzfMf6RootActivityPosition: result := RootActivityAnnotation;
+    UzfMf6MultiplierPosition: result := MultiplierAnnotation;
     else
       begin
         GwtPosition := Index - UzfBoundaryGwtStart;
@@ -3616,6 +3865,7 @@ begin
     UzfMf6AirEntryPotentialPosition: result := AirEntryPotential;
     UzfMf6RootPotentialPosition: result := RootPotential;
     UzfMf6RootActivityPosition: result := RootActivity;
+    UzfMf6MultiplierPosition: result := Multiplier;
     else
       begin
         GwtPosition := Index - UzfBoundaryGwtStart;
@@ -3755,6 +4005,7 @@ begin
       and (AirEntryPotential = Uzf_Cell.AirEntryPotential)
       and (RootPotential = Uzf_Cell.RootPotential)
       and (RootActivity = Uzf_Cell.RootActivity)
+      and (Multiplier = Uzf_Cell.Multiplier)
   end;
 end;
 
@@ -3825,6 +4076,8 @@ begin
       RootPotentialTimeSeriesName := Value;
     UzfMf6RootActivityPosition:
       RootActivityTimeSeriesName := Value;
+    UzfMf6MultiplierPosition:
+      MultiplierTimeSeriesName := Value;
     else
       begin
         GwtPosition := Index - UzfBoundaryGwtStart;
@@ -3849,6 +4102,11 @@ begin
         end;
       end;
   end;
+end;
+
+procedure TUzfMf6_Cell.SetMultiplierTimeSeriesName(const Value: string);
+begin
+  FValues.MultiplierTimeSeriesName := Value;
 end;
 
 procedure TUzfMf6_Cell.SetPotentialETTimeSeriesName(const Value: string);
@@ -3896,6 +4154,7 @@ begin
     PestAirEntryPotentialFormula := Uzf6Source.PestAirEntryPotentialFormula;
     PestRootPotentialFormula := Uzf6Source.PestRootPotentialFormula;
     PestRootActivityFormula := Uzf6Source.PestRootActivityFormula;
+    PestMultiplierFormula := Uzf6Source.PestMultiplierFormula;
 
     PestInfiltrationMethod := Uzf6Source.PestInfiltrationMethod;
     PestPotentialETMethod := Uzf6Source.PestPotentialETMethod;
@@ -3904,6 +4163,7 @@ begin
     PestAirEntryPotentialMethod := Uzf6Source.PestAirEntryPotentialMethod;
     PestRootPotentialMethod := Uzf6Source.PestRootPotentialMethod;
     PestRootActivityMethod := Uzf6Source.PestRootActivityMethod;
+    PestMultiplierMethod := Uzf6Source.PestMultiplierMethod;
     // GWT
     StartingConcentrations := Uzf6Source.StartingConcentrations;
 
@@ -4129,6 +4389,7 @@ begin
   PestAirEntryPotentialFormula := '';
   PestRootPotentialFormula := '';
   PestRootActivityFormula := '';
+  PestMultiplierFormula := '';
 
   PestInfiltrationMethod := DefaultBoundaryMethod(InfiltrationPosition);
   PestPotentialETMethod := DefaultBoundaryMethod(PotentialETPosition);
@@ -4137,6 +4398,7 @@ begin
   PestAirEntryPotentialMethod := DefaultBoundaryMethod(AirEntryPotentialPosition);
   PestRootPotentialMethod := DefaultBoundaryMethod(RootPotentialPosition);
   PestRootActivityMethod := DefaultBoundaryMethod(RootActivityPosition);
+  PestMultiplierMethod := DefaultBoundaryMethod(MultiplierPosition);
 end;
 
 procedure TUzfMf6Boundary.CreateFormulaObjects;
@@ -4159,6 +4421,7 @@ begin
   FAirEntryPotential := CreateFormulaObjectBlocks(dsoTop);
   FRootPotential := CreateFormulaObjectBlocks(dsoTop);
   FRootActivity := CreateFormulaObjectBlocks(dsoTop);
+  FMultiplier := CreateFormulaObjectBlocks(dsoTop);
 
   LocalModel := ParentModel as TCustomModel;
   if (LocalModel <> nil) and LocalModel.GwtUsed then
@@ -4247,6 +4510,10 @@ begin
       begin
         result := ppmMultiply;
       end;
+    MultiplierPosition:
+      begin
+        result := ppmMultiply;
+      end;
     else
       begin
         result := inherited;
@@ -4271,6 +4538,7 @@ begin
   PestAirEntryPotentialFormula := '';
   PestRootPotentialFormula := '';
   PestRootActivityFormula := '';
+  PestMultiplierFormula := '';
 
   FStartingConcentrations.Free;
 
@@ -4417,6 +4685,10 @@ begin
       begin
         result := PestRootActivityFormula
       end;
+    MultiplierPosition:
+      begin
+        result := PestMultiplierFormula
+      end;
     else
       begin
         FormulaIndex := FormulaIndex-UzfBoundaryGwtStart;
@@ -4494,6 +4766,10 @@ begin
     RootActivityPosition:
       begin
         result := PestRootActivityMethod
+      end;
+    MultiplierPosition:
+      begin
+        result := PestMultiplierMethod
       end;
     else
       begin
@@ -4607,6 +4883,25 @@ begin
     FPestInfiltrationObserver.OnUpToDateSet := InvalidateInfiltrationData;
   end;
   result := FPestInfiltrationObserver;
+end;
+
+function TUzfMf6Boundary.GetPestMultiplierFormula: string;
+begin
+  Result := FMultiplier.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(MultiplierPosition);
+  end;
+end;
+
+function TUzfMf6Boundary.GetPestMultiplierObserver: TObserver;
+begin
+  if FPestMultiplierObserver = nil then
+  begin
+    CreateObserver('PestMultiplier_', FPestMultiplierObserver, nil);
+    FPestMultiplierObserver.OnUpToDateSet := InvalidateMultiplierData;
+  end;
+  result := FPestMultiplierObserver;
 end;
 
 function TUzfMf6Boundary.GetPestPotentialETFormula: string;
@@ -4751,6 +5046,10 @@ begin
   else if Sender = FRootActivity as TObject then
   begin
     List.Add(FObserverList[RootActivityPosition]);
+  end
+  else if Sender = FMultiplier as TObject then
+  begin
+    List.Add(FObserverList[MultiplierPosition]);
   end;
 
   StartIndex := UzfBoundaryGwtStart;
@@ -4978,6 +5277,7 @@ begin
     Model.InvalidateUzfMf6AirEntryPotential(self);
     Model.InvalidateUzfMf6RootPotential(self);
     Model.InvalidateUzfMf6RootActivity(self);
+    Model.InvalidateUzfMf6Multiplier(self);
     Model.InvalidateUzfGwtConc(self);
   end;
 end;
@@ -5067,6 +5367,36 @@ begin
       if ChildModel <> nil then
       begin
         ChildModel.InvalidateUzfMf6Infiltration(self);
+      end;
+    end;
+  end;
+end;
+
+procedure TUzfMf6Boundary.InvalidateMultiplierData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+//  if ParentModel = nil then
+//  begin
+//    Exit;
+//  end;
+//  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    PhastModel.InvalidateUzfMf6Multiplier(self);
+
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        ChildModel.InvalidateUzfMf6Multiplier(self);
       end;
     end;
   end;
@@ -5296,6 +5626,10 @@ begin
       begin
         PestRootActivityFormula := Value;
       end;
+    MultiplierPosition:
+      begin
+        PestMultiplierFormula := Value;
+      end;
     else
       begin
         FormulaIndex := FormulaIndex-UzfBoundaryGwtStart;
@@ -5373,6 +5707,10 @@ begin
     RootActivityPosition:
       begin
         PestRootActivityMethod := Value;
+      end;
+    MultiplierPosition:
+      begin
+        PestMultiplierMethod := Value;
       end;
     else
       begin
@@ -5474,6 +5812,17 @@ procedure TUzfMf6Boundary.SetPestInfiltrationMethod(
   const Value: TPestParamMethod);
 begin
   SetPestParamMethod(FPestInfiltrationMethod, Value);
+end;
+
+procedure TUzfMf6Boundary.SetPestMultiplierFormula(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, MultiplierPosition, FMultiplier);
+end;
+
+procedure TUzfMf6Boundary.SetPestMultiplierMethod(
+  const Value: TPestParamMethod);
+begin
+  SetPestParamMethod(FPestMultiplierMethod, Value);
 end;
 
 procedure TUzfMf6Boundary.SetPestPotentialETFormula(const Value: string);

@@ -21,7 +21,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
       Left = 8
       Top = 6
       Width = 49
-      Height = 21
+      Height = 23
       ButtonKind = bkClassic
       MaxValue = 2147483647.000000000000000000
       TabOrder = 0

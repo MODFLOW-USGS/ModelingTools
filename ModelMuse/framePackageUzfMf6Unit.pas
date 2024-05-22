@@ -20,6 +20,7 @@ type
     cbPackageConvergence: TCheckBox;
     cbBudgetCsv: TCheckBox;
     cbSaveWaterContent: TCheckBox;
+    cbUseMultiplierMODFLOW6: TCheckBox;
     procedure rcSelectionControllerEnabledChange(Sender: TObject);
     procedure rgEvapotranspirationClick(Sender: TObject);
   private
@@ -53,6 +54,7 @@ begin
   rdeNumberOfWaveSets.IntegerValue := UzfPackage.NumberOfWaveSets;
   cbPackageConvergence.Checked := UzfPackage.WriteConvergenceData;
   cbSaveWaterContent.Checked := UzfPackage.SaveWaterContent;
+  cbUseMultiplierMODFLOW6.Checked := UzfPackage.UseMultiplier;
 end;
 
 procedure TframePackageUzfMf6.rcSelectionControllerEnabledChange(
@@ -83,6 +85,7 @@ begin
   UzfPackage.NumberOfWaveSets := rdeNumberOfWaveSets.IntegerValue;
   UzfPackage.WriteConvergenceData := cbPackageConvergence.Checked;
   UzfPackage.SaveWaterContent := cbSaveWaterContent.Checked;
+  UzfPackage.UseMultiplier := cbUseMultiplierMODFLOW6.Checked;
 end;
 
 procedure TframePackageUzfMf6.Enable_rgUnsatEt;

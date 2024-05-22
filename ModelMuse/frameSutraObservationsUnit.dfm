@@ -122,7 +122,7 @@ inherited frameSutraObservations: TframeSutraObservations
       Left = 5
       Top = 52
       Width = 333
-      Height = 21
+      Height = 23
       Anchors = [akLeft, akTop, akRight]
       MaxLength = 40
       TabOrder = 1

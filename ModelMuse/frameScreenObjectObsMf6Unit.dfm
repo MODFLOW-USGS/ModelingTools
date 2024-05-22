@@ -84,7 +84,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Width = 278
         Height = 97
         Enabled = False
-        ItemHeight = 15
         Items.Strings = (
           'Nearest horizontal neighbor'
           'All horizontal neighbors'
@@ -98,7 +97,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 219
         Width = 278
         Height = 142
-        ItemHeight = 15
         Items.Strings = (
           'CHD flows'
           'DRN flows'
@@ -127,7 +125,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 221
         Width = 282
         Height = 97
-        ItemHeight = 15
         Items.Strings = (
           'CNC (Mass flow at spec. conc.)'
           'SRC (Mass source loading rate)')
@@ -139,7 +136,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 93
         Width = 275
         Height = 97
-        ItemHeight = 15
         TabOrder = 7
       end
     end
@@ -165,7 +161,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 35
         Width = 286
         Height = 230
-        ItemHeight = 15
         Items.Strings = (
           'Head'
           'From MVR'
@@ -188,7 +183,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 35
         Width = 284
         Height = 230
-        ItemHeight = 15
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -225,7 +219,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 109
         Width = 239
         Height = 252
-        ItemHeight = 15
         Items.Strings = (
           'Stream stage'
           'External inflow'
@@ -266,7 +259,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 109
         Width = 232
         Height = 252
-        ItemHeight = 15
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -305,7 +297,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 32
         Width = 270
         Height = 337
-        ItemHeight = 15
         Items.Strings = (
           'Stage'
           'Specified inflow'
@@ -334,7 +325,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 32
         Width = 300
         Height = 337
-        ItemHeight = 15
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -424,7 +414,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Margins.Top = 30
           Margins.Right = 0
           Align = alLeft
-          ItemHeight = 15
           Items.Strings = (
             'Recharge to the aquifer from UZF (uzf-gwrch)'
             'UZF Discharge to land surface (uzf-gwd)'
@@ -455,7 +444,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Margins.Right = 0
           Margins.Bottom = 0
           Align = alClient
-          ItemHeight = 15
           Items.Strings = (
             'UZT_Concentration'
             'UZT_Storage'
@@ -489,7 +477,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Width = 582
         Height = 313
         Align = alClient
-        ItemHeight = 15
         Items.Strings = (
           'Flow: groundwater (GW) and interbeds (IB) (csub)'
           'Flow: GW and IB from inelastic compaction (inelastic-csub)'
@@ -562,7 +549,6 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Height = 71
           Align = alBottom
           Columns = 8
-          ItemHeight = 15
           TabOrder = 0
         end
       end
@@ -578,7 +564,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 582
-        ExplicitHeight = 418
+        ExplicitHeight = 413
         inherited splObservations: TSplitter
           Top = 241
           Width = 582
@@ -589,17 +575,17 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Width = 582
           Height = 241
           ExplicitWidth = 582
-          ExplicitHeight = 241
+          ExplicitHeight = 236
           inherited frameObservations: TframeGrid
             Width = 578
             Height = 222
             ExplicitTop = 17
             ExplicitWidth = 578
-            ExplicitHeight = 222
+            ExplicitHeight = 217
             inherited Panel: TPanel
               Top = 164
               Width = 578
-              ExplicitTop = 164
+              ExplicitTop = 159
               ExplicitWidth = 578
               inherited sbAdd: TSpeedButton
                 Left = 447
@@ -628,7 +614,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         inherited grpObsComparisons: TGroupBox
           Top = 246
           Width = 582
-          ExplicitTop = 246
+          ExplicitTop = 241
           ExplicitWidth = 582
           inherited frameObsComparisons: TframeGrid
             Width = 578

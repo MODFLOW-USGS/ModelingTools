@@ -645,7 +645,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           50
           50
           50
-          91)
+          147)
       end
       object pnlParamBottom: TPanel
         Left = 0
@@ -968,7 +968,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           50
           50
           50
-          187)
+          206)
       end
     end
     object tabFlows: TTabSheet
@@ -1860,7 +1860,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           ExplicitLeft = 386
           ExplicitTop = 58
           ExplicitWidth = 166
-          ExplicitHeight = 308
+          ExplicitHeight = 303
           inherited dg8Point: TRbwDataGrid4
             Width = 166
             Height = 308
@@ -2131,6 +2131,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Height = 319
         Align = alClient
         TabOrder = 0
+        ExplicitHeight = 314
         object dgTableTime: TRbwDataGrid4
           Left = 1
           Top = 1
@@ -2306,7 +2307,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         TabStop = True
         ExplicitLeft = 226
         ExplicitWidth = 327
-        ExplicitHeight = 319
+        ExplicitHeight = 314
         inherited dgSfrTable: TRbwDataGrid4
           Width = 327
           Height = 247
@@ -2319,7 +2320,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         inherited pnl1: TPanel
           Top = 247
           Width = 327
-          ExplicitTop = 247
+          ExplicitTop = 242
           ExplicitWidth = 327
           inherited lblNumberOfPoints: TLabel
             Anchors = [akLeft, akTop, akBottom]
@@ -2677,11 +2678,11 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         TabOrder = 1
         ExplicitTop = 145
         ExplicitWidth = 553
-        ExplicitHeight = 331
+        ExplicitHeight = 326
         inherited Panel: TPanel
           Top = 290
           Width = 553
-          ExplicitTop = 290
+          ExplicitTop = 285
           ExplicitWidth = 553
           inherited sbAdd: TSpeedButton
             Left = 288
@@ -2939,7 +2940,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 553
-        ExplicitHeight = 476
+        ExplicitHeight = 471
         inherited splObservations: TSplitter
           Top = 299
           Width = 553
@@ -2950,17 +2951,17 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
           Width = 553
           Height = 299
           ExplicitWidth = 553
-          ExplicitHeight = 299
+          ExplicitHeight = 294
           inherited frameObservations: TframeGrid
             Width = 549
             Height = 280
             ExplicitTop = 17
             ExplicitWidth = 549
-            ExplicitHeight = 280
+            ExplicitHeight = 275
             inherited Panel: TPanel
               Top = 248
               Width = 549
-              ExplicitTop = 248
+              ExplicitTop = 243
               ExplicitWidth = 549
             end
             inherited Grid: TRbwDataGrid4
@@ -2974,7 +2975,7 @@ inherited frameScreenObjectSFR: TframeScreenObjectSFR
         inherited grpObsComparisons: TGroupBox
           Top = 304
           Width = 553
-          ExplicitTop = 304
+          ExplicitTop = 299
           ExplicitWidth = 553
           inherited frameObsComparisons: TframeGrid
             Width = 549

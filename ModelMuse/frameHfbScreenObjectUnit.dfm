@@ -84,7 +84,7 @@ object frameHfbScreenObject: TframeHfbScreenObject
     Left = 312
     Top = 60
     Width = 89
-    Height = 21
+    Height = 23
     Color = clBtnFace
     Enabled = False
     TabOrder = 3
@@ -93,7 +93,7 @@ object frameHfbScreenObject: TframeHfbScreenObject
     Left = 312
     Top = 88
     Width = 89
-    Height = 21
+    Height = 23
     Color = clBtnFace
     Enabled = False
     TabOrder = 5

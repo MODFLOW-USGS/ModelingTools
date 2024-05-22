@@ -735,7 +735,14 @@ procedure TRchItem.SetMultiplier(const Value: string);
 begin
   FMultiplier.ScreenObject := ScreenObjectI;
   try
-    UpdateFormulaBlocks(Value, RchMultiplierPosition, FMultiplier);
+    if Value <> '' then
+    begin
+      UpdateFormulaBlocks(Value, RchMultiplierPosition, FMultiplier);
+    end
+    else
+    begin
+      UpdateFormulaBlocks('1', RchMultiplierPosition, FMultiplier);
+    end;
   finally
     FMultiplier.ScreenObject := nil;
   end;

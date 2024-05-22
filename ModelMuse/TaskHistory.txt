@@ -33069,5 +33069,13 @@ object TTaskHistory
         'Import'
         'Refactoring'
         'MF-2015')
+    end
+    item
+      Date = 45434.000000000000000000
+      Categories.Strings = (
+        'Testing'
+        'Bug fix'
+        'Import'
+        'MF-2015')
     end>
 end

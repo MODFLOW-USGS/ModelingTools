@@ -5,7 +5,7 @@ inherited framePestObsMf6: TframePestObsMf6
       inherited Panel: TPanel
         Top = 166
         Height = 58
-        ExplicitTop = 168
+        ExplicitTop = 161
         ExplicitHeight = 58
         inherited sbAdd: TSpeedButton
           Top = 20

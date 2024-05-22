@@ -704,7 +704,7 @@ procedure TModflowDRN_Writer.WriteListOptions(InputFileName: string);
 begin
   inherited;
   WriteMf6ParamListOption;
-  WriteString('  AUXDEPTHNAME DDRN');
+  WriteString('    AUXDEPTHNAME DDRN');
   NewLine;
   if FDrnPackage.UseMultiplier then
   begin

@@ -2754,6 +2754,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateMfEtsEvapRate(Sender: TObject);
     procedure InvalidateMfEtsEvapSurface(Sender: TObject);
     procedure InvalidateMfEtsEvapDepth(Sender: TObject);
+    procedure InvalidateMfEtsMultiplier(Sender: TObject);
     procedure InvalidateMfEtsEvapLayer(Sender: TObject);
     procedure InvalidateEtsDepthFractions(Sender: TObject);
     procedure InvalidateEtsRateFractions(Sender: TObject);
@@ -2770,6 +2771,7 @@ that affects the model output should also have a comment. }
     procedure InvalidateUzfMf6AirEntryPotential(Sender: TObject);
     procedure InvalidateUzfMf6RootPotential(Sender: TObject);
     procedure InvalidateUzfMf6RootActivity(Sender: TObject);
+    procedure InvalidateUzfMf6Multiplier(Sender: TObject);
     procedure InvalidateUzfGwtConc(Sender: TObject);
 
     procedure InvalidateMfStrConductance(Sender: TObject);
@@ -10248,7 +10250,8 @@ const
 //    '5.2.0.10' bug fix: fixed bug in exporting MAW and UZF package input
 //                files in MODFLOW 6 when observations have been defined but
 //                the observation utility is not active.
-//    '5.2.0.11'
+//    '5.2.0.11' bug fix: Fixed export of RCH package in MODFLOW 6 when objects
+//                are to be summed.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
@@ -27013,6 +27016,11 @@ begin
   ModflowPackages.EtsPackage.MfEtsEvapSurface.Invalidate;
 end;
 
+procedure TCustomModel.InvalidateMfEtsMultiplier(Sender: TObject);
+begin
+  ModflowPackages.EtsPackage.MfEtsMultiplier.Invalidate;
+end;
+
 procedure TCustomModel.InvalidateMfEvtEvapDepth(Sender: TObject);
 begin
   ModflowPackages.EvtPackage.MfEvtEvapDepth.Invalidate;
@@ -29400,6 +29408,11 @@ end;
 procedure TCustomModel.InvalidateUzfMf6Infiltration(Sender: TObject);
 begin
   ModflowPackages.UzfMf6Package.MfUzfMf6Infiltration.Invalidate;
+end;
+
+procedure TCustomModel.InvalidateUzfMf6Multiplier(Sender: TObject);
+begin
+  ModflowPackages.UzfMf6Package.MfUzfMf6Multiplier.Invalidate;
 end;
 
 procedure TCustomModel.InvalidateUzfMf6PotentialET(Sender: TObject);

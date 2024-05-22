@@ -34,8 +34,8 @@ object frameIface: TframeIface
       Tag = 5
       Left = 3
       Top = 183
-      Width = 94
-      Height = 18
+      Width = 97
+      Height = 20
       Alignment = taLeftJustify
       Caption = 'Bottom (5)'
       TabOrder = 7
@@ -46,8 +46,8 @@ object frameIface: TframeIface
       Tag = 3
       Left = 3
       Top = 135
-      Width = 80
-      Height = 18
+      Width = 83
+      Height = 20
       Alignment = taLeftJustify
       Caption = 'Front (3)'
       TabOrder = 5
@@ -58,8 +58,8 @@ object frameIface: TframeIface
       Tag = 2
       Left = 3
       Top = 111
-      Width = 80
-      Height = 18
+      Width = 83
+      Height = 20
       Alignment = taLeftJustify
       Caption = 'Right (2)'
       TabOrder = 4
@@ -70,8 +70,8 @@ object frameIface: TframeIface
       Tag = 1
       Left = 3
       Top = 87
-      Width = 70
-      Height = 18
+      Width = 73
+      Height = 20
       Alignment = taLeftJustify
       Caption = 'Left (1)'
       TabOrder = 3
@@ -82,8 +82,8 @@ object frameIface: TframeIface
       Tag = 6
       Left = 3
       Top = 207
-      Width = 69
-      Height = 18
+      Width = 72
+      Height = 20
       Alignment = taRightJustify
       Caption = 'Top (6)'
       TabOrder = 8
@@ -94,8 +94,8 @@ object frameIface: TframeIface
       Tag = 4
       Left = 3
       Top = 159
-      Width = 80
-      Height = 18
+      Width = 83
+      Height = 20
       Alignment = taLeftJustify
       Caption = 'Back (4)'
       TabOrder = 6
@@ -105,8 +105,8 @@ object frameIface: TframeIface
     object rbInternal: TJvRadioButton
       Left = 3
       Top = 63
-      Width = 93
-      Height = 18
+      Width = 96
+      Height = 20
       Alignment = taLeftJustify
       Caption = 'Internal (0)'
       Checked = True

@@ -112,7 +112,7 @@ object CustomframeFluxObs: TCustomframeFluxObs
     WordWrapRowCaptions = False
     ColWidths = (
       20
-      20
+      24
       174)
   end
   object btnAddOrRemoveFluxObservations: TButton

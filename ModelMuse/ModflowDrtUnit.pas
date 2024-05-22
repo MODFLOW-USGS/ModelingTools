@@ -56,9 +56,19 @@ type
 
   // @name represents a MODFLOW Drain boundary for one time interval.
   // @name is stored by @link(TDrnCollection).
-  TDrtItem = class(TDrnItem)
+  TDrtItem = class(TCustomModflowBoundaryItem)
   private
+    // See @link(Elevation).
+    FElevation: IFormulaObject;
+    // See @link(Conductance).
+    FConductance: IFormulaObject;
     FReturnFraction: IFormulaObject;
+    // See @link(Elevation).
+    procedure SetElevation(const Value: string);
+    // See @link(Conductance).
+    procedure SetConductance(const Value: string);
+    function GetConductance: string;
+    function GetElevation: string;
     procedure SetReturnFraction(const Value: string);
     function GetReturnFraction: string;
   protected
@@ -78,6 +88,12 @@ type
   public
     Destructor Destroy; override;
   published
+    // @name is the formula used to set the elevation
+    // of this boundary.
+    property Elevation: string read GetElevation write SetElevation;
+    // @name is the formula used to set the conductance
+    // or the conductance multiplier of this boundary.
+    property Conductance: string read GetConductance write SetConductance;
     // @name copies Source to this @classname.
     procedure Assign(Source: TPersistent);override;
     // @name is the formula used to set the fraction of extracted flow
@@ -446,7 +462,8 @@ end;
 
 procedure TDrtItem.CreateFormulaObjects;
 begin
-  inherited;
+  FElevation := CreateFormulaObject(dso3D);
+  FConductance := CreateFormulaObject(dso3D);
   FReturnFraction := CreateFormulaObject(dso3D);
 end;
 
@@ -466,9 +483,32 @@ begin
   end;
 end;
 
+function TDrtItem.GetConductance: string;
+begin
+  FConductance.ScreenObject := ScreenObjectI;
+  try
+    Result := FConductance.Formula;
+  finally
+    FConductance.ScreenObject := nil;
+  end;
+  ResetItemObserver(DrtConductancePosition);
+
+end;
+
 function TDrtItem.GetConductanceIndex: Integer;
 begin
   Result := DrtConductancePosition;
+end;
+
+function TDrtItem.GetElevation: string;
+begin
+  FElevation.ScreenObject := ScreenObjectI;
+  try
+    Result := FElevation.Formula;
+  finally
+    FElevation.ScreenObject := nil;
+  end;
+  ResetItemObserver(DrtElevationPosition);
 end;
 
 procedure TDrtItem.GetPropertyObserver(Sender: TObject; List: TList);
@@ -517,15 +557,22 @@ begin
   if result then
   begin
     Item := TDrtItem(AnotherItem);
-    result := (Item.ReturnFraction = ReturnFraction);
+    result := (Item.ReturnFraction = ReturnFraction)
+      and (Item.Elevation = Elevation)
+      and (Item.Conductance = Conductance)
   end;
 end;
 
 procedure TDrtItem.RemoveFormulaObjects;
 begin
+  frmGoPhast.PhastModel.FormulaManager.Remove(FConductance,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FElevation,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FReturnFraction,
     GlobalRemoveModflowBoundaryItemSubscription, GlobalRestoreModflowBoundaryItemSubscription, self);
-  inherited;
 end;
 
 procedure TDrtItem.SetBoundaryFormula(Index: integer; const Value: string);
@@ -536,6 +583,16 @@ begin
     DrtReturnPosition: ReturnFraction := Value;
     else Assert(False);
   end;
+end;
+
+procedure TDrtItem.SetConductance(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DrtConductancePosition, FConductance);
+end;
+
+procedure TDrtItem.SetElevation(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, DrtElevationPosition, FElevation);
 end;
 
 procedure TDrtItem.SetReturnFraction(const Value: string);

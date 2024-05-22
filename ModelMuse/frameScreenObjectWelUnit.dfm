@@ -23,7 +23,7 @@ inherited frameScreenObjectWel: TframeScreenObjectWel
       Left = 8
       Top = 80
       Width = 241
-      Height = 24
+      Height = 23
       Filter = 'Text files (*.txt)|*.txt|All files (*.*)|*.*'
       TabOrder = 4
       Text = ''

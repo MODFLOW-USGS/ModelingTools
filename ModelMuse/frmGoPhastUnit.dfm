@@ -4,7 +4,7 @@ inherited frmGoPhast: TfrmGoPhast
   HelpType = htKeyword
   HelpKeyword = 'Main_Window'
   Caption = 'GoPhast'
-  ClientHeight = 555
+  ClientHeight = 560
   ClientWidth = 776
   KeyPreview = True
   Menu = mmMainMenu
@@ -17,11 +17,11 @@ inherited frmGoPhast: TfrmGoPhast
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
   ExplicitWidth = 788
-  ExplicitHeight = 613
+  ExplicitHeight = 618
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
     Left = 0
-    Top = 384
+    Top = 389
     Width = 776
     Height = 10
     Cursor = crVSplit
@@ -39,15 +39,16 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 0
     Top = 132
     Width = 776
-    Height = 252
+    Height = 257
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
+    ExplicitHeight = 252
     object splitVertTop: TJvNetscapeSplitter
       Left = 537
       Top = 0
-      Height = 252
+      Height = 257
       Hint = 'Click and drag to resize the windows.'
       Align = alRight
       MinSize = 1
@@ -63,21 +64,21 @@ inherited frmGoPhast: TfrmGoPhast
       Left = 0
       Top = 0
       Width = 537
-      Height = 252
+      Height = 257
       Align = alClient
       TabOrder = 0
       TabStop = True
       ExplicitWidth = 537
       ExplicitHeight = 252
       inherited rulVertical: TRbwRuler
-        Height = 198
+        Height = 203
         RulerPrecision = 7
         ExplicitTop = 39
         ExplicitHeight = 173
       end
       inherited pnlTop: TPanel
         Width = 537
-        ExplicitWidth = 533
+        ExplicitWidth = 531
         inherited rulHorizontal: TRbwRuler
           Width = 488
           RulerPrecision = 6
@@ -88,17 +89,17 @@ inherited frmGoPhast: TfrmGoPhast
       end
       inherited ZoomBox: TQRbwZoomBox2
         Width = 488
-        Height = 198
+        Height = 203
         Image32.Left = 1
         Image32.Top = 1
         Image32.Width = 486
-        Image32.Height = 196
+        Image32.Height = 201
         Image32.Align = alClient
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 486
-        Image32.ExplicitHeight = 196
-        ExplicitWidth = 484
-        ExplicitHeight = 197
+        Image32.ExplicitHeight = 201
+        ExplicitWidth = 482
+        ExplicitHeight = 189
       end
       inherited OrderMenu: TPopupMenu
         Left = 80
@@ -109,7 +110,7 @@ inherited frmGoPhast: TfrmGoPhast
       Left = 547
       Top = 0
       Width = 229
-      Height = 252
+      Height = 257
       Align = alRight
       TabOrder = 1
       TabStop = True
@@ -118,7 +119,7 @@ inherited frmGoPhast: TfrmGoPhast
       ExplicitHeight = 252
       inherited rulVertical: TRbwRuler
         Left = 180
-        Height = 198
+        Height = 203
         Align = alRight
         RulerPosition = rpRight
         RulerPrecision = 7
@@ -153,20 +154,20 @@ inherited frmGoPhast: TfrmGoPhast
       inherited ZoomBox: TQRbwZoomBox2
         Left = 0
         Width = 180
-        Height = 198
+        Height = 203
         ExaggerationDirection = edHorizontal
         HorizontalDirection = hdLeft
         Image32.Left = 1
         Image32.Top = 1
         Image32.Width = 178
-        Image32.Height = 196
+        Image32.Height = 201
         Image32.Align = alClient
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
-        Image32.ExplicitHeight = 196
+        Image32.ExplicitHeight = 201
         ExplicitLeft = 0
         ExplicitWidth = 180
-        ExplicitHeight = 197
+        ExplicitHeight = 189
       end
       inherited OrderMenu: TPopupMenu
         Left = 48
@@ -176,7 +177,7 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 394
+    Top = 399
     Width = 776
     Height = 133
     Align = alBottom
@@ -187,6 +188,7 @@ inherited frmGoPhast: TfrmGoPhast
     ParentDoubleBuffered = False
     TabOrder = 2
     OnMouseMove = pnlLowerRightMouseMove
+    ExplicitTop = 394
     object splitVertBottom: TJvNetscapeSplitter
       Left = 537
       Top = 0
@@ -223,7 +225,7 @@ inherited frmGoPhast: TfrmGoPhast
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 79
-        ExplicitWidth = 533
+        ExplicitWidth = 531
         inherited ModelCube: TRbwModelCube
           Hint = 
             'Click to change row|Click to change the selected row forward or ' +
@@ -257,7 +259,7 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitWidth = 486
         Image32.ExplicitHeight = 77
         ExplicitTop = 0
-        ExplicitWidth = 484
+        ExplicitWidth = 482
         ExplicitHeight = 79
       end
     end
@@ -272,7 +274,7 @@ inherited frmGoPhast: TfrmGoPhast
       ParentDoubleBuffered = False
       TabOrder = 1
       TabStop = True
-      ExplicitLeft = 543
+      ExplicitLeft = 541
       ExplicitWidth = 229
       ExplicitHeight = 133
       inherited glWidModelView: TGLWidget
@@ -285,7 +287,7 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object sbMain: TStatusBar
     Left = 0
-    Top = 527
+    Top = 532
     Width = 776
     Height = 28
     Hint = 'Drag with the mouse to resize status bar panels'
@@ -308,8 +310,8 @@ inherited frmGoPhast: TfrmGoPhast
     OnMouseMove = sbMainMouseMove
     OnMouseUp = sbMainMouseUp
     OnDrawPanel = sbMainDrawPanel
-    ExplicitTop = 526
-    ExplicitWidth = 772
+    ExplicitTop = 518
+    ExplicitWidth = 770
   end
   object cbControlBar: TControlBar
     Left = 0
@@ -323,7 +325,7 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitWidth = 772
+    ExplicitWidth = 770
     object tbarEdit: TToolBar
       Left = 183
       Top = 2
@@ -598,7 +600,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarView: TToolBar
-      Left = 448
+      Left = 446
       Top = 34
       Width = 170
       Height = 28
@@ -675,7 +677,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 178
+      Left = 435
       Top = 66
       Width = 212
       Height = 28
@@ -777,7 +779,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 403
+      Left = 178
       Top = 66
       Width = 244
       Height = 28

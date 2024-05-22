@@ -56,10 +56,6 @@ inherited frameHeadObservations: TframeHeadObservations
       inherited Panel2: TPanel
         Top = 110
         ExplicitTop = 110
-        inherited seTimes: TJvSpinEdit
-          Height = 23
-          ExplicitHeight = 23
-        end
       end
       inherited rdgObservations: TRbwDataGrid4
         Height = 75
@@ -201,9 +197,7 @@ inherited frameHeadObservations: TframeHeadObservations
         ExplicitTop = 110
         inherited seLayers: TJvSpinEdit
           Left = 9
-          Height = 23
           ExplicitLeft = 9
-          ExplicitHeight = 23
         end
       end
       inherited rdgLayers: TRbwDataGrid4
@@ -215,12 +209,6 @@ inherited frameHeadObservations: TframeHeadObservations
   inherited pnlName: TPanel
     Height = 109
     ExplicitHeight = 109
-    inherited edObsName: TLabeledEdit
-      Height = 23
-      EditLabel.ExplicitTop = -23
-      EditLabel.ExplicitWidth = 83
-      ExplicitHeight = 23
-    end
     object rgMultiObsMethod: TRadioGroup
       Left = 9
       Top = 49

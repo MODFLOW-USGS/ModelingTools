@@ -273,6 +273,16 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         end>
       ExplicitWidth = 483
       ExplicitHeight = 92
+      ColWidths = (
+        64
+        64
+        70
+        64
+        64
+        64
+        64
+        64
+        64)
     end
   end
   object pcLake: TPageControl
@@ -573,11 +583,11 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 477
-        ExplicitHeight = 305
+        ExplicitHeight = 300
         inherited Panel: TPanel
           Top = 264
           Width = 477
-          ExplicitTop = 264
+          ExplicitTop = 259
           ExplicitWidth = 477
           inherited lbNumber: TLabel
             Width = 152
@@ -710,11 +720,6 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         inherited pnlTop: TPanel
           Width = 477
           ExplicitWidth = 477
-          inherited edFormula: TLabeledEdit
-            EditLabel.ExplicitLeft = 128
-            EditLabel.ExplicitTop = 12
-            EditLabel.ExplicitWidth = 44
-          end
         end
       end
     end

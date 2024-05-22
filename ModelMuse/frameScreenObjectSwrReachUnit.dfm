@@ -84,7 +84,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
           Left = 183
           Top = 63
           Width = 274
-          Height = 21
+          Height = 23
           TabOrder = 2
         end
         object btnEditReachLength: TButton
@@ -169,6 +169,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
             'between them are defined automatically. Use this page to define ' +
             'connections with other objects.'
           WordWrap = True
+          ExplicitTop = 25
           ExplicitWidth = 555
         end
         inline frameConnections: TframeGrid
@@ -185,7 +186,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
           inherited Panel: TPanel
             Top = 79
             Width = 563
-            ExplicitTop = 87
+            ExplicitTop = 74
             ExplicitWidth = 563
             inherited sbAdd: TSpeedButton
               Left = 294
@@ -286,6 +287,10 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
               end>
             ExplicitWidth = 563
             ExplicitHeight = 79
+            ColWidths = (
+              130
+              64
+              64)
           end
         end
       end
@@ -306,7 +311,7 @@ inherited frameScreenObjectSwrReach: TframeScreenObjectSwrReach
         inherited pnlBottom: TPanel
           Top = 306
           Width = 567
-          ExplicitTop = 308
+          ExplicitTop = 301
           ExplicitWidth = 567
           inherited btnDelete: TBitBtn
             Left = 479

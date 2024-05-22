@@ -255,6 +255,7 @@ type
   // for a series of time intervals.
   TEvtCollection = class(TCustomMF_ArrayBoundColl)
   protected
+    FSkip: Boolean;
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     procedure AddSpecificBoundary(AModel: TBaseModel); override;
     // See @link(TCustomListArrayBoundColl.AssignArrayCellValues
@@ -428,7 +429,6 @@ type
       read GetConcentrationPestSeriesMethod;
     property ConcentrationTimeSeriesNames[const Index: Integer]: string
       read GetConcentrationTimeSeriesName;
-    function IsIdentical(AnotherCell: TValueCell): boolean; override;
   end;
 
   TEvt_Cell = class(TEvapotranspirationCell)
@@ -472,6 +472,7 @@ type
     function GetPestSeriesName(Index: Integer): string; override;
     function GetMf6TimeSeriesName(Index: Integer): string; override;
     procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
+    function IsIdentical(AnotherCell: TValueCell): boolean; override;
   end;
 
   TEvapotranspirationLayerCell = class abstract(TValueCell)
@@ -1034,7 +1035,7 @@ var
   Item: TEvtItem;
   ScreenObject: TScreenObject;
   ALink: TEvtTimeListLink;
-  FEvapotranspirationRateData: TModflowTimeList;
+  EvapotranspirationRateData: TModflowTimeList;
   PestRateSeriesName: string;
   RateMethod: TPestParamMethod;
   RateItems: TStringList;
@@ -1074,17 +1075,17 @@ begin
       RateItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
   end;
   ALink := TimeListLink.GetLink(AModel) as TEvtTimeListLink;
-  FEvapotranspirationRateData := ALink.FEvapotranspirationRateData;
-  FEvapotranspirationRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
-  Assert(FEvapotranspirationRateData.Count = Count);
+  EvapotranspirationRateData := ALink.FEvapotranspirationRateData;
+  EvapotranspirationRateData.Initialize(BoundaryValues, ScreenObject, lctUse);
+  Assert(EvapotranspirationRateData.Count = Count);
 
   ClearBoundaries(AModel);
-  SetBoundaryCapacity(FEvapotranspirationRateData.Count, AModel);
-  for TimeIndex := 0 to FEvapotranspirationRateData.Count - 1 do
+  SetBoundaryCapacity(EvapotranspirationRateData.Count, AModel);
+  for TimeIndex := 0 to EvapotranspirationRateData.Count - 1 do
   begin
     AddBoundary(TEvtStorage.Create(AModel));
   end;
-  ListOfTimeLists.Add(FEvapotranspirationRateData);
+  ListOfTimeLists.Add(EvapotranspirationRateData);
 end;
 
 procedure TEvtCollection.InvalidateEtRateData(Sender: TObject);
@@ -1131,22 +1132,25 @@ var
   NumberOfSpecies: Integer;
   Index: Integer;
 begin
-  SetLength((Boundaries[ItemIndex, AModel] as TEvtStorage).FEvtArray, BoundaryCount);
-  NumberOfSpecies := SpeciesCount;
-  for Index := 0 to BoundaryCount - 1 do
+  if not FSkip then
   begin
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.Values,
-      NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValueAnnotations,
-      NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestNames,
-      NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestSeriesNames,
-      NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestSeriesMethods,
-      NumberOfSpecies);
-    SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValueTimeSeriesNames,
-      NumberOfSpecies);
+    SetLength((Boundaries[ItemIndex, AModel] as TEvtStorage).FEvtArray, BoundaryCount);
+    NumberOfSpecies := SpeciesCount;
+    for Index := 0 to BoundaryCount - 1 do
+    begin
+      SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.Values,
+        NumberOfSpecies);
+      SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValueAnnotations,
+        NumberOfSpecies);
+      SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestNames,
+        NumberOfSpecies);
+      SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestSeriesNames,
+        NumberOfSpecies);
+      SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValuePestSeriesMethods,
+        NumberOfSpecies);
+      SetLength(TEvtStorage(Boundaries[ItemIndex, AModel]).FEvtArray[Index].GwtConcentrations.ValueTimeSeriesNames,
+        NumberOfSpecies);
+    end;
   end;
   inherited;
 end;
@@ -1378,7 +1382,7 @@ begin
   result := Values.Cell.Section;
 end;
 
-function TEvapotranspirationCell.IsIdentical(AnotherCell: TValueCell): boolean;
+function TEvt_Cell.IsIdentical(AnotherCell: TValueCell): boolean;
 var
   Evt_Cell: TEvt_Cell;
 begin

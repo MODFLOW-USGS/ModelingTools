@@ -600,7 +600,14 @@ end;
 
 procedure TWellItem.SetMultiplier(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, WelMultiplierPosition, FMultiplier);
+  if Value <> '' then
+  begin
+    UpdateFormulaBlocks(Value, WelMultiplierPosition, FMultiplier);
+  end
+  else
+  begin
+    UpdateFormulaBlocks('1', WelMultiplierPosition, FMultiplier);
+  end;
 end;
 
 procedure TWellItem.SetPumpingRate(const Value: string);

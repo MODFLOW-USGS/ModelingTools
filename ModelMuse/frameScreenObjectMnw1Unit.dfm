@@ -37,7 +37,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
       Left = 8
       Top = 16
       Width = 121
-      Height = 21
+      Height = 23
       MaxLength = 32
       TabOrder = 0
       OnChange = edSiteLabelChange

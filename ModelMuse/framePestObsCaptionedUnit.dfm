@@ -9,7 +9,7 @@ inherited framePestObsCaptioned: TframePestObsCaptioned
       ExplicitHeight = 184
       inherited Panel: TPanel
         Top = 151
-        ExplicitTop = 143
+        ExplicitTop = 146
       end
       inherited Grid: TRbwDataGrid4
         Height = 151

@@ -1577,12 +1577,14 @@ Type
     FMfEtsEvapRate: TModflowBoundaryDisplayTimeList;
     FMfEtsEvapDepth: TModflowBoundaryDisplayTimeList;
     FMfEtsEvapSurface: TModflowBoundaryDisplayTimeList;
+    FMfEtsMultiplier: TModflowBoundaryDisplayTimeList;
     procedure SetSegmentCount(const Value: integer);
     procedure InitializeEtsDisplay(Sender: TObject);
     procedure GetMfEtsDepthUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMfEtsLayerUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMfEtsRateUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMfEtsSurfaceUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMfEtsMultiplierUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMfEtsDepthFractionUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfEtsRateFractionUseList(Sender: TObject;
@@ -1605,6 +1607,8 @@ Type
       read FMfEtsEvapDepth;
     property MfEtsEvapLayer: TModflowBoundaryDisplayTimeList
       read FMfEtsEvapLayer;
+    property MfEtsMultiplier: TModflowBoundaryDisplayTimeList
+      read FMfEtsMultiplier;
     procedure InvalidateMfEtsEvapLayer(Sender: TObject);
     procedure InvalidateEtsDepthFractions(Sender: TObject);
     procedure InvalidateEtsRateFractions(Sender: TObject);
@@ -2553,7 +2557,7 @@ Type
   // UNSAT_ETWC or UNSAT_ETAE
   TUzfUnsatEtChoice = (uuecWaterContent, uuecCapillaryPressure);
 
-  TUzfMf6PackageSelection = class(TModflowPackageSelection)
+  TUzfMf6PackageSelection = class(TMultiplierPackage)
   private
     FSimulateGroundwaterSeepage: Boolean;
     FGroundwaterET: TUzfGwEtChoice;
@@ -2568,6 +2572,7 @@ Type
     FMfUzfMf6Infiltration: TModflowBoundaryDisplayTimeList;
     FMfUzfMf6ExtinctionDepth: TModflowBoundaryDisplayTimeList;
     FMfUzfMf6PotentialEt: TModflowBoundaryDisplayTimeList;
+    FMfUzfMf6Multiplier: TModflowBoundaryDisplayTimeList;
     FWriteConvergenceData: Boolean;
     FSaveBudgetCsvFile: Boolean;
     FSaveGwtConcentration: Boolean;
@@ -2598,6 +2603,8 @@ Type
     procedure GetMfUzfMf6RootPotentialUseList(Sender: TObject;
       NewUseList: TStringList);
     procedure GetMfUzfMf6RootActivityUseList(Sender: TObject;
+      NewUseList: TStringList);
+    procedure GetMfUzfMf6MultiplierUseList(Sender: TObject;
       NewUseList: TStringList);
     function ModflowUzfMf6EtSimulated(Sender: TObject): boolean;
     function ModflowUzfMf6WaterContentUsed(Sender: TObject): boolean;
@@ -2635,6 +2642,8 @@ Type
       read FMfUzfMf6RootPotential;
     property MfUzfMf6RootActivity: TModflowBoundaryDisplayTimeList
       read FMfUzfMf6RootActivity;
+    property MfUzfMf6Multiplier: TModflowBoundaryDisplayTimeList
+      read FMfUzfMf6Multiplier;
 
     procedure InvalidateConcentrations;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
@@ -2668,6 +2677,7 @@ Type
     property SaveWaterContent: Boolean read FSaveWaterContent
       write SetSaveWaterContent
       stored True;
+    property UseMultiplier;
   end;
 
   THobPackageSelection = class(TModflowPackageSelection)
@@ -8493,11 +8503,6 @@ begin
 end;
 { TEtsPackageSelection }
 
-//procedure TEtsPackageSelection.AddRemoveRenameGwtConcentrationTimeLists;
-//begin
-//  UpdateConcentrationLists(FGwtConcentrationList, InitializeEtsDisplay,
-//    GetGwtConcUseList, StrETSS);
-//end;
 
 procedure TEtsPackageSelection.Assign(Source: TPersistent);
 var
@@ -8554,6 +8559,14 @@ begin
     MfEtsEvapLayer.Name := StrMODFLOWEtsLayer;
     AddTimeList(MfEtsEvapLayer);
 
+    FMfEtsMultiplier := TModflowBoundaryDisplayTimeList.Create(Model);
+    MfEtsMultiplier.OnInitialize := InitializeEtsDisplay;
+    MfEtsMultiplier.OnGetUseList := GetMfEtsMultiplierUseList;
+    MfEtsMultiplier.OnTimeListUsed := PackageUsed;
+    MfEtsMultiplier.Name := StrEVTMultiplier;
+    AddTimeList(MfEtsMultiplier);
+
+
     UpdateEtsSegmentCount;
 
 //    FGwtConcentrationList := TMfBoundDispObjectList.Create;
@@ -8569,6 +8582,7 @@ begin
   FMfEtsEvapRate.Free;
   FMfEtsEvapDepth.Free;
   FMfEtsEvapSurface.Free;
+  FMfEtsMultiplier.Free;
   inherited;
 end;
 
@@ -8657,6 +8671,15 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TEtsPackageSelection.GetMfEtsMultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  Index: integer;
+  DataSetName: string;
+begin
+  UpdateEtsUseList(NewUseList, ptETS, 13, StrMODFLOWEtsMultiplier);
 end;
 
 procedure TEtsPackageSelection.GetMfEtsRateFractionUseList(Sender: TObject;
@@ -23641,6 +23664,13 @@ begin
     FMfUzfMf6RootActivity.OnTimeListUsed := ModflowUzfMf6CapillaryPressureUsed;
     FMfUzfMf6RootActivity.Name := StrUzfMf6RootActivity;
     AddTimeList(FMfUzfMf6RootActivity);
+
+    FMfUzfMf6Multiplier := TModflowBoundaryDisplayTimeList.Create(Model);
+    FMfUzfMf6Multiplier.OnInitialize := InitializeUzfMf6Display;
+    FMfUzfMf6Multiplier.OnGetUseList := GetMfUzfMf6MultiplierUseList;
+    FMfUzfMf6Multiplier.OnTimeListUsed := ModflowUzfMf6CapillaryPressureUsed;
+    FMfUzfMf6Multiplier.Name := StrUzfMf6Multiplier;
+    AddTimeList(FMfUzfMf6Multiplier);
   end;
 
   FGwtSpecConcList := TMfBoundDispObjectList.Create;
@@ -23655,6 +23685,7 @@ begin
   FGwtInfiltrationConcList.Free;
   FGwtET_ConcList.Free;
 
+  FMfUzfMf6Multiplier.Free;
   FMfUzfMf6RootActivity.Free;
   FMfUzfMf6RootPotential.Free;
   FMfUzfMf6AirEntryPotential.Free;
@@ -23804,6 +23835,12 @@ procedure TUzfMf6PackageSelection.GetMfUzfMf6InfiltrationUseList(
   Sender: TObject; NewUseList: TStringList);
 begin
   GetMfUzfMf6UseList(Sender, NewUseList, UzfMf6InfiltrationPosition, StrUzfInfiltration);
+end;
+
+procedure TUzfMf6PackageSelection.GetMfUzfMf6MultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+  GetMfUzfMf6UseList(Sender, NewUseList, UzfMf6MultiplierPosition, StrUzfMf6Multiplier);
 end;
 
 procedure TUzfMf6PackageSelection.GetMfUzfMf6RootActivityUseList(

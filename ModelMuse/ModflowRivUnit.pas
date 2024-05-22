@@ -800,7 +800,14 @@ end;
 
 procedure TRivItem.SetMultiplier(const Value: string);
 begin
-  UpdateFormulaBlocks(Value, RivMultiplierPosition, FMultiplier);
+  if Value <> '' then
+  begin
+    UpdateFormulaBlocks(Value, RivMultiplierPosition, FMultiplier);
+  end
+  else
+  begin
+    UpdateFormulaBlocks('1', RivMultiplierPosition, FMultiplier);
+  end;
 end;
 
 { TRivCollection }
