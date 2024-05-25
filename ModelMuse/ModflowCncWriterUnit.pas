@@ -3,7 +3,6 @@ unit ModflowCncWriterUnit;
 interface
 
 uses System.SysUtils, SubscriptionUnit, System.Classes, Mt3dmsChemSpeciesUnit,
-
   CustomModflowWriterUnit,
   ModflowGwtSpecifiedConcUnit,
   PhastModelUnit, ScreenObjectUnit, ModflowBoundaryUnit, ModflowCellUnit,
@@ -16,6 +15,7 @@ type
     FGwtFile: string;
     FSpeciesIndex: Integer;
     FSpeciesName: string;
+    FPackage: TMultiplierPackage;
     procedure PrintOptions;
     procedure PrintDimensions;
     procedure PrintStressPeriods; virtual; abstract;
@@ -36,6 +36,7 @@ type
       ZoneArrayNames: TTransientZoneCollection); override;
     procedure WriteMF6_ListParm(DataSetIdentifier, VariableIdentifiers,
       ErrorRoot: string; const TimeIndex: Integer); override;
+    procedure WriteMultiplier; virtual; abstract;
   public
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists;
       Species: Integer);
@@ -56,6 +57,9 @@ type
     function Mf6ObservationsUsed: Boolean; override;
     class function ObservationExtension: string; override;
     Class function Mf6GwtObType: TObGwt; override;
+    procedure WriteAdditionalAuxVariables; override;
+    procedure WriteListOptions(InputFileName: string); override;
+    procedure WriteMultiplier; override;
   public
     procedure WriteFile(const AFileName: string; SpeciesIndex: Integer);
     class function ObservationOutputExtension: string; override;
@@ -76,6 +80,9 @@ type
     function Mf6ObservationsUsed: Boolean; override;
     class function ObservationExtension: string; override;
     Class function Mf6GwtObType: TObGwt; override;
+    procedure WriteAdditionalAuxVariables; override;
+    procedure WriteListOptions(InputFileName:string); override;
+    procedure WriteMultiplier; override;
   public
     procedure WriteFile(const AFileName: string; SpeciesIndex: Integer);
     class function ObservationOutputExtension: string; override;
@@ -165,6 +172,15 @@ begin
     D7PNameIname, D7PName);
 end;
 
+procedure TModflowCncWriter.WriteAdditionalAuxVariables;
+begin
+  inherited;
+  if FCncPackage.UseMultiplier then
+  begin
+    writeString(' multiplier');
+  end;
+end;
+
 procedure TModflowCncWriter.WriteFile(const AFileName: string; SpeciesIndex: Integer);
 var
   Abbreviation: string;
@@ -182,6 +198,7 @@ begin
     Exit;
   end;
   FCncPackage := Model.ModflowPackages.GwtCncPackage;
+  FPackage := FCncPackage;
   FSpeciesName := Model.MobileComponents[SpeciesIndex].Name;
   FSpeciesIndex := SpeciesIndex;
 
@@ -215,6 +232,21 @@ begin
     WriteFileInternal;
   end;
 
+end;
+
+procedure TModflowCncWriter.WriteListOptions(InputFileName:string);
+begin
+  inherited;
+  WriteMultiplier;
+end;
+
+procedure TModflowCncWriter.WriteMultiplier;
+begin
+  if FCncPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
 end;
 
 procedure TCustomSimpleGwtBoundaryWriter.PrintOptions;
@@ -266,6 +298,12 @@ begin
   WriteInteger(Cnc_Cell.Column + 1);
   WriteValueOrFormula(Cnc_Cell, CncConcentrationPosition);
   WriteIface(Cnc_Cell.IFace);
+
+  if FPackage.UseMultiplier then
+  begin
+    WriteValueOrFormula(Cnc_Cell, CncMultiplierPosition);
+  end;
+
   WriteBoundName(Cnc_Cell);
   if Model.DisvUsed then
   begin
@@ -389,6 +427,15 @@ begin
     D7PNameIname, D7PName);
 end;
 
+procedure TModflowSrcWriter.WriteAdditionalAuxVariables;
+begin
+  inherited;
+  if FSrcPackage.UseMultiplier then
+  begin
+    writeString(' multiplier');
+  end;
+end;
+
 procedure TModflowSrcWriter.WriteFile(const AFileName: string;
   SpeciesIndex: Integer);
 var
@@ -407,6 +454,7 @@ begin
     Exit;
   end;
   FSrcPackage := Model.ModflowPackages.GwtSrcPackage;
+  FPackage := FSrcPackage;
   FSpeciesName := Model.MobileComponents[SpeciesIndex].Name;
   FSpeciesIndex := SpeciesIndex;
 
@@ -441,6 +489,21 @@ begin
   end;
 end;
 
+procedure TModflowSrcWriter.WriteListOptions;
+begin
+  inherited;
+  WriteMultiplier;
+end;
+
+procedure TModflowSrcWriter.WriteMultiplier;
+begin
+  if FSrcPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
+end;
+
 procedure TCustomSimpleGwtBoundaryWriter.UpdateDisplay
   (TimeLists: TModflowBoundListOfTimeLists; Species: Integer);
 var
@@ -453,8 +516,9 @@ var
 //  TimeList: TModflowBoundaryDisplayTimeList;
   DataArray: TModflowBoundaryDisplayDataArray;
   DataSetIndex: Integer;
-  FirstTimeList: TModflowBoundaryDisplayTimeList;
+  TimeList: TModflowBoundaryDisplayTimeList;
   CellList: TValueCellList;
+  DataIndex: Integer;
 //  SpeciesIndex: Integer;
 begin
   if not Package.IsSelected then
@@ -477,26 +541,29 @@ begin
         SetTimeListsUpToDate(TimeLists);
         Exit;
       end;
-      FirstTimeList := TimeLists[0];
-      for TimeIndex := 0 to FirstTimeList.Count - 1 do
-      begin
         DataSets.Clear;
-        DataArray := FirstTimeList[TimeIndex] as TModflowBoundaryDisplayDataArray;
-        DataSets.Add(DataArray);
-        for Index := 0 to Values.Count - 1 do
+      for DataIndex := 0 to 1 do
+      begin
+        TimeList := TimeLists[DataIndex];
+        for TimeIndex := 0 to TimeList.Count - 1 do
         begin
-          CellList := Values[Index];
-          UsedIndicies := [];
-          UpdateCellDisplay(CellList, DataSets, [], nil, UsedIndicies);
+          DataArray := TimeList[TimeIndex] as TModflowBoundaryDisplayDataArray;
+          DataSets.Add(DataArray);
         end;
-        for DataSetIndex := 0 to DataSets.Count - 1 do
-        begin
-          DataArray := DataSets[DataSetIndex];
-          DataArray.UpToDate := True;
-          DataArray.CacheData;
-        end;
-        SetTimeListsUpToDate(TimeLists);
       end;
+      for Index := 0 to Values.Count - 1 do
+      begin
+        CellList := Values[Index];
+        UsedIndicies := [];
+        UpdateCellDisplay(CellList, DataSets, [], nil, UsedIndicies);
+      end;
+      for DataSetIndex := 0 to DataSets.Count - 1 do
+      begin
+        DataArray := DataSets[DataSetIndex];
+        DataArray.UpToDate := True;
+        DataArray.CacheData;
+      end;
+      SetTimeListsUpToDate(TimeLists);
     finally
       DataSets.Free;
     end;

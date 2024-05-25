@@ -274,9 +274,9 @@ type
     jvspGwtSsm: TJvStandardPage;
     frameGwtSSM: TframePackage;
     jvspGwtCNC: TJvStandardPage;
-    frameGwtCNC: TframePackage;
+    frameGwtCNC: TframePackageUseMultiplier;
     jvspGwtSRC: TJvStandardPage;
-    frameGwtSRC: TframePackage;
+    frameGwtSRC: TframePackageUseMultiplier;
     jvspGwtProcess: TJvStandardPage;
     frameGwtProcess: TframePackageFmi;
     jvspChemSpecies: TJvStandardPage;

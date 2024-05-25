@@ -11,9 +11,12 @@ uses
 
 type
   TframeScreenObjectCnc = class(TframeCustomGwtBoundary)
+    procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
   protected
     function GetVariableName: string; override;
+    function GetMultiplierName: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TCncBoundary; override;
     procedure CreateNewBoundary(ScreenObject: TScreenObject); override;
     { Private declarations }
@@ -25,7 +28,7 @@ var
 implementation
 
 uses
-  GoPhastTypes;
+  GoPhastTypes, frmGoPhastUnit;
 
 resourcestring
   StrSpecifiedConcentrat = 'Specified Concentration';
@@ -43,9 +46,24 @@ begin
   result := ScreenObject.GwtCncBoundary;
 end;
 
+function TframeScreenObjectCnc.GetMultiplierName: string;
+begin
+  result := StrSpecifiedConcentrat + ' Multiplier';
+end;
+
 function TframeScreenObjectCnc.GetVariableName: string;
 begin
   result := StrSpecifiedConcentrat;
+end;
+
+procedure TframeScreenObjectCnc.rdgModflowBoundarySelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  if CanSelect  and (ACol = 3) then
+  begin
+    CanSelect := frmGoPhast.PhastModel.ModflowPackages.GwtCncPackage.UseMultiplier;
+  end;
 end;
 
 Initialization

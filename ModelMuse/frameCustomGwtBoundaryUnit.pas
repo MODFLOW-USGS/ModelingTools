@@ -19,13 +19,14 @@ uses
   JvSpin, Vcl.ExtCtrls;
 
 type
-  TCncColumns = (ccStartTime, ccEndTime, ccConcentration);
+  TCncColumns = (ccStartTime, ccEndTime, ccConcentration, ccMultiplier);
 
   TframeCustomGwtBoundary = class abstract(TframeScreenObjectNoParam)
     comboChemSpecies: TComboBox;
     lblChemSpecies: TLabel;
   protected
     function GetVariableName: string; virtual; abstract;
+    function GetMultiplierName: string; virtual; abstract;
     function GetBoundary(ScreenObject: TScreenObject): TCncBoundary;
       virtual; abstract;
     procedure CreateNewBoundary(ScreenObject: TScreenObject); virtual; abstract;
@@ -71,17 +72,25 @@ begin
   rdgModflowBoundary.Columns[Ord(ccStartTime)].AutoAdjustColWidths := False;
   rdgModflowBoundary.Columns[Ord(ccEndTime)].AutoAdjustColWidths := False;
   rdgModflowBoundary.Columns[Ord(ccConcentration)].AutoAdjustColWidths := False;
+  rdgModflowBoundary.Columns[Ord(ccMultiplier)].AutoAdjustColWidths := False;
+
   seNumberOfTimes.AsInteger := 0;
   seNumberOfTimes.OnChange(nil);
   rdgModflowBoundary.Cells[Ord(ccStartTime), 1] := '';
   rdgModflowBoundary.Cells[Ord(ccEndTime), 1] := '';
   rdgModflowBoundary.Cells[Ord(ccConcentration), 1] := '';
+  rdgModflowBoundary.Cells[Ord(ccMultiplier), 1] := '';
+
   rdgModflowBoundary.Columns[Ord(ccStartTime)].AutoAdjustColWidths := True;
   rdgModflowBoundary.Columns[Ord(ccEndTime)].AutoAdjustColWidths := True;
   rdgModflowBoundary.Columns[Ord(ccConcentration)].AutoAdjustColWidths := True;
+  rdgModflowBoundary.Columns[Ord(ccMultiplier)].AutoAdjustColWidths := True;
+
   rdgModflowBoundary.Cells[Ord(ccStartTime), 0] := StrStartingTime;
   rdgModflowBoundary.Cells[Ord(ccEndTime), 0] := StrEndingTime;
   rdgModflowBoundary.Cells[Ord(ccConcentration), 0] := GetVariableName;
+  rdgModflowBoundary.Cells[Ord(ccMultiplier), 0] := GetMultiplierName;
+
   rdgModflowBoundary.Cells[Ord(ccStartTime), PestModifierRow] :=
     StrPestModifier;
   rdgModflowBoundary.Cells[Ord(ccStartTime), PestMethodRow] :=
@@ -115,10 +124,16 @@ begin
       FloatToStr(AnItem.EndTime);
     rdgModflowBoundary.Cells[Ord(ccConcentration), ItemIndex + PestRowOffset +
       1] := AnItem.Concentration;
+    rdgModflowBoundary.Cells[Ord(ccMultiplier), ItemIndex + PestRowOffset +
+      1] := AnItem.Multiplier;
   end;
   PestMethod[Ord(ccConcentration)] := ABoundary.PestBoundaryMethod
     [BoundaryValuePosition];
   PestModifier[Ord(ccConcentration)] := ABoundary.PestBoundaryFormula
+    [BoundaryValuePosition];
+  PestMethod[Ord(ccMultiplier)] := ABoundary.PestBoundaryMethod
+    [BoundaryValuePosition];
+  PestModifier[Ord(ccMultiplier)] := ABoundary.PestBoundaryFormula
     [BoundaryValuePosition];
 end;
 
@@ -177,7 +192,12 @@ begin
         if (ABoundary.PestConcentrationFormula <>
           FirstBoundary.PestConcentrationFormula) or
           (ABoundary.PestConcentrationMethod <>
-          FirstBoundary.PestConcentrationMethod) then
+          FirstBoundary.PestConcentrationMethod)
+          or (ABoundary.PestMultiplierFormula <>
+          FirstBoundary.PestMultiplierFormula) or
+          (ABoundary.PestMultiplierMethod <>
+          FirstBoundary.PestMultiplierMethod)
+          then
         begin
           ClearGrid;
           Exit;
@@ -193,7 +213,10 @@ begin
               (rdgModflowBoundary.Cells[Ord(ccEndTime), ItemIndex + 1] <>
               FloatToStr(AnItem.EndTime)) or
               (rdgModflowBoundary.Cells[Ord(ccConcentration), ItemIndex + 1] <>
-              AnItem.Concentration) then
+              AnItem.Concentration) or
+              (rdgModflowBoundary.Cells[Ord(ccMultiplier), ItemIndex + 1] <>
+              AnItem.Multiplier)
+              then
             begin
               ClearGrid;
               Exit;
@@ -244,13 +267,16 @@ begin
         if TryStrToFloat(rdgModflowBoundary.Cells[Ord(ccStartTime), RowIndex],
           StartTime) and TryStrToFloat(rdgModflowBoundary.Cells[Ord(ccEndTime),
           RowIndex], EndTime) and
-          (rdgModflowBoundary.Cells[Ord(ccConcentration), RowIndex] <> '') then
+          (rdgModflowBoundary.Cells[Ord(ccConcentration), RowIndex] <> '') and
+          (rdgModflowBoundary.Cells[Ord(ccMultiplier), RowIndex] <> '')  then
         begin
           CncItem := NewBoundary.Values.Add as TCncItem;
           CncItem.StartTime := StartTime;
           CncItem.EndTime := EndTime;
           CncItem.Concentration := rdgModflowBoundary.Cells
             [Ord(ccConcentration), RowIndex];
+          CncItem.Multiplier := rdgModflowBoundary.Cells
+            [Ord(ccMultiplier), RowIndex];
         end;
       end;
       if NewBoundary.Values.Count = 0 then
@@ -302,6 +328,30 @@ begin
             NewBoundary.PestConcentrationFormula :=
               PestModifier[Ord(ccConcentration)];
           end;
+
+          if rdgModflowBoundary.Cells[Ord(ccMultiplier), PestMethodRow] = ''
+          then
+          begin
+            NewBoundary.PestMultiplierMethod :=
+              Boundary.PestMultiplierMethod;
+          end
+          else
+          begin
+            NewBoundary.PestMultiplierMethod :=
+              PestMethod[Ord(ccMultiplier)];
+          end;
+          if rdgModflowBoundary.Cells[Ord(ccMultiplier), PestModifierRow] = ''
+          then
+          begin
+            NewBoundary.PestMultiplierFormula :=
+              Boundary.PestMultiplierFormula;
+          end
+          else
+          begin
+            NewBoundary.PestMultiplierFormula :=
+              PestModifier[Ord(ccMultiplier)];
+          end;
+
           if comboChemSpecies.ItemIndex >= 0 then
           begin
             NewBoundary.ChemSpecies := comboChemSpecies.Text;

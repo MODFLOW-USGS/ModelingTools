@@ -2875,7 +2875,9 @@ that affects the model output should also have a comment. }
     procedure InvalidateCSubStressOffset(Sender: TObject);
 
     procedure InvalidateCncConcentration(Sender: TObject);
+    procedure InvalidateCncMultiplier(Sender: TObject);
     procedure InvalidateMassSrc(Sender: TObject);
+    procedure InvalidateMassSrcMultiplier(Sender: TObject);
 
     procedure InvalidateTransientKx(Sender: TObject);
     procedure InvalidateTransientKy(Sender: TObject);
@@ -16931,7 +16933,9 @@ begin
   ModflowPackages.MawPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.UzfMf6Package.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.GwtCncPackage.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.GwtCncPackage.AddRemoveRenameGwtMultiplierTimeLists;
   ModflowPackages.GwtSrcPackage.AddRemoveRenameGwtConcentrationTimeLists;
+  ModflowPackages.GwtSrcPackage.AddRemoveRenameGwtMultiplierTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
@@ -26813,6 +26817,11 @@ begin
   ModflowPackages.GwtCncPackage.InvalidateConcentrations;
 end;
 
+procedure TCustomModel.InvalidateCncMultiplier(Sender: TObject);
+begin
+  ModflowPackages.GwtCncPackage.InvalidateMultipliers;
+end;
+
 procedure TCustomModel.InvalidateContours;
 begin
   TopContoursUpToDate := False;
@@ -26869,6 +26878,11 @@ end;
 procedure TCustomModel.InvalidateMassSrc(Sender: TObject);
 begin
   ModflowPackages.GwtSrcPackage.InvalidateConcentrations;
+end;
+
+procedure TCustomModel.InvalidateMassSrcMultiplier(Sender: TObject);
+begin
+  ModflowPackages.GwtSrcPackage.InvalidateMultipliers;
 end;
 
 procedure TCustomModel.InvalidateMawGwtConc(Sender: TObject);

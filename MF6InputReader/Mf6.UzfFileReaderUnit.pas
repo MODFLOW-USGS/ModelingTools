@@ -10,7 +10,7 @@ type
   TUzfOptions = class(TCustomMf6Persistent)
   private
     FAUXILIARY: TStringList;
-    AUXMULTNAME: string;
+    FAUXMULTNAME: string;
     BOUNDNAMES: Boolean;
     PRINT_INPUT: Boolean;
     PRINT_FLOWS: Boolean;
@@ -38,6 +38,7 @@ type
     destructor Destroy; override;
     property Count: Integer read GetCount;
     property AUXILIARY[Index: Integer]: string read GetAUXILIARY; default;
+    property AUXMULTNAME: string read FAUXMULTNAME;
     property WATER_CONTENT: Boolean read FWATER_CONTENT;
     property BUDGET: Boolean read FBUDGET;
     property BUDGETCSV: Boolean read FBUDGETCSV;
@@ -236,7 +237,7 @@ procedure TUzfOptions.Initialize;
 begin
   inherited;
   FAUXILIARY.Clear;
-  AUXMULTNAME := '';
+  FAUXMULTNAME := '';
   BOUNDNAMES := False;
   PRINT_INPUT := False;
   PRINT_FLOWS := False;
@@ -300,7 +301,7 @@ begin
       and (FSplitter.Count >= 2) then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
-      AUXMULTNAME := FSplitter[1];
+      FAUXMULTNAME := FSplitter[1];
     end
     else if FSplitter[0] = 'BOUNDNAMES' then
     begin

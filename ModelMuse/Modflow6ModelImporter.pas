@@ -1577,14 +1577,7 @@ begin
   Cnc := Package.Package as TCnc;
   Options := Cnc.Options;
 
-  if Options.AUXMULTNAME <> '' then
-  begin
-    AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  end
-  else
-  begin
-    AuxMultIndex := -1;
-  end;
+  AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
 
   OtherCellLists := TObjectList<TCncTimeItemIDList>.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
@@ -16200,7 +16193,7 @@ type
   TImportUzfPeriodItem = record
     PeriodData: TUzfPeriodItem;
     Period: Integer;
-    function Compatible(Item: TImportUzfPeriodItem): Boolean;
+    function Compatible(Item: TImportUzfPeriodItem; Options: TUzfOptions): Boolean;
   end;
   TImportUzfPeriodItemList = TList<TImportUzfPeriodItem>;
 
@@ -16217,7 +16210,7 @@ type
 
   TUztSetting = (usStatus, usConcentration, usInfiltration, usUzet);
   TUztSettingsArray = array[TUztSetting] of TNumberedItem;
-  TTransportSettings = Tarray<TArray<TUztSettingsArray>>;
+  TTransportSettings = TArray<TArray<TUztSettingsArray>>;
 
   TUzfData = Class(TObject)
   private
@@ -16235,7 +16228,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Compatible(UzfData: TUzfData): Boolean;
+    function Compatible(UzfData: TUzfData; Options: TUzfOptions): Boolean;
     procedure SetTransportCounts(PeriodCount, TransportModelCount: Integer);
   end;
 
@@ -16343,6 +16336,10 @@ var
   UztBoundNameDictionary: TBoundNameDictionary;
   BoundName: string;
   UztObs: TUztObs;
+  IFaceIndex: Integer;
+  MultIndex: Integer;
+  Aux: TMf6BoundaryValue;
+  IFACE: Integer;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
     ItemIndex: Integer;
@@ -16593,6 +16590,12 @@ begin
     begin
       UzfPackage.GroundwaterET := ugecSimulateUnsatOnly;
     end;
+  end;
+  IFaceIndex := Options.IndexOfAux('IFACE');
+  MultIndex := Options.IndexOfAux(Options.AUXMULTNAME);
+  if MultIndex >= 0 then
+  begin
+    UzfPackage.UseMultiplier := True;
   end;
 
   Dimensions := Uzf.UzfDimensions;
@@ -16934,7 +16937,7 @@ begin
             end
             else if AnsiSameText(UztPeriodItem.Name, 'AUXILIARY')  then
             begin
-              // ignore
+               // ignore
             end
             else
             begin
@@ -16952,7 +16955,7 @@ begin
       for MergeIndex := 0 to MergedUzfData.Count - 1 do
       begin
         MergedList := MergedUzfData[MergeIndex];
-        if MergedList.First.Compatible(UzfDataItem) then
+        if MergedList.First.Compatible(UzfDataItem, Options) then
         begin
           break;
         end
@@ -17014,6 +17017,7 @@ begin
       UzfMf6Item.AirEntryPotential := '0';
       UzfMf6Item.RootPotential := '0';
       UzfMf6Item.RootActivity := '0';
+      UzfMf6Item.Multiplier := '1';
 
       if MergedList.Count = 1 then
       begin
@@ -17067,6 +17071,27 @@ begin
           UzfMf6Item.AirEntryPotential := BoundaryValueToFormula(PData.ha);
           UzfMf6Item.RootPotential := BoundaryValueToFormula(PData.hroot);
           UzfMf6Item.RootActivity := BoundaryValueToFormula(PData.rootact);
+          if MultIndex >= 0 then
+          begin
+            Aux := PData.Aux[MultIndex];
+            UzfMf6Item.Multiplier := BoundaryValueToFormula(Aux);
+          end;
+          if IFaceIndex >= 0 then
+          begin
+
+          end;
+          if IfaceIndex >= 0 then
+          begin
+            Aux := PData.Aux[IfaceIndex];
+            Assert(Aux.ValueType = vtNumeric);
+            IFACE := Round(Aux.NumericValue);
+          end
+          else
+          begin
+            IFACE := 0;
+          end;
+          AScreenObject.IFACE := TIface(IFACE+2);
+
 
           for var TransportIndex := 0 to length(UzfDataItem.FTransportSettings[PeriodIndex]) - 1 do
           begin
@@ -19218,7 +19243,7 @@ end;
 
 { TUzfData }
 
-function TUzfData.Compatible(UzfData: TUzfData): Boolean;
+function TUzfData.Compatible(UzfData: TUzfData; Options: TUzfOptions): Boolean;
 var
   Index: Integer;
   Item1: TNumberedItem;
@@ -19234,7 +19259,7 @@ begin
   begin
     for Index := 0 to PeriodData.Count - 1 do
     begin
-      result := PeriodData[Index].Compatible(UzfData.PeriodData[Index]);
+      result := PeriodData[Index].Compatible(UzfData.PeriodData[Index], Options);
       if not result then
       begin
         Exit;
@@ -19294,12 +19319,23 @@ procedure TUzfData.SetTransportCounts(PeriodCount,
 begin
   SetLength(FTransportSettings, PeriodCount, TransportModelCount);
   SetLength(UztPackageItemArray, TransportModelCount);
+  for var OuterIndex := 0 to Length(FTransportSettings) - 1 do
+  begin
+    for var InnerIndex := 0 to Length(FTransportSettings[0]) - 1 do
+    begin
+      for var SettingIndex := Low(TUztSetting) to High(TUztSetting) do
+      begin
+        FTransportSettings[OuterIndex, InnerIndex, SettingIndex].Initialize;
+      end;
+
+    end;
+  end;
 end;
 
 
 { TImportUzfPeriodItem }
 
-function TImportUzfPeriodItem.Compatible(Item: TImportUzfPeriodItem): Boolean;
+function TImportUzfPeriodItem.Compatible(Item: TImportUzfPeriodItem; Options: TUzfOptions): Boolean;
   function CompatibleBoundValues(Source, Other: TMf6BoundaryValue): Boolean;
   begin
     result := (Source.ValueType = Other.ValueType);
@@ -19326,6 +19362,16 @@ begin
     begin
       result := CompatibleBoundValues(PeriodData.Aux[AuxIndex],
         Item.PeriodData.Aux[AuxIndex]);
+      if result then
+      begin
+        if (SameText(Options.AUXILIARY[AuxIndex], 'IFACE')
+          or SameText(Options.AUXILIARY[AuxIndex], 'IFLOWFACE'))
+          and (PeriodData.Aux[AuxIndex].ValueType = vtNumeric) then
+        begin
+          result := PeriodData.Aux[AuxIndex].NumericValue =
+            Item.PeriodData.Aux[AuxIndex].NumericValue;
+        end;
+      end;
       if not result then
       begin
         Exit;

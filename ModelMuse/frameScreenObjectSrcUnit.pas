@@ -10,10 +10,13 @@ uses
 
 type
   TframeScreenObjectSrc = class(TframeCustomGwtBoundary)
+    procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
+      var CanSelect: Boolean);
   private
     { Private declarations }
   protected
     function GetVariableName: string; override;
+    function GetMultiplierName: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TCncBoundary;
       override;
     procedure CreateNewBoundary(ScreenObject: TScreenObject); override;
@@ -25,6 +28,9 @@ var
   frameScreenObjectSrc: TframeScreenObjectSrc;
 
 implementation
+
+uses
+  frmGoPhastUnit;
 
 resourcestring
   StrMassLoading = 'Mass Loading';
@@ -44,9 +50,24 @@ begin
   result := ScreenObject.GwtSrcBoundary;
 end;
 
+function TframeScreenObjectSrc.GetMultiplierName: string;
+begin
+  result := StrMassLoading + ' Multiplier';
+end;
+
 function TframeScreenObjectSrc.GetVariableName: string;
 begin
   result := StrMassLoading;
+end;
+
+procedure TframeScreenObjectSrc.rdgModflowBoundarySelectCell(Sender: TObject;
+  ACol, ARow: Integer; var CanSelect: Boolean);
+begin
+  inherited;
+  if CanSelect  and (ACol = 3) then
+  begin
+    CanSelect := frmGoPhast.PhastModel.ModflowPackages.GwtSrcPackage.UseMultiplier;
+  end;
 end;
 
 end.
