@@ -226,10 +226,6 @@ uses
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
-  StrModelMuseCanNotIm = 'ModelMuse can not import AUXMULTNAME specified for ' +
-  'a time series in the %s package.';
-  StrModelMuseCanNotAp = 'ModelMuse can not apply AUXMULTNAME values to data' +
-  ' specified as a time series in the %s package.';
   StrModelMuseCanNotSpPetm0 = 'ModelMuse can not specify a separate value fo' +
   'r petm0 in the EVt package.';
 
@@ -1410,18 +1406,17 @@ var
   Options: TCncOptions;
   AuxMultIndex: Integer;
   Imported_Cnc: TValueArrayItem;
+  Imported_Mult: TValueArrayItem;
   TimeSeries: string;
   ImportedTimeSeries: string;
   OtherCellLists: TObjectList<TCncTimeItemIDList>;
   Aux: TMf6BoundaryValue;
-  AuxMultiplier: double;
   CellIds: TCellIdList;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TCncTimeItem; Period: Integer);
   var
     CncItem: TCncItem;
     ImportedName: string;
     Aux: TMf6BoundaryValue;
-    AuxMultiplier: Extended;
   begin
     CncItem := AScreenObject.GwtCncBoundary.Values.Add as TCncItem;
     ItemList.Add(CncItem);
@@ -1433,22 +1428,27 @@ var
       Aux := ACell.Aux[AuxMultIndex];
       if Aux.ValueType = vtNumeric then
       begin
-        AuxMultiplier := Aux.NumericValue
+        ImportedName := Format('Imported_CNC_multiplier_%s Period_%d', [Package.PackageName, Period]);
+        Imported_Mult := AScreenObject.ImportedValues.Add;
+        Imported_Mult.Name := ImportedName;
+        Imported_Mult.Values.DataType := rdtDouble;
+        CncItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_Mult.Name + '")';
       end
       else
       begin
-        AuxMultiplier := 1;
-        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['CNC']));
+        Imported_Mult := nil;
+        TimeSeries := Aux.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        CncItem.Concentration := ImportedTimeSeries;
       end;
-    end
-    else
-    begin
-      AuxMultiplier := 1;
     end;
 
     if ACell.conc.ValueType = vtNumeric then
     begin
-      ImportedName := Format('Imported_CNC_Period_%d', [Period]);
+      ImportedName := Format('Imported_CNC_%s Period_%d', [Package.PackageName, Period]);
       Imported_Cnc := AScreenObject.ImportedValues.Add;
       Imported_Cnc.Name := ImportedName;
       Imported_Cnc.Values.DataType := rdtDouble;
@@ -1463,10 +1463,6 @@ var
         Assert(False);
       end;
       CncItem.Concentration := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
-      begin
-        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['CNC']));
-      end;
     end;
   end;
   function CreateScreenObject(ACell: TCncTimeItem; Period: Integer): TScreenObject;
@@ -1578,6 +1574,7 @@ begin
   Options := Cnc.Options;
 
   AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  GwtCncPackage.UseMultiplier := AuxMultIndex >= 0;
 
   OtherCellLists := TObjectList<TCncTimeItemIDList>.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
@@ -1708,28 +1705,16 @@ begin
         for var CellIndex := 0 to ACellList.Count - 1 do
         begin
           ACell := ACellList[CellIndex];
-          if ACell.conc.ValueType = vtNumeric then
+          Aux := ACell.Aux[AuxMultIndex];
+          if Aux.ValueType = vtNumeric then
           begin
-            if AuxMultIndex >= 0 then
-            begin
-              Aux := ACell.Aux[AuxMultIndex];
-              if Aux.ValueType = vtNumeric then
-              begin
-                AuxMultiplier := Aux.NumericValue
-              end
-              else
-              begin
-                AuxMultiplier := 1;
-                FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['CNC']));
-              end;
-            end
-            else
-            begin
-              AuxMultiplier := 1;
-            end;
-            Imported_Cnc.Values.Add(ACell.conc.NumericValue * AuxMultiplier);
+            Imported_Mult.Values.Add(Aux.NumericValue)
           end;
 
+          if ACell.conc.ValueType = vtNumeric then
+          begin
+            Imported_Cnc.Values.Add(ACell.conc.NumericValue);
+          end;
 
           if NewScreenObject then
           begin
@@ -14843,18 +14828,17 @@ var
   Options: TSrcOptions;
   AuxMultIndex: Integer;
   Imported_Src: TValueArrayItem;
+  Imported_Mutiplier: TValueArrayItem;
   TimeSeries: string;
   ImportedTimeSeries: string;
   OtherCellLists: TObjectList<TSrcTimeItemIDList>;
   Aux: TMf6BoundaryValue;
-  AuxMultiplier: double;
   CellIds: TCellIdList;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TSrcTimeItem; Period: Integer);
   var
     SrcItem: TCncItem;
     ImportedName: string;
     Aux: TMf6BoundaryValue;
-    AuxMultiplier: Extended;
   begin
     SrcItem := AScreenObject.GwtSrcBoundary.Values.Add as TCncItem;
     ItemList.Add(SrcItem);
@@ -14866,17 +14850,22 @@ var
       Aux := ACell.Aux[AuxMultIndex];
       if Aux.ValueType = vtNumeric then
       begin
-        AuxMultiplier := Aux.NumericValue
+        ImportedName := Format('Imported Multiplier_Period_%d', [Period]);
+        Imported_Mutiplier := AScreenObject.ImportedValues.Add;
+        Imported_Mutiplier.Name := ImportedName;
+        Imported_Mutiplier.Values.DataType := rdtDouble;
+        SrcItem.Multiplier := rsObjectImportedValuesR + '("' + Imported_Mutiplier.Name + '")';
       end
       else
       begin
-        AuxMultiplier := 1;
-        FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['SRC']));
+        Imported_Mutiplier := nil;
+        TimeSeries := Aux.StringValue;
+        if not Map.TryGetValue(UpperCase(TimeSeries), ImportedTimeSeries) then
+        begin
+          Assert(False);
+        end;
+        SrcItem.Multiplier := ImportedTimeSeries;
       end;
-    end
-    else
-    begin
-      AuxMultiplier := 1;
     end;
 
     if ACell.smassrate.ValueType = vtNumeric then
@@ -14896,10 +14885,6 @@ var
         Assert(False);
       end;
       SrcItem.Concentration := ImportedTimeSeries;
-      if AuxMultiplier <> 1 then
-      begin
-        FErrorMessages.Add(Format(StrModelMuseCanNotAp, ['SRC']));
-      end;
     end;
   end;
   function CreateScreenObject(ACell: TSrcTimeItem; Period: Integer): TScreenObject;
@@ -15010,14 +14995,8 @@ begin
   Src := Package.Package as TSrc;
   Options := Src.Options;
 
-  if Options.AUXMULTNAME <> '' then
-  begin
-    AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  end
-  else
-  begin
-    AuxMultIndex := -1;
-  end;
+  AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  GwtSrcPackage.UseMultiplier := AuxMultIndex >= 0;
 
   OtherCellLists := TObjectList<TSrcTimeItemIDList>.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
@@ -15148,26 +15127,17 @@ begin
         for var CellIndex := 0 to ACellList.Count - 1 do
         begin
           ACell := ACellList[CellIndex];
+          if AuxMultIndex >= 0 then
+          begin
+            Aux := ACell.Aux[AuxMultIndex];
+            if Aux.ValueType = vtNumeric then
+            begin
+              Imported_Mutiplier.Values.Add(Aux.NumericValue)
+            end;
+          end;
           if ACell.smassrate.ValueType = vtNumeric then
           begin
-            if AuxMultIndex >= 0 then
-            begin
-              Aux := ACell.Aux[AuxMultIndex];
-              if Aux.ValueType = vtNumeric then
-              begin
-                AuxMultiplier := Aux.NumericValue
-              end
-              else
-              begin
-                AuxMultiplier := 1;
-                FErrorMessages.Add(Format(StrModelMuseCanNotIm, ['SRC']));
-              end;
-            end
-            else
-            begin
-              AuxMultiplier := 1;
-            end;
-            Imported_Src.Values.Add(ACell.smassrate.NumericValue * AuxMultiplier);
+            Imported_Src.Values.Add(ACell.smassrate.NumericValue);
           end;
 
 
