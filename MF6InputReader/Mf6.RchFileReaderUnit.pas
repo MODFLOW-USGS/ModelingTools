@@ -73,8 +73,8 @@ type
   private
     IPer: Integer;
     FCells: TRchTimeItemList;
-    IRCH: TIArray3D;
-    RECHARGE: TArrayItem;
+    FIRCH: TIArray2D;
+    FRECHARGE: TArrayItem;
     AuxList: TArrayItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
@@ -89,6 +89,8 @@ type
     property Period: Integer read IPer;
     property Count: Integer read GetCount;
     property Cells[Index: Integer]: TRchTimeItem read GetCell; default;
+    property IRCH: TIArray2D read FIRCH;
+    property RECHARGE: TArrayItem read FRECHARGE;
   end;
 
   TRchPeriodList = TObjectList<TRchPeriod>;
@@ -432,8 +434,7 @@ var
   StartIndex: Integer;
   AuxIndex: Integer;
   LocalDim: TDimensions;
-  Layered: Boolean;
-  IntThreeDReader: TInteger3DArrayReader;
+  IntTwoDReader: TInteger2DArrayReader;
   Double2DDReader: TDouble2DArrayReader;
   AuxArray: TArrayItem;
   RowIndex: Integer;
@@ -451,16 +452,16 @@ begin
     LocalDim.NLay := 1;
     if PriorPeriod = nil then
     begin
-      IRCH := nil;
-      RECHARGE.Initialize;
+      FIRCH := nil;
+      FRECHARGE.Initialize;
     end
     else
     begin
-      IRCH := PriorPeriod.IRCH;
-      if IRCH <> nil then
+      FIRCH := PriorPeriod.FIRCH;
+      if FIRCH <> nil then
       begin
-        SetLength(IRCH, Length(IRCH), Length(IRCH[0]), Length(IRCH[0,0]));
-        RECHARGE.Assign(PriorPeriod.RECHARGE);
+        SetLength(FIRCH, Length(FIRCH), Length(FIRCH[0]));
+        FRECHARGE.Assign(PriorPeriod.FRECHARGE);
         for AuxIndex := 0 to PriorPeriod.AuxList.Count - 1 do
         begin
           AuxArray.Assign(PriorPeriod.AuxList[AuxIndex]);
@@ -492,39 +493,39 @@ begin
         begin
           // do nothing
         end
-        else if FSplitter[0] = 'IRCH' then
+        else if AnsiSameText(FSplitter[0], 'IRCH') then
         begin
-          Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-          IntThreeDReader := TInteger3DArrayReader.Create(LocalDim, Layered, FPackageType);
+          IntTwoDReader := TInteger2DArrayReader.Create(LocalDim, FPackageType);
           try
-            IntThreeDReader.Read(Stream, Unhandled);
-            IRCH := IntThreeDReader.FData;
+            IntTwoDReader.Read(Stream, Unhandled);
+            FIRCH := IntTwoDReader.FData;
+
           finally
-            IntThreeDReader.Free;
+            IntTwoDReader.Free;
           end;
         end
-        else if FSplitter[0] = 'RECHARGE' then
+        else if AnsiSameText(FSplitter[0], 'RECHARGE') then
         begin
-          if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
+          if (FSplitter.Count >= 3) and AnsiSameText(FSplitter[1], 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
-            RECHARGE.TimeArraySeries := FSplitter[2]
+            FRECHARGE.TimeArraySeries := FSplitter[2]
           end
           else
           begin
             Double2DDReader := TDouble2DArrayReader.Create(LocalDim, FPackageType);
             try
               Double2DDReader.Read(Stream, Unhandled);
-              RECHARGE.value := Double2DDReader.FData;
+              FRECHARGE.value := Double2DDReader.FData;
             finally
               Double2DDReader.Free;
             end;
           end;
         end
-        else if FSplitter[0] = 'AUX' then
+        else if AnsiSameText(FSplitter[0], 'AUX') then
         begin
           AuxArray.Initialize;
-          if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
+          if (FSplitter.Count >= 3) and AnsiSameText(FSplitter[1], 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
             AuxArray.TimeArraySeries := FSplitter[2]
@@ -552,6 +553,7 @@ begin
         end
       end;
     finally
+      ID := 0;
       for RowIndex := 0 to LocalDim.NRow - 1 do
       begin
         for ColIndex := 0 to LocalDim.NCol - 1 do
@@ -559,25 +561,25 @@ begin
           Cell := TRchTimeItem.Create;
           Inc(ID);
           Cell.FId := ID;
-          if IRCH = nil then
+          if FIRCH = nil then
           begin
             Cell.Fcellid.Layer := 1;
           end
           else
           begin
-            Cell.Fcellid.Layer := IRCH[0, RowIndex, ColIndex];
+            Cell.Fcellid.Layer := FIRCH[RowIndex, ColIndex];
           end;
           Cell.Fcellid.Row := RowIndex + 1;
           Cell.Fcellid.Column := ColIndex + 1;
-          if RECHARGE.Value <> nil then
+          if FRECHARGE.Value <> nil then
           begin
-            Cell.Frecharge.NumericValue := RECHARGE.Value[RowIndex, ColIndex];
+            Cell.Frecharge.NumericValue := FRECHARGE.Value[RowIndex, ColIndex];
             Cell.Frecharge.ValueType := vtNumeric;
           end
           else
           begin
             Cell.Frecharge.ValueType := vtString;
-            Cell.Frecharge.StringValue := RECHARGE.TimeArraySeries + '_'
+            Cell.Frecharge.StringValue := FRECHARGE.TimeArraySeries + '_'
               + IntToStr(RowIndex + 1) + '_' + IntToStr(ColIndex + 1)
           end;
           for AuxIndex := 0 to AuxList.Count - 1 do

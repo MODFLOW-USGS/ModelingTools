@@ -291,9 +291,9 @@ begin
         begin
           // do nothing
         end
-        else if FSplitter[0] = 'CONCENTRATION' then
+        else if AnsiSametext(FSplitter[0], 'CONCENTRATION') then
         begin
-          if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
+          if (FSplitter.Count >= 3) and AnsiSametext(FSplitter[1], 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
             CONCENTRATION.TimeArraySeries := FSplitter[2]

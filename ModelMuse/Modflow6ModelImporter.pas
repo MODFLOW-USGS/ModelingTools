@@ -410,36 +410,47 @@ var
   ColIndex: Integer;
   APoint: TPoint2D;
   Model: TPhastModel;
+  DisvCell2D: TModflowIrregularCell2D;
+  ElementCorners: TModflowNodeList;
+  CellOutline: TPolygon2D;
 begin
   Assert(FAllTopCellsScreenObject = nil);
-    Model := frmGoPhast.PhastModel;
-    FAllTopCellsScreenObject := TScreenObject.CreateWithViewDirection(
-      Model, vdTop, UndoCreateScreenObject, False);
-    FAllTopCellsScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+  Model := frmGoPhast.PhastModel;
+  FAllTopCellsScreenObject := TScreenObject.CreateWithViewDirection(
+    Model, vdTop, UndoCreateScreenObject, False);
+  FAllTopCellsScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
-    Model.AddScreenObject(FAllTopCellsScreenObject);
-    FAllTopCellsScreenObject.ElevationCount := ecZero;
-//    if FImporter.FImportParameters.AssignmentMethod = camInterpolate then
-//    begin
-//      FAllTopCellsScreenObject.SetValuesByInterpolation := True;
-//    end
-//    else
-//    begin
-      FAllTopCellsScreenObject.SetValuesOfIntersectedCells := True;
-//    end;
-    FAllTopCellsScreenObject.EvaluatedAt := eaBlocks;
-    FAllTopCellsScreenObject.Visible := False;
-    FAllTopCellsScreenObject.Capacity := Model.RowCount * Model.ColumnCount;
-    for RowIndex := 0 to Model.RowCount - 1 do
+  Model.AddScreenObject(FAllTopCellsScreenObject);
+  FAllTopCellsScreenObject.ElevationCount := ecZero;
+  FAllTopCellsScreenObject.SetValuesOfIntersectedCells := True;
+  FAllTopCellsScreenObject.EvaluatedAt := eaBlocks;
+  FAllTopCellsScreenObject.Visible := False;
+  FAllTopCellsScreenObject.Capacity := Model.RowCount * Model.ColumnCount;
+  for RowIndex := 0 to Model.RowCount - 1 do
+  begin
+    for ColIndex := 0 to Model.ColumnCount - 1 do
     begin
-      for ColIndex := 0 to Model.ColumnCount - 1 do
+      APoint := Model.TwoDElementCenter(ColIndex, RowIndex);
+      if Model.DisvUsed then
       begin
-        APoint := Model.TwoDElementCenter(ColIndex, RowIndex);
-        FAllTopCellsScreenObject.AddPoint(APoint, True);
+        DisvCell2D := Model.DisvGrid.TwoDGrid.Cells[ColIndex];
+        if not DisvCell2D.PointInside(APoint) then
+        begin
+          ElementCorners := DisvCell2D.ElementCorners;
+          SetLength(CellOutline, ElementCorners.Count);
+          for var PointIndex := 0 to ElementCorners.Count - 1 do
+          begin
+            CellOutline[PointIndex] := ElementCorners[PointIndex].Location;
+          end;
+          APoint := Centroid(CellOutline);
+        end;
       end;
+
+      FAllTopCellsScreenObject.AddPoint(APoint, True);
     end;
-    FAllTopCellsScreenObject.Name := 'Imported_Arrays';
-    FAllTopCellsScreenObject.SectionStarts.CacheData;
+  end;
+  FAllTopCellsScreenObject.Name := 'Imported_Arrays';
+  FAllTopCellsScreenObject.SectionStarts.CacheData;
 end;
 
 destructor TModflow6Importer.Destroy;
@@ -1324,7 +1335,7 @@ begin
             end;
             if AddCells then
             begin
-              AddPointsToScreenObject(CellIds, AScreenObject);
+              AddPointsToScreenObject(CellIds, AScreenObject, True);
             end;
           end;
         end;
@@ -1729,7 +1740,7 @@ begin
 
         if NewScreenObject then
         begin
-          AddPointsToScreenObject(CellIds, AScreenObject);
+          AddPointsToScreenObject(CellIds, AScreenObject, True);
         end;
       end
     end;
@@ -2841,6 +2852,8 @@ begin
   AssignTOP(TOP);
   AssignBOTM(BOTM);
   AssignIDomain(IDOMAIN, NumberOfLayers);
+  Mesh3D.ElevationsNeedUpdating := True;
+  Mesh3D.CheckUpdateElevations;
 end;
 
 type
@@ -3471,7 +3484,7 @@ begin
 
         if NewScreenObject then
         begin
-          AddPointsToScreenObject(CellIds, AScreenObject);
+          AddPointsToScreenObject(CellIds, AScreenObject, True);
         end;
 
         if ACellList.FIds.Count > 0 then
@@ -10030,6 +10043,9 @@ var
   CellId: TMfCellId;
   DisvUsed: Boolean;
   Limits: TGridLimit;
+  DisvCell2D: TModflowIrregularCell2D;
+  ElementCorners: TModflowNodeList;
+  CellOutline: TPolygon2D;
 begin
   Model := frmGoPhast.PhastModel;
   DisvUsed := Model.DisvUsed;
@@ -10072,6 +10088,20 @@ begin
       ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
       APoint.x := ElementCenter.RotatedLocation.x;
       APoint.y := ElementCenter.RotatedLocation.y;
+      if Model.DisvUsed then
+      begin
+        DisvCell2D := Model.DisvGrid.TwoDGrid.Cells[CellId.Column - 1];
+        if not DisvCell2D.PointInside(APoint) then
+        begin
+          ElementCorners := DisvCell2D.ElementCorners;
+          SetLength(CellOutline, ElementCorners.Count);
+          for var PointIndex := 0 to ElementCorners.Count - 1 do
+          begin
+            CellOutline[PointIndex] := ElementCorners[PointIndex].Location;
+          end;
+          APoint := Centroid(CellOutline);
+        end;
+      end;
       AScreenObject.AddPoint(APoint, True);
       if ThreeD then
       begin
@@ -10202,6 +10232,10 @@ begin
     Model.ModflowWettingOptions.WettingEquation := Options.REWET.IHDWET;
   end;
   NpfPackage.UseXT3D := Options.XT3D;
+  if NpfPackage.UseXT3D then
+  begin
+    Model.ModflowPackages.GncPackage.IsSelected := False;
+  end;
   NpfPackage.Xt3dOnRightHandSide := Options.RHS;
   NpfPackage.SaveSpecificDischarge := Options.SAVE_SPECIFIC_DISCHARGE;
   NpfPackage.SaveSaturation := Options.SAVE_SATURATION;
@@ -18030,6 +18064,15 @@ begin
   MultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
   Model.ModflowPackages.WelPackage.UseMultiplier := MultIndex >= 0;
 
+  if Options.AUTO_FLOW_REDUCE.Used then
+  begin
+    Model.ModflowPackages.WelPackage.PhiRamp := Options.AUTO_FLOW_REDUCE.Value;
+  end
+  else
+  begin
+    Model.ModflowPackages.WelPackage.PhiRamp := 0;
+  end;
+
   SpcList := TSpcList.Create;
   OtherCellLists := TObjectList<TMvrWelTimeItemList>.Create;
   WellMvrLinkList := TWellMvrLinkList.Create;
@@ -18464,7 +18507,7 @@ begin
 
             if NewScreenObject then
             begin
-              AddPointsToScreenObject(CellIds, AScreenObject);
+              AddPointsToScreenObject(CellIds, AScreenObject, True);
             end;
 
             if ACellList.FIds.Count > 0 then

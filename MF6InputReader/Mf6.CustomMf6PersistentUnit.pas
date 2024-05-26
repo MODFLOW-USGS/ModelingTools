@@ -111,6 +111,7 @@ type
     NLay: Integer;
     NRow: Integer;
     NCol: Integer;
+    DisVNRow: Integer;
     procedure Initialize;
     function DimensionCount: Integer;
   end;
@@ -121,10 +122,12 @@ type
   end;
 
   TDimensionedPackageReader = class(TPackageReader)
+  private
+    procedure SetDimensions(const Value: TDimensions);
   protected
     FDimensions: TDimensions;
   public
-    property Dimensions: TDimensions read FDimensions write FDimensions;
+    property Dimensions: TDimensions read FDimensions write SetDimensions;
   end;
 
   TArrayType = (atConstant, atInternal, atExternal, atUndefined);
@@ -160,7 +163,7 @@ type
   TDArray2D = TArray<TDArray1D>;
   TDArray3D = TArray<TDArray2D>;
 
-  TIArray1D = TArray<Integer>;
+  TIArray1D = TArray<longint>;
   TIArray2D = TArray<TIArray1D>;
   TIArray3D = TArray<TIArray2D>;
 
@@ -184,10 +187,10 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
-  TInteger1DArrayReader = class(T1DArrayReader<Integer>)
+  TInteger1DArrayReader = class(T1DArrayReader<Longint >)
   private
     procedure ReadDataFromTextFile(Stream: TStreamReader);
-    function StrToDataType(AValue: string; var DataValue: Integer): Boolean; override;
+    function StrToDataType(AValue: string; var DataValue: Longint): Boolean; override;
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
@@ -198,6 +201,13 @@ type
   public
     FData: TArray<TArray<DataType>>;
     constructor Create(Dimensions: TDimensions; PackageType: string); reintroduce;
+  end;
+
+  TInteger2DArrayReader = class(T2DArrayReader<Longint>)
+    function StrToDataType(AValue: string; var DataValue: Longint): Boolean; override;
+    procedure Read2DArrayFromTextFile(Stream: TStreamReader);
+  public
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
   TDouble2DArrayReader = class(T2DArrayReader<Double>)
@@ -227,10 +237,10 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   end;
 
-  TInteger3DArrayReader = class(T3DArrayReader<Integer>)
+  TInteger3DArrayReader = class(T3DArrayReader<Longint >)
   private
-    function StrToDataType(AValue: string; var DataValue: Integer): Boolean; override;
-    procedure Read2DArrayFromTextFile(Stream: TStreamReader; LayerIndex: Integer);
+    function StrToDataType(AValue: string; var DataValue: Longint ): Boolean; override;
+    procedure Read2DArrayFromTextFile(Stream: TStreamReader; LayerIndex: Longint );
     procedure Read3DArrayFromTextFile(Stream: TStreamReader);
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -1065,9 +1075,19 @@ begin
   begin
     Inc(Result);
   end;
-  if NRow >= 1 then
+  if DisVNRow < 0 then
   begin
-    Inc(Result);
+    if NRow >= 1 then
+    begin
+      Inc(Result);
+    end;
+  end
+  else
+  begin
+    if DisVNRow >= 1 then
+    begin
+      Inc(Result);
+    end;
   end;
   if NCol >= 1 then
   begin
@@ -1081,6 +1101,7 @@ begin
   NLay := 0;
   NRow := 0;
   NCol := 0;
+  DisVNRow := -1;
 end;
 
 { T2DArrayReader<DataType> }
@@ -1105,15 +1126,6 @@ var
   ColIndex: Integer;
   ExternalFileStream: TStreamReader;
   ExternalBinaryFileStream: TFileStream;
-//  KSTP: Integer;
-//  KPER: Integer;
-//  PERTIM: TModflowDouble;
-//  TOTIM: TModflowDouble;
-//  DESC: TModflowDesc;
-//  NCOL: Integer;
-//  NROW: Integer;
-//  ILAY: Integer;
-//  AnArray: TModflowDoubleArray;
 begin
   ReadControlLine(Stream, Unhandled);
   case ArrayType of
@@ -1425,7 +1437,7 @@ begin
 end;
 
 procedure TInteger3DArrayReader.Read2DArrayFromTextFile(Stream: TStreamReader;
-  LayerIndex: Integer);
+  LayerIndex: Longint );
 var
   ALine: string;
   ErrorLine: string;
@@ -1498,7 +1510,7 @@ begin
   end;
 end;
 
-function TInteger3DArrayReader.StrToDataType(AValue: string; var DataValue: Integer): Boolean;
+function TInteger3DArrayReader.StrToDataType(AValue: string; var DataValue: Longint ): Boolean;
 begin
   result := TryStrToInt(AValue, DataValue);
 end;
@@ -1593,7 +1605,7 @@ begin
   end;
 end;
 
-function TInteger1DArrayReader.StrToDataType(AValue: string; var DataValue: Integer): Boolean;
+function TInteger1DArrayReader.StrToDataType(AValue: string; var DataValue: Longint): Boolean;
 begin
   result := TryStrToInt(AValue, DataValue);
 end;
@@ -1902,6 +1914,157 @@ begin
     begin
       Exit;
     end;
+  end;
+end;
+
+{ TInteger2DArrayReader }
+
+procedure TInteger2DArrayReader.Read(Stream: TStreamReader;
+  Unhandled: TStreamWriter);
+var
+  RowIndex: Integer;
+  ColIndex: Integer;
+  ExternalFileStream: TStreamReader;
+  ExternalBinaryFileStream: TFileStream;
+begin
+  ReadControlLine(Stream, Unhandled);
+  case ArrayType of
+    atConstant:
+      begin
+        for RowIndex := 0 to FDimensions.NRow - 1 do
+        begin
+          for ColIndex := 0 to FDimensions.NCol - 1 do
+          begin
+            FData[RowIndex, ColIndex] := FConstantValue;
+          end;
+        end;
+      end;
+    atInternal:
+      begin
+        Read2DArrayFromTextFile(Stream);
+      end;
+    atExternal:
+      begin
+        if FBinary then
+        begin
+          if TFile.Exists(FExternalFileName) then
+          begin
+            try
+              ExternalBinaryFileStream := TFile.Create(FExternalFileName,
+                fmOpenRead or fmShareDenyWrite);
+              try
+                for RowIndex := 0 to FDimensions.NRow - 1 do
+                begin
+                  for ColIndex := 0 to FDimensions.NCol - 1 do
+                  begin
+                    ExternalBinaryFileStream.Read(FData[RowIndex, ColIndex], SizeOf(Integer));
+                  end;
+                end;
+              finally
+                ExternalBinaryFileStream.Free;
+              end;
+            except
+              on E: EEncodingError do
+              begin
+                raise;
+              end;
+              on E: Exception do
+              begin
+                Unhandled.WriteLine('ERROR');
+                Unhandled.WriteLine(E.Message);
+              end;
+            end;
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+              [FExternalFileName]));
+          end;
+        end
+        else
+        begin
+          if TFile.Exists(FExternalFileName) then
+          begin
+            try
+              ExternalFileStream := TFile.OpenText(FExternalFileName);
+              try
+                Read2DArrayFromTextFile(ExternalFileStream);
+              finally
+                ExternalFileStream.Free;
+              end;
+            except
+              on E: EEncodingError do
+              begin
+                raise;
+              end;
+              on E: Exception do
+              begin
+                Unhandled.WriteLine('ERROR');
+                Unhandled.WriteLine(E.Message);
+              end;
+            end;
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format('Unable to open %s because it does not exist.',
+              [FExternalFileName]));
+          end;
+        end;
+      end;
+    else
+      begin
+        Unhandled.WriteLine('Error reading array control line.');
+      end;
+  end;
+end;
+
+procedure TInteger2DArrayReader.Read2DArrayFromTextFile(Stream: TStreamReader);
+var
+  ALine: string;
+  ErrorLine: string;
+  ItemIndex: Integer;
+  RowIndex: Integer;
+  ColIndex: Integer;
+  DataValue: Integer;
+begin
+  RowIndex := 0;
+  ColIndex := 0;
+  while (RowIndex < FDimensions.NRow) and (ColIndex < FDimensions.NCol) do
+  begin
+    ALine := Stream.ReadLine;
+    ErrorLine := ALine;
+    FSplitter.DelimitedText := ALine;
+    for ItemIndex := 0 to FSplitter.Count - 1 do
+    begin
+      if StrToDataType(FSplitter[ItemIndex], DataValue) then
+      begin
+        FData[RowIndex, ColIndex] := DataValue * FFactor;
+        Inc(ColIndex);
+        if ColIndex = FDimensions.NCol then
+        begin
+          ColIndex := 0;
+          Inc(RowIndex);
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TInteger2DArrayReader.StrToDataType(AValue: string;
+  var DataValue: Longint): Boolean;
+begin
+  result := TryStrToInt(AValue, DataValue);
+end;
+
+{ TDimensionedPackageReader }
+
+procedure TDimensionedPackageReader.SetDimensions(const Value: TDimensions);
+begin
+  FDimensions := Value;
+  FDimensions.DisVNRow := FDimensions.NRow;
+  if FDimensions.NRow = 0 then
+  begin
+    FDimensions.NRow := 1;
   end;
 end;
 

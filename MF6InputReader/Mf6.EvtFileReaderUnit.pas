@@ -91,7 +91,7 @@ type
     SURFACE: TArrayItem;
     RATE: TArrayItem;
     DEPTH: TArrayItem;
-    IEVT: TIArray3D;
+    IEVT: TIArray2D;
     AuxList: TArrayItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
@@ -444,7 +444,7 @@ procedure TEvtDimensions.Initialize;
 begin
   inherited;
   MAXBOUND := 0;
-  FNSEG := 0;
+  FNSEG := 1;
 end;
 
 procedure TEvtDimensions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -534,8 +534,7 @@ var
   StartIndex: Integer;
   AuxIndex: Integer;
   LocalDim: TDimensions;
-  Layered: Boolean;
-  IntThreeDReader: TInteger3DArrayReader;
+  IntTwoDReader: TInteger2DArrayReader;
   Double2DDReader: TDouble2DArrayReader;
   AuxArray: TArrayItem;
   RowIndex: Integer;
@@ -575,7 +574,7 @@ begin
       IEVT := PriorPeriod.IEVT;
       if IEVT <> nil then
       begin
-        SetLength(IEVT, Length(IEVT), Length(IEVT[0]), Length(IEVT[0,0]));
+        SetLength(IEVT, Length(IEVT), Length(IEVT[0]));
       end;
     end;
     try
@@ -602,20 +601,19 @@ begin
         begin
           // do nothing
         end
-        else if FSplitter[0] = 'IEVT' then
+        else if AnsiSametext(FSplitter[0], 'IEVT') then
         begin
-          Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
-          IntThreeDReader := TInteger3DArrayReader.Create(LocalDim, Layered, FPackageType);
+          IntTwoDReader := TInteger2DArrayReader.Create(LocalDim, FPackageType);
           try
-            IntThreeDReader.Read(Stream, Unhandled);
-            IEVT := IntThreeDReader.FData;
+            IntTwoDReader.Read(Stream, Unhandled);
+            IEVT := IntTwoDReader.FData;
           finally
-            IntThreeDReader.Free;
+            IntTwoDReader.Free;
           end;
         end
-        else if FSplitter[0] = 'SURFACE' then
+        else if AnsiSametext(FSplitter[0], 'SURFACE') then
         begin
-          if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
+          if (FSplitter.Count >= 3) and AnsiSametext(FSplitter[1], 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
             SURFACE.TimeArraySeries := FSplitter[2];
@@ -633,9 +631,9 @@ begin
             end;
           end;
         end
-        else if FSplitter[0] = 'RATE' then
+        else if AnsiSametext(FSplitter[0], 'RATE') then
         begin
-          if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
+          if (FSplitter.Count >= 3) and AnsiSametext(FSplitter[1], 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
             RATE.TimeArraySeries := FSplitter[2];
@@ -653,9 +651,9 @@ begin
             end;
           end;
         end
-        else if FSplitter[0] = 'DEPTH' then
+        else if AnsiSametext(FSplitter[0], 'DEPTH') then
         begin
-          if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
+          if (FSplitter.Count >= 3) and AnsiSametext(FSplitter[1], 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
             DEPTH.TimeArraySeries := FSplitter[2];
@@ -673,10 +671,10 @@ begin
             end;
           end;
         end
-        else if FSplitter[0] = 'AUX' then
+        else if AnsiSametext(FSplitter[0], 'AUX') then
         begin
           AuxArray.Initialize;
-          if (FSplitter.Count >= 3) and (FSplitter[1] = 'TIMEARRAYSERIES') then
+          if (FSplitter.Count >= 3) and AnsiSametext(FSplitter[1], 'TIMEARRAYSERIES') then
           begin
             FSplitter.DelimitedText := CaseSensitiveLine;
             AuxArray.TimeArraySeries := FSplitter[2];
@@ -722,7 +720,7 @@ begin
           end
           else
           begin
-            Cell.Fcellid.Layer := IEVT[0, RowIndex, ColIndex];
+            Cell.Fcellid.Layer := IEVT[RowIndex, ColIndex];
           end;
           Cell.Fcellid.Row := RowIndex + 1;
           Cell.Fcellid.Column := ColIndex + 1;

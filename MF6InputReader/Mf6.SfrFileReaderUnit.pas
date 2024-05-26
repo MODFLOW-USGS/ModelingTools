@@ -621,7 +621,7 @@ begin
       begin
         // do nothing
       end
-      else if (FSplitter.Count >= 12) and (FSplitter[1] = 'NONE') then
+      else if (FSplitter.Count >= 12) and AnsiSametext(FSplitter[1], 'NONE') then
       begin
         if TryStrToInt(FSplitter[0],Item.Frno)
           and TryFortranStrToFloat(FSplitter[2],Item.Frlen)
@@ -827,8 +827,8 @@ begin
     end
     else if (FSplitter.Count >= 4)
       and TryStrToInt(FSplitter[0],Item.rno)
-      and (FSplitter[1] = 'TAB6')
-      and (FSplitter[2] = 'FILEIN')
+      and AnsiSameText(FSplitter[1], 'TAB6')
+      and AnsiSameText(FSplitter[2], 'FILEIN')
       then
     begin
       FSplitter.DelimitedText := CaseSensitiveLine;
