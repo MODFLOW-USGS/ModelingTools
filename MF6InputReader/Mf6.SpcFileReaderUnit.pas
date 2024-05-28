@@ -37,6 +37,7 @@ type
   TSpcTimeItemList = TList<TSpcTimeItem>;
   TSpcDictionary = TDictionary<Integer, TSpcTimeItem>;
   TSpcDictionaries = TObjectList<TSpcDictionary>;
+  TSpcTimeItemLists = TObjectList<TSpcTimeItemList>;
 
   TSpcPeriod = class(TCustomMf6Persistent)
   private

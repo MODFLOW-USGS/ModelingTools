@@ -70,6 +70,7 @@ type
     ValueType: TValueType;
     StringValue: string;
     NumericValue: Extended;
+    AuxName: string;
     procedure Initialize;
   end;
 
@@ -1811,6 +1812,7 @@ begin
   ValueType := vtNumeric;
   StringValue := '';
   NumericValue := 0;
+  AuxName := '';
 end;
 
 { TArrayItem }

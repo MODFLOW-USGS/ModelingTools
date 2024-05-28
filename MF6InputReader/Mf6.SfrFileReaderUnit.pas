@@ -108,7 +108,7 @@ type
   private
     FItems: TSfrPackageItemObjectList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
-      BOUNDNAMES: Boolean; Dimensions: TDimensions);
+      BOUNDNAMES: Boolean; Dimensions: TDimensions; Options: TSfrOptions);
     function GetCount: Integer;
     function GetItem(Index: Integer): TSfrPackageItem;
   protected
@@ -576,7 +576,7 @@ begin
 end;
 
 procedure TSfrPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-  naux: Integer; BOUNDNAMES: Boolean; Dimensions: TDimensions);
+  naux: Integer; BOUNDNAMES: Boolean; Dimensions: TDimensions; Options: TSfrOptions);
 var
   ALine: string;
   ErrorLine: string;
@@ -669,6 +669,7 @@ begin
               AValue.ValueType := vtString;
               AValue.StringValue := FSplitter[ItemStart]
             end;
+            AVAlue.AuxName := Options.AUXILIARY[AuxIndex];
             Item.Faux.Add(AVAlue);
             Inc(ItemStart);
           end;
@@ -1317,7 +1318,7 @@ begin
       else if FSplitter[1] ='PACKAGEDATA' then
       begin
         FPackageData.Read(Stream, Unhandled, FOptions.FAUXILIARY.Count,
-          FOptions.BOUNDNAMES, FDimensions);
+          FOptions.BOUNDNAMES, FDimensions, FOptions);
       end
       else if FSplitter[1] ='CROSSSECTIONS' then
       begin

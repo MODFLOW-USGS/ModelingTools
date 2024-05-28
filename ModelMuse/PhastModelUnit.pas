@@ -10254,12 +10254,13 @@ const
 //                the observation utility is not active.
 //    '5.2.0.11' bug fix: Fixed export of RCH package in MODFLOW 6 when objects
 //                are to be summed.
+//    '5.2.0.12' no real change.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.11';
+  IIModelVersion = '5.2.0.12';
 
 function IModelVersion: string;
 begin

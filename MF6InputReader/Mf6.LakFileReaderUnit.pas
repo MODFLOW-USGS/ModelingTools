@@ -83,7 +83,7 @@ type
   private
     FItems: TLakPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
-      BOUNDNAMES: Boolean);
+      BOUNDNAMES: Boolean; Options: TLakOptions);
     function GetItem(Index: Integer): TLakPackageItem;
     function GetCount: integer;
   protected
@@ -585,7 +585,7 @@ begin
 end;
 
 procedure TLakPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-  naux: Integer; BOUNDNAMES: Boolean);
+  naux: Integer; BOUNDNAMES: Boolean; Options: TLakOptions);
 var
   ALine: string;
   ErrorLine: string;
@@ -648,6 +648,7 @@ begin
             AValue.ValueType := vtString;
             AValue.StringValue := FSplitter[ItemStart]
           end;
+          AVAlue.AuxName := Options.AUXILIARY[AuxIndex];
           Item.Faux.Add(AVAlue);
           Inc(ItemStart);
         end;
@@ -1085,12 +1086,18 @@ begin
             SfrItem.StringValue := FSplitter[2]
           end;
         end
-        else if (SfrItem.Name = 'AUXILIARY')
-          and TryFortranStrToFloat(FSplitter[3], SfrItem.FloatValue)
-          then
+        else if (SfrItem.Name = 'AUXILIARY') then
         begin
           FSplitter.DelimitedText := CaseSensitiveLine;
-          SfrItem.AuxName := FSplitter[2];
+          if TryFortranStrToFloat(FSplitter[3], SfrItem.FloatValue) then
+          begin
+            SfrItem.AuxName := FSplitter[2];
+          end
+          else
+          begin
+            SfrItem.StringValue := FSplitter[3];
+            SfrItem.AuxName := FSplitter[2];
+          end;
         end
         else
         begin
@@ -1242,7 +1249,7 @@ begin
       else if FSplitter[1] ='PACKAGEDATA' then
       begin
         FPackageData.Read(Stream, Unhandled, FOptions.FAUXILIARY.Count,
-          FOptions.BOUNDNAMES);
+          FOptions.BOUNDNAMES, FOptions);
       end
       else if FSplitter[1] ='CONNECTIONDATA' then
       begin
