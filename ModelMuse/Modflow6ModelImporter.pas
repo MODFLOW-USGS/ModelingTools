@@ -6616,12 +6616,12 @@ var
   Ssm: TSsm;
   SpcList: TSpcList;
   SpcMaps: TimeSeriesMaps;
-  SpcDictionaries: TSpcDictionaries;
+//  SpcDictionaries: TSpcDictionaries;
   Spc: TSpc;
   SpcPeriod: TSpcPeriod;
   NextSpcPeriod: TSpcPeriod;
   EndPeriod: Integer;
-  SpcDictionary: TSpcDictionary;
+//  SpcDictionary: TSpcDictionary;
   SpcCell: TSpcTimeItem;
   TransportAuxIndex: Integer;
   ALakeSetting: TMf6BoundaryValue;
@@ -6654,7 +6654,6 @@ var
     NewTimeItem: TLakeTimeItem;
     ASetting: TNumberedItem;
     SettingIndex: Integer;
-    TimeSeriesName: string;
     OutletIndex: Integer;
     MfOutLet: TLakeOutlet;
     ImportOutlet: TMf6LakOutletItem;
@@ -6762,14 +6761,14 @@ var
           begin
             While TransportAuxIndex >= NewTimeItem.GwtStatus.Count do
             begin
-              NewStatus := NewTimeItem.GwtStatus.Add;
+              NewTimeItem.GwtStatus.Add;
             end;
             NewStatus := NewTimeItem.GwtStatus[TransportAuxIndex];
             NewStatus.GwtBoundaryStatus := gbsConstant;
 
             While TransportAuxIndex >= NewTimeItem.SpecifiedConcentrations.Count do
             begin
-              NewConcentration := NewTimeItem.SpecifiedConcentrations.Add;
+              NewTimeItem.SpecifiedConcentrations.Add;
             end;
             NewConcentration := NewTimeItem.SpecifiedConcentrations[TransportAuxIndex];
             NewConcentration.Value := GetFloatFormulaFromSetting(ASetting, Map);
@@ -6863,7 +6862,7 @@ var
         begin
           While TransportIndex >= NewTimeItem.GwtStatus.Count do
           begin
-            NewStatus := NewTimeItem.GwtStatus.Add;
+            NewTimeItem.GwtStatus.Add;
           end;
           NewStatus := NewTimeItem.GwtStatus[TransportIndex];
           if NewStatus.GwtBoundaryStatus in [gbsInactive, gbsConstant] then
@@ -6903,7 +6902,7 @@ var
           SpcTimeItem := SpcTimeItemList[0];
           While TransportIndex >= NewTimeItem.GwtStatus.Count do
           begin
-            NewStatus := NewTimeItem.GwtStatus.Add;
+            NewTimeItem.GwtStatus.Add;
           end;
           NewStatus := NewTimeItem.GwtStatus[TransportIndex];
           if NewStatus.GwtBoundaryStatus in [gbsInactive, gbsConstant] then
@@ -8093,7 +8092,7 @@ begin
   TransportAuxNames := TStringList.Create;
   SpcList := TSpcList.Create;
   SpcMaps := TimeSeriesMaps.Create;
-  SpcDictionaries := TSpcDictionaries.Create;
+//  SpcDictionaries := TSpcDictionaries.Create;
   try
     FillSpcList(SpcList, Package, TransportModels, SpcMaps);
     TransportAuxNames.CaseSensitive := False;
@@ -8457,20 +8456,20 @@ begin
         ALake.ClearTimeSettings;
       end;
 
-      for var SpcIndex := 0 to Length(LakMvrLinkList[PeriodIndex].SpcPeriods) - 1 do
-      begin
-        SpcPeriod := LakMvrLinkList[PeriodIndex].SpcPeriods[SpcIndex];
-        SpcDictionary := SpcDictionaries[SpcIndex];
-        if SpcDictionary <> nil then
-        begin
-          SpcDictionary.Clear;
-          for var CellIndex := 0 to SpcPeriod.Count - 1 do
-          begin
-            SpcCell := SpcPeriod[CellIndex];
-            SpcDictionary.Add(SpcCell.bndno, SpcCell);
-          end;
-        end;
-      end;
+//      for var SpcIndex := 0 to Length(LakMvrLinkList[PeriodIndex].SpcPeriods) - 1 do
+//      begin
+//        SpcPeriod := LakMvrLinkList[PeriodIndex].SpcPeriods[SpcIndex];
+//        SpcDictionary := SpcDictionaries[SpcIndex];
+//        if SpcDictionary <> nil then
+//        begin
+//          SpcDictionary.Clear;
+//          for var CellIndex := 0 to SpcPeriod.Count - 1 do
+//          begin
+//            SpcCell := SpcPeriod[CellIndex];
+//            SpcDictionary.Add(SpcCell.bndno, SpcCell);
+//          end;
+//        end;
+//      end;
 
       APeriod := LakMvrLinkList[PeriodIndex].LakPeriod;
       Period := LakMvrLinkList[PeriodIndex].Period;
@@ -8596,7 +8595,7 @@ begin
     TransportAuxNames.Free;
     SpcList.Free;
     SpcMaps.Free;
-    SpcDictionaries.Free;
+//    SpcDictionaries.Free;
   end;
 end;
 
@@ -8605,6 +8604,7 @@ Type
     MawPeriod: TMawPeriod;
     MvrPeriod: TMvrPeriod;
     MwtPeriods: TMwtPeriodArray;
+    SpcPeriods: TSpcPeriodArray;
     function Period: Integer;
     function SameContents(OtherLink: TMawMvrLink): Boolean;
     function HasData: Boolean;
@@ -8690,6 +8690,19 @@ var
   MwtNumberDictionary: TNumberDictionary;
   Genus: TGenus;
   MwtObs: TMwtObs;
+  TransportSpeciesNames: TStringList;
+  TransportAuxNames: TStringList;
+  SpcList: TSpcList;
+  SpcMaps: TimeSeriesMaps;
+  SpcDictionaries: TSpcDictionaries;
+  FoundMatch: Boolean;
+  Ssm: TSsm;
+  Spc: TSpc;
+  SpcPeriod: TSpcPeriod;
+  AuxIndex: Integer;
+  Aux: TMf6BoundaryValue;
+  SpcMap: TimeSeriesMap;
+  SpcTimeItem: TSpcTimeItem;
   procedure AssignObservations(ObsList: TObservationList; Mf6Obs: TModflow6Obs);
   var
     MawObs: TMawObs;
@@ -8853,7 +8866,45 @@ begin
   MwtNumberDictionaries := TNumberDictionaries.Create;
   MwtBoundNameDictionaries := TBoundNameDictionaries.Create;
   ListOfObsLists := TListOfObsLists.Create;
+  TransportSpeciesNames := TStringList.Create;
+  TransportAuxNames := TStringList.Create;
+  SpcList := TSpcList.Create;
+  SpcMaps := TimeSeriesMaps.Create;
+  SpcDictionaries := TSpcDictionaries.Create;
   try
+    FillSpcList(SpcList, Package, TransportModels, SpcMaps);
+    TransportAuxNames.CaseSensitive := False;
+    for var ModelIndex := 0 to TransportModels.Count - 1 do
+    begin
+      AModel := TransportModels[ModelIndex];
+      TransportModel := AModel.FName as TTransportNameFile;
+      for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+      begin
+        APackage := TransportModel.NfPackages[PackageIndex];
+        FoundMatch := False;
+        if APackage.FileType = 'SSM6' then
+        begin
+          Ssm := APackage.Package as TSsm;
+          for var SourceIndex := 0 to Ssm.Sources.Count - 1 do
+          begin
+            if SameText(Ssm.Sources[SourceIndex].pname, Package.PackageName) then
+            begin
+              FoundMatch := True;
+              TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+              TransportSpeciesNames.Add(TransportModel.SpeciesName);
+              break;
+            end;
+          end;
+          break;
+        end;
+      end;
+      if not FoundMatch then
+      begin
+        TransportAuxNames.Add('');
+        TransportSpeciesNames.Add(TransportModel.SpeciesName);
+      end;
+    end;
+
     FoundAny := False;
     for var ModelIndex := 0 to TransportModels.Count - 1 do
     begin
@@ -8948,7 +8999,7 @@ begin
       ListOfObsLists.Add(TObsLists.Create)
     end;
 
-    if (Mvr = nil) and (MwtList.Count = 0) then
+    if (Mvr = nil) and (MwtList.Count = 0) and (SpcList.Count = 0) then
     begin
       MawMvrLink.MvrPeriod := nil;
       SetLength(MawMvrLink.MwtPeriods, 0);
@@ -8966,6 +9017,7 @@ begin
         MawMvrLinkArray[StressPeriodIndex].MvrPeriod := nil;
         MawMvrLinkArray[StressPeriodIndex].MawPeriod := nil;
         SetLength(MawMvrLinkArray[StressPeriodIndex].MwtPeriods, MwtList.Count);
+        SetLength(MawMvrLinkArray[StressPeriodIndex].SpcPeriods, SpcList.Count);
       end;
 
       if Mvr <> nil then
@@ -8974,6 +9026,19 @@ begin
         begin
           MvrPeriod := Mvr.Periods[StressPeriodIndex];
           MawMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
+        end;
+      end;
+
+      for var TransportIndex := 0 to SpcList.Count - 1 do
+      begin
+        Spc := SpcList[TransportIndex];
+        if Spc <> nil then
+        begin
+          for StressPeriodIndex := 0 to Spc.PeriodCount - 1 do
+          begin
+            SpcPeriod := Spc.Periods[StressPeriodIndex];
+            MawMvrLinkArray[SpcPeriod.Period-1].SpcPeriods[TransportIndex] := SpcPeriod;
+          end;
         end;
       end;
 
@@ -9014,6 +9079,14 @@ begin
           begin
             MawMvrLinkArray[StressPeriodIndex].MwtPeriods[TransportIndex] :=
               MawMvrLinkArray[StressPeriodIndex-1].MwtPeriods[TransportIndex];
+          end;
+        end;
+        for var TransportIndex := 0 to SpcList.Count - 1 do
+        begin
+          if MawMvrLinkArray[StressPeriodIndex].SpcPeriods[TransportIndex] = nil then
+          begin
+            MawMvrLinkArray[StressPeriodIndex].SpcPeriods[TransportIndex] :=
+              MawMvrLinkArray[StressPeriodIndex-1].SpcPeriods[TransportIndex];
           end;
         end;
       end;
@@ -9139,6 +9212,46 @@ begin
         FErrorMessages.Add(Format('Unrecognized MAW conductance equation "%s".', [PackageItem.condeqn]));
       end;
 
+      for var TransportIndex := 0 to TransportAuxNames.Count - 1 do
+      begin
+        if TransportAuxNames[TransportIndex] <> '' then
+        begin
+          AuxIndex := Options.IndexOfAUXILIARY(TransportAuxNames[TransportIndex]);
+          if AuxIndex >= 0 then
+          begin
+            Aux := PackageItem.Aux[AuxIndex];
+            if ModflowMawBoundary.Values.Count > 0 then
+            begin
+              AnItem := AScreenObject.ModflowMawBoundary.Values[0] as TMawItem;
+            end
+            else
+            begin
+              AnItem := AScreenObject.ModflowMawBoundary.Values.Add as TMawItem;
+              AnItem.StartTime := Model.ModflowStressPeriods.First.StartTime;
+              AnItem.EndTime := Model.ModflowStressPeriods.First.EndTime;
+            end;
+            AnItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsConstant;
+            if Aux.ValueType = vtNumeric then
+            begin
+              AnItem.SpecifiedConcentrations[TransportIndex].Value :=
+                FortranFloattoStr(Aux.NumericValue);
+            end
+            else
+            begin
+              if Map.TryGetValue(UpperCase(Aux.StringValue), ImportedTimeSeriesName)  then
+              begin
+                AnItem.SpecifiedConcentrations[TransportIndex].Value :=
+                  ImportedTimeSeriesName;
+              end
+              else
+              begin
+                Assert(False);
+              end;
+            end;
+          end;
+        end;
+      end;
+
       BoundName := UpperCase(PackageItem.Boundname);
       if BoundNameObsDictionary.TryGetValue(BoundName, ObsList) then
       begin
@@ -9158,7 +9271,6 @@ begin
         end;
         AssignObservations(ObsList, AScreenObject.Modflow6Obs);
       end;
-
 
       Genus := [];
       for var TransportIndex := 0 to MwtList.Count - 1 do
@@ -9245,7 +9357,14 @@ begin
           PriorItem := WellItems[ObjectIndex];
           PriorItem.EndTime := StartTime;
         end;
-        AnItem := AScreenObject.ModflowMawBoundary.Values.Add as TMawItem;
+        if PeriodIndex < AScreenObject.ModflowMawBoundary.Values.Count then
+        begin
+          AnItem := AScreenObject.ModflowMawBoundary.Values[PeriodIndex] as TMawItem;
+        end
+        else
+        begin
+          AnItem := AScreenObject.ModflowMawBoundary.Values.Add as TMawItem;
+        end;
         if PriorItem <> nil then
         begin
           AnItem.Assign(PriorItem)
@@ -9349,13 +9468,68 @@ begin
         end
         else if AnsiSameText(ASetting.Name, 'AUXILIARY') then
         begin
-          // ignore
+          AuxIndex := TransportAuxNames.IndexOf(ASetting.AuxName);
+          if AuxIndex >= 0 then
+          begin
+            AnItem.GwtStatus[AuxIndex].GwtBoundaryStatus := gbsConstant;
+            if Aux.ValueType = vtNumeric then
+            begin
+              AnItem.SpecifiedConcentrations[AuxIndex].Value :=
+                FortranFloattoStr(ASetting.FloatValue);
+            end
+            else
+            begin
+              if Map.TryGetValue(UpperCase(ASetting.StringValue), ImportedTimeSeriesName)  then
+              begin
+                AnItem.SpecifiedConcentrations[AuxIndex].Value :=
+                  ImportedTimeSeriesName;
+              end
+              else
+              begin
+                Assert(False);
+              end;
+            end;
+          end;
         end
         else
         begin
           FErrorMessages.Add(Format('Unrecognized mawsetting "%s".', [ASetting.Name]))
         end;
       end;
+
+      for var TransportIndex := 0 to Length(MawMvrLink.SpcPeriods) - 1 do
+      begin
+        SpcPeriod := MawMvrLink.SpcPeriods[TransportIndex];
+        if SpcPeriod <> nil then
+        begin
+          SpcMap := SpcMaps[TransportIndex];
+          for SettingIndex := 0 to SpcPeriod.Count - 1 do
+          begin
+            SpcTimeItem := SpcPeriod[SettingIndex];
+            AnItem := WellItems[SpcTimeItem.bndno];
+            AnItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsConstant;
+            if SpcTimeItem.spcsetting.ValueType = vtNumeric then
+            begin
+              AnItem.SpecifiedConcentrations[AuxIndex].Value :=
+                FortranFloattoStr(SpcTimeItem.spcsetting.NumericValue);
+            end
+            else
+            begin
+              if SpcMap.TryGetValue(UpperCase(SpcTimeItem.spcsetting.StringValue),
+                ImportedTimeSeriesName) then
+              begin
+                AnItem.SpecifiedConcentrations[AuxIndex].Value :=
+                  ImportedTimeSeriesName;
+              end
+              else
+              begin
+                Assert(False);
+              end;
+            end;
+          end;
+        end;
+      end;
+
       for var TransportIndex := 0 to Length(MawMvrLink.MwtPeriods) - 1 do
       begin
         MwtPeriod := MawMvrLink.MwtPeriods[TransportIndex];
@@ -9506,6 +9680,11 @@ begin
     MwtNumberDictionaries.Free;
     MwtBoundNameDictionaries.Free;
     ListOfObsLists.Free;
+    TransportSpeciesNames.Free;
+    TransportAuxNames.Free;
+    SpcList.Free;
+    SpcMaps.Free;
+    SpcDictionaries.Free;
   end;
 
 end;
@@ -13068,6 +13247,7 @@ type
     SfrPeriod: TSfrPeriod;
     MvrPeriod: TMvrPeriod;
     SftPeriods: TSftPeriodArray;
+    SpcPeriods: TSpcPeriodArray;
     function Period: Integer;
     function SameContents(OtherLink: TSfrMvrLink): Boolean;
     function HasData: Boolean;
@@ -13193,6 +13373,23 @@ var
   ValidSfrSettings: TStringList;
   ValidSftSettings: TStringList;
   OutputControl: TModflowOutputControl;
+  TransportSpeciesNames: TStringList;
+  TransportAuxNames: TStringList;
+  SpcList: TSpcList;
+  SpcMaps: TimeSeriesMaps;
+  SpcDictionaries: TSpcDictionaries;
+  Spc: TSpc;
+  SpcPeriod: TSpcPeriod;
+  NextSpcPeriod: TSpcPeriod;
+  EndPeriod: Integer;
+  FoundMatch: Boolean;
+  Ssm: TSsm;
+  SpcPeriodSettingsList: TListOfSpcTimeItemLists;
+  SpcPeriodSettings: TSpcTimeItemLists;
+  SpcSetingList: TSpcTimeItemList;
+  TransportAuxIndex: Integer;
+  TransportAuxValues: TMf6BoundaryValueArray;
+  SpcMap: TimeSeriesMap;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -13205,6 +13402,38 @@ var
       or (SfrReachInfo.IdObs <> nil) then
     begin
       AReachList.Terminated := True;
+    end;
+  end;
+  procedure UpdateSpcReachSettings(AReachList: TSfrReachInfoList; ASettingList: TSpcTimeItemList;
+    var BoundaryValues: TMf6BoundaryValueArray; const Key: string; AuxName: string = '');
+  var
+    ASetting: TSpcTimeItem;
+    AMf6BoundaryValue: TMf6BoundaryValue;
+  begin
+    for var ReachIndex := 0 to AReachList.Count - 1 do
+    begin
+      for var SettingIndex := 0 to ASettingList.Count - 1 do
+      begin
+        ASetting := ASettingList[SettingIndex];
+//        if AnsiSameText(ASetting.spcsetting.Name, Key) then
+        begin
+//          if (AuxName = '') or AnsiSameText(ASetting.AuxName, AuxName)  then
+          begin
+            AMf6BoundaryValue.StringValue := ASetting.spcsetting.StringValue;
+            AMf6BoundaryValue.NumericValue := ASetting.spcsetting.NumericValue;
+            if AMf6BoundaryValue.StringValue <> '' then
+            begin
+              AMf6BoundaryValue.ValueType := vtString;
+            end
+            else
+            begin
+              AMf6BoundaryValue.ValueType := vtNumeric;
+            end;
+            BoundaryValues[ReachIndex]  := AMf6BoundaryValue;
+            break;
+          end;
+        end;
+      end;
     end;
   end;
   procedure UpdateReachSettings(AReachList: TSfrReachInfoList; ASettingList: TNumberedItemLists;
@@ -13558,6 +13787,50 @@ var
     end;
     SfrBoundary.HydraulicConductivity := RealValuesToFormula(Values, 'ReachK', result);
 
+    for var TransportIndex := 0 to TransportAuxNames.Count - 1 do
+    begin
+      if TransportAuxNames[TransportIndex] <> '' then
+      begin
+        TransportAuxIndex := Options.IndexOfAUXILIARY(TransportAuxNames[TransportIndex]);
+        SetLength(TransportAuxValues, AReachList.Count);
+
+        for CellIndex := 0 to AReachList.Count - 1 do
+        begin
+          TransportAuxValues[CellIndex] := AReachList[CellIndex].PackageData.Aux[TransportAuxIndex]
+        end;
+
+        if SfrBoundary.Values.Count > 0 then
+        begin
+          SfrItem := SfrBoundary.Values[0] as TSfrMf6Item;
+        end
+        else
+        begin
+          SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
+          SfrItem.StartTime := Model.ModflowStressPeriods.First.StartTime;
+          SfrItem.EndTime := Model.ModflowStressPeriods.Last.EndTime;
+        end;
+        SfrItem.SpecifiedConcentrations[TransportIndex].Value :=
+          BoundaryValuesToFormula(TransportAuxValues,
+            Format('%s_%d', [TransportSpeciesNames[TransportIndex], TransportIndex]),
+            Map, result);
+        SfrItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsConstant;
+      end
+      else
+      begin
+        if SfrBoundary.Values.Count > 0 then
+        begin
+          SfrItem := SfrBoundary.Values[0] as TSfrMf6Item;
+        end
+        else
+        begin
+          SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
+          SfrItem.StartTime := Model.ModflowStressPeriods.First.StartTime;
+          SfrItem.EndTime := Model.ModflowStressPeriods.Last.EndTime;
+        end;
+        SfrItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsInactive;
+      end;
+    end;
+
     for var TransportIndex := 0 to SftList.Count - 1 do
     begin
       for CellIndex := 0 to AReachList.Count - 1 do
@@ -13644,7 +13917,14 @@ var
       APeriod := SfrMvrLink.SfrPeriod;
       ASettingList := PeriodSettings[PeriodIndex];
 
-      SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
+      if PeriodIndex >= SfrBoundary.Values.Count then
+      begin
+        SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
+      end
+      else
+      begin
+        SfrItem := SfrBoundary.Values[PeriodIndex] as TSfrMf6Item;
+      end;
 
       StartTime := Model.ModflowStressPeriods[SfrMvrLink.Period-1].StartTime;
       SfrItem.StartTime := StartTime;
@@ -13731,11 +14011,22 @@ var
       SfrItem.Runoff := BoundaryValuesToFormula(RunoffBoundaryValues,
         Format('Runoff_%d', [SfrMvrLink.Period]), Map, result);
 
+      for var TransportIndex := 0 to SpcList.Count - 1 do
+      begin
+        SpcPeriodSettings := SpcPeriodSettingsList[TransportIndex];
+        SpcSetingList  := SpcPeriodSettings[PeriodIndex];
+
+        UpdateSpcReachSettings(AReachList, SpcSetingList, SftCONCENTRATION[TransportIndex], 'CONCENTRATION');
+        SfrItem.SpecifiedConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftCONCENTRATION[TransportIndex],
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+      end;
+
       for var TransportIndex := 0 to SftList.Count - 1 do
       begin
         SftPeriodSettings := SftPeriodSettingsList[TransportIndex];
         SftSetingList  := SftPeriodSettings[PeriodIndex];
         AReachSettingsList := SftSetingList[AReachList[0].PackageData.rno-1];
+
 
         for SettingIndex := 0 to AReachSettingsList.Count - 1 do
         begin
@@ -13760,23 +14051,23 @@ var
 
         UpdateReachSettings(AReachList, SftSetingList, SftCONCENTRATION[TransportIndex], 'CONCENTRATION');
         SfrItem.SpecifiedConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftCONCENTRATION[TransportIndex],
-          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), SftMaps[TransportIndex], result);
 
         UpdateReachSettings(AReachList, SftSetingList, SftRAINFALL[TransportIndex], 'RAINFALL');
         SfrItem.RainfallConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftRAINFALL[TransportIndex],
-          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), SftMaps[TransportIndex], result);
 
         UpdateReachSettings(AReachList, SftSetingList, SftEVAPORATION[TransportIndex], 'EVAPORATION');
         SfrItem.EvapConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftEVAPORATION[TransportIndex],
-          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), SftMaps[TransportIndex], result);
 
         UpdateReachSettings(AReachList, SftSetingList, SftRUNOFF[TransportIndex], 'RUNOFF');
         SfrItem.RunoffConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftRUNOFF[TransportIndex],
-          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), SftMaps[TransportIndex], result);
 
         UpdateReachSettings(AReachList, SftSetingList, SftINFLOW[TransportIndex], 'INFLOW');
         SfrItem.InflowConcentrations[TransportIndex].Value := BoundaryValuesToFormula(SftINFLOW[TransportIndex],
-          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), Map, result);
+          Format('Concentration_Chem_%d_Period_%d', [TransportIndex+1, SfrMvrLink.Period]), SftMaps[TransportIndex], result);
 
       end;
     end;
@@ -14039,7 +14330,47 @@ begin
   ListOfObsLists := TListOfObsLists.Create;
   ValidSfrSettings := TStringList.Create;
   ValidSftSettings := TStringList.Create;
+  TransportSpeciesNames := TStringList.Create;
+  TransportAuxNames := TStringList.Create;
+  SpcList := TSpcList.Create;
+  SpcMaps := TimeSeriesMaps.Create;
+  SpcDictionaries := TSpcDictionaries.Create;
+  SpcPeriodSettingsList := TListOfSpcTimeItemLists.Create;
   try
+    TransportAuxNames.CaseSensitive := False;
+
+    for var ModelIndex := 0 to TransportModels.Count - 1 do
+    begin
+      AModel := TransportModels[ModelIndex];
+      TransportModel := AModel.FName as TTransportNameFile;
+      for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+      begin
+        APackage := TransportModel.NfPackages[PackageIndex];
+        FoundMatch := False;
+        if APackage.FileType = 'SSM6' then
+        begin
+          Ssm := APackage.Package as TSsm;
+          for var SourceIndex := 0 to Ssm.Sources.Count - 1 do
+          begin
+            if SameText(Ssm.Sources[SourceIndex].pname, Package.PackageName) then
+            begin
+              FoundMatch := True;
+              TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+              TransportSpeciesNames.Add(TransportModel.SpeciesName);
+              break;
+            end;
+          end;
+          break;
+        end;
+      end;
+      if not FoundMatch then
+      begin
+        TransportAuxNames.Add('');
+        TransportSpeciesNames.Add(TransportModel.SpeciesName);
+      end;
+    end;
+
+    ValidSfrSettings.CaseSensitive := False;
     ValidSfrSettings.Add('STATUS');
     ValidSfrSettings.Add('MANNING');
     ValidSfrSettings.Add('STAGE');
@@ -14052,6 +14383,7 @@ begin
     ValidSfrSettings.Add('CROSS_SECTION');
     ValidSfrSettings.Add('AUXILIARY');
 
+    ValidSftSettings.CaseSensitive := False;
     ValidSftSettings.Add('STATUS');
     ValidSftSettings.Add('CONCENTRATION');
     ValidSftSettings.Add('RAINFALL');
@@ -14059,6 +14391,19 @@ begin
     ValidSftSettings.Add('RUNOFF');
     ValidSftSettings.Add('INFLOW');
     ValidSftSettings.Add('AUXILIARY');
+
+    FillSpcList(SpcList, Package, TransportModels, SpcMaps);
+    for var SpcIndex := 0 to SpcList.Count - 1 do
+    begin
+      if SpcList[SpcIndex] <> nil then
+      begin
+        SpcDictionaries.Add(TSpcDictionary.Create);
+      end
+      else
+      begin
+        SpcDictionaries.Add(nil);
+      end;
+    end;
 
     FoundAny := False;
     for var ModelIndex := 0 to TransportModels.Count - 1 do
@@ -14145,7 +14490,7 @@ begin
       ListOfObsLists.Add(TObsLists.Create)
     end;
 
-    if (Mvr = nil) and (SftList.Count = 0) then
+    if (Mvr = nil) and (SftList.Count = 0) and (SpcList.Count = 0) then
     begin
       SfrMvrLink.MvrPeriod := nil;
       SetLength(SfrMvrLink.SftPeriods, 0);
@@ -14163,6 +14508,7 @@ begin
         SfrMvrLinkArray[StressPeriodIndex].MvrPeriod := nil;
         SfrMvrLinkArray[StressPeriodIndex].SfrPeriod := nil;
         SetLength(SfrMvrLinkArray[StressPeriodIndex].SftPeriods, SftList.Count);
+        SetLength(SfrMvrLinkArray[StressPeriodIndex].SpcPeriods, SpcList.Count)
       end;
 
       if Mvr <> nil then
@@ -14172,6 +14518,31 @@ begin
           MvrPeriod := Mvr.Periods[StressPeriodIndex];
           SfrMvrLinkArray[MvrPeriod.Period-1].MvrPeriod := MvrPeriod;
           IdentifySourcesAndReceivers(MvrPeriod);
+        end;
+      end;
+
+      for var SpcIndex := 0 to SpcList.Count - 1 do
+      begin
+        Spc := SpcList[SpcIndex];
+        if Spc <> nil then
+        begin
+          for PeriodIndex := 0 to Spc.PeriodCount - 1 do
+          begin
+            SpcPeriod := Spc.Periods[PeriodIndex];
+            if PeriodIndex < Spc.PeriodCount - 1 then
+            begin
+              NextSpcPeriod := Spc.Periods[PeriodIndex+1];
+              EndPeriod := NextSpcPeriod.Period;
+            end
+            else
+            begin
+              EndPeriod := Model.ModflowStressPeriods.Count;
+            end;
+            for Index := SpcPeriod.Period to EndPeriod do
+            begin
+              SfrMvrLinkArray[Index-1].SpcPeriods[SpcIndex] := SpcPeriod;
+            end;
+          end;
         end;
       end;
 
@@ -14212,6 +14583,14 @@ begin
           begin
             SfrMvrLinkArray[StressPeriodIndex].SftPeriods[TransportIndex] :=
               SfrMvrLinkArray[StressPeriodIndex-1].SftPeriods[TransportIndex];
+          end;
+        end;
+        for var TransportIndex := 0 to SpcList.Count - 1 do
+        begin
+          if SfrMvrLinkArray[StressPeriodIndex].SpcPeriods[TransportIndex] = nil then
+          begin
+            SfrMvrLinkArray[StressPeriodIndex].SpcPeriods[TransportIndex] :=
+              SfrMvrLinkArray[StressPeriodIndex-1].SpcPeriods[TransportIndex];
           end;
         end;
       end;
@@ -14503,7 +14882,7 @@ begin
               for SettingIndex := 0 to APeriod.Count - 1 do
               begin
                 ASetting := APeriod[SettingIndex];
-                Assert(ValidSfrSettings.IndexOf(UpperCase(ASetting.Name))>=0);
+                Assert(ValidSfrSettings.IndexOf(ASetting.Name)>=0);
                 AReachSettingsList := ASettingList[ASetting.IdNumber-1];
                 AReachSettingsList.Add(ASetting);
               end;
@@ -14514,14 +14893,12 @@ begin
               SftPeriod := SfrMvrLinkList[PeriodIndex].SftPeriods[TransportIndex];
               if SftPeriod <> nil then
               begin
-//                SftPeriodSettings: TPeriodSettings;
-
                 SftPeriodSettings := SftPeriodSettingsList[TransportIndex];
                 SftSetingList  := SftPeriodSettings.Last;
                 for SettingIndex := 0 to SftPeriod.Count - 1 do
                 begin
                   ASetting := SftPeriod[SettingIndex];
-                  Assert(ValidSftSettings.IndexOf(UpperCase(ASetting.Name))>=0);
+                  Assert(ValidSftSettings.IndexOf(ASetting.Name)>=0);
                   AReachSettingsList := SftSetingList[ASetting.IdNumber-1];
                   AReachSettingsList.Add(ASetting);
                 end;
@@ -14622,7 +14999,7 @@ begin
                   for SettingIndex := 0 to AReachSettingsList.Count - 1 do
                   begin
                     ASetting := AReachSettingsList[SettingIndex];
-                    Assert(ValidSfrSettings.IndexOf(UpperCase(ASetting.Name)) >= 0);
+                    Assert(ValidSfrSettings.IndexOf(ASetting.Name) >= 0);
                     if AnsiSameText(ASetting.Name, 'STATUS') then
                     begin
                       StringValues[ReachIndex] := ASetting.StringValue;
@@ -14651,7 +15028,7 @@ begin
                   for SettingIndex := 0 to AReachSettingsList.Count - 1 do
                   begin
                     ASetting := AReachSettingsList[SettingIndex];
-                    Assert(ValidSfrSettings.IndexOf(UpperCase(ASetting.Name)) >= 0);
+                    Assert(ValidSfrSettings.IndexOf(ASetting.Name) >= 0);
                     if AnsiSameText(ASetting.Name, 'CROSS_SECTION') then
                     begin
                       StringValues[ReachIndex] := ASetting.StringValue;
@@ -14784,6 +15161,20 @@ begin
                   if DefaultFormula = '' then
                   begin
                     SplitReachListWithBoundaryValues(AReachList, AuxArrays[AuxIndex]);
+                  end;
+                end;
+
+                for var TransportIndex := 0 to SpcList.Count - 1 do
+                begin
+                  if SpcList[TransportIndex] <> nil then
+                  begin
+                    SpcPeriod :=  SfrMvrLinkArray[PeriodIndex].SpcPeriods[TransportIndex];
+                    SpcMap := SpcMaps[TransportIndex];
+
+                  end
+                  else
+                  begin
+
                   end;
                 end;
 
@@ -15111,6 +15502,12 @@ begin
     ListOfObsLists.Free;
     ValidSfrSettings.Free;
     ValidSftSettings.Free;
+    TransportSpeciesNames.Free;
+    TransportAuxNames.Free;
+    SpcList.Free;
+    SpcMaps.Free;
+    SpcDictionaries.Free;
+    SpcPeriodSettingsList.Free;
   end;
 
 end;
@@ -16569,11 +16966,23 @@ type
   end;
   TImportUzfPeriodItemList = TList<TImportUzfPeriodItem>;
 
+  TImportSpcPeriodItem = record
+    PeriodData: TSpcTimeItem;
+    Period: Integer;
+    function Compatible(Item: TImportSpcPeriodItem): Boolean;
+  end;
+
+  TImportSpcPeriodItemList = TList<TImportSpcPeriodItem>;
+  TImportSpcPeriodItemLists = TObjectList<TImportSpcPeriodItemList>;
+
   TImportUztPeriodItem = record
     PeriodData: TNumberedItem;
     Period: Integer;
     function Compatible(Item: TImportUztPeriodItem): Boolean;
   end;
+
+  TImportUztPeriodItemList = TList<TImportUztPeriodItem>;
+  TImportUztPeriodItemLists = TObjectList<TImportUztPeriodItemList>;
 
   TUztPeriodItemList = Class(TNumberedItemList)
     Function ConvertToFormula(Name: string; Map: TimeSeriesMap;
@@ -16597,6 +17006,7 @@ type
     UztIdObs: TObservationLists;
     UztPackageItemArray: TUztPackageItemArray;
     FTransportSettings: TTransportSettings;
+    FSpcPeriodData: TImportSpcPeriodItemLists;
   public
     constructor Create;
     destructor Destroy; override;
@@ -16612,6 +17022,7 @@ type
     UzfPeriod: TUzfPeriod;
     MvrPeriod: TMvrPeriod;
     UztPeriods: TUztPeriodArray;
+    SpcPeriods: TSpcPeriodArray;
     function Period: Integer;
     function SameContents(OtherLink: TUzfMvrLink): Boolean;
     function HasData: Boolean;
@@ -16642,6 +17053,7 @@ var
   PackageItem: TUzfPackageItem;
   CellIndex: Integer;
   UzfDataItem: TUzfData;
+  FirstUzfDataItem: TUzfData;
   PeriodIndex: Integer;
   UzfPeriodItem: TUzfPeriodItem;
   ImportUzfPeriodItem: TImportUzfPeriodItem;
@@ -16712,6 +17124,19 @@ var
   MultIndex: Integer;
   Aux: TMf6BoundaryValue;
   IFACE: Integer;
+  TransportSpeciesNames: TStringList;
+  TransportAuxNames: TStringList;
+  SpcList: TSpcList;
+  SpcMaps: TimeSeriesMaps;
+  SpcDictionaries: TSpcDictionaries;
+  SpcPeriodSettingsList: TListOfSpcTimeItemLists;
+  FoundMatch: Boolean;
+  Ssm: TSsm;
+  Spc: TSpc;
+  SpcPeriod: TSpcPeriod;
+  SpcTimeItem: TSpcTimeItem;
+  ImportSpcPeriodItem: TImportSpcPeriodItem;
+  AuxIndex: Integer;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
     ItemIndex: Integer;
@@ -16733,7 +17158,9 @@ var
       end;
     end;
   end;
-  function BoundaryValueToFormula(Value: TMf6BoundaryValue): string;
+  function BoundaryValueToFormula(Value: TMf6BoundaryValue; Map: TimeSeriesMap): string;
+  var
+    ImportedTimeSeries: string;
   begin
     if Value.ValueType = vtNumeric then
     begin
@@ -16741,7 +17168,16 @@ var
     end
     else
     begin
-      result := Value.StringValue;
+      if Map.TryGetValue(UpperCase(Value.StringValue), ImportedTimeSeries) then
+      begin
+        result := ImportedTimeSeries;
+      end
+      else
+      begin
+        result := '';
+        Assert(False);
+      end;
+
     end;
   end;
   function NumberedItemToFormula(Value: TNumberedItem; Map: TimeSeriesMap): string;
@@ -16995,7 +17431,59 @@ begin
   UztNumberDictionaries := TNumberDictionaries.Create;
   UztBoundNameDictionaries := TBoundNameDictionaries.Create;
   ListOfObsLists := TListOfObsLists.Create;
+  TransportSpeciesNames := TStringList.Create;
+  TransportAuxNames := TStringList.Create;
+  SpcList := TSpcList.Create;
+  SpcMaps := TimeSeriesMaps.Create;
+  SpcDictionaries := TSpcDictionaries.Create;
+  SpcPeriodSettingsList := TListOfSpcTimeItemLists.Create;
   try
+    TransportAuxNames.CaseSensitive := False;
+
+    for var ModelIndex := 0 to TransportModels.Count - 1 do
+    begin
+      AModel := TransportModels[ModelIndex];
+      TransportModel := AModel.FName as TTransportNameFile;
+      for var PackageIndex := 0 to TransportModel.NfPackages.Count  - 1 do
+      begin
+        APackage := TransportModel.NfPackages[PackageIndex];
+        FoundMatch := False;
+        if APackage.FileType = 'SSM6' then
+        begin
+          Ssm := APackage.Package as TSsm;
+          for var SourceIndex := 0 to Ssm.Sources.Count - 1 do
+          begin
+            if SameText(Ssm.Sources[SourceIndex].pname, Package.PackageName) then
+            begin
+              FoundMatch := True;
+              TransportAuxNames.Add(Ssm.Sources[SourceIndex].auxname);
+              TransportSpeciesNames.Add(TransportModel.SpeciesName);
+              break;
+            end;
+          end;
+          break;
+        end;
+      end;
+      if not FoundMatch then
+      begin
+        TransportAuxNames.Add('');
+        TransportSpeciesNames.Add(TransportModel.SpeciesName);
+      end;
+    end;
+
+    FillSpcList(SpcList, Package, TransportModels, SpcMaps);
+    for var SpcIndex := 0 to SpcList.Count - 1 do
+    begin
+      if SpcList[SpcIndex] <> nil then
+      begin
+        SpcDictionaries.Add(TSpcDictionary.Create);
+      end
+      else
+      begin
+        SpcDictionaries.Add(nil);
+      end;
+    end;
+
     FoundAny := False;
     for var ModelIndex := 0 to TransportModels.Count - 1 do
     begin
@@ -17106,14 +17594,14 @@ begin
       end;
     end;
 
-    if (Mvr = nil) and (UztList.Count = 0) then
+    if (Mvr = nil) and (UztList.Count = 0) and (SpcList.Count = 0) then
     begin
       UzfMvrLink.MvrPeriod := nil;
       for StressPeriodIndex := 0 to Uzf.PeriodCount - 1 do
       begin
         UzfMvrLink.UzfPeriod := Uzf.Periods[StressPeriodIndex];
-        SetLength(UzfMvrLink.UztPeriods, 0);
         UzfMvrLinkList.Add(UzfMvrLink);
+        SetLength(UzfMvrLink.UztPeriods, 0);
       end;
     end
     else
@@ -17124,6 +17612,7 @@ begin
         UzfMvrLinkArray[StressPeriodIndex].MvrPeriod := nil;
         UzfMvrLinkArray[StressPeriodIndex].UzfPeriod := nil;
         SetLength(UzfMvrLinkArray[StressPeriodIndex].UztPeriods, UztList.Count);
+        SetLength(UzfMvrLinkArray[StressPeriodIndex].SpcPeriods, SpcList.Count);
       end;
       if Mvr <> nil then
       begin
@@ -17138,6 +17627,19 @@ begin
       begin
         UzfPeriod := Uzf.Periods[StressPeriodIndex];
         UzfMvrLinkArray[UzfPeriod.Period-1].UzfPeriod := UzfPeriod;
+      end;
+
+      for var TransportIndex := 0 to SpcList.Count - 1 do
+      begin
+        Spc := SpcList[TransportIndex];
+        if Spc <> nil then
+        begin
+          for StressPeriodIndex := 0 to Spc.PeriodCount - 1 do
+          begin
+            SpcPeriod := Spc.Periods[StressPeriodIndex];
+            UzfMvrLinkArray[SpcPeriod.Period-1].SpcPeriods[TransportIndex] := SpcPeriod;
+          end;
+        end;
       end;
 
       for var TransportIndex := 0 to UztList.Count - 1 do
@@ -17160,11 +17662,22 @@ begin
           UzfMvrLinkArray[StressPeriodIndex].UzfPeriod := 
             UzfMvrLinkArray[StressPeriodIndex-1].UzfPeriod;
         end;
+
         if UzfMvrLinkArray[StressPeriodIndex].MvrPeriod = nil then
         begin
           UzfMvrLinkArray[StressPeriodIndex].MvrPeriod := 
             UzfMvrLinkArray[StressPeriodIndex-1].MvrPeriod;
         end;
+
+        for var TransportIndex := 0 to SpcList.Count - 1 do
+        begin
+          if UzfMvrLinkArray[StressPeriodIndex].SpcPeriods[TransportIndex] = nil then
+          begin
+            UzfMvrLinkArray[StressPeriodIndex].SpcPeriods[TransportIndex] :=
+              UzfMvrLinkArray[StressPeriodIndex-1].SpcPeriods[TransportIndex];
+          end;
+        end;
+
         for var TransportIndex := 0 to UztList.Count - 1 do
         begin
           if UzfMvrLinkArray[StressPeriodIndex].UztPeriods[TransportIndex] = nil then
@@ -17199,6 +17712,17 @@ begin
     begin
       PackageItem := Uzf.PackageData[CellIndex];
       UzfDataItem := TUzfData.Create;
+      for var TransportIndex := 0 to SpcList.Count - 1 do
+      begin
+        if SpcList[TransportIndex] = nil then
+        begin
+          UzfDataItem.FSpcPeriodData.Add(nil);
+        end
+        else
+        begin
+          UzfDataItem.FSpcPeriodData.Add(TImportSpcPeriodItemList.Create);
+        end;
+      end;
       UzfDataItem.SetTransportCounts(UzfMvrLinkList.Count, UztList.Count);
       UzfDataItem.MvrSource := UzfSources.IndexOf(PackageItem.iuzno) >= 0;
       RIndex := UzfReceivers.IndexOf(PackageItem.iuzno);
@@ -17274,6 +17798,24 @@ begin
         UzfDataItem.PeriodData.Add(ImportUzfPeriodItem);
       end;
 
+      for var TransportIndex := 0 to SpcList.Count - 1 do
+      begin
+        SpcPeriod := UzfMvrLinkList[PeriodIndex].SpcPeriods[TransportIndex];
+        if SpcPeriod <> nil then
+        begin
+          for CellIndex := 0 to SpcPeriod.Count - 1 do
+          begin
+            SpcTimeItem := SpcPeriod[CellIndex];
+            UzfDataItem := UzfData[SpcTimeItem.bndno-1];
+
+            ImportSpcPeriodItem.Period := Period;
+            ImportSpcPeriodItem.PeriodData := SpcTimeItem;
+
+            UzfDataItem.FSpcPeriodData[TransportIndex].Add(ImportSpcPeriodItem);
+          end;
+        end;
+      end;
+
       for var TransportIndex := 0 to UztList.Count - 1 do
       begin
         UztPeriod := UzfMvrLinkList[PeriodIndex].UztPeriods[TransportIndex];
@@ -17283,7 +17825,7 @@ begin
           begin
             UztPeriodItem := UztPeriod[CellIndex];
             UzfDataItem := UzfData[UztPeriodItem.IdNumber-1];
-            
+
             ImportUztPeriodItem.Period := Period;
             ImportUztPeriodItem.PeriodData := UztPeriodItem;
 
@@ -17437,20 +17979,16 @@ begin
             UzfMf6Item.StartTime := StartTime;
             UzfMf6Item.EndTime := EndTime;
           end;
-          UzfMf6Item.Infiltration := BoundaryValueToFormula(PData.finf);
-          UzfMf6Item.ExtinctionDepth := BoundaryValueToFormula(PData.extdp);
-          UzfMf6Item.ExtinctionWaterContent := BoundaryValueToFormula(PData.extwc);
-          UzfMf6Item.AirEntryPotential := BoundaryValueToFormula(PData.ha);
-          UzfMf6Item.RootPotential := BoundaryValueToFormula(PData.hroot);
-          UzfMf6Item.RootActivity := BoundaryValueToFormula(PData.rootact);
+          UzfMf6Item.Infiltration := BoundaryValueToFormula(PData.finf, Map);
+          UzfMf6Item.ExtinctionDepth := BoundaryValueToFormula(PData.extdp, Map);
+          UzfMf6Item.ExtinctionWaterContent := BoundaryValueToFormula(PData.extwc, Map);
+          UzfMf6Item.AirEntryPotential := BoundaryValueToFormula(PData.ha, Map);
+          UzfMf6Item.RootPotential := BoundaryValueToFormula(PData.hroot, Map);
+          UzfMf6Item.RootActivity := BoundaryValueToFormula(PData.rootact, Map);
           if MultIndex >= 0 then
           begin
             Aux := PData.Aux[MultIndex];
-            UzfMf6Item.Multiplier := BoundaryValueToFormula(Aux);
-          end;
-          if IFaceIndex >= 0 then
-          begin
-
+            UzfMf6Item.Multiplier := BoundaryValueToFormula(Aux, Map);
           end;
           if IfaceIndex >= 0 then
           begin
@@ -17464,6 +18002,27 @@ begin
           end;
           AScreenObject.IFACE := TIface(IFACE+2);
 
+          for var TransportIndex := 0 to TransportAuxNames.Count - 1 do
+          begin
+            AuxIndex := Options.IndexOfAux(TransportAuxNames[TransportIndex]);
+            if AuxIndex >= 0 then
+            begin
+              Aux := PData.Aux[AuxIndex];
+              UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsConstant;
+              UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value := BoundaryValueToFormula(Aux, Map);
+            end;
+          end;
+
+          for var TransportIndex := 0 to UzfDataItem.FSpcPeriodData.Count - 1 do
+          begin
+            if UzfDataItem.FSpcPeriodData[TransportIndex] <> nil then
+            begin
+              ImportSpcPeriodItem := UzfDataItem.FSpcPeriodData[TransportIndex][PeriodIndex];
+              UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsConstant;
+              UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value := 
+                BoundaryValueToFormula(ImportSpcPeriodItem.PeriodData.spcsetting, SpcMaps[TransportIndex]);
+            end;
+          end;
 
           for var TransportIndex := 0 to length(UzfDataItem.FTransportSettings[PeriodIndex]) - 1 do
           begin
@@ -17476,15 +18035,15 @@ begin
                   begin
                     if AnsiSameText(UztItem.StringValue, 'ACTIVE') then
                     begin
-                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsActive;
+                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsActive;
                     end
                     else if AnsiSameText(UztItem.StringValue, 'INACTIVE') then
                     begin
-                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsInactive;
+                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsInactive;
                     end
                     else if AnsiSameText(UztItem.StringValue, 'CONSTANT') then
                     begin
-                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsConstant;
+                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsConstant;
                     end
                     else
                     begin
@@ -17701,6 +18260,48 @@ begin
             Format('Imported_rootact_SP%d', [ImportedUzfPeriodItem.Period]),
             Map, AScreenObject);
 
+          for var TransportIndex := 0 to TransportAuxNames.Count - 1 do
+          begin
+            AuxIndex := Options.IndexOfAux(TransportAuxNames[TransportIndex]);
+            if AuxIndex >= 0 then
+            begin
+              for CellIndex := 0 to MergedList.Count - 1 do
+              begin
+                UzfDataItem := MergedList[CellIndex];
+                ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+                PData := ImportedUzfPeriodItem.PeriodData;
+                BoundaryValueArray[CellIndex] := PData.aux[AuxIndex]
+              end;
+              UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value := 
+                BoundaryValuesToFormula(BoundaryValueArray,
+                Format('Imported_%s _SP%d', 
+                [TransportSpeciesNames[TransportIndex], ImportedUzfPeriodItem.Period]),
+                Map, AScreenObject);
+
+              UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsConstant;            
+            end;
+          end;
+
+          for var TransportIndex := 0 to SpcList.Count - 1 do
+          begin
+            FirstUzfDataItem := MergedList[0];
+            if FirstUzfDataItem.FSpcPeriodData[TransportIndex] <> nil then
+            begin
+              for CellIndex := 0 to MergedList.Count - 1 do
+              begin
+                UzfDataItem := MergedList[CellIndex]; 
+                ImportSpcPeriodItem := UzfDataItem.FSpcPeriodData[TransportIndex][PeriodIndex];
+                BoundaryValueArray[CellIndex] := ImportSpcPeriodItem.PeriodData.spcsetting;
+              end;
+              UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value := 
+                BoundaryValuesToFormula(BoundaryValueArray,
+                Format('Imported_%s _SP%d', 
+                [TransportSpeciesNames[TransportIndex], ImportedUzfPeriodItem.Period]),
+                Map, AScreenObject);
+
+              UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsConstant;            
+            end;
+          end;
 
           for var TransportIndex := 0 to length(UzfDataItem.FTransportSettings[PeriodIndex]) - 1 do
           begin
@@ -17904,6 +18505,12 @@ begin
     UztNumberDictionaries.Free;
     UztBoundNameDictionaries.Free;
     ListOfObsLists.Free;
+    TransportSpeciesNames.Free;
+    TransportAuxNames.Free;
+    SpcList.Free;
+    SpcMaps.Free;
+    SpcDictionaries.Free;
+    SpcPeriodSettingsList.Free;
   end;
 end;
 
@@ -19406,6 +20013,14 @@ begin
         Exit;
       end;
     end;
+    for var TransportIndex := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := SpcPeriods[TransportIndex] <> nil;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
   end;
 end;
 
@@ -19434,6 +20049,15 @@ begin
       result := Max(result, MwtPeriods[TransportIndex].Period);
     end;
   end;
+
+  for var TransportIndex := 0 to Length(SpcPeriods) - 1 do
+  begin
+    if SpcPeriods[TransportIndex] <> nil then
+    begin
+      result := Max(result, SpcPeriods[TransportIndex].Period);
+    end;
+  end;
+
 end;
 
 function TMawMvrLink.SameContents(OtherLink: TMawMvrLink): Boolean;
@@ -19446,6 +20070,14 @@ begin
     for var Index := 0 to Length(MwtPeriods) - 1 do
     begin
       result := MwtPeriods[Index] = OtherLink.MwtPeriods[Index];
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+    for var Index := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := SpcPeriods[Index] = OtherLink.SpcPeriods[Index];
       if not result then
       begin
         Exit;
@@ -19464,6 +20096,14 @@ begin
     for var TransportIndex := 0 to Length(SftPeriods) - 1 do
     begin
       result := SftPeriods[TransportIndex] <> nil;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+    for var TransportIndex := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := SpcPeriods[TransportIndex] <> nil;
       if result then
       begin
         Exit;
@@ -19498,6 +20138,14 @@ begin
         result := Max(result, SftPeriods[TransportIndex].Period);
       end;
     end;
+
+    for var TransportIndex := 0 to Length(SpcPeriods) - 1 do
+    begin
+      if SpcPeriods[TransportIndex] <> nil then
+      begin
+        result := Max(result, SpcPeriods[TransportIndex].Period);
+      end;
+    end;
   end;
 end;
 
@@ -19511,6 +20159,14 @@ begin
     for var Index := 0 to Length(SftPeriods) - 1 do
     begin
       result := SftPeriods[Index] = OtherLink.SftPeriods[Index];
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+    for var Index := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := SpcPeriods[Index] = OtherLink.SpcPeriods[Index];
       if not result then
       begin
         Exit;
@@ -19624,6 +20280,14 @@ begin
         Exit;
       end;
     end;
+    for var TransportIndex := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := SpcPeriods[TransportIndex] <> nil;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
   end;
 end;
 
@@ -19644,6 +20308,14 @@ begin
     if MvrPeriod <> nil then
     begin
       result := Max(result, MvrPeriod.Period);
+    end;
+
+    for var TransportIndex := 0 to Length(SpcPeriods) - 1 do
+    begin
+      if SpcPeriods[TransportIndex] <> nil then
+      begin
+        result := Max(result, SpcPeriods[TransportIndex].Period);
+      end;
     end;
 
     for var TransportIndex := 0 to Length(UztPeriods) - 1 do
@@ -19671,6 +20343,14 @@ begin
         Exit;
       end;
     end;
+    for var Index := 0 to Length(SpcPeriods) - 1 do
+    begin
+      result := SpcPeriods[Index] = OtherLink.SpcPeriods[Index];
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
   end;
 end;
 
@@ -19681,6 +20361,8 @@ var
   Index: Integer;
   Item1: TNumberedItem;
   Item2: TNumberedItem;
+  List1: TImportSpcPeriodItemList; 
+  List2: TImportSpcPeriodItemList; 
 begin
   result := (MvrSource = UzfData.MvrSource)
     and (MvrReceiver = UzfData.MvrReceiver)
@@ -19715,7 +20397,7 @@ begin
         begin
           Item1 := FTransportSettings[TimeIndex,ModelIndex,Setting];
           Item2 := UzfData.FTransportSettings[TimeIndex,ModelIndex,Setting];
-          result := Item1.StringValue = Item2.StringValue;
+          result := AnsiSameText(Item1.StringValue, Item2.StringValue);
           if not result then
           begin
             Exit;
@@ -19723,8 +20405,38 @@ begin
         end;
       end;
     end;
-    Result := (UztIdObs[TransportIndex] = nil)
+    result := (UztIdObs[TransportIndex] = nil)
       and (UzfData.UztIdObs[TransportIndex] = nil);
+    if not result then
+    begin
+      Exit;
+    end;
+
+  end;
+
+  Assert(FSpcPeriodData.Count = UzfData.FSpcPeriodData.Count);
+  for var TransportIndex := 0 to FSpcPeriodData.Count - 1 do
+  begin
+    Assert((FSpcPeriodData[TransportIndex] = nil)
+      = (UzfData.FSpcPeriodData[TransportIndex] = nil));
+    if FSpcPeriodData[TransportIndex] <> nil then
+    begin
+      List1 := FSpcPeriodData[TransportIndex];
+      List2 := UzfData.FSpcPeriodData[TransportIndex];
+      result := List1.Count = List2.Count   ;
+      if not result then
+      begin
+        Exit;
+      end;
+      for var ItemIndex := 0 to List1.Count - 1 do
+      begin
+        result := List1[ItemIndex].Compatible(List2[ItemIndex]);
+        if not result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
   end;
 
 end;
@@ -19735,10 +20447,12 @@ begin
 //  UztPackageData := TUztPackageItemList.Create(False);
   UztBoundNameObs := TObservationLists.Create(False);
   UztIdObs := TObservationLists.Create(False);
+  FSpcPeriodData := TImportSpcPeriodItemLists.Create;
 end;
 
 destructor TUzfData.Destroy;
 begin
+  FSpcPeriodData.Free;
   PeriodData.Free;
 //  UztPackageData.Free;
   UztBoundNameObs.Free;
@@ -19991,7 +20705,7 @@ end;
 function TImportUztPeriodItem.Compatible(Item: TImportUztPeriodItem): Boolean;
 begin
   result := (Period = Item.Period)
-    and (PeriodData.StringValue = Item.PeriodData.StringValue);
+    and (AnsiSameText(PeriodData.StringValue, Item.PeriodData.StringValue));
 end;
 
 { TUztPeriodItemList }
@@ -20045,6 +20759,18 @@ begin
   model := '';
   EPSG := 0;
   proj4 := '';
+end;
+
+{ TImportSpcPeriodItem }
+
+function TImportSpcPeriodItem.Compatible(Item: TImportSpcPeriodItem): Boolean;
+begin
+  result := (Period = Item.Period)
+    and  (PeriodData.spcsetting.ValueType = Item.PeriodData.spcsetting.ValueType);
+  if result and (PeriodData.spcsetting.ValueType = vtString) then
+  begin
+     result := AnsiSameText(PeriodData.spcsetting.StringValue, Item.PeriodData.spcsetting.StringValue);
+  end;
 end;
 
 end.

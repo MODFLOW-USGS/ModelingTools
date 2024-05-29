@@ -92,7 +92,7 @@ type
   private
     FItems: TMawPackageItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; naux: Integer;
-      BOUNDNAMES: Boolean);
+      BOUNDNAMES: Boolean; Options: TMawOptions);
     function GetCount: Integer;
     function GetItem(Index: Integer): TMawPackageItem;
   protected
@@ -497,7 +497,7 @@ begin
 end;
 
 procedure TMawPackageData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
-  naux: Integer; BOUNDNAMES: Boolean);
+  naux: Integer; BOUNDNAMES: Boolean; Options: TMawOptions);
 var
   ALine: string;
   ErrorLine: string;
@@ -557,6 +557,7 @@ begin
             AValue.ValueType := vtString;
             AValue.StringValue := FSplitter[ItemStart]
           end;
+          AVAlue.AuxName := Options.AUXILIARY[AuxIndex];
           Item.Faux.Add(AVAlue);
           Inc(ItemStart);
         end;
@@ -924,7 +925,7 @@ begin
       else if FSplitter[1] ='PACKAGEDATA' then
       begin
         FPackageData.Read(Stream, Unhandled, FOptions.FAUXILIARY.Count,
-          FOptions.BOUNDNAMES);
+          FOptions.BOUNDNAMES, FOptions);
       end
       else if FSplitter[1] ='CONNECTIONDATA' then
       begin
