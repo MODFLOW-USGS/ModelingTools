@@ -51,7 +51,9 @@ type
     function SameLocation(OtherCellID: TMfCellId): Boolean;
   end;
 
-  TCellIdList = TList<TMfCellId>;
+  TCellIdList = class(TList<TMfCellId>)
+    procedure Sort;
+  end;
 
   TValueType = (vtNumeric, vtString);
 
@@ -2068,6 +2070,28 @@ begin
   begin
     FDimensions.NRow := 1;
   end;
+end;
+
+{ TCellIdList }
+
+procedure TCellIdList.Sort;
+begin
+  inherited Sort(
+    TComparer<TMfCellId>.Construct(
+      function(const Left, Right: TMfCellId): Integer
+      begin
+        result := Left.Row - Right.Row;
+        if Result = 0 then
+        begin
+          result := Left.column - Right.column;
+          if result = 0 then
+          begin
+            result := Left.Layer - Right.Layer;
+          end;
+        end;
+      end
+    ));
+
 end;
 
 end.

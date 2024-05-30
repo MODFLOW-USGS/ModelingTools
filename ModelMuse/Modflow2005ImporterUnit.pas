@@ -5949,7 +5949,7 @@ begin
   ALine := Trim(ALine);
   if ALine = 'TOP ELEVATION OF LAYER 1' then
   begin
-    Read2DRealArray(FElevations[0], 'Model_Top');
+    Read2DRealArray(FElevations[0], kModelTop);
   end
   else
   begin

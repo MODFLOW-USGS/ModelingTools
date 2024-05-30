@@ -610,7 +610,7 @@ begin
   end;
   for Index := 0 to BoundaryFormulaCount - 1 do
   begin
-    {Item :=} FItems.Add;
+     FItems.Add;
   end;
 end;
 

@@ -10257,6 +10257,8 @@ const
 //    '5.2.0.12' no real change.
 
 //               bug fix: Fixed export of h0 in CSUB package data.
+//               bug fix: Fixed export of MVR when the source doesn't change
+//                over time.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 

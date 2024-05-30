@@ -6269,7 +6269,10 @@ begin
         begin
           if (ITMP < 0) and (NP = 0) and (FEvaluationType <> etExportCsv) then
           begin
-            Continue;
+            if not Model.ModflowPackages.MvrPackage.IsSelected then
+            begin
+              Continue;
+            end;
           end;
           if FEvaluationType <> etExportCsv then
           begin
@@ -6279,6 +6282,11 @@ begin
         // data set 6
         WriteCells := (ITMP > 0) or ((ITMP < 0) and (FEvaluationType = etExportCsv));
         if (Model.ModelSelection = msModflowOwhm2) and not ITMPUsed and (ITMP < 0) then
+        begin
+          WriteCells := True;
+        end;
+        if  (Model.ModelSelection = msModflow2015)
+          and Model.ModflowPackages.MvrPackage.IsSelected then
         begin
           WriteCells := True;
         end;

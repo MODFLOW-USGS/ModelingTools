@@ -123,6 +123,7 @@ type
       ScreenObject: TScreenObject = nil): string;
     procedure FillSpcList(SpcList: TSpcList; Package: TPackage;
       TransportModels: TModelList; Maps: TimeSeriesMaps);
+    function CellCoordinates(CellId: TMfCellId): TPoint3d;
     property AllTopCellsScreenObject: TScreenObject read GetAllTopCellsScreenObject;
     procedure AssignRealValuesToCellCenters(DataArray: TDataArray;
       ScreenObject: TScreenObject; ImportedData: TDArray2D);
@@ -223,7 +224,7 @@ uses
   ModflowGwtSpecifiedConcUnit, Mf6.SrcFileReaderUnit, Mf6.FmiFileReaderUnit,
   Mf6.SftFileReaderUnit, GwtStatusUnit, Mf6.LktFileReaderUnit, Mt3dmsChemUnit,
   Mf6.MwtFileReaderUnit, Mf6.UztFileReaderUnit, Mf6.MvtFileReaderUnit,
-  ModelMuseUtilities, GeoRefUnit;
+  ModelMuseUtilities, GeoRefUnit, SparseDataSets, SparseArrayUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -2723,7 +2724,7 @@ begin
 
     Position := YOrigin;
     RowPositions[Length(RowPositions)-1] := Position;
-    for RowIndex := 0 to Length(Delc) - 1 do
+    for RowIndex := Length(Delc) - 1 downto 0 do
     begin
       Position := Position + Delc[RowIndex];
       RowPositions[Length(RowPositions) - RowIndex -2] := Position;
@@ -2744,7 +2745,7 @@ begin
 
     Position := DistanceToLL * Sin(AngleToLL - GridAngle);
     RowPositions[Length(RowPositions)-1] := Position;
-    for RowIndex := 0 to Length(Delc) - 1 do
+    for RowIndex := Length(Delc) - 1 downto 0 do
     begin
       Position := Position + Delc[RowIndex];
       RowPositions[Length(RowPositions) - RowIndex - 2] := Position;
@@ -6681,6 +6682,7 @@ var
   ALakeSetting: TMf6BoundaryValue;
   NewStatus: TGwtBoundaryStatusItem;
   NewConcentration: TGwtConcStringValueItem;
+  Locations: T3DSparseBooleanArray;
   function GetFloatFormulaFromLakeSetting(ASetting: TMf6BoundaryValue; Map: TimeSeriesMap): string;
   var
     TimeSeriesName: string;
@@ -7644,6 +7646,9 @@ var
     UseNeigbor: Boolean;
     LktPackageItem: TLktPackageItem;
     SrtItem: TStringConcValueItem;
+    Cell1: TMfCellId;
+    Cell2: TMfCellId;
+    Values: TOneDRealArray;
     procedure CreateDataSetScreenObject;
     var
       CellIds: TCellIdList;
@@ -7737,8 +7742,18 @@ var
           begin
             ACellId.Row := 0;
           end;
-          CellIds.Add(ACellId);
-          UsedCells.AddPoint(ACellId.Column, ACellId.Row, ACellId.Layer, nil);
+
+          if (ACellId.Layer > 1) and AnsiSameText(AConnection.claktype, 'VERTICAL') then
+          begin
+            ACellId.Layer := ACellId.Layer-1
+          end;
+
+          if not Locations.IsValue[ACellId.Layer, ACellId.Row, ACellId.Column] then
+          begin
+            CellIds.Add(ACellId);
+            UsedCells.AddPoint(ACellId.Column, ACellId.Row, ACellId.Layer, nil);
+            Locations.Items[ACellId.Layer, ACellId.Row, ACellId.Column] := True;
+          end;
         end;
       end;
       IDomain := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
@@ -7789,8 +7804,12 @@ var
                 ACellId.Column := ANeighborCell.Column+1;
                 ACellId.Row := ANeighborCell.Row+1;
                 ACellId.Layer := ANeighborCell.Layer+1;
-                CellIds.Add(ACellId);
-                UsedCells.AddPoint(ACellId.Column, ACellId.Row, ACellId.Layer, nil);
+                if not Locations.IsValue[ACellId.Layer, ACellId.Row, ACellId.Column] then
+                begin
+                  CellIds.Add(ACellId);
+                  UsedCells.AddPoint(ACellId.Column, ACellId.Row, ACellId.Layer, nil);
+                  Locations.Items[ACellId.Layer, ACellId.Row, ACellId.Column] := True;
+                end;
               end;
             end;
           end;
@@ -7798,7 +7817,30 @@ var
       end;
       if CellIds.Count > 0 then
       begin
-        AddPointsToScreenObject(CellIds, ALake.LakeScreenObject, True);
+        CellIds.Sort;
+        for CellIndex := CellIds.Count - 2 downto 0 do
+        begin
+          Cell1 := CellIds[CellIndex+1];
+          Cell2 := CellIds[CellIndex];
+          if (Cell1.Row = Cell2.Row) and (Cell1.Column = Cell2.Column) then
+          begin
+            CellIds.Delete(CellIndex)
+          end;
+        end;
+
+//        RealValuesToFormula
+
+        AddPointsToScreenObject(CellIds, ALake.LakeScreenObject, False);
+        ALake.LakeScreenObject.ElevationCount := ecTwo;
+        ALake.LakeScreenObject.HigherElevationFormula := kModelTop;
+        SetLength(Values, CellIds.Count);
+        for CellIndex := 0 to CellIds.Count - 1 do
+        begin
+          Cell1 := CellIds[CellIndex];
+          Values[CellIndex] := CellCoordinates(Cell1).z;
+        end;
+        ALake.LakeScreenObject.LowerElevationFormula := RealValuesToFormula(
+          Values, 'Imported Lower Elevation', ALake.LakeScreenObject);
       end;
     finally
       CellIds.Free;
@@ -8148,6 +8190,8 @@ begin
   TransportAuxNames := TStringList.Create;
   SpcList := TSpcList.Create;
   SpcMaps := TimeSeriesMaps.Create;
+  Locations := T3DSparseBooleanArray.Create(GetQuantum(Model.LayerCount),
+    GetQuantum(Model.RowCount), GetQuantum(Model.ColumnCount));
 //  SpcDictionaries := TSpcDictionaries.Create;
   try
     FillSpcList(SpcList, Package, TransportModels, SpcMaps);
@@ -8651,6 +8695,7 @@ begin
     TransportAuxNames.Free;
     SpcList.Free;
     SpcMaps.Free;
+    Locations.Free;
 //    SpcDictionaries.Free;
   end;
 end;
@@ -8685,11 +8730,14 @@ var
   ConnectionIndex: Integer;
   CIndex: Integer;
   ConnectionItem: TMawConnectionItem;
+  FirstConnection: TMawConnectionItem;
+  ErrorFound: Boolean;
   WellScreen: TMawWellScreenItem;
   PeriodIndex: Integer;
   LastTime: Double;
   APeriod: TMawPeriod;
   StartTime: Double;
+  EndTime: double;
   ObjectIndex: Integer;
   AnItem: TMawItem;
   PriorItem: TMawItem;
@@ -9659,6 +9707,22 @@ begin
       end;
     end;
 
+    StartTime := Model.ModflowStressPeriods.First.StartTime;
+    EndTime := Model.ModflowStressPeriods.First.EndTime;
+    for ObjectIndex := 1 to Length(Wells) - 1 do
+    begin
+      AScreenObject := Wells[ObjectIndex];
+      Assert(AScreenObject <> nil);
+      Assert(AScreenObject.ModflowMawBoundary <> nil);
+      if AScreenObject.ModflowMawBoundary.Values.Count = 0 then
+      begin
+        AnItem := AScreenObject.ModflowMawBoundary.Values.Add as TMawItem;
+        AnItem.StartTime := StartTime;
+        AnItem.EndTime := EndTime;
+        AnItem.MawStatus := mwInactive;
+      end;
+    end;
+
     if Model.DisvUsed then
     begin
       DisvGrid := Model.DisvGrid;
@@ -9674,9 +9738,26 @@ begin
       PackageItem := Maw.PackageData[WellIndex-1];
       AScreenObject := Wells[WellIndex];
       AScreenObject.ModflowMawBoundary.WellScreens.Capacity := PackageItem.ngwfnodes;
+      ErrorFound := False;
       for CIndex := 0 to PackageItem.ngwfnodes - 1 do
       begin
         ConnectionItem := Maw.Connections[ConnectionIndex];
+        if CIndex = 0 then
+        begin
+          FirstConnection := ConnectionItem;
+        end
+        else
+        begin
+          if (ConnectionItem.CellID.Row <> FirstConnection.CellID.Row)
+            or (ConnectionItem.CellID.Column <> FirstConnection.CellID.Column) then
+          begin
+            if not ErrorFound then
+            begin
+              ErrorFound := True;
+              self.FErrorMessages.Add(Format('MAW well %d contains cell connections that do not all have the same row and column.', [WellIndex]));
+            end;
+          end;
+        end;
         Inc(ConnectionIndex);
         Assert(ConnectionItem.wellno = PackageItem.wellno);
         WellScreen := AScreenObject.ModflowMawBoundary.WellScreens.Add as TMawWellScreenItem;
@@ -9789,71 +9870,83 @@ begin
   PhastModel.Clear;
   frmGoPhast.Caption := StrModelName;
   frmGoPhast.sdSaveDialog.FileName := '';
-  PhastModel.ModelSelection := msModflow2015;
-  PhastModel.ModflowPackages.GwtProcess.SeparateGwt := NameFiles.Count > 1;
 
-  FImportGeoRef.Initialize;
-  if TFile.Exists(usgs_model_reference) then
-  begin
-    GeoRef := TStringList.Create  ;
-    try
+  PhastModel.ImportingModel := True;
+  try
+    PhastModel.ModelSelection := msModflow2015;
+    PhastModel.ModflowPackages.GwtProcess.SeparateGwt := NameFiles.Count > 1;
+    FImportGeoRef.Initialize;
+    if TFile.Exists(usgs_model_reference) then
+    begin
+      GeoRef := TStringList.Create  ;
       try
-        GeoRef.LoadFromFile(usgs_model_reference);
-      except
-        Beep;
-        MessageDlg(Format('Error reading %s.]', [usgs_model_reference]), mtError, [mbOK], 0);
-        Exit;
-        Splitter := TStringList.Create;
         try
-          for LineIndex := 0 to GeoRef.Count - 1 do
-          begin
-            Splitter.DelimitedText := GeoRef[LineIndex];
-            if Splitter.Count >= 2 then
+          GeoRef.LoadFromFile(usgs_model_reference);
+        except
+          Beep;
+          MessageDlg(Format('Error reading %s.]', [usgs_model_reference]), mtError, [mbOK], 0);
+          Exit;
+          Splitter := TStringList.Create;
+          try
+            for LineIndex := 0 to GeoRef.Count - 1 do
             begin
-              if LowerCase(Splitter[0]) = 'xul' then
+              Splitter.DelimitedText := GeoRef[LineIndex];
+              if Splitter.Count >= 2 then
               begin
-                FImportGeoRef.xul := FortranStrToFloatDef(Splitter[1], 0)
-              end
-              else if LowerCase(Splitter[0]) = 'yul' then
-              begin
-                FImportGeoRef.yul := FortranStrToFloatDef(Splitter[1], 0)
-              end
-              else if LowerCase(Splitter[0]) = 'rotation' then
-              begin
-                FImportGeoRef.rotation := FortranStrToFloatDef(Splitter[1], 0)
-              end
-              else if LowerCase(Splitter[0]) = 'length_units' then
-              begin
-                FImportGeoRef.length_units := Splitter[1];
-              end
-              else if LowerCase(Splitter[0]) = 'time_units' then
-              begin
-                FImportGeoRef.time_units := Splitter[1];
-              end
-              else if LowerCase(Splitter[0]) = 'start_date' then
-              begin
-                FImportGeoRef.start_date := Splitter[1];
-              end
-              else if LowerCase(Splitter[0]) = 'start_time' then
-              begin
-                FImportGeoRef.start_time := Splitter[1];
-              end
-              else if LowerCase(Splitter[0]) = 'model' then
-              begin
-                FImportGeoRef.model := Splitter[1];
-              end
-              else if UpperCase(Splitter[0]) = 'EPSG' then
-              begin
-                FImportGeoRef.EPSG := StrToIntDef(Splitter[1], 0);
-                PhastModel.GeoRef.ProjectionType := ptEpsg;
-                PhastModel.GeoRef.Projection := IntToStr(FImportGeoRef.EPSG);
-              end
-              else if LowerCase(Splitter[0]) = 'proj4' then
-              begin
-                proj4Pos := Pos('proj4', LowerCase(GeoRef[LineIndex]));
-                FImportGeoRef.proj4 := Trim(Copy(GeoRef[LineIndex], proj4Pos + Length('proj4'), MAXINT));
-                PhastModel.GeoRef.ProjectionType := ptProj4;
-                PhastModel.GeoRef.Projection := FImportGeoRef.proj4;
+                if LowerCase(Splitter[0]) = 'xul' then
+                begin
+                  FImportGeoRef.xul := FortranStrToFloatDef(Splitter[1], 0)
+                end
+                else if LowerCase(Splitter[0]) = 'yul' then
+                begin
+                  FImportGeoRef.yul := FortranStrToFloatDef(Splitter[1], 0)
+                end
+                else if LowerCase(Splitter[0]) = 'rotation' then
+                begin
+                  FImportGeoRef.rotation := FortranStrToFloatDef(Splitter[1], 0)
+                end
+                else if LowerCase(Splitter[0]) = 'length_units' then
+                begin
+                  FImportGeoRef.length_units := Splitter[1];
+                end
+                else if LowerCase(Splitter[0]) = 'time_units' then
+                begin
+                  FImportGeoRef.time_units := Splitter[1];
+                end
+                else if LowerCase(Splitter[0]) = 'start_date' then
+                begin
+                  FImportGeoRef.start_date := Splitter[1];
+                end
+                else if LowerCase(Splitter[0]) = 'start_time' then
+                begin
+                  FImportGeoRef.start_time := Splitter[1];
+                end
+                else if LowerCase(Splitter[0]) = 'model' then
+                begin
+                  FImportGeoRef.model := Splitter[1];
+                end
+                else if UpperCase(Splitter[0]) = 'EPSG' then
+                begin
+                  FImportGeoRef.EPSG := StrToIntDef(Splitter[1], 0);
+                  PhastModel.GeoRef.ProjectionType := ptEpsg;
+                  PhastModel.GeoRef.Projection := IntToStr(FImportGeoRef.EPSG);
+                end
+                else if LowerCase(Splitter[0]) = 'proj4' then
+                begin
+                  proj4Pos := Pos('proj4', LowerCase(GeoRef[LineIndex]));
+                  FImportGeoRef.proj4 := Trim(Copy(GeoRef[LineIndex], proj4Pos + Length('proj4'), MAXINT));
+                  PhastModel.GeoRef.ProjectionType := ptProj4;
+                  PhastModel.GeoRef.Projection := FImportGeoRef.proj4;
+                end
+                else
+                begin
+                  if Pos('proj', lowercase(GeoRef[LineIndex])) > 0 then
+                  begin
+                    FImportGeoRef.proj4 := GeoRef[LineIndex];
+                    PhastModel.GeoRef.ProjectionType := ptProj4;
+                    PhastModel.GeoRef.Projection := FImportGeoRef.proj4;
+                  end;
+                end;
               end
               else
               begin
@@ -9864,287 +9957,280 @@ begin
                   PhastModel.GeoRef.Projection := FImportGeoRef.proj4;
                 end;
               end;
-            end
-            else
-            begin
-              if Pos('proj', lowercase(GeoRef[LineIndex])) > 0 then
-              begin
-                FImportGeoRef.proj4 := GeoRef[LineIndex];
-                PhastModel.GeoRef.ProjectionType := ptProj4;
-                PhastModel.GeoRef.Projection := FImportGeoRef.proj4;
-              end;
-            end;
-          end;
-        finally
-          Splitter.Free;
-        end;
-      end;
-    finally
-      GeoRef.Free;
-    end;
-  end;
-
-  PhastModel.DisvGrid.CanDraw := False;
-  try
-    try
-      FlowModelImported := False;
-      for FileIndex := 0 to NameFiles.Count - 1 do
-      begin
-        FSimulation := TMf6Simulation.Create('Simulation');
-        try
-          FSimulation.OnUpdataStatusBar := OnUpdateStatusBar;
-          FSimulations.Add(FSimulation);
-          FSimulation.ReadSimulation(NameFiles[FileIndex]);
-        finally
-          FSimulation := nil;
-        end;
-      end;
-
-      for FileIndex := 0 to FSimulations.Count - 1 do
-      begin
-        FSimulation := FSimulations[FileIndex];
-        try
-          for ExchangeIndex := 0 to FSimulation.Exchanges.Count - 1 do
-          begin
-            Exchange := FSimulation.Exchanges[ExchangeIndex];
-            if AnsiSameText(Exchange.ExchangeType, 'GWF6-GWT6') then
-            begin
-              FlowModelName := Exchange.ExchangeModelNameA;
-              TransportModelName := Exchange.ExchangeModelNameB;
-              FFLowTransportLinks.Add(UpperCase(TransportModelName), FlowModelName);
-            end
-            else
-            begin
-              ErrorMessages.Add('The following error was encountered when reading '
-                + NameFiles[FileIndex]);
-              ErrorMessages.Add('ModelMuse does not currently support MODFLOW 6 exchanges');
-            end;
-          end;
-        finally
-          FSimulation := nil;
-        end;
-      end;
-
-      HeadFileModelNameDictionary := TDictionary<string, string>.Create;
-      try
-        for FileIndex := 0 to FSimulations.Count - 1 do
-        begin
-          FSimulation := FSimulations[FileIndex];
-          try
-            for ModelIndex := 0 to FSimulation.Models.Count - 1 do
-            begin
-              AModel := FSimulation.Models[ModelIndex];
-              if AModel.ModelType = 'GWF6' then
-              begin
-                OCPackage := (AModel.FName as TFlowNameFile).OCPackage;
-                if OCPackage <> nil then
-                begin
-                  BudgetFile := (OCPackage.Package as TOc).Options.FullBudgetFileName;
-                  if BudgetFile <> '' then
-                  begin
-                    HeadFileModelNameDictionary.Add(UpperCase(BudgetFile), AModel.ModelName);
-                  end;
-                end;
-              end;
             end;
           finally
-            FSimulation := nil;
-          end;
-        end;
-
-        for FileIndex := 0 to FSimulations.Count - 1 do
-        begin
-          FSimulation := FSimulations[FileIndex];
-          try
-            for ModelIndex := 0 to FSimulation.Models.Count - 1 do
-            begin
-              AModel := FSimulation.Models[ModelIndex];
-              if AModel.ModelType = 'GWT6' then
-              begin
-                FmiPackage := (AModel.FName as TTransportNameFile).FmiPackage;
-                if FmiPackage <> nil then
-                begin
-                  Budgetfile := (FmiPackage.Package as TFmi).FullBudgetFileName;
-                  if Budgetfile <> '' then
-                  begin
-                    if HeadFileModelNameDictionary.TryGetValue(UpperCase(Budgetfile), FlowModelName) then
-                    begin
-                      FFLowTransportLinks.Add(UpperCase(AModel.ModelName), FlowModelName);
-                    end;
-
-                  end;
-                end;
-              end;
-            end;
-          finally
-            FSimulation := nil;
+            Splitter.Free;
           end;
         end;
       finally
-        HeadFileModelNameDictionary.Free;
+        GeoRef.Free;
       end;
+    end;
 
-      for FileIndex := 0 to FSimulations.Count - 1 do
-      begin
-        FSimulation := FSimulations[FileIndex];
-        try
-          FlowModelNames := TStringList.Create;
+    PhastModel.DisvGrid.CanDraw := False;
+    try
+      try
+        FlowModelImported := False;
+        for FileIndex := 0 to NameFiles.Count - 1 do
+        begin
+          FSimulation := TMf6Simulation.Create('Simulation');
           try
-            for ModelIndex := 0 to FSimulation.Models.Count - 1 do
+            FSimulation.OnUpdataStatusBar := OnUpdateStatusBar;
+            FSimulations.Add(FSimulation);
+            FSimulation.ReadSimulation(NameFiles[FileIndex]);
+          finally
+            FSimulation := nil;
+          end;
+        end;
+
+        for FileIndex := 0 to FSimulations.Count - 1 do
+        begin
+          FSimulation := FSimulations[FileIndex];
+          try
+            for ExchangeIndex := 0 to FSimulation.Exchanges.Count - 1 do
             begin
-              AModel := FSimulation.Models[ModelIndex];
-              if AModel.ModelType = 'GWF6' then
+              Exchange := FSimulation.Exchanges[ExchangeIndex];
+              if AnsiSameText(Exchange.ExchangeType, 'GWF6-GWT6') then
               begin
-                FlowModelNames.Add(AModel.NameFile)
-              end;
-            end;
-            if FlowModelImported and (FlowModelNames.Count > 0) then
-            begin
-              ErrorMessages.Add('The following error was encountered when reading '
-                + NameFiles[FileIndex]);
-              ErrorMessages.Add('Another flow model name file was already in another simulation name file');
-              ErrorMessages.Add('ModelMuse can only import a single flow model.');
-              Continue;
-            end;
-            FModelNameFile := '';
-            if FlowModelNames.Count > 1 then
-            begin
-              frmSelectFlowModel := TfrmSelectFlowModel.Create(nil);
-              try
-                frmSelectFlowModel.rgFlowModels.Items := FlowModelNames;
-                frmSelectFlowModel.rgFlowModels.ItemIndex := 0;
-                if frmSelectFlowModel.ShowModal = mrOK then
-                begin
-                  FModelNameFile := frmSelectFlowModel.rgFlowModels.Items[frmSelectFlowModel.rgFlowModels.ItemIndex];
-                end
-                else
-                begin
-                  Exit;
-                end;
-              finally
-                frmSelectFlowModel.Free
-              end;
-            end
-            else
-            begin
-              if FlowModelNames.Count > 0 then
-              begin
-                FModelNameFile := FlowModelNames[0];
+                FlowModelName := Exchange.ExchangeModelNameA;
+                TransportModelName := Exchange.ExchangeModelNameB;
+                FFLowTransportLinks.Add(UpperCase(TransportModelName), FlowModelName);
               end
               else
               begin
-                FModelNameFile := '';
+                ErrorMessages.Add('The following error was encountered when reading '
+                  + NameFiles[FileIndex]);
+                ErrorMessages.Add('ModelMuse does not currently support MODFLOW 6 exchanges');
               end;
             end;
-            if FModelNameFile <> '' then
-            begin
-              FFlowModel := FSimulation.Models.GetModelByNameFile(FModelNameFile);
-              FFlowModelName := FFlowModel.ModelName;
-            end
-            else
-            begin
-              FFlowModel := nil;
-            end;
-            ImportSimulationOptions;
-            if FFlowModel <> nil then
-            begin
-              ImportFlowModelTiming;
-            end
-            else
-            begin
-              ImportTransportModelTiming;
-            end;
-            ImportSolutionGroups;
-            if not ImportFlowModel then
-            begin
-              Exit;
-            end;
-
-            ImportIMS(FFlowModelOptions);
-
-
-
           finally
-            FlowModelNames.Free
+            FSimulation := nil;
+          end;
+        end;
+
+        HeadFileModelNameDictionary := TDictionary<string, string>.Create;
+        try
+          for FileIndex := 0 to FSimulations.Count - 1 do
+          begin
+            FSimulation := FSimulations[FileIndex];
+            try
+              for ModelIndex := 0 to FSimulation.Models.Count - 1 do
+              begin
+                AModel := FSimulation.Models[ModelIndex];
+                if AModel.ModelType = 'GWF6' then
+                begin
+                  OCPackage := (AModel.FName as TFlowNameFile).OCPackage;
+                  if OCPackage <> nil then
+                  begin
+                    BudgetFile := (OCPackage.Package as TOc).Options.FullBudgetFileName;
+                    if BudgetFile <> '' then
+                    begin
+                      HeadFileModelNameDictionary.Add(UpperCase(BudgetFile), AModel.ModelName);
+                    end;
+                  end;
+                end;
+              end;
+            finally
+              FSimulation := nil;
+            end;
           end;
 
+          for FileIndex := 0 to FSimulations.Count - 1 do
+          begin
+            FSimulation := FSimulations[FileIndex];
+            try
+              for ModelIndex := 0 to FSimulation.Models.Count - 1 do
+              begin
+                AModel := FSimulation.Models[ModelIndex];
+                if AModel.ModelType = 'GWT6' then
+                begin
+                  FmiPackage := (AModel.FName as TTransportNameFile).FmiPackage;
+                  if FmiPackage <> nil then
+                  begin
+                    Budgetfile := (FmiPackage.Package as TFmi).FullBudgetFileName;
+                    if Budgetfile <> '' then
+                    begin
+                      if HeadFileModelNameDictionary.TryGetValue(UpperCase(Budgetfile), FlowModelName) then
+                      begin
+                        FFLowTransportLinks.Add(UpperCase(AModel.ModelName), FlowModelName);
+                      end;
+
+                    end;
+                  end;
+                end;
+              end;
+            finally
+              FSimulation := nil;
+            end;
+          end;
         finally
-          FSimulation := nil;
+          HeadFileModelNameDictionary.Free;
         end;
-      end;
-      for FileIndex := 0 to FSimulations.Count - 1 do
-      begin
-        FSimulation := FSimulations[FileIndex];
-        FSimulation.OutFile.close
-      end;
 
-
-      for FileIndex := 0 to NameFiles.Count - 1 do
-      begin
-        OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
-        if TFile.Exists(OutFile) then
+        for FileIndex := 0 to FSimulations.Count - 1 do
         begin
-          ListFile := TStringList.Create;
+          FSimulation := FSimulations[FileIndex];
           try
-            ListFile.LoadFromFile(OutFile);
-            if ListFile.Count > 0 then
-            begin
-              ErrorMessages.Add('The following errors were encountered when reading '
-                + NameFiles[FileIndex]);
-              ErrorMessages.AddStrings(ListFile);
-              ErrorMessages.Add('');
+            FlowModelNames := TStringList.Create;
+            try
+              for ModelIndex := 0 to FSimulation.Models.Count - 1 do
+              begin
+                AModel := FSimulation.Models[ModelIndex];
+                if AModel.ModelType = 'GWF6' then
+                begin
+                  FlowModelNames.Add(AModel.NameFile)
+                end;
+              end;
+              if FlowModelImported and (FlowModelNames.Count > 0) then
+              begin
+                ErrorMessages.Add('The following error was encountered when reading '
+                  + NameFiles[FileIndex]);
+                ErrorMessages.Add('Another flow model name file was already in another simulation name file');
+                ErrorMessages.Add('ModelMuse can only import a single flow model.');
+                Continue;
+              end;
+              FModelNameFile := '';
+              if FlowModelNames.Count > 1 then
+              begin
+                frmSelectFlowModel := TfrmSelectFlowModel.Create(nil);
+                try
+                  frmSelectFlowModel.rgFlowModels.Items := FlowModelNames;
+                  frmSelectFlowModel.rgFlowModels.ItemIndex := 0;
+                  if frmSelectFlowModel.ShowModal = mrOK then
+                  begin
+                    FModelNameFile := frmSelectFlowModel.rgFlowModels.Items[frmSelectFlowModel.rgFlowModels.ItemIndex];
+                  end
+                  else
+                  begin
+                    Exit;
+                  end;
+                finally
+                  frmSelectFlowModel.Free
+                end;
+              end
+              else
+              begin
+                if FlowModelNames.Count > 0 then
+                begin
+                  FModelNameFile := FlowModelNames[0];
+                end
+                else
+                begin
+                  FModelNameFile := '';
+                end;
+              end;
+              if FModelNameFile <> '' then
+              begin
+                FFlowModel := FSimulation.Models.GetModelByNameFile(FModelNameFile);
+                FFlowModelName := FFlowModel.ModelName;
+              end
+              else
+              begin
+                FFlowModel := nil;
+              end;
+              ImportSimulationOptions;
+              if FFlowModel <> nil then
+              begin
+                ImportFlowModelTiming;
+              end
+              else
+              begin
+                ImportTransportModelTiming;
+              end;
+              ImportSolutionGroups;
+              if not ImportFlowModel then
+              begin
+                Exit;
+              end;
+
+              ImportIMS(FFlowModelOptions);
+
+
+
+            finally
+              FlowModelNames.Free
             end;
+
           finally
-            ListFile.Free;
+            FSimulation := nil;
           end;
-        end
-        else
+        end;
+        for FileIndex := 0 to FSimulations.Count - 1 do
         begin
-          ErrorMessages.Add(OutFile + ' does not exist.')
+          FSimulation := FSimulations[FileIndex];
+          FSimulation.OutFile.close
+        end;
+
+
+        for FileIndex := 0 to NameFiles.Count - 1 do
+        begin
+          OutFile := ChangeFileExt(NameFiles[FileIndex], '.lst');
+          if TFile.Exists(OutFile) then
+          begin
+            ListFile := TStringList.Create;
+            try
+              ListFile.LoadFromFile(OutFile);
+              if ListFile.Count > 0 then
+              begin
+                ErrorMessages.Add('The following errors were encountered when reading '
+                  + NameFiles[FileIndex]);
+                ErrorMessages.AddStrings(ListFile);
+                ErrorMessages.Add('');
+              end;
+            finally
+              ListFile.Free;
+            end;
+          end
+          else
+          begin
+            ErrorMessages.Add(OutFile + ' does not exist.')
+          end;
+        end;
+
+        for var ScreenObjectIndex := 0 to FNewScreenObjects.Count - 1 do
+        begin
+          TScreenObjectCrack(FNewScreenObjects[ScreenObjectIndex]).Loaded;
+        end;
+        PhastModel.Exaggeration := frmGoPhast.DefaultVE;
+        frmGoPhast.RestoreDefault2DView1Click(nil);
+        Application.ProcessMessages;
+
+      except
+        on E: EEncodingError do
+        begin
+          MessageDlg('One or more input files appear to be corrupt.', mtError, [mbOK], 0);
+        end;
+        on E: Exception do
+        begin
+          ErrorMessages.Add('ERROR');
+          ErrorMessages.Add(E.Message);
         end;
       end;
+    finally
+  //    PhastModel
+      PhastModel.DisvGrid.CanDraw := True;
+      if PhastModel.DisvUsed then
+      begin
+        frmGoPhast.acDefaultCrossSectionExecute(nil);
+      end;
+      PhastModel.Mf6TimesSeries.Loaded;
+    end;
 
-      for var ScreenObjectIndex := 0 to FNewScreenObjects.Count - 1 do
+    if ErrorMessages.Count > 0 then
+    begin
+      ErrorMessages.AddStrings(NameFiles);
+      if frmImportWarnings = nil then
       begin
-        TScreenObjectCrack(FNewScreenObjects[ScreenObjectIndex]).Loaded;
+        frmImportWarnings := TfrmImportWarnings.Create(frmGoPhast)
       end;
-      PhastModel.Exaggeration := frmGoPhast.DefaultVE;
-      frmGoPhast.RestoreDefault2DView1Click(nil);
-      Application.ProcessMessages;
-
-    except
-      on E: EEncodingError do
-      begin
-        MessageDlg('One or more input files appear to be corrupt.', mtError, [mbOK], 0);
-      end;
-      on E: Exception do
-      begin
-        ErrorMessages.Add('ERROR');
-        ErrorMessages.Add(E.Message);
-      end;
+      frmImportWarnings.memoWarnings.Lines := ErrorMessages;
+    end
+    else
+    begin
+      FreeAndNil(frmImportWarnings)
     end;
   finally
-//    PhastModel
-    PhastModel.DisvGrid.CanDraw := True;
-    if PhastModel.DisvUsed then
-    begin
-      frmGoPhast.acDefaultCrossSectionExecute(nil);
-    end;
-    PhastModel.Mf6TimesSeries.Loaded;
-  end;
-
-  if ErrorMessages.Count > 0 then
-  begin
-    ErrorMessages.AddStrings(NameFiles);
-    if frmImportWarnings = nil then
-    begin
-      frmImportWarnings := TfrmImportWarnings.Create(frmGoPhast)
-    end;
-    frmImportWarnings.memoWarnings.Lines := ErrorMessages;
-  end
-  else
-  begin
-    FreeAndNil(frmImportWarnings)
+    PhastModel.ImportingModel := False;
   end;
 end;
 
@@ -10579,7 +10665,14 @@ begin
           MvrItem := ModflowMvr.Values.Add as TMvrItem;
           for ReceiverIndex := 0 to ModflowMvr.Receivers.Count-1 do
           begin
-            IndividualMvrItem := MvrItem.Items.Add;
+            if ReceiverIndex >= MvrItem.Items.Count then
+            begin
+              IndividualMvrItem := MvrItem.Items.Add;
+            end
+            else
+            begin
+              IndividualMvrItem := MvrItem.Items[ReceiverIndex]
+            end;
             IndividualMvrItem.MvrType := MvrType;
             IndividualMvrItem.Value := '0';
           end;
@@ -10645,22 +10738,56 @@ begin
   end;
 end;
 
-procedure TModflow6Importer.AddPointsToScreenObject(CellIds: TCellIdList;
-  AScreenObject: TScreenObject; ThreeD: Boolean = True);
+function TModflow6Importer.CellCoordinates(CellId: TMfCellId): TPoint3d;
 var
+  Model: TPhastModel;
+  DisvUsed: Boolean;
   ElementCenter: TDualLocation;
   APoint: TPoint2D;
-  CellIndex: Integer;
-  Model: TPhastModel;
-  CellId: TMfCellId;
-  DisvUsed: Boolean;
-  Limits: TGridLimit;
   DisvCell2D: TModflowIrregularCell2D;
   ElementCorners: TModflowNodeList;
   CellOutline: TPolygon2D;
 begin
   Model := frmGoPhast.PhastModel;
   DisvUsed := Model.DisvUsed;
+  if DisvUsed then
+  begin
+    CellId.Row := 1;
+  end;
+  ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
+  APoint.x := ElementCenter.RotatedLocation.x;
+  APoint.y := ElementCenter.RotatedLocation.y;
+  if DisvUsed then
+  begin
+    DisvCell2D := Model.DisvGrid.TwoDGrid.Cells[CellId.Column - 1];
+    if not DisvCell2D.PointInside(APoint) then
+    begin
+      // The user specified center of the cell may be at the edge of the cell.
+      ElementCorners := DisvCell2D.ElementCorners;
+      SetLength(CellOutline, ElementCorners.Count);
+      for var PointIndex := 0 to ElementCorners.Count - 1 do
+      begin
+        CellOutline[PointIndex] := ElementCorners[PointIndex].Location;
+      end;
+      APoint := Centroid(CellOutline);
+    end;
+  end;
+  result.x := APoint.x;
+  result.y := APoint.y;
+  result.z := ElementCenter.RotatedLocation.z;
+end;
+
+procedure TModflow6Importer.AddPointsToScreenObject(CellIds: TCellIdList;
+  AScreenObject: TScreenObject; ThreeD: Boolean = True);
+var
+  APoint: TPoint2D;
+  CellIndex: Integer;
+  Model: TPhastModel;
+  CellId: TMfCellId;
+  Limits: TGridLimit;
+  Point3d:TPoint3D;
+begin
+  Model := frmGoPhast.PhastModel;
   for CellIndex := 0 to CellIds.Count - 1 do
   begin
     CellId := CellIds[CellIndex];
@@ -10693,37 +10820,19 @@ begin
     end
     else
     begin
-      if DisvUsed then
-      begin
-        CellId.Row := 1;
-      end;
-      ElementCenter := Model.ElementLocation[CellId.Layer - 1, CellId.Row - 1, CellId.Column - 1];
-      APoint.x := ElementCenter.RotatedLocation.x;
-      APoint.y := ElementCenter.RotatedLocation.y;
-      if Model.DisvUsed then
-      begin
-        DisvCell2D := Model.DisvGrid.TwoDGrid.Cells[CellId.Column - 1];
-        if not DisvCell2D.PointInside(APoint) then
-        begin
-          ElementCorners := DisvCell2D.ElementCorners;
-          SetLength(CellOutline, ElementCorners.Count);
-          for var PointIndex := 0 to ElementCorners.Count - 1 do
-          begin
-            CellOutline[PointIndex] := ElementCorners[PointIndex].Location;
-          end;
-          APoint := Centroid(CellOutline);
-        end;
-      end;
+      Point3d := CellCoordinates(CellId);
+      APoint.x := Point3d.x;
+      APoint.y := Point3d.y;
       AScreenObject.AddPoint(APoint, True);
       if ThreeD then
       begin
         if CellIds.Count > 1 then
         begin
-          AScreenObject.ImportedSectionElevations.Add(ElementCenter.RotatedLocation.z);
+          AScreenObject.ImportedSectionElevations.Add(Point3d.z);
         end
         else
         begin
-          AScreenObject.ElevationFormula := FortranFloatToStr(ElementCenter.RotatedLocation.z);
+          AScreenObject.ElevationFormula := FortranFloatToStr(Point3d.z);
         end;
       end;
     end;
@@ -15495,6 +15604,12 @@ begin
                         SfrItem.DiversionCount := DiversionItem.Index+1
                       end;
                       SfrItem.DiversionFormulas[DiversionItem.Index] := DiversionFormula;
+                      // The following ensures that the diversion formula won't be
+                      // removed during TSfrMf6Item.Loaded.
+                      if DiversionFormula <> SfrItem.Diversions[DiversionItem.Index] then
+                      begin
+                        Assert(False);
+                      end;
                     end;
                   end;
                 end;
@@ -16178,6 +16293,13 @@ begin
       begin
         StressPeriod.StressPeriodType := sptSteadyState;
       end;
+    end;
+  end
+  else
+  begin
+    for SpIndex := 0 to StressPeriods.Count - 1 do
+    begin
+      StressPeriods[SpIndex].StressPeriodType := sptTransient;
     end;
   end;
 
@@ -20044,11 +20166,13 @@ end;
 { TImportLake }
 
 procedure TImportLake.ClearTimeSettings;
+var
+  OutletSettings: TNumberedItemList;
 begin
   FLakeSettings.Clear;
-  for var Index := 0 to FOutletSettings.Count - 1 do
+  for OutletSettings in FOutletSettings.Values do
   begin
-    FOutletSettings[Index].Clear;
+    OutletSettings.Clear;
   end;
   for var Index := 0 to LktSetting.Count - 1 do
   begin
@@ -20064,8 +20188,6 @@ begin
       SpcSettings[Index].Clear;
     end;
   end;
-
-
 end;
 
 constructor TImportLake.Create(LakPackageItem: TLakPackageItem);
@@ -20464,7 +20586,7 @@ var
   List1: TImportSpcPeriodItemList; 
   List2: TImportSpcPeriodItemList; 
 begin
-  result := (MvrSource = UzfData.MvrSource)
+  result := (not MvrSource) and (not UzfData.MvrSource)
     and (MvrReceiver = UzfData.MvrReceiver)
     and (PeriodData.Count = UzfData.PeriodData.Count)
     and (PackageData.boundname = UzfData.PackageData.boundname)
