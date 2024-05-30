@@ -104,6 +104,7 @@ type
     FFlowModelName: string;
     FImportGeoRef: TImportGeoRef;
     FFlowModelOptions: TFlowNameFileOptions;
+    FNewScreenObjects: TScreenObjectList;
     procedure ImportFlowModelTiming;
     procedure ImportTransportModelTiming;
     procedure ImportSimulationOptions;
@@ -401,6 +402,7 @@ begin
   FMvrSources := TMvrSourceList.Create;
   FMvrReceivers := TMvrReceiverList.Create;
   FFLowTransportLinks := TDictionary<string,string>.Create;
+  FNewScreenObjects := TScreenObjectList.Create;
 end;
 
 procedure TModflow6Importer.CreateAllTopCellsScreenObject;
@@ -418,6 +420,7 @@ begin
   Model := frmGoPhast.PhastModel;
   FAllTopCellsScreenObject := TScreenObject.CreateWithViewDirection(
     Model, vdTop, UndoCreateScreenObject, False);
+  FNewScreenObjects.Add(FAllTopCellsScreenObject);
   FAllTopCellsScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
   Model.AddScreenObject(FAllTopCellsScreenObject);
@@ -455,6 +458,7 @@ end;
 
 destructor TModflow6Importer.Destroy;
 begin
+  FNewScreenObjects.Free;
   FFLowTransportLinks.Free;
   FMvrSources.Free;
   FMvrReceivers.Free;
@@ -859,6 +863,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_CHD_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -900,6 +905,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_CHD_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -1058,7 +1064,10 @@ begin
 
       IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
       MultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-      Model.ModflowPackages.ChdBoundary.UseMultiplier := MultIndex >= 0;
+      if MultIndex >= 0 then      
+      begin      
+        Model.ModflowPackages.ChdBoundary.UseMultiplier := True;
+      end;        
       for TimeSeriesIndex := 0 to Chd.TimeSeriesCount - 1 do
       begin
         TimeSeriesPackage := Chd.TimeSeries[TimeSeriesIndex];
@@ -1489,6 +1498,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_CNC_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -1539,6 +1549,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_CNC_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -1585,7 +1596,10 @@ begin
   Options := Cnc.Options;
 
   AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  GwtCncPackage.UseMultiplier := AuxMultIndex >= 0;
+  if AuxMultIndex >= 0 then  
+  begin  
+    GwtCncPackage.UseMultiplier := True;
+  end;    
 
   OtherCellLists := TObjectList<TCncTimeItemIDList>.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
@@ -1846,6 +1860,7 @@ var
   begin
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     if BoundName <> '' then
     begin
       NewName := ValidName('ImportedCSUB_' + BoundName);
@@ -2487,8 +2502,14 @@ begin
       end;
       Assign3DRealDataSet(DataArrayName, GridData.CG_SKE_CR);
       Assign3DRealDataSet(KInitialCoarsePoros, GridData.CG_THETA);
-      Assign3DRealDataSet(KMoistSpecificGravi, GridData.SGM);
-      Assign3DRealDataSet(KSaturatedSpecificG, GridData.SGS);
+      if GridData.SGM <> nil then
+      begin
+        Assign3DRealDataSet(KMoistSpecificGravi, GridData.SGM);
+      end;
+      if GridData.SGM <> nil then      
+      begin      
+        Assign3DRealDataSet(KSaturatedSpecificG, GridData.SGS);
+      end;
 
       Assert(NoDelayLists.Count = NoDelayInterbeds.Count);
       InterbedIndex := 0;
@@ -2509,11 +2530,14 @@ begin
       begin
         APeriod := CSub[PeriodIndex];
         StartTime := Model.ModflowStressPeriods[APeriod.Period-1].StartTime;
-        for ScreenObjectIndex := 0 to PriorScreenObjects.Count - 1 do
-        begin
-          TimeItem := PriorScreenObjects[ScreenObjectIndex].ModflowCSub.Values.Last as TCsubItem;
-          TimeItem.EndTime := StartTime;
-        end;
+        if PeriodIndex > 0 then        
+        begin        
+          for ScreenObjectIndex := 0 to PriorScreenObjects.Count - 1 do
+          begin
+            TimeItem := PriorScreenObjects[ScreenObjectIndex].ModflowCSub.Values.Last as TCsubItem;
+            TimeItem.EndTime := StartTime;
+          end;
+        end;          
         PriorScreenObjects.Clear;
 
         PriorTimeSeriesAssigned := False;
@@ -2541,6 +2565,7 @@ begin
             if (not PriorTimeSeriesAssigned) or (TimeSeries <> PriorTimeSeries) then
             begin
               AScreenObject := CreateScreenObject(TimeSeries, APeriod.Period);
+              TimeItem := AScreenObject.ModflowCSub.Values.Last as TCsubItem;
               PriorScreenObjects.Add(AScreenObject);
               case ACell.ValueType of
                 vtNumeric:
@@ -2562,6 +2587,7 @@ begin
                     Formula := ImportedTimeSeriesName;
                   end;
               end;
+              TimeItem.StressOffset := Formula; 
 
               if ACell.ValueType = vtNumeric then
               begin
@@ -2772,6 +2798,7 @@ var
   IDOMAIN: TIArray3D;
   APoint: TPoint2D;
   NumberOfLayers: Integer;
+  UniqueCount: integer;
   function ConvertLocation(X, Y: Extended): TPoint2D;
   begin
     if GridAngle = 0 then
@@ -2811,6 +2838,7 @@ begin
   CellCorners := Mesh2D.CellCorners;
   
   Verticies := Disv.Verticies;
+  
   CellCorners.Capacity := Verticies.Count;
   for Index := 0 to Verticies.Count - 1 do
   begin
@@ -2834,8 +2862,13 @@ begin
     APoint := ConvertLocation(Cell.xc, Cell.yc);
     IrregularCell.X := APoint.x;
     IrregularCell.Y := APoint.y; 
-    IrregularCell.NodeNumbers.Capacity := Cell.ncvert;
-    for NodeIndex := 0 to Cell.ncvert - 1 do
+    UniqueCount := Cell.ncvert;
+    if Cell.icvert[0] = Cell.icvert[Cell.ncvert-1] then
+    begin
+      Dec(UniqueCount);
+    end;
+    IrregularCell.NodeNumbers.Capacity := UniqueCount;
+    for NodeIndex := 0 to UniqueCount - 1 do
     begin
       NodeNumber := Cell.icvert[NodeIndex] -1;
       ModelNode := IrregularCell.NodeNumbers.Add;
@@ -3066,6 +3099,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_Drn_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -3108,6 +3142,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_Drn_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -3176,14 +3211,11 @@ begin
   Drn := Package.Package as TDrn;
   Options := Drn.Options;
 
-  if Options.AUXMULTNAME <> '' then
-  begin
-    AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  end
-  else
-  begin
-    AuxMultIndex := -1;
-  end;
+  AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  if AuxMultIndex >= 0 then  
+  begin  
+    Model.ModflowPackages.DrnPackage.UseMultiplier := True;
+  end;    
 
   if Options.AUXDEPTHNAME <> '' then
   begin
@@ -3355,7 +3387,7 @@ begin
         begin
           if DrnMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
           begin
-            KeyString := KeyString + ' MVR';
+            KeyString := KeyString + ' MVR' + ACell.Id.ToString;
             MvrUsed := True;
           end;
         end;
@@ -3914,6 +3946,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_Evt_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -3955,6 +3988,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_Evt_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -4023,6 +4057,10 @@ begin
   end;
   IFaceIndex := Options.IndexOfAUXILIARY('IFACE');
   MultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  if MultIndex >= 0 then
+  begin
+    Model.ModflowPackages.EtsPackage.UseMultiplier := True;
+  end;
 
   DepthFractions := TValueArrayItemList.Create;
   EdtFractions := TValueArrayItemList.Create;
@@ -4749,10 +4787,25 @@ begin
   begin
     SPData := StressPeriods.PeriodData[SPIndex];
     MfStressPeriod := MFStressPeriods.Add;
-    MfStressPeriod.StartTime := StartTime;
+    if (SPIndex = 0) and (SPData.PerLen = 0) then
+    begin
+      MfStressPeriod.StartTime := StartTime-1;
+    end
+    else
+    begin
+      MfStressPeriod.StartTime := StartTime;
+    end;
     StartTime := StartTime + SPData.PerLen;
     MfStressPeriod.EndTime := StartTime;
-    MfStressPeriod.PeriodLength := SPData.PerLen;
+    if SPData.PerLen <> 0 then    
+    begin    
+      MfStressPeriod.PeriodLength := SPData.PerLen;
+    end      
+    else    
+    begin    
+      MfStressPeriod.PeriodLength := 
+        MfStressPeriod.EndTime - MfStressPeriod.StartTime;
+    end;        
     MfStressPeriod.TimeStepMultiplier := SPData.TSMult;
 
     if SPData.NSTP > 1 then
@@ -5188,6 +5241,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_Ghb_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -5230,6 +5284,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_Ghb_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -5298,14 +5353,11 @@ begin
   Ghb := Package.Package as TGhb;
   Options := Ghb.Options;
 
-  if Options.AUXMULTNAME <> '' then
-  begin
-    AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  end
-  else
-  begin
-    AuxMultIndex := -1;
-  end;
+  AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  if AuxMultIndex >= 0 then  
+  begin  
+    Model.ModflowPackages.GhbBoundary.UseMultiplier := True;
+  end;    
 
   SpcList := TSpcList.Create;
   GhbMvrLinkList := TGhbMvrLinkList.Create;
@@ -5828,6 +5880,7 @@ begin
 
         ScreenObject := TScreenObject.CreateWithViewDirection(
           Model, vdTop, UndoCreateScreenObject, False);
+        FNewScreenObjects.Add(ScreenObject);
         ScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
         Model.AddScreenObject(ScreenObject);
@@ -5912,6 +5965,7 @@ var
   begin
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     result.Name := Format('Imported_HFB_Layer_%d_Period_%d', [LayerIndex + 1, HfbPeriod.Period]);
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -7599,6 +7653,7 @@ var
     begin
       ALake.DataSetsScreenObject := TScreenObject.CreateWithViewDirection(
         Model, vdTop, UndoCreateScreenObject, False);
+      FNewScreenObjects.Add(ALake.DataSetsScreenObject);
       ALake.DataSetsScreenObject.Name := Format('ImportedDataLake%d', [ALake.FLakPackageItem.lakeno]);
       ALake.DataSetsScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -7631,6 +7686,7 @@ var
     Assert(ALake <> nil);
     ALake.LakeScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(ALake.LakeScreenObject);
     if ALake.FLakPackageItem.boundname = '' then
     begin
       ALake.LakeScreenObject.Name := Format('ImportedLake%d', [ALake.FLakPackageItem.lakeno]);
@@ -9166,6 +9222,7 @@ begin
 
       AScreenObject := TScreenObject.CreateWithViewDirection(
         Model, vdTop, UndoCreateScreenObject, False);
+      FNewScreenObjects.Add(AScreenObject);
       NewName := ValidName(Format('Imported_%s_Maw_%d',
         [Package.PackageName, WellIndex + 1]));
       AScreenObject.Name := NewName;
@@ -9689,6 +9746,9 @@ begin
 
 end;
 
+type
+  TScreenObjectCrack = class(TScreenObject);
+
 procedure TModflow6Importer.ImportModflow6Model(NameFiles, ErrorMessages: TStringList; usgs_model_reference: string);
 var
   FileIndex: Integer;
@@ -10044,6 +10104,10 @@ begin
         end;
       end;
 
+      for var ScreenObjectIndex := 0 to FNewScreenObjects.Count - 1 do
+      begin
+        TScreenObjectCrack(FNewScreenObjects[ScreenObjectIndex]).Loaded;
+      end;
       PhastModel.Exaggeration := frmGoPhast.DefaultVE;
       frmGoPhast.RestoreDefault2DView1Click(nil);
       Application.ProcessMessages;
@@ -10060,6 +10124,7 @@ begin
       end;
     end;
   finally
+//    PhastModel
     PhastModel.DisvGrid.CanDraw := True;
     if PhastModel.DisvUsed then
     begin
@@ -11145,6 +11210,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_Rch_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -11186,6 +11252,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_Rch_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -11247,6 +11314,10 @@ begin
   end;
 
   AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  if AuxMultIndex >= 0 then
+  begin
+    Model.ModflowPackages.RchPackage.UseMultiplier := True;
+  end;
 
   RchLinkList := TRchLinkList.Create;
   SpcList := TSpcList.Create;
@@ -11978,6 +12049,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_Riv_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -12020,6 +12092,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_Riv_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -12088,14 +12161,11 @@ begin
   Riv := Package.Package as TRiv;
   Options := Riv.Options;
 
-  if Options.AUXMULTNAME <> '' then
-  begin
-    AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  end
-  else
-  begin
-    AuxMultIndex := -1;
-  end;
+  AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
+  if AuxMultIndex >= 0 then  
+  begin  
+    Model.ModflowPackages.RivPackage.UseMultiplier := True;
+  end;    
 
   SpcList := TSpcList.Create;
   RivMvrLinkList := TRivMvrLinkList.Create;
@@ -13687,6 +13757,7 @@ var
 
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_Sfr_%d',
       [Package.PackageName, FirstReachNo]));
     result.Name := NewName;
@@ -15404,7 +15475,11 @@ begin
                         begin
                           if ASetting.StringValue <> '' then
                           begin
-                            DiversionFormula := ASetting.StringValue;
+                            if not Map.TryGetValue(UpperCase(ASetting.StringValue), DiversionFormula) then
+                            begin
+                              Assert(False);
+                            end;
+                            
                           end
                           else
                           begin
@@ -15699,6 +15774,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_SRC_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -15749,6 +15825,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_SRC_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -15795,7 +15872,10 @@ begin
   Options := Src.Options;
 
   AuxMultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  GwtSrcPackage.UseMultiplier := AuxMultIndex >= 0;
+  if AuxMultIndex >= 0 then  
+  begin  
+    GwtSrcPackage.UseMultiplier := True;
+  end;    
 
   OtherCellLists := TObjectList<TSrcTimeItemIDList>.Create;
   BoundNameObsDictionary := TBoundNameDictionary.Create;
@@ -16490,6 +16570,7 @@ var
   begin
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     result.Name := 'ImportedTVK_' + RootName + '_Period_' + IntToStr(APeriod.Period);
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -16767,6 +16848,7 @@ var
   begin
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     result.Name := 'ImportedTVS_' + RootName + '_Period_' + IntToStr(APeriod.Period);
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -17892,6 +17974,7 @@ begin
       MergedList := MergedUzfData[MergeIndex];
       AScreenObject := TScreenObject.CreateWithViewDirection(
         Model, vdTop, UndoCreateScreenObject, False);
+      FNewScreenObjects.Add(AScreenObject);
       AScreenObject.Name := 'ImportedUZF_' + IntToStr(MergeIndex+1);
       AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
@@ -17980,6 +18063,7 @@ begin
             UzfMf6Item.EndTime := EndTime;
           end;
           UzfMf6Item.Infiltration := BoundaryValueToFormula(PData.finf, Map);
+          UzfMf6Item.PotentialET := BoundaryValueToFormula(PData.pet, Map);
           UzfMf6Item.ExtinctionDepth := BoundaryValueToFormula(PData.extdp, Map);
           UzfMf6Item.ExtinctionWaterContent := BoundaryValueToFormula(PData.extwc, Map);
           UzfMf6Item.AirEntryPotential := BoundaryValueToFormula(PData.ha, Map);
@@ -18203,6 +18287,17 @@ begin
           end;
           UzfMf6Item.Infiltration := BoundaryValuesToFormula(BoundaryValueArray,
             Format('Imported_finf_SP%d', [ImportedUzfPeriodItem.Period]),
+            Map, AScreenObject);
+
+          for CellIndex := 0 to MergedList.Count - 1 do
+          begin
+            UzfDataItem := MergedList[CellIndex];
+            ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+            PData := ImportedUzfPeriodItem.PeriodData;
+            BoundaryValueArray[CellIndex] := PData.pet;
+          end;
+          UzfMf6Item.PotentialET := BoundaryValuesToFormula(BoundaryValueArray,
+            Format('Imported_pet_SP%d', [ImportedUzfPeriodItem.Period]),
             Map, AScreenObject);
 
           for CellIndex := 0 to MergedList.Count - 1 do
@@ -18923,6 +19018,7 @@ var
     Inc(ObjectCount);
     AScreenObject := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(AScreenObject);
     NewName := ValidName(Format('Imported_%s_Wel_Obs_%d', [Package.PackageName, ObjectCount]));
     AScreenObject.Name := NewName;
     AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -18965,6 +19061,7 @@ var
     Inc(ObjectCount);
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
+    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_Wel_%d_Period_%d', [Package.PackageName, ObjectCount, Period]));
     result.Name := NewName;
     result.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
@@ -19037,7 +19134,10 @@ begin
   Wel := Package.Package as TWel;
   Options := Wel.Options;
   MultIndex := Options.IndexOfAUXILIARY(Options.AUXMULTNAME);
-  Model.ModflowPackages.WelPackage.UseMultiplier := MultIndex >= 0;
+  if MultIndex >= 0 then  
+  begin  
+    Model.ModflowPackages.WelPackage.UseMultiplier := True;
+  end;    
 
   if Options.AUTO_FLOW_REDUCE.Used then
   begin

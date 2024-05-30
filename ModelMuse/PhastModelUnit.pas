@@ -10256,6 +10256,8 @@ const
 //                are to be summed.
 //    '5.2.0.12' no real change.
 
+//               bug fix: Fixed export of h0 in CSUB package data.
+
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const

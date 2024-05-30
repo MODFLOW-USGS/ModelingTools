@@ -7037,9 +7037,20 @@ begin
           OtherEdge := Edges.NearestPointsFirstData(X,Y);
           if OtherEdge.IsSame(ACellEdge) then
           begin
-            Edges.RemovePoint(X, Y, OtherEdge);
-            OtherEdge.Free;
-            ACellEdge.Free;
+            if Edges.RemovePoint(X, Y, OtherEdge) then
+            begin
+              OtherEdge.Free;
+              ACellEdge.Free;
+            end
+            else if Edges.RemovePoint(Y, X, OtherEdge) then
+            begin
+              OtherEdge.Free;
+              ACellEdge.Free;
+            end
+            else
+            begin
+              Assert(False);
+            end;
           end
           else
           begin
@@ -7048,9 +7059,20 @@ begin
             OtherEdge := Edges.NearestPointsFirstData(X,Y);
             if OtherEdge.IsSame(ACellEdge) then
             begin
-              Edges.RemovePoint(X, Y, OtherEdge);
-              OtherEdge.Free;
-              ACellEdge.Free;
+              if Edges.RemovePoint(X, Y, OtherEdge) then
+              begin
+                OtherEdge.Free;
+                ACellEdge.Free;
+              end
+              else if Edges.RemovePoint(Y, X, OtherEdge) then
+              begin
+                OtherEdge.Free;
+                ACellEdge.Free;
+              end
+              else
+              begin
+                Assert(False);
+              end;
             end
             else
             begin
@@ -7082,7 +7104,12 @@ begin
         for ItemIndex := 0 to Length(AnArray) - 1 do
         begin
           ACellEdge := AnArray[ItemIndex];
-          ASegment[1] := TwoDGrid.CellCorners[ACellEdge.Node1].Location;
+          try
+            ASegment[1] := TwoDGrid.CellCorners[ACellEdge.Node1].Location;
+          except
+            ShowMessage(ACellEdge.Node1.ToString + ' ' + ItemIndex.ToString + ' ' + EdgeIndex.ToString);
+            raise;
+          end;
           ASegment[2] := TwoDGrid.CellCorners[ACellEdge.Node2].Location;
           Assert(Distance(ASegment[1], ASegment[2]) >0);
           AllEdges[EIndex] := ASegment;

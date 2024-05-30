@@ -195,8 +195,10 @@ var
   Comment: string;
   ParamDefArrays: TList;
   RechRateTimes: TModflowBoundaryDisplayTimeList;
+  RechMultTimes: TModflowBoundaryDisplayTimeList;
   RechLayerTimes: TModflowBoundaryDisplayTimeList;
   RechRateArray: TModflowBoundaryDisplayDataArray;
+  RechMultArray: TModflowBoundaryDisplayDataArray;
   RechLayerArray: TModflowBoundaryDisplayDataArray;
   DefArrayList: TList;
   Index: Integer;
@@ -233,8 +235,9 @@ begin
         NPRCH := ParameterCount;
         NRCHOP := Ord(Model.ModflowPackages.RchPackage.LayerOption) + 1;
         RechRateTimes := TimeLists[0];
-        RechLayerTimes := TimeLists[1];
-        for ConcIndex := 2 to TimeLists.Count - 1 do
+        RechMultTimes := TimeLists[1];
+        RechLayerTimes := TimeLists[2];
+        for ConcIndex := 3 to TimeLists.Count - 1 do
         begin
           ConcLists.Add(TimeLists[ConcIndex])
         end;
@@ -280,6 +283,12 @@ begin
             end;
             Model.AdjustDataArray(RechRateArray);
             RechRateArray.CacheData;
+
+            RechMultArray := RechMultTimes[TimeIndex]
+              as TModflowBoundaryDisplayDataArray;
+
+            AssignTransient2DArray(RechMultArray, 1, List, 1, rdtDouble,
+              Model.ModflowPackages.RchPackage.AssignmentMethod);
 
             // Data set 8
             if RechLayerArray <> nil then

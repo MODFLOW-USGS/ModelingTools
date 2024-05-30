@@ -2155,7 +2155,7 @@ begin
         Index := Index-SfrMf6DiversionStartPosition;
         if Index < FDiversionFormulas.Count then
         begin
-          DiversionFormulas[Index-SfrMf6DiversionStartPosition] := Value;
+          DiversionFormulas[Index] := Value;
           Exit;
         end;
 

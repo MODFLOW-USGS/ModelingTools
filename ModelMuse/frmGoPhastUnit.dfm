@@ -44,7 +44,6 @@ inherited frmGoPhast: TfrmGoPhast
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitHeight = 252
     object splitVertTop: TJvNetscapeSplitter
       Left = 537
       Top = 0
@@ -69,7 +68,7 @@ inherited frmGoPhast: TfrmGoPhast
       TabOrder = 0
       TabStop = True
       ExplicitWidth = 537
-      ExplicitHeight = 252
+      ExplicitHeight = 257
       inherited rulVertical: TRbwRuler
         Height = 203
         RulerPrecision = 7
@@ -78,7 +77,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
       inherited pnlTop: TPanel
         Width = 537
-        ExplicitWidth = 531
+        ExplicitWidth = 533
         inherited rulHorizontal: TRbwRuler
           Width = 488
           RulerPrecision = 6
@@ -98,8 +97,8 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 486
         Image32.ExplicitHeight = 201
-        ExplicitWidth = 482
-        ExplicitHeight = 189
+        ExplicitWidth = 484
+        ExplicitHeight = 202
       end
       inherited OrderMenu: TPopupMenu
         Left = 80
@@ -116,7 +115,7 @@ inherited frmGoPhast: TfrmGoPhast
       TabStop = True
       ExplicitLeft = 547
       ExplicitWidth = 229
-      ExplicitHeight = 252
+      ExplicitHeight = 257
       inherited rulVertical: TRbwRuler
         Left = 180
         Height = 203
@@ -167,7 +166,7 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitHeight = 201
         ExplicitLeft = 0
         ExplicitWidth = 180
-        ExplicitHeight = 189
+        ExplicitHeight = 202
       end
       inherited OrderMenu: TPopupMenu
         Left = 48
@@ -188,7 +187,6 @@ inherited frmGoPhast: TfrmGoPhast
     ParentDoubleBuffered = False
     TabOrder = 2
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitTop = 394
     object splitVertBottom: TJvNetscapeSplitter
       Left = 537
       Top = 0
@@ -225,7 +223,7 @@ inherited frmGoPhast: TfrmGoPhast
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 79
-        ExplicitWidth = 531
+        ExplicitWidth = 533
         inherited ModelCube: TRbwModelCube
           Hint = 
             'Click to change row|Click to change the selected row forward or ' +
@@ -259,7 +257,7 @@ inherited frmGoPhast: TfrmGoPhast
         Image32.ExplicitWidth = 486
         Image32.ExplicitHeight = 77
         ExplicitTop = 0
-        ExplicitWidth = 482
+        ExplicitWidth = 484
         ExplicitHeight = 79
       end
     end
@@ -274,7 +272,7 @@ inherited frmGoPhast: TfrmGoPhast
       ParentDoubleBuffered = False
       TabOrder = 1
       TabStop = True
-      ExplicitLeft = 541
+      ExplicitLeft = 543
       ExplicitWidth = 229
       ExplicitHeight = 133
       inherited glWidModelView: TGLWidget
@@ -310,8 +308,8 @@ inherited frmGoPhast: TfrmGoPhast
     OnMouseMove = sbMainMouseMove
     OnMouseUp = sbMainMouseUp
     OnDrawPanel = sbMainDrawPanel
-    ExplicitTop = 518
-    ExplicitWidth = 770
+    ExplicitTop = 531
+    ExplicitWidth = 772
   end
   object cbControlBar: TControlBar
     Left = 0
@@ -325,7 +323,7 @@ inherited frmGoPhast: TfrmGoPhast
     ShowHint = True
     TabOrder = 0
     OnMouseMove = pnlLowerRightMouseMove
-    ExplicitWidth = 770
+    ExplicitWidth = 772
     object tbarEdit: TToolBar
       Left = 183
       Top = 2

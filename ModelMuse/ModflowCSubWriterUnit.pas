@@ -1027,7 +1027,7 @@ begin
             if h0DataArray <> nil then
             begin
 //              WriteFloat(h0);
-              WriteDataArrayValueOrFormula(kvDataArray, LayerIndex, RowIndex, ColIndex);
+              WriteDataArrayValueOrFormula(h0DataArray, LayerIndex, RowIndex, ColIndex);
             end
             else
             begin
