@@ -124,6 +124,7 @@ type
     procedure FillSpcList(SpcList: TSpcList; Package: TPackage;
       TransportModels: TModelList; Maps: TimeSeriesMaps);
     function CellCoordinates(CellId: TMfCellId): TPoint3d;
+    function CellTopAndBottom(CellId: TMfCellId; Out Top, Bottom: double): Boolean;
     property AllTopCellsScreenObject: TScreenObject read GetAllTopCellsScreenObject;
     procedure AssignRealValuesToCellCenters(DataArray: TDataArray;
       ScreenObject: TScreenObject; ImportedData: TDArray2D);
@@ -224,7 +225,8 @@ uses
   ModflowGwtSpecifiedConcUnit, Mf6.SrcFileReaderUnit, Mf6.FmiFileReaderUnit,
   Mf6.SftFileReaderUnit, GwtStatusUnit, Mf6.LktFileReaderUnit, Mt3dmsChemUnit,
   Mf6.MwtFileReaderUnit, Mf6.UztFileReaderUnit, Mf6.MvtFileReaderUnit,
-  ModelMuseUtilities, GeoRefUnit, SparseDataSets, SparseArrayUnit;
+  ModelMuseUtilities, GeoRefUnit, SparseDataSets, SparseArrayUnit,
+  QuadTreeClass;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -1512,6 +1514,7 @@ var
     result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
 
     result.CreateGwtCncBoundary;
+    result.GwtCncBoundary.ChemSpecies := NameFile.SpeciesName;
 
     AddItem(result, ACell, Period);
 
@@ -2987,7 +2990,6 @@ var
     DrnItem: TDrnItem;
     ImportedName: string;
     Aux: TMf6BoundaryValue;
-//    AuxMultiplier: Extended;
   begin
     DrnItem := AScreenObject.ModflowDrnBoundary.Values.Add as TDrnItem;
     ItemList.Add(DrnItem);
@@ -7623,9 +7625,11 @@ var
     DataArray: TDataArray;
     UndoCreateScreenObject: TCustomUndo;
     AConnection: TLakConnectionItem;
+    OtherConnection: TLakConnectionItem;
     UniformValues: Boolean;
     FirstValue: Extended;
     CellIndex: Integer;
+    NearestCellIndex: Integer;
     ImportedK: TValueArrayItem;
     DataSetIndex: Integer;
     CellIds: TCellIdList;
@@ -7642,13 +7646,133 @@ var
     X: double;
     Y: double;
     Z: double;
-    Data: TPointerArray;
+    Data: OctTreeClass.TPointerArray;
     UseNeigbor: Boolean;
     LktPackageItem: TLktPackageItem;
     SrtItem: TStringConcValueItem;
     Cell1: TMfCellId;
     Cell2: TMfCellId;
     Values: TOneDRealArray;
+    QuadTree: TRbwQuadTree;
+    QuadTrees: TObjectList<TRbwQuadTree>;
+    procedure EliminateUnconnectedCells(CellIds: TCellIdList);
+    var
+      GroupNumbers: array of Integer;
+      GroupCounts: array of Integer;
+      GroupIndex: Integer;
+      DisvUsed: Boolean;
+      DisvGrid: TModflowDisvGrid;
+      GroupNumber: Integer;
+      MaxGroupNumber: Integer;
+      MaxCount: Integer;
+      procedure CheckNeighbors(CellIndex: Integer);
+      var
+        IntQueue: TQueue<Integer>;
+        TestIndex: Integer;
+        ACell: TMfCellId;
+        function AreNeighbors(Cell1, Cell2: TMfCellId): Boolean;
+        var
+          DisvCell1: TModflowIrregularCell2D;
+          DisvCell2: TModflowIrregularCell2D;
+        begin
+          result := False;
+          if DisvUsed then
+          begin
+            DisvCell1 := DisvGrid.TwoDGrid.Cells[Cell1.Column-1];
+            DisvCell2 := DisvGrid.TwoDGrid.Cells[Cell2.Column-1];
+            // use if Cells connected by a single node are not accepted.
+//            result := DisvCell1.IsNeighbor(DisvCell2);
+            // use if cells connected by a single node are accepted.
+            result := DisvCell1.HaveSharedNode(DisvCell2);
+          end
+          else
+          begin
+            // use if diagonal neighbors are not accepted.
+//            if Abs(Cell1.Row - Cell2.Row) = 1 then
+//            begin
+//              result := Abs(Cell1.Column - Cell2.Column) = 0;
+//            end
+//            else if Abs(Cell1.Row - Cell2.Row) = 0 then
+//            begin
+//              result := Abs(Cell1.Column - Cell2.Column) = 1;
+//            end;
+            // use if diagonal neighbors are accepted.
+            result := (Abs(Cell1.Row - Cell2.Row) in [0,1])
+              and (Abs(Cell1.Column - Cell2.Column) in [0,1])
+          end;
+        end;
+      begin
+        IntQueue := TQueue<Integer>.Create;
+        try
+          IntQueue.Enqueue(CellIndex);
+          while IntQueue.Count > 0 do
+          begin
+            TestIndex := IntQueue.Dequeue;
+            ACell := CellIds[TestIndex];
+            for var Index := TestIndex + 1 to CellIds.Count - 1 do
+            begin
+              if GroupNumbers[Index] <> 0  then
+              begin
+                Continue;
+              end;
+              if AreNeighbors(ACell, CellIds[Index]) then
+              begin
+                GroupNumbers[Index] := GroupIndex;
+                IntQueue.Enqueue(Index);
+              end;
+            end;
+          end;
+        finally
+          IntQueue.Free;
+        end;
+      end;
+    begin
+      DisvUsed := Model.DisvUsed;
+      if DisvUsed then
+      begin
+        DisvGrid := Model.DisvGrid;
+      end
+      else
+      begin
+        DisvGrid := nil;
+      end;
+      SetLength(GroupNumbers, CellIds.Count);
+      GroupIndex := 1;
+      for var Index := 0 to CellIds.Count - 1 do
+      begin
+        if GroupNumbers[Index] <> 0  then
+        begin
+          Continue;
+        end;
+        GroupNumbers[Index] := GroupIndex;
+        CheckNeighbors(Index);
+        Inc(GroupIndex);
+      end;
+      SetLength(GroupCounts, GroupIndex);
+      for var Index := 0 to CellIds.Count - 1 do
+      begin
+        GroupNumber := GroupNumbers[Index];
+        Assert(GroupNumber <> 0);
+        Inc(GroupCounts[GroupNumber]);
+      end;
+      MaxCount := 0;
+      MaxGroupNumber := -1;
+      for var Index := 0 to Length(GroupCounts) - 1 do
+      begin
+        if GroupCounts[Index] > MaxCount then
+        begin
+          MaxCount := GroupCounts[Index];
+          MaxGroupNumber := Index
+        end;
+      end;
+      for var Index := CellIds.Count - 1 downto 0 do
+      begin
+        if GroupNumbers[Index] <> MaxGroupNumber then
+        begin
+          CellIds.Delete(Index)
+        end;
+      end;
+    end;
     procedure CreateDataSetScreenObject;
     var
       CellIds: TCellIdList;
@@ -7680,6 +7804,9 @@ var
           CellIds.Add(ACellId);
         end;
         AddPointsToScreenObject(CellIds, ALake.DataSetsScreenObject, True);
+//        ALake.DataSetsScreenObject.ElevationCount := ecTwo;
+//        ALake.DataSetsScreenObject.LowerElevationFormula := ALake.DataSetsScreenObject.ElevationFormula;
+//        ALake.DataSetsScreenObject.HigherElevationFormula := KModelTop;
       finally
         CellIds.Free;
       end;
@@ -7687,6 +7814,7 @@ var
         rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
     end;
   begin
+    Locations.Clear;
     ObsNameIndex := 0;
     Assert(ALake <> nil);
     ALake.LakeScreenObject := TScreenObject.CreateWithViewDirection(
@@ -7827,8 +7955,10 @@ var
             CellIds.Delete(CellIndex)
           end;
         end;
-
-//        RealValuesToFormula
+        if CellIds.Count > 2 then
+        begin
+          EliminateUnconnectedCells(CellIds);
+        end;
 
         AddPointsToScreenObject(CellIds, ALake.LakeScreenObject, False);
         ALake.LakeScreenObject.ElevationCount := ecTwo;
@@ -7986,6 +8116,7 @@ var
       end;
     end;
 
+
     UniformValues := True;
     FirstValue := ALake.FConnections[0].bedleak;
     for CellIndex := 1 to ALake.FConnections.Count - 1 do
@@ -7996,6 +8127,7 @@ var
         break;
       end;
     end;
+
 
     if UniformValues then
     begin
@@ -8012,14 +8144,59 @@ var
       ImportedK.Name := KImportedLakeK;
       ImportedK.Values.DataType := rdtDouble;
 
-      for CellIndex := 0 to ALake.FConnections.Count - 1 do
-      begin
-        ImportedK.Values.Add(ALake.FConnections[CellIndex].bedleak);
+      QuadTrees := TObjectList<TRbwQuadTree>.Create;
+      try
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          AConnection := ALake.FConnections[CellIndex];
+          While AConnection.cellid.Layer > QuadTrees.Count do
+          begin
+            QuadTrees.Add(TRbwQuadTree.Create(nil));
+          end;
+          if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+          begin
+            QuadTree := QuadTrees[AConnection.cellid.Layer-1];
+            QuadTree.AddPoint(AConnection.cellid.Row, AConnection.cellid.Column,
+              Pointer(CellIndex))
+          end;
+        end;
+
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          AConnection := ALake.FConnections[CellIndex];
+
+          if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+          begin
+            ImportedK.Values.Add(ALake.FConnections[CellIndex].bedleak);
+          end
+          else
+          begin
+            QuadTree := QuadTrees[AConnection.cellid.Layer-1];
+            if QuadTree.Count > 0 then
+            begin
+              NearestCellIndex := Integer(QuadTree.NearestPointsFirstData(
+                AConnection.cellid.Row, AConnection.cellid.Column));
+              OtherConnection := ALake.FConnections[NearestCellIndex];
+              ImportedK.Values.Add(OtherConnection.bedleak);
+            end
+            else
+            begin
+              ImportedK.Values.Add(AConnection.bedleak);
+            end;
+          end;
+        end;
+
+
+      finally
+        QuadTrees.Free;
       end;
 
       DataArrayName := Format('LakeK_%d', [ALake.FLakPackageItem.lakeno]);
       DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
         DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
+      DataArray.Comment := Format('Imported from %s on %s',
+        [FModelNameFile, DateTimeToStr(Now)]);
+      DataArray.UpdateDimensions(Model.LayerCount, Model.RowCount, Model.ColumnCount);
 
       DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
       ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
@@ -8054,14 +8231,60 @@ var
       ImportedK.Name := KImportedLakeBelev;
       ImportedK.Values.DataType := rdtDouble;
 
-      for CellIndex := 0 to ALake.FConnections.Count - 1 do
-      begin
-        ImportedK.Values.Add(ALake.FConnections[CellIndex].belev);
+      QuadTrees := TObjectList<TRbwQuadTree>.Create;
+      try
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          AConnection := ALake.FConnections[CellIndex];
+          While AConnection.cellid.Layer > QuadTrees.Count do
+          begin
+            QuadTrees.Add(TRbwQuadTree.Create(nil));
+          end;
+          if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+          begin
+            QuadTree := QuadTrees[AConnection.cellid.Layer-1];
+            QuadTree.AddPoint(AConnection.cellid.Row, AConnection.cellid.Column,
+              Pointer(CellIndex))
+          end;
+        end;
+
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          AConnection := ALake.FConnections[CellIndex];
+
+          if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+          begin
+            ImportedK.Values.Add(ALake.FConnections[CellIndex].belev);
+          end
+          else
+          begin
+            QuadTree := QuadTrees[AConnection.cellid.Layer-1];
+            if QuadTree.Count > 0 then
+            begin
+              NearestCellIndex := Integer(QuadTree.NearestPointsFirstData(
+                AConnection.cellid.Row, AConnection.cellid.Column));
+              OtherConnection := ALake.FConnections[NearestCellIndex];
+              ImportedK.Values.Add(OtherConnection.belev);
+            end
+            else
+            begin
+              ImportedK.Values.Add(AConnection.belev);
+            end;
+          end;
+        end;
+
+
+      finally
+        QuadTrees.Free;
       end;
+
 
       DataArrayName := Format('LakeBottomElev_%d', [ALake.FLakPackageItem.lakeno]);
       DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
         DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
+      DataArray.Comment := Format('Imported from %s on %s',
+        [FModelNameFile, DateTimeToStr(Now)]);
+      DataArray.UpdateDimensions(Model.LayerCount, Model.RowCount, Model.ColumnCount);
 
       DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
       ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
@@ -8096,14 +8319,60 @@ var
       ImportedK.Name := KImportedLakeTelev;
       ImportedK.Values.DataType := rdtDouble;
 
-      for CellIndex := 0 to ALake.FConnections.Count - 1 do
-      begin
-        ImportedK.Values.Add(ALake.FConnections[CellIndex].telev);
+      QuadTrees := TObjectList<TRbwQuadTree>.Create;
+      try
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          AConnection := ALake.FConnections[CellIndex];
+          While AConnection.cellid.Layer > QuadTrees.Count do
+          begin
+            QuadTrees.Add(TRbwQuadTree.Create(nil));
+          end;
+          if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+          begin
+            QuadTree := QuadTrees[AConnection.cellid.Layer-1];
+            QuadTree.AddPoint(AConnection.cellid.Row, AConnection.cellid.Column,
+              Pointer(CellIndex))
+          end;
+        end;
+
+        for CellIndex := 0 to ALake.FConnections.Count - 1 do
+        begin
+          AConnection := ALake.FConnections[CellIndex];
+
+          if AnsiSameText(AConnection.claktype, 'HORIZONTAL') then
+          begin
+            ImportedK.Values.Add(ALake.FConnections[CellIndex].telev);
+          end
+          else
+          begin
+            QuadTree := QuadTrees[AConnection.cellid.Layer-1];
+            if QuadTree.Count > 0 then
+            begin
+              NearestCellIndex := Integer(QuadTree.NearestPointsFirstData(
+                AConnection.cellid.Row, AConnection.cellid.Column));
+              OtherConnection := ALake.FConnections[NearestCellIndex];
+              ImportedK.Values.Add(OtherConnection.telev);
+            end
+            else
+            begin
+              ImportedK.Values.Add(AConnection.telev);
+            end;
+          end;
+        end;
+
+
+      finally
+        QuadTrees.Free;
       end;
+
 
       DataArrayName := Format('LakeTopElev_%d', [ALake.FLakPackageItem.lakeno]);
       DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
         DataArrayName, '0', DataArrayName, [dcType], rdtDouble, eaBlocks, dso3d, '');
+      DataArray.Comment := Format('Imported from %s on %s',
+        [FModelNameFile, DateTimeToStr(Now)]);
+      DataArray.UpdateDimensions(Model.LayerCount, Model.RowCount, Model.ColumnCount);
 
       DataSetIndex := ALake.DataSetsScreenObject.AddDataSet(DataArray);
       ALake.DataSetsScreenObject.DataSetFormulas[DataSetIndex] :=
@@ -8135,6 +8404,7 @@ var
 
   end;
 begin
+  FErrorMessages.Add('Be sure to check all lakes to make sure there are no extra lakes cells. If any are found, delete them.');
   // For each lake, define 3D data sets for Lake K, bottom elevation, and top elevation.
   // Assign lake thickness a value of 1.
   // Assign bedleak to Lake K
@@ -9719,7 +9989,7 @@ begin
         AnItem := AScreenObject.ModflowMawBoundary.Values.Add as TMawItem;
         AnItem.StartTime := StartTime;
         AnItem.EndTime := EndTime;
-        AnItem.MawStatus := mwInactive;
+        AnItem.MawStatus := mwActive;
       end;
     end;
 
@@ -10777,6 +11047,37 @@ begin
   result.z := ElementCenter.RotatedLocation.z;
 end;
 
+function TModflow6Importer.CellTopAndBottom(CellId: TMfCellId; Out Top,
+  Bottom: double): Boolean;
+var
+  Model: TPhastModel;
+  LocalGrid: TModflowGrid;
+  DisvGrid: TModflowDisvGrid;
+begin
+  result := True;
+  Model := frmGophast.PhastModel;
+  if (CellId.Layer-1 < 0) or (CellId.Layer-1 > Model.LayerCount)
+    or (CellId.Row-1 < 0) or (CellId.Row-1 > Model.RowCount-1)
+    or (CellId.Column-1 < 0) or (CellId.Column-1 > Model.ColumnCount-1)
+    then
+  begin
+    result := False;
+    Exit;
+  end;
+  if Model.DisvUsed then
+  begin
+    DisvGrid := Model.DisvGrid;
+    Top := DisvGrid.LayerPosition(CellId.Layer-1, CellId.Column-1);
+    Bottom := DisvGrid.LayerPosition(CellId.Layer, CellId.Column-1);
+  end
+  else
+  begin
+    LocalGrid := Model.ModflowGrid;
+    Top := LocalGrid.CellElevation[ZeroBasedID(CellId.Layer-1, CellId.Row-1, CellId.Column-1)];
+    Bottom := LocalGrid.CellElevation[ZeroBasedID(CellId.Layer, CellId.Row-1, CellId.Column-1)];
+  end;
+end;
+
 procedure TModflow6Importer.AddPointsToScreenObject(CellIds: TCellIdList;
   AScreenObject: TScreenObject; ThreeD: Boolean = True);
 var
@@ -10948,6 +11249,7 @@ begin
   Model.ModflowWettingOptions.WettingActive := Options.REWET.Used;
   if Options.REWET.Used then
   begin
+    Model.ModflowWettingOptions.WettingActive := True;
     Model.ModflowWettingOptions.WettingFactor := Options.REWET.WETFCT;
     Model.ModflowWettingOptions.WettingIterations := Options.REWET.IWETIT;
     Model.ModflowWettingOptions.WettingEquation := Options.REWET.IHDWET;
@@ -13221,10 +13523,10 @@ begin
     end;
     DataArrayName := Format('Imported_Active_%d', [LayerIndex]);
     ActiveFormula := ActiveFormula + ',' + DataArrayName;
-    DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray, 
+    DataArray := Model.DataArrayManager.CreateNewDataArray(TDataArray,
       DataArrayName, 'True', DataArrayName, [dcType], rdtBoolean, eaBlocks, 
       dsoTop, '');
-    DataArray.Comment := Format('Imported from %s on %s', 
+    DataArray.Comment := Format('Imported from %s on %s',
       [FModelNameFile, DateTimeToStr(Now)]);
     DataArray.UpdateDimensions(Model.LayerCount, Model.RowCount, Model.ColumnCount);
     Interpolator := TNearestPoint2DInterpolator.Create(nil);
@@ -15902,6 +16204,7 @@ var
     result.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
 
     result.CreateGwtSrcBoundary;
+    result.GwtSrcBoundary.ChemSpecies := NameFile.SpeciesName;
 
     AddItem(result, ACell, Period);
 
@@ -17478,6 +17781,9 @@ var
     ObsIndex: Integer;
     AnObs: TObservation;
     UzfObs: TUzfObs;
+    Depth: double;
+    Top: Double;
+    Bottom: Double;
   begin
     if Obs <> nil then
     begin
@@ -17546,6 +17852,12 @@ var
         else if AnsiSameText(AnObs.ObsType, 'water-content') then
         begin
           Include(UzfObs, uoWaterContent);
+          Assert(AnObs.IdType2 = itFloat);
+          Depth := AnObs.FloatNum2;
+          if CellTopAndBottom(UzfDataItem.PackageData.cellid, Top, Bottom) then
+          begin
+            AScreenObject.Modflow6Obs.UzfObsDepthFraction := 1-(Top-Depth-Bottom)/(Top-Bottom);
+          end;
         end
         else
         begin
@@ -19560,7 +19872,7 @@ begin
             begin
               if WellMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
               begin
-                KeyString := KeyString + ' MVR';
+                KeyString := KeyString + ' MVR' + CellIndex.ToString;
                 MvrUsed := True;
               end;
             end;

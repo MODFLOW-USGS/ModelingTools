@@ -198,6 +198,7 @@ type
     function Area: double;
     property NodesI[Index: integer]: INode2D read GetNodeI;
     function IsNeighbor(OtherCell: TModflowIrregularCell2D): Boolean; overload;
+    function HaveSharedNode(OtherCell: TModflowIrregularCell2D): Boolean; overload;
     procedure GetNeighbors(CellList: TMFIrregularCell2D_List);
     // Get the neighbors of the current cell in order around the edge
     // of the cell.
@@ -1645,6 +1646,27 @@ end;
 function TModflowIrregularCell2D.GetTriangNumber: integer;
 begin
   result := FTriangNumber;
+end;
+
+function TModflowIrregularCell2D.HaveSharedNode(
+  OtherCell: TModflowIrregularCell2D): Boolean;
+var
+  ANode: TModflowNode;
+begin
+  result := False;
+  if OtherCell = self then
+  begin
+    Exit;
+  end;
+  for var NodeIndex := 0 to NodeNumbers.Count - 1 do
+  begin
+    ANode := ElementCorners[NodeIndex];
+    if ANode.FCells.IndexOf(OtherCell) >= 0 then
+    begin
+      result := True;
+      Exit;
+    end;
+  end;
 end;
 
 function TModflowIrregularCell2D.IndexOf(Item: ITriangulatable): Integer;
