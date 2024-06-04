@@ -310,6 +310,7 @@ type
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList);
     procedure RecordStrings(Strings: TStringList);
     Property SpeciesCount: Integer read FSpeciesCount write SetSpeciesCount;
+    function IsIdentical(GwtCellData: TGwtCellData): Boolean;
   end;
 
   // @name is used in FMP4
@@ -2526,6 +2527,22 @@ begin
     WriteCompInt(Comp, Strings.IndexOf(ValueTimeSeriesNames[Index]));
   end;
 
+end;
+
+function TGwtCellData.IsIdentical(GwtCellData: TGwtCellData): Boolean;
+begin
+  result := Length(Values) = Length(GwtCellData.Values);
+  if result then
+  begin
+    for var Index := 0 to Length(Values) - 1 do
+    begin
+      result := Values[Index] = GwtCellData.Values[Index];
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
 end;
 
 procedure TGwtCellData.RecordStrings(Strings: TStringList);

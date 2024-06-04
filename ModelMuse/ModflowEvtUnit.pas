@@ -472,6 +472,7 @@ type
     function GetPestSeriesName(Index: Integer): string; override;
     function GetMf6TimeSeriesName(Index: Integer): string; override;
     procedure SetMf6TimeSeriesName(Index: Integer; const Value: string); override;
+  public
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
   end;
 
@@ -1391,7 +1392,8 @@ begin
   begin
     Evt_Cell := TEvt_Cell(AnotherCell);
     result :=
-      (EvapotranspirationRate = Evt_Cell.EvapotranspirationRate);
+      (EvapotranspirationRate = Evt_Cell.EvapotranspirationRate)
+      and FValues.GwtConcentrations.IsIdentical(Evt_Cell.FValues.GwtConcentrations)
   end;
 end;
 

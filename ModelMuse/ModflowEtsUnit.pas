@@ -3922,6 +3922,7 @@ begin
     result :=
       (EvapotranspirationRate = Ets_Cell.EvapotranspirationRate)
       and (Multiplier = Ets_Cell.Multiplier)
+      and FValues.GwtConcentrations.IsIdentical(Ets_Cell.FValues.GwtConcentrations)
   end;
 end;
 

@@ -1722,7 +1722,9 @@ begin
       and (RiverBottom = RIV_Cell.RiverBottom)
       and (RiverStage = RIV_Cell.RiverStage)
       and (IFace = RIV_Cell.IFace)
-      and (Values.Cell = RIV_Cell.Values.Cell);
+      and (Values.Cell = RIV_Cell.Values.Cell)
+      and (FValues.Multiplier = RIV_Cell.FValues.Multiplier)
+      and FValues.GwtConcentrations.IsIdentical(RIV_Cell.FValues.GwtConcentrations)
   end;
 end;
 

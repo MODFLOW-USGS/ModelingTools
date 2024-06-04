@@ -2388,8 +2388,9 @@ begin
       and (EndingHead = CHD_Cell.EndingHead)
       and (Multiplier = CHD_Cell.Multiplier)
       and (IFace = CHD_Cell.IFace)
-      and (Values.Cell = CHD_Cell.Values.Cell);
-//      and (EndingHead = StartingHead);
+      and (Values.Cell = CHD_Cell.Values.Cell)
+      and (FValues.Multiplier = CHD_Cell.FValues.Multiplier)
+      and FValues.GwtConcentrations.IsIdentical(CHD_Cell.FValues.GwtConcentrations)
   end;
 end;
 

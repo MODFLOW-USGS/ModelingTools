@@ -1632,6 +1632,8 @@ begin
     Rch_Cell := TRch_Cell(AnotherCell);
     result := (RechargeRate = Rch_Cell.RechargeRate)
       and (Values.Cell = Rch_Cell.Values.Cell)
+      and (FValues.Multiplier = Rch_Cell.FValues.Multiplier)
+      and FValues.GwtConcentrations.IsIdentical(Rch_Cell.FValues.GwtConcentrations)
   end;
 end;
 

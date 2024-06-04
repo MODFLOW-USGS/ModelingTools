@@ -1338,7 +1338,9 @@ begin
     result :=
       (PumpingRate = WEL_Cell.PumpingRate)
       and (IFace = WEL_Cell.IFace)
-      and (Values.Cell = WEL_Cell.Values.Cell);
+      and (Values.Cell = WEL_Cell.Values.Cell)
+      and (Values.Multiplier = WEL_Cell.Values.Multiplier)
+      and Values.GwtConcentrations.IsIdentical(WEL_Cell.Values.GwtConcentrations)
   end;
 end;
 

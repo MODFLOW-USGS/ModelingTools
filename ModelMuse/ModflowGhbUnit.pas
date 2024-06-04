@@ -1587,7 +1587,9 @@ begin
       (Conductance = GHB_Cell.Conductance)
       and (BoundaryHead = GHB_Cell.BoundaryHead)
       and (IFace = GHB_Cell.IFace)
-      and (FValues.Cell = GHB_Cell.FValues.Cell);
+      and (FValues.Cell = GHB_Cell.FValues.Cell)
+      and (FValues.Multiplier = GHB_Cell.FValues.Multiplier)
+      and FValues.GwtConcentrations.IsIdentical(GHB_Cell.FValues.GwtConcentrations)
   end;
 end;
 

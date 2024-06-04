@@ -143,6 +143,7 @@ type
     procedure Assign3DBooleanDataSet(DsName: string; Data: TIArray3D);
     procedure ImportOc(Package: TPackage);
     procedure ImportGwfObs(Package: TPackage);
+    procedure ImportGwtObs(NameFile: TTransportNameFile; Package: TPackage);
     procedure ImportNpf(Package: TPackage);
     procedure ImportTvk(Package: TPackage);
     procedure ImportTimeSeries(Package: TPackage; Map: TimeSeriesMap);
@@ -1734,10 +1735,13 @@ begin
         for var CellIndex := 0 to ACellList.Count - 1 do
         begin
           ACell := ACellList[CellIndex];
-          Aux := ACell.Aux[AuxMultIndex];
-          if Aux.ValueType = vtNumeric then
+          if AuxMultIndex >= 0 then
           begin
-            Imported_Mult.Values.Add(Aux.NumericValue)
+            Aux := ACell.Aux[AuxMultIndex];
+            if Aux.ValueType = vtNumeric then
+            begin
+              Imported_Mult.Values.Add(Aux.NumericValue)
+            end;
           end;
 
           if ACell.conc.ValueType = vtNumeric then
@@ -5935,6 +5939,99 @@ begin
   end;
 end;
 
+procedure TModflow6Importer.ImportGwtObs(NameFile: TTransportNameFile; Package: TPackage);
+var
+  Obs: TObs;
+  Model: TPhastModel;
+  Mf6ObservationUtility: TMf6ObservationUtility;
+  FileIndex: Integer;
+  ObsFile: TObsFile;
+  ObsIndex: Integer;
+  Observation: TObservation;
+  ScreenObject: TScreenObject;
+  UndoCreateScreenObject: TCustomUndo;
+  Modflow6Obs: TModflow6Obs;
+  APoint: TPoint2D;
+  CellId: TMfCellId;
+begin
+  if Assigned(OnUpdateStatusBar) then
+  begin
+    OnUpdateStatusBar(self, 'importing OBS package');
+  end;
+  Obs := Package.Package as TObs;
+  Model := frmGoPhast.PhastModel;
+  Mf6ObservationUtility := Model.ModflowPackages.Mf6ObservationUtility;
+  Mf6ObservationUtility.IsSelected := True;
+  if Obs.Options.Digits > 0 then
+  begin
+    Mf6ObservationUtility.OutputFormat := ofText;
+    Mf6ObservationUtility.Digits := Obs.Options.Digits;
+  end
+  else
+  begin
+    Mf6ObservationUtility.OutputFormat := ofBinary;
+  end;
+
+  for FileIndex := 0 to Obs.FileCount - 1 do
+  begin
+    ObsFile := Obs[FileIndex];
+    for ObsIndex := 0 to ObsFile.Count - 1 do
+    begin
+      Observation := ObsFile[ObsIndex];
+
+      if AnsiSameText(Observation.ObsType, 'concentration') then
+      begin
+
+        ScreenObject := TScreenObject.CreateWithViewDirection(
+          Model, vdTop, UndoCreateScreenObject, False);
+        FNewScreenObjects.Add(ScreenObject);
+        ScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
+
+        Model.AddScreenObject(ScreenObject);
+        ScreenObject.ElevationCount := ecOne;
+        ScreenObject.SetValuesOfIntersectedCells := True;
+        ScreenObject.EvaluatedAt := eaBlocks;
+        ScreenObject.Visible := False;
+        ScreenObject.Capacity := 1;
+
+        CellId := Observation.CellId1;
+        if Model.DisvUsed then
+        begin
+          Dec(CellId.Column);
+          CellId.Row := 0;
+        end
+        else
+        begin
+          Dec(CellId.Column);
+          Dec(CellId.Row);
+        end;
+        Assert(Observation.IdType1 = itCell);
+        APoint := Model.TwoDElementCenter(CellId.Column, CellId.Row);
+        ScreenObject.AddPoint(APoint, True);
+        ScreenObject.ElevationFormula := Format('LayerCenter(%d)', [CellId.Layer]);
+
+        Model.ModflowPackages.Mf6ObservationUtility.IsSelected := True;
+        ScreenObject.CreateMf6Obs;
+        Modflow6Obs := ScreenObject.Modflow6Obs;
+        Modflow6Obs.Name := Observation.ObsName;
+        Modflow6Obs.GwtSpecies := Model.MobileComponents.GetItemIndexByName(NameFile.SpeciesName);
+        if AnsiSameText(Observation.ObsType, 'concentration') then
+        begin
+          Modflow6Obs.GwtObs := [ogwtConcentration];
+        end;
+      end
+      else if AnsiSameText(Observation.ObsType, 'flow-ja-face') then
+      begin
+        FErrorMessages.Add(Format('ModelMuse could not import the observation "%s" because it is a flow-ja-face observation', [Observation.ObsName] ));
+      end
+      else
+      begin
+        FErrorMessages.Add(Format('ModelMuse could not import the observation "%s" because it is not a recognized type', [Observation.ObsName] ));
+      end;
+    end;
+  end;
+end;
+
 procedure TModflow6Importer.ImportHfb(Package: TPackage);
 const
   KImportedHfbValue = 'ImportedHfbValue';
@@ -6541,28 +6638,40 @@ begin
     Assign3DRealDataSet(DataArrayName, GridData.CIM);
   end;
 
-  if GridData.DECAY <> nil then
+  if Options.FIRST_ORDER_DECAY or Options.ZERO_ORDER_DECAY then
   begin
-    DataArrayName := ChemSpecies.ImmobileDecay[DomainIndex];
-    Assign3DRealDataSet(DataArrayName, GridData.DECAY);
+    if GridData.DECAY <> nil then
+    begin
+      DataArrayName := ChemSpecies.ImmobileDecay[DomainIndex];
+      Assign3DRealDataSet(DataArrayName, GridData.DECAY);
+    end;
   end;
 
-  if GridData.DECAY_SORBED <> nil then
+  if Options.SORPTION and (Options.FIRST_ORDER_DECAY or Options.ZERO_ORDER_DECAY) then
   begin
-    DataArrayName := ChemSpecies.ImmobileDecaySorbed[DomainIndex];
-    Assign3DRealDataSet(DataArrayName, GridData.DECAY_SORBED);
+    if GridData.DECAY_SORBED <> nil then
+    begin
+      DataArrayName := ChemSpecies.ImmobileDecaySorbed[DomainIndex];
+      Assign3DRealDataSet(DataArrayName, GridData.DECAY_SORBED);
+    end;
   end;
 
-  if GridData.BULK_DENSITY <> nil then
+  if Options.SORPTION then
   begin
-    DataArrayName := ChemSpecies.ImmobileBulkDensities[DomainIndex];
-    Assign3DRealDataSet(DataArrayName, GridData.BULK_DENSITY);
+    if GridData.BULK_DENSITY <> nil then
+    begin
+      DataArrayName := ChemSpecies.ImmobileBulkDensities[DomainIndex];
+      Assign3DRealDataSet(DataArrayName, GridData.BULK_DENSITY);
+    end;
   end;
 
-  if GridData.DISTCOEF <> nil then
+  if Options.SORPTION then
   begin
-    DataArrayName := ChemSpecies.ImmobileDistCoeficients[DomainIndex];
-    Assign3DRealDataSet(DataArrayName, GridData.DISTCOEF);
+    if GridData.DISTCOEF <> nil then
+    begin
+      DataArrayName := ChemSpecies.ImmobileDistCoeficients[DomainIndex];
+      Assign3DRealDataSet(DataArrayName, GridData.DISTCOEF);
+    end;
   end;
 
 end;
@@ -6923,11 +7032,11 @@ var
             NewTimeItem.GwtStatus.Add;
           end;
           NewStatus := NewTimeItem.GwtStatus[TransportIndex];
-          if NewStatus.GwtBoundaryStatus in [gbsInactive, gbsConstant] then
+          if NewStatus.GwtBoundaryStatus in [gbsInactive, gbsInactive] then
           begin
             Continue;
           end;
-          NewStatus.GwtBoundaryStatus := gbsInactive;
+          NewStatus.GwtBoundaryStatus := gbsConstant;
 
           While TransportIndex >= NewTimeItem.SpecifiedConcentrations.Count do
           begin
@@ -6963,7 +7072,7 @@ var
             NewTimeItem.GwtStatus.Add;
           end;
           NewStatus := NewTimeItem.GwtStatus[TransportIndex];
-          if NewStatus.GwtBoundaryStatus in [gbsInactive, gbsConstant] then
+          if NewStatus.GwtBoundaryStatus in [gbsInactive, gbsActive] then
           begin
             Continue;
           end;
@@ -7675,13 +7784,13 @@ var
           DisvCell1: TModflowIrregularCell2D;
           DisvCell2: TModflowIrregularCell2D;
         begin
-          result := False;
           if DisvUsed then
           begin
             DisvCell1 := DisvGrid.TwoDGrid.Cells[Cell1.Column-1];
             DisvCell2 := DisvGrid.TwoDGrid.Cells[Cell2.Column-1];
             // use if Cells connected by a single node are not accepted.
 //            result := DisvCell1.IsNeighbor(DisvCell2);
+
             // use if cells connected by a single node are accepted.
             result := DisvCell1.HaveSharedNode(DisvCell2);
           end
@@ -7696,6 +7805,7 @@ var
 //            begin
 //              result := Abs(Cell1.Column - Cell2.Column) = 1;
 //            end;
+
             // use if diagonal neighbors are accepted.
             result := (Abs(Cell1.Row - Cell2.Row) in [0,1])
               and (Abs(Cell1.Column - Cell2.Column) in [0,1])
@@ -7709,7 +7819,7 @@ var
           begin
             TestIndex := IntQueue.Dequeue;
             ACell := CellIds[TestIndex];
-            for var Index := TestIndex + 1 to CellIds.Count - 1 do
+            for var Index := 0 to CellIds.Count - 1 do
             begin
               if GroupNumbers[Index] <> 0  then
               begin
@@ -8845,48 +8955,51 @@ begin
       Period := LakMvrLinkList[PeriodIndex].Period;
       StartTime := Model.ModflowStressPeriods[Period-1].StartTime;
 
-      for SettingIndex := 0 to APeriod.Count - 1 do
+      if APeriod <> nil then
       begin
-        ASetting := APeriod[SettingIndex];
-        SettingName := ASetting.Name;
-        if AnsiSameText(SettingName, 'STATUS')
-          or AnsiSameText(SettingName, 'STAGE')
-          or AnsiSameText(SettingName, 'RAINFALL')
-          or AnsiSameText(SettingName, 'EVAPORATION')
-          or AnsiSameText(SettingName, 'RUNOFF')
-          or AnsiSameText(SettingName, 'INFLOW')
-          or AnsiSameText(SettingName, 'WITHDRAWAL')
-          or AnsiSameText(SettingName, 'AUXILIARY')
-          then
+        for SettingIndex := 0 to APeriod.Count - 1 do
         begin
-          LakeNo := ASetting.IdNumber;
-          ALake := Lakes[LakeNo-1];
-          ALake.FLakeSettings.Add(ASetting);
-        end
-        else if AnsiSameText(SettingName, 'RATE')
-          or AnsiSameText(SettingName, 'INVERT')
-          or AnsiSameText(SettingName, 'WIDTH')
-          or AnsiSameText(SettingName, 'SLOPE')
-          or AnsiSameText(SettingName, 'ROUGH')
-          then
-        begin
-          OutletNumber := ASetting.IdNumber;
-          AnOutlet := Lak.LakOutlets[OutletNumber-1];
-          LakeNo := AnOutlet.lakein;
-          ALake := Lakes[LakeNo-1];
-          if ALake.FOutletSettings.TryGetValue(OutletNumber, OutletList) then
+          ASetting := APeriod[SettingIndex];
+          SettingName := ASetting.Name;
+          if AnsiSameText(SettingName, 'STATUS')
+            or AnsiSameText(SettingName, 'STAGE')
+            or AnsiSameText(SettingName, 'RAINFALL')
+            or AnsiSameText(SettingName, 'EVAPORATION')
+            or AnsiSameText(SettingName, 'RUNOFF')
+            or AnsiSameText(SettingName, 'INFLOW')
+            or AnsiSameText(SettingName, 'WITHDRAWAL')
+            or AnsiSameText(SettingName, 'AUXILIARY')
+            then
           begin
-            OutletList.Add(ASetting);
-            ALake.HasOutletSettings := True;
+            LakeNo := ASetting.IdNumber;
+            ALake := Lakes[LakeNo-1];
+            ALake.FLakeSettings.Add(ASetting);
+          end
+          else if AnsiSameText(SettingName, 'RATE')
+            or AnsiSameText(SettingName, 'INVERT')
+            or AnsiSameText(SettingName, 'WIDTH')
+            or AnsiSameText(SettingName, 'SLOPE')
+            or AnsiSameText(SettingName, 'ROUGH')
+            then
+          begin
+            OutletNumber := ASetting.IdNumber;
+            AnOutlet := Lak.LakOutlets[OutletNumber-1];
+            LakeNo := AnOutlet.lakein;
+            ALake := Lakes[LakeNo-1];
+            if ALake.FOutletSettings.TryGetValue(OutletNumber, OutletList) then
+            begin
+              OutletList.Add(ASetting);
+              ALake.HasOutletSettings := True;
+            end
+            else
+            begin
+              Assert(False);
+            end;
           end
           else
           begin
             Assert(False);
           end;
-        end
-        else
-        begin
-          Assert(False);
         end;
       end;
       for var TransportIndex := 0 to Length(LakMvrLinkList[PeriodIndex].LktPeriods) - 1 do
@@ -14309,7 +14422,7 @@ var
           SfrItem.StartTime := Model.ModflowStressPeriods.First.StartTime;
           SfrItem.EndTime := Model.ModflowStressPeriods.Last.EndTime;
         end;
-        SfrItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsInactive;
+        SfrItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsActive;
       end;
     end;
 
@@ -16840,7 +16953,7 @@ begin
     else if APackage.FileType = 'OBS6' then
     begin
       // import OBS6
-      Continue;
+      ImportGwtObs(NameFile, APackage);
     end
     else
     begin
@@ -18714,10 +18827,15 @@ begin
 
           for CellIndex := 0 to MergedList.Count - 1 do
           begin
+          try
             UzfDataItem := MergedList[CellIndex];
             ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
             PData := ImportedUzfPeriodItem.PeriodData;
             BoundaryValueArray[CellIndex] := PData.finf;
+          except
+            ShowMessage(CellIndex.ToString + ' ' + PeriodIndex.ToString);
+            raise;
+          end;
           end;
           UzfMf6Item.Infiltration := BoundaryValuesToFormula(BoundaryValueArray,
             Format('Imported_finf_SP%d', [ImportedUzfPeriodItem.Period]),

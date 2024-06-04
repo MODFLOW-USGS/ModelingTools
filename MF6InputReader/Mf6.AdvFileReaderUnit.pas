@@ -35,7 +35,7 @@ implementation
 procedure TAdvOptions.Initialize;
 begin
   inherited;
-  FSCHEME := '';
+  FSCHEME := 'upstream';
 end;
 
 procedure TAdvOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);

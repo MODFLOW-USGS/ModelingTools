@@ -10259,6 +10259,9 @@ const
 //               bug fix: Fixed export of h0 in CSUB package data.
 //               bug fix: Fixed export of MVR when the source doesn't change
 //                over time.
+//               bug fix: Fixed export of some flow boundary packages when the
+//                only change between stress periods was the boundary
+//                concentration in the transport package.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
