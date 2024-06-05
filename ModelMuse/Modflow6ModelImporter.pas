@@ -17757,6 +17757,7 @@ var
   SpcTimeItem: TSpcTimeItem;
   ImportSpcPeriodItem: TImportSpcPeriodItem;
   AuxIndex: Integer;
+  HasSettings: Boolean;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
     ItemIndex: Integer;
@@ -18796,7 +18797,7 @@ begin
               SrtItem.Values.RealValues[CellIndex] :=
                 UzfDataItem.UztPackageItemArray[TransportIndex].strt.NumericValue;
             end;
-            ModflowUzfMf6Boundary.SurfaceDepressionDepth :=
+            ModflowUzfMf6Boundary.StartingConcentrations[TransportIndex].Value :=
               rsObjectImportedValuesR + '("' + SrtItem.Name + '")';
 
             AModel := TransportModels[TransportIndex];
@@ -18825,107 +18826,105 @@ begin
 
           SetLength(BoundaryValueArray, MergedList.Count);
 
-          for CellIndex := 0 to MergedList.Count - 1 do
+          if PeriodIndex < MergedList.First.PeriodData.Count then
           begin
-          try
-            UzfDataItem := MergedList[CellIndex];
-            ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
-            PData := ImportedUzfPeriodItem.PeriodData;
-            BoundaryValueArray[CellIndex] := PData.finf;
-          except
-            ShowMessage(CellIndex.ToString + ' ' + PeriodIndex.ToString);
-            raise;
-          end;
-          end;
-          UzfMf6Item.Infiltration := BoundaryValuesToFormula(BoundaryValueArray,
-            Format('Imported_finf_SP%d', [ImportedUzfPeriodItem.Period]),
-            Map, AScreenObject);
-
-          for CellIndex := 0 to MergedList.Count - 1 do
-          begin
-            UzfDataItem := MergedList[CellIndex];
-            ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
-            PData := ImportedUzfPeriodItem.PeriodData;
-            BoundaryValueArray[CellIndex] := PData.pet;
-          end;
-          UzfMf6Item.PotentialET := BoundaryValuesToFormula(BoundaryValueArray,
-            Format('Imported_pet_SP%d', [ImportedUzfPeriodItem.Period]),
-            Map, AScreenObject);
-
-          for CellIndex := 0 to MergedList.Count - 1 do
-          begin
-            UzfDataItem := MergedList[CellIndex];
-            ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
-            PData := ImportedUzfPeriodItem.PeriodData;
-            BoundaryValueArray[CellIndex] := PData.extdp;
-          end;
-          UzfMf6Item.ExtinctionDepth := BoundaryValuesToFormula(BoundaryValueArray,
-            Format('Imported_extdp_SP%d', [ImportedUzfPeriodItem.Period]),
-            Map, AScreenObject);
-
-          for CellIndex := 0 to MergedList.Count - 1 do
-          begin
-            UzfDataItem := MergedList[CellIndex];
-            ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
-            PData := ImportedUzfPeriodItem.PeriodData;
-            BoundaryValueArray[CellIndex] := PData.extwc;
-          end;
-          UzfMf6Item.ExtinctionWaterContent := BoundaryValuesToFormula(BoundaryValueArray,
-            Format('Imported_extwc_SP%d', [ImportedUzfPeriodItem.Period]),
-            Map, AScreenObject);
-
-          for CellIndex := 0 to MergedList.Count - 1 do
-          begin
-            UzfDataItem := MergedList[CellIndex];
-            ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
-            PData := ImportedUzfPeriodItem.PeriodData;
-            BoundaryValueArray[CellIndex] := PData.ha;
-          end;
-          UzfMf6Item.AirEntryPotential := BoundaryValuesToFormula(BoundaryValueArray,
-            Format('Imported_ha_SP%d', [ImportedUzfPeriodItem.Period]),
-            Map, AScreenObject);
-
-          for CellIndex := 0 to MergedList.Count - 1 do
-          begin
-            UzfDataItem := MergedList[CellIndex];
-            ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
-            PData := ImportedUzfPeriodItem.PeriodData;
-            BoundaryValueArray[CellIndex] := PData.hroot;
-          end;
-          UzfMf6Item.RootPotential := BoundaryValuesToFormula(BoundaryValueArray,
-            Format('Imported_hroot_SP%d', [ImportedUzfPeriodItem.Period]),
-            Map, AScreenObject);
-
-          for CellIndex := 0 to MergedList.Count - 1 do
-          begin
-            UzfDataItem := MergedList[CellIndex];
-            ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
-            PData := ImportedUzfPeriodItem.PeriodData;
-            BoundaryValueArray[CellIndex] := PData.rootact;
-          end;
-          UzfMf6Item.RootActivity := BoundaryValuesToFormula(BoundaryValueArray,
-            Format('Imported_rootact_SP%d', [ImportedUzfPeriodItem.Period]),
-            Map, AScreenObject);
-
-          for var TransportIndex := 0 to TransportAuxNames.Count - 1 do
-          begin
-            AuxIndex := Options.IndexOfAux(TransportAuxNames[TransportIndex]);
-            if AuxIndex >= 0 then
+            for CellIndex := 0 to MergedList.Count - 1 do
             begin
-              for CellIndex := 0 to MergedList.Count - 1 do
-              begin
-                UzfDataItem := MergedList[CellIndex];
-                ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
-                PData := ImportedUzfPeriodItem.PeriodData;
-                BoundaryValueArray[CellIndex] := PData.aux[AuxIndex]
-              end;
-              UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value := 
-                BoundaryValuesToFormula(BoundaryValueArray,
-                Format('Imported_%s _SP%d', 
-                [TransportSpeciesNames[TransportIndex], ImportedUzfPeriodItem.Period]),
-                Map, AScreenObject);
+              UzfDataItem := MergedList[CellIndex];
+              ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+              PData := ImportedUzfPeriodItem.PeriodData;
+              BoundaryValueArray[CellIndex] := PData.finf;
+            end;
+            UzfMf6Item.Infiltration := BoundaryValuesToFormula(BoundaryValueArray,
+              Format('Imported_finf_SP%d', [ImportedUzfPeriodItem.Period]),
+              Map, AScreenObject);
 
-              UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsConstant;            
+            for CellIndex := 0 to MergedList.Count - 1 do
+            begin
+              UzfDataItem := MergedList[CellIndex];
+              ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+              PData := ImportedUzfPeriodItem.PeriodData;
+              BoundaryValueArray[CellIndex] := PData.pet;
+            end;
+            UzfMf6Item.PotentialET := BoundaryValuesToFormula(BoundaryValueArray,
+              Format('Imported_pet_SP%d', [ImportedUzfPeriodItem.Period]),
+              Map, AScreenObject);
+
+            for CellIndex := 0 to MergedList.Count - 1 do
+            begin
+              UzfDataItem := MergedList[CellIndex];
+              ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+              PData := ImportedUzfPeriodItem.PeriodData;
+              BoundaryValueArray[CellIndex] := PData.extdp;
+            end;
+            UzfMf6Item.ExtinctionDepth := BoundaryValuesToFormula(BoundaryValueArray,
+              Format('Imported_extdp_SP%d', [ImportedUzfPeriodItem.Period]),
+              Map, AScreenObject);
+
+            for CellIndex := 0 to MergedList.Count - 1 do
+            begin
+              UzfDataItem := MergedList[CellIndex];
+              ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+              PData := ImportedUzfPeriodItem.PeriodData;
+              BoundaryValueArray[CellIndex] := PData.extwc;
+            end;
+            UzfMf6Item.ExtinctionWaterContent := BoundaryValuesToFormula(BoundaryValueArray,
+              Format('Imported_extwc_SP%d', [ImportedUzfPeriodItem.Period]),
+              Map, AScreenObject);
+
+            for CellIndex := 0 to MergedList.Count - 1 do
+            begin
+              UzfDataItem := MergedList[CellIndex];
+              ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+              PData := ImportedUzfPeriodItem.PeriodData;
+              BoundaryValueArray[CellIndex] := PData.ha;
+            end;
+            UzfMf6Item.AirEntryPotential := BoundaryValuesToFormula(BoundaryValueArray,
+              Format('Imported_ha_SP%d', [ImportedUzfPeriodItem.Period]),
+              Map, AScreenObject);
+
+            for CellIndex := 0 to MergedList.Count - 1 do
+            begin
+              UzfDataItem := MergedList[CellIndex];
+              ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+              PData := ImportedUzfPeriodItem.PeriodData;
+              BoundaryValueArray[CellIndex] := PData.hroot;
+            end;
+            UzfMf6Item.RootPotential := BoundaryValuesToFormula(BoundaryValueArray,
+              Format('Imported_hroot_SP%d', [ImportedUzfPeriodItem.Period]),
+              Map, AScreenObject);
+
+            for CellIndex := 0 to MergedList.Count - 1 do
+            begin
+              UzfDataItem := MergedList[CellIndex];
+              ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+              PData := ImportedUzfPeriodItem.PeriodData;
+              BoundaryValueArray[CellIndex] := PData.rootact;
+            end;
+            UzfMf6Item.RootActivity := BoundaryValuesToFormula(BoundaryValueArray,
+              Format('Imported_rootact_SP%d', [ImportedUzfPeriodItem.Period]),
+              Map, AScreenObject);
+
+            for var TransportIndex := 0 to TransportAuxNames.Count - 1 do
+            begin
+              AuxIndex := Options.IndexOfAux(TransportAuxNames[TransportIndex]);
+              if AuxIndex >= 0 then
+              begin
+                for CellIndex := 0 to MergedList.Count - 1 do
+                begin
+                  UzfDataItem := MergedList[CellIndex];
+                  ImportedUzfPeriodItem := UzfDataItem.PeriodData[PeriodIndex];
+                  PData := ImportedUzfPeriodItem.PeriodData;
+                  BoundaryValueArray[CellIndex] := PData.aux[AuxIndex]
+                end;
+                UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value :=
+                  BoundaryValuesToFormula(BoundaryValueArray,
+                  Format('Imported_%s _SP%d',
+                  [TransportSpeciesNames[TransportIndex], ImportedUzfPeriodItem.Period]),
+                  Map, AScreenObject);
+
+                UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsConstant;
+              end;
             end;
           end;
 
@@ -18952,62 +18951,80 @@ begin
 
           for var TransportIndex := 0 to length(UzfDataItem.FTransportSettings[PeriodIndex]) - 1 do
           begin
-            UztMap := UztMaps[TransportIndex];
+            UzfDataItem := MergedList.First;
+
+            HasSettings := False;
             for var SettingIndex := Low(TUztSetting) to High(TUztSetting) do
             begin
-              if SettingIndex = usStatus then
+               UztItem := UzfDataItem.FTransportSettings[PeriodIndex,TransportIndex][SettingIndex];
+              if UztItem.Name <> '' then
               begin
-                UzfDataItem := MergedList.First;
-                UztItem := UzfDataItem.FTransportSettings[PeriodIndex,TransportIndex][SettingIndex];
-                if AnsiSameText(UztItem.StringValue, 'ACTIVE') then
+                HasSettings := True;
+                break;
+              end;
+            end;
+            if HasSettings then
+            begin
+              UztMap := UztMaps[TransportIndex];
+              for var SettingIndex := Low(TUztSetting) to High(TUztSetting) do
+              begin
+                if SettingIndex = usStatus then
                 begin
-                  UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsActive;
-                end
-                else if AnsiSameText(UztItem.StringValue, 'INACTIVE') then
-                begin
-                  UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsInactive;
-                end
-                else if AnsiSameText(UztItem.StringValue, 'CONSTANT') then
-                begin
-                  UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsConstant;
+                  UzfDataItem := MergedList.First;
+                  UztItem := UzfDataItem.FTransportSettings[PeriodIndex,TransportIndex][SettingIndex];
+                  if UztItem.Name <> '' then
+                  begin
+                    if AnsiSameText(UztItem.StringValue, 'ACTIVE') then
+                    begin
+                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsActive;
+                    end
+                    else if AnsiSameText(UztItem.StringValue, 'INACTIVE') then
+                    begin
+                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsInactive;
+                    end
+                    else if AnsiSameText(UztItem.StringValue, 'CONSTANT') then
+                    begin
+                      UzfMf6Item.GwtStatus[TransportIndex].GwtBoundaryStatus  := gbsConstant;
+                    end
+                    else
+                    begin
+                      Assert(False);
+                    end;
+                  end;
                 end
                 else
                 begin
-                  Assert(False);
-                end;
-              end
-              else
-              begin
-                ItemList := TUztPeriodItemList.Create;
-                try
-                  for CellIndex := 0 to MergedList.Count - 1 do
-                  begin
-                    UzfDataItem := MergedList[CellIndex];
-                    UztItem := UzfDataItem.FTransportSettings[PeriodIndex,TransportIndex][SettingIndex];
-                    ItemList.Add(UztItem);
+                  ItemList := TUztPeriodItemList.Create;
+                  try
+                    for CellIndex := 0 to MergedList.Count - 1 do
+                    begin
+                      UzfDataItem := MergedList[CellIndex];
+                      UztItem := UzfDataItem.FTransportSettings[PeriodIndex,TransportIndex][SettingIndex];
+                      ItemList.Add(UztItem);
+                    end;
+                    case SettingIndex of
+                      usConcentration:
+                        begin
+                          UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value :=
+                            ItemList.ConvertToFormula(Format('Imported_conc_%d_SP%d',
+                            [TransportIndex+1, PeriodIndex+1]), UztMap, AScreenObject);
+                        end;
+                      usInfiltration:
+                        begin
+                          UzfMf6Item.InfiltrationConcentrations[TransportIndex].Value :=
+                            ItemList.ConvertToFormula(Format('Imported_infil_%d_SP%d',
+                            [TransportIndex+1, PeriodIndex+1]), UztMap, AScreenObject);
+                        end;
+                      usUzet:
+                        begin
+                          UzfMf6Item.EvapConcentrations[TransportIndex].Value :=
+                            ItemList.ConvertToFormula(Format('Imported_uzet_%d_SP%d',
+                            [TransportIndex+1, PeriodIndex+1]), UztMap, AScreenObject);
+                        end;
+                    end;
+                  finally
+                    ItemList.Free;
                   end;
-                  case SettingIndex of
-                    usConcentration:
-                      begin
-                        UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value :=
-                          ItemList.ConvertToFormula(Format('Imported_conc_%d_SP%d',
-                          [TransportIndex+1, PeriodIndex+1]), UztMap, AScreenObject);
-                      end;
-                    usInfiltration:
-                      begin
-                        UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value :=
-                          ItemList.ConvertToFormula(Format('Imported_infil_%d_SP%d',
-                          [TransportIndex+1, PeriodIndex+1]), UztMap, AScreenObject);
-                      end;
-                    usUzet:
-                      begin
-                        UzfMf6Item.SpecifiedConcentrations[TransportIndex].Value :=
-                          ItemList.ConvertToFormula(Format('Imported_uzet_%d_SP%d',
-                          [TransportIndex+1, PeriodIndex+1]), UztMap, AScreenObject);
-                      end;
-                  end;
-                finally
-                  ItemList.Free;
                 end;
               end;
             end;
@@ -21022,17 +21039,20 @@ begin
     and (PackageData.boundname = UzfData.PackageData.boundname)
     and (NumberObs = nil) and (UzfData.NumberObs = nil)
     and AnsiSameText(mvrtype, UzfData.mvrtype);
-  if result then
+  if not result then
   begin
-    for Index := 0 to PeriodData.Count - 1 do
+    Exit
+  end;
+
+  for Index := 0 to PeriodData.Count - 1 do
+  begin
+    result := PeriodData[Index].Compatible(UzfData.PeriodData[Index], Options);
+    if not result then
     begin
-      result := PeriodData[Index].Compatible(UzfData.PeriodData[Index], Options);
-      if not result then
-      begin
-        Exit;
-      end;
+      Exit;
     end;
   end;
+
   for var TransportIndex := 0 to Length(UztPackageItemArray) -1 do
   begin
     result := AnsiSameText(UztPackageItemArray[TransportIndex].boundname, 
@@ -21049,7 +21069,8 @@ begin
         begin
           Item1 := FTransportSettings[TimeIndex,ModelIndex,Setting];
           Item2 := UzfData.FTransportSettings[TimeIndex,ModelIndex,Setting];
-          result := AnsiSameText(Item1.StringValue, Item2.StringValue);
+          result := AnsiSameText(Item1.StringValue, Item2.StringValue)
+            and AnsiSameText(Item1.Name, Item2.Name);
           if not result then
           begin
             Exit;

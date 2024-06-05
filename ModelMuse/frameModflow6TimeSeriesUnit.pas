@@ -24,6 +24,7 @@ type
     pnlTop: TPanel;
     edGroupName: TEdit;
     btnInsertTime: TButton;
+    btnCopyColumn: TButton;
     procedure rrdgTimeSeriesSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure seTimeSeriesCountChange(Sender: TObject);
@@ -33,6 +34,7 @@ type
     procedure rrdgTimeSeriesBeforeDrawCell(Sender: TObject; ACol,
       ARow: Integer);
     procedure btnInsertTimeClick(Sender: TObject);
+    procedure btnCopyColumnClick(Sender: TObject);
   private
     // @name contains @link(FTimesSeriesGroup)
     FTimesSeriesGroupItem: ITimeSeriesCollectionItem;
@@ -55,12 +57,43 @@ resourcestring
 
 implementation
 
+uses
+  Vcl.Clipbrd;
+
 {$R *.dfm}
 
 type
   TTimeSeriesRows = (tsrName, tsrPestModifier, tsrPestMethod, tsrScaleFactor,
     tsrInterpolation, tsrFirstTime);
   TTimeSeriesColumns = (tscLabel, tscTimes, tscFirstSeries);
+
+procedure TframeModflow6TimeSeries.btnCopyColumnClick(Sender: TObject);
+var
+  Lines: TStringList;
+  CanSelect: Boolean;
+begin
+  if rrdgTimeSeries.SelectedCol >= 0 then
+  begin
+    Lines := TStringList.Create;
+    try
+      for var RowIndex := 0 to rrdgTimeSeries.RowCount - 1 do
+      begin
+        CanSelect := True;
+        rrdgTimeSeriesSelectCell(rrdgTimeSeries, rrdgTimeSeries.SelectedCol, RowIndex, CanSelect);
+        if CanSelect then
+        begin
+          Lines.Add(rrdgTimeSeries.Cells[rrdgTimeSeries.SelectedCol, RowIndex]);
+        end;
+      end;
+      if Lines.Count > 0 then
+      begin
+        ClipBoard.AsText := Lines.Text;
+      end;
+    finally
+      Lines.Free;
+    end;
+  end;
+end;
 
 procedure TframeModflow6TimeSeries.btnDeleteTimeClick(Sender: TObject);
 begin

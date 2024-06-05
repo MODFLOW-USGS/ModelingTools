@@ -10255,19 +10255,20 @@ const
 //    '5.2.0.11' bug fix: Fixed export of RCH package in MODFLOW 6 when objects
 //                are to be summed.
 //    '5.2.0.12' no real change.
-
-//               bug fix: Fixed export of h0 in CSUB package data.
+//    '5.2.0.13' bug fix: Fixed export of h0 in CSUB package data.
 //               bug fix: Fixed export of MVR when the source doesn't change
 //                over time.
 //               bug fix: Fixed export of some flow boundary packages when the
 //                only change between stress periods was the boundary
 //                concentration in the transport package.
+//               Enhancement: The scale factor for a dynamic time series can
+//                now be a formula.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.12';
+  IIModelVersion = '5.2.0.13';
 
 function IModelVersion: string;
 begin

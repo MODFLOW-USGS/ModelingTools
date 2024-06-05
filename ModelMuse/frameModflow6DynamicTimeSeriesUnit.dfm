@@ -199,18 +199,18 @@ object frameModflow6DynamicTimeSeries: TframeModflow6DynamicTimeSeries
       item
         AutoAdjustRowHeights = False
         AutoAdjustCaptionRowHeights = False
-        ButtonCaption = '...'
+        ButtonCaption = 'F()'
         ButtonFont.Charset = DEFAULT_CHARSET
         ButtonFont.Color = clWindowText
         ButtonFont.Height = -11
         ButtonFont.Name = 'Tahoma'
         ButtonFont.Style = []
-        ButtonUsed = False
-        ButtonWidth = 20
+        ButtonUsed = True
+        ButtonWidth = 35
         CheckMax = False
         CheckMin = False
         ComboUsed = False
-        Format = rcf4Real
+        Format = rcf4String
         LimitToList = False
         MaxLength = 0
         ParentButtonFont = False
