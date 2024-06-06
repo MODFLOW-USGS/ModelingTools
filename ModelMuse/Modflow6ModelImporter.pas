@@ -3394,7 +3394,7 @@ begin
         begin
           if DrnMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
           begin
-            KeyString := KeyString + ' MVR' + ACell.Id.ToString;
+            KeyString := KeyString + ' MVR';
             MvrUsed := True;
           end;
         end;
@@ -10777,6 +10777,8 @@ var
   APackage: TPackage;
   Mvt: TMvt;
   MvtOptions: TMvtOptions;
+  MapName: string;
+  MapNeeded: Boolean;
   function GetMapName(AScreenObject: TScreenObject): string;
   begin
     result := AScreenObject.Name + ' Per ' + IntToStr(PeriodIndex+1);
@@ -10850,6 +10852,10 @@ begin
       ReceiverKey.Period := MvrPeriod.Period;
       for MvrIndex := 0 to MvrPeriod.Count - 1 do
       begin
+        if MvrIndex = 6547 then
+        begin
+          Beep;
+        end;
         MvrPeriodItem := MvrPeriod[MvrIndex];
         SourceKey.ID := MvrPeriodItem.id1;
         SourceKey.PackageName := MvrPeriodItem.pname1;
@@ -10984,18 +10990,33 @@ begin
           ReceiverItem.ReceiverObject := Receiver.ScreenObject;
           ReceiverItem.DivisionChoice := dcDoNotDivide;
 
-          if (AScreenObject.SectionCount > 1)
-            and (Receiver.ScreenObject.SectionCount > 1)
-            and (ReceiverItem.ReceiverPackage = rpcUzf) then
-          begin
-            // map needed
-            AMvrMap := ModflowMvr.MvrMaps.Add.MvrMap;
-            AMvrMap.MapName := GetMapName(Receiver.ScreenObject);
-            for SectionIndex := 1 to AScreenObject.SectionCount do
-            begin
-              AMvrMap.Add.SourceSection := SectionIndex;
-            end;
-          end;
+//          if (AScreenObject.SectionCount > 1) then
+//          begin
+//            if (Receiver.ScreenObject.SectionCount > 1)
+//              and (ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf]) then
+//            begin
+//              // map needed
+//              MapName := GetMapName(Receiver.ScreenObject);
+//              AMvrMap := nil;
+//              for MapIndex := 0 to ModflowMvr.MvrMaps.Count - 1 do
+//              begin
+//                if ModflowMvr.MvrMaps[MapIndex].MvrMap.MapName = MapName then
+//                begin
+//                  AMvrMap := ModflowMvr.MvrMaps[MapIndex].MvrMap;
+//                  break;
+//                end;
+//              end;
+//              if AMvrMap = nil then
+//              begin
+//                AMvrMap := ModflowMvr.MvrMaps.Add.MvrMap;
+//                AMvrMap.MapName := GetMapName(Receiver.ScreenObject);
+//                for SectionIndex := 1 to AScreenObject.SectionCount do
+//                begin
+//                  AMvrMap.Add.SourceSection := SectionIndex;
+//                end;
+//              end;
+//            end;
+//          end;
 
           for TimeIndex := 0 to ModflowMvr.Values.Count - 1 do
           begin
@@ -11011,21 +11032,45 @@ begin
         end;
 
         MvrMap := nil;
-        if (AScreenObject.SectionCount > 1)
-          and (Receiver.ScreenObject.SectionCount > 1)
-          and (ReceiverItem.ReceiverPackage = rpcUzf) then
+        if (AScreenObject.SectionCount > 1) then
         begin
-          // map needed
-          for MapIndex := 0 to ModflowMvr.MvrMaps.Count - 1 do
+          MapNeeded := False;
+          if ReceiverItem.ReceiverPackage = rpcSfr then
           begin
-            AMvrMap := ModflowMvr.MvrMaps[MapIndex].MvrMap;
-            if AMvrMap.MapName = GetMapName(Receiver.ScreenObject) then
-            begin
-              MvrMap := AMvrMap;
-              break;
-            end;
+            MapNeeded := True;
+          end
+          else if (ReceiverItem.ReceiverPackage = rpcUzf)
+            and (Receiver.ScreenObject.SectionCount > 1) then
+          begin
+            MapNeeded := True;
           end;
-          Assert(MvrMap <> nil);
+          if MapNeeded then
+          begin
+            // map needed
+            MapName := GetMapName(Receiver.ScreenObject);
+            for MapIndex := 0 to ModflowMvr.MvrMaps.Count - 1 do
+            begin
+              AMvrMap := ModflowMvr.MvrMaps[MapIndex].MvrMap;
+              if AMvrMap.MapName = MapName then
+              begin
+                MvrMap := AMvrMap;
+                break;
+              end;
+            end;
+            if MvrMap = nil then
+            begin
+              AMvrMap := ModflowMvr.MvrMaps.Add.MvrMap;
+              AMvrMap.MapName := MapName;
+              Assert(AScreenObject.SectionCount = Length(Source.IDs));
+              for SectionIndex := 1 to AScreenObject.SectionCount do
+              begin
+                AMvrMap.Add.SourceSection := SectionIndex;
+              end;
+              MvrMap := AMvrMap;
+            end;
+
+            Assert(MvrMap <> nil);
+          end;
         end;
 
         if ModflowMvr.Values.Count > 0 then
@@ -11077,10 +11122,18 @@ begin
           begin
             if ReceiverKey.ID = Receiver.IDs[SearchIndex] then
             begin
-              ReceiverSectionsValues := MvrMap[SourceKey.ID-1].ReceiverSectionsValues;
-              ReceiverSectionsValue := ReceiverSectionsValues.Add;
-              ReceiverSectionsValue.SectionNumber := SearchIndex + 1;
-              ReceiverSectionsValue.Value := MvrPeriodItem.value;
+              try
+                // Get the position of SourceKey.ID in Source.IDS
+                ReceiverSectionsValues := MvrMap[SourceKey.ID-1].ReceiverSectionsValues;
+                ReceiverSectionsValue := ReceiverSectionsValues.Add;
+                ReceiverSectionsValue.SectionNumber := SearchIndex + 1;
+                ReceiverSectionsValue.Value := MvrPeriodItem.value;
+              except
+                begin
+                  ShowMessage(MvrIndex.ToString + ' ' + ASCreenObject.Name + ' ' + MvrMap.MapName);
+                  raise;
+                end;
+              end;
               break;
             end;
           end;
@@ -20007,7 +20060,7 @@ begin
             begin
               if WellMvrLink.MvrPeriod.HasSource(Package.PackageName, ACell.Id) then
               begin
-                KeyString := KeyString + ' MVR' + CellIndex.ToString;
+                KeyString := KeyString + ' MVR';
                 MvrUsed := True;
               end;
             end;
@@ -21033,7 +21086,7 @@ var
   List1: TImportSpcPeriodItemList; 
   List2: TImportSpcPeriodItemList; 
 begin
-  result := (not MvrSource) and (not UzfData.MvrSource)
+  result := (MvrSource = UzfData.MvrSource)
     and (MvrReceiver = UzfData.MvrReceiver)
     and (PeriodData.Count = UzfData.PeriodData.Count)
     and (PackageData.boundname = UzfData.PackageData.boundname)

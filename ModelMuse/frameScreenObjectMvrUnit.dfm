@@ -216,7 +216,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         inherited Panel: TPanel
           Top = 104
           Width = 404
-          ExplicitTop = 99
+          ExplicitTop = 104
           ExplicitWidth = 404
           inherited lbNumber: TLabel
             Width = 107
@@ -245,6 +245,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           Width = 404
           Height = 104
           ColCount = 5
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
           OnSelectCell = frameReceiversGridSelectCell
           OnSetEditText = frameReceiversGridSetEditText
           OnBeforeDrawCell = frameReceiversGridBeforeDrawCell
@@ -386,7 +387,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           ColWidths = (
             64
             64
-            229
+            127
             64
             64)
         end
@@ -423,7 +424,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           Top = 120
           Width = 110
           Height = 89
-          ExplicitTop = 115
+          ExplicitTop = 120
           ExplicitWidth = 110
           ExplicitHeight = 89
           inherited lbNumber: TLabel
@@ -491,6 +492,8 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
+          ExplicitLeft = 4
+          ExplicitTop = -1
           ExplicitWidth = 110
           ExplicitHeight = 120
         end
@@ -515,6 +518,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           TabOrder = 0
           OnExit = rdgMapExit
           OnSelectCell = rdgMapSelectCell
+          OnSetEditText = rdgMapSetEditText
           ExtendedAutoDistributeText = False
           AutoMultiEdit = False
           AutoDistributeText = False
@@ -599,6 +603,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               AutoAdjustColWidths = False
             end>
           WordWrapRowCaptions = False
+          ExplicitLeft = 6
           RowHeights = (
             24
             24

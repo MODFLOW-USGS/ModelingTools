@@ -464,7 +464,14 @@ begin
       end
       else if FSplitter[0] = 'INNER_RCLOSE' then
       begin
-        if not TryFortranStrToFloat(FSplitter[1], FINNER_RCLOSE) then
+        if TryFortranStrToFloat(FSplitter[1], FINNER_RCLOSE) then
+        begin
+          if FSplitter.Count >= 3 then
+          begin
+            Frclose_option := FSplitter[2];
+          end;
+        end
+        else
         begin
           Unhandled.WriteLine(StrUnrecognizedImsOp);
           Unhandled.WriteLine(ErrorLine);

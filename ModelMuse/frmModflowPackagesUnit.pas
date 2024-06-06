@@ -855,6 +855,7 @@ begin
   FframePkgSmsObjectList.Add(result);
   NewPage := TJvStandardPage.Create(self);
   NewPage.Name := '';
+  NewPage.HelpKeyword := 'SMS_Sparse_Matrix_Solution_Pac';
   NewPage.PageList := jvplPackages;
   NewPage.OnShow := ShowImsPage;
   result.Parent := NewPage;

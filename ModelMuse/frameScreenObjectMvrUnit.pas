@@ -66,6 +66,8 @@ type
     procedure rdgMapSelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
     procedure seReceiverNumberChange(Sender: TObject);
+    procedure rdgMapSetEditText(Sender: TObject; ACol, ARow: Integer;
+      const Value: string);
   private
     FLakObjects: TStringList;
     FMawObjects: TStringList;
@@ -76,6 +78,8 @@ type
     FUzfObjects: TStringList;
     FMvrMaps: TSectionMaps;
     FMapItem: TSectionMap;
+    FValuesChanged: Boolean;
+    FRow: Integer;
     procedure Changed;
     procedure SetOnChange(const Value: TNotifyEvent);
     procedure SetChanging(const Value: Boolean);
@@ -140,7 +144,7 @@ resourcestring
   StrInvalidLakeOutletExplanation = 'The object "%s" defines a Lake MVR sour' +
   'ce but the lake outlet number is invalid.';
   StrDivideFlowEqually = 'Divide flow equally among UZF receiver cells';
-  StrMapNameDOptiona = 'UZF recevier map name %d (optional)';
+  StrMapNameDOptiona = 'UZF receiver map name %d (optional)';
   StrMapName = 'UZF receiver map names';
   StrSourceSection = 'Source section';
   StrReceiverSections = 'Receiver section %d';
@@ -270,7 +274,8 @@ var
   ReceiverItem: TReceiverSectionValue;
 begin
   inherited;
-  if Changing then
+  FRow := ARow;
+  if Changing or frameMapNames.Grid.Drawing or FValuesChanged then
   begin
     Exit;
   end;
@@ -313,13 +318,12 @@ begin
           begin
             ReceiverItem := AnItem.ReceiverSectionsValues[ReceiverIndex];
             ColIndex := ReceiverIndex*2 + 1;
-            rdgMap.IntegerValue[ColIndex, ItemIndex+1] := ReceiverItem.SectionNumber;
+            rdgMap.IntegerValue[ColIndex, AnItem.SourceSection] := ReceiverItem.SectionNumber;
             Inc(ColIndex);
-            rdgMap.RealValue[ColIndex, ItemIndex+1] := ReceiverItem.Value;
+            rdgMap.RealValue[ColIndex, AnItem.SourceSection] := ReceiverItem.Value;
           end;
         end;
       end;
-
     end
     else
     begin
@@ -687,6 +691,7 @@ var
   MapIndex: Integer;
   AMap: TSectionMap;
   TimeRowIndex: Integer;
+  Dummy: Boolean;
 begin
   rdgModflowBoundary.Handle;
   seNumberOfTimes.Handle;
@@ -838,7 +843,10 @@ begin
     end;
   finally
     Changing := False;
+    FValuesChanged := False;
   end;
+  Dummy := True;
+  frameMapNamesGridSelectCell(frameMapNames.Grid, 0, 1, Dummy);
   frameReceivers.Grid.HideEditor;
   frameMapNames.Grid.HideEditor;
 end;
@@ -1027,6 +1035,7 @@ var
   SectionNumber: Integer;
   AValue: double;
   ReceiverItem: TReceiverSectionValue;
+  Dummy: Boolean;
 begin
   inherited;
   if MapItem <> nil then
@@ -1042,6 +1051,10 @@ begin
       if (AnItem.SourceSection >= 1)
         and (AnItem.SourceSection <= rdgMap.RowCount-1) then
       begin
+        if rdgMap.Objects[Ord(mcReceiver), AnItem.SourceSection] <> nil then
+        begin
+          rdgMap.Objects[Ord(mcReceiver), AnItem.SourceSection].Free;
+        end;
         rdgMap.Objects[Ord(mcReceiver), ItemIndex+1] := AnItem;
       end
       else
@@ -1062,6 +1075,10 @@ begin
         end;
 
         ReceiverCount := 0;
+        while AnItem.ReceiverSectionsValues.Count > MaxReceivers do
+        begin
+          AnItem.ReceiverSectionsValues.Last.Free;
+        end;
         for ReceiverIndex := 0 to MaxReceivers - 1 do
         begin
           ColIndex := ReceiverIndex*2 + 1;
@@ -1095,6 +1112,12 @@ begin
       end;
     end;
   end;
+  if FValuesChanged then
+  begin
+    FValuesChanged := False;
+    Dummy := True;
+    frameMapNamesGridSelectCell(frameMapNames.Grid, 0, FRow, Dummy);
+  end;
 end;
 
 procedure TframeScreenObjectMvr.rdgMapSelectCell(Sender: TObject; ACol,
@@ -1102,6 +1125,13 @@ procedure TframeScreenObjectMvr.rdgMapSelectCell(Sender: TObject; ACol,
 begin
   inherited;
   CanSelect := MapItem <> nil;
+end;
+
+procedure TframeScreenObjectMvr.rdgMapSetEditText(Sender: TObject; ACol,
+  ARow: Integer; const Value: string);
+begin
+  inherited;
+  FValuesChanged := True;
 end;
 
 procedure TframeScreenObjectMvr.rdgModflowBoundaryMouseUp(Sender: TObject;
@@ -1132,7 +1162,7 @@ begin
       ReceiverIndex := frameReceivers.Grid.ItemIndex[Ord(rcPackage), ItemIndex+1];
       if ReceiverIndex >= 0 then
       begin
-        CanSelect := TReceiverPackageChoice(ReceiverIndex) = rpcUzf;
+        CanSelect := TReceiverPackageChoice(ReceiverIndex) in [rpcSfr, rpcUzf];
       end;
     end;
   end;
