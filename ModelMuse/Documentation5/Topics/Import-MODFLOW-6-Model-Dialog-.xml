@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2024-06-07T11:26:57.809-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Import MODFLOW 6 Model Dialog Box</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Import MODFLOW 6 Model Dialog Box</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><text styleclass="Strong" translate="true">Import MODFLOW 6 Model</text><text styleclass="Normal" translate="true"> dialog box is used to import existing MODFLOW 6 models. The user specifies the simulation file for flow in the first edit box (labeled </text><text styleclass="Strong" translate="true">MODFLOW 6 Simulation Name File for flow</text><text styleclass="Normal" translate="true">). </text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If a .usgs model reference file is available, its name can be specified in the edit box labeled </text><text styleclass="Strong" translate="true">usgs.model.reference file (Optional)</text><text styleclass="Normal" translate="true">. This file includes the coordinates of the upper left corner of the model and the model rotation among other things. This information can be used to geolocate models that use a structured grid.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If there are separate simulations for solute transport, their simulation name files can be entered the table labeled &quot;MODFLOW 6 Simulation Name Files for transport (optional). If groundwater flow and transport are included in the same simulation, this table should be left empty.</text></para>
+    <para styleclass="Heading2_atoc_"><text styleclass="Heading2_atoc_" translate="true">Limitations</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can not import model types other than flow models or solute transport models. Thus it can not import energy transport models or particle tracking models.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can not import models that use DISU grids.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If a simulation includes more than one flow model, only one of the flow models can be imported.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can not import exchanges between flow models are between solute transport models.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If the model contains more than one boundary package of the same type, all of the boundaries will be included in a single package.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing the lake package, it may happen that cells outside the model area will be identified as part of a lake if the lake is close to the edge of the model. If this occurs, the model can be fixed by selecting the erroneous vertices of the lake object and deleting them.</text></para>
+    <para styleclass="Normal"></para>
+  </body>
+</topic>

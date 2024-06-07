@@ -144,8 +144,8 @@ resourcestring
   StrInvalidLakeOutletExplanation = 'The object "%s" defines a Lake MVR sour' +
   'ce but the lake outlet number is invalid.';
   StrDivideFlowEqually = 'Divide flow equally among UZF receiver cells';
-  StrMapNameDOptiona = 'UZF receiver map name %d (optional)';
-  StrMapName = 'UZF receiver map names';
+  StrMapNameDOptiona = 'Receiver map name %d (optional)';
+  StrMapName = 'Receiver map names';
   StrSourceSection = 'Source section';
   StrReceiverSections = 'Receiver section %d';
   StrReceiverValue = 'Value';
@@ -303,7 +303,6 @@ begin
           begin
             MaxReceivers := AnItem.ReceiverSectionsValues.Count;
           end;
-//          rdgMap.Cells[Ord(mcReceiver), ItemIndex+1] := AnItem.ReceiverSections.CommaSeparatedText;
         end;
       end;
       seReceiverNumber.AsInteger := MaxReceivers;
@@ -813,7 +812,7 @@ begin
               end;
             finally
               frameMapNames.Grid.EndUpdate;
-              frameMapNames.Width := Max(110, frameMapNames.Grid.ColWidths[0] + 16);
+              frameMapNames.Width := Max(110, frameMapNames.Grid.ColWidths[0] + 24);
             end;
           end;
         end

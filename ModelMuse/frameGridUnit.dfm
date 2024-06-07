@@ -46,9 +46,7 @@ object frameGrid: TframeGrid
       Top = 6
       Width = 23
       Height = 22
-      Hint = 
-        'Insert layer group|Insert a layer group above the selected layer' +
-        ' group.'
+      Hint = 'Insert row|Insert a row above the selected row.'
       Anchors = []
       Glyph.Data = {
         F6000000424DF600000000000000760000002800000010000000100000000100

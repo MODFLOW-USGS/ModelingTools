@@ -26362,7 +26362,7 @@ begin
   StreamList := TSfrStreamPlotList.Create;
 //  LakeList := TLakePlotList.Create;
   try
-    SfrMf6StreamLinkPlot.GetMf6ObjectsToPlot(StreamList{, LakeList});
+    SfrMf6StreamLinkPlot.GetMf6ObjectsToPlot(StreamList);
     if StreamList.Count > 0 then
     begin
       StreamColor := Color32(SfrMf6StreamLinkPlot.StreamColor);

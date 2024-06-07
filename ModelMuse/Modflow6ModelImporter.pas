@@ -10213,7 +10213,8 @@ end;
 type
   TScreenObjectCrack = class(TScreenObject);
 
-procedure TModflow6Importer.ImportModflow6Model(NameFiles, ErrorMessages: TStringList; usgs_model_reference: string);
+procedure TModflow6Importer.ImportModflow6Model(NameFiles, ErrorMessages: TStringList;
+  usgs_model_reference: string);
 var
   FileIndex: Integer;
   OutFile: string;
@@ -10727,8 +10728,12 @@ begin
     DataArrayName := ChemSpecies.MobileSorptionCapacityDataArrayName;
     Assign3DRealDataSet(DataArrayName, GridData.SP2);
   end;
-
 end;
+
+type
+  TSectionDictionary = TDictionary<Integer, Integer>;
+  TSectionDictionaries = TObjectList<TSectionDictionary>;
+  TSourceSectionDictionary = TDictionary<TScreenObject, TSectionDictionary>;
 
 procedure TModflow6Importer.ImportMvr(Package: TPackage; TransportModels: TModelList);
 var
@@ -10779,6 +10784,9 @@ var
   MvtOptions: TMvtOptions;
   MapName: string;
   MapNeeded: Boolean;
+  SectionDictionary: TSectionDictionary;
+  SectionDictionaries: TSectionDictionaries;
+  SourceSectionDictionary: TSourceSectionDictionary;
   function GetMapName(AScreenObject: TScreenObject): string;
   begin
     result := AScreenObject.Name + ' Per ' + IntToStr(PeriodIndex+1);
@@ -10793,6 +10801,8 @@ begin
   MvrPackage.IsSelected := True;
 
   EndTime := Model.ModflowStressPeriods.Last.EndTime;
+  SectionDictionaries := TSectionDictionaries.Create;
+  SourceSectionDictionary := TSourceSectionDictionary.Create;
   SourceDictionary := TMvrSourceDictionary.Create(TTMvrKeyComparer.Create);
   ReceiverDictionary := TMvrReceiverDictionary.Create(TTMvrKeyComparer.Create);
   try
@@ -10843,9 +10853,10 @@ begin
       end;
     end;
 
-
     for PeriodIndex := 0 to Mvr.PeriodCount - 1 do
     begin
+      SectionDictionaries.Clear;
+      SourceSectionDictionary.Clear;
       MvrPeriod := Mvr.Periods[PeriodIndex];
       StartTime := Model.ModflowStressPeriods[MvrPeriod.Period-1].StartTime;
       SourceKey.Period := MvrPeriod.Period;
@@ -10873,6 +10884,18 @@ begin
         end;
 
         AScreenObject := Source.ScreenObject;
+        if not SourceSectionDictionary.TryGetValue(AScreenObject, SectionDictionary) then
+        begin
+          SectionDictionary := TSectionDictionary.Create;
+          SectionDictionaries.Add(SectionDictionary);
+          SourceSectionDictionary.Add(AScreenObject, SectionDictionary);
+          Assert(AScreenObject.SectionCount = Length(Source.IDs));
+          for SectionIndex := 0 to AScreenObject.SectionCount - 1 do
+          begin
+            SectionDictionary.Add(Source.IDs[SectionIndex], SectionIndex)
+          end;
+        end;
+
         AScreenObject.CreateModflowMvr;
         ModflowMvr := AScreenObject.ModflowMvr;
         case Source.SourceType of
@@ -10990,34 +11013,6 @@ begin
           ReceiverItem.ReceiverObject := Receiver.ScreenObject;
           ReceiverItem.DivisionChoice := dcDoNotDivide;
 
-//          if (AScreenObject.SectionCount > 1) then
-//          begin
-//            if (Receiver.ScreenObject.SectionCount > 1)
-//              and (ReceiverItem.ReceiverPackage in [rpcSfr, rpcUzf]) then
-//            begin
-//              // map needed
-//              MapName := GetMapName(Receiver.ScreenObject);
-//              AMvrMap := nil;
-//              for MapIndex := 0 to ModflowMvr.MvrMaps.Count - 1 do
-//              begin
-//                if ModflowMvr.MvrMaps[MapIndex].MvrMap.MapName = MapName then
-//                begin
-//                  AMvrMap := ModflowMvr.MvrMaps[MapIndex].MvrMap;
-//                  break;
-//                end;
-//              end;
-//              if AMvrMap = nil then
-//              begin
-//                AMvrMap := ModflowMvr.MvrMaps.Add.MvrMap;
-//                AMvrMap.MapName := GetMapName(Receiver.ScreenObject);
-//                for SectionIndex := 1 to AScreenObject.SectionCount do
-//                begin
-//                  AMvrMap.Add.SourceSection := SectionIndex;
-//                end;
-//              end;
-//            end;
-//          end;
-
           for TimeIndex := 0 to ModflowMvr.Values.Count - 1 do
           begin
             PriorMvrItem := ModflowMvr.Values[TimeIndex] as TMvrItem;
@@ -11124,7 +11119,11 @@ begin
             begin
               try
                 // Get the position of SourceKey.ID in Source.IDS
-                ReceiverSectionsValues := MvrMap[SourceKey.ID-1].ReceiverSectionsValues;
+                if not SectionDictionary.TryGetValue(SourceKey.ID, SectionIndex) then
+                begin
+                  Assert(False);
+                end;
+                ReceiverSectionsValues := MvrMap[SectionIndex].ReceiverSectionsValues;
                 ReceiverSectionsValue := ReceiverSectionsValues.Add;
                 ReceiverSectionsValue.SectionNumber := SearchIndex + 1;
                 ReceiverSectionsValue.Value := MvrPeriodItem.value;
@@ -11143,6 +11142,8 @@ begin
   finally
     ReceiverDictionary.Free;
     SourceDictionary.Free;
+    SectionDictionaries.Free;
+    SourceSectionDictionary.Free;
   end;
 end;
 
@@ -14037,6 +14038,7 @@ var
   TransportAuxIndex: Integer;
   TransportAuxValues: TMf6BoundaryValueArray;
   SpcMap: TimeSeriesMap;
+  Value: double;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -14820,80 +14822,71 @@ var
     BoundaryValues: TMf6BoundaryValueArray);
   var
     NewReachList: TSfrReachInfoList;
+    FirstReachList: TSfrReachInfoList;
     Index: Integer;
-    TempList: TSfrReachInfoLists;
   begin
-    TempList := TSfrReachInfoLists.Create;
-    try
-      NewReachList := TSfrReachInfoList.Create;
-      TempList.Add(NewReachList);
-      NewReachList.Add(AReachList[0]);
-      for Index := 1 to AReachList.Count - 1 do
+    NewReachList := TSfrReachInfoList.Create;
+    FirstReachList := NewReachList;
+    NewReachList.Add(AReachList[0]);
+    for Index := 1 to AReachList.Count - 1 do
+    begin
+      if BoundaryValues[Index].ValueType = BoundaryValues[Index-1].ValueType then
       begin
-        if BoundaryValues[Index].ValueType = BoundaryValues[Index-1].ValueType then
+        if (BoundaryValues[Index].ValueType = vtString) then
         begin
-          if (BoundaryValues[Index].ValueType = vtString) then
+          if (BoundaryValues[Index].StringValue = BoundaryValues[Index-1].StringValue) then
           begin
-            if (BoundaryValues[Index].StringValue = BoundaryValues[Index-1].StringValue) then
-            begin
-              NewReachList.Add(AReachList[Index]);
-            end
-            else
-            begin
-              NewReachList := TSfrReachInfoList.Create;
-              TempList.Add(NewReachList);
-              NewReachList.Add(AReachList[Index]);
-            end;
+            NewReachList.Add(AReachList[Index]);
           end
           else
           begin
+            NewReachList := TSfrReachInfoList.Create;
+            SfrReachInfoLists.Add(NewReachList);
             NewReachList.Add(AReachList[Index]);
           end;
         end
         else
         begin
-          NewReachList := TSfrReachInfoList.Create;
-          TempList.Add(NewReachList);
           NewReachList.Add(AReachList[Index]);
         end;
+      end
+      else
+      begin
+        NewReachList := TSfrReachInfoList.Create;
+        SfrReachInfoLists.Add(NewReachList);
+        NewReachList.Add(AReachList[Index]);
       end;
-
-       finally
-      TempList.Free;
     end;
 
-    AReachList := SfrReachInfoLists[ObjectIndex];
+    SfrReachInfoLists[ObjectIndex] := FirstReachList;
+    AReachList := FirstReachList;
   end;
   procedure SplitReachListWithStrings(var AReachList: TSfrReachInfoList;
     StringValues: TOneDStringArray);
   var
     NewReachList: TSfrReachInfoList;
+    FirstReachList: TSfrReachInfoList;
     Index: Integer;
-    TempList: TSfrReachInfoLists;
   begin
-    TempList := TSfrReachInfoLists.Create;
-    try
-      NewReachList := TSfrReachInfoList.Create;
-      TempList.Add(NewReachList);
-      NewReachList.Add(AReachList[0]);
-      for Index := 1 to AReachList.Count - 1 do
+    NewReachList := TSfrReachInfoList.Create;
+    FirstReachList := NewReachList;
+    NewReachList.Add(AReachList[0]);
+    for Index := 1 to AReachList.Count - 1 do
+    begin
+      if AnsiSameText(StringValues[Index], StringValues[Index-1]) then
       begin
-        if AnsiSameText(StringValues[Index], StringValues[Index-1]) then
-        begin
-          NewReachList.Add(AReachList[Index]);
-        end
-        else
-        begin
-          NewReachList := TSfrReachInfoList.Create;
-          TempList.Add(NewReachList);
-          NewReachList.Add(AReachList[Index]);
-        end;
+        NewReachList.Add(AReachList[Index]);
+      end
+      else
+      begin
+        NewReachList := TSfrReachInfoList.Create;
+        SfrReachInfoLists.Add(NewReachList);
+        NewReachList.Add(AReachList[Index]);
       end;
-    finally
-      TempList.Free;
     end;
 
-    AReachList := SfrReachInfoLists[ObjectIndex];
+    SfrReachInfoLists[ObjectIndex] := FirstReachList;
+    AReachList := FirstReachList;
   end;
   procedure IdentifySourcesAndReceivers(MvrPeriod: TMvrPeriod);
   var
@@ -14955,6 +14948,62 @@ begin
   if Options.BUDGETCSV then
   begin
     SfrPackage.SaveGwtBudgetCsv := True;
+  end;
+
+  if Model.ModflowOptions.LengthUnit = 0 then
+  begin
+    if Options.LENGTH_CONVERSION.Used then
+    begin
+      Value := Options.LENGTH_CONVERSION.Value;
+      if Abs(Value- 3.28081) < 0.0001 then
+      begin
+        Model.ModflowOptions.LengthUnit := 1;
+      end
+      else if Abs(Value- 1) < 0.0001 then
+      begin
+        Model.ModflowOptions.LengthUnit := 2;
+      end
+      else if Abs(Value- 100) < 0.0001 then
+      begin
+        Model.ModflowOptions.LengthUnit := 3;
+      end;
+    end
+    else
+    begin
+      Model.ModflowOptions.LengthUnit := 2;
+    end;
+  end;
+
+  if Model.ModflowOptions.TimeUnit = 0 then
+  begin
+    if Options.TIME_CONVERSION.Used then
+    begin
+      Value := Options.TIME_CONVERSION.Value;
+      if Abs(Value- 1) < 0.0001 then
+      begin
+        Model.ModflowOptions.TimeUnit := 1;
+      end
+      else if Abs(Value- 60) < 0.0001 then
+      begin
+        Model.ModflowOptions.TimeUnit := 2;
+      end
+      else if Abs(Value- 3600) < 0.0001 then
+      begin
+        Model.ModflowOptions.TimeUnit := 3;
+      end
+      else if Abs(Value- 86400) < 0.0001 then
+      begin
+        Model.ModflowOptions.TimeUnit := 4;
+      end
+      else if Abs(Value- 31557600) < 0.0001 then
+      begin
+        Model.ModflowOptions.TimeUnit := 5;
+      end;
+    end
+    else
+    begin
+      Model.ModflowOptions.TimeUnit := 1;
+    end;
   end;
 
   SfrPackage.WriteConvergenceData := Options.PACKAGE_CONVERGENCE;

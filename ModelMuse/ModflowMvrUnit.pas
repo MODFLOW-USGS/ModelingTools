@@ -217,6 +217,7 @@ type
     procedure SetMapName(const Value: string);
     function GetItem(Index: Integer): TSectionMapItem;
     procedure SetItem(Index: Integer; const Value: TSectionMapItem);
+    procedure EliminateUnusedItems;
   public
     constructor Create(Model: IModelForTOrderedCollection);
     procedure Assign(Source: TPersistent); override;
@@ -230,6 +231,7 @@ type
   private
     FMvrMap: TSectionMapItemCollection;
     procedure SetMvrMap(const Value: TSectionMapItemCollection);
+    procedure EliminateUnusedItems;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -244,6 +246,7 @@ type
   private
     function GetItem(Index: Integer): TSectionMap;
     procedure SetItem(Index: Integer; const Value: TSectionMap);
+    procedure EliminateUnusedItems;
   public
     constructor Create(Model: IModelForTOrderedCollection);
     property Items[Index: Integer]: TSectionMap read GetItem write SetItem; default;
@@ -286,6 +289,7 @@ type
 
   TMvrItems = class(TCustomMF_ListBoundColl)
   private
+    FOutsideGridCell: Boolean;
     function GetItems(Index: Integer): TMvrItem;
     procedure SetItems(Index: Integer; const Value: TMvrItem);
     procedure InvalidateMvrData(Sender: TObject);
@@ -308,8 +312,10 @@ type
       PestItemNames, TimeSeriesNames: TStringListObjectList); override;
     procedure AssignDirectlySpecifiedValues(AnItem: TCustomModflowBoundaryItem;
       BoundaryStorage: TCustomBoundaryStorage); override;
+    procedure AssignOutsideGridCell(CellAssignmentList: TObject); override;
   public
     property Items[Index: Integer]: TMvrItem read GetItems write SetItems; default;
+    property OutsideGridCell: Boolean read FOutsideGridCell write FOutsideGridCell;
   end;
 
   TMvrSourceCell = class(TValueCell)
@@ -808,6 +814,7 @@ end;
 procedure TMvrBoundary.Loaded;
 begin
   Receivers.Loaded(ParentModel as TCustomModel);
+  FMvrMaps.EliminateUnusedItems;
 end;
 
 procedure TMvrBoundary.SetMvrMaps(const Value: TSectionMaps);
@@ -1029,6 +1036,16 @@ begin
       Cell.Section := ACell.Section;
     end;
   end;
+end;
+
+procedure TMvrItems.AssignOutsideGridCell(CellAssignmentList: TObject);
+var
+  CellList: TCellAssignmentList;
+begin
+  CellList := CellAssignmentList as TCellAssignmentList;
+  CellList.Add(TCellAssignment.Create(0,0,0, nil, 0,
+    'dummy assignment outside of model area', amIntersect));
+  FOutsideGridCell := True;
 end;
 
 procedure TMvrItems.CreateTimeLists;
@@ -1778,6 +1795,17 @@ begin
   inherited Create(TSectionMapItem, Model);
 end;
 
+procedure TSectionMapItemCollection.EliminateUnusedItems;
+begin
+  for var ItemIndex := Count - 1 downto 0 do
+  begin
+    if Items[ItemIndex].ReceiverSectionsValues.Count = 0 then
+    begin
+      Items[ItemIndex].Free;
+    end;
+  end;
+end;
+
 function TSectionMapItemCollection.GetItem(Index: Integer): TSectionMapItem;
 begin
   result := inherited Items[Index] as TSectionMapItem
@@ -1821,6 +1849,11 @@ begin
   inherited;
 end;
 
+procedure TSectionMap.EliminateUnusedItems;
+begin
+  FMvrMap.EliminateUnusedItems;
+end;
+
 function TSectionMap.IsSame(AnotherItem: TOrderedItem): boolean;
 begin
   result := AnotherItem is TSectionMap;
@@ -1845,6 +1878,14 @@ end;
 constructor TSectionMaps.Create(Model: IModelForTOrderedCollection);
 begin
   inherited Create(TSectionMap, Model);
+end;
+
+procedure TSectionMaps.EliminateUnusedItems;
+begin
+  for var ItemIndex := 0 to Count - 1 do
+  begin
+    Items[ItemIndex].EliminateUnusedItems;
+  end;
 end;
 
 function TSectionMaps.GetItem(Index: Integer): TSectionMap;

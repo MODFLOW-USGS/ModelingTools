@@ -5061,6 +5061,7 @@ var
   ParamBoundary: TModflowParamBoundary;
   AParam: TModflowTransientListParameter;
   CurrentTime: TDateTime;
+  FoundFirst: Boolean;
   procedure AssignMf6ObsNames(ValueCellList: TValueCellList);
   var
     CellIndex: Integer;
@@ -5098,6 +5099,7 @@ begin
       Exit;
     end;
 
+    FoundFirst := False;
     CurrentTime := Now;
     frmProgressMM.BeginUpdate;
     for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
@@ -5139,12 +5141,13 @@ begin
         end;
         frmProgressMM.AddMessage(Format(StrEvaluatingS,
           [ScreenObject.Name]));
-        if Now - CurrentTime >  OneSecond then
+        if (Now - CurrentTime >  OneSecond) or not FoundFirst then
         begin
           frmProgressMM.EndUpdate;
           Application.ProcessMessages;
           frmProgressMM.BeginUpdate;
           CurrentTime := Now;
+          FoundFirst := True;
         end;
 
         Boundary.GetCellValues(FValues, FParamValues, Model, self);

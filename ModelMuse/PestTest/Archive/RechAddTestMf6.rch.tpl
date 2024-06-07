@@ -1,6 +1,6 @@
 ptf @
 etf %
-# RCH: Recharge package file created on 7/30/2021 by ModelMuse version 4.3.0.56.
+# RCH: Recharge package file created on 6/7/2024 by ModelMuse version 5.2.0.13.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
   AUXILIARY IFACE
@@ -11,7 +11,7 @@ BEGIN OPTIONS
 END OPTIONS
 
 BEGIN DIMENSIONS
-  MAXBOUND    36
+  MAXBOUND    41
 END DIMENSIONS
 
 BEGIN PERIOD      1
@@ -40,8 +40,12 @@ BEGIN PERIOD      1
      1     4     5  2.000000000000E+000      0 'Object1' 
      1     4     4  2.000000000000E+000      0 'Object1' 
      1     4     3  2.000000000000E+000      0 'Object1' 
+     1     3     6  2.000000000000E+000      0 'Object1' 
+     1     3     5  2.000000000000E+000      0 'Object1' 
      1     3     4  2.000000000000E+000      0 'Object1' 
      1     3     3  2.000000000000E+000      0 'Object1' 
+     1     3     4 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
+     1     3     3 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
      1     3     2 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
      1     3     1 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
      1     2     4 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
@@ -49,6 +53,7 @@ BEGIN PERIOD      1
      1     2     2 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
      1     2     1 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
      1     1     4 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
+     1     1     3 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
      1     1     2 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
      1     1     1 %                    (1 *  @                    b@) *  @                    a@%      0 'Object0' 
 END PERIOD 

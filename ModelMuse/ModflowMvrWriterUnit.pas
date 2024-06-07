@@ -117,7 +117,6 @@ type
     procedure WriteMvtFile(const AFileName: string; SpeciesIndex: Integer);
     property UsedPackages: TSourcePackageChoices read FUsedPackages;
     procedure UpdateDisplay(TimeLists: TModflowBoundListOfTimeLists);
-//    property UzfCellNumbers: TThreeDIntegerArray read FUzfCellNumbers write FUzfCellNumbers;
   end;
 
 const
@@ -150,6 +149,9 @@ resourcestring
   StrInvalidMVRReceiver = 'Invalid MVR receiver package';
   StrThe0sPackageCanRec = 'The %0:s package can not be used as a receiver pa' +
   'ckage in %1:s for MVR because the %0:s package is not seleccted';
+  StrInvalidMVRMapName = 'Invalid MVR Map name';
+  StrS0InStressPerio = '%s:0 in stress period %1:d is not a MVR Map defined ' +
+  'in %s:s.';
 
 type
   TSourceReceiverMap = TDictionary<Integer, TReceiverSectionValue>;
@@ -297,7 +299,6 @@ var
   ReceiverIndex: Integer;
   ReceiverItem: TReceiverItem;
   ModflowLak6: TLakeMf6;
-//  OutletIndex: Integer;
   LkValues: TMvrRecord;
   TimeIndex: Integer;
   MvrItem: TMvrItem;
@@ -318,6 +319,7 @@ begin
   inherited;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidMVRSourceP);
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrInvalidMVRReceiver);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidMVRMapName);
 
   Compiler := Model.rpThreeDFormulaCompilerNodes;
 
@@ -354,7 +356,6 @@ begin
           EndStressPeriod := Model.ModflowFullStressPeriods.FindEndStressPeriod(MvrItem.EndTime);
           for StressPeriodIndex := StartStressPeriod to EndStressPeriod do
           begin
-//            MvrSourceDictionary := FSourceCellDictionaries[StressPeriodIndex];
             AList := Values[StressPeriodIndex];
             if AList.Count > 0 then
             begin
@@ -833,14 +834,9 @@ procedure TModflowMvrWriter.WriteGwtFileInternal;
 begin
   OpenFile(FNameOfFile);
   try
-//    WriteTemplateHeader;
-
     WriteDataSet0;
 
     WriteGwtOptions;
-//    WriteGwtPackageData;
-//    WriteGwtStressPeriods;
-
   finally
     CloseFile;
   end;
@@ -858,10 +854,7 @@ begin
   try
     Assert(FSpeciesIndex >= 0);
     Assert(FSpeciesIndex < Model.MobileComponents.Count);
-//    WriteString('    FLOW_PACKAGE_AUXILIARY_NAME ');
     ASpecies := Model.MobileComponents[FSpeciesIndex];
-//    WriteString(' ' + ASpecies.Name);
-//    NewLine;
 
     PrintListInputOption;
     PrintFlowsOption;
@@ -870,7 +863,6 @@ begin
     MvrPackage := Model.ModflowPackages.MvrPackage;
     BaseFileName := ChangeFileExt(FNameOfFile, '');
     BaseFileName := ChangeFileExt(BaseFileName, '') + '.' + ASpecies.Name;
-
 
     if MvrPackage.SaveBudgetFile then
     begin
@@ -939,7 +931,6 @@ var
   MapItemIndex: Integer;
   MapItem: TSectionMapItem;
   Divisor: Integer;
-  DivisorIndex: Integer;
   ReceiverSection: Integer;
   SectionMaps: TDictionary<string,TSourceReceiverMap>;
   SectionMapsList: TObjectList<TSourceReceiverMap>;
@@ -1062,8 +1053,8 @@ begin
                 if not SectionMaps.TryGetValue(UpperCase(MapName), SourceReceiverIndexMap) then
                 begin
                   SourceReceiverIndexMap := nil;
-                  frmErrorsAndWarnings.AddError(Model, 'Invalid MVR Map name',
-                    Format('%s:0 in stress period %1:d is not a MVR Map defined in %s:s.',
+                  frmErrorsAndWarnings.AddError(Model, StrInvalidMVRMapName,
+                    Format(StrS0InStressPerio,
                     [MapName, StressPeriodIndex+1, MvrCell.ScreenObject.Name]),
                     MvrCell.ScreenObject as TObject);
                 end;
@@ -1102,8 +1093,7 @@ begin
             begin
               ReceiverCount := Length(ReceiverValues.UzfCells);
               Divisor := ReceiverCount;
-              if (ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf])
-                {and (ReceiverItem.DivisionChoice = dcDivide)} then
+              if (ASource.SourcePackage in [spcWel, spcDrn, spcRiv, spcGhb, spcSfr, spcUzf]) then
               begin
                 MapName := MvrCell.Values.MvrMapNames[ReceiverIndex];
                 // If a map is used, ReceiverCount can not be used as the divisor.
@@ -1132,8 +1122,16 @@ begin
                     Continue
                   end;
                   ReceiverSection := ReceiverSectionValue.SectionNumber-1;
-                end;
-              end;
+                end
+                else
+                begin
+                  ReceiverCount := 1;
+                end
+              end
+              else
+              begin
+                ReceiverCount := 1;
+              end
             end;
 
             if (ReceiverKey.ScreenObject <> PriorReceiverObject)
@@ -1449,8 +1447,6 @@ begin
   finally
     AllStreamReaches.Free;
     EnclosedReaches.Free;
-//    CurrentObjectReaches.Free;
-
     SectionMaps.Free;
     SectionMapsList.Free;
     SfrQuadTreeDictionary.Free;
@@ -1498,15 +1494,6 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     WriteGwtFileInternal;
-
-//    if  Model.PestUsed and FPestParamUsed then
-//    begin
-//      FNameOfFile := FNameOfFile + '.tpl';
-//      WritePestTemplateLine(FNameOfFile);
-//      WritingTemplate := True;
-//      WriteGwtFileInternal;
-//    end;
-
   finally
     frmErrorsAndWarnings.EndUpdate;
   end;
@@ -1546,7 +1533,6 @@ begin
     WriteString(budgetCsvFile);
     NewLine;
   end;
-
 
   WriteEndOptions
 end;
@@ -1608,7 +1594,6 @@ begin
   WriteString('END PACKAGES');
   NewLine;
   NewLine;
-
 end;
 
 procedure TModflowMvrWriter.WriteParameterCells(CellList: TValueCellList;
@@ -1619,7 +1604,6 @@ procedure TModflowMvrWriter.WriteParameterCells(CellList: TValueCellList;
 begin
   Assert(False);
   inherited;
-
 end;
 
 procedure TModflowMvrWriter.WriteParameterDefinitions(const DS3, DS3Instances,
@@ -1630,7 +1614,6 @@ procedure TModflowMvrWriter.WriteParameterDefinitions(const DS3, DS3Instances,
 begin
   Assert(False);
   inherited;
-
 end;
 
 procedure TModflowMvrWriter.WriteStressPeriods(const VariableIdentifiers,
@@ -1638,7 +1621,6 @@ procedure TModflowMvrWriter.WriteStressPeriods(const VariableIdentifiers,
 begin
   Assert(False);
   inherited;
-
 end;
 
 { TMvrReceiverKeyComparer }
