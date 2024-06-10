@@ -1415,6 +1415,7 @@ begin
     end;
 
     FNameOfFile := FileName(AFileName);
+    FInputFileName := FNameOfFile;
     result := FNameOfFile;
     OpenFile(FNameOfFile);
     try

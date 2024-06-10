@@ -264,8 +264,6 @@ begin
 end;
 
 procedure TModflowBCF_Writer.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
 begin
   if not Package.IsSelected then
   begin
@@ -294,11 +292,11 @@ begin
     frmErrorsAndWarnings.EndUpdate;
   end;
 
-  NameOfFile := FileName(AFileName);
+  FNameOfFile := FileName(AFileName);
   WriteToNameFile(StrBCF, Model.UnitNumbers.UnitNumber(StrBCF),
-    NameOfFile, foInput, Model);
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+    FNameOfFile, foInput, Model);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingBCFPackage);
     WriteDataSet1;
@@ -340,7 +338,7 @@ begin
   begin
     ADataArray := FPestDataArrays[DataArrayIndex];
     WritePestZones(ADataArray, FInputFileName,
-      Format(StrBCFd, [DataArrayIndex+1]),
+      Format(StrBCFd, [DataArrayIndex+1]), '',
       Format('BC%d', [DataArrayIndex+1]));
   end;
 end;

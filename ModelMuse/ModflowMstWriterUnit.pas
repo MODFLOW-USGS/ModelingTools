@@ -10,6 +10,7 @@ type
   private
     FSpeciesIndex: Integer;
     FMstPackage: TGwtMstPackage;
+    FPestScriptName: string;
     procedure WriteOptions;
     procedure writeGridData;
     procedure WriteFileInternal;
@@ -57,8 +58,11 @@ begin
 
 
   Abbreviation := 'MST6';
+
+  FPestScriptName  := AFileName;
   GwtFile := GwtFileName(AFileName, SpeciesIndex);
   FNameOfFile := GwtFile;
+  FInputFileName := GwtFile;
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
@@ -94,8 +98,10 @@ procedure TModflowGwtMstWriter.writeGridData;
 var
   DataArray: TDataArray;
   ChemSpecies: TMobileChemSpeciesItem;
+  FileNameToUse: string;
 begin
   WriteBeginGridData;
+  FileNameToUse := FPestScriptName;
 
   ChemSpecies := Model.MobileComponents[FSpeciesIndex];
 
@@ -110,6 +116,7 @@ begin
   end;
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'POROSITY');
+  WritePestZones(DataArray, FileNameToUse, 'POROSITY', '.' + ChemSpecies.Name, 'POROSITY');
 
   if FMstPackage.ZeroOrderDecay or FMstPackage.FirstOrderDecay then
   begin
@@ -117,6 +124,7 @@ begin
       ChemSpecies.MobileDecayRateDataArrayName);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'DECAY');
+    WritePestZones(DataArray, FileNameToUse, 'DECAY', '.' + ChemSpecies.Name, 'DECAY');
 
     if FMstPackage.Sorption <> gscNone then
     begin
@@ -124,6 +132,7 @@ begin
         ChemSpecies.MobileSorbedDecayRateDataArrayName);
       Assert(DataArray <> nil);
       WriteMf6_DataSet(DataArray, 'DECAY_SORBED');
+      WritePestZones(DataArray, FileNameToUse, 'DECAY_SORBED', '.' + ChemSpecies.Name, 'DECAY_SORBED');
     end;
   end;
 
@@ -133,11 +142,13 @@ begin
       ChemSpecies.MobileBulkDensityDataArrayName);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'BULK_DENSITY');
+    WritePestZones(DataArray, FileNameToUse, 'BULK_DENSITY', '.' + ChemSpecies.Name, 'BULK_DENSITY');
 
     DataArray := Model.DataArrayManager.GetDataSetByName(
       ChemSpecies.MobileDistCoefDataArrayName);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'DISTCOEF');
+    WritePestZones(DataArray, FileNameToUse, 'DISTCOEF', '.' + ChemSpecies.Name, 'DISTCOEF');
   end;
 
   if FMstPackage.Sorption = gscFreundlich then
@@ -146,6 +157,7 @@ begin
       ChemSpecies.MobileFreundlichExponentDataArrayName);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'SP2');
+    WritePestZones(DataArray, FileNameToUse, 'SP2', '.' + ChemSpecies.Name, 'SP2');
   end;
 
   if FMstPackage.Sorption = gscLangmuir then
@@ -154,6 +166,7 @@ begin
       ChemSpecies.MobileSorptionCapacityDataArrayName);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'SP2');
+    WritePestZones(DataArray, FileNameToUse, 'SP2', '.' + ChemSpecies.Name, 'SP2');
   end;
 
   WriteEndGridData;

@@ -287,16 +287,13 @@ var
   ModflowInputPrefix: string;
   OutputPrefix: string;
   ModflowOutputPrefix: string;
-//  Options: TModpathSelection;
 begin
   FModel := Model;
   FEmbeddedExport := EmbeddedExport;
   FFileName := FileName;
-//  FInputFileName := FFileName;
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, CbfFileExistsError);
-  //  Options := Model.ModflowPackages.ModPath;
 
     Modelname := ChangeFileExt(ExtractFileName(FileName), '');
     ModflowInputPrefix := '..\..\model\model.' + Modelname + '\';
@@ -315,14 +312,12 @@ begin
 
       AFileName := ChangeFileExt(FileName,
         TModflowDiscretizationWriter.Extension);
-//      frmGoPhast.PhastModel.AddModpathInputFile(AFileName);
       AFileName := ExtractFileName(AFileName);
       NameFile.Add('DIS 13 ' + AFileName);
       NameArchiveFile.Add('DIS 13 ' + ModflowInputPrefix +  AFileName);
       CheckFileExists(AFileName);
 
       AFileName := ChangeFileExt(FileName, StrCbcExt);
-//      frmGoPhast.PhastModel.AddModpathInputFile(AFileName);
       AFileName := ExtractFileName(AFileName);
       NameFile.Add('BUDGET 20 ' + AFileName);
       NameArchiveFile.Add('BUDGET 20 ' + ModflowOutputPrefix + AFileName);
@@ -337,7 +332,6 @@ begin
           oftBinary:
             begin
               AFileName := ChangeFileExt(FileName, StrBhd);
-//              frmGoPhast.PhastModel.AddModpathInputFile(AFileName);
               AFileName := ExtractFileName(AFileName);
               NameFile.Add('HEAD 22 ' + AFileName);
               NameArchiveFile.Add('HEAD 22 ' + ModflowOutputPrefix + AFileName);
@@ -375,7 +369,6 @@ begin
   FModel := Model;
   FEmbeddedExport := EmbeddedExport;
   FFileName := FileName;
-//  FInputFileName := FFileName;
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveErrorGroup(Model, CbfFileExistsError);
@@ -400,7 +393,6 @@ begin
       begin
         AFileName := ChangeFileExt(FileName,
           TModflowDiscretizationWriter.Extension);
-  //      frmGoPhast.PhastModel.AddModpathInputFile(AFileName);
         AFileName := ExtractFileName(AFileName);
         NameFile.Add('DIS ' + AFileName);
         NameArchiveFile.Add('DIS ' + ModflowInputPrefix +  AFileName);
@@ -443,7 +435,6 @@ begin
       begin
         AFileName := ChangeFileExt(FileName,
           TTemporalDiscretizationWriter.Extension);
-  //      frmGoPhast.PhastModel.AddModpathInputFile(AFileName);
         AFileName := ExtractFileName(AFileName);
         NameFile.Add('TDIS ' + AFileName);
         NameArchiveFile.Add('TDIS ' + ModflowInputPrefix +  AFileName);
@@ -451,7 +442,6 @@ begin
       end;
 
       AFileName := ChangeFileExt(FileName, StrCbcExt);
-//      frmGoPhast.PhastModel.AddModpathInputFile(AFileName);
       AFileName := ExtractFileName(AFileName);
       NameFile.Add('BUDGET ' + AFileName);
       NameArchiveFile.Add('BUDGET ' + ModflowOutputPrefix + AFileName);
@@ -468,7 +458,6 @@ begin
           oftBinary:
             begin
               AFileName := ChangeFileExt(FileName, StrBhd);
-//              frmGoPhast.PhastModel.AddModpathInputFile(AFileName);
               AFileName := ExtractFileName(AFileName);
               NameFile.Add('HEAD ' + AFileName);
               NameArchiveFile.Add('HEAD ' + ModflowOutputPrefix + AFileName);

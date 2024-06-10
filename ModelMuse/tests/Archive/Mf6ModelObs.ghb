@@ -1,4 +1,4 @@
-# GHB: General-Head Boundary package file created on 6/7/2024 by ModelMuse version 5.2.0.13.
+# GHB: General-Head Boundary package file created on 6/10/2024 by ModelMuse version 5.2.0.15.
 BEGIN OPTIONS
     AUXILIARY IFACE Chem
     BOUNDNAMES
@@ -19,3 +19,4 @@ END PERIOD
 BEGIN PERIOD      2
      1     3     1  1.000000000000E+000   1.000000000000E-009      0  1.000000000000E+000  'Object2'  # Data Set 6: Layer Row Column Bhead Cond IFACE Chem boundname
 END PERIOD 
+

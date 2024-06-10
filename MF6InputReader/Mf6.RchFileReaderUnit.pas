@@ -78,7 +78,7 @@ type
     AuxList: TArrayItemList;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
-      READASARRAYS: Boolean; PriorPeriod: TRchPeriod);
+      READASARRAYS: Boolean; PriorPeriod: TRchPeriod; Options: TRchOptions);
     function GetCell(Index: Integer): TRchTimeItem;
     function GetCount: Integer;
   protected
@@ -423,7 +423,7 @@ end;
 
 procedure TRchPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
-  READASARRAYS: Boolean; PriorPeriod: TRchPeriod);
+  READASARRAYS: Boolean; PriorPeriod: TRchPeriod; Options: TRchOptions);
 var
   DimensionCount: Integer;
   Cell: TRchTimeItem;
@@ -471,7 +471,6 @@ begin
     end;
 //    AuxList := TArrayItemList.Create;
     try
-      AuxIndex := 0;
       while not Stream.EndOfStream do
       begin
         ALine := Stream.ReadLine;
@@ -522,35 +521,43 @@ begin
             end;
           end;
         end
-        else if AnsiSameText(FSplitter[0], 'AUX') then
+        else
         begin
-          AuxArray.Initialize;
-          if (FSplitter.Count >= 3) and AnsiSameText(FSplitter[1], 'TIMEARRAYSERIES') then
+          AuxIndex := Options.FAUXILIARY.IndexOf(FSplitter[0]);
+          if AuxIndex >= 0 then
           begin
-            FSplitter.DelimitedText := CaseSensitiveLine;
-            AuxArray.TimeArraySeries := FSplitter[2]
-          end
-          else
-          begin
-            Double2DDReader := TDouble2DArrayReader.Create(LocalDim, FPackageType);
-            try
-              Double2DDReader.Read(Stream, Unhandled);
-              AuxArray.Value := Double2DDReader.FData;
-              SetLength(AuxArray.Value, Length(AuxArray.Value), Length(AuxArray.Value[0]));
-            finally
-              Double2DDReader.Free;
+            AuxArray.Initialize;
+            if (FSplitter.Count >= 3) and AnsiSameText(FSplitter[1], 'TIMEARRAYSERIES') then
+            begin
+              FSplitter.DelimitedText := CaseSensitiveLine;
+              AuxArray.TimeArraySeries := FSplitter[2]
+            end
+            else
+            begin
+              Double2DDReader := TDouble2DArrayReader.Create(LocalDim, FPackageType);
+              try
+                Double2DDReader.Read(Stream, Unhandled);
+                AuxArray.Value := Double2DDReader.FData;
+                SetLength(AuxArray.Value, Length(AuxArray.Value), Length(AuxArray.Value[0]));
+              finally
+                Double2DDReader.Free;
+              end;
             end;
-          end;
-          if PriorPeriod = nil then
-          begin
-            AuxList.Add(AuxArray)
+            if PriorPeriod = nil then
+            begin
+              AuxList.Add(AuxArray)
+            end
+            else
+            begin
+              AuxList[AuxIndex].Assign(AuxArray);
+            end;
           end
           else
           begin
-            AuxList[AuxIndex].Assign(AuxArray);
-            Inc(AuxIndex);
+            Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
+            Unhandled.WriteLine(ErrorLine);
           end;
-        end
+        end;
       end;
     finally
       ID := 0;
@@ -597,6 +604,7 @@ begin
               Aux.StringValue := AuxArray.TimeArraySeries + '_'
                 + IntToStr(RowIndex + 1) + '_' + IntToStr(ColIndex + 1)
             end;
+            Cell.Faux.Add(Aux);
           end;
           FCells.Add(Cell);
         end;
@@ -818,7 +826,7 @@ begin
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
-            FOptions.BOUNDNAMES, FOptions.READASARRAYS, PriorPeriod);
+            FOptions.BOUNDNAMES, FOptions.READASARRAYS, PriorPeriod, FOptions);
         end
         else
         begin

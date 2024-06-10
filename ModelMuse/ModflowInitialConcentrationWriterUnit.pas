@@ -8,6 +8,7 @@ type
   TGwtInitialConcWriter = class(TCustomModflowWriter)
   private
     FSpeciesIndex: Integer;
+    FPestScriptFileName: string;
   protected
     class function Extension: string; override;
     procedure WriteInitialConcentrations;
@@ -38,6 +39,7 @@ begin
   begin
     Exit;
   end;
+  FPestScriptFileName := AFileName;
   FSpeciesIndex := SpeciesIndex;
   SpeciesName := Model.MobileComponents[SpeciesIndex].Name;
   AGwtFileName := GwtFileName(AFileName, SpeciesIndex);
@@ -45,6 +47,7 @@ begin
   WriteToGwtNameFile('IC6', AGwtFileName, SpeciesIndex);
 
   FNameOfFile := AGwtFileName;
+  FInputFileName := AGwtFileName;
   OpenFile(FNameOfFile);
   try
     WriteCommentLine(File_Comment('Initial concentration file for ' + SpeciesName));
@@ -58,7 +61,7 @@ procedure TGwtInitialConcWriter.WriteInitialConcentrations;
 var
   Item: TMobileChemSpeciesItem;
   DataArray: TDataArray;
-  LayerIndex: Integer;
+//  LayerIndex: Integer;
   DataSetName: string;
 begin
   Item := Model.MobileComponents[FSpeciesIndex];
@@ -70,21 +73,23 @@ begin
 
   WriteBeginGridData;
 
-  for LayerIndex := 0 to Model.LayerCount - 1 do
-  begin
-    if LayerIndex = 0 then
-    begin
-      WriteArray(DataArray, LayerIndex,
-        DataSetName + ' ' + Model.ModflowLayerBottomDescription(LayerIndex),
-        StrNoValueAssigned, DataSetName);
-    end
-    else
-    begin
-      WriteArray(DataArray, LayerIndex,
-        DataSetName + ' ' + Model.ModflowLayerBottomDescription(LayerIndex),
-        StrNoValueAssigned, '');
-    end;
-  end;
+//  for LayerIndex := 0 to Model.LayerCount - 1 do
+//  begin
+//    if LayerIndex = 0 then
+//    begin
+//      WriteArray(DataArray, LayerIndex,
+//        DataSetName + ' ' + Model.ModflowLayerBottomDescription(LayerIndex),
+//        StrNoValueAssigned, DataSetName);
+//    end
+//    else
+//    begin
+//      WriteArray(DataArray, LayerIndex,
+//        DataSetName + ' ' + Model.ModflowLayerBottomDescription(LayerIndex),
+//        StrNoValueAssigned, '');
+//    end;
+//  end;
+  WriteMf6_DataSet(DataArray, 'STRT');
+  WritePestZones(DataArray, FPestScriptFileName, 'STRT', '.' + Item.Name, 'STRT');
 
   WriteEndGridData;
 end;

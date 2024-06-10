@@ -419,7 +419,7 @@ end;
 
 procedure TModflowHobWriter.WriteFile(const AFileName: string; Purpose: TObservationPurpose);
 var
-  NameOfFile: string;
+//  NameOfFile: string;
   Index: Integer;
   TimeIndex: Integer;
 begin
@@ -444,20 +444,19 @@ begin
     frmProgressMM.AddMessage(StrWritingHOBPackage);
     frmProgressMM.AddMessage(StrEvaluatingData);
     Evaluate(Purpose);
-    NameOfFile := FileName(AFileName);
-    WriteToNameFile(StrHOB, Model.UnitNumbers.UnitNumber(StrHOB), NameOfFile, foInput, Model);
+    FNameOfFile := FileName(AFileName);
+    WriteToNameFile(StrHOB, Model.UnitNumbers.UnitNumber(StrHOB), FNameOfFile, foInput, Model);
     if IUHOBSV <> 0 then
     begin
-      FOutFileName := ChangeFileExt(NameOfFile, StrHobout);
+      FOutFileName := ChangeFileExt(FNameOfFile, StrHobout);
       WriteToNameFile(StrDATA, IUHOBSV, FOutFileName, foOutput, Model);
       if Model.PestStatus in [psObservations, psActive] then
       begin
         Model.FileNameLines.Add('  HOB ' +  ExtractFileName(FOutFileName));
       end;
     end;
-    FInputFileName := NameOfFile;
-    FInputFileName := FInputFileName;
-    OpenFile(NameOfFile);
+    FInputFileName := FNameOfFile;
+    OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingDataSet0);
       WriteDataSet0;

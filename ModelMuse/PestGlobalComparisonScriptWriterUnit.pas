@@ -66,6 +66,8 @@ begin
   end;
 
   ScriptFileName := FileName(AFileName);
+  FInputFileName := ScriptFileName;
+  FNameOfFile := ScriptFileName;
 
   ObservationList := TObservationInterfaceList.Create;
   FObsItemDictionary := TObsItemDictionary.Create;

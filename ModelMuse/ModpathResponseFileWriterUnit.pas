@@ -269,8 +269,6 @@ end;
 
 procedure TModpathResponseFileWriter.WriteFile(const AFileName: string;
   NewBudgetFile: boolean);
-var
-  NameOfFile: string;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidMODPATHStop);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidMODPATHPart);
@@ -281,14 +279,14 @@ begin
   FNewBudgetFile := NewBudgetFile;
 
   FArchive := False;
-  NameOfFile := FileName(AFileName);
-  WriteRspFile(NameOfFile, AFileName);
+  FNameOfFile := FileName(AFileName);
+  WriteRspFile(FNameOfFile, AFileName);
 
   FArchive := True;
-  NameOfFile := NameOfFile + ArchiveExt;
-  WriteRspFile(NameOfFile, AFileName);
+  FNameOfFile := FNameOfFile + ArchiveExt;
+  WriteRspFile(FNameOfFile, AFileName);
 
-  Model.AddModpathInputFile(NameOfFile);
+  Model.AddModpathInputFile(FNameOfFile);
 
 end;
 
@@ -2288,32 +2286,33 @@ end;
 
 procedure TModpathSimFileWriter.WriteFile(const AFileName: string);
 var
-  NameOfFile: string;
+//  NameOfFile: string;
   ADirectory: string;
 begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheMODPATHStopOpti);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidSimulationT);
   FNameFile := AFileName;
-  NameOfFile := FileName(AFileName);
+  FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
 
   FModelName := ExtractFileName(AFileName);
   FModelName := ChangeFileExt(FModelName , '');
 
   if FMpathVersion = mp6 then
   begin
-    SaveFile(NameOfFile, False);
-    SaveFile(NameOfFile + ArchiveExt, True);
+    SaveFile(FNameOfFile, False);
+    SaveFile(FNameOfFile + ArchiveExt, True);
   end
   else
   begin
     FillScreenObjectList;
     SpecifyCellNumberArray;
-    SaveFileMp7(NameOfFile, False);
-    SaveFileMp7(NameOfFile + ArchiveExt, True);
+    SaveFileMp7(FNameOfFile, False);
+    SaveFileMp7(FNameOfFile + ArchiveExt, True);
   end;
 
-  Model.AddModpathInputFile(NameOfFile + ArchiveExt);
-  ADirectory := IncludeTrailingPathDelimiter(ExtractFileDir(NameOfFile));
+  Model.AddModpathInputFile(FNameOfFile + ArchiveExt);
+  ADirectory := IncludeTrailingPathDelimiter(ExtractFileDir(FNameOfFile));
   if FMpathVersion = mp6 then
   begin
     Model.AddModpathOutputFile(ADirectory + 'MPATH6.LOG');
@@ -2323,7 +2322,7 @@ begin
     Model.AddModpathOutputFile(ADirectory + 'mpath7.log');
   end;
 
-//  Model.AddModelInputFile(NameOfFile);
+//  Model.AddModelInputFile(FNameOfFile);
 end;
 
 procedure TModpathSimFileWriter.GetCellCount(AScreenObject: TScreenObject;

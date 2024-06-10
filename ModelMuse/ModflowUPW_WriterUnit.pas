@@ -114,8 +114,8 @@ begin
 end;
 
 procedure TModflowUPW_Writer.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   if not Model.ModflowPackages.UpwPackage.IsSelected then
   begin
@@ -136,11 +136,11 @@ begin
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrParameterZonesNot);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheNOPARCHECKOptUPW);
 
-    NameOfFile := FileName(AFileName);
+    FNameOfFile := FileName(AFileName);
     WriteToNameFile(StrUPW, Model.UnitNumbers.UnitNumber(StrUPW),
-      NameOfFile, foInput, Model);
-    FInputFileName := NameOfFile;
-    OpenFile(NameOfFile);
+      FNameOfFile, foInput, Model);
+    FInputFileName := FNameOfFile;
+    OpenFile(FNameOfFile);
     try
       frmProgressMM.AddMessage(StrWritingUPWPackage);
       frmProgressMM.AddMessage(StrWritingDataSet0);

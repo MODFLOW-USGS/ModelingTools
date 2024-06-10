@@ -622,7 +622,7 @@ begin
         DataArray := Model.DataArrayManager.GetDataSetByName(Formula);
         if OutsideGridCell and (DataArray <> nil) then
         begin
-          frmErrorsAndWarnings.AddError(Model, 'Invalid data array in formula for an SFR object outside the grid.',
+          frmErrorsAndWarnings.AddError(Model, 'Invalid use of a data set in formula for an SFR object outside the grid.',
             Format('%s', [ASegment.FScreenObject.Name]), ASegment.FScreenObject);
         end;
         if (DataArray <> nil) and DataArray.PestParametersUsed then

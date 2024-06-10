@@ -4290,7 +4290,7 @@ begin
     FWriteLocation := wlMain;
   end;
 
-  WritePestZones(DataArray, FInputFileName, StrGSUR, 'GSU');
+  WritePestZones(DataArray, FInputFileName, StrGSUR, '', 'GSU');
 
 end;
 

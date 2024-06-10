@@ -54,6 +54,7 @@ begin
   Abbreviation := 'ADV6';
   GwtFile := GwtFileName(AFileName, 0);
   FNameOfFile := GwtFile;
+  FInputFileName := GwtFile;
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, 0);
 

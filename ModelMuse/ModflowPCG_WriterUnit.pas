@@ -92,8 +92,8 @@ begin
 end;
 
 procedure TPcgWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   if not Package.IsSelected then
   begin
@@ -110,12 +110,12 @@ begin
 
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrUnusuallyLowDampin);
 
-  NameOfFile := FileName(AFileName);
-  FInputFileName := NameOfFile;
+  FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
   WriteToNameFile('PCG', Model.UnitNumbers.UnitNumber(StrPCG),
-    NameOfFile, foInput, Model);
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+    FNameOfFile, foInput, Model);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingPCGPackage);
     WriteDataSet0;

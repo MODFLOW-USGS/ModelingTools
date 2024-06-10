@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2024-06-07T11:26:57.809-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-06-10T17:23:31.691-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Import MODFLOW 6 Model Dialog Box</title>
   <body>
     <header>
@@ -16,6 +16,8 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can not import exchanges between flow models are between solute transport models.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">If the model contains more than one boundary package of the same type, all of the boundaries will be included in a single package.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing the lake package, it may happen that cells outside the model area will be identified as part of a lake if the lake is close to the edge of the model. If this occurs, the model can be fixed by selecting the erroneous vertices of the lake object and deleting them.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">All connections to any individual well in the Multiaquifer Well package must be vertically aligned.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The model input must be consistent with the MODFLOW input instructions.</text></para>
     <para styleclass="Normal"></para>
   </body>
 </topic>

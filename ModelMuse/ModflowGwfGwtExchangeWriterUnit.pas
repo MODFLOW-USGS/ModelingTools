@@ -41,6 +41,7 @@ begin
   SpeciesName := Model.MobileComponents[SpeciesIndex].Name;
   GwtFile := GwtFileName(AFileName, SpeciesIndex);
   FNameOfFile := GwtFile;
+  FInputFileName := GwtFile;
   Exchange := Format('GWF6-GWT6 %0:s MODFLOW %1:s', [ExtractFileName(GwtFile), SpeciesName]);
   Model.SimNameWriter.AddExchange(Exchange);
   OpenFile(FNameOfFile);

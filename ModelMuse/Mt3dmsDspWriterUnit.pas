@@ -136,8 +136,8 @@ begin
 end;
 
 procedure TMt3dmsDspWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   if not Model.ModflowPackages.Mt3dmsDispersion.IsSelected then
   begin
@@ -151,17 +151,17 @@ begin
     Exit;
   end;
 
-  NameOfFile := FileName(AFileName);
+  FNameOfFile := FileName(AFileName);
 
   // write to MT3DMS or MT3D-USGS name file.
   WriteToMt3dMsNameFile(StrDSP, Mt3dDsp,
-    NameOfFile, foInput, Model);
+    FNameOfFile, foInput, Model);
 //  WriteToNameFile(StrBAS, Model.UnitNumbers.UnitNumber(StrBAS),
-//    NameOfFile, foInput);
+//    FNameOfFile, foInput);
 
   // PackageGeneratedExternally needs to be updated for MT3DMS
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingMT3DMSDSPP);
 

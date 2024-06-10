@@ -23,7 +23,6 @@ type
     FUsedWellCountDictionary: TDictionary<TScreenObject, Integer>;
     FUsedWelStartsDictionary: TDictionary<TScreenObject, Integer>;
     FParser: TRbwParser;
-//    FNameOfFile: string;
     procedure WriteDataSet1;
     procedure WriteStressPeriods;
     procedure WriteASystem(ACstSystem: TCtsSystem; StartTime: Double;

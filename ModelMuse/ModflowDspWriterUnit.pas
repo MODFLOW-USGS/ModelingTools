@@ -10,6 +10,7 @@ type
   private
     FDspPackage: TGwtDispersionPackage;
     FSpeciesName: string;
+    FPestScriptFileName: string;
     procedure WriteFileInternal;
     procedure WriteOptions;
     procedure WriteGridData;
@@ -55,8 +56,10 @@ begin
   FDspPackage := Model.ModflowPackages.GwtDispersionPackage;
 
   Abbreviation := 'DSP6';
+  FPestScriptFileName := AFileName;
   GwtFile := GwtFileName(AFileName, SpeciesIndex);
   FNameOfFile := GwtFile;
+  FInputFileName := GwtFile;
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 
@@ -97,7 +100,9 @@ end;
 procedure TModflowDspWriter.WriteGridData;
 var
   DataArray: TDataArray;
+  FileNameToUse: string;
 begin
+  FileNameToUse := FPestScriptFileName;
   WriteBeginGridData;
 
   if FDspPackage.SeparateDataSetsForEachSpecies = dtCombined then
@@ -110,6 +115,7 @@ begin
   end;
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'DIFFC');
+  WritePestZones(DataArray, FileNameToUse, 'DIFFC', '.' + FSpeciesName, 'DIFFC');
 
   case FDspPackage.LongitudinalDispTreatement of
     dtCombined:
@@ -124,6 +130,7 @@ begin
         end;
         Assert(DataArray <> nil);
         WriteMf6_DataSet(DataArray, 'ALH');
+        WritePestZones(DataArray, FileNameToUse, 'ALH', '.' + FSpeciesName, 'ALH');
       end;
     dtSeparate:
       begin
@@ -137,6 +144,7 @@ begin
         end;
         Assert(DataArray <> nil);
         WriteMf6_DataSet(DataArray, 'ALH');
+        WritePestZones(DataArray, FileNameToUse, 'ALH', '.' + FSpeciesName, 'ALH');
 
         if FDspPackage.SeparateDataSetsForEachSpecies = dtCombined then
         begin
@@ -148,6 +156,7 @@ begin
         end;
         Assert(DataArray <> nil);
         WriteMf6_DataSet(DataArray, 'ALV');
+        WritePestZones(DataArray, FileNameToUse, 'ALV', '.' + FSpeciesName, 'ALV');
       end;
     else
       Assert(False);
@@ -166,6 +175,7 @@ begin
         end;
         Assert(DataArray <> nil);
         WriteMf6_DataSet(DataArray, 'ATH1');
+        WritePestZones(DataArray, FileNameToUse, 'ATH1', '.' + FSpeciesName, 'ATH1');
       end;
     dtSeparate:
       begin
@@ -179,6 +189,7 @@ begin
         end;
         Assert(DataArray <> nil);
         WriteMf6_DataSet(DataArray, 'ATH1');
+        WritePestZones(DataArray, FileNameToUse, 'ATH1', '.' + FSpeciesName, 'ATH1');
 
         if  FDspPackage.SeparateDataSetsForEachSpecies = dtCombined then
         begin
@@ -190,6 +201,7 @@ begin
         end;
         Assert(DataArray <> nil);
         WriteMf6_DataSet(DataArray, 'ATH2');
+        WritePestZones(DataArray, FileNameToUse, 'ATH2', '.' + FSpeciesName, 'ATH2');
       end;
     else
       Assert(False);
@@ -207,6 +219,7 @@ begin
     end;
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'ATV');
+    WritePestZones(DataArray, FileNameToUse, 'ATV', '.' + FSpeciesName, 'ATV');
   end;
 
   WriteEndGridData;

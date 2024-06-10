@@ -226,6 +226,7 @@ begin
   end;
 
   FFileName := FileName(AFileName);
+  FNameOfFile := FFileName;
   WriteToNameFile(Abbreviation, -1, FFileName, foInput, Model, False, 'GNC');
 
   FInputFileName := FFileName;

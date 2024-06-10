@@ -54,6 +54,7 @@ begin
   Abbreviation := 'SSM6';
   GwtFile := GwtFileName(AFileName, SpeciesIndex);
   FNameOfFile := GwtFile;
+  FInputFileName := GwtFile;
 
   WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
 

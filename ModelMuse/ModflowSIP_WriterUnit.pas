@@ -61,8 +61,8 @@ begin
 end;
 
 procedure TSipWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   if Model.ModelSelection = msModflow2015 then
   begin
@@ -76,10 +76,10 @@ begin
   begin
     Exit;
   end;
-  NameOfFile := FileName(AFileName);
-  FInputFileName := NameOfFile;
-  WriteToNameFile('SIP', Model.UnitNumbers.UnitNumber(StrSIP), NameOfFile, foInput, Model);
-  OpenFile(NameOfFile);
+  FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
+  WriteToNameFile('SIP', Model.UnitNumbers.UnitNumber(StrSIP), FNameOfFile, foInput, Model);
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingSIPPackage);
     WriteDataSet0;

@@ -917,6 +917,7 @@ var
   Limit: Integer;
 begin
   FGettingData := True;
+  rdgGWT.BeginUpdate;
   try
     GwtProcess := frmGoPhast.PhastModel.ModflowPackages.GwtProcess;
     tabGWT.TabVisible := GwtProcess.IsSelected and GwtProcess.SeparateGwt;
@@ -1051,6 +1052,7 @@ begin
     pgcMain.ActivePage := tabModflow;
   finally
     FGettingData := False;
+    rdgGWT.EndUpdate;
   end;
 end;
 

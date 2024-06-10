@@ -238,7 +238,7 @@ begin
             StrNoValueAssigned, ArrayName);
         end;
       end;
-      WritePestZones(DataArray, FInputFileName, Format('M%d', [MIndex]),
+      WritePestZones(DataArray, FInputFileName, Format('M%d', [MIndex]), '',
         Format('M%d', [MIndex]));
       Inc(MIndex);
       Model.DataArrayManager.CacheDataArrays;
@@ -267,7 +267,7 @@ begin
           // Data set 3
           Description := UsedParam.Description;
           WriteArray(DataArray, 0, Description, StrNoValueAssigned, ArrayName);
-          WritePestZones(DataArray, FInputFileName, Format('M%d', [MIndex]),
+          WritePestZones(DataArray, FInputFileName, Format('M%d', [MIndex]), '',
             Format('M%d', [MIndex]));
           Inc(MIndex);
 

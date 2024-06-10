@@ -10263,12 +10263,16 @@ const
 //                concentration in the transport package.
 //               Enhancement: The scale factor for a dynamic time series can
 //                now be a formula.
+//    '5.2.0.14' Bug fix: Fixed reading some ModelMuse files on systems that
+//                us comma as the decimal separator.
+//    '5.2.0.15  bug fix: Fixed export of GWT DSP file that would cause an
+//                assertion failure.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.13';
+  IIModelVersion = '5.2.0.16';
 
 function IModelVersion: string;
 begin

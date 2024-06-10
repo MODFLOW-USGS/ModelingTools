@@ -50,7 +50,8 @@ procedure TGridMetaDataWriter.WriteFile(AFileName: string);
 begin
   AFileName := FileName(AFileName);
   Model.AddModpathInputFile(AFileName);
-//  FInputFileName := AFileName;
+  FInputFileName := AFileName;
+  FNameOfFile := AFileName;
   OpenFile(AFileName);
   try
     WriteDataSet0;

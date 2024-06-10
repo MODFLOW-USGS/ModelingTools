@@ -38,7 +38,7 @@ end;
 
 procedure TModflowMt3dmsLinkWriter.WriteFile(const AFileName: string);
 var
-  NameOfFile: string;
+//  NameOfFile: string;
   FtlFileName: string;
   Packages: TModflowPackages;
 begin
@@ -58,14 +58,14 @@ begin
   begin
     Exit;
   end;
-  NameOfFile := FileName(AFileName);
-  FtlFileName := ChangeFileExt(NameOfFile, '.ftl');
+  FNameOfFile := FileName(AFileName);
+  FtlFileName := ChangeFileExt(FNameOfFile, '.ftl');
   if Model.ModelSelection = msModflowLGR2 then
   begin
     if not WritingTemplate then
     begin
       WriteToNameFile(StrLMT7, Model.UnitNumbers.UnitNumber(StrLMT7),
-            NameOfFile, foInput, Model);
+            FNameOfFile, foInput, Model);
     end;
   end
   else
@@ -73,7 +73,7 @@ begin
     if not WritingTemplate then
     begin
       WriteToNameFile(StrLMT6, Model.UnitNumbers.UnitNumber(StrLMT6),
-            NameOfFile, foInput, Model);
+            FNameOfFile, foInput, Model);
     end;
   end;
 
@@ -91,8 +91,8 @@ begin
   end;
   }
 
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     if Model.ModelSelection = msModflowLGR2 then
     begin
