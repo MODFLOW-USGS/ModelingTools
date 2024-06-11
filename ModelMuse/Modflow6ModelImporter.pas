@@ -172,7 +172,7 @@ type
     procedure ImportUzf(Package: TPackage; TransportModels: TModelList; MvrPackage: TPackage);
     function GetMvr(MvrPackage, Package: TPackage): TMvr;
     procedure ImportMvr(Package: TPackage; TransportModels: TModelList);
-    procedure ImportGnc(Package: TPackage);
+    procedure ImportGnc(Package: TPackage; NpfPackage: TPackage);
     function GetIms(ModelName: string): TSmsPackageSelection;
     procedure ImportIMS(FlowModelOptions: TFlowNameFileOptions);
     procedure ImportTransportIC(NameFile: TTransportNameFile; Package: TPackage);
@@ -227,7 +227,7 @@ uses
   Mf6.SftFileReaderUnit, GwtStatusUnit, Mf6.LktFileReaderUnit, Mt3dmsChemUnit,
   Mf6.MwtFileReaderUnit, Mf6.UztFileReaderUnit, Mf6.MvtFileReaderUnit,
   ModelMuseUtilities, GeoRefUnit, SparseDataSets, SparseArrayUnit,
-  QuadTreeClass;
+  QuadTreeClass, MeshRenumberingTypes;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -4408,6 +4408,7 @@ var
   InnerModelIndex: Integer;
   InnerTransportModel: TTransportNameFile;
   ChemFound: Boolean;
+  NpfPackage: TPackage;
 begin
   result := True;
   TransportModels := TModelList.Create;
@@ -4632,6 +4633,7 @@ begin
         end
         else if APackage.FileType = 'NPF6' then
         begin
+          NpfPackage := APackage;
           ImportNpf(APackage);
         end
         else if APackage.FileType = 'HFB6' then
@@ -4704,7 +4706,7 @@ begin
         end
         else if APackage.FileType = 'GNC6' then
         begin
-          ImportGnc(APackage);
+//          ImportGnc(APackage);
         end
         else if APackage.FileType = 'GWF6-GWF6' then
         begin
@@ -4714,6 +4716,15 @@ begin
         begin
           FErrorMessages.Add('Unrecognized file type: ' + APackage.FileType);
         end;
+      end;
+
+      for PackageIndex := 0 to Packages.Count - 1 do
+      begin
+        APackage := Packages[PackageIndex];
+        if APackage.FileType = 'GNC6' then
+        begin
+          ImportGnc(APackage, NpfPackage);
+        end
       end;
 
       for PackageIndex := 0 to Packages.Count - 1 do
@@ -4876,7 +4887,7 @@ begin
   GwtProcess.FLOW_IMBALANCE_CORRECTION := Fmi.Options.FLOW_IMBALANCE_CORRECTION;
 end;
 
-procedure TModflow6Importer.ImportGnc(Package: TPackage);
+procedure TModflow6Importer.ImportGnc(Package: TPackage; NpfPackage: TPackage);
 var
   Model: TPhastModel;
   Gnc: TGnc;
@@ -4888,9 +4899,19 @@ var
   ConnectionIndex: Integer;
   ConnectedCellID: TMfCellId;
   ConnectedCell: TWeightedCellId;
-  ExistingGhostNodes: TGhostNodeArray;
   ContainingCell: TWeightedCellId;
-  SumWeights: double;
+  ContainingElement: IElement3D;
+  LinkedElement: IElement3D;
+  ConnectedElement: IElement3D;
+  ExistingNodes: T2DSparsePointerArray;
+//  KxDataArray: TDataArray;
+  ALayer: TModflowIrregularLayer;
+  Kx: double;
+  ACell: TModflowDisVCell;
+  CellThickness: double;
+  Transmissivity: double;
+  Npf: TNpf;
+  K: TDArray3D;
 begin
   Model := frmGoPhast.PhastModel;
   if not Model.DisvUsed then
@@ -4910,57 +4931,73 @@ begin
     Model.ModflowPackages.GncPackage.EquationFormulation := efExplicit;
   end;
 
-  SetLength(ExistingGhostNodes, Model.DisvGrid.TwoDGrid.ElementCount);
-  GhostNodes := Model.DisvGrid.TwoDGrid.GhostNodes;
-  ImportedGnc := Gnc.Data;
-  for Index := 0 to ImportedGnc.Count - 1 do
-  begin
-    ImportedGncItem := ImportedGnc[Index];
+  Npf := NpfPackage.Package as TNpf;
+  K := Npf.GridData.K;
 
-    GhostNode := ExistingGhostNodes[ImportedGncItem.cellidn.Column-1];
-    if GhostNode = nil then
+//  KxDataArray := Model.DataArrayManager.GetDataSetByName(rsKx);
+//  Assert(KxDataArray <> nil);
+
+  ExistingNodes := T2DSparsePointerArray.Create(
+    GetQuantum(Model.DisvGrid.TwoDGrid.ElementCount),
+    GetQuantum(Model.DisvGrid.TwoDGrid.ElementCount));
+
+  try
+    GhostNodes := Model.DisvGrid.TwoDGrid.GhostNodes;
+    ImportedGnc := Gnc.Data;
+    for Index := 0 to ImportedGnc.Count - 1 do
     begin
+      ImportedGncItem := ImportedGnc[Index];
+
+      ContainingElement := Model.DisvGrid.ElementArrayI[ImportedGncItem.cellidn.Layer-1, ImportedGncItem.cellidn.Column-1];
+      LinkedElement := Model.DisvGrid.ElementArrayI[ImportedGncItem.cellidm.Layer-1, ImportedGncItem.cellidm.Column-1];
+
+      if ExistingNodes.IsValue[ContainingElement.ElementNumber2D, LinkedElement.ElementNumber2D] then
+      begin
+        Continue;
+      end;
+      ALayer := Model.DisvGrid.Layers[ImportedGncItem.cellidn.Layer-1].Layer;
+
       GhostNode := GhostNodes.Add;
-      ExistingGhostNodes[ImportedGncItem.cellidn.Column-1] := GhostNode;
-    end;
-    GhostNode.ContainingCell.Cell := ImportedGncItem.cellidn.Column-1;
-    GhostNode.LinkedCell.Cell := ImportedGncItem.cellidm.Column-1;
+      GhostNode.ContainingCell.Cell := ContainingElement.ElementNumber2D;
+      GhostNode.LinkedCell.Cell := LinkedElement.ElementNumber2D;
 
-    ContainingCell := GhostNode.CellWeights.GetCellByID(GhostNode.ContainingCell.Cell);
-    if ContainingCell = nil then
-    begin
+      ExistingNodes.Items[GhostNode.ContainingCell.Cell, GhostNode.LinkedCell.Cell] := GhostNode;
+
       ContainingCell := GhostNode.CellWeights.Add;
       ContainingCell.Cell := GhostNode.ContainingCell.Cell;
-      ContainingCell.Weight := 0;
-    end;
+      ContainingCell.Weight := 1;
 
-    for ConnectionIndex := 0 to ImportedGncItem.Count - 1 do
-    begin
-      ConnectedCellID := ImportedGncItem[ConnectionIndex];
-      if ConnectedCellID.Column > 0 then
+      for ConnectionIndex := 0 to ImportedGncItem.Count - 1 do
       begin
-        ConnectedCell := GhostNode.CellWeights.GetCellByID(ConnectedCellID.Column-1);
-        if ConnectedCell = nil then
+        ConnectedCellID := ImportedGncItem[ConnectionIndex];
+        if ConnectedCellID.Column > 0 then
         begin
+          ConnectedElement := Model.DisvGrid.ElementArrayI[ConnectedCellID.Layer-1, ConnectedCellID.Column-1];
           ConnectedCell := GhostNode.CellWeights.Add;
-          ConnectedCell.Cell := ConnectedCellID.Column-1;
+          ConnectedCell.Cell := ConnectedElement.ElementNumber2D;
           ConnectedCell.Weight := ImportedGncItem.Alpha[ConnectionIndex];
+          ContainingCell.Weight := ContainingCell.Weight - ConnectedCell.Weight;
+        end;
+      end;
+
+      for ConnectionIndex := 0 to GhostNode.CellWeights.Count - 1 do
+      begin
+        ContainingCell := GhostNode.CellWeights[ConnectionIndex];
+        Kx := K[ImportedGncItem.cellidn.Layer-1,0,ContainingCell.Cell];
+        ACell := ALayer[ContainingCell.Cell];
+        CellThickness := ACell.Thickness;
+        Transmissivity := Kx*CellThickness;
+        if Transmissivity > 0 then
+        begin
+          ContainingCell.Weight := ContainingCell.Weight/Transmissivity;
         end;
       end;
     end;
-
-    if ContainingCell.Weight = 0 then
-    begin
-      SumWeights := 0;
-      for ConnectionIndex := 0 to GhostNode.CellWeights.Count - 1 do
-      begin
-        ConnectedCell := GhostNode.CellWeights[ConnectionIndex];
-        SumWeights :=SumWeights + ConnectedCell.Weight
-      end;
-      ContainingCell.Weight := 1-SumWeights;
-    end;
-
+  finally
+    ExistingNodes.Free;
   end;
+
+
 end;
 
 type
@@ -5555,7 +5592,6 @@ begin
         ObjectCount := 0;
         for PeriodIndex := 0 to GhbMvrLinkList.Count - 1 do
         begin
-  //        KeyStringDictionary.Clear;
           GhbMvrLink := GhbMvrLinkList[PeriodIndex];
           APeriod := GhbMvrLinkList[PeriodIndex].GhbPeriod;
           if APeriod = nil then
@@ -5569,6 +5605,7 @@ begin
             AnItem.EndTime := StartTime;
           end;
           ItemList.Clear;
+          KeyStringDictionary.Clear;
 
           for CellListIndex := 0 to CellLists.Count - 1 do
           begin
@@ -10576,8 +10613,6 @@ begin
           TScreenObjectCrack(FNewScreenObjects[ScreenObjectIndex]).Loaded;
         end;
         PhastModel.Exaggeration := frmGoPhast.DefaultVE;
-        frmGoPhast.RestoreDefault2DView1Click(nil);
-        Application.ProcessMessages;
 
       except
         on E: EEncodingError do
@@ -10597,6 +10632,8 @@ begin
       begin
         frmGoPhast.acDefaultCrossSectionExecute(nil);
       end;
+      frmGoPhast.RestoreDefault2DView1Click(nil);
+      Application.ProcessMessages;
       PhastModel.Mf6TimesSeries.Loaded;
     end;
 

@@ -757,15 +757,6 @@ var
   ColIndex: Integer;
   ExternalFileStream: TStreamReader;
   ExternalBinaryFileStream: TFileStream;
-//  KSTP: Integer;
-//  KPER: Integer;
-//  PERTIM: TModflowDouble;
-//  TOTIM: TModflowDouble;
-//  DESC: TModflowDesc;
-//  NCOL: Integer;
-//  NROW: Integer;
-//  ILAY: Integer;
-//  AnArray: TModflowDoubleArray;
 begin
   inherited;
   if FLayered then
