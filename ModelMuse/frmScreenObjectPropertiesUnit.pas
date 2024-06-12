@@ -20308,7 +20308,7 @@ var
 begin
   result := (frmGoPhast.ModelSelection = msModflow2015)
     and ((DataGrid = frameRchParam.rdgModflowBoundary)
-    or ((DataGrid = frameChdParam.rdgModflowBoundary) and (ACol in [3,4,5]))
+    or ((DataGrid = frameChdParam.rdgModflowBoundary) {and (ACol in [3,4,5,])  GWT concentrations should also be specified.})
     or (DataGrid = frameCSUB.rdgModflowBoundary)
     or (DataGrid = frameDrnParam.rdgModflowBoundary)
     or (DataGrid = frameEtsParam.rdgModflowBoundary)

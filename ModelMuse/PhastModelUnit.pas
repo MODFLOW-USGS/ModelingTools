@@ -10267,12 +10267,16 @@ const
 //                us comma as the decimal separator.
 //    '5.2.0.15  bug fix: Fixed export of GWT DSP file that would cause an
 //                assertion failure.
+//    '5.2.0.16'
+//    '5.2.0.17' bug fix: The EVT package is now included in the MODFLOW 6
+//                grounddwater transport source and sink mixing package as
+//                an AUXMIXED source.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.16';
+  IIModelVersion = '5.2.0.17';
 
 function IModelVersion: string;
 begin

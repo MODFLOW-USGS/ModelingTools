@@ -4925,6 +4925,8 @@ begin
     OnUpdateStatusBar(self, 'importing GNC package');
   end;
 
+  FErrorMessages.Add('Importing the GNC package can be problematic. Consider using the original GNC file in the Model|MODFLOW Name File dialog box instead of using the imported GNC.');
+
   Gnc := Package.Package as TGnc;
   if Gnc.Options.EXPLICIT then
   begin
@@ -4950,6 +4952,10 @@ begin
 
       ContainingElement := Model.DisvGrid.ElementArrayI[ImportedGncItem.cellidn.Layer-1, ImportedGncItem.cellidn.Column-1];
       LinkedElement := Model.DisvGrid.ElementArrayI[ImportedGncItem.cellidm.Layer-1, ImportedGncItem.cellidm.Column-1];
+//      if (ImportedGncItem.cellidn.Column = 131632) and (ImportedGncItem.cellidm.Column = 133948)  then
+//      begin
+//        Beep;
+//      end;
 
       if ExistingNodes.IsValue[ContainingElement.ElementNumber2D, LinkedElement.ElementNumber2D] then
       begin
@@ -11416,6 +11422,7 @@ var
   GridData: TNpfGridData;
   DataArray: TDataArray;
   TvkIndex: Integer;
+  FoundNegativeK: Boolean;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
@@ -11474,7 +11481,31 @@ begin
   GridData := Npf.GridData;
   Assign3DIntegerDataSet(KCellType, GridData.ICELLTYPE);
 
+  FoundNegativeK := False;
   Assign3DRealDataSet(rsKx, GridData.K);
+  for var LayerIndex := 0 to Length(GridData.K) - 1 do
+  begin
+    for var RowIndex := 0 to Length(GridData.K[LayerIndex]) - 1 do
+    begin
+      for var ColIndex := 0 to Length(GridData.K[LayerIndex, RowIndex]) - 1 do
+      begin
+        if GridData.K[LayerIndex, RowIndex, ColIndex] < 0 then
+        begin
+          FErrorMessages.Add('One or more cells have negative K values.');
+          FoundNegativeK := True;
+          break;
+        end;
+      end;
+      if FoundNegativeK then
+      begin
+        break;
+      end;
+    end;
+    if FoundNegativeK then
+    begin
+      break;
+    end;
+  end;
 
   if GridData.K22 <> nil then
   begin

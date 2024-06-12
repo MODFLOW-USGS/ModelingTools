@@ -5987,11 +5987,11 @@ begin
     DisvGrid.DrawCellNumbers := not DisvGrid.DrawCellNumbers;
 	if DisvGrid.DrawCellNumbers then
 	begin
-	  Caption := 'Hide Cell Numbers';
+	  acShowCellNumbers.Caption := 'Hide Cell Numbers';
 	end
 	else
 	begin
-	  Caption := 'Show Cell Numbers';
+	  acShowCellNumbers.Caption := 'Show Cell Numbers';
 	end;
     InvalidateImage32AllViews;
   end;

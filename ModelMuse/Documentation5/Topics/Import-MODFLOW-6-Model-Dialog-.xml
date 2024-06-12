@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2024-06-11T16:31:29.230-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-06-12T12:31:22.770-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Import MODFLOW 6 Model Dialog Box</title>
   <body>
     <header>
@@ -23,7 +23,7 @@
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The imported model may specify more information in the Iterative Model Solution file than the original model.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse does not attempt to import the Output Control file.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The Ghost Node Correction package is only imported for DISV models.</text></para>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The values imported for the Ghost Node Correction may differ from those in the original model. If this is a problem replace the imported Ghost Node Correction file with the original file.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The values imported for the Ghost Node Correction may differ from those in the original model. If this is a problem replace the imported Ghost Node Correction file with the original file or specify the original GNC file in the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Name_File_Dialog_Box" styleclass="Normal" translate="true">Model|MODFLOW Name File</link><text styleclass="Normal" translate="true"> dialog box</text><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">In some cases, the encoding of a text input file may be a problem. In such cases, it may be possible to solve the problem by copying the contents of the file to another text file and then using the new file in the model in place of the old one.</text></para>
     <para styleclass="Normal"></para>
   </body>
