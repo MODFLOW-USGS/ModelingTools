@@ -10271,6 +10271,8 @@ const
 //    '5.2.0.17' bug fix: The EVT package is now included in the MODFLOW 6
 //                grounddwater transport source and sink mixing package as
 //                an AUXMIXED source.
+//               (not in released version)bug fix: Fixed bug in saving GWT CNC
+//                and GWT SRC boundaries when multiplier are not used
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 

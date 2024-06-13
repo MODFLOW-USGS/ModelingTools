@@ -14011,6 +14011,7 @@ var
   ReachIndex: Integer;
   ScreenObjectDictionary: TDictionary<Integer, TScreenObject>;
   AScreenObject: TScreenObject;
+  SfrScreenObjects: TScreenObjectList;
   ObjectCount: Integer;
   CellIndex: Integer;
   BoundaryValues: TMf6BoundaryValueArray;
@@ -14107,6 +14108,8 @@ var
   TransportAuxValues: TMf6BoundaryValueArray;
   SpcMap: TimeSeriesMap;
   Value: double;
+  StartTime: double;
+  EndTime: double;
   procedure CreateReachList(SfrReachInfo: TSfrReachInfo);
   begin
     AReachList := TSfrReachInfoList.Create;
@@ -15101,6 +15104,7 @@ begin
   SpcMaps := TimeSeriesMaps.Create;
   SpcDictionaries := TSpcDictionaries.Create;
   SpcPeriodSettingsList := TListOfSpcTimeItemLists.Create;
+  SfrScreenObjects := TScreenObjectList.Create;
   try
     TransportAuxNames.CaseSensitive := False;
 
@@ -16063,6 +16067,7 @@ begin
               end;
 
               AScreenObject := CreateScreenObject(AReachList);
+              SfrScreenObjects.Add(AScreenObject);
               for ReachIndex := 0 to AReachList.Count - 1 do
               begin
                 SfrReachInfo := AReachList[ReachIndex];
@@ -16219,6 +16224,29 @@ begin
       SfrReachInfoList.Free;
     end;
 
+    StartTime := Model.ModflowStressPeriods.First.StartTime;
+    EndTime := Model.ModflowStressPeriods.Last.EndTime;
+    for var ScreenObjectIndex := 0 to SfrScreenObjects.Count - 1 do
+    begin
+      AScreenObject := SfrScreenObjects[ScreenObjectIndex];
+      Assert(AScreenObject.ModflowSfr6Boundary <> nil);
+      if AScreenObject.ModflowSfr6Boundary.Values.Count = 0 then
+      begin
+        SfrItem := AScreenObject.ModflowSfr6Boundary.Values.Add as TSfrMf6Item;
+        SfrItem.StartTime := StartTime;
+        SfrItem.EndTime := EndTime;
+        SfrItem.Inflow := '0';
+        SfrItem.Rainfall := '0';
+        SfrItem.Evaporation := '0';
+        SfrItem.Runoff := '0';
+        SfrItem.Stage := '0';
+        SfrItem.StreamStatus := ssActive;
+        SfrItem.Stage := '0';
+        SfrItem.Stage := '0';
+        SfrItem.Stage := '0';
+      end;
+    end;
+
     // Find singlely connected reaches.
     //  => 0 or 1 upstream reaches,
     //     0 or 1 downstream reaches.
@@ -16283,6 +16311,7 @@ begin
     SpcMaps.Free;
     SpcDictionaries.Free;
     SpcPeriodSettingsList.Free;
+    SfrScreenObjects.Free;
   end;
 
 end;
