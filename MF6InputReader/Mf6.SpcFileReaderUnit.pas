@@ -336,6 +336,7 @@ begin
           FItems.Add(SpcTimeItem);
         end;
       end;
+      Concentration.Initialize;
     end;
   end
   else

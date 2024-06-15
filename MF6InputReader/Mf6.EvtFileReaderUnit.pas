@@ -576,6 +576,10 @@ begin
       begin
         SetLength(IEVT, Length(IEVT), Length(IEVT[0]));
       end;
+      PriorPeriod.SURFACE.Initialize;
+      PriorPeriod.RATE.Initialize;
+      PriorPeriod.DEPTH.Initialize;
+      PriorPeriod.IEVT := nil;
     end;
     try
       while not Stream.EndOfStream do
@@ -741,6 +745,11 @@ begin
           begin
             Cell.Frate.NumericValue := RATE.Value[RowIndex, ColIndex];
             Cell.Frate.ValueType := vtNumeric;
+            if Cell.Frate.NumericValue = 0 then
+            begin
+              Cell.Free;
+              Continue;
+            end;
           end
           else
           begin

@@ -457,19 +457,22 @@ begin
     end
     else
     begin
+      FRECHARGE.Assign(PriorPeriod.FRECHARGE);
       FIRCH := PriorPeriod.FIRCH;
       if FIRCH <> nil then
       begin
         SetLength(FIRCH, Length(FIRCH), Length(FIRCH[0]));
-        FRECHARGE.Assign(PriorPeriod.FRECHARGE);
         for AuxIndex := 0 to PriorPeriod.AuxList.Count - 1 do
         begin
           AuxArray.Assign(PriorPeriod.AuxList[AuxIndex]);
           AuxList.Add(AuxArray);
         end;
       end;
+      PriorPeriod.FRECHARGE.Initialize;
+      PriorPeriod.FIRCH := nil;
+      PriorPeriod.AuxList.Clear;
     end;
-//    AuxList := TArrayItemList.Create;
+
     try
       while not Stream.EndOfStream do
       begin
@@ -582,6 +585,11 @@ begin
           begin
             Cell.Frecharge.NumericValue := FRECHARGE.Value[RowIndex, ColIndex];
             Cell.Frecharge.ValueType := vtNumeric;
+            if Cell.Frecharge.NumericValue = 0 then
+            begin
+              Cell.Free;
+              Continue;
+            end;
           end
           else
           begin

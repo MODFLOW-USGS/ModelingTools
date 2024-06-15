@@ -156,6 +156,14 @@ begin
       if FSplitter[0] = 'NO_PTC' then
       begin
         FNO_PTC := FSplitter[0];
+        if FSplitter.Count >= 2 then
+        begin
+          Fno_ptc_option := FSplitter[1];
+          if (Fno_ptc_option <> 'FIRST') and (Fno_ptc_option <> 'ALL') then
+          begin
+            Unhandled.WriteLine(StrUnrecognizedImsOp);
+          end;
+        end;
       end
       else if FSplitter.Count >= 2 then
       begin
