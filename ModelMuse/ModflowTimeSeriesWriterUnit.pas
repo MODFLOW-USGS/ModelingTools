@@ -183,6 +183,7 @@ procedure TTimeSeriesWriter.WriteFile(FileName: string);
 begin
   Model.AddModelInputFile(FileName);
   FInputFileName := FileName;
+  FNameOfFile := FileName;
   OpenFile(FileName);
   try
     WriteAttributes;

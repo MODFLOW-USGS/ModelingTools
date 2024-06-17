@@ -179,8 +179,16 @@ begin
       end;
       rrdgTimeSeries.ItemIndex[ColIndex, Ord(tsrPestMethod)] :=
         Ord(ASeries.ParamMethod);
-      rrdgTimeSeries.RealValue[ColIndex, Ord(tsrScaleFactor)] :=
-        ASeries.ScaleFactor;
+      if ASeries.ScaleFactorFormula <> '' then
+      begin
+        rrdgTimeSeries.Cells[ColIndex, Ord(tsrScaleFactor)] :=
+          ASeries.ScaleFactorFormula;
+      end
+      else
+      begin
+        rrdgTimeSeries.RealValue[ColIndex, Ord(tsrScaleFactor)] :=
+          ASeries.ScaleFactor;
+      end;
       rrdgTimeSeries.ItemIndex[ColIndex, Ord(tsrInterpolation)] :=
         Ord(ASeries.InterpolationMethod);
 
@@ -341,8 +349,14 @@ begin
     end;
     ASeries.ParamMethod :=
       TPestParamMethod(rrdgTimeSeries.ItemIndex[SeriesIndex, Ord(tsrPestMethod)]);
-    ASeries.ScaleFactor :=
-      rrdgTimeSeries.RealValueDefault[SeriesIndex, Ord(tsrScaleFactor), 1];
+    if rrdgTimeSeries.Cells[SeriesIndex, Ord(tsrScaleFactor)] = '' then
+    begin
+      ASeries.ScaleFactorFormula := '1';
+    end
+    else
+    begin
+      ASeries.ScaleFactorFormula := rrdgTimeSeries.Cells[SeriesIndex, Ord(tsrScaleFactor)];
+    end;
     ASeries.InterpolationMethod :=
       TMf6InterpolationMethods(rrdgTimeSeries.ItemIndex[
       SeriesIndex, Ord(tsrInterpolation)]);

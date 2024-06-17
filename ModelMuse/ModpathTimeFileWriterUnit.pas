@@ -49,13 +49,13 @@ begin
 end;
 
 procedure TModpathTimeFileWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
-  NameOfFile := FileName(AFileName);
-  Model.AddModpathInputFile(NameOfFile);
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+  FNameOfFile := FileName(AFileName);
+  Model.AddModpathInputFile(FNameOfFile);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     WriteDataSet1;
     WriteDataSet2;

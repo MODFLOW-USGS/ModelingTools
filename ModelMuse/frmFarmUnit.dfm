@@ -37,9 +37,13 @@ inherited frmFarm: TfrmFarm
         ExplicitHeight = 361
         inherited pnlTop: TPanel
           Width = 630
-          ExplicitWidth = 630
+          ExplicitWidth = 626
           inherited seFarmId: TJvSpinEdit
             OnChange = frameFarmseFarmIdChange
+          end
+          inherited pnlCaption: TPanel
+            Width = 630
+            ExplicitWidth = 626
           end
           inherited edFarmName: TLabeledEdit
             OnChange = frameFarmedFarmNameChange
@@ -48,7 +52,8 @@ inherited frmFarm: TfrmFarm
         inherited PanelOwhm2: TPanel
           Width = 630
           Height = 296
-          ExplicitWidth = 630
+          ExplicitWidth = 626
+          ExplicitHeight = 295
           inherited lblPumpSpread: TLabel
             Width = 217
             ExplicitWidth = 217
@@ -289,18 +294,8 @@ inherited frmFarm: TfrmFarm
         end
       end
       inherited tabNonRoutedDelivery: TTabSheet
-        ExplicitWidth = 630
-        ExplicitHeight = 361
         inherited frameDelivery: TframeDeliveryGrid
-          Width = 630
-          Height = 361
-          ExplicitWidth = 626
-          ExplicitHeight = 360
           inherited Panel: TPanel
-            Top = 311
-            Width = 630
-            ExplicitTop = 310
-            ExplicitWidth = 626
             inherited sbAdd: TSpeedButton
               Left = 475
               Top = 9
@@ -327,15 +322,7 @@ inherited frmFarm: TfrmFarm
             end
           end
           inherited Grid: TRbwDataGrid4
-            Width = 630
-            Height = 254
             OnSetEditText = frameDeliveryGridSetEditText
-            ExplicitWidth = 626
-            ExplicitHeight = 253
-          end
-          inherited pnlTop: TPanel
-            Width = 630
-            ExplicitWidth = 626
           end
         end
       end
@@ -359,14 +346,6 @@ inherited frmFarm: TfrmFarm
             OnSetEditText = frameFormulaGridDiversionGridSetEditText
           end
           inherited pnlTop: TPanel
-            inherited rdeRow: TRbwDataEntry
-              Height = 28
-              ExplicitHeight = 28
-            end
-            inherited rdeCol: TRbwDataEntry
-              Height = 28
-              ExplicitHeight = 28
-            end
             inherited rdeVertexNumber: TRbwDataEntry
               Height = 28
               ExplicitHeight = 28
@@ -376,6 +355,14 @@ inherited frmFarm: TfrmFarm
               ExplicitHeight = 28
             end
             inherited rdeY: TRbwDataEntry
+              Height = 28
+              ExplicitHeight = 28
+            end
+            inherited rdeRow: TRbwDataEntry
+              Height = 28
+              ExplicitHeight = 28
+            end
+            inherited rdeCol: TRbwDataEntry
               Height = 28
               ExplicitHeight = 28
             end
@@ -402,14 +389,6 @@ inherited frmFarm: TfrmFarm
             OnSetEditText = frameFormulaGridReturnFlowGridSetEditText
           end
           inherited pnlTop: TPanel
-            inherited rdeRow: TRbwDataEntry
-              Height = 28
-              ExplicitHeight = 28
-            end
-            inherited rdeCol: TRbwDataEntry
-              Height = 28
-              ExplicitHeight = 28
-            end
             inherited rdeVertexNumber: TRbwDataEntry
               Height = 28
               ExplicitHeight = 28
@@ -419,6 +398,14 @@ inherited frmFarm: TfrmFarm
               ExplicitHeight = 28
             end
             inherited rdeY: TRbwDataEntry
+              Height = 28
+              ExplicitHeight = 28
+            end
+            inherited rdeRow: TRbwDataEntry
+              Height = 28
+              ExplicitHeight = 28
+            end
+            inherited rdeCol: TRbwDataEntry
               Height = 28
               ExplicitHeight = 28
             end
@@ -481,14 +468,6 @@ inherited frmFarm: TfrmFarm
                   64)
               end
               inherited pnlTop: TPanel
-                inherited rdeRow: TRbwDataEntry
-                  Height = 22
-                  ExplicitHeight = 22
-                end
-                inherited rdeCol: TRbwDataEntry
-                  Height = 22
-                  ExplicitHeight = 22
-                end
                 inherited rdeVertexNumber: TRbwDataEntry
                   Height = 22
                   ExplicitHeight = 22
@@ -498,6 +477,14 @@ inherited frmFarm: TfrmFarm
                   ExplicitHeight = 22
                 end
                 inherited rdeY: TRbwDataEntry
+                  Height = 22
+                  ExplicitHeight = 22
+                end
+                inherited rdeRow: TRbwDataEntry
+                  Height = 22
+                  ExplicitHeight = 22
+                end
+                inherited rdeCol: TRbwDataEntry
                   Height = 22
                   ExplicitHeight = 22
                 end
@@ -585,14 +572,6 @@ inherited frmFarm: TfrmFarm
                   64)
               end
               inherited pnlTop: TPanel
-                inherited rdeRow: TRbwDataEntry
-                  Height = 22
-                  ExplicitHeight = 22
-                end
-                inherited rdeCol: TRbwDataEntry
-                  Height = 22
-                  ExplicitHeight = 22
-                end
                 inherited rdeVertexNumber: TRbwDataEntry
                   Height = 22
                   ExplicitHeight = 22
@@ -602,6 +581,14 @@ inherited frmFarm: TfrmFarm
                   ExplicitHeight = 22
                 end
                 inherited rdeY: TRbwDataEntry
+                  Height = 22
+                  ExplicitHeight = 22
+                end
+                inherited rdeRow: TRbwDataEntry
+                  Height = 22
+                  ExplicitHeight = 22
+                end
+                inherited rdeCol: TRbwDataEntry
                   Height = 22
                   ExplicitHeight = 22
                 end
@@ -658,32 +645,6 @@ inherited frmFarm: TfrmFarm
           end
           inherited Grid: TRbwDataGrid4
             OnSetEditText = frameGW_AllocationGridSetEditText
-          end
-        end
-      end
-      inherited tabWaterSupplyConcentration: TTabSheet
-        ExplicitWidth = 630
-        ExplicitHeight = 361
-        inherited frameWaterSupplyConcentration: TframeFormulaGrid
-          Width = 630
-          Height = 361
-          ExplicitWidth = 630
-          ExplicitHeight = 361
-          inherited Panel: TPanel
-            Top = 320
-            Width = 630
-            ExplicitTop = 320
-            ExplicitWidth = 630
-          end
-          inherited Grid: TRbwDataGrid4
-            Width = 630
-            Height = 263
-            ExplicitWidth = 630
-            ExplicitHeight = 263
-          end
-          inherited pnlTop: TPanel
-            Width = 630
-            ExplicitWidth = 630
           end
         end
       end
@@ -847,7 +808,7 @@ inherited frmFarm: TfrmFarm
       788
       41)
     object btnHelp: TBitBtn
-      Left = 341
+      Left = 337
       Top = 4
       Width = 108
       Height = 33
@@ -856,10 +817,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 337
+      ExplicitLeft = 333
     end
     object btnOK: TBitBtn
-      Left = 455
+      Left = 451
       Top = 4
       Width = 108
       Height = 33
@@ -868,10 +829,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 451
+      ExplicitLeft = 447
     end
     object btnCancel: TBitBtn
-      Left = 569
+      Left = 565
       Top = 4
       Width = 108
       Height = 33
@@ -879,7 +840,7 @@ inherited frmFarm: TfrmFarm
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 565
+      ExplicitLeft = 561
     end
   end
 end

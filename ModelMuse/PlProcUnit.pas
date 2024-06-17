@@ -69,6 +69,7 @@ type
     FPrefix: string;
     FParamValuesFileNameRoot: string;
     FTemplateNeeded: Boolean;
+    FSpeciesName: string;
     procedure WriteTemplateFile(const AFileName: string;
       ScriptChoice: TScriptChoice);
     procedure WriteValuesFile(const AFileName: string);
@@ -85,7 +86,7 @@ type
     Constructor Create(AModel: TCustomModel; EvaluationType: TEvaluationType); override;
     destructor Destroy; override;
     procedure WriteFile(var AFileName: string; DataArray: TDataArray;
-      const DataArrayID: string; Prefix: string = '');
+      const DataArrayID, SpeciesName: string; Prefix: string);
   end;
 
   // Write a 2D CLIST file of SUTRA nodes for PEST
@@ -364,9 +365,10 @@ end;
 procedure TUsgGridSpecWrite.WriteUsgGridSpecs(DISV: TModflowDisvGrid; FileName: string);
 begin
   FDISV := DISV;
-  FileName := ChangeFileExt(FileName, '.gsf');
+  FInputFileName := ChangeFileExt(FileName, '.gsf');
+  FNameOfFile := FInputFileName;
 
-  OpenFile(FileName);
+  OpenFile(FInputFileName);
   try
     WriteLine1;
     WriteLine2;
@@ -454,6 +456,8 @@ var
   APoint: TPoint3D;
 begin
   FileName := ChangeFileExt(FileName, Extension);
+  FNameOfFile := FileName;
+  FInputFileName := FileName;
 
   OpenFile(FileName);
   try
@@ -675,11 +679,12 @@ begin
 end;
 
 procedure TParameterZoneWriter.WriteFile(var AFileName: string;
-  DataArray: TDataArray; const DataArrayID: string; Prefix: string = '');
+  DataArray: TDataArray; const DataArrayID, SpeciesName: string; Prefix: string);
 var
   PIndex: Integer;
   AParam: TModflowSteadyParameter;
 begin
+  FSpeciesName := SpeciesName;
   FPrefix := Prefix;
   FDataArray := DataArray;
   if FDataArray <> nil then
@@ -1327,7 +1332,7 @@ begin
         {$ENDREGION}
 
         Root := ChangeFileExt(AFileName, '');
-        Root := ChangeFileExt(Root, '');
+        Root := ChangeFileExt(Root, '') + FSpeciesName;
         WriteString('#Write new data values');
         NewLine;
         {$REGION 'Write new data values'}
@@ -4025,7 +4030,7 @@ begin
     ADataRec := FDataRecordList[Index];
     if ADataRec.DataArray.PestParametersUsed then
     begin
-      WritePestZones(ADataRec.DataArray, FFileName, ADataRec.Id, ADataRec.Prefix);
+      WritePestZones(ADataRec.DataArray, FFileName, ADataRec.Id, '', ADataRec.Prefix);
     end;
   end;
 end;

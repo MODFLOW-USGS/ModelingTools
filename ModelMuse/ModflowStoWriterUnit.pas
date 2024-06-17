@@ -43,7 +43,7 @@ end;
 procedure TStoPackageWriter.WriteFile(const AFileName: string);
 var
   FTYPE: string;
-  NameOfFile: string;
+//  NameOfFile: string;
 begin
   if not Model.ModflowPackages.StoPackage.IsSelected then
   begin
@@ -55,10 +55,10 @@ begin
     Exit;
   end;
 
-  NameOfFile := FileName(AFileName);
-  FInputFileName := NameOfFile;
-  WriteToNameFile(FTYPE, -1, NameOfFile, foInput, Model, False, 'STO');
-  OpenFile(NameOfFile);
+  FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
+  WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model, False, 'STO');
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage('Writing STO package input');
     frmProgressMM.AddMessage(StrWritingDataSet0);
@@ -183,7 +183,7 @@ begin
     end;
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'SS');
-    WritePestZones(DataArray, FInputFileName, STO_SS, 'SS');
+    WritePestZones(DataArray, FInputFileName, STO_SS, '', 'SS');
   end
   else
   begin
@@ -232,7 +232,7 @@ begin
   frmProgressMM.AddMessage('  Writing SY');
   DataArray := Model.DataArrayManager.GetDataSetByName(rsSpecificYield);
   WriteMf6_DataSet(DataArray, 'SY');
-  WritePestZones(DataArray, FInputFileName, STO_SY, 'SY');
+  WritePestZones(DataArray, FInputFileName, STO_SY, '', 'SY');
 end;
 
 end.

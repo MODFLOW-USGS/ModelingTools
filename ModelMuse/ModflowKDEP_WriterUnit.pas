@@ -87,7 +87,7 @@ begin
     RSArray := Model.DataArrayManager.GetDataSetByName(StrHufReferenceSurface);
     WriteArray(RSArray, 0, ' # Data Set 2: RS', StrNoValueAssigned, 'RS');
     Model.DataArrayManager.CacheDataArrays;
-    WritePestZones(RSArray, FInputFileName, StrRS, 'RS');
+    WritePestZones(RSArray, FInputFileName, StrRS, '', 'RS');
   end;
 end;
 

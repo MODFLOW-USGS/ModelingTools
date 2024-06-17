@@ -63,8 +63,8 @@ begin
 end;
 
 procedure TDe4Writer.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   if not Package.IsSelected then
   begin
@@ -79,10 +79,10 @@ begin
     Exit;
   end;
 
-  NameOfFile := FileName(AFileName);
-  FInputFileName := NameOfFile;
-  WriteToNameFile('DE4', Model.UnitNumbers.UnitNumber(StrDE4), NameOfFile, foInput, Model);
-  OpenFile(NameOfFile);
+  FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
+  WriteToNameFile('DE4', Model.UnitNumbers.UnitNumber(StrDE4), FNameOfFile, foInput, Model);
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingDE4Package);
     WriteDataSet0;

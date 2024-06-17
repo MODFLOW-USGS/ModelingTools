@@ -58,6 +58,7 @@ type
     FTimeSeriesLocationDictionary: TTimeSeriesLocationDictionary;
     FGroup: TDynamicTimeSeriesItem;
     FUsesList: TStringList;
+    FScaleFactorFormula: string;
     function GetScaleFactor: double;
     function GetItems(Index: Integer): IDynamicTimeSeriesFormulaItem;
     procedure SetItems(Index: Integer; const Value: IDynamicTimeSeriesFormulaItem);
@@ -80,6 +81,8 @@ type
     procedure Invalidate;
     function IsSameI(DynamicTimeSeriesCollection: IDynamicTimeSeries): Boolean;
     procedure ClearLocations;
+    procedure SetScaleFactorFormula(const Value: string);
+    function GetScaleFactorFormula: string;
   public
     constructor Create(ModelInterface: IModelForDynamicTimeSeries;
       ScreenObject: IScreenObject; Group: TDynamicTimeSeriesItem);
@@ -107,6 +110,7 @@ type
     property ParamMethod: TPestParamMethod read GetParamMethod
       write SetParamMethod;
     property Deleted: Boolean read GetDeleted write SetDeleted;
+    property ScaleFactorFormula: string read GetScaleFactorFormula write SetScaleFactorFormula;
   end;
 
   TDyanmicTimesSeriesCollection = class;
@@ -175,7 +179,7 @@ type
     FTimesSeriesCollection: TDyanmicTimesSeriesCollection;
     function GetTimesSeriesCollectionI: ITimesSeriesCollection;
     procedure SetTimesSeriesCollection(const Value: TDyanmicTimesSeriesCollection);
-    procedure ClearLocations;
+//    procedure ClearLocations;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -381,6 +385,7 @@ begin
     ParamMethod := TimeSeriesSource.ParamMethod;
     Orientation := TimeSeriesSource.Orientation;
     Deleted := TimeSeriesSource.Deleted;
+    ScaleFactorFormula := TimeSeriesSource.ScaleFactorFormula;
   end;
   inherited;
 end;
@@ -470,6 +475,11 @@ begin
   result := StoredScaleFactor.Value;
 end;
 
+function TDynamicTimeSeries.GetScaleFactorFormula: string;
+begin
+  result := FScaleFactorFormula;
+end;
+
 function TDynamicTimeSeries.GetScaleFactorParameter: string;
 begin
   Result := FScaleFactorParameter;
@@ -512,6 +522,85 @@ begin
 
     result.Count := Count;
     Compiler := FModel.FormulaCompiler[Orientation, eaBlocks];
+    if ScaleFactorFormula <> '' then
+    begin
+      try
+        Formula := ScaleFactorFormula;
+        Compiler.Compile(Formula);
+      except on ERbwParserError do
+        begin
+          Formula := '1';
+          Compiler.Compile(Formula);
+          ScaleFactorFormula := Formula;
+        end;
+      end;
+      Expression := Compiler.CurrentExpression;
+      if not (Expression.ResultType in [rdtDouble, rdtInteger]) then
+      begin
+        Formula := '1';
+        Compiler.Compile(Formula);
+        ScaleFactorFormula := Formula;
+        Expression := Compiler.CurrentExpression;
+      end;
+
+      TempUseList := TStringList.Create;
+      try
+        TempUseList.AddStrings(Expression.VariablesUsed);
+        for UseIndex := 0 to TempUseList.Count - 1 do
+        begin
+          AName := TempUseList[UseIndex];
+          DataArrayI := Model.GetDataArrayInterface.GetDataSetByNameI(AName);
+          if DataArrayI.LayerCount = 1 then
+          begin
+            Layer := 0;
+          end
+          else
+          begin
+            Layer := Location.Layer;
+          end;
+          if DataArrayI <> nil then
+          begin
+            DataArrayI.Initialize;
+            VarIndex := Compiler.IndexOfVariable(AName);
+            if VarIndex >= 0 then
+            begin
+              AVariable := Compiler.Variables[VarIndex];
+
+              case DataArrayI.DataType of
+                rdtDouble:
+                  begin
+                    (AVariable as TRealVariable).Value :=
+                      DataArrayI.RealData[Layer, Location.Row, Location.Column];
+                  end;
+                rdtInteger:
+                  begin
+                    (AVariable as TIntegerVariable).Value :=
+                      DataArrayI.IntegerData[Layer, Location.Row, Location.Column];
+                  end;
+                rdtBoolean:
+                  begin
+                    (AVariable as TBooleanVariable).Value :=
+                      DataArrayI.BooleanData[Layer, Location.Row, Location.Column];
+                  end;
+                rdtString:
+                  begin
+                    (AVariable as TStringVariable).Value :=
+                      DataArrayI.StringData[Layer, Location.Row, Location.Column];
+                  end;
+              end;
+            end;
+          end;
+        end;
+      finally
+        TempUseList.Free;
+      end;
+
+      UpdateGlobalLocations(Location.Column, Location.Row, Location.Layer,
+        eaBlocks, Model as TBaseModel);
+
+      Expression.Evaluate;
+      result.ScaleFactor := Expression.DoubleResult;
+    end;
 
     for Index := 0 to Count - 1 do
     begin
@@ -654,6 +743,7 @@ begin
     result := (Count = DynamicTimeSeriesCollection.Count)
       and (SeriesName = DynamicTimeSeriesCollection.SeriesName)
       and (ScaleFactor = DynamicTimeSeriesCollection.ScaleFactor)
+      and (ScaleFactorFormula = DynamicTimeSeriesCollection.ScaleFactorFormula)
       and (InterpolationMethod = DynamicTimeSeriesCollection.InterpolationMethod)
       and (ScaleFactorParameter = DynamicTimeSeriesCollection.ScaleFactorParameter)
       and (ParamMethod = DynamicTimeSeriesCollection.ParamMethod)
@@ -721,6 +811,15 @@ end;
 procedure TDynamicTimeSeries.SetScaleFactor(const Value: double);
 begin
   StoredScaleFactor.Value := Value;
+end;
+
+procedure TDynamicTimeSeries.SetScaleFactorFormula(const Value: string);
+begin
+  if FScaleFactorFormula <> Value then
+  begin
+    FScaleFactorFormula := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TDynamicTimeSeries.SetScaleFactorParameter(
@@ -1047,10 +1146,10 @@ begin
   end;
 end;
 
-procedure TDynamicTimeSeriesCollectionItem.ClearLocations;
-begin
-  FTimesSeriesCollection.ClearLocations;
-end;
+//procedure TDynamicTimeSeriesCollectionItem.ClearLocations;
+//begin
+//  FTimesSeriesCollection.ClearLocations;
+//end;
 
 constructor TDynamicTimeSeriesCollectionItem.Create(Collection: TCollection);
 var

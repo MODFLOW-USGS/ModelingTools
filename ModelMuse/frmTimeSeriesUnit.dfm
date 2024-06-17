@@ -35,8 +35,7 @@ inherited frmTimeSeries: TfrmTimeSeries
     Height = 519
     PropagateEnable = False
     Align = alClient
-    ExplicitLeft = 121
-    ExplicitWidth = 499
+    ExplicitWidth = 494
     ExplicitHeight = 518
   end
   object pnlBottom: TPanel
@@ -52,7 +51,7 @@ inherited frmTimeSeries: TfrmTimeSeries
       624
       41)
     object btnHelp: TBitBtn
-      Left = 279
+      Left = 275
       Top = 6
       Width = 91
       Height = 33
@@ -61,10 +60,10 @@ inherited frmTimeSeries: TfrmTimeSeries
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 275
+      ExplicitLeft = 271
     end
     object btnOK: TBitBtn
-      Left = 376
+      Left = 372
       Top = 6
       Width = 91
       Height = 33
@@ -92,10 +91,10 @@ inherited frmTimeSeries: TfrmTimeSeries
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 372
+      ExplicitLeft = 368
     end
     object btnCancel: TBitBtn
-      Left = 472
+      Left = 468
       Top = 6
       Width = 91
       Height = 33
@@ -103,7 +102,7 @@ inherited frmTimeSeries: TfrmTimeSeries
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 468
+      ExplicitLeft = 464
     end
     object btnAddGroup: TButton
       Left = 9

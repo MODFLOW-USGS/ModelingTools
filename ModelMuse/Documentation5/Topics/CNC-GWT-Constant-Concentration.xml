@@ -1,11 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-09-06T10:31:18.847-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-06-07T09:39:58.138-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">CNC: GWT Constant Concentration Package Pane</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">CNC: GWT Constant Concentration Package Pane</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The</text><text styleclass="Strong" translate="true"> CNC: GWT Constant Concentration Package</text><text styleclass="Normal" translate="true"> pane is used to activate the Constant Concentraton package. It is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Strong" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Groundwater-Transport" styleclass="Strong" translate="true">Groundwater Transport|</link><text styleclass="Normal" translate="true"> | </text><link displaytype="text" defaultstyle="true" type="topiclink" href="GWT-Groundwater-Transport" styleclass="Strong" translate="true">GWT: Groundwater Transport</link><text styleclass="Normal" translate="true">.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">&quot;Multipliers&quot; can be used with CNC boundaries. Multipliers will be used if the &quot;</text><text styleclass="Strong" translate="true">Use Multiplier</text><text styleclass="Normal" translate="true">&quot; checkbox is checked.. Ordinarily, multipliers are not needed. If multipliers are used, the concentration is multiplied by the value of the multiplier. One use for multipliers might be when the concentrations are defined using a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Time_Series_Dialog_Box" styleclass="Normal" translate="true">time-series</link><text styleclass="Normal" translate="true"> and it is desired to multiply the concentration values in the time series by a different amount at different locations.</text></para>
   </body>
 </topic>

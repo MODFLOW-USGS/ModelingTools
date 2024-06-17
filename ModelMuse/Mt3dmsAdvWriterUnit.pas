@@ -151,8 +151,8 @@ begin
 end;
 
 procedure TMt3dmsAdvWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   if not Model.ModflowPackages.Mt3dmsAdvection.IsSelected then
   begin
@@ -161,7 +161,7 @@ begin
   // remove errors and warnings
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFileForTheInitial);
 
-  NameOfFile := FileName(AFileName);
+  FNameOfFile := FileName(AFileName);
   // PackageGeneratedExternally needs to be updated for MT3DMS
   if Model.PackageGeneratedExternally(StrADV) then
   begin
@@ -170,10 +170,10 @@ begin
 
   // write to MT3DMS or MT3D-USGS name file.
   WriteToMt3dMsNameFile(StrADV, Mt3dAdv,
-    NameOfFile, foInput, Model);
+    FNameOfFile, foInput, Model);
 
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingMT3DMSADVP);
 

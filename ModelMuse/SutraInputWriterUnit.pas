@@ -953,7 +953,7 @@ var
         ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
         try
           TempFile := ChangeFileExt(FNameOfFile, '');
-          ParameterZoneWriter.WriteFile(TempFile, ADataArray, ADataArray.Name);
+          ParameterZoneWriter.WriteFile(TempFile, ADataArray, ADataArray.Name, '', '');
         finally
           ParameterZoneWriter.Free;
         end;

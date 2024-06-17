@@ -93,7 +93,7 @@ type
     FEvaluationType: TEvaluationType;
     FPestParamUsed: Boolean;
     // @name is the name of the file that will eventually be read by the
-    // model. It differs from @link(FNameOfFile) in that is the same
+    // model. It differs from @link(FNameOfFile) in that it is the same
     // regardless or whether the file being created is the actual input file
     // or a template file being created for PEST.
     FInputFileName: string;
@@ -139,7 +139,7 @@ type
       ACell: PCellLocation; AScreenObject: TObject; FixedLength: Integer = 0;
       ChangeSign: Boolean = False); overload;
     procedure WritePestZones(DataArray: TDataArray; InputFileName: string;
-      const DataArrayID, Prefix: string);
+      const DataArrayID,  SpeciesName, Prefix: string);
     // @name creates a new file whose name is FileName and writes all values
     // written to file to that file until @link(CloseTempFile) is called.
     procedure OpenTempFile(const FileName: string);
@@ -4023,7 +4023,7 @@ begin
           ParameterZoneWriter := TParameterZoneWriter.Create(Model, etExport);
           try
             TempFile := ChangeFileExt(FNameOfFile, '');
-            ParameterZoneWriter.WriteFile(TempFile, ADataArray, ADataArray.Name);
+            ParameterZoneWriter.WriteFile(TempFile, ADataArray, ADataArray.Name, '', '');
           finally
             ParameterZoneWriter.Free;
           end;
@@ -5061,6 +5061,7 @@ var
   ParamBoundary: TModflowParamBoundary;
   AParam: TModflowTransientListParameter;
   CurrentTime: TDateTime;
+  FoundFirst: Boolean;
   procedure AssignMf6ObsNames(ValueCellList: TValueCellList);
   var
     CellIndex: Integer;
@@ -5098,6 +5099,7 @@ begin
       Exit;
     end;
 
+    FoundFirst := False;
     CurrentTime := Now;
     frmProgressMM.BeginUpdate;
     for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
@@ -5139,12 +5141,13 @@ begin
         end;
         frmProgressMM.AddMessage(Format(StrEvaluatingS,
           [ScreenObject.Name]));
-        if Now - CurrentTime >  OneSecond then
+        if (Now - CurrentTime >  OneSecond) or not FoundFirst then
         begin
           frmProgressMM.EndUpdate;
           Application.ProcessMessages;
           frmProgressMM.BeginUpdate;
           CurrentTime := Now;
+          FoundFirst := True;
         end;
 
         Boundary.GetCellValues(FValues, FParamValues, Model, self);
@@ -11213,7 +11216,7 @@ begin
 end;
 
 procedure TCustomFileWriter.WritePestZones(DataArray: TDataArray;
-  InputFileName: string; const DataArrayID, Prefix: string);
+  InputFileName: string; const DataArrayID, SpeciesName, Prefix: string);
 var
   PestZoneWriter: TParameterZoneWriter;
 begin
@@ -11221,7 +11224,7 @@ begin
   begin
     PestZoneWriter := TParameterZoneWriter.Create(Model, etExport);
     try
-      PestZoneWriter.WriteFile(InputFileName, DataArray, DataArrayID, Prefix);
+      PestZoneWriter.WriteFile(InputFileName, DataArray, DataArrayID, SpeciesName, Prefix);
     finally
       PestZoneWriter.Free;
     end;

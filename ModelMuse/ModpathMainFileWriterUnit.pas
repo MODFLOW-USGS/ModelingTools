@@ -132,18 +132,19 @@ begin
 end;
 
 procedure TModpathMainFileWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrUndefinedLengthUni);
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrUnsupportedLengthU);
 
-    NameOfFile := FileName(AFileName);
-    Model.AddModpathInputFile(NameOfFile);
-    FInputFileName := NameOfFile; 
-    OpenFile(NameOfFile);
+    FNameOfFile := FileName(AFileName);
+
+    Model.AddModpathInputFile(FNameOfFile);
+    FInputFileName := FNameOfFile;
+    OpenFile(FNameOfFile);
     try
       WriteDataSet1;
       WriteDataSet2;
@@ -736,14 +737,14 @@ begin
 end;
 
 procedure TModpathBasicFileWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   Evaluate;
-  NameOfFile := FileName(AFileName);
-  Model.AddModpathInputFile(NameOfFile);
-  FInputFileName := NameOfFile; 
-  OpenFile(NameOfFile);
+  FNameOfFile := FileName(AFileName);
+  Model.AddModpathInputFile(FNameOfFile);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     WriteDataSet0;
     Application.ProcessMessages;

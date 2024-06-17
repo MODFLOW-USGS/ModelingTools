@@ -211,8 +211,8 @@ begin
 end;
 
 procedure TNwtWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model,StrIllegalSolverChoic);
   if not Package.IsSelected then
@@ -228,11 +228,11 @@ begin
     Exit;
   end;
 
-  NameOfFile := FileName(AFileName);
+  FNameOfFile := FileName(AFileName);
   WriteToNameFile('NWT', Model.UnitNumbers.UnitNumber(StrNWT),
-    NameOfFile, foInput, Model);
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+    FNameOfFile, foInput, Model);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingNWTPackage);
     WriteDataSet0;

@@ -74,6 +74,15 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
       TabOrder = 4
       OnClick = btnInsertTimeClick
     end
+    object btnCopyColumn: TButton
+      Left = 304
+      Top = 37
+      Width = 113
+      Height = 25
+      Caption = 'Copy Column'
+      TabOrder = 5
+      OnClick = btnCopyColumnClick
+    end
   end
   object rrdgTimeSeries: TRbwRowDataGrid
     Left = 0
@@ -104,7 +113,7 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
         AutoAdjustColWidths = True
       end
       item
-        AutoAdjustColWidths = False
+        AutoAdjustColWidths = True
       end>
     Rows = <
       item
@@ -252,6 +261,9 @@ object frameModflow6TimeSeries: TframeModflow6TimeSeries
         CaseSensitivePicklist = False
         CheckStyle = csCheck
       end>
+    ColWidths = (
+      50
+      74)
   end
   object pnlTop: TPanel
     Left = 0

@@ -1137,6 +1137,7 @@ function SortLayerSorts(Item1, Item2: Pointer): Integer;
 function IsNetworkDrive(const FileName: string): Boolean;
 function FortranStrToFloat(AString: string): Extended;
 function FortranFloatToStr(Value: Extended): string;
+function TryFortranStrToFloat(AString: string; out Value: Extended): Boolean;
 
 resourcestring
   StrNoBoundaryConditio = 'No boundary conditions assigned to the %s because' +
@@ -1162,6 +1163,10 @@ implementation
 
 {$IFNDEF Testing}
 uses Math, System.StrUtils;
+
+resourcestring
+  StrErrorReadingTRealI = 'Error reading TRealItem.StringValue. %s is not a ' +
+  'valid floating point value';
 {$ENDIF}
 
 function SortLayerSorts(Item1, Item2: Pointer): Integer;
@@ -1198,6 +1203,31 @@ begin
       end;
     end;
     result := StrToFloat(AString);
+  finally
+    FormatSettings.DecimalSeparator := OldDecimalSeparator;
+  end;
+end;
+
+function TryFortranStrToFloat(AString: string; out Value: Extended): Boolean;
+var
+  OldDecimalSeparator: Char;
+  SignPos: Integer;
+begin
+  AString := Trim(AString);
+  OldDecimalSeparator := FormatSettings.DecimalSeparator;
+  try
+    FormatSettings.DecimalSeparator := '.';
+    AString := StringReplace(AString, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+    AString := StringReplace(AString, 'd', 'e', [rfReplaceAll, rfIgnoreCase]);
+    SignPos := Max(PosEx('+', AString, 2), PosEx('-', AString, 2));
+    if SignPos > 0 then
+    begin
+      if not CharInSet(AString[SignPos-1], ['e', 'E']) then
+      begin
+        Insert('E', AString, SignPos);
+      end;
+    end;
+    Result := TryStrToFloat(AString, Value);
   finally
     FormatSettings.DecimalSeparator := OldDecimalSeparator;
   end;
@@ -1940,8 +1970,14 @@ begin
 end;
 
 procedure TRealItem.ReadStringValue(Reader: TReader);
+var
+  AString: string;
 begin
-  Value := StrToFloat(Reader.ReadString)
+  AString := Reader.ReadString;
+  if not TryStrToFloat(AString, FValue) then
+  begin
+    FValue := FortranStrToFloat(AString);
+  end;
 end;
 
 procedure TRealItem.ReadValue(Reader: TReader);

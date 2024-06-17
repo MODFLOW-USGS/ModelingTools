@@ -478,7 +478,7 @@ object TTaskHistory
     end
     item
       Name = 'MF6 Time Series'
-      Display = False
+      Display = True
     end
     item
       Name = 'MF6 GWT'
@@ -33139,6 +33139,74 @@ object TTaskHistory
       Date = 45447.000000000000000000
       Categories.Strings = (
         'Bug fix'
+        'Import'
+        'MF-2015')
+    end
+    item
+      Date = 45448.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Import'
+        'MF-2015'
+        'MF6 Time Series'
+        'Error checking')
+    end
+    item
+      Date = 45449.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'MF-2015'
+        'Documentation')
+    end
+    item
+      Date = 45450.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Testing'
+        'Import'
+        'MF-2015')
+    end
+    item
+      Date = 45451.000000000000000000
+    end
+    item
+      Date = 45452.000000000000000000
+    end
+    item
+      Date = 45453.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Bug fix'
+        'Import'
+        'MF-2015')
+    end
+    item
+      Date = 45454.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'MF-2015'
+        'Documentation')
+    end
+    item
+      Date = 45455.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Bug fix'
+        'Import'
+        'MF-2015')
+    end
+    item
+      Date = 45456.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Import'
+        'MF-2015'
+        'Bug fix')
+    end
+    item
+      Date = 45457.000000000000000000
+      Categories.Strings = (
+        'Documentation'
         'Import'
         'MF-2015')
     end>

@@ -156,6 +156,14 @@ begin
       if FSplitter[0] = 'NO_PTC' then
       begin
         FNO_PTC := FSplitter[0];
+        if FSplitter.Count >= 2 then
+        begin
+          Fno_ptc_option := FSplitter[1];
+          if (Fno_ptc_option <> 'FIRST') and (Fno_ptc_option <> 'ALL') then
+          begin
+            Unhandled.WriteLine(StrUnrecognizedImsOp);
+          end;
+        end;
       end
       else if FSplitter.Count >= 2 then
       begin
@@ -464,7 +472,14 @@ begin
       end
       else if FSplitter[0] = 'INNER_RCLOSE' then
       begin
-        if not TryFortranStrToFloat(FSplitter[1], FINNER_RCLOSE) then
+        if TryFortranStrToFloat(FSplitter[1], FINNER_RCLOSE) then
+        begin
+          if FSplitter.Count >= 3 then
+          begin
+            Frclose_option := FSplitter[2];
+          end;
+        end
+        else
         begin
           Unhandled.WriteLine(StrUnrecognizedImsOp);
           Unhandled.WriteLine(ErrorLine);

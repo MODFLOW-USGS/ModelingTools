@@ -1,4 +1,6 @@
 inherited frmImportModflow6: TfrmImportModflow6
+  HelpType = htKeyword
+  HelpKeyword = 'Import-MODFLOW-6-Model-Dialog-'
   Caption = 'Import MODFLOW 6 Model'
   ClientHeight = 343
   ClientWidth = 625
@@ -28,15 +30,15 @@ inherited frmImportModflow6: TfrmImportModflow6
         ExplicitHeight = 18
       end
       inherited sbAdd: TSpeedButton
-        Left = 318
+        Left = 314
         ExplicitLeft = 332
       end
       inherited sbInsert: TSpeedButton
-        Left = 376
+        Left = 370
         ExplicitLeft = 393
       end
       inherited sbDelete: TSpeedButton
-        Left = 433
+        Left = 427
         ExplicitLeft = 454
       end
       inherited seNumber: TJvSpinEdit
@@ -108,24 +110,24 @@ inherited frmImportModflow6: TfrmImportModflow6
     object edFlowSimFile: TJvFilenameEdit
       Left = 8
       Top = 32
-      Width = 605
+      Width = 597
       Height = 26
       Filter = 'Simulation Name File|*mfsim.nam'
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 0
       Text = ''
-      ExplicitWidth = 601
+      ExplicitWidth = 593
     end
     object fedGeoRef: TJvFilenameEdit
       Left = 8
       Top = 88
-      Width = 605
+      Width = 597
       Height = 26
       Filter = 'usgs.model.reference file|*.reference'
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
       Text = ''
-      ExplicitWidth = 601
+      ExplicitWidth = 593
     end
   end
   object pnlBottom: TPanel
@@ -141,7 +143,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       625
       41)
     object btnHelp: TBitBtn
-      Left = 313
+      Left = 305
       Top = 6
       Width = 82
       Height = 27
@@ -149,10 +151,11 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 309
+      OnClick = btnHelpClick
+      ExplicitLeft = 301
     end
     object btnOK: TBitBtn
-      Left = 401
+      Left = 393
       Top = 6
       Width = 82
       Height = 27
@@ -161,10 +164,10 @@ inherited frmImportModflow6: TfrmImportModflow6
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 397
+      ExplicitLeft = 389
     end
     object btnCancel: TBitBtn
-      Left = 489
+      Left = 481
       Top = 6
       Width = 83
       Height = 27
@@ -172,7 +175,7 @@ inherited frmImportModflow6: TfrmImportModflow6
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 485
+      ExplicitLeft = 477
     end
   end
   object stat1: TStatusBar

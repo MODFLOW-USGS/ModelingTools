@@ -5987,11 +5987,11 @@ begin
     DisvGrid.DrawCellNumbers := not DisvGrid.DrawCellNumbers;
 	if DisvGrid.DrawCellNumbers then
 	begin
-	  Caption := 'Hide Cell Numbers';
+	  acShowCellNumbers.Caption := 'Hide Cell Numbers';
 	end
 	else
 	begin
-	  Caption := 'Show Cell Numbers';
+	  acShowCellNumbers.Caption := 'Show Cell Numbers';
 	end;
     InvalidateImage32AllViews;
   end;
@@ -13492,7 +13492,6 @@ var
   MPathLocation: string;
   SimNameWriter: IMf6_SimNameFileWriter;
   NewModelOptionsCollection: TModelOptionsCollection;
-//  ModelIndex: Integer;
   ModelOptions: TModelOptions;
   DisvGrid: TModflowDisvGrid;
   ZoneBudgetLocation: string;
@@ -13550,8 +13549,6 @@ begin
       Exit;
     end;
 
-//    ModflowOutputControl
-
     if (ModelSelection = msModflow2015) then
     begin
       MPathPackage := PhastModel.ModflowPackages.ModPath;
@@ -13562,7 +13559,6 @@ begin
         Exit;
       end;
     end;
-
 
     InitializeModflowInputDialog;
     if sdModflowInput.Execute then
@@ -13721,12 +13717,10 @@ begin
             [PhastModel.ProgramLocations.PestDirectory]), mtConfirmation,
             [mbYes, mbNo], 0) = mrYes) then
           begin
-//          MessageDlg(Format(StrPLPROCWasNotFound,
-//            [PhastModel.ProgramLocations.PestDirectory]), mtError, [mbOK], 0);
             Exit;
           end;
         end;
-//        PilotPointsUsed := False;
+
         for ParamIndex := 0 to PhastModel.ModflowSteadyParameters.Count - 1 do
         begin
           AParam := PhastModel.ModflowSteadyParameters[ParamIndex];

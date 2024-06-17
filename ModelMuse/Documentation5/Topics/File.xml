@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-07-20T15:32:41.046-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-06-07T12:38:28.263-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">File</title>
   <body>
     <header>
@@ -8,7 +8,7 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The menu items under File are listed in table 3. The commands under this menu have to do with opening, saving, importing, or exporting files. Many of the choices under File|Import refer to features of data sets and objects that are described under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Data_Sets_Dialog_Box" styleclass="Normal" translate="true">Data Sets dialog box</link><text styleclass="Normal" translate="true"> and </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Object_Properties_Dialog_Box" styleclass="Normal" translate="true">Object Properties dialog box</link><text styleclass="Normal" translate="true">.</text></para>
     <para styleclass="Table Caption"><text styleclass="Table Caption" translate="true">Table 3. File Menu</text></para>
-    <para styleclass="Normal" style="text-align:center;"><table rowcount="62" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
+    <para styleclass="Normal" style="text-align:center;"><table rowcount="63" colcount="2" style="width:auto; cell-padding:4px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;">
       <tr style="vertical-align:top">
         <td colspan="2" style="width:626px;">
           <para styleclass="Normal"><line style="height:1px; color:#000000;" /></para>
@@ -193,6 +193,14 @@
         </td>
         <td style="width:405px;">
           <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import an existing MODFLOW-2005 or MODFLOW-NWT model into ModelMuse. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import_MODFLOW_Model_Dialog_Box" styleclass="Table Cell" style="font-weight:bold;" translate="true">Import MODFLOW-2005 or -NWT Model</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
+        </td>
+      </tr>
+      <tr style="vertical-align:top">
+        <td style="width:221px;">
+          <para styleclass="Table Header" style="text-align:left;"><text styleclass="Table Header" translate="true">Import|MODFLOW 6 Model...</text></para>
+        </td>
+        <td style="width:405px;">
+          <para styleclass="Table Cell"><text styleclass="Table Cell" translate="true">Import an existing MODFLOW 6 model into ModelMuse. See </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Import-MODFLOW-6-Model-Dialog-" styleclass="Strong" translate="true">Import MODFLOW 6 Model</link><text styleclass="Table Cell" translate="true"> dialog box.</text></para>
         </td>
       </tr>
       <tr style="vertical-align:top">

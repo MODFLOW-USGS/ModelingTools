@@ -78,13 +78,13 @@ begin
 end;
 
 procedure TPestGridSpecificationWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   Assert(not Model.DisvUsed);
-  NameOfFile := FileName(AFileName);
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+  FNameOfFile := FileName(AFileName);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     WriteDataSet1;
     WriteDataSet2;
@@ -93,7 +93,7 @@ begin
   finally
     CloseFile;
   end;
-  Model.AddModelInputFile(NameOfFile)
+  Model.AddModelInputFile(FNameOfFile)
 end;
 
 procedure TPestGridSpecificationWriter.WriteU2DRELHeader(const Comment: string;

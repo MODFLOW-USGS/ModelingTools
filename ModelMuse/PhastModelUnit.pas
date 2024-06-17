@@ -10255,19 +10255,30 @@ const
 //    '5.2.0.11' bug fix: Fixed export of RCH package in MODFLOW 6 when objects
 //                are to be summed.
 //    '5.2.0.12' no real change.
-
-//               bug fix: Fixed export of h0 in CSUB package data.
+//    '5.2.0.13' bug fix: Fixed export of h0 in CSUB package data.
 //               bug fix: Fixed export of MVR when the source doesn't change
 //                over time.
 //               bug fix: Fixed export of some flow boundary packages when the
 //                only change between stress periods was the boundary
 //                concentration in the transport package.
+//               Enhancement: The scale factor for a dynamic time series can
+//                now be a formula.
+//    '5.2.0.14' Bug fix: Fixed reading some ModelMuse files on systems that
+//                us comma as the decimal separator.
+//    '5.2.0.15  bug fix: Fixed export of GWT DSP file that would cause an
+//                assertion failure.
+//    '5.2.0.16'
+//    '5.2.0.17' bug fix: The EVT package is now included in the MODFLOW 6
+//                grounddwater transport source and sink mixing package as
+//                an AUXMIXED source.
+//               (not in released version)bug fix: Fixed bug in saving GWT CNC
+//                and GWT SRC boundaries when multiplier are not used
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.12';
+  IIModelVersion = '5.2.0.17';
 
 function IModelVersion: string;
 begin
@@ -26361,7 +26372,7 @@ begin
   StreamList := TSfrStreamPlotList.Create;
 //  LakeList := TLakePlotList.Create;
   try
-    SfrMf6StreamLinkPlot.GetMf6ObjectsToPlot(StreamList{, LakeList});
+    SfrMf6StreamLinkPlot.GetMf6ObjectsToPlot(StreamList);
     if StreamList.Count > 0 then
     begin
       StreamColor := Color32(SfrMf6StreamLinkPlot.StreamColor);

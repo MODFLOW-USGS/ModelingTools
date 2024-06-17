@@ -1898,6 +1898,8 @@ type
     FFmp4CropHasSalinityDemandNode: TJvPageIndexNode;
     FFmp4MultCropHasSalinityDemandNode: TJvPageIndexNode;
     FFmp4AddedDemandRunoffSplitNode: TJvPageIndexNode;
+    FTooFewError: Boolean;
+    FTooManyError: Boolean;
     procedure Mf6ObsChanged(Sender: TObject);
     procedure EnableModpathObjectChoice;
     Function GenerateNewDataSetFormula(DataArray: TDataArray): string;
@@ -2955,9 +2957,9 @@ resourcestring
   StrYouCanOnlyDefine = 'You can only define conduits in CFP with objects th' +
   'at have one %s formula on the Properties tab.';
   StrThereAreTooManyI = 'There are too many imported values for %s. The extr' +
-  'a values will be deleted.';
+  'a values will be deleted for any imported values for which this is the case.';
   StrThereAreTooFewIm = 'There are too few imported values for %s. Default v' +
-  'alues will be added.';
+  'alues will be added for any imported values for which this is the case.';
   StrTryModelLinkStre = 'Try "Model|Link Streams..." instead.';
   StrYouCanOnlyDefineMAW = 'You can only define multi-aquifer wells using po' +
   'int objects with zero Z-coordinates';
@@ -5228,6 +5230,8 @@ begin
     ColIndex := 0;
     First := True;
 
+    FTooFewError := False;
+    FTooManyError := False;
     rdgImportedData.BeginUpdate;
     try
       if AScreenObject.ImportedSectionElevations.Count > 0 then
@@ -12148,13 +12152,21 @@ begin
     begin
       ValueStorage.Count := rdgImportedData.RowCount-1;
       RowCount := ValueStorage.Count + 1;
-      Beep;
-      MessageDlg(Format(StrThereAreTooManyI, [ColumnCaption]), mtWarning, [mbOK], 0);
+      if not FTooManyError then
+      begin
+        Beep;
+        MessageDlg(Format(StrThereAreTooManyI, [ColumnCaption]), mtWarning, [mbOK], 0);
+        FTooManyError := True;
+      end;
     end
     else if rdgImportedData.RowCount > RowCount then
     begin
-      Beep;
-      MessageDlg(Format(StrThereAreTooFewIm, [ColumnCaption]), mtWarning, [mbOK], 0);
+      if not FTooFewError then
+      begin
+        Beep;
+        MessageDlg(Format(StrThereAreTooFewIm, [ColumnCaption]), mtWarning, [mbOK], 0);
+        FTooFewError := True;
+      end;
       ExistingCount := ValueStorage.Count;
       ValueStorage.Count := rdgImportedData.RowCount-1;
       case ValueStorage.DataType of
@@ -20296,7 +20308,7 @@ var
 begin
   result := (frmGoPhast.ModelSelection = msModflow2015)
     and ((DataGrid = frameRchParam.rdgModflowBoundary)
-    or ((DataGrid = frameChdParam.rdgModflowBoundary) and (ACol in [3,4,5]))
+    or ((DataGrid = frameChdParam.rdgModflowBoundary) {and (ACol in [3,4,5,])  GWT concentrations should also be specified.})
     or (DataGrid = frameCSUB.rdgModflowBoundary)
     or (DataGrid = frameDrnParam.rdgModflowBoundary)
     or (DataGrid = frameEtsParam.rdgModflowBoundary)

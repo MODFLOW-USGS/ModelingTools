@@ -881,7 +881,7 @@ begin
   begin
     VKS := Model.DataArrayManager.GetDataSetByName(StrUzfVerticalK);
     WriteArray(VKS, 0, 'Data Set 4: VKS', StrNoValueAssigned, 'VKS');
-    WritePestZones(VKS, FInputFileName, StrVKS, 'VKS');
+    WritePestZones(VKS, FInputFileName, StrVKS, '', 'VKS');
   end;
 end;
 
@@ -894,7 +894,7 @@ begin
   begin
     SURFK := Model.DataArrayManager.GetDataSetByName(StrUzfSurfaceK);
     WriteArray(SURFK, 0, 'Data Set 4b: SURFK', StrNoValueAssigned, 'SURFK');
-    WritePestZones(SURFK, FInputFileName, StrSURF, 'SRK');
+    WritePestZones(SURFK, FInputFileName, StrSURF, '', 'SRK');
   end;
 end;
 
@@ -904,7 +904,7 @@ var
 begin
   EPS := Model.DataArrayManager.GetDataSetByName(StrUzfBrooksCoreyEpsilon);
   WriteArray(EPS, 0, 'Data Set 5: EPS', StrNoValueAssigned, 'EPS');
-  WritePestZones(EPS, FInputFileName, StrEPS, 'EPS');
+  WritePestZones(EPS, FInputFileName, StrEPS, '', 'EPS');
 end;
 
 procedure TModflowUzfWriter.WriteDataSet6a;
@@ -921,7 +921,7 @@ begin
   begin
     WriteArray(THTS, 0, 'Data Set 6: THTS', StrNoValueAssigned, 'THTS');
   end;
-  WritePestZones(THTS, FInputFileName, StrTHTS, 'THS');
+  WritePestZones(THTS, FInputFileName, StrTHTS, '', 'THS');
 end;
 
 procedure TModflowUzfWriter.WriteDataSet6b;
@@ -934,7 +934,7 @@ begin
   begin
     THTR := Model.DataArrayManager.GetDataSetByName(StrUzfReisidualWaterContent);
     WriteArray(THTR, 0, 'Data Set 6b: THTR', StrNoValueAssigned, 'THTR');
-    WritePestZones(THTR, FInputFileName, StrTHTR, 'THR');
+    WritePestZones(THTR, FInputFileName, StrTHTR, '', 'THR');
   end;
 end;
 
@@ -949,7 +949,7 @@ begin
   begin
     THTI := Model.DataArrayManager.GetDataSetByName(StrUzfInitialUnsaturatedWaterContent);
     WriteArray(THTI, 0, 'Data Set 7: THTI', StrNoValueAssigned, 'THTI');
-    WritePestZones(THTI, FInputFileName, StrTHTI, 'THI');
+    WritePestZones(THTI, FInputFileName, StrTHTI, '', 'THI');
   end;
 end;
 

@@ -13,6 +13,7 @@ type
     FIstProp: TIstPackageItem;
     FDomainIndex: Integer;
     FGwtFile: string;
+    FPestScriptFileName: string;
     function IstFileName(const AFileName: string; SpeciesIndex,
       PackageIndex: Integer): string;
     procedure WriteOptions;
@@ -58,6 +59,7 @@ var
   Abbreviation: string;
   DomainIndex: Integer;
 begin
+  FPestScriptFileName := AFileName;
   FSpeciesIndex := SpeciesIndex;
   if not Package.IsSelected then
   begin
@@ -77,6 +79,7 @@ begin
     FDomainIndex := DomainIndex;
     FGwtFile := IstFileName(AFileName, SpeciesIndex, DomainIndex+1);
     FNameOfFile := FGwtFile;
+    FInputFileName := FGwtFile;
 
     WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex,
       'IST-' + IntToStr(DomainIndex+1));
@@ -114,8 +117,10 @@ procedure TModflowGwtIstWriter.writeGridData;
 var
   DataArray: TDataArray;
   ChemSpecies: TMobileChemSpeciesItem;
+  FileNameToUse: string;
 begin
   WriteBeginGridData;
+  FileNameToUse := FPestScriptFileName;
 
   ChemSpecies := Model.MobileComponents[FSpeciesIndex];
 
@@ -125,6 +130,7 @@ begin
       ChemSpecies.ImmobileInitialConcentrations[FDomainIndex]);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'CIM');
+    WritePestZones(DataArray, FileNameToUse, 'CIM', '.' + ChemSpecies.Name, 'CIM');
   end;
 
   if FDomainIndex < ChemSpecies.ImmobilePorosities.Count then
@@ -133,7 +139,7 @@ begin
       ChemSpecies.ImmobilePorosities[FDomainIndex]);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'POROSITY');
-//    WriteMf6_DataSet(DataArray, 'THETAIM');
+    WritePestZones(DataArray, FileNameToUse, 'POROSITY', '.' + ChemSpecies.Name, 'POROSITY');
   end;
 
   if FDomainIndex < ChemSpecies.ImmobileVolumeFractions.Count then
@@ -142,6 +148,7 @@ begin
       ChemSpecies.ImmobileVolumeFractions[FDomainIndex]);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'VOLFRAC');
+    WritePestZones(DataArray, FileNameToUse, 'VOLFRAC', '.' + ChemSpecies.Name, 'VOLFRAC');
   end;
 
   if FDomainIndex < ChemSpecies.ImmobileMassTransferRates.Count then
@@ -150,6 +157,7 @@ begin
       ChemSpecies.ImmobileMassTransferRates[FDomainIndex]);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'ZETAIM');
+    WritePestZones(DataArray, FileNameToUse, 'ZETAIM', '.' + ChemSpecies.Name, 'ZETAIM');
   end;
 
   if (FIstProp.FirstOrderDecay or FIstProp.ZeroOrderDecay)
@@ -159,6 +167,7 @@ begin
       ChemSpecies.ImmobileDecay[FDomainIndex]);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'DECAY');
+    WritePestZones(DataArray, FileNameToUse, 'DECAY', '.' + ChemSpecies.Name, 'DECAY');
   end;
 
   if FIstProp.Sorption and (FIstProp.FirstOrderDecay or FIstProp.ZeroOrderDecay)
@@ -168,6 +177,7 @@ begin
       ChemSpecies.ImmobileDecaySorbed[FDomainIndex]);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'DECAY_SORBED');
+    WritePestZones(DataArray, FileNameToUse, 'DECAY_SORBED', '.' + ChemSpecies.Name, 'DECAY_SORBED');
   end;
 
   if FIstProp.Sorption
@@ -177,6 +187,7 @@ begin
       ChemSpecies.ImmobileBulkDensities[FDomainIndex]);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'BULK_DENSITY');
+    WritePestZones(DataArray, FileNameToUse, 'BULK_DENSITY', '.' + ChemSpecies.Name, 'BULK_DENSITY');
   end;
 
   if FIstProp.Sorption
@@ -186,6 +197,7 @@ begin
       ChemSpecies.ImmobileDistCoeficients[FDomainIndex]);
     Assert(DataArray <> nil);
     WriteMf6_DataSet(DataArray, 'DISTCOEF');
+    WritePestZones(DataArray, FileNameToUse, 'DISTCOEF', '.' + ChemSpecies.Name, 'DISTCOEF');
   end;
 
   WriteEndGridData;

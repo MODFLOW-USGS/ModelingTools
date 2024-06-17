@@ -96,7 +96,7 @@ type
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter;
       Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
       READASARRAYS: Boolean; NSEG: Integer; SURF_RATE_SPECIFIED: Boolean;
-      PriorPeriod: TEvtPeriod);
+      PriorPeriod: TEvtPeriod; Options: TEvtOptions);
     function GetCell(Index: Integer): TEvtTimeItem;
     function GetCount: Integer;
   protected
@@ -523,7 +523,7 @@ end;
 procedure TEvtPeriod.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
   Dimensions: TDimensions; naux: Integer; BOUNDNAMES: Boolean;
   READASARRAYS: Boolean; NSEG: Integer; SURF_RATE_SPECIFIED: Boolean;
-  PriorPeriod: TEvtPeriod);
+  PriorPeriod: TEvtPeriod; Options: TEvtOptions);
 var
   DimensionCount: Integer;
   Cell: TEvtTimeItem;
@@ -576,9 +576,12 @@ begin
       begin
         SetLength(IEVT, Length(IEVT), Length(IEVT[0]));
       end;
+      PriorPeriod.SURFACE.Initialize;
+      PriorPeriod.RATE.Initialize;
+      PriorPeriod.DEPTH.Initialize;
+      PriorPeriod.IEVT := nil;
     end;
     try
-      AuxIndex := 0;
       while not Stream.EndOfStream do
       begin
         ALine := Stream.ReadLine;
@@ -671,41 +674,44 @@ begin
             end;
           end;
         end
-        else if AnsiSametext(FSplitter[0], 'AUX') then
-        begin
-          AuxArray.Initialize;
-          if (FSplitter.Count >= 3) and AnsiSametext(FSplitter[1], 'TIMEARRAYSERIES') then
-          begin
-            FSplitter.DelimitedText := CaseSensitiveLine;
-            AuxArray.TimeArraySeries := FSplitter[2];
-            AuxArray.value := nil;
-          end
-          else
-          begin
-            Double2DDReader := TDouble2DArrayReader.Create(LocalDim, FPackageType);
-            try
-              Double2DDReader.Read(Stream, Unhandled);
-              AuxArray.Value := Double2DDReader.FData;
-              SetLength(AuxArray.Value, Length(AuxArray.Value), Length(AuxArray.Value[0]));
-              AuxArray.TimeArraySeries := '';
-            finally
-              Double2DDReader.Free;
-            end;
-          end;
-          if PriorPeriod = nil then
-          begin
-            AuxList.Add(AuxArray)
-          end
-          else
-          begin
-            AuxList[AuxIndex].Assign(AuxArray);
-            Inc(AuxIndex);
-          end;
-        end
         else
         begin
-          Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
-          Unhandled.WriteLine(ErrorLine);
+          AuxIndex := Options.FAUXILIARY.IndexOf(FSplitter[0]);
+          if AuxIndex >= 0 then
+          begin
+            AuxArray.Initialize;
+            if (FSplitter.Count >= 3) and AnsiSametext(FSplitter[1], 'TIMEARRAYSERIES') then
+            begin
+              FSplitter.DelimitedText := CaseSensitiveLine;
+              AuxArray.TimeArraySeries := FSplitter[2];
+              AuxArray.value := nil;
+            end
+            else
+            begin
+              Double2DDReader := TDouble2DArrayReader.Create(LocalDim, FPackageType);
+              try
+                Double2DDReader.Read(Stream, Unhandled);
+                AuxArray.Value := Double2DDReader.FData;
+                SetLength(AuxArray.Value, Length(AuxArray.Value), Length(AuxArray.Value[0]));
+                AuxArray.TimeArraySeries := '';
+              finally
+                Double2DDReader.Free;
+              end;
+            end;
+            if PriorPeriod = nil then
+            begin
+              AuxList.Add(AuxArray)
+            end
+            else
+            begin
+              AuxList[AuxIndex].Assign(AuxArray);
+            end;
+          end
+          else
+          begin
+            Unhandled.WriteLine(Format(StrUnrecognizedSPERI, [FPackageType]));
+            Unhandled.WriteLine(ErrorLine);
+          end;
         end;
       end;
     finally
@@ -739,6 +745,11 @@ begin
           begin
             Cell.Frate.NumericValue := RATE.Value[RowIndex, ColIndex];
             Cell.Frate.ValueType := vtNumeric;
+            if Cell.Frate.NumericValue = 0 then
+            begin
+              Cell.Free;
+              Continue;
+            end;
           end
           else
           begin
@@ -772,6 +783,7 @@ begin
               Aux.StringValue := AuxArray.TimeArraySeries + '_'
                 + IntToStr(RowIndex + 1) + '_' + IntToStr(ColIndex + 1)
             end;
+            Cell.Faux.Add(Aux);
           end;
           FCells.Add(Cell);
         end;
@@ -1063,7 +1075,7 @@ begin
           APeriod.IPer := IPER;
           APeriod.Read(Stream, Unhandled, FDimensions, FOptions.FAUXILIARY.Count,
             FOptions.FBOUNDNAMES, FOptions.READASARRAYS, FEvtDimensions.FNSEG,
-            FOptions.FSURF_RATE_SPECIFIED, PriorPeriod);
+            FOptions.FSURF_RATE_SPECIFIED, PriorPeriod, FOptions);
         end
         else
         begin

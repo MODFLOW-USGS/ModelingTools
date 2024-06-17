@@ -1898,7 +1898,7 @@ begin
   begin
     ADataArray := FPestDataArrays[DataArrayIndex];
     WritePestZones(ADataArray, FInputFileName,
-      Format(StrSUBd, [DataArrayIndex+1]),
+      Format(StrSUBd, [DataArrayIndex+1]), '',
       Format('SU%d', [DataArrayIndex+1]));
   end;
 end;

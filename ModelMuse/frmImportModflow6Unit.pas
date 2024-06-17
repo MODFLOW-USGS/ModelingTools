@@ -97,6 +97,7 @@ begin
     FreeAndNil(frmShowHideObjects);
     FreeAndNil(frmDataSets);
 
+    Screen.Cursor := crHourGlass;
     Importer := TModflow6Importer.Create;
     ErrorMessages := TStringList.Create;
     try
@@ -105,6 +106,7 @@ begin
     finally
       Importer.Free;
       ErrorMessages.Free;
+      Screen.Cursor := crDefault;
     end;
   finally
     NameFiles.Free;

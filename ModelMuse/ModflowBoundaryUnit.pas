@@ -1240,6 +1240,11 @@ resourcestring
   StrBoundaryStartingAn = 'Boundary starting and ending times are the same';
   StrBecauseTheBoundary = 'Because the boundary starting and ending times de' +
   'fined in %s are the same, they will have no effect.';
+  StrOnlyTheDirectForm = 'Only the direct formula interpretation is when a ' +
+  'time series is specified as a formula. You have used a different method ' +
+  'in the following objects. For boundaries that allow "multipliers" to be ' +
+  'used, you may be able to use the multiplier to adjust the time series values.';
+  StrTimeSeries0sO = 'Time series: %0:s; Object: %1:s';
 
 function SortBoundaryItems(Item1, Item2: pointer): integer;
 var
@@ -3945,9 +3950,21 @@ begin
         begin
           DynamicTimeSeries := AScreenObject.DynamicTimesSeriesCollections.
             GetTimeSeriesByName(UnmodifiedFormula);
+          if (DynamicTimeSeries <> nil) and (Formula <> UnmodifiedFormula) then
+          begin
+            frmErrorsAndWarnings.AddWarning(AModel, StrOnlyTheDirectForm,
+              Format(StrTimeSeries0sO, [UnmodifiedFormula, AScreenObject.Name]),
+             AScreenObject);
+          end;
         end
         else
         begin
+          if Formula <> UnmodifiedFormula then
+          begin
+            frmErrorsAndWarnings.AddWarning(AModel, StrOnlyTheDirectForm,
+              Format(StrTimeSeries0sO, [UnmodifiedFormula, AScreenObject.Name]),
+             AScreenObject);
+          end;
           DynamicTimeSeries := nil;
         end;
 

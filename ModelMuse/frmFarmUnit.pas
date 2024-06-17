@@ -200,7 +200,14 @@ procedure TfrmFarm.frameFarmedFarmNameChange(Sender: TObject);
 begin
   inherited;
   frameFarm.seFarmIdChange(Sender);
-
+  if frameFarm.edFarmName.Text = '' then
+  begin
+    frameFarm.edFarmName.Color := clRed;
+  end
+  else
+  begin
+    frameFarm.edFarmName.Color := clWindow;
+  end;
 end;
 
 procedure TfrmFarm.frameFarmpcMainChange(Sender: TObject);

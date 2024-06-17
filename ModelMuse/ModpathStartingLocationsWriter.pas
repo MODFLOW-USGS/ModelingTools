@@ -123,7 +123,7 @@ end;
 
 procedure TModpathStartingLocationsWriter.WriteFileVersion5(const AFileName: string);
 var
-  NameOfFile: string;
+//  NameOfFile: string;
   StressPeriods: TModflowStressPeriods;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheFollowingObj);
@@ -148,10 +148,10 @@ begin
     end;
     frmErrorsAndWarnings.RemoveErrorGroup(Model, StrAStartingTimeFor);
 
-    NameOfFile := FileName(AFileName);
-    Model.AddModpathInputFile(NameOfFile);
-    FInputFileName := NameOfFile;
-    OpenFile(NameOfFile);
+    FNameOfFile := FileName(AFileName);
+    Model.AddModpathInputFile(FNameOfFile);
+    FInputFileName := FNameOfFile;
+    OpenFile(FNameOfFile);
     try
       AssignParticleLocationsToElements;
       UpdateParticleLines;
@@ -293,7 +293,7 @@ procedure TModpathStartingLocationsWriter.WriteFileVersion6(
 var
   Index: Integer;
   ScreenObject: TScreenObject;
-  NameOfFile: string;
+//  NameOfFile: string;
   StressPeriods: TModflowStressPeriods;
 begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInTheFollowingObj);
@@ -302,10 +302,10 @@ begin
   StressPeriods := Model.ModflowStressPeriods;
   FStartTime := StressPeriods[0].StartTime;
   FEndTime := StressPeriods[StressPeriods.Count-1].EndTime;
-  NameOfFile := FileName(AFileName);
-  Model.AddModpathInputFile(NameOfFile);
-    FINPUTFILENAME := NAMEOFFILE;
-  OpenFile(NameOfFile);
+  FNameOfFile := FileName(AFileName);
+  Model.AddModpathInputFile(FNameOfFile);
+    FINPUTFILENAME := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     FModflowGrid := Model.Grid;
     FOptions := Model.ModflowPackages.ModPath;

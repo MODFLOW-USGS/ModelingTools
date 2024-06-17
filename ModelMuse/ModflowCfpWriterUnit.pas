@@ -84,7 +84,7 @@ type
     FUseCOC: Boolean;
     FShouldWriteCRCH: Boolean;
     FShouldWriteCOC: Boolean;
-    NameOfFile: string;
+//    NameOfFile: string;
     FTempFileNumber: Integer;
     FScreenObjects: T3DSparsePointerArray;
     procedure Evaluate;
@@ -1728,11 +1728,11 @@ begin
     Exit;
   end;
 
-  NameOfFile := FileName(AFileName);
+  FNameOfFile := FileName(AFileName);
   if ShouldWriteFile and not WritingTemplate then
   begin
     WriteToNameFile(StrCFP, Model.UnitNumbers.UnitNumber(StrCFP),
-      NameOfFile, foInput, Model);
+      FNameOfFile, foInput, Model);
   end;
 
 //  if ShouldWriteFile then
@@ -1747,8 +1747,8 @@ begin
 
   if ShouldWriteFile then
   begin
-    FInputFileName := NameOfFile;
-    OpenFile(NameOfFile);
+    FInputFileName := FNameOfFile;
+    OpenFile(FNameOfFile);
     try
       WriteDataSet0;
       WriteDataSet1;
@@ -1794,8 +1794,8 @@ begin
       CloseFile;
     end;
   end;
-  WriteCrchFile(NameOfFile);
-  WriteCocFile(NameOfFile);
+  WriteCrchFile(FNameOfFile);
+  WriteCocFile(FNameOfFile);
 end;
 
 function TModflowCfpWriter.WriteTransientBoundaryFile(ANode: TCfpNode): Integer;
@@ -1963,17 +1963,17 @@ begin
     end;
     if (NNODES > 0) or (NPIPES > 0) or (NTSAN > 0) or (NTSAT > 0) then
     begin
-      NameOfFile := ChangeFileExt(NameOfFile, '.coc');
-      OutDir := ExtractFileDir(NameOfFile);
+      FNameOfFile := ChangeFileExt(NameOfFile, '.coc');
+      OutDir := ExtractFileDir(FNameOfFile);
       OutDir := IncludeTrailingPathDelimiter(OutDir);
 
       if not WritingTemplate then
       begin
         WriteToNameFile(StrCOC, Model.UnitNumbers.UnitNumber(StrCOC),
-                NameOfFile, foInput, Model);
+                FNameOfFile, foInput, Model);
       end;
 
-      OpenFile(NameOfFile);
+      OpenFile(FNameOfFile);
       try
         // Data Set 0
         WriteCommentLine(File_Comment('COC'));
@@ -2119,15 +2119,15 @@ var
 begin
   if FCrchUsed and FShouldWriteCRCH then
   begin
-    NameOfFile := ChangeFileExt(NameOfFile, '.crch');
+    FNameOfFile := ChangeFileExt(NameOfFile, '.crch');
 
     if not WritingTemplate then
     begin
       WriteToNameFile(StrCRCH, Model.UnitNumbers.UnitNumber(StrCRCH),
-            NameOfFile, foInput, Model);
+            FNameOfFile, foInput, Model);
     end;
 
-    OpenFile(NameOfFile);
+    OpenFile(FNameOfFile);
     try
       StressPeriodCount := Model.ModflowFullStressPeriods.Count;
       for StressPeriodIndex := 0 to StressPeriodCount - 1 do

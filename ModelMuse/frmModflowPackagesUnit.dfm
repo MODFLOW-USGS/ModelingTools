@@ -26,7 +26,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 583
     Height = 513
-    ActivePage = jvspGwtCNC
+    ActivePage = jvspGwtSRC
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -91,11 +91,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             ExplicitHeight = 18
           end
           inherited btnDelete: TBitBtn
-            Left = 237
+            Left = 233
             Enabled = True
             TabOrder = 1
             OnClick = frameParameterDefinition_btnDeleteClick
-            ExplicitLeft = 237
+            ExplicitLeft = 233
           end
           inherited seNumberOfParameters: TJvSpinEdit
             Height = 26
@@ -256,12 +256,12 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited rdgOptions: TRbwDataGrid4
-          Width = 520
-          ExplicitWidth = 520
+          Width = 512
+          ExplicitWidth = 512
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -338,8 +338,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited cbSaveHeads: TCheckBox
           Width = 441
@@ -756,11 +756,11 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited memoComments: TMemo
           Left = 6
           Top = 58
-          Width = 494
+          Width = 486
           Height = 59
           ExplicitLeft = 6
           ExplicitTop = 58
-          ExplicitWidth = 494
+          ExplicitWidth = 486
           ExplicitHeight = 59
         end
         inherited rdePCGMaxOuter: TRbwDataEntry
@@ -946,9 +946,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
+          Width = 464
           Height = 124
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 124
         end
         inherited cbTabfiles: TCheckBox
@@ -1324,9 +1324,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 552
+          Width = 544
           Height = 81
-          ExplicitWidth = 552
+          ExplicitWidth = 544
           ExplicitHeight = 81
         end
         inherited pnLayerOption: TPanel
@@ -1348,8 +1348,8 @@ inherited frmModflowPackages: TfrmModflowPackages
             Caption = 'Time varying recharge layers'
           end
           inherited rgAssignmentMethod: TRadioGroup
-            Width = 552
-            ExplicitWidth = 552
+            Width = 544
+            ExplicitWidth = 544
           end
         end
         inherited rcSelectionController: TRbwController
@@ -1453,8 +1453,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited pnLayerOption: TPanel
           Width = 583
@@ -1572,8 +1572,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited pnLayerOption: TPanel
           Width = 583
@@ -1707,9 +1707,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
+          Width = 464
           Height = 366
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 366
         end
         inherited pnLayerOption: TPanel
@@ -1850,9 +1850,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
+          Width = 464
           Height = 223
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 223
         end
         inherited rdeTheta: TRbwDataEntry
@@ -2074,11 +2074,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited memoComments: TMemo
               Left = 10
-              Width = 472
+              Width = 464
               Height = 47
               Anchors = [akLeft, akTop, akRight, akBottom]
               ExplicitLeft = 10
-              ExplicitWidth = 472
+              ExplicitWidth = 464
               ExplicitHeight = 47
             end
             inherited cbSfrUnsatflow: TCheckBox95
@@ -2348,10 +2348,10 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
+          Width = 464
           Height = 66
           Anchors = [akLeft, akTop, akRight, akBottom]
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 66
         end
         inherited pnLayerOption: TPanel
@@ -2533,9 +2533,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
+          Width = 464
           Height = 142
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 142
         end
         inherited pcGMG: TJvPageControl
@@ -2627,12 +2627,12 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboGmgIoutgmg: TJvImageComboBox
               Left = 304
               Top = 168
-              Width = 4
+              Width = 0
               Height = 28
               ItemHeight = 22
               ExplicitLeft = 304
               ExplicitTop = 168
-              ExplicitWidth = 4
+              ExplicitWidth = 0
               ExplicitHeight = 28
             end
             inherited cbGmbIunitmhc: TCheckBox
@@ -2642,12 +2642,12 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited comboGmgIsm: TJvImageComboBox
               Left = 304
               Top = 139
-              Width = 4
+              Width = 0
               Height = 28
               ItemHeight = 22
               ExplicitLeft = 304
               ExplicitTop = 139
-              ExplicitWidth = 4
+              ExplicitWidth = 0
               ExplicitHeight = 28
             end
           end
@@ -2886,11 +2886,11 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited memoComments: TMemo
           Left = 19
           Top = 63
-          Width = 472
+          Width = 464
           Height = 109
           ExplicitLeft = 19
           ExplicitTop = 63
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 109
         end
         inherited rdeSipMxiter: TRbwDataEntry
@@ -3071,9 +3071,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
+          Width = 464
           Height = 109
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 109
         end
         inherited rdeDe4Itmx: TRbwDataEntry
@@ -3236,10 +3236,10 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Top = 63
-          Width = 472
+          Width = 464
           Height = 388
           ExplicitTop = 63
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 388
         end
         inherited rdeDryHead: TRbwDataEntry
@@ -3383,14 +3383,14 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 536
-          ExplicitWidth = 536
+          Width = 528
+          ExplicitWidth = 528
         end
         inherited pcModpath: TPageControl
-          Width = 549
+          Width = 541
           Height = 374
           ActivePage = frameModpath.tabOutputTimes
-          ExplicitWidth = 549
+          ExplicitWidth = 541
           ExplicitHeight = 374
           inherited tabResponse: TTabSheet
             ExplicitTop = 29
@@ -3687,7 +3687,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           end
           inherited tabOutputTimes: TTabSheet
             ExplicitTop = 29
-            ExplicitWidth = 541
+            ExplicitWidth = 533
             ExplicitHeight = 341
             inherited lblTimeMethod: TLabel
               Width = 315
@@ -4057,9 +4057,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 525
+          Width = 517
           Height = 287
-          ExplicitWidth = 525
+          ExplicitWidth = 517
           ExplicitHeight = 287
         end
         inherited comboPrintOption: TJvImageComboBox
@@ -4071,9 +4071,9 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited gbMnwiOptions: TGroupBox
           Top = 412
-          Width = 525
+          Width = 517
           ExplicitTop = 412
-          ExplicitWidth = 525
+          ExplicitWidth = 517
           inherited cbWellOutput: TCheckBox
             Width = 558
             ExplicitWidth = 558
@@ -4189,9 +4189,9 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Left = 8
-          Width = 481
+          Width = 473
           ExplicitLeft = 8
-          ExplicitWidth = 481
+          ExplicitWidth = 473
         end
         inherited pcSub: TPageControl
           Width = 583
@@ -4245,11 +4245,11 @@ inherited frmModflowPackages: TfrmModflowPackages
             inherited feReadRestart: TJvFilenameEdit
               Left = 2
               Top = 160
-              Width = 375
+              Width = 367
               Height = 26
               ExplicitLeft = 2
               ExplicitTop = 160
-              ExplicitWidth = 375
+              ExplicitWidth = 367
               ExplicitHeight = 26
             end
             inherited comboOutputChoice: TJvImageComboBox
@@ -4486,10 +4486,10 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Top = 79
-          Width = 472
+          Width = 464
           Height = 52
           ExplicitTop = 79
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 52
         end
         inherited pcSWT: TPageControl
@@ -4537,20 +4537,20 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             inherited gbIthk: TGroupBox
               Top = 0
-              Width = 1013
+              Width = 1005
               Height = 86
               ExplicitTop = 0
-              ExplicitWidth = 1013
+              ExplicitWidth = 1005
               ExplicitHeight = 86
               inherited rgIthkConstant: TRadioButton
-                Width = 1079
-                ExplicitWidth = 1079
+                Width = 1075
+                ExplicitWidth = 1075
               end
               inherited rbIthkVariable: TRadioButton
                 Top = 39
-                Width = 388
+                Width = 384
                 ExplicitTop = 39
-                ExplicitWidth = 388
+                ExplicitWidth = 384
               end
             end
             inherited comboOutputChoice: TJvImageComboBox
@@ -5412,9 +5412,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
+          Width = 464
           Height = 393
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 393
         end
         inherited rdeHYDNOH: TRbwDataEntry
@@ -5548,8 +5548,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited pcNWT: TPageControl
           Width = 583
@@ -6177,8 +6177,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited pcMt3d_Basic: TPageControl
           Width = 583
@@ -6391,8 +6391,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited spinMaxOuter: TJvSpinEdit
           Height = 26
@@ -6481,8 +6481,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited pcAdvection: TPageControl
           Top = 147
@@ -6974,8 +6974,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited PageControl1: TPageControl
           Top = 157
@@ -7025,10 +7025,10 @@ inherited frmModflowPackages: TfrmModflowPackages
               ExplicitHeight = 18
             end
             inherited rdgYieldCoefficient: TRbwDataGrid4
-              Width = 379
+              Width = 371
               Height = 202
               FixedCols = 0
-              ExplicitWidth = 379
+              ExplicitWidth = 371
               ExplicitHeight = 202
             end
             inherited cbInitialConcChoice: TCheckBox
@@ -7215,8 +7215,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited grpbxConcentrationObservations: TGroupBox
           inherited lblConcScaleFactor: TLabel
@@ -7340,10 +7340,10 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Top = 80
-          Width = 472
+          Width = 464
           Height = 71
           ExplicitTop = 80
-          ExplicitWidth = 472
+          ExplicitWidth = 464
           ExplicitHeight = 71
         end
         inherited pcControls: TPageControl
@@ -8444,8 +8444,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited pgcConduits: TPageControl
           Top = 134
@@ -8593,8 +8593,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited pcSWI: TPageControl
           Width = 583
@@ -8950,9 +8950,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 516
         end
         inherited memoComments: TMemo
-          Width = 302
+          Width = 294
           Height = 88
-          ExplicitWidth = 302
+          ExplicitWidth = 294
           ExplicitHeight = 88
         end
         inherited jvplSwr: TJvPageList
@@ -9681,7 +9681,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited lblByNodeFrequency: TLabel
-          Left = 397
+          Left = 389
           Width = 73
           Height = 18
           ExplicitLeft = 425
@@ -9689,7 +9689,7 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited lblQSumFrequency: TLabel
-          Left = 397
+          Left = 389
           Width = 73
           Height = 18
           ExplicitLeft = 425
@@ -9697,8 +9697,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited seMaxIterations: TJvSpinEdit
           Height = 26
@@ -9710,39 +9710,39 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 28
         end
         inherited fedWellFileName: TJvFilenameEdit
-          Width = 302
+          Width = 294
           Height = 26
-          ExplicitWidth = 302
+          ExplicitWidth = 294
           ExplicitHeight = 26
         end
         inherited fedByNode: TJvFilenameEdit
           Top = 351
-          Width = 375
+          Width = 367
           Height = 26
           ExplicitTop = 351
-          ExplicitWidth = 375
+          ExplicitWidth = 367
           ExplicitHeight = 26
         end
         inherited fedQSum: TJvFilenameEdit
-          Width = 375
+          Width = 367
           Height = 26
-          ExplicitWidth = 375
+          ExplicitWidth = 367
           ExplicitHeight = 26
         end
         inherited comboByNodeFrequency: TJvImageComboBox
-          Left = 397
+          Left = 389
           Top = 348
           Height = 28
           ItemHeight = 22
-          ExplicitLeft = 397
+          ExplicitLeft = 389
           ExplicitTop = 348
           ExplicitHeight = 28
         end
         inherited comboQSumFrequency: TJvImageComboBox
-          Left = 397
+          Left = 389
           Height = 28
           ItemHeight = 22
-          ExplicitLeft = 397
+          ExplicitLeft = 389
           ExplicitHeight = 28
         end
         inherited rcSelectionController: TRbwController
@@ -9809,23 +9809,23 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 492
-          ExplicitWidth = 492
+          Width = 484
+          ExplicitWidth = 484
         end
         inherited rdgOptions: TRbwDataGrid4
           Top = 170
-          Width = 492
+          Width = 484
           Height = 337
           ExplicitTop = 170
-          ExplicitWidth = 492
+          ExplicitWidth = 484
           ExplicitHeight = 337
         end
         inherited comboInterblockMethod: TJvImageComboBox
-          Width = 302
+          Width = 294
           Height = 28
           DroppedWidth = 564
           ItemHeight = 22
-          ExplicitWidth = 302
+          ExplicitWidth = 294
           ExplicitHeight = 28
         end
         inherited rcSelectionController: TRbwController
@@ -9883,8 +9883,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited comboStorageChoice: TJvImageComboBox
           Height = 28
@@ -9937,9 +9937,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Top = 63
-          Width = 472
           ExplicitTop = 63
-          ExplicitWidth = 472
         end
         inherited pgcControls: TPageControl
           Top = 102
@@ -10259,8 +10257,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 36
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited seMaxIterations: TJvSpinEdit
           Height = 26
@@ -10360,8 +10358,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 517
-          ExplicitWidth = 517
+          Width = 509
+          ExplicitWidth = 509
         end
         inherited cbIncludeWellStorage: TCheckBox
           Width = 553
@@ -10502,8 +10500,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited comboOutputFormat: TComboBox
           Height = 26
@@ -10576,8 +10574,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited seMaxIterations: TJvSpinEdit
           Height = 26
@@ -10725,8 +10723,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 249
-          ExplicitWidth = 245
+          Width = 241
+          ExplicitWidth = 241
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -10892,9 +10890,9 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Top = 63
-          Width = 472
+          Width = 464
           ExplicitTop = 63
-          ExplicitWidth = 472
+          ExplicitWidth = 464
         end
         inherited seMaxIterations: TJvSpinEdit
           Height = 26
@@ -10980,8 +10978,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited comboForce: TComboBox
           Width = 565
@@ -11043,8 +11041,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited pcCsub: TPageControl
           Width = 583
@@ -11296,11 +11294,11 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Width = 552
-          ExplicitWidth = 552
+          ExplicitWidth = 548
         end
         inherited rgScheme: TRadioGroup
           Width = 552
-          ExplicitWidth = 552
+          ExplicitWidth = 548
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -11403,6 +11401,9 @@ inherited frmModflowPackages: TfrmModflowPackages
           Width = 552
           ExplicitWidth = 552
         end
+        inherited cbUseMultiplierMODFLOW6: TCheckBox
+          Caption = 'Use Multiplier'
+        end
         inherited rcSelectionController: TRbwController
           ControlList = <
             item
@@ -11454,6 +11455,9 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited memoComments: TMemo
           Width = 552
           ExplicitWidth = 552
+        end
+        inherited cbUseMultiplierMODFLOW6: TCheckBox
+          Caption = 'Use Multiplier'
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -11687,8 +11691,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 583
@@ -11938,8 +11942,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited rdgSoils: TRbwDataGrid4
           Width = 583
@@ -12005,8 +12009,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited rdgClimate: TRbwDataGrid4
           Top = 198
@@ -12064,9 +12068,9 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited memoComments: TMemo
           Top = 63
-          Width = 472
+          Width = 464
           ExplicitTop = 63
-          ExplicitWidth = 472
+          ExplicitWidth = 464
         end
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 583
@@ -12187,8 +12191,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited clbPrint: TCheckListBox
           ItemHeight = 18
@@ -12329,8 +12333,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 583
@@ -12445,8 +12449,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited cpnlgrp1: TCategoryPanelGroup
           Width = 583
@@ -12544,8 +12548,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited cbSpecifyDensity: TCheckBox
           Top = 157
@@ -12652,8 +12656,8 @@ inherited frmModflowPackages: TfrmModflowPackages
           ExplicitHeight = 18
         end
         inherited memoComments: TMemo
-          Width = 472
-          ExplicitWidth = 472
+          Width = 464
+          ExplicitWidth = 464
         end
         inherited cbSpecifyViscosity: TCheckBox
           OnClick = framePkgViscositycbSpecifyViscosityClick
@@ -12825,7 +12829,7 @@ inherited frmModflowPackages: TfrmModflowPackages
       770
       41)
     object btnHelp: TBitBtn
-      Left = 355
+      Left = 347
       Top = 0
       Width = 108
       Height = 33
@@ -12834,10 +12838,10 @@ inherited frmModflowPackages: TfrmModflowPackages
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 351
+      ExplicitLeft = 343
     end
     object btnOK: TBitBtn
-      Left = 469
+      Left = 461
       Top = 2
       Width = 108
       Height = 33
@@ -12846,10 +12850,10 @@ inherited frmModflowPackages: TfrmModflowPackages
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 465
+      ExplicitLeft = 457
     end
     object btnCancel: TBitBtn
-      Left = 583
+      Left = 575
       Top = 0
       Width = 108
       Height = 33
@@ -12858,7 +12862,7 @@ inherited frmModflowPackages: TfrmModflowPackages
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnCancelClick
-      ExplicitLeft = 579
+      ExplicitLeft = 571
     end
   end
   object pnlLeft: TPanel

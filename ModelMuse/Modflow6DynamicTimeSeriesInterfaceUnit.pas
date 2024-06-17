@@ -74,6 +74,11 @@ type
     function GetStaticTimeSeries(Location: TTimeSeriesLocation): IMf6TimeSeries;
     property StaticTimeSeries[Location: TTimeSeriesLocation]: IMf6TimeSeries
       read GetStaticTimeSeries;
+
+    procedure SetScaleFactorFormula(const Value: string);
+    function GetScaleFactorFormula: string;
+    property ScaleFactorFormula: string read GetScaleFactorFormula write SetScaleFactorFormula;
+
   end;
 
   // @name is the collection that contains @link(IDynamicTimeSeriesItem);

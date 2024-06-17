@@ -11936,6 +11936,10 @@ begin
     for FarmIndex := 0 to Model.Farms.Count - 1 do
     begin
       AFarm := Model.Farms[FarmIndex];
+      if AFarm.FarmName = '' then
+      begin
+        AFarm.FarmName := Format('Farm%d', [FarmIndex+1]);
+      end;
       FarmNames[AFarm.FarmId] :=' ' + ReplaceStr(AFarm.FarmName, ' ', '_')
     end;
     for FarmIndex := 1 to Length(FarmNames) - 1 do
@@ -11951,6 +11955,10 @@ begin
     begin
       AFarm := Model.Farms[FarmIndex];
       WriteInteger(AFarm.FarmId);
+      if AFarm.FarmName = '' then
+      begin
+        AFarm.FarmName := Format('Farm%d', [FarmIndex+1]);
+      end;
       WriteString(' ' + ReplaceStr(AFarm.FarmName, ' ', '_'));
       NewLine;
     end;

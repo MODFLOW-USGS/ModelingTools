@@ -427,7 +427,8 @@ begin
   for TimeIndex := 0 to Values.Count - 1 do
   begin
     RchRateList := Values[TimeIndex];
-    MAXBOUND := Max(MAXBOUND, CountCellsMF6(RchRateList, FRchPackage.LayerOption, FRchPackage.AssignmentMethod));
+    MAXBOUND := Max(MAXBOUND, CountCellsMF6(RchRateList, FRchPackage.LayerOption,
+      FRchPackage.AssignmentMethod));
   end;
 
   CountParametersAndParameterCells(NPRCH, MXL);

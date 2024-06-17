@@ -68,8 +68,8 @@ begin
 end;
 
 procedure TMt3dmsGcgWriter.WriteFile(const AFileName: string);
-var
-  NameOfFile: string;
+//var
+//  NameOfFile: string;
 begin
   if not Model.ModflowPackages.Mt3dmsGCGSolver.IsSelected then
   begin
@@ -78,7 +78,7 @@ begin
   // remove errors and warnings
 //  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrFileForTheInitial);
 
-  NameOfFile := FileName(AFileName);
+  FNameOfFile := FileName(AFileName);
   // PackageGeneratedExternally needs to be updated for MT3DMS
   if Model.PackageGeneratedExternally(StrGCG) then
   begin
@@ -86,10 +86,10 @@ begin
   end;
 
   // write to MT3DMS or MT3D-USGS name file.
-  WriteToMt3dMsNameFile(StrGCG, Mt3dGcg, NameOfFile, foInput, Model);
+  WriteToMt3dMsNameFile(StrGCG, Mt3dGcg, FNameOfFile, foInput, Model);
 
-  FInputFileName := NameOfFile;
-  OpenFile(NameOfFile);
+  FInputFileName := FNameOfFile;
+  OpenFile(FNameOfFile);
   try
     frmProgressMM.AddMessage(StrWritingMT3DMSGcgP);
 

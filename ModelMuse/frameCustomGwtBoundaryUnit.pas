@@ -245,12 +245,7 @@ var
   BoundaryUsed: boolean;
   NewBoundary: TCncBoundary;
   RowIndex: Integer;
-  // ATime: double;
   CncItem: TCncItem;
-//  FirstTime: Double;
-//  StressPeriods: TModflowStressPeriods;
-//  LastTime: Double;
-  // PriorItem: TCncItem;
   StartTime: Double;
   EndTime: Double;
 begin
@@ -259,24 +254,27 @@ begin
     if SetAll or not ClearAll then
     begin
       NewBoundary := TCncBoundary.Create(nil, nil);
-//      StressPeriods := frmGoPhast.PhastModel.ModflowStressPeriods;
-      // FirstTime := StressPeriods.First.StartTime;
-      // LastTime :=  StressPeriods.Last.EndTime;
       for RowIndex := 1 to rdgModflowBoundary.RowCount - 1 do
       begin
         if TryStrToFloat(rdgModflowBoundary.Cells[Ord(ccStartTime), RowIndex],
           StartTime) and TryStrToFloat(rdgModflowBoundary.Cells[Ord(ccEndTime),
           RowIndex], EndTime) and
-          (rdgModflowBoundary.Cells[Ord(ccConcentration), RowIndex] <> '') and
-          (rdgModflowBoundary.Cells[Ord(ccMultiplier), RowIndex] <> '')  then
+          (rdgModflowBoundary.Cells[Ord(ccConcentration), RowIndex] <> '') then
         begin
           CncItem := NewBoundary.Values.Add as TCncItem;
           CncItem.StartTime := StartTime;
           CncItem.EndTime := EndTime;
           CncItem.Concentration := rdgModflowBoundary.Cells
             [Ord(ccConcentration), RowIndex];
-          CncItem.Multiplier := rdgModflowBoundary.Cells
-            [Ord(ccMultiplier), RowIndex];
+          if rdgModflowBoundary.Cells[Ord(ccMultiplier), RowIndex] <> '' then
+          begin
+            CncItem.Multiplier := rdgModflowBoundary.Cells
+              [Ord(ccMultiplier), RowIndex];
+          end
+          else
+          begin
+            CncItem.Multiplier := '1';
+          end;
         end;
       end;
       if NewBoundary.Values.Count = 0 then

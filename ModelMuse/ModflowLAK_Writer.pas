@@ -440,7 +440,7 @@ begin
           StrNoValueAssigned, 'BDLKNC');
       end;
     end;
-    WritePestZones(LakeLeakance, FInputFileName, StrBDLK, 'BDK');
+    WritePestZones(LakeLeakance, FInputFileName, StrBDLK, '', 'BDK');
   end
   else
   begin
