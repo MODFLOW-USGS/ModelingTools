@@ -85,7 +85,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="designide.dcp"/>
-        <DCCReference Include="XBasePkg11_2.dcp"/>
+        <DCCReference Include="XBasePkg11_3.dcp"/>
         <DCCReference Include="XBase1PropEd.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

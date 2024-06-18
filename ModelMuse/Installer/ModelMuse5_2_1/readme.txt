@@ -171,7 +171,7 @@ do so.
 3. If you are compiling the components from source code, you need to add the 
 directories containing the source code to the Library path for both the 
 Windows 32 and Windows 64 bit platforms. Select "Tools|Options"
-then look in "Environment Options|Delphi Options|Library".
+then look in "Language|Delphi|Library".
 4. If you are compiling the components from source code and the components 
 are separated into run-time and design-time packages, you build the runtime 
 package and then build and install the design-time package.

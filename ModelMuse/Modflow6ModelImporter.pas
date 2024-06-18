@@ -11267,7 +11267,6 @@ begin
   result := True;
   Model := frmGophast.PhastModel;
   if (CellId.Layer-1 < 0) or (CellId.Layer-1 > Model.LayerCount)
-    or (CellId.Row-1 < 0) or (CellId.Row-1 > Model.RowCount-1)
     or (CellId.Column-1 < 0) or (CellId.Column-1 > Model.ColumnCount-1)
     then
   begin
@@ -11282,6 +11281,11 @@ begin
   end
   else
   begin
+    if (CellId.Row-1 < 0) or (CellId.Row-1 > Model.RowCount-1) then
+    begin
+      result := False;
+      Exit;
+    end;
     LocalGrid := Model.ModflowGrid;
     Top := LocalGrid.CellElevation[ZeroBasedID(CellId.Layer-1, CellId.Row-1, CellId.Column-1)];
     Bottom := LocalGrid.CellElevation[ZeroBasedID(CellId.Layer, CellId.Row-1, CellId.Column-1)];
@@ -13755,6 +13759,10 @@ begin
           break;
         end;
       end;
+      if not Uniform then
+      begin
+        break;
+      end;
     end;
     DataArrayName := Format('Imported_Active_%d', [LayerIndex]);
     ActiveFormula := ActiveFormula + ',' + DataArrayName;
@@ -13974,6 +13982,13 @@ type
   TPeriodSettings = TObjectList<TNumberedItemLists>;
   TSftPeriodSettings = TObjectList<TPeriodSettings>;
 
+  TSfrOrder = record
+    rno: Integer;
+    ScreenObject: TScreenObject;
+  end;
+
+  TSfrOrderList = TList<TSfrOrder>;
+
 procedure TModflow6Importer.ImportSfr(Package: TPackage;
   TransportModels: TModelList; MvrPackage: TPackage);
 var
@@ -14011,7 +14026,8 @@ var
   ReachIndex: Integer;
   ScreenObjectDictionary: TDictionary<Integer, TScreenObject>;
   AScreenObject: TScreenObject;
-  SfrScreenObjects: TScreenObjectList;
+  SfrScreenObjects: TSfrOrderList;
+  SfrOrder: TSfrOrder;
   ObjectCount: Integer;
   CellIndex: Integer;
   BoundaryValues: TMf6BoundaryValueArray;
@@ -14407,7 +14423,6 @@ var
 
     result := TScreenObject.CreateWithViewDirection(
       Model, vdTop, UndoCreateScreenObject, False);
-    FNewScreenObjects.Add(result);
     NewName := ValidName(Format('Imported_%s_Sfr_%d',
       [Package.PackageName, FirstReachNo]));
     result.Name := NewName;
@@ -15104,7 +15119,7 @@ begin
   SpcMaps := TimeSeriesMaps.Create;
   SpcDictionaries := TSpcDictionaries.Create;
   SpcPeriodSettingsList := TListOfSpcTimeItemLists.Create;
-  SfrScreenObjects := TScreenObjectList.Create;
+  SfrScreenObjects := TSfrOrderList.Create;
   try
     TransportAuxNames.CaseSensitive := False;
 
@@ -16067,7 +16082,9 @@ begin
               end;
 
               AScreenObject := CreateScreenObject(AReachList);
-              SfrScreenObjects.Add(AScreenObject);
+              SfrOrder.ScreenObject := AScreenObject;
+              SfrOrder.rno := AReachList.First.PackageData.rno;
+              SfrScreenObjects.Add(SfrOrder);
               for ReachIndex := 0 to AReachList.Count - 1 do
               begin
                 SfrReachInfo := AReachList[ReachIndex];
@@ -16226,9 +16243,16 @@ begin
 
     StartTime := Model.ModflowStressPeriods.First.StartTime;
     EndTime := Model.ModflowStressPeriods.Last.EndTime;
+    SfrScreenObjects.Sort(
+      TComparer<TSfrOrder>.Construct(
+        function(const Left, Right: TSfrOrder): Integer
+        begin
+          Result := Left.rno -Right.rno;
+        end)
+      );
     for var ScreenObjectIndex := 0 to SfrScreenObjects.Count - 1 do
     begin
-      AScreenObject := SfrScreenObjects[ScreenObjectIndex];
+      AScreenObject := SfrScreenObjects[ScreenObjectIndex].ScreenObject;
       Assert(AScreenObject.ModflowSfr6Boundary <> nil);
       if AScreenObject.ModflowSfr6Boundary.Values.Count = 0 then
       begin
@@ -16245,6 +16269,8 @@ begin
         SfrItem.Stage := '0';
         SfrItem.Stage := '0';
       end;
+      FNewScreenObjects.Add(AScreenObject);
+
     end;
 
     // Find singlely connected reaches.
@@ -18170,6 +18196,10 @@ var
           if CellTopAndBottom(UzfDataItem.PackageData.cellid, Top, Bottom) then
           begin
             AScreenObject.Modflow6Obs.UzfObsDepthFraction := 1-(Top-Depth-Bottom)/(Top-Bottom);
+          end
+          else
+          begin
+            Assert(False);
           end;
         end
         else

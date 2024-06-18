@@ -307,7 +307,7 @@ procedure Register;
 
 implementation
 
-{ $R QZoomBox2.dcr}
+{$R ZoomBox2.dcr}
 
 const
   // When the magnification gets outside the range or

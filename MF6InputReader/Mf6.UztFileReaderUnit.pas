@@ -635,6 +635,10 @@ begin
       begin
         if TryStrToInt(FSplitter[2], IPER) then
         begin
+          if IPER > NPER then
+          begin
+            break;
+          end;
           APeriod := TUztPeriod.Create(FPackageType);
           FPeriods.Add(APeriod);
           APeriod.IPer := IPER;

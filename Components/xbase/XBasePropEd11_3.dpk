@@ -30,7 +30,7 @@ package XBasePropEd11_3;
 
 requires
   designide,
-  XBasePkg11_2;
+  XBasePkg11_3;
 
 contains
   XBase1PropEd in 'XBase1PropEd.pas';

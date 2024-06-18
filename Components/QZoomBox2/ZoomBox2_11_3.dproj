@@ -93,7 +93,7 @@
         <DCCReference Include="ZoomBox2.dcr"/>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
-        <DCCReference Include="GR32_DSGN_RS11_1.dcp"/>
+        <DCCReference Include="GR32_DSGN_RS11_3.dcp"/>
         <DCCReference Include="ZoomBox2.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

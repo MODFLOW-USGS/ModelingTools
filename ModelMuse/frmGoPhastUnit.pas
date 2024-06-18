@@ -563,6 +563,8 @@ type
     acImportModflow6Model: TAction;
     miImportMODFLOW6Model: TMenuItem;
     RunMODFLOWOWHMV21: TMenuItem;
+    acReverseObjectOrder: TAction;
+    ReverseOrderofSelectedObjects1: TMenuItem;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -772,6 +774,7 @@ type
     procedure acFarmIrrigationTypesExecute(Sender: TObject);
     procedure acImportSurferGridFilesExecute(Sender: TObject);
     procedure acImportModflow6ModelExecute(Sender: TObject);
+    procedure acReverseObjectOrderExecute(Sender: TObject);
   private
     FDefaultCreateArchive: TDefaultCreateArchive;
     FCreateArchive: Boolean;
@@ -5911,6 +5914,12 @@ procedure TfrmGoPhast.acTimeSeriesExecute(Sender: TObject);
 begin
   inherited;
   ShowAForm(TfrmTimeSeries);
+end;
+
+procedure TfrmGoPhast.acReverseObjectOrderExecute(Sender: TObject);
+begin
+  inherited;
+  ReverseObjectOrder;
 end;
 
 procedure TfrmGoPhast.acSutra40ActiveExecute(Sender: TObject);
@@ -14272,7 +14281,11 @@ procedure TfrmGoPhast.acImportModflow6ModelExecute(Sender: TObject);
 begin
   inherited;
 {$IFDEF ImportMF6}
-  ShowAForm(TfrmImportModflow6);
+  if ShowAForm(TfrmImportModflow6) = mrCancel then
+  begin
+    Application.Terminate;
+    Exit;
+  end;
   if frmImportWarnings <> nil then
   begin
     frmImportWarnings.Show;

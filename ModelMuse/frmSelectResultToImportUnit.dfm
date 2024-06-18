@@ -4,6 +4,8 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   Caption = ' Select Model Results to Import'
   ClientHeight = 457
   ClientWidth = 627
+  ExplicitLeft = 3
+  ExplicitTop = 3
   ExplicitWidth = 639
   ExplicitHeight = 495
   TextHeight = 18
@@ -35,7 +37,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     ExplicitTop = 280
   end
   object btnHelp: TBitBtn
-    Left = 287
+    Left = 283
     Top = 402
     Width = 91
     Height = 47
@@ -44,11 +46,11 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     NumGlyphs = 2
     TabOrder = 7
     OnClick = btnHelpClick
-    ExplicitLeft = 283
+    ExplicitLeft = 279
     ExplicitTop = 401
   end
   object btnOK: TBitBtn
-    Left = 384
+    Left = 380
     Top = 402
     Width = 91
     Height = 47
@@ -58,11 +60,11 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     NumGlyphs = 2
     TabOrder = 8
     OnClick = btnOKClick
-    ExplicitLeft = 380
+    ExplicitLeft = 376
     ExplicitTop = 401
   end
   object btnCancel: TBitBtn
-    Left = 481
+    Left = 477
     Top = 402
     Width = 91
     Height = 47
@@ -70,19 +72,19 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 9
-    ExplicitLeft = 477
+    ExplicitLeft = 473
     ExplicitTop = 401
   end
   object comboColorGrid: TComboBox
     Left = 8
     Top = 370
-    Width = 563
+    Width = 559
     Height = 26
     Style = csDropDownList
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 4
     ExplicitTop = 369
-    ExplicitWidth = 559
+    ExplicitWidth = 555
   end
   object btnSelectAll: TButton
     Left = 8
@@ -111,7 +113,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
   object rgDisplayChoice: TRadioGroup
     Left = 8
     Top = 302
-    Width = 563
+    Width = 559
     Height = 42
     Anchors = [akLeft, akRight, akBottom]
     Caption = 'Display choice'
@@ -123,7 +125,7 @@ inherited frmSelectResultToImport: TfrmSelectResultToImport
       'Neither')
     TabOrder = 3
     ExplicitTop = 301
-    ExplicitWidth = 559
+    ExplicitWidth = 555
   end
   object pnlSelections: TPanel
     AlignWithMargins = True

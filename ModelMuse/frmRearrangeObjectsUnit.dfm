@@ -23,7 +23,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       428
       99)
     object btnCancel: TBitBtn
-      Left = 325
+      Left = 321
       Top = 55
       Width = 91
       Height = 33
@@ -31,10 +31,10 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 321
+      ExplicitLeft = 317
     end
     object btnOK: TBitBtn
-      Left = 228
+      Left = 224
       Top = 55
       Width = 91
       Height = 33
@@ -43,10 +43,10 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 224
+      ExplicitLeft = 220
     end
     object btnHelp: TBitBtn
-      Left = 131
+      Left = 127
       Top = 55
       Width = 91
       Height = 33
@@ -55,12 +55,12 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 127
+      ExplicitLeft = 123
     end
     object rgShow: TRadioGroup
       Left = 8
       Top = 6
-      Width = 408
+      Width = 404
       Height = 43
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Show'
@@ -72,7 +72,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
         'Selected')
       TabOrder = 0
       OnClick = rgShowClick
-      ExplicitWidth = 404
+      ExplicitWidth = 400
     end
   end
   object pnlInstructions: TPanel
@@ -90,7 +90,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
     object lblInstructions: TLabel
       Left = 8
       Top = 0
-      Width = 366
+      Width = 362
       Height = 90
       Anchors = [akLeft, akTop, akRight]
       Caption = 

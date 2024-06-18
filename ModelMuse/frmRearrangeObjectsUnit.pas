@@ -87,10 +87,12 @@ type
     { Public declarations }
   end;
 
+procedure ReverseObjectOrder;
+
 implementation
 
 uses frmGoPhastUnit, ScreenObjectUnit, CursorsFoiledAgain, System.Contnrs,
-  System.Math;
+  System.Math, System.Generics.Collections;
 
 resourcestring
   StrObjects = 'Objects';
@@ -104,6 +106,8 @@ type
     NewName: string;
   end;
 
+  TObjectOrderList = TObjectList<TObjectOrder>;
+
 function CompareObjectOrders (Item1, Item2: Pointer): Integer;
 var
   Order1, Order2: TObjectOrder;
@@ -113,6 +117,87 @@ begin
   result := Order1.Order - Order2.Order;
 end;
 
+
+procedure ReverseObjectOrder;
+var
+  OriginalOrder: TObjectOrderList;
+  NewOrder: TObjectOrderList;
+  SelectedOrder: TObjectOrderList;
+  AScreenObject: TScreenObject;
+  AnOrder: TObjectOrder;
+  EndIndex: Integer;
+  Order1:TObjectOrder;
+  Order2:TObjectOrder;
+  Temp: Integer;
+  Undo: TUndoReverseObjectOrder;
+begin
+  OriginalOrder := TObjectOrderList.Create;
+  NewOrder := TObjectOrderList.Create;
+  SelectedOrder := TObjectOrderList.Create;
+  try
+    NewOrder.OwnsObjects := False;
+    SelectedOrder.OwnsObjects := False;
+    for var Index := 0 to frmGoPhast.PhastModel.ScreenObjectCount - 1 do
+    begin
+      AScreenObject := frmGoPhast.PhastModel.ScreenObjects[Index];
+      AnOrder := TObjectOrder.Create;
+      AnOrder.ScreenObject := AScreenObject;
+      AnOrder.Order := Index;
+      AnOrder.NewName := AScreenObject.Name;
+      OriginalOrder.Add(AnOrder);
+      if AScreenObject.Selected then
+      begin
+        SelectedOrder.Add(AnOrder);
+      end;
+      NewOrder.Add(AnOrder);
+    end;
+
+    EndIndex := SelectedOrder.Count - 1;
+    for var Index := 0 to SelectedOrder.Count - 1 do
+    begin
+      if EndIndex <= Index then
+      begin
+        break;
+      end;
+      Order1 := SelectedOrder[Index];
+      Order2 := SelectedOrder[EndIndex];
+
+      NewOrder[Order1.Order] := Order2;
+      NewOrder[Order2.Order] := Order1;
+      Temp := Order1.Order;
+      Order1.Order := Order2.Order;
+      Order2.Order := Temp;
+
+      Dec(EndIndex);
+    end;
+
+
+    Undo := TUndoReverseObjectOrder.Create;
+    try
+      // store the screen objects in the Undo object.
+      for var Index := 0 to NewOrder.Count - 1 do
+      begin
+        AnOrder := NewOrder.Items[Index];
+        Assert(AnOrder.Order = Index);
+        Undo.FNewList.Add(AnOrder.ScreenObject);
+        Undo.FNewNames.Add(AnOrder.ScreenObject.Name);
+      end;
+      // Record the selected objects.
+      Undo.SetPostSelection;
+    except
+      Undo.Free;
+      raise;
+    end;
+    // Perform the action.
+    frmGoPhast.UndoStack.Submit(Undo);
+
+  finally
+    SelectedOrder.Free;
+    OriginalOrder.Free;
+//    NewOrder.OwnsObjects := True;
+    NewOrder.Free;
+  end;
+end;
 
 procedure TfrmRearrangeObjects.FormCreate(Sender: TObject);
 begin
@@ -236,7 +321,6 @@ begin
       for Index := 0 to NewOrder.Count - 1 do
       begin
         ObjectOrder := NewOrder.Items[Index] as TObjectOrder;
-        AScreenObject := ObjectOrder.ScreenObject;
         Undo.FNewList.Add(AScreenObject);
 //        if AScreenObject.Deleted then
 //        begin

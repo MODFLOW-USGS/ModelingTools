@@ -4,7 +4,7 @@ inherited frmGoPhast: TfrmGoPhast
   HelpType = htKeyword
   HelpKeyword = 'Main_Window'
   Caption = 'GoPhast'
-  ClientHeight = 560
+  ClientHeight = 555
   ClientWidth = 776
   KeyPreview = True
   Menu = mmMainMenu
@@ -17,11 +17,11 @@ inherited frmGoPhast: TfrmGoPhast
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
   ExplicitWidth = 788
-  ExplicitHeight = 618
+  ExplicitHeight = 613
   TextHeight = 18
   object splitHoriz: TJvNetscapeSplitter
     Left = 0
-    Top = 389
+    Top = 384
     Width = 776
     Height = 10
     Cursor = crVSplit
@@ -39,7 +39,7 @@ inherited frmGoPhast: TfrmGoPhast
     Left = 0
     Top = 132
     Width = 776
-    Height = 257
+    Height = 252
     Align = alClient
     BevelOuter = bvNone
     ParentColor = True
@@ -47,7 +47,7 @@ inherited frmGoPhast: TfrmGoPhast
     object splitVertTop: TJvNetscapeSplitter
       Left = 537
       Top = 0
-      Height = 257
+      Height = 252
       Hint = 'Click and drag to resize the windows.'
       Align = alRight
       MinSize = 1
@@ -63,14 +63,14 @@ inherited frmGoPhast: TfrmGoPhast
       Left = 0
       Top = 0
       Width = 537
-      Height = 257
+      Height = 252
       Align = alClient
       TabOrder = 0
       TabStop = True
       ExplicitWidth = 537
-      ExplicitHeight = 257
+      ExplicitHeight = 252
       inherited rulVertical: TRbwRuler
-        Height = 203
+        Height = 198
         RulerPrecision = 7
         ExplicitTop = 39
         ExplicitHeight = 173
@@ -88,17 +88,17 @@ inherited frmGoPhast: TfrmGoPhast
       end
       inherited ZoomBox: TQRbwZoomBox2
         Width = 488
-        Height = 203
+        Height = 198
         Image32.Left = 1
         Image32.Top = 1
         Image32.Width = 486
-        Image32.Height = 201
+        Image32.Height = 196
         Image32.Align = alClient
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 486
-        Image32.ExplicitHeight = 201
+        Image32.ExplicitHeight = 196
         ExplicitWidth = 484
-        ExplicitHeight = 202
+        ExplicitHeight = 197
       end
       inherited OrderMenu: TPopupMenu
         Left = 80
@@ -109,16 +109,16 @@ inherited frmGoPhast: TfrmGoPhast
       Left = 547
       Top = 0
       Width = 229
-      Height = 257
+      Height = 252
       Align = alRight
       TabOrder = 1
       TabStop = True
       ExplicitLeft = 547
       ExplicitWidth = 229
-      ExplicitHeight = 257
+      ExplicitHeight = 252
       inherited rulVertical: TRbwRuler
         Left = 180
-        Height = 203
+        Height = 198
         Align = alRight
         RulerPosition = rpRight
         RulerPrecision = 7
@@ -153,20 +153,20 @@ inherited frmGoPhast: TfrmGoPhast
       inherited ZoomBox: TQRbwZoomBox2
         Left = 0
         Width = 180
-        Height = 203
+        Height = 198
         ExaggerationDirection = edHorizontal
         HorizontalDirection = hdLeft
         Image32.Left = 1
         Image32.Top = 1
         Image32.Width = 178
-        Image32.Height = 201
+        Image32.Height = 196
         Image32.Align = alClient
         Image32.ExplicitTop = 1
         Image32.ExplicitWidth = 178
-        Image32.ExplicitHeight = 201
+        Image32.ExplicitHeight = 196
         ExplicitLeft = 0
         ExplicitWidth = 180
-        ExplicitHeight = 202
+        ExplicitHeight = 197
       end
       inherited OrderMenu: TPopupMenu
         Left = 48
@@ -176,7 +176,7 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 399
+    Top = 394
     Width = 776
     Height = 133
     Align = alBottom
@@ -285,7 +285,7 @@ inherited frmGoPhast: TfrmGoPhast
   end
   object sbMain: TStatusBar
     Left = 0
-    Top = 532
+    Top = 527
     Width = 776
     Height = 28
     Hint = 'Drag with the mouse to resize status bar panels'
@@ -308,7 +308,7 @@ inherited frmGoPhast: TfrmGoPhast
     OnMouseMove = sbMainMouseMove
     OnMouseUp = sbMainMouseUp
     OnDrawPanel = sbMainDrawPanel
-    ExplicitTop = 531
+    ExplicitTop = 526
     ExplicitWidth = 772
   end
   object cbControlBar: TControlBar
@@ -1813,6 +1813,9 @@ inherited frmGoPhast: TfrmGoPhast
         end
         object miAnonymizeObjects: TMenuItem
           Action = acAnonymizeObjects
+        end
+        object ReverseOrderofSelectedObjects1: TMenuItem
+          Action = acReverseObjectOrder
         end
       end
       object N1: TMenuItem
@@ -3779,6 +3782,11 @@ inherited frmGoPhast: TfrmGoPhast
       Category = 'File'
       Caption = 'MODFLOW 6 Model'
       OnExecute = acImportModflow6ModelExecute
+    end
+    object acReverseObjectOrder: TAction
+      Category = 'Object'
+      Caption = 'Reverse Order of Selected Objects'
+      OnExecute = acReverseObjectOrderExecute
     end
   end
   object ilDisabledImageList: TImageList

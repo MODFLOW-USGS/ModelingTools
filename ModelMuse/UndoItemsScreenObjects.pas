@@ -611,6 +611,13 @@ type
     destructor Destroy; override;
   end;
 
+  TUndoReverseObjectOrder = class(TUndoRearrangeScreenObjects)
+  protected
+    // @name describes what this @classname does.  It is used in menu captions
+    // and hints.
+    function Description: string; override;
+  end;
+
   {@abstract(@name is used to show or hide @link(TScreenObject)s.)}
   TUndoShowHideScreenObject = class(TUndoChangeSelection)
   protected
@@ -1048,6 +1055,7 @@ resourcestring
   StrNoDelayInterbedss = 'NoDelayInterbeds_%s';
   StrDelayInterbed0s = 'DelayInterbed_%0:s_%1:s';
   StrWaterTableInterbeds = 'WaterTableInterbeds_%s';
+  StrReverseOrderOfSel = 'reverse order of selected objects';
 
 { TCustomUpdateScreenObjectDisplayUndo }
 
@@ -6457,6 +6465,13 @@ end;
 //  inherited;
 //end;
 //
+{ TUndoReverseObjectOrder }
+
+function TUndoReverseObjectOrder.Description: string;
+begin
+  result := StrReverseOrderOfSel;
+end;
+
 end.
 
 
