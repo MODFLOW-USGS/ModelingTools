@@ -321,6 +321,7 @@ begin
       for Index := 0 to NewOrder.Count - 1 do
       begin
         ObjectOrder := NewOrder.Items[Index] as TObjectOrder;
+        AScreenObject := ObjectOrder.ScreenObject;
         Undo.FNewList.Add(AScreenObject);
 //        if AScreenObject.Deleted then
 //        begin

@@ -6,8 +6,8 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
   Caption = 'Rearrange Objects'
   ClientHeight = 400
   ClientWidth = 428
-  ExplicitWidth = 440
-  ExplicitHeight = 438
+  ExplicitWidth = 444
+  ExplicitHeight = 439
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -90,7 +90,7 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
     object lblInstructions: TLabel
       Left = 8
       Top = 0
-      Width = 362
+      Width = 357
       Height = 90
       Anchors = [akLeft, akTop, akRight]
       Caption = 
@@ -98,7 +98,6 @@ inherited frmRearrangeObjects: TfrmRearrangeObjects
         'ition.  You can also type a new name for an object.'#13#10#13#10'Objects a' +
         're listed from back to front.'
       WordWrap = True
-      ExplicitWidth = 370
     end
   end
   object sgObjects: TRbwDataGrid4

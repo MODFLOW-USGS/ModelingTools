@@ -5,7 +5,7 @@ interface
 uses
   System.UITypes, Windows, Classes, SutraMeshUnit, SysUtils;
 
-procedure ImportSutraMeshFromFile(const AFileName: string; GmshExag: double = 1;
+procedure ImportSutraMeshFromFile(const AFileName: string; out ErrorMessage: string; GmshExag: double = 1;
   ChangeVE: Boolean = True);
 
 implementation
@@ -702,8 +702,8 @@ begin
 end;
 
 
-procedure ImportSutraMeshFromFile(const AFileName: string; GmshExag: double = 1;
-  ChangeVE: Boolean = True);
+procedure ImportSutraMeshFromFile(const AFileName: string; out ErrorMessage: string;
+  GmshExag: double = 1; ChangeVE: Boolean = True);
 var
   FileReader: TStreamReader;
   Splitter: TStringList;
@@ -722,15 +722,15 @@ begin
       Splitter := TStringList.Create;
       try
         Splitter.Delimiter := ' ';
-		try
+        try
           ALine := FileReader.ReadLine;
         except on E: EEncodingError  do
           begin
             Beep;
             MessageDlg(StrThereWasAnErrorIInvalidMesh, mtError, [mbOK], 0);
             Exit;
-		  end;
-		end;
+          end;
+        end;
         try
         if ALine = '$MeshFormat' then
         begin
@@ -773,8 +773,9 @@ begin
       end
       else
       begin
-        Beep;
-        MessageDlg(StrThereWasAnErrorI, mtError, [mbOK], 0);
+        ErrorMessage := StrThereWasAnErrorI;
+//        Beep;
+//        MessageDlg(StrThereWasAnErrorI, mtError, [mbOK], 0);
       end;
     finally
       Mesh3D.Free;

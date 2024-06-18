@@ -1186,14 +1186,14 @@ resourcestring
   StrPestDefaultDir = 'C:\Pest17\';
 
   // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
-  StrDefaultGmshPath = 'C:\gmsh-4.12.2-Windows64\gmsh.exe';
+  StrDefaultGmshPath = 'C:\gmsh-4.13.1-Windows64\gmsh.exe';
 
   StrDefaultGeompackPath = 'C:\GeompackPlusPlus\zgp1408.exe';
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
 
   // Be sure to update zonebudget path when updating mf6 path.
-  StrDefaultModflow6Path =      'C:\WRDAPP\mf6.4.4_win64\bin\mf6.exe';
-  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.4.4_win64\bin\zbud6.exe';
+  StrDefaultModflow6Path =      'C:\WRDAPP\mf6.5.0_win64\bin\mf6.exe';
+  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.5.0_win64\bin\zbud6.exe';
 
   StrDefaultOwhmV2Path = 'C:\WRDAPP\mf-owhm-2.3.0\bin\mf-owhm.exe';
 

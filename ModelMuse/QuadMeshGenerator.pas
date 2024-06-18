@@ -1075,7 +1075,8 @@ Type
     // @link(AdjustNodes) to adjust the positions of the nodes according
     // to the method specified in @link(NodeAdjustmentMethod).
     procedure GenerateMesh;
-    procedure GenerateMeshWithGmsh(const GMshLocation: string; Exaggeration: double);
+    procedure GenerateMeshWithGmsh(const GMshLocation: string;
+      var ErrorMessage: string; Exaggeration: double);
     procedure GenerateMeshWithGeomPackPP(const GeompackLocation: string;
       Exaggeration: double; Options: TGeompackOptions; var ErrorMessage: string);
     // @name adjusts the positions of the nodes according
@@ -8222,10 +8223,12 @@ begin
     end;
 
     Assert(FileExists(MeshFileName));
-    ImportSutraMeshFromFile(MeshFileName, Exaggeration, False);
+    ImportSutraMeshFromFile(MeshFileName, ErrorMessage, Exaggeration, False);
+    if ErrorMessage <> '' then
+    begin
+      Exit;
+    end;
 
-//    DeleteFile(OptionFileName);
-//    DeleteFile(MeshFileName);
   finally
     DeleteFile(GeomPackOperationFileName);
     DeleteFile(MeshFileName);
@@ -8234,18 +8237,9 @@ begin
     DeleteFile(ErrorFileName);
   end;
 
-//  RenumberNodesAndElements;
-//  Exit;
-
   Mesh := frmGoPhast.PhastModel.SutraMesh;
   case RenumberingAlgorithm of
     raNone: ;
-//      begin
-//        if Mesh.MeshType = mt3D then
-//        begin
-//          Mesh.SimpleRenumber;
-//        end;
-//      end;
     CuthillMcKee:
       begin
         CuthillMcKeeRenumbering.RenumberMesh(Mesh.Mesh2D);
@@ -8255,7 +8249,6 @@ begin
         begin
           Mesh.SimpleRenumber;
         end;
-//        frmGoPhast.PhastModel.DataArrayManager.InvalidateAllDataSets;
       end;
     raSloanRandolph:
       begin
@@ -8266,7 +8259,6 @@ begin
         begin
           Mesh.SimpleRenumber;
         end;
-//        frmGoPhast.PhastModel.DataArrayManager.InvalidateAllDataSets;
       end
     else Assert(False);
   end;
@@ -8276,7 +8268,7 @@ begin
 end;
 
 procedure TQuadMeshCreator.GenerateMeshWithGmsh(const GMshLocation: string;
-  Exaggeration: double);
+   var ErrorMessage: string; Exaggeration: double);
 const
   FiveSeconds = 1/24/3600*5;
 var
@@ -8490,23 +8482,18 @@ begin
   end;
 
   Assert(FileExists(MeshFileName));
-  ImportSutraMeshFromFile(MeshFileName, Exaggeration, False);
+  ImportSutraMeshFromFile(MeshFileName, ErrorMessage, Exaggeration, False);
 
   DeleteFile(OptionFileName);
   DeleteFile(MeshFileName);
-
-//  RenumberNodesAndElements;
-//  Exit;
+  if ErrorMessage <> '' then
+  begin
+    Exit;
+  end;
 
   Mesh := frmGoPhast.PhastModel.SutraMesh;
   case RenumberingAlgorithm of
     raNone: ;
-//      begin
-//        if Mesh.MeshType = mt3D then
-//        begin
-//          Mesh.SimpleRenumber;
-//        end;
-//      end;
     CuthillMcKee:
       begin
         CuthillMcKeeRenumbering.RenumberMesh(Mesh.Mesh2D);
@@ -8516,7 +8503,6 @@ begin
         begin
           Mesh.SimpleRenumber;
         end;
-//        frmGoPhast.PhastModel.DataArrayManager.InvalidateAllDataSets;
       end;
     raSloanRandolph:
       begin
@@ -8527,7 +8513,6 @@ begin
         begin
           Mesh.SimpleRenumber;
         end;
-//        frmGoPhast.PhastModel.DataArrayManager.InvalidateAllDataSets;
       end
     else Assert(False);
   end;

@@ -1058,24 +1058,27 @@ begin
           Obs.FModflow6Obs := MfObs;
           FObsList.Add(Obs);
         end;
-        for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
+        if Model.GwtUsed then
         begin
-          if ObservationsUsed and IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+          for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
           begin
-            MfObs := ScreenObject.Modflow6Obs;
-  //          SftObs.FName := MfObs.Name;
-            SftObs.FBoundName := ScreenObject.Name;
-            SftObs.FObsTypes := MfObs.CalibrationObservations.SftObs[SpeciesIndex];
-            if SpeciesIndex in MfObs.Genus then
+            if ObservationsUsed and IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
             begin
-              SftObs.FObsTypes := SftObs.FObsTypes + MfObs.SftObs;
+              MfObs := ScreenObject.Modflow6Obs;
+    //          SftObs.FName := MfObs.Name;
+              SftObs.FBoundName := ScreenObject.Name;
+              SftObs.FObsTypes := MfObs.CalibrationObservations.SftObs[SpeciesIndex];
+              if SpeciesIndex in MfObs.Genus then
+              begin
+                SftObs.FObsTypes := SftObs.FObsTypes + MfObs.SftObs;
+              end;
+              SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
+              SftObs.FReachStart := ReachStart;
+              SftObs.FCount := ASegment.ReachCount;
+              SftObs.FModflow6Obs := MfObs;
+              SftObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
+              FGwtObservations[SpeciesIndex].Add(SftObs)
             end;
-            SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
-            SftObs.FReachStart := ReachStart;
-            SftObs.FCount := ASegment.ReachCount;
-            SftObs.FModflow6Obs := MfObs;
-            SftObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
-            FGwtObservations[SpeciesIndex].Add(SftObs)
           end;
         end;
         ReachStart := ReachStart + ASegment.ReachCount;
@@ -1149,22 +1152,25 @@ begin
       Obs.FModflow6Obs := MfObs;
       FObsList.Add(Obs);
     end;
-    for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
+    if Model.GwtUsed then
     begin
-      if ObservationsUsed and IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+      for SpeciesIndex := 0 to Model.MobileComponents.Count -1 do
       begin
-        MfObs := ScreenObject.Modflow6Obs;
-  //      SftObs.FName := MfObs.Name;
-        SftObs.FBoundName := ScreenObject.Name;
-        SftObs.FObsTypes := MfObs.SftObs;
-        SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
-        SftObs.FReachStart := ReachStart;
-        SftObs.FCount := ASegment.ReachCount;
-        SftObs.FModflow6Obs := MfObs;
-        SftObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
-        FGwtObservations[SpeciesIndex].Add(SftObs)
+        if ObservationsUsed and IsMf6GwtObservation(ScreenObject, SpeciesIndex) then
+        begin
+          MfObs := ScreenObject.Modflow6Obs;
+    //      SftObs.FName := MfObs.Name;
+          SftObs.FBoundName := ScreenObject.Name;
+          SftObs.FObsTypes := MfObs.SftObs;
+          SftObs.FSfrObsLocation := MfObs.SfrObsLocation;
+          SftObs.FReachStart := ReachStart;
+          SftObs.FCount := ASegment.ReachCount;
+          SftObs.FModflow6Obs := MfObs;
+          SftObs.FName := MfObs.Name + '_' + IntToStr(SpeciesIndex);
+          FGwtObservations[SpeciesIndex].Add(SftObs)
+        end;
+  //      FSftObsLists[MfObs.GwtSpecies].Add(SftObs)
       end;
-//      FSftObsLists[MfObs.GwtSpecies].Add(SftObs)
     end;
     ReachStart := ReachStart + ASegment.ReachCount;
   end;
@@ -2436,12 +2442,15 @@ begin
   begin
     Exit;
   end;
-  FSpeciesIndex :=  SpeciesIndex;
-  SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
-  FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.sft';
-  FInputFileName := FNameOfFile;
+  if Model.GwtUsed then
+  begin
+    FSpeciesIndex :=  SpeciesIndex;
+    SpeciesName := Model.MobileComponents[FSpeciesIndex].Name;
+    FNameOfFile := ChangeFileExt(AFileName, '') + '.' + SpeciesName + '.sft';
+    FInputFileName := FNameOfFile;
 
-  WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+    WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+  end;
 
   FPestParamUsed := False;
   WritingTemplate := False;

@@ -10271,14 +10271,16 @@ const
 //    '5.2.0.17' bug fix: The EVT package is now included in the MODFLOW 6
 //                grounddwater transport source and sink mixing package as
 //                an AUXMIXED source.
-//               (not in released version)bug fix: Fixed bug in saving GWT CNC
-//                and GWT SRC boundaries when multiplier are not used
+//               (not in released version) bug fix: Fixed bug in saving GWT CNC
+//                and GWT SRC boundaries when multiplier are not used.
+//    '5.2.0.18' bug fix: fixed export of SFR package for MODFLOW 6 after
+//                disabling solute transport.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.17';
+  IIModelVersion = '5.2.0.18';
 
 function IModelVersion: string;
 begin
@@ -35401,37 +35403,16 @@ begin
     try
       CreateBoundariesForMeshCreator(MeshCreator, List, Exag);
 
-  {$IFDEF DEBUG}
-//      StartTime := Now;
-//      OutputDebugString('SAMPLING ON');
-
-  {$ENDIF}
-//      try
-      MeshCreator.GenerateMeshWithGmsh(ProgramLocations.GmshLocation, Exag);
-//        ImportFromGmshOnTerminate, FMeshFileName;
+      MeshCreator.GenerateMeshWithGmsh(ProgramLocations.GmshLocation, ErrorMessage, Exag);
+      if ErrorMessage <> '' then
+      begin
+        Exit;
+      end;
 
       SutraMesh.ElevationsNeedUpdating := True;
       SutraMesh.CheckUpdateElevations;
 
       Exit;
-
-//      except on E: EInvalidElement do
-//        begin
-//          InvalidMesh := True;
-//        end;
-//      end;
-
-//      for AdjustIndex := 1 to 5 do
-//      begin
-//        MeshCreator.AdjustNodes;
-//      end;
-//      MeshCreator.FixFinalTriangularElements;
-  {$IFDEF DEBUG}
-//      OutputDebugString('SAMPLING OFF');
-
-//      EndTime := Now;
-  {$ENDIF}
-
 
       if FSutraMesh = nil then
       begin
