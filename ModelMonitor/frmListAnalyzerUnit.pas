@@ -120,7 +120,6 @@ type
     function DisplayObservations: boolean;
     function DisplayArray: Boolean;
     procedure FilePositionChanged(Sender: TObject);
-    procedure InitializeSearchTrie;
     procedure AlternateIndexFile;
     function SearchTrie(ALine: AnsiString; var IndexTypes: TIndexTypeArray;
       var KeyLength: integer; out FoundKey: string): boolean;
@@ -134,6 +133,7 @@ type
 //    procedure WndProc(var Message: TMessage); override;
     { Private declarations }
   public
+    procedure InitializeSearchTrie;
     procedure OpenAFile(const FileName: string);
     { Public declarations }
   end;

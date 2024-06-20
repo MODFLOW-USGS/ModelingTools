@@ -491,7 +491,7 @@ uses
   frmGoPhastUnit, PhastModelUnit,
   PointCollectionUnit, QuadTreeClass, ShapefileUnit, System.IOUtils, FastGEO,
   ModelMuseUtilities, ScreenObjectUnit, TriCP_Routines, TriPackRoutines,
-  SutraPestObsUnit, System.Math;
+  SutraPestObsUnit, System.Math, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrObservationGroupNa = 'Observation Group Name (OBGNME)';
@@ -543,7 +543,6 @@ resourcestring
   'define pilot points between observations.';
   StrNoObservationPoint = 'No observation points defined.';
   StrWeight = 'Weight';
-//  StrObservationsToMoni = 'Observations to monitor (OBS_REPORT_[N])';
 
 type
   TCheckedPointItem = class(TPointItem)
@@ -2112,6 +2111,8 @@ var
     end;
   end;
 begin
+  frmErrorsAndWarnings.RemoveErrorGroup(frmGoPhast.PhastModel, StrUnnamedObservation);
+
   Locations := frmGoPhast.PhastModel.ProgramLocations;
 
   PestProperties := frmGoPhast.PhastModel.PestProperties;
@@ -2844,9 +2845,6 @@ begin
     {$ENDREGION}
 
     {$REGION 'Observation Groups'}
-//    ObsGroups := PestProperties.ObservationGroups;
-//    ObsGroupFrame := frameObservationGroups;
-//    EditedObsGroups := FLocalObsGroups;
     SetObsGroups(PestProperties.ObservationGroups, frameObservationGroups,
       FLocalObsGroups);
     SetObsGroups(PestProperties.PriorInfoObservationGroups,
@@ -3342,6 +3340,11 @@ begin
       if Grid.Cells[Ord(pogcName), RowIndex] <> '' then
       begin
         AnObsGroup.ObsGroupName := Grid.Cells[Ord(pogcName), RowIndex];
+      end
+      else
+      begin
+        frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel, StrUnnamedObservation,
+          StrAtLeastOneObserva);
       end;
       AnObsGroup.IsRegularizationGroup := Grid.Checked[Ord(pogcRegularization), RowIndex];
       AnObsGroup.UseGroupTarget := Grid.Checked[Ord(pogcUseTarget), RowIndex];
@@ -3354,13 +3357,23 @@ end;
 
 procedure TfrmPEST.CheckObsGroupName(Grid: TRbwDataGrid4; ARow: Integer; ACol: Integer);
 begin
-  if (ARow > 0) and (ACol = Ord(pogcName)) then
+  if (ARow > 0) then
   begin
-    if Grid.Checked[Ord(pogcRegularization), ARow]
-      and (Length(Grid.Cells[Ord(pogcName), ARow]) >
-      AllowableGroupNameLength - Length(strRegul)) then
+    if ACol = Ord(pogcName) then
     begin
-      Grid.Canvas.Brush.Color := clRed;
+      if Grid.Checked[Ord(pogcRegularization), ARow]
+        and (Length(Grid.Cells[Ord(pogcName), ARow]) >
+        AllowableGroupNameLength - Length(strRegul)) then
+      begin
+        Grid.Canvas.Brush.Color := clRed;
+      end;
+    end;
+    if ACol = Ord(pogcName) then
+    begin
+      if Grid.Cells[ACol, ARow] = '' then
+      begin
+        Grid.Canvas.Brush.Color := clRed;
+      end;
     end;
   end;
 end;

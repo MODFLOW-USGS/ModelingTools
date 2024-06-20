@@ -337,6 +337,7 @@ var
   DataArray: TModflowBoundaryDisplayDataArray;
   DisplayTimeList: TModflowBoundaryDisplayTimeList;
   CellList: TValueCellList;
+  Parameters: TByteSet;
 begin
   if not Package.IsSelected then
   begin
@@ -378,8 +379,13 @@ begin
               as TModflowBoundaryDisplayDataArray;
             DataArrayList.Add(DataArray);
           end;
+          Parameters := [];
+          for var PIndex := 0 to TimeLists.Count - 1 do
+          begin
+            Include(Parameters, PIndex);
+          end;
           UpdateCellDisplay(CellList, DataArrayList,
-            [0..TimeLists.Count-1]);
+            Parameters);
         end;
       end;
 

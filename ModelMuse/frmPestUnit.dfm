@@ -4,8 +4,8 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 484
   ClientWidth = 760
-  ExplicitWidth = 772
-  ExplicitHeight = 522
+  ExplicitWidth = 776
+  ExplicitHeight = 523
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
@@ -30,19 +30,16 @@ inherited frmPEST: TfrmPEST
     TabOrder = 0
     OnMouseDown = tvPESTMouseDown
     Items.Links = {00000000}
-    ExplicitHeight = 441
   end
   object plMain: TJvPageList
     Left = 198
     Top = 0
     Width = 562
     Height = 442
-    ActivePage = jvspLsqr
+    ActivePage = jvspPriorInfoObsGroups
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
-    ExplicitWidth = 558
-    ExplicitHeight = 441
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
@@ -1286,8 +1283,6 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Pilot_Points_P'
       Caption = 'jvspPilotPoints'
-      ExplicitWidth = 558
-      ExplicitHeight = 441
       object Panel2: TPanel
         Left = 0
         Top = 140
@@ -1295,8 +1290,6 @@ inherited frmPEST: TfrmPEST
         Height = 302
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 558
-        ExplicitHeight = 301
         object Splitter1: TSplitter
           Left = 242
           Top = 1
@@ -1312,7 +1305,6 @@ inherited frmPEST: TfrmPEST
           Align = alLeft
           Caption = 'Individually specified pilot points'
           TabOrder = 0
-          ExplicitHeight = 299
           inline framePilotPoints: TframeGrid
             Left = 2
             Top = 89
@@ -1323,12 +1315,12 @@ inherited frmPEST: TfrmPEST
             ExplicitLeft = 2
             ExplicitTop = 89
             ExplicitWidth = 237
-            ExplicitHeight = 208
+            ExplicitHeight = 209
             inherited Panel: TPanel
               Top = 143
               Width = 237
               Height = 66
-              ExplicitTop = 142
+              ExplicitTop = 143
               ExplicitWidth = 237
               ExplicitHeight = 66
               inherited lbNumber: TLabel
@@ -1423,7 +1415,7 @@ inherited frmPEST: TfrmPEST
                   AutoAdjustColWidths = True
                 end>
               ExplicitWidth = 237
-              ExplicitHeight = 142
+              ExplicitHeight = 143
             end
           end
           object Panel1: TPanel
@@ -1461,8 +1453,6 @@ inherited frmPEST: TfrmPEST
           Align = alClient
           Caption = 'Between point observations'
           TabOrder = 1
-          ExplicitWidth = 310
-          ExplicitHeight = 299
           object rdgBetweenObs: TRbwDataGrid4
             Left = 2
             Top = 169
@@ -1531,8 +1521,6 @@ inherited frmPEST: TfrmPEST
                 AutoAdjustColWidths = True
               end>
             WordWrapRowCaptions = False
-            ExplicitWidth = 306
-            ExplicitHeight = 128
             ColWidths = (
               64
               64)
@@ -1544,7 +1532,6 @@ inherited frmPEST: TfrmPEST
             Height = 149
             Align = alTop
             TabOrder = 1
-            ExplicitWidth = 306
             object lblMinSeparation: TLabel
               Left = 4
               Top = 45
@@ -1593,7 +1580,6 @@ inherited frmPEST: TfrmPEST
         Height = 140
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 558
         object lblPilotPointBuffer: TLabel
           Left = 6
           Top = 39
@@ -1617,7 +1603,6 @@ inherited frmPEST: TfrmPEST
           Align = alRight
           Caption = 'Regularly spaced pilot points'
           TabOrder = 1
-          ExplicitLeft = 294
           object lblArrayPattern: TLabel
             Left = 16
             Top = 27
@@ -3367,8 +3352,6 @@ inherited frmPEST: TfrmPEST
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 441
-    ExplicitWidth = 756
     object btnHelp: TBitBtn
       Left = 446
       Top = 6

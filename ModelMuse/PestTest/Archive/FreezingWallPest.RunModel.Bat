@@ -20,7 +20,7 @@ if exist "FreezingWallPest_N_5185.OBS" del "FreezingWallPest_N_5185.OBS"
 if exist "FreezingWallPest_N_6161.OBS" del "FreezingWallPest_N_6161.OBS"
 if exist "FreezingWallPest.SUTRA.FIL" copy /Y "FreezingWallPest.SUTRA.FIL" "SUTRA.FIL"
 "EnhancedTemplateProcessor.exe" FreezingWallPest.inp.tpl FreezingWallPest.pval
-"sutra_4_0.exe"
+"sutra_4_0_0_PROVISIONAL_2023-02-28_8b569f6.exe"
 "SutraObsExtractor.exe" FreezingWallPest.soe_ev
 @echo off
 rem Get end time:

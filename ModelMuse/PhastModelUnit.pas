@@ -10276,6 +10276,9 @@ const
 //    '5.2.0.18' bug fix: fixed export of SFR package for MODFLOW 6 after
 //                disabling solute transport.
 
+//               Enhancement: ModelMuse now checks that PEST Observation Group
+//                names and Prior Information Group names are assigned.
+
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
 const

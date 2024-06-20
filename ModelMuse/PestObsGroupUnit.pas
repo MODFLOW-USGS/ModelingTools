@@ -71,17 +71,19 @@ type
   function ValidObsGroupName(Value: string): string;
 
 resourcestring
-  StrRegul = 'regul_';
+  StrUnnamedObservation = 'Unnamed observation or prior information group';
+  StrAtLeastOneObserva = 'At least one observation group or prior informatio' +
+  'n group has not been assigned a name.';
 
 const
   AllowableGroupNameLength = 12;
-
+  StrRegul = 'regul_';
 
 implementation
 
 uses
   frmGoPhastUnit, PhastModelUnit, System.Generics.Collections,
-  ModflowParameterUnit, System.Generics.Defaults;
+  ModflowParameterUnit, System.Generics.Defaults, frmErrorsAndWarningsUnit;
 
 function ValidObsGroupName(Value: string): string;
 const
@@ -147,6 +149,11 @@ end;
 
 function TPestObservationGroup.GetExportedGroupName: string;
 begin
+  if ObsGroupName = '' then
+  begin
+    frmErrorsAndWarnings.AddError(frmGoPhast.PhastModel, StrUnnamedObservation,
+      StrAtLeastOneObserva);
+  end;
   if IsRegularizationGroup then
   begin
     result := StrRegul + ObsGroupName;

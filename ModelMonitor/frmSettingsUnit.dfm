@@ -20,7 +20,6 @@ object frmSettings: TfrmSettings
     ActivePage = tabWarnings
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 624
     object TabPrimary: TTabSheet
       Caption = 'Primary Identifiers'
       object memoPrimary: TMemo
@@ -106,7 +105,6 @@ object frmSettings: TfrmSettings
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitWidth = 624
     object btnCancel: TBitBtn
       Left = 544
       Top = 8

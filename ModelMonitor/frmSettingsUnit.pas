@@ -85,6 +85,7 @@ begin
   SetIdentifiers(memoIgnored.Lines, NonIdentifiers);
   SetIdentifiers(memoErrors.Lines, ErrorValues);
   SetIdentifiers(memoWarnings.Lines, WarningValues);
+  frmMain.InitializeSearchTrie;
 end;
 
 procedure TfrmSettings.SetIdentifiers(Lines: TStrings;
