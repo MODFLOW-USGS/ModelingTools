@@ -4,8 +4,8 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
   Caption = 'Riparian ET Plant Groups'
   ClientHeight = 414
   ClientWidth = 613
-  ExplicitWidth = 625
-  ExplicitHeight = 452
+  ExplicitWidth = 629
+  ExplicitHeight = 453
   TextHeight = 18
   object splMain: TSplitter
     Left = 177
@@ -22,8 +22,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 372
-    ExplicitWidth = 609
     DesignSize = (
       613
       41)
@@ -37,11 +35,10 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 260
     end
     object btnOK: TBitBtn
       Left = 378
-      Top = 6
+      Top = 4
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -49,7 +46,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 374
     end
     object btnCancel: TBitBtn
       Left = 492
@@ -60,7 +56,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 488
     end
   end
   object pnlRipPlantGroupSelection: TPanel
@@ -70,7 +65,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
     Height = 373
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 372
     object grdpnl1: TGridPanel
       Left = 1
       Top = 340
@@ -108,7 +102,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
           Value = 100.000000000000000000
         end>
       TabOrder = 1
-      ExplicitTop = 339
       DesignSize = (
         175
         32)
@@ -212,7 +205,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
       ReadOnly = True
       TabOrder = 0
       OnChange = tvPlantGroupsChange
-      ExplicitHeight = 338
     end
   end
   object pgcMain: TPageControl
@@ -223,8 +215,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
     ActivePage = tsProperties
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 427
-    ExplicitHeight = 372
     object tsProperties: TTabSheet
       Caption = 'Properties'
       DesignSize = (
@@ -270,7 +260,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
         MaxLength = 24
         TabOrder = 0
         Text = ''
-        ExplicitWidth = 392
       end
       object cedSatExtDepth: TJvComboEdit
         Left = 16
@@ -303,7 +292,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
         Text = ''
         OnButtonClick = EditFormula
         OnChange = ChangeComboEdColor
-        ExplicitWidth = 392
       end
       object cedActiveRootDepth: TJvComboEdit
         Left = 16
@@ -336,7 +324,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
         Text = ''
         OnButtonClick = EditFormula
         OnChange = ChangeComboEdColor
-        ExplicitWidth = 392
       end
       object cedMaxEtFlux: TJvComboEdit
         Left = 16
@@ -369,7 +356,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
         Text = ''
         OnButtonClick = EditFormula
         OnChange = ChangeComboEdColor
-        ExplicitWidth = 392
       end
       object cedSatExtinctEvapFlux: TJvComboEdit
         Left = 16
@@ -402,7 +388,6 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
         Text = ''
         OnButtonClick = EditFormula
         OnChange = ChangeComboEdColor
-        ExplicitWidth = 392
       end
     end
     object tabTranspirationRateCurve: TTabSheet
@@ -411,7 +396,7 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
       object pbTranspirationCurve: TPaintBox
         Left = 275
         Top = 0
-        Width = 152
+        Width = 148
         Height = 340
         Align = alClient
         OnPaint = pbTranspirationCurvePaint
@@ -427,12 +412,12 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
         Align = alLeft
         TabOrder = 0
         ExplicitWidth = 275
-        ExplicitHeight = 341
+        ExplicitHeight = 340
         inherited Panel: TPanel
           Top = 303
           Width = 275
           Height = 37
-          ExplicitTop = 304
+          ExplicitTop = 303
           ExplicitWidth = 275
           ExplicitHeight = 37
           inherited lbNumber: TLabel
@@ -530,7 +515,7 @@ inherited frmModflowRipPlantGroups: TfrmModflowRipPlantGroups
               AutoAdjustColWidths = True
             end>
           ExplicitWidth = 275
-          ExplicitHeight = 304
+          ExplicitHeight = 303
           ColWidths = (
             18
             64

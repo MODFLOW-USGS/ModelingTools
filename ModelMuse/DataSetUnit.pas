@@ -3137,6 +3137,7 @@ begin
               try
                 TempUseList.Duplicates := dupIgnore;
                 TempUseList.Sorted := True;
+                TempUseList.CaseSensitive := False;
                 TempUseList.Capacity := UseList.Count;
                 TempUseList.Assign(UseList);
 

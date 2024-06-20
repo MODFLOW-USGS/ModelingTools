@@ -92,6 +92,12 @@ type
 var
   frmModflowRipPlantGroups: TfrmModflowRipPlantGroups;
 
+const
+  // MaxPlantGroups is limited to 256 so that in
+  // @link(TModflowRipWriter.UpdateDisplay) there is not
+  // an out of range exception thrown.
+  MaxPlantGroups = 256;
+
 implementation
 
 uses
@@ -115,6 +121,7 @@ resourcestring
   StrTheMaximumDimensio = 'The maximum dimensionless ET is not one for the f' +
   'ollowing plant groups: '#13#10'%s'#13#10'Click "Cancel" to fix this befor' +
   'e closing the dialog box. ';
+  StrTheMaximumAllowed = 'The maximum allowed number of plant groups is %d.';
 
 {$R *.dfm}
 
@@ -204,8 +211,11 @@ var
 begin
   inherited;
   NewPlantGroup := AddNewPlantGroup;
-  NewNode := AddPlantGroupToTreeView(NewPlantGroup);
-  tvPlantGroups.Selected := NewNode;
+  if NewPlantGroup <> nil then
+  begin
+    NewNode := AddPlantGroupToTreeView(NewPlantGroup);
+    tvPlantGroups.Selected := NewNode;
+  end;
 end;
 
 procedure TfrmModflowRipPlantGroups.btnDeletePlantGroupClick(Sender: TObject);
@@ -238,10 +248,13 @@ begin
   begin
     APlantGroup := SelectedNode.Data;
     NewPlantGroup := AddNewPlantGroup;
-    NewPlantGroup.Index := APlantGroup.Index;
+    if NewPlantGroup <> nil then
+    begin
+      NewPlantGroup.Index := APlantGroup.Index;
 
-    tvPlantGroups.Items.InsertObject(SelectedNode, NewPlantGroup.Name,
-      NewPlantGroup);
+      tvPlantGroups.Items.InsertObject(SelectedNode, NewPlantGroup.Name,
+        NewPlantGroup);
+    end;
   end;
 end;
 
@@ -611,6 +624,13 @@ end;
 
 function TfrmModflowRipPlantGroups.AddNewPlantGroup: TRipPlantGroup;
 begin
+  if FPlantGroups.Count >= MaxPlantGroups then
+  begin
+    result := nil;
+    Beep;
+    MessageDlg(Format(StrTheMaximumAllowed, [MaxPlantGroups]), mtWarning, [mbOK], 0);
+    Exit;
+  end;
   SelectedPlantGroup := nil;
   result := FPlantGroups.Add;
   result.Name := Format('Plant Group %d', [FPlantGroups.Count]);
