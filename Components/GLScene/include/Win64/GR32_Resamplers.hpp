@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Resamplers.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Resamplers.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_resamplersHPP
 #define Gr32_resamplersHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -79,7 +81,7 @@ typedef System::StaticArray<Gr32::TArrayOfInteger, 1> TKernelEntryArray;
 
 typedef TKernelEntryArray *PKernelEntryArray;
 
-typedef float __fastcall (__closure *TFilterMethod)(float Value);
+typedef Gr32::TFloat __fastcall (__closure *TFilterMethod)(Gr32::TFloat Value);
 
 class PASCALIMPLEMENTATION EBitmapException : public System::Sysutils::Exception
 {
@@ -87,17 +89,17 @@ class PASCALIMPLEMENTATION EBitmapException : public System::Sysutils::Exception
 	
 public:
 	/* Exception.Create */ inline __fastcall EBitmapException(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EBitmapException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EBitmapException(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EBitmapException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EBitmapException(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EBitmapException(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EBitmapException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EBitmapException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EBitmapException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EBitmapException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EBitmapException(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EBitmapException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EBitmapException(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EBitmapException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EBitmapException(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EBitmapException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EBitmapException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EBitmapException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EBitmapException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EBitmapException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EBitmapException() { }
 	
 };
@@ -109,17 +111,17 @@ class PASCALIMPLEMENTATION ESrcInvalidException : public System::Sysutils::Excep
 	
 public:
 	/* Exception.Create */ inline __fastcall ESrcInvalidException(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall ESrcInvalidException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall ESrcInvalidException(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall ESrcInvalidException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall ESrcInvalidException(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall ESrcInvalidException(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall ESrcInvalidException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall ESrcInvalidException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall ESrcInvalidException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall ESrcInvalidException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall ESrcInvalidException(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall ESrcInvalidException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall ESrcInvalidException(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ESrcInvalidException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ESrcInvalidException(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall ESrcInvalidException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall ESrcInvalidException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall ESrcInvalidException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ESrcInvalidException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ESrcInvalidException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~ESrcInvalidException() { }
 	
 };
@@ -131,17 +133,17 @@ class PASCALIMPLEMENTATION ENestedException : public System::Sysutils::Exception
 	
 public:
 	/* Exception.Create */ inline __fastcall ENestedException(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall ENestedException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall ENestedException(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall ENestedException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall ENestedException(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall ENestedException(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall ENestedException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall ENestedException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall ENestedException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall ENestedException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall ENestedException(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall ENestedException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall ENestedException(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ENestedException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ENestedException(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall ENestedException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall ENestedException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall ENestedException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ENestedException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ENestedException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~ENestedException() { }
 	
 };
@@ -149,7 +151,7 @@ public:
 
 typedef Gr32::TColor32 __fastcall (__closure *TGetSampleInt)(int X, int Y);
 
-typedef Gr32::TColor32 __fastcall (__closure *TGetSampleFloat)(float X, float Y);
+typedef Gr32::TColor32 __fastcall (__closure *TGetSampleFloat)(Gr32::TFloat X, Gr32::TFloat Y);
 
 typedef Gr32::TColor32 __fastcall (__closure *TGetSampleFixed)(Gr32::TFixed X, Gr32::TFixed Y);
 
@@ -165,8 +167,8 @@ protected:
 public:
 	__fastcall virtual TCustomKernel();
 	void __fastcall Changed();
-	virtual float __fastcall Filter(float Value) = 0 ;
-	virtual float __fastcall GetWidth() = 0 ;
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value) = 0 ;
+	virtual Gr32::TFloat __fastcall GetWidth() = 0 ;
 	__property Gr32::TNotifiablePersistent* Observer = {read=FObserver};
 public:
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TCustomKernel() { }
@@ -181,8 +183,8 @@ class PASCALIMPLEMENTATION TBoxKernel : public TCustomKernel
 	typedef TCustomKernel inherited;
 	
 public:
-	virtual float __fastcall Filter(float Value);
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
 public:
 	/* TCustomKernel.Create */ inline __fastcall virtual TBoxKernel() : TCustomKernel() { }
 	
@@ -197,8 +199,8 @@ class PASCALIMPLEMENTATION TLinearKernel : public TCustomKernel
 	typedef TCustomKernel inherited;
 	
 public:
-	virtual float __fastcall Filter(float Value);
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
 public:
 	/* TCustomKernel.Create */ inline __fastcall virtual TLinearKernel() : TCustomKernel() { }
 	
@@ -213,8 +215,8 @@ class PASCALIMPLEMENTATION TCosineKernel : public TCustomKernel
 	typedef TCustomKernel inherited;
 	
 public:
-	virtual float __fastcall Filter(float Value);
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
 public:
 	/* TCustomKernel.Create */ inline __fastcall virtual TCosineKernel() : TCustomKernel() { }
 	
@@ -232,8 +234,8 @@ protected:
 	virtual bool __fastcall RangeCheck();
 	
 public:
-	virtual float __fastcall Filter(float Value);
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
 public:
 	/* TCustomKernel.Create */ inline __fastcall virtual TSplineKernel() : TCustomKernel() { }
 	
@@ -251,8 +253,8 @@ protected:
 	virtual bool __fastcall RangeCheck();
 	
 public:
-	virtual float __fastcall Filter(float Value);
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
 public:
 	/* TCustomKernel.Create */ inline __fastcall virtual TMitchellKernel() : TCustomKernel() { }
 	
@@ -267,19 +269,19 @@ class PASCALIMPLEMENTATION TCubicKernel : public TCustomKernel
 	typedef TCustomKernel inherited;
 	
 private:
-	float FCoeff;
-	void __fastcall SetCoeff(const float Value);
+	Gr32::TFloat FCoeff;
+	void __fastcall SetCoeff(const Gr32::TFloat Value);
 	
 protected:
 	virtual bool __fastcall RangeCheck();
 	
 public:
 	__fastcall virtual TCubicKernel();
-	virtual float __fastcall Filter(float Value);
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
 	
 __published:
-	__property float Coeff = {read=FCoeff, write=SetCoeff};
+	__property Gr32::TFloat Coeff = {read=FCoeff, write=SetCoeff};
 public:
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TCubicKernel() { }
 	
@@ -291,22 +293,22 @@ class PASCALIMPLEMENTATION THermiteKernel : public TCustomKernel
 	typedef TCustomKernel inherited;
 	
 private:
-	float FBias;
-	float FTension;
-	void __fastcall SetBias(const float Value);
-	void __fastcall SetTension(const float Value);
+	Gr32::TFloat FBias;
+	Gr32::TFloat FTension;
+	void __fastcall SetBias(const Gr32::TFloat Value);
+	void __fastcall SetTension(const Gr32::TFloat Value);
 	
 protected:
 	virtual bool __fastcall RangeCheck();
 	
 public:
 	__fastcall virtual THermiteKernel();
-	virtual float __fastcall Filter(float Value);
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
 	
 __published:
-	__property float Bias = {read=FBias, write=SetBias};
-	__property float Tension = {read=FTension, write=SetTension};
+	__property Gr32::TFloat Bias = {read=FBias, write=SetBias};
+	__property Gr32::TFloat Tension = {read=FTension, write=SetTension};
 public:
 	/* TPersistent.Destroy */ inline __fastcall virtual ~THermiteKernel() { }
 	
@@ -318,22 +320,22 @@ class PASCALIMPLEMENTATION TWindowedSincKernel : public TCustomKernel
 	typedef TCustomKernel inherited;
 	
 private:
-	float FWidth;
-	float FWidthReciprocal;
+	Gr32::TFloat FWidth;
+	Gr32::TFloat FWidthReciprocal;
 	
 protected:
 	virtual bool __fastcall RangeCheck();
-	virtual float __fastcall Window(float Value) = 0 ;
+	virtual Gr32::TFloat __fastcall Window(Gr32::TFloat Value) = 0 ;
 	
 public:
 	__fastcall virtual TWindowedSincKernel();
-	virtual float __fastcall Filter(float Value);
-	void __fastcall SetWidth(float Value);
-	virtual float __fastcall GetWidth();
-	__property float WidthReciprocal = {read=FWidthReciprocal};
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
+	void __fastcall SetWidth(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
+	__property Gr32::TFloat WidthReciprocal = {read=FWidthReciprocal};
 	
 __published:
-	__property float Width = {read=FWidth, write=SetWidth};
+	__property Gr32::TFloat Width = {read=FWidth, write=SetWidth};
 public:
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TWindowedSincKernel() { }
 	
@@ -350,7 +352,7 @@ private:
 	void __fastcall SetTerms(int Value);
 	
 protected:
-	virtual float __fastcall Window(float Value);
+	virtual Gr32::TFloat __fastcall Window(Gr32::TFloat Value);
 	
 public:
 	__fastcall virtual TAlbrechtKernel();
@@ -368,7 +370,7 @@ class PASCALIMPLEMENTATION TLanczosKernel : public TWindowedSincKernel
 	typedef TWindowedSincKernel inherited;
 	
 protected:
-	virtual float __fastcall Window(float Value);
+	virtual Gr32::TFloat __fastcall Window(Gr32::TFloat Value);
 public:
 	/* TWindowedSincKernel.Create */ inline __fastcall virtual TLanczosKernel() : TWindowedSincKernel() { }
 	
@@ -383,18 +385,18 @@ class PASCALIMPLEMENTATION TGaussianKernel : public TWindowedSincKernel
 	typedef TWindowedSincKernel inherited;
 	
 private:
-	float FSigma;
-	float FSigmaReciprocalLn2;
-	void __fastcall SetSigma(const float Value);
+	Gr32::TFloat FSigma;
+	Gr32::TFloat FSigmaReciprocalLn2;
+	void __fastcall SetSigma(const Gr32::TFloat Value);
 	
 protected:
-	virtual float __fastcall Window(float Value);
+	virtual Gr32::TFloat __fastcall Window(Gr32::TFloat Value);
 	
 public:
 	__fastcall virtual TGaussianKernel();
 	
 __published:
-	__property float Sigma = {read=FSigma, write=SetSigma};
+	__property Gr32::TFloat Sigma = {read=FSigma, write=SetSigma};
 public:
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TGaussianKernel() { }
 	
@@ -406,7 +408,7 @@ class PASCALIMPLEMENTATION TBlackmanKernel : public TWindowedSincKernel
 	typedef TWindowedSincKernel inherited;
 	
 protected:
-	virtual float __fastcall Window(float Value);
+	virtual Gr32::TFloat __fastcall Window(Gr32::TFloat Value);
 public:
 	/* TWindowedSincKernel.Create */ inline __fastcall virtual TBlackmanKernel() : TWindowedSincKernel() { }
 	
@@ -421,7 +423,7 @@ class PASCALIMPLEMENTATION THannKernel : public TWindowedSincKernel
 	typedef TWindowedSincKernel inherited;
 	
 protected:
-	virtual float __fastcall Window(float Value);
+	virtual Gr32::TFloat __fastcall Window(Gr32::TFloat Value);
 public:
 	/* TWindowedSincKernel.Create */ inline __fastcall virtual THannKernel() : TWindowedSincKernel() { }
 	
@@ -436,7 +438,7 @@ class PASCALIMPLEMENTATION THammingKernel : public TWindowedSincKernel
 	typedef TWindowedSincKernel inherited;
 	
 protected:
-	virtual float __fastcall Window(float Value);
+	virtual Gr32::TFloat __fastcall Window(Gr32::TFloat Value);
 public:
 	/* TWindowedSincKernel.Create */ inline __fastcall virtual THammingKernel() : TWindowedSincKernel() { }
 	
@@ -451,22 +453,22 @@ class PASCALIMPLEMENTATION TSinshKernel : public TCustomKernel
 	typedef TCustomKernel inherited;
 	
 private:
-	float FWidth;
-	float FCoeff;
-	void __fastcall SetCoeff(const float Value);
+	Gr32::TFloat FWidth;
+	Gr32::TFloat FCoeff;
+	void __fastcall SetCoeff(const Gr32::TFloat Value);
 	
 protected:
 	virtual bool __fastcall RangeCheck();
 	
 public:
 	__fastcall virtual TSinshKernel();
-	void __fastcall SetWidth(float Value);
-	virtual float __fastcall GetWidth();
-	virtual float __fastcall Filter(float Value);
+	void __fastcall SetWidth(Gr32::TFloat Value);
+	virtual Gr32::TFloat __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall Filter(Gr32::TFloat Value);
 	
 __published:
-	__property float Coeff = {read=FCoeff, write=SetCoeff};
-	__property float Width = {read=GetWidth, write=SetWidth};
+	__property Gr32::TFloat Coeff = {read=FCoeff, write=SetCoeff};
+	__property Gr32::TFloat Width = {read=GetWidth, write=SetWidth};
 public:
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TSinshKernel() { }
 	
@@ -482,13 +484,13 @@ private:
 	
 protected:
 	Gr32::TColor32 __fastcall GetPixelTransparentEdge(int X, int Y);
-	virtual float __fastcall GetWidth();
-	virtual void __fastcall Resample(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const System::Types::TRect &DstClip, Gr32::TCustomBitmap32* Src, const System::Types::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack);
+	virtual Gr32::TFloat __fastcall GetWidth();
+	virtual void __fastcall Resample(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect, const Gr32::TRect &DstClip, Gr32::TCustomBitmap32* Src, const Gr32::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack);
 	
 public:
 	virtual Gr32::TColor32 __fastcall GetSampleInt(int X, int Y);
 	virtual Gr32::TColor32 __fastcall GetSampleFixed(Gr32::TFixed X, Gr32::TFixed Y);
-	virtual Gr32::TColor32 __fastcall GetSampleFloat(float X, float Y);
+	virtual Gr32::TColor32 __fastcall GetSampleFloat(Gr32::TFloat X, Gr32::TFloat Y);
 	virtual void __fastcall PrepareSampling();
 public:
 	/* TCustomResampler.Create */ inline __fastcall virtual TNearestResampler()/* overload */ : Gr32::TCustomResampler() { }
@@ -509,15 +511,15 @@ private:
 	TGetSampleFixed FGetSampleFixed;
 	
 protected:
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall GetWidth();
 	Gr32::TColor32 __fastcall GetPixelTransparentEdge(Gr32::TFixed X, Gr32::TFixed Y);
-	virtual void __fastcall Resample(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const System::Types::TRect &DstClip, Gr32::TCustomBitmap32* Src, const System::Types::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack);
+	virtual void __fastcall Resample(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect, const Gr32::TRect &DstClip, Gr32::TCustomBitmap32* Src, const Gr32::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack);
 	
 public:
 	__fastcall virtual TLinearResampler()/* overload */;
 	__fastcall virtual ~TLinearResampler();
 	virtual Gr32::TColor32 __fastcall GetSampleFixed(Gr32::TFixed X, Gr32::TFixed Y);
-	virtual Gr32::TColor32 __fastcall GetSampleFloat(float X, float Y);
+	virtual Gr32::TColor32 __fastcall GetSampleFloat(Gr32::TFloat X, Gr32::TFloat Y);
 	virtual void __fastcall PrepareSampling();
 public:
 	/* TCustomResampler.Create */ inline __fastcall virtual TLinearResampler(Gr32::TCustomBitmap32* ABitmap)/* overload */ : Gr32::TCustomResampler(ABitmap) { }
@@ -530,7 +532,7 @@ class PASCALIMPLEMENTATION TDraftResampler : public TLinearResampler
 	typedef TLinearResampler inherited;
 	
 protected:
-	virtual void __fastcall Resample(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const System::Types::TRect &DstClip, Gr32::TCustomBitmap32* Src, const System::Types::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack);
+	virtual void __fastcall Resample(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect, const Gr32::TRect &DstClip, Gr32::TCustomBitmap32* Src, const Gr32::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack);
 public:
 	/* TLinearResampler.Create */ inline __fastcall virtual TDraftResampler()/* overload */ : TLinearResampler() { }
 	/* TLinearResampler.Destroy */ inline __fastcall virtual ~TDraftResampler() { }
@@ -560,13 +562,13 @@ private:
 	void __fastcall SetTableSize(int Value);
 	
 protected:
-	virtual float __fastcall GetWidth();
+	virtual Gr32::TFloat __fastcall GetWidth();
 	
 public:
 	__fastcall virtual TKernelResampler()/* overload */;
 	__fastcall virtual ~TKernelResampler();
-	virtual Gr32::TColor32 __fastcall GetSampleFloat(float X, float Y);
-	virtual void __fastcall Resample(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const System::Types::TRect &DstClip, Gr32::TCustomBitmap32* Src, const System::Types::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack);
+	virtual Gr32::TColor32 __fastcall GetSampleFloat(Gr32::TFloat X, Gr32::TFloat Y);
+	virtual void __fastcall Resample(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect, const Gr32::TRect &DstClip, Gr32::TCustomBitmap32* Src, const Gr32::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack);
 	virtual void __fastcall PrepareSampling();
 	virtual void __fastcall FinalizeSampling();
 	
@@ -614,7 +616,7 @@ typedef void __fastcall (__closure *TReverseTransformInt)(int DstX, int DstY, /*
 
 typedef void __fastcall (__closure *TReverseTransformFixed)(Gr32::TFixed DstX, Gr32::TFixed DstY, /* out */ Gr32::TFixed &SrcX, /* out */ Gr32::TFixed &SrcY);
 
-typedef void __fastcall (__closure *TReverseTransformFloat)(float DstX, float DstY, /* out */ float &SrcX, /* out */ float &SrcY);
+typedef void __fastcall (__closure *TReverseTransformFloat)(Gr32::TFloat DstX, Gr32::TFloat DstY, /* out */ Gr32::TFloat &SrcX, /* out */ Gr32::TFloat &SrcY);
 
 class PASCALIMPLEMENTATION TTransformer : public TNestedSampler
 {
@@ -632,7 +634,7 @@ public:
 	virtual void __fastcall PrepareSampling();
 	virtual Gr32::TColor32 __fastcall GetSampleInt(int X, int Y);
 	virtual Gr32::TColor32 __fastcall GetSampleFixed(Gr32::TFixed X, Gr32::TFixed Y);
-	virtual Gr32::TColor32 __fastcall GetSampleFloat(float X, float Y);
+	virtual Gr32::TColor32 __fastcall GetSampleFloat(Gr32::TFloat X, Gr32::TFloat Y);
 	virtual bool __fastcall HasBounds();
 	virtual Gr32::TFloatRect __fastcall GetSampleBounds();
 	
@@ -912,11 +914,11 @@ extern DELPHI_PACKAGE void __fastcall IncBuffer(TBufferEntry &Buffer, Gr32::TCol
 extern DELPHI_PACKAGE void __fastcall MultiplyBuffer(TBufferEntry &Buffer, int W);
 extern DELPHI_PACKAGE void __fastcall ShrBuffer(TBufferEntry &Buffer, int Shift);
 extern DELPHI_PACKAGE Gr32::TColor32 __fastcall BufferToColor32(const TBufferEntry &Buffer, int Shift);
-extern DELPHI_PACKAGE void __fastcall BlockTransfer(Gr32::TCustomBitmap32* Dst, int DstX, int DstY, const System::Types::TRect &DstClip, Gr32::TCustomBitmap32* Src, const System::Types::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack = 0x0);
-extern DELPHI_PACKAGE void __fastcall BlockTransferX(Gr32::TCustomBitmap32* Dst, Gr32::TFixed DstX, Gr32::TFixed DstY, Gr32::TCustomBitmap32* Src, const System::Types::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack = 0x0);
-extern DELPHI_PACKAGE void __fastcall BlendTransfer(Gr32::TCustomBitmap32* Dst, int DstX, int DstY, const System::Types::TRect &DstClip, Gr32::TCustomBitmap32* SrcF, const System::Types::TRect &SrcRectF, Gr32::TCustomBitmap32* SrcB, const System::Types::TRect &SrcRectB, Gr32_blend::TBlendReg BlendCallback)/* overload */;
-extern DELPHI_PACKAGE void __fastcall BlendTransfer(Gr32::TCustomBitmap32* Dst, int DstX, int DstY, const System::Types::TRect &DstClip, Gr32::TCustomBitmap32* SrcF, const System::Types::TRect &SrcRectF, Gr32::TCustomBitmap32* SrcB, const System::Types::TRect &SrcRectB, Gr32_blend::TBlendRegEx BlendCallback, int MasterAlpha)/* overload */;
-extern DELPHI_PACKAGE void __fastcall StretchTransfer(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const System::Types::TRect &DstClip, Gr32::TCustomBitmap32* Src, const System::Types::TRect &SrcRect, Gr32::TCustomResampler* Resampler, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack = 0x0);
+extern DELPHI_PACKAGE void __fastcall BlockTransfer(Gr32::TCustomBitmap32* Dst, int DstX, int DstY, const Gr32::TRect &DstClip, Gr32::TCustomBitmap32* Src, const Gr32::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack = 0x0);
+extern DELPHI_PACKAGE void __fastcall BlockTransferX(Gr32::TCustomBitmap32* Dst, Gr32::TFixed DstX, Gr32::TFixed DstY, Gr32::TCustomBitmap32* Src, const Gr32::TRect &SrcRect, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack = 0x0);
+extern DELPHI_PACKAGE void __fastcall BlendTransfer(Gr32::TCustomBitmap32* Dst, int DstX, int DstY, const Gr32::TRect &DstClip, Gr32::TCustomBitmap32* SrcF, const Gr32::TRect &SrcRectF, Gr32::TCustomBitmap32* SrcB, const Gr32::TRect &SrcRectB, Gr32_blend::TBlendReg BlendCallback)/* overload */;
+extern DELPHI_PACKAGE void __fastcall BlendTransfer(Gr32::TCustomBitmap32* Dst, int DstX, int DstY, const Gr32::TRect &DstClip, Gr32::TCustomBitmap32* SrcF, const Gr32::TRect &SrcRectF, Gr32::TCustomBitmap32* SrcB, const Gr32::TRect &SrcRectB, Gr32_blend::TBlendRegEx BlendCallback, int MasterAlpha)/* overload */;
+extern DELPHI_PACKAGE void __fastcall StretchTransfer(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect, const Gr32::TRect &DstClip, Gr32::TCustomBitmap32* Src, const Gr32::TRect &SrcRect, Gr32::TCustomResampler* Resampler, Gr32::TDrawMode CombineOp, Gr32::TPixelCombineEvent CombineCallBack = 0x0);
 extern DELPHI_PACKAGE TFixedSamplePattern __fastcall CreateJitteredPattern(int TileWidth, int TileHeight, int SamplesX, int SamplesY);
 extern DELPHI_PACKAGE void __fastcall RegisterResampler(Gr32::TCustomResamplerClass ResamplerClass);
 extern DELPHI_PACKAGE void __fastcall RegisterKernel(TCustomKernelClass KernelClass);

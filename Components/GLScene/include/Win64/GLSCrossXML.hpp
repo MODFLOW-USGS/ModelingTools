@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSCrossXML.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSCrossXML.pas' rev: 36.00 (Windows)
 
 #ifndef GlscrossxmlHPP
 #define GlscrossxmlHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -34,21 +36,21 @@ typedef Xml::Xmlintf::_di_IXMLNode GLSXMLNode;
 typedef Xml::Xmldom::_di_IDOMNode GLSDOMNode;
 
 //-- var, const, procedure ---------------------------------------------------
-extern DELPHI_PACKAGE Xml::Xmlintf::_di_IXMLDocument __fastcall GLSNewXMLDocument(void);
-extern DELPHI_PACKAGE void __fastcall ReleaseXMLDocument(Xml::Xmlintf::_di_IXMLDocument &ADoc);
-extern DELPHI_PACKAGE void __fastcall WriteXMLFile(Xml::Xmlintf::_di_IXMLDocument &ADoc, System::Classes::TStream* AStream)/* overload */;
-extern DELPHI_PACKAGE void __fastcall ReadXMLFile(Xml::Xmlintf::_di_IXMLDocument &ADoc, System::Classes::TStream* AStream)/* overload */;
-extern DELPHI_PACKAGE void __fastcall WriteXMLFile(Xml::Xmlintf::_di_IXMLDocument &ADoc, System::UnicodeString AFileName)/* overload */;
-extern DELPHI_PACKAGE void __fastcall ReadXMLFile(Xml::Xmlintf::_di_IXMLDocument &ADoc, System::UnicodeString AFileName)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall GetXMLAttribute(const Xml::Xmlintf::_di_IXMLNode XMLNode, const System::UnicodeString AttrName, /* out */ System::UnicodeString &Value)/* overload */;
-extern DELPHI_PACKAGE void __fastcall SetXMLAttribute(const Xml::Xmlintf::_di_IXMLNode XMLNode, const System::UnicodeString AttrName, const System::UnicodeString Value)/* overload */;
-extern DELPHI_PACKAGE void __fastcall SetXMLAttribute(const Xml::Xmldom::_di_IDOMNode DOMNode, const System::UnicodeString AttrName, const System::UnicodeString Value)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall FindXMLNode(const Xml::Xmlintf::_di_IXMLNode ParentNode, const System::UnicodeString NodeName, /* out */ Xml::Xmlintf::_di_IXMLNode &ChildNode);
-extern DELPHI_PACKAGE Xml::Xmldom::_di_IDOMNode __fastcall CreateDOMNode(const Xml::Xmldom::_di_IDOMNode ParentNode, const System::UnicodeString NodeName);
-extern DELPHI_PACKAGE void __fastcall SetXMLText(const Xml::Xmldom::_di_IDOMNode DOMNode, const System::UnicodeString AText);
-extern DELPHI_PACKAGE bool __fastcall GetXMLText(const Xml::Xmlintf::_di_IXMLNode XMLNode, /* out */ System::UnicodeString &AText);
-extern DELPHI_PACKAGE int __fastcall GetXMLAttributeCount(const Xml::Xmlintf::_di_IXMLNode XMLNode);
-extern DELPHI_PACKAGE Xml::Xmlintf::_di_IXMLNode __fastcall GetXMLAttribute(const Xml::Xmlintf::_di_IXMLNode XMLNode, int Idx)/* overload */;
+extern DELPHI_PACKAGE GLSXMLDocument __fastcall GLSNewXMLDocument(void);
+extern DELPHI_PACKAGE void __fastcall ReleaseXMLDocument(GLSXMLDocument &ADoc);
+extern DELPHI_PACKAGE void __fastcall WriteXMLFile(GLSXMLDocument &ADoc, System::Classes::TStream* AStream)/* overload */;
+extern DELPHI_PACKAGE void __fastcall ReadXMLFile(GLSXMLDocument &ADoc, System::Classes::TStream* AStream)/* overload */;
+extern DELPHI_PACKAGE void __fastcall WriteXMLFile(GLSXMLDocument &ADoc, System::UnicodeString AFileName)/* overload */;
+extern DELPHI_PACKAGE void __fastcall ReadXMLFile(GLSXMLDocument &ADoc, System::UnicodeString AFileName)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall GetXMLAttribute(const GLSXMLNode XMLNode, const System::UnicodeString AttrName, /* out */ System::UnicodeString &Value)/* overload */;
+extern DELPHI_PACKAGE void __fastcall SetXMLAttribute(const GLSXMLNode XMLNode, const System::UnicodeString AttrName, const System::UnicodeString Value)/* overload */;
+extern DELPHI_PACKAGE void __fastcall SetXMLAttribute(const GLSDOMNode DOMNode, const System::UnicodeString AttrName, const System::UnicodeString Value)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall FindXMLNode(const GLSXMLNode ParentNode, const System::UnicodeString NodeName, /* out */ GLSXMLNode &ChildNode);
+extern DELPHI_PACKAGE GLSDOMNode __fastcall CreateDOMNode(const GLSDOMNode ParentNode, const System::UnicodeString NodeName);
+extern DELPHI_PACKAGE void __fastcall SetXMLText(const GLSDOMNode DOMNode, const System::UnicodeString AText);
+extern DELPHI_PACKAGE bool __fastcall GetXMLText(const GLSXMLNode XMLNode, /* out */ System::UnicodeString &AText);
+extern DELPHI_PACKAGE int __fastcall GetXMLAttributeCount(const GLSXMLNode XMLNode);
+extern DELPHI_PACKAGE Xml::Xmlintf::_di_IXMLNode __fastcall GetXMLAttribute(const GLSXMLNode XMLNode, int Idx)/* overload */;
 }	/* namespace Glscrossxml */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLSCROSSXML)
 using namespace Glscrossxml;

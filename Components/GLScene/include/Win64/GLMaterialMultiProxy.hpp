@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMaterialMultiProxy.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLMaterialMultiProxy.pas' rev: 36.00 (Windows)
 
 #ifndef GlmaterialmultiproxyHPP
 #define GlmaterialmultiproxyHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -47,11 +49,11 @@ class PASCALIMPLEMENTATION TGLMaterialMultiProxyMaster : public Glpersistentclas
 private:
 	Glscene::TGLBaseSceneObject* FMasterObject;
 	Glmaterial::TGLLibMaterial* FMasterLibMaterial;
-	System::UnicodeString FTempLibMaterialName;
+	Glmaterial::TGLLibMaterialName FTempLibMaterialName;
 	float FDistanceMin2;
 	float FDistanceMax2;
-	void __fastcall SetMasterLibMaterialName(const System::UnicodeString Value);
-	System::UnicodeString __fastcall GetMasterLibMaterialName();
+	void __fastcall SetMasterLibMaterialName(const Glmaterial::TGLLibMaterialName Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetMasterLibMaterialName();
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	
 protected:
@@ -72,7 +74,7 @@ public:
 	
 __published:
 	__property Glscene::TGLBaseSceneObject* MasterObject = {read=FMasterObject, write=SetMasterObject};
-	__property System::UnicodeString MasterLibMaterialName = {read=GetMasterLibMaterialName, write=SetMasterLibMaterialName};
+	__property Glmaterial::TGLLibMaterialName MasterLibMaterialName = {read=GetMasterLibMaterialName, write=SetMasterLibMaterialName};
 	__property float DistanceMin = {read=GetDistanceMin, write=SetDistanceMin};
 	__property float DistanceMax = {read=GetDistanceMax, write=SetDistanceMax};
 private:
@@ -141,8 +143,8 @@ public:
 	__fastcall virtual ~TGLMaterialMultiProxy();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall DoRender(Glrendercontextinfo::TGLRenderContextInfo &rci, bool renderSelf, bool renderChildren);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
 	
 __published:

@@ -1322,6 +1322,7 @@ var
   CurId: TID4;
   CurSize: LongWord;
   CurPnts, CurPols, CurItems: TLWChunkList;
+  ALWChunk: TLWChunk;
 begin
    CurPols:=nil;
    CurPnts:=nil;
@@ -1350,10 +1351,11 @@ begin
     begin
       CurPols.Add(GetChunkClass(CurId, TLWChunk).Create);
 
-      with CurPols[CurPols.Count - 1] do
+      ALWChunk := CurPols[CurPols.Count - 1];
+//      with CurPols[CurPols.Count - 1] do
       begin
-        FID := CurId;
-        LoadFromStream(AStream);
+        ALWChunk.FID := CurId;
+        ALWChunk.LoadFromStream(AStream);
       end;
 
     end else
@@ -1361,11 +1363,12 @@ begin
     begin
       CurPnts.Add(GetChunkClass(CurId, TLWChunk).Create);
 
-      with CurPnts[CurPnts.Count - 1] do
+      ALWChunk := CurPnts[CurPnts.Count - 1];
+//      with CurPnts[CurPnts.Count - 1] do
       begin
 
-        FID := CurId;
-        LoadFromStream(AStream);
+        ALWChunk.FID := CurId;
+        ALWChunk.LoadFromStream(AStream);
 
       end;
     end else
@@ -1377,10 +1380,11 @@ begin
 
       CurItems.Add(GetChunkClass(CurId, TLWChunk).Create);
 
-      with CurItems[CurItems.Count - 1] do
+      ALWChunk := CurItems[CurItems.Count - 1];
+//      with CurItems[CurItems.Count - 1] do
       begin
-        FID := CurId;
-        LoadFromStream(AStream);
+        ALWChunk.FID := CurId;
+        ALWChunk.LoadFromStream(AStream);
       end;
 
     end;
@@ -1817,6 +1821,7 @@ end;
 procedure TLWSurf.LoadData(AStream: TStream; DataStart, DataSize: LongWord);
 var
   CurId: TID4;
+  ALWChunk: TLWChunk;
 begin
 
   ReadS0(AStream,FName);
@@ -1830,11 +1835,12 @@ begin
 
     Items.Add(GetChunkClass(CurId, TLWSubChunk).Create);
 
-    with Items[Items.Count - 1] do
+    ALWChunk := Items[Items.Count - 1];
+//    with Items[Items.Count - 1] do
     begin
 
-      FID:=CurId;
-      LoadFromStream(AStream);
+      ALWChunk.FID:=CurId;
+      ALWChunk.LoadFromStream(AStream);
 
     end;
 
@@ -2285,6 +2291,7 @@ procedure TLWClip.LoadData(AStream: TStream; DataStart,
   DataSize: LongWord);
 var
   CurId: TID4;
+  ALWChunk: TLWChunk;
 begin
   ReadMotorolaNumber(AStream,@FClipIndex,4);
   while Cardinal(AStream.Position) < (DataStart + DataSize) do
@@ -2294,11 +2301,12 @@ begin
 
     Items.Add(GetChunkClass(CurId, TLWSubChunk).Create);
 
-    with Items[Items.Count - 1] do
+    ALWChunk := Items[Items.Count - 1];
+//    with Items[Items.Count - 1] do
     begin
 
-      FID:=CurId;
-      LoadFromStream(AStream);
+      ALWChunk.FID:=CurId;
+      ALWChunk.LoadFromStream(AStream);
 
     end;
 

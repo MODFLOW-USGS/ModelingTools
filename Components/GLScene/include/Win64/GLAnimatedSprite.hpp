@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLAnimatedSprite.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLAnimatedSprite.pas' rev: 36.00 (Windows)
 
 #ifndef GlanimatedspriteHPP
 #define GlanimatedspriteHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -137,7 +139,7 @@ private:
 	int FFrameHeight;
 	int FInterval;
 	TGLSpriteAnimFrameList* FFrames;
-	System::UnicodeString FLibMaterialName;
+	Glmaterial::TGLLibMaterialName FLibMaterialName;
 	Glmaterial::TGLLibMaterial* FLibMaterialCached;
 	TGLSpriteFrameDimensions FDimensions;
 	TGLSpriteAnimMargins* FMargins;
@@ -150,7 +152,7 @@ protected:
 	virtual void __fastcall WriteToFiler(System::Classes::TWriter* writer);
 	virtual void __fastcall ReadFromFiler(System::Classes::TReader* reader);
 	void __fastcall SetDimensions(const TGLSpriteFrameDimensions Value);
-	void __fastcall SetLibMaterialName(const System::UnicodeString val);
+	void __fastcall SetLibMaterialName(const Glmaterial::TGLLibMaterialName val);
 	Glmaterial::TGLLibMaterial* __fastcall GetLibMaterialCached();
 	void __fastcall SetInterval(const int Value);
 	void __fastcall SetFrameRate(const float Value);
@@ -170,7 +172,7 @@ __published:
 	__property int EndFrame = {read=FEndFrame, write=FEndFrame, nodefault};
 	__property int FrameWidth = {read=FFrameWidth, write=SetFrameWidth, nodefault};
 	__property int FrameHeight = {read=FFrameHeight, write=SetFrameHeight, nodefault};
-	__property System::UnicodeString LibMaterialName = {read=FLibMaterialName, write=SetLibMaterialName};
+	__property Glmaterial::TGLLibMaterialName LibMaterialName = {read=FLibMaterialName, write=SetLibMaterialName};
 	__property TGLSpriteAnimFrameList* Frames = {read=FFrames};
 	__property TGLSpriteFrameDimensions Dimensions = {read=FDimensions, write=SetDimensions, nodefault};
 	__property int Interval = {read=FInterval, write=SetInterval, nodefault};

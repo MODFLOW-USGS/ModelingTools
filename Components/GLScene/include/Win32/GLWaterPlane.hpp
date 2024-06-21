@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLWaterPlane.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLWaterPlane.pas' rev: 36.00 (Windows)
 
 #ifndef GlwaterplaneHPP
 #define GlwaterplaneHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -93,10 +95,10 @@ public:
 	virtual void __fastcall DoProgress(const Glbaseclasses::TGLProgressTimes &progressTime);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
 	void __fastcall CreateRippleAtGridPos(int X, int Y);
 	void __fastcall CreateRippleAtWorldPos(const float x, const float y, const float z)/* overload */;
-	void __fastcall CreateRippleAtWorldPos(const Glvectortypes::TVector4f &pos)/* overload */;
+	void __fastcall CreateRippleAtWorldPos(const Glvectorgeometry::TVector &pos)/* overload */;
 	void __fastcall CreateRippleRandom();
 	void __fastcall Reset();
 	__property float LastIterationStepTime = {read=FLastIterationStepTime};

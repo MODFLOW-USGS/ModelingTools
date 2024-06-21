@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileLMTS.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFileLMTS.pas' rev: 36.00 (Windows)
 
 #ifndef GlfilelmtsHPP
 #define GlfilelmtsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -72,8 +74,8 @@ typedef TLMTS_Subset *PLMTS_Subset;
 struct DECLSPEC_DRECORD TLMTS_Subset
 {
 public:
-	int Offset;
-	int Count;
+	System::LongInt Offset;
+	System::LongInt Count;
 	System::Word TextID1;
 	System::Word TextID2;
 };
@@ -114,14 +116,14 @@ struct DECLSPEC_DRECORD TMaterialInfo
 public:
 	Glmaterial::TShininess FShininess;
 	Glmaterial::TShininess BShininess;
-	Glvectortypes::TVector4f FAmbient;
-	Glvectortypes::TVector4f FDiffuse;
-	Glvectortypes::TVector4f FEmission;
-	Glvectortypes::TVector4f FSpecular;
-	Glvectortypes::TVector4f BAmbient;
-	Glvectortypes::TVector4f BDiffuse;
-	Glvectortypes::TVector4f BEmission;
-	Glvectortypes::TVector4f BSpecular;
+	Glvectorgeometry::TVector FAmbient;
+	Glvectorgeometry::TVector FDiffuse;
+	Glvectorgeometry::TVector FEmission;
+	Glvectorgeometry::TVector FSpecular;
+	Glvectorgeometry::TVector BAmbient;
+	Glvectorgeometry::TVector BDiffuse;
+	Glvectorgeometry::TVector BEmission;
+	Glvectorgeometry::TVector BSpecular;
 	Gltexture::TGLTextureImageAlpha ImageAlpha;
 	Gltexture::TGLMagFilter magFilter;
 	Gltexture::TGLMinFilter minFilter;

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScriptBase.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLScriptBase.pas' rev: 36.00 (Windows)
 
 #ifndef GlscriptbaseHPP
 #define GlscriptbaseHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -54,7 +56,7 @@ public:
 	virtual void __fastcall Stop() = 0 ;
 	virtual void __fastcall Execute() = 0 ;
 	virtual void __fastcall Invalidate() = 0 ;
-	virtual System::Variant __fastcall Call(System::UnicodeString aName, System::Variant *aParams, const int aParams_High) = 0 ;
+	virtual System::Variant __fastcall Call(System::UnicodeString aName, System::Variant *aParams, const System::NativeInt aParams_High) = 0 ;
 	__property System::Classes::TStringList* Errors = {read=FErrors};
 	__property TGLScriptState State = {read=GetState, nodefault};
 	

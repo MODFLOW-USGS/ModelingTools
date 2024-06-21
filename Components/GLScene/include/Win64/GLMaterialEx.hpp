@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMaterialEx.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLMaterialEx.pas' rev: 36.00 (Windows)
 
 #ifndef GlmaterialexHPP
 #define GlmaterialexHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -97,7 +99,7 @@ private:
 	TGLMaterialLibraryEx* __fastcall GetMaterialLibraryEx();
 	
 protected:
-	virtual void __fastcall SetName(const System::UnicodeString AValue);
+	virtual void __fastcall SetName(const TGLMaterialComponentName AValue);
 	virtual void __fastcall NotifyChange(System::TObject* Sender);
 	__property Glpersistentclasses::TPersistentObjectList* UserList = {read=GetUserList};
 	virtual void __fastcall DoOnPrepare(Glcontext::TGLContext* Sender) = 0 ;
@@ -112,7 +114,7 @@ public:
 	__property bool IsValid = {read=FIsValid, nodefault};
 	
 __published:
-	__property System::UnicodeString Name = {read=GetName, write=SetName};
+	__property TGLMaterialComponentName Name = {read=GetName, write=SetName};
 	__property bool DefferedInit = {read=FDefferedInit, write=FDefferedInit, default=0};
 public:
 	/* TXCollectionItem.Create */ inline __fastcall virtual TGLBaseMaterialCollectionItem(Glxcollection::TXCollection* aOwner) : Glxcollection::TXCollectionItem(aOwner) { }
@@ -144,13 +146,13 @@ class PASCALIMPLEMENTATION TGLLibMaterialProperty : public Glbaseclasses::TGLUpd
 	
 protected:
 	bool FEnabled;
-	System::UnicodeString FNextPassName;
+	Glmaterial::TGLLibMaterialName FNextPassName;
 	TGLLibMaterialEx* __fastcall GetMaterial();
 	TGLMaterialLibraryEx* __fastcall GetMaterialLibraryEx();
 	virtual void __fastcall SetEnabled(bool AValue);
-	void __fastcall SetNextPass(const System::UnicodeString AValue);
+	void __fastcall SetNextPass(const Glmaterial::TGLLibMaterialName AValue);
 	virtual void __fastcall Loaded();
-	__property System::UnicodeString NextPass = {read=FNextPassName, write=SetNextPass};
+	__property Glmaterial::TGLLibMaterialName NextPass = {read=FNextPassName, write=SetNextPass};
 	
 public:
 	virtual void __fastcall NotifyChange(System::TObject* Sender);
@@ -202,7 +204,7 @@ private:
 	System::StaticArray<Gltextureformat::TGLSeparateTextureWrap, 3> FWrap;
 	Glcolor::TGLColor* FBorderColor;
 	Gltextureformat::TGLTextureCompareMode FCompareMode;
-	Glstate::TComparisonFunction FCompareFunc;
+	Glstate::TDepthFunction FCompareFunc;
 	bool FDecodeSRGB;
 	void __fastcall SetMagFilter(Gltexture::TGLMagFilter AValue);
 	void __fastcall SetMinFilter(Gltexture::TGLMinFilter AValue);
@@ -212,7 +214,7 @@ private:
 	void __fastcall SetWrap(int Index, Gltextureformat::TGLSeparateTextureWrap AValue);
 	void __fastcall SetBorderColor(Glcolor::TGLColor* const AValue);
 	void __fastcall SetCompareMode(Gltextureformat::TGLTextureCompareMode AValue);
-	void __fastcall SetCompareFunc(Glstate::TComparisonFunction AValue);
+	void __fastcall SetCompareFunc(Glstate::TDepthFunction AValue);
 	void __fastcall SetDecodeSRGB(bool AValue);
 	
 public:
@@ -236,7 +238,7 @@ __published:
 	__property Gltextureformat::TGLSeparateTextureWrap WrapZ = {read=GetWrap, write=SetWrap, index=2, default=0};
 	__property Glcolor::TGLColor* BorderColor = {read=FBorderColor, write=SetBorderColor};
 	__property Gltextureformat::TGLTextureCompareMode CompareMode = {read=FCompareMode, write=SetCompareMode, default=0};
-	__property Glstate::TComparisonFunction CompareFunc = {read=FCompareFunc, write=SetCompareFunc, default=3};
+	__property Glstate::TDepthFunction CompareFunc = {read=FCompareFunc, write=SetCompareFunc, default=3};
 	__property bool sRGB_Encode = {read=FDecodeSRGB, write=SetDecodeSRGB, default=1};
 };
 
@@ -283,7 +285,7 @@ protected:
 	virtual void __fastcall ReadFromFiler(System::Classes::TReader* AReader);
 	
 private:
-	Gltextureformat::TGLInternalCompression FCompression;
+	Gltexture::TGLTextureCompression FCompression;
 	Glgraphics::TGLBaseImage* FImage;
 	Gltexture::TGLTextureImageAlpha FImageAlpha;
 	float FImageBrightness;
@@ -305,7 +307,7 @@ private:
 	bool __fastcall StoreGamma();
 	void __fastcall SetNormalMapScale(const float AValue);
 	bool __fastcall StoreNormalMapScale();
-	void __fastcall SetCompression(const Gltextureformat::TGLInternalCompression AValue);
+	void __fastcall SetCompression(const Gltexture::TGLTextureCompression AValue);
 	void __fastcall SetSourceFile(System::UnicodeString AValue);
 	void __fastcall SetInternallyStored(const bool AValue);
 	void __fastcall SetMipGenMode(const TMipmapGenerationMode AValue);
@@ -333,7 +335,7 @@ __published:
 	__property Gltexture::TGLTextureImageAlpha ImageAlpha = {read=FImageAlpha, write=SetImageAlpha, default=0};
 	__property float ImageBrightness = {read=FImageBrightness, write=SetImageBrightness, stored=StoreBrightness};
 	__property float ImageGamma = {read=FImageGamma, write=SetImageGamma, stored=StoreGamma};
-	__property Gltextureformat::TGLInternalCompression Compression = {read=FCompression, write=SetCompression, default=0};
+	__property Gltexture::TGLTextureCompression Compression = {read=FCompression, write=SetCompression, default=0};
 	__property float HeightToNormalScale = {read=FHeightToNormalScale, write=SetNormalMapScale, stored=StoreNormalMapScale};
 	__property System::UnicodeString SourceFile = {read=FSourceFile, write=SetSourceFile};
 	__property bool InternallyStored = {read=FInternallyStored, write=SetInternallyStored, default=0};
@@ -422,16 +424,16 @@ class PASCALIMPLEMENTATION TGLTextureProperties : public TGLLibMaterialProperty
 	typedef TGLLibMaterialProperty inherited;
 	
 private:
-	System::UnicodeString FLibTextureName;
-	System::UnicodeString FLibSamplerName;
+	TGLMaterialComponentName FLibTextureName;
+	TGLMaterialComponentName FLibSamplerName;
 	TGLAbstractTexture* FLibTexture;
 	TGLTextureSampler* FLibSampler;
-	Glcoordinates::TGLCoordinates3* FTextureOffset;
-	Glcoordinates::TGLCoordinates3* FTextureScale;
+	Glcoordinates::TGLCoordinates* FTextureOffset;
+	Glcoordinates::TGLCoordinates* FTextureScale;
 	float FTextureRotate;
 	bool FTextureMatrixIsIdentity;
 	bool FTextureOverride;
-	Glvectortypes::TMatrix4f FTextureMatrix;
+	Glvectorgeometry::TMatrix FTextureMatrix;
 	Gltexture::TGLTextureMappingMode FMappingMode;
 	Glcolor::TGLColor* FEnvColor;
 	Glcoordinates::TGLCoordinates4* FMapSCoordinates;
@@ -439,17 +441,17 @@ private:
 	Glcoordinates::TGLCoordinates4* FMapRCoordinates;
 	Glcoordinates::TGLCoordinates4* FMapQCoordinates;
 	TGLTextureSwizzling* FSwizzling;
-	System::UnicodeString __fastcall GetLibTextureName();
-	System::UnicodeString __fastcall GetLibSamplerName();
-	void __fastcall SetLibTextureName(const System::UnicodeString AValue);
-	void __fastcall SetLibSamplerName(const System::UnicodeString AValue);
-	Glcoordinates::TGLCoordinates3* __fastcall GetTextureOffset();
-	void __fastcall SetTextureOffset(Glcoordinates::TGLCoordinates3* const AValue);
+	TGLMaterialComponentName __fastcall GetLibTextureName();
+	TGLMaterialComponentName __fastcall GetLibSamplerName();
+	void __fastcall SetLibTextureName(const TGLMaterialComponentName AValue);
+	void __fastcall SetLibSamplerName(const TGLMaterialComponentName AValue);
+	Glcoordinates::TGLCoordinates* __fastcall GetTextureOffset();
+	void __fastcall SetTextureOffset(Glcoordinates::TGLCoordinates* const AValue);
 	bool __fastcall StoreTextureOffset();
-	Glcoordinates::TGLCoordinates3* __fastcall GetTextureScale();
-	void __fastcall SetTextureScale(Glcoordinates::TGLCoordinates3* const AValue);
+	Glcoordinates::TGLCoordinates* __fastcall GetTextureScale();
+	void __fastcall SetTextureScale(Glcoordinates::TGLCoordinates* const AValue);
 	bool __fastcall StoreTextureScale();
-	void __fastcall SetTextureMatrix(const Glvectortypes::TMatrix4f &AValue);
+	void __fastcall SetTextureMatrix(const Glvectorgeometry::TMatrix &AValue);
 	void __fastcall SetTextureRotate(float AValue);
 	bool __fastcall StoreTextureRotate();
 	void __fastcall SetMappingMode(const Gltexture::TGLTextureMappingMode AValue);
@@ -484,13 +486,13 @@ public:
 	bool __fastcall IsValid();
 	void __fastcall Apply(Glrendercontextinfo::TGLRenderContextInfo &ARci);
 	void __fastcall UnApply(Glrendercontextinfo::TGLRenderContextInfo &ARci);
-	__property Glvectortypes::TMatrix4f TextureMatrix = {read=FTextureMatrix, write=SetTextureMatrix};
+	__property Glvectorgeometry::TMatrix TextureMatrix = {read=FTextureMatrix, write=SetTextureMatrix};
 	
 __published:
-	__property System::UnicodeString LibTextureName = {read=GetLibTextureName, write=SetLibTextureName};
-	__property System::UnicodeString LibSamplerName = {read=GetLibSamplerName, write=SetLibSamplerName};
-	__property Glcoordinates::TGLCoordinates3* TextureOffset = {read=GetTextureOffset, write=SetTextureOffset, stored=StoreTextureOffset};
-	__property Glcoordinates::TGLCoordinates3* TextureScale = {read=GetTextureScale, write=SetTextureScale, stored=StoreTextureScale};
+	__property TGLMaterialComponentName LibTextureName = {read=GetLibTextureName, write=SetLibTextureName};
+	__property TGLMaterialComponentName LibSamplerName = {read=GetLibSamplerName, write=SetLibSamplerName};
+	__property Glcoordinates::TGLCoordinates* TextureOffset = {read=GetTextureOffset, write=SetTextureOffset, stored=StoreTextureOffset};
+	__property Glcoordinates::TGLCoordinates* TextureScale = {read=GetTextureScale, write=SetTextureScale, stored=StoreTextureScale};
 	__property float TextureRotate = {read=FTextureRotate, write=SetTextureRotate, stored=StoreTextureRotate};
 	__property Glcolor::TGLColor* EnvColor = {read=FEnvColor, write=SetEnvColor};
 	__property Gltexture::TGLTextureMappingMode MappingMode = {read=FMappingMode, write=SetMappingMode, default=0};
@@ -623,8 +625,8 @@ class PASCALIMPLEMENTATION TGLMultitexturingProperties : public TGLLibMaterialPr
 private:
 	TGLTextureCombiner* FLibCombiner;
 	TGLASMVertexProgram* FLibAsmProg;
-	System::UnicodeString FLibCombinerName;
-	System::UnicodeString FLibAsmProgName;
+	TGLMaterialComponentName FLibCombinerName;
+	TGLMaterialComponentName FLibAsmProgName;
 	System::StaticArray<TGLTextureProperties*, 4> FTexProps;
 	Gltexture::TGLTextureMode FTextureMode;
 	TLightDir2TexEnvColor FLightDir;
@@ -733,8 +735,8 @@ protected:
 	virtual float __fastcall GetFloat();
 	virtual Glvectortypes::TVector2f __fastcall GetVec2();
 	virtual Glvectortypes::TVector3f __fastcall GetVec3();
-	virtual Glvectortypes::TVector4f __fastcall GetVec4();
-	virtual int __fastcall GetInt();
+	virtual Glvectorgeometry::TVector __fastcall GetVec4();
+	virtual Opengltokens::TGLint __fastcall GetInt();
 	virtual Glvectortypes::TVector2i __fastcall GetIVec2();
 	virtual Glvectortypes::TVector3i __fastcall GetIVec3();
 	virtual Glvectortypes::TVector4i __fastcall GetIVec4();
@@ -742,7 +744,7 @@ protected:
 	virtual Glvectortypes::TVector2ui __fastcall GetUVec2();
 	virtual Glvectortypes::TVector3ui __fastcall GetUVec3();
 	virtual Glvectortypes::TVector4ui __fastcall GetUVec4();
-	virtual void __fastcall SetFloat(const float Value);
+	virtual void __fastcall SetFloat(const Opengltokens::TGLfloat Value);
 	virtual void __fastcall SetVec2(const Glvectortypes::TVector2f &Value);
 	virtual void __fastcall SetVec3(const Glvectortypes::TVector3f &Value);
 	virtual void __fastcall SetVec4(const Glvectortypes::TVector4f &Value);
@@ -760,9 +762,9 @@ protected:
 	virtual void __fastcall SetMat2(const Glvectortypes::TMatrix2f &Value);
 	virtual void __fastcall SetMat3(const Glvectortypes::TMatrix3f &Value);
 	virtual void __fastcall SetMat4(const Glvectortypes::TMatrix4f &Value);
-	virtual void __fastcall SetFloatArray(const System::PSingle Values, int Count);
-	virtual void __fastcall SetIntArray(const System::PInteger Values, int Count);
-	virtual void __fastcall SetUIntArray(const System::PCardinal Values, int Count);
+	virtual void __fastcall SetFloatArray(const Opengltokens::PGLfloat Values, int Count);
+	virtual void __fastcall SetIntArray(const Opengltokens::PGLint Values, int Count);
+	virtual void __fastcall SetUIntArray(const Opengltokens::PGLuint Values, int Count);
 	virtual void __fastcall WriteToFiler(System::Classes::TWriter* AWriter);
 	virtual void __fastcall ReadFromFiler(System::Classes::TReader* AReader);
 	virtual void __fastcall Apply(Glrendercontextinfo::TGLRenderContextInfo &ARci);
@@ -797,7 +799,7 @@ protected:
 	virtual float __fastcall GetFloat();
 	virtual Glvectortypes::TVector2f __fastcall GetVec2();
 	virtual Glvectortypes::TVector3f __fastcall GetVec3();
-	virtual Glvectortypes::TVector4f __fastcall GetVec4();
+	virtual Glvectorgeometry::TVector __fastcall GetVec4();
 	virtual int __fastcall GetInt();
 	virtual Glvectortypes::TVector2i __fastcall GetIVec2();
 	virtual Glvectortypes::TVector3i __fastcall GetIVec3();
@@ -806,7 +808,7 @@ protected:
 	virtual Glvectortypes::TVector2ui __fastcall GetUVec2();
 	virtual Glvectortypes::TVector3ui __fastcall GetUVec3();
 	virtual Glvectortypes::TVector4ui __fastcall GetUVec4();
-	virtual void __fastcall SetFloat(const float Value);
+	virtual void __fastcall SetFloat(const Opengltokens::TGLfloat Value);
 	virtual void __fastcall SetVec2(const Glvectortypes::TVector2f &Value);
 	virtual void __fastcall SetVec3(const Glvectortypes::TVector3f &Value);
 	virtual void __fastcall SetVec4(const Glvectortypes::TVector4f &Value);
@@ -830,9 +832,9 @@ protected:
 	virtual void __fastcall ReadFromFiler(System::Classes::TReader* AReader);
 	
 public:
-	virtual void __fastcall SetFloatArray(const System::PSingle Values, int Count);
-	virtual void __fastcall SetIntArray(const System::PInteger Values, int Count);
-	virtual void __fastcall SetUIntArray(const System::PCardinal Values, int Count);
+	virtual void __fastcall SetFloatArray(const Opengltokens::PGLfloat Values, int Count);
+	virtual void __fastcall SetIntArray(const Opengltokens::PGLint Values, int Count);
+	virtual void __fastcall SetUIntArray(const Opengltokens::PGLuint Values, int Count);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall Apply(Glrendercontextinfo::TGLRenderContextInfo &ARci);
 	__property System::UnicodeString Name = {read=GetName};
@@ -858,7 +860,7 @@ class PASCALIMPLEMENTATION TGLShaderUniformDSA : public TGLShaderUniform
 	typedef TGLShaderUniform inherited;
 	
 protected:
-	virtual void __fastcall SetFloat(const float Value);
+	virtual void __fastcall SetFloat(const Opengltokens::TGLfloat Value);
 	virtual void __fastcall SetVec2(const Glvectortypes::TVector2f &Value);
 	virtual void __fastcall SetVec3(const Glvectortypes::TVector3f &Value);
 	virtual void __fastcall SetVec4(const Glvectortypes::TVector4f &Value);
@@ -875,9 +877,9 @@ protected:
 	virtual void __fastcall SetMat4(const Glvectortypes::TMatrix4f &Value);
 	
 public:
-	virtual void __fastcall SetFloatArray(const System::PSingle Values, int Count);
-	virtual void __fastcall SetIntArray(const System::PInteger Values, int Count);
-	virtual void __fastcall SetUIntArray(const System::PCardinal Values, int Count);
+	virtual void __fastcall SetFloatArray(const Opengltokens::PGLfloat Values, int Count);
+	virtual void __fastcall SetIntArray(const Opengltokens::PGLint Values, int Count);
+	virtual void __fastcall SetUIntArray(const Opengltokens::PGLuint Values, int Count);
 public:
 	/* TGLUpdateAbleObject.Create */ inline __fastcall virtual TGLShaderUniformDSA(System::Classes::TPersistent* AOwner) : TGLShaderUniform(AOwner) { }
 	
@@ -898,8 +900,8 @@ private:
 	Gltextureformat::TSwizzleVector FSwizzling;
 	
 protected:
-	System::UnicodeString FLibTexureName;
-	System::UnicodeString FLibSamplerName;
+	TGLMaterialComponentName FLibTexureName;
+	TGLMaterialComponentName FLibSamplerName;
 	virtual System::UnicodeString __fastcall GetTextureName();
 	virtual System::UnicodeString __fastcall GetSamplerName();
 	virtual Gltextureformat::TSwizzleVector __fastcall GetTextureSwizzle();
@@ -916,8 +918,8 @@ public:
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall Notification(System::TObject* Sender, System::Classes::TOperation Operation);
 	virtual void __fastcall Apply(Glrendercontextinfo::TGLRenderContextInfo &ARci);
-	__property System::UnicodeString LibTextureName = {read=GetTextureName, write=SetTextureName};
-	__property System::UnicodeString LibSamplerName = {read=GetSamplerName, write=SetSamplerName};
+	__property TGLMaterialComponentName LibTextureName = {read=GetTextureName, write=SetTextureName};
+	__property TGLMaterialComponentName LibSamplerName = {read=GetSamplerName, write=SetSamplerName};
 	__property Glslparameter::TGLSLSamplerType GLSLSampler = {read=GetGLSLSamplerType, nodefault};
 	__property Gltextureformat::TSwizzleVector Swizzling = {read=GetTextureSwizzle, write=SetTextureSwizzle};
 };
@@ -944,11 +946,11 @@ protected:
 	void __fastcall SetLibShaderName(TGLShaderType AType, const System::UnicodeString AValue);
 	Glslparameter::_di_IShaderParameter __fastcall GetUniform(const System::UnicodeString AName);
 	__classmethod void __fastcall ReleaseUniforms(Glpersistentclasses::TPersistentObjectList* AList);
-	__property System::UnicodeString LibVertexShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=0};
-	__property System::UnicodeString LibFragmentShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=4};
-	__property System::UnicodeString LibGeometryShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=3};
-	__property System::UnicodeString LibTessEvalShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=2};
-	__property System::UnicodeString LibTessControlShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=1};
+	__property TGLMaterialComponentName LibVertexShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=0};
+	__property TGLMaterialComponentName LibFragmentShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=4};
+	__property TGLMaterialComponentName LibGeometryShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=3};
+	__property TGLMaterialComponentName LibTessEvalShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=2};
+	__property TGLMaterialComponentName LibTessControlShaderName = {read=GetLibShaderName, write=SetLibShaderName, index=1};
 	virtual void __fastcall DefineProperties(System::Classes::TFiler* Filer);
 	void __fastcall ReadUniforms(System::Classes::TStream* AStream);
 	void __fastcall WriteUniforms(System::Classes::TStream* AStream);
@@ -1114,7 +1116,7 @@ public:
 	HIDESBASE TGLLibMaterialEx* __fastcall Add();
 	HIDESBASE TGLLibMaterialEx* __fastcall FindItemID(int ID);
 	__property TGLLibMaterialEx* Items[int index] = {read=GetItems, write=SetItems/*, default*/};
-	TGLLibMaterialEx* __fastcall GetLibMaterialByName(const System::UnicodeString AName);
+	TGLLibMaterialEx* __fastcall GetLibMaterialByName(const Glmaterial::TGLLibMaterialName AName);
 public:
 	/* TCollection.Destroy */ inline __fastcall virtual ~TGLLibMaterialsEx() { }
 	
@@ -1135,14 +1137,14 @@ public:
 	DYNAMIC System::UnicodeString __fastcall GetNamePath();
 	__classmethod virtual Glxcollection::TXCollectionItemClass __fastcall ItemsClass();
 	__property TGLBaseMaterialCollectionItem* Items[int index] = {read=GetItems/*, default*/};
-	TGLBaseMaterialCollectionItem* __fastcall GetItemByName(const System::UnicodeString AName);
-	TGLAbstractTexture* __fastcall GetTextureByName(const System::UnicodeString AName);
-	TGLFrameBufferAttachment* __fastcall GetAttachmentByName(const System::UnicodeString AName);
-	TGLTextureSampler* __fastcall GetSamplerByName(const System::UnicodeString AName);
-	TGLTextureCombiner* __fastcall GetCombinerByName(const System::UnicodeString AName);
-	TGLShaderEx* __fastcall GetShaderByName(const System::UnicodeString AName);
-	TGLASMVertexProgram* __fastcall GetAsmProgByName(const System::UnicodeString AName);
-	System::UnicodeString __fastcall MakeUniqueName(const System::UnicodeString AName);
+	TGLBaseMaterialCollectionItem* __fastcall GetItemByName(const TGLMaterialComponentName AName);
+	TGLAbstractTexture* __fastcall GetTextureByName(const TGLMaterialComponentName AName);
+	TGLFrameBufferAttachment* __fastcall GetAttachmentByName(const TGLMaterialComponentName AName);
+	TGLTextureSampler* __fastcall GetSamplerByName(const TGLMaterialComponentName AName);
+	TGLTextureCombiner* __fastcall GetCombinerByName(const TGLMaterialComponentName AName);
+	TGLShaderEx* __fastcall GetShaderByName(const TGLMaterialComponentName AName);
+	TGLASMVertexProgram* __fastcall GetAsmProgByName(const TGLMaterialComponentName AName);
+	TGLMaterialComponentName __fastcall MakeUniqueName(const TGLMaterialComponentName AName);
 public:
 	/* TXCollection.Create */ inline __fastcall virtual TGLMatLibComponents(System::Classes::TPersistent* aOwner) : Glxcollection::TXCollection(aOwner) { }
 	/* TXCollection.Destroy */ inline __fastcall virtual ~TGLMatLibComponents() { }
@@ -1171,12 +1173,12 @@ public:
 	__fastcall virtual TGLMaterialLibraryEx(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLMaterialLibraryEx();
 	void __fastcall GetNames(System::Classes::TGetStrProc Proc, CGLBaseMaterialCollectionItem AClass)/* overload */;
-	TGLTextureImageEx* __fastcall AddTexture(const System::UnicodeString AName);
-	TGLFrameBufferAttachment* __fastcall AddAttachment(const System::UnicodeString AName);
-	TGLTextureSampler* __fastcall AddSampler(const System::UnicodeString AName);
-	TGLTextureCombiner* __fastcall AddCombiner(const System::UnicodeString AName);
-	TGLShaderEx* __fastcall AddShader(const System::UnicodeString AName);
-	TGLASMVertexProgram* __fastcall AddAsmProg(const System::UnicodeString AName);
+	TGLTextureImageEx* __fastcall AddTexture(const TGLMaterialComponentName AName);
+	TGLFrameBufferAttachment* __fastcall AddAttachment(const TGLMaterialComponentName AName);
+	TGLTextureSampler* __fastcall AddSampler(const TGLMaterialComponentName AName);
+	TGLTextureCombiner* __fastcall AddCombiner(const TGLMaterialComponentName AName);
+	TGLShaderEx* __fastcall AddShader(const TGLMaterialComponentName AName);
+	TGLASMVertexProgram* __fastcall AddAsmProg(const TGLMaterialComponentName AName);
 	void __fastcall SetLevelForAll(const Glstate::TGLMaterialLevel ALevel);
 	
 __published:

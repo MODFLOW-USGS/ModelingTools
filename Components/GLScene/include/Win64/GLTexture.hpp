@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTexture.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLTexture.pas' rev: 36.00 (Windows)
 
 #ifndef GltextureHPP
 #define GltextureHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -269,8 +271,8 @@ protected:
 	virtual int __fastcall GetWidth();
 	virtual int __fastcall GetHeight();
 	virtual int __fastcall GetDepth();
-	void __fastcall SetPicture(int index, Vcl::Graphics::TPicture* const val);
-	Vcl::Graphics::TPicture* __fastcall GetPicture(int index);
+	void __fastcall SetPicture(TGLCubeMapTarget index, Vcl::Graphics::TPicture* const val);
+	Vcl::Graphics::TPicture* __fastcall GetPicture(TGLCubeMapTarget index);
 	virtual Gltextureformat::TGLTextureTarget __fastcall GetTextureTarget();
 	void __fastcall PictureChanged(System::TObject* Sender);
 	
@@ -287,7 +289,7 @@ public:
 	__classmethod virtual System::UnicodeString __fastcall FriendlyName();
 	__classmethod virtual System::UnicodeString __fastcall FriendlyDescription();
 	__property NativeTextureTarget;
-	__property Vcl::Graphics::TPicture* Picture[int index] = {read=GetPicture, write=SetPicture};
+	__property Vcl::Graphics::TPicture* Picture[TGLCubeMapTarget index] = {read=GetPicture, write=SetPicture};
 	
 __published:
 	__property Vcl::Graphics::TPicture* PicturePX = {read=GetPicture, write=SetPicture, index=0};
@@ -324,7 +326,7 @@ private:
 	Glcoordinates::TGLCoordinates4* FMapRCoordinates;
 	Glcoordinates::TGLCoordinates4* FMapQCoordinates;
 	TGLTextureNeededEvent FOnTextureNeeded;
-	Gltextureformat::TGLInternalCompression FCompression;
+	TGLTextureCompression FCompression;
 	int FRequiredMemorySize;
 	Gltextureformat::TGLTextureFilteringQuality FFilteringQuality;
 	int FTexWidth;
@@ -337,7 +339,7 @@ private:
 	Gltextureformat::TGLSeparateTextureWrap FTextureWrapT;
 	Gltextureformat::TGLSeparateTextureWrap FTextureWrapR;
 	Gltextureformat::TGLTextureCompareMode fTextureCompareMode;
-	Glstate::TComparisonFunction fTextureCompareFunc;
+	TGLDepthCompareFunc fTextureCompareFunc;
 	TGLDepthTextureMode fDepthTextureMode;
 	bool FKeepImageAfterTransfer;
 	
@@ -359,7 +361,7 @@ protected:
 	void __fastcall SetTextureFormat(const TGLTextureFormat val);
 	void __fastcall SetTextureFormatEx(const Gltextureformat::TGLInternalFormat val);
 	bool __fastcall StoreTextureFormatEx();
-	void __fastcall SetCompression(const Gltextureformat::TGLInternalCompression val);
+	void __fastcall SetCompression(const TGLTextureCompression val);
 	void __fastcall SetFilteringQuality(const Gltextureformat::TGLTextureFilteringQuality val);
 	void __fastcall SetMappingMode(const TGLTextureMappingMode val);
 	Glcoordinates::TGLCoordinates4* __fastcall GetMappingSCoordinates();
@@ -381,7 +383,7 @@ protected:
 	void __fastcall SetBorderColor(Glcolor::TGLColor* const val);
 	void __fastcall SetNormalMapScale(const float val);
 	void __fastcall SetTextureCompareMode(const Gltextureformat::TGLTextureCompareMode val);
-	void __fastcall SetTextureCompareFunc(const Glstate::TComparisonFunction val);
+	void __fastcall SetTextureCompareFunc(const TGLDepthCompareFunc val);
 	void __fastcall SetDepthTextureMode(const TGLDepthTextureMode val);
 	bool __fastcall StoreNormalMapScale();
 	bool __fastcall StoreImageClassName();
@@ -440,7 +442,7 @@ __published:
 	__property Gltextureformat::TGLSeparateTextureWrap TextureWrapR = {read=FTextureWrapR, write=SetTextureWrapR, default=0};
 	__property TGLTextureFormat TextureFormat = {read=GetTextureFormat, write=SetTextureFormat, default=0};
 	__property Gltextureformat::TGLInternalFormat TextureFormatEx = {read=FTextureFormat, write=SetTextureFormatEx, stored=StoreTextureFormatEx, nodefault};
-	__property Gltextureformat::TGLInternalCompression Compression = {read=FCompression, write=SetCompression, default=0};
+	__property TGLTextureCompression Compression = {read=FCompression, write=SetCompression, default=0};
 	__property Gltextureformat::TGLTextureFilteringQuality FilteringQuality = {read=FFilteringQuality, write=SetFilteringQuality, default=0};
 	__property TGLTextureMappingMode MappingMode = {read=FMappingMode, write=SetMappingMode, default=0};
 	__property Glcoordinates::TGLCoordinates4* MappingSCoordinates = {read=GetMappingSCoordinates, write=SetMappingSCoordinates, stored=StoreMappingSCoordinates};
@@ -452,7 +454,7 @@ __published:
 	__property bool Disabled = {read=FDisabled, write=SetDisabled, default=1};
 	__property float NormalMapScale = {read=FNormalMapScale, write=SetNormalMapScale, stored=StoreNormalMapScale};
 	__property Gltextureformat::TGLTextureCompareMode TextureCompareMode = {read=fTextureCompareMode, write=SetTextureCompareMode, default=0};
-	__property Glstate::TComparisonFunction TextureCompareFunc = {read=fTextureCompareFunc, write=SetTextureCompareFunc, default=3};
+	__property TGLDepthCompareFunc TextureCompareFunc = {read=fTextureCompareFunc, write=SetTextureCompareFunc, default=3};
 	__property TGLDepthTextureMode DepthTextureMode = {read=fDepthTextureMode, write=SetDepthTextureMode, default=0};
 	__property bool KeepImageAfterTransfer = {read=FKeepImageAfterTransfer, write=FKeepImageAfterTransfer, default=0};
 };
@@ -465,10 +467,10 @@ class PASCALIMPLEMENTATION TGLTextureExItem : public System::Classes::TCollectio
 private:
 	TGLTexture* FTexture;
 	int FTextureIndex;
-	Glcoordinates::TGLCoordinates3* FTextureOffset;
-	Glcoordinates::TGLCoordinates3* FTextureScale;
+	Glcoordinates::TGLCoordinates* FTextureOffset;
+	Glcoordinates::TGLCoordinates* FTextureScale;
 	bool FTextureMatrixIsIdentity;
-	Glvectortypes::TMatrix4f FTextureMatrix;
+	Glvectorgeometry::TMatrix FTextureMatrix;
 	bool FApplied;
 	HRESULT __stdcall QueryInterface(const GUID &IID, /* out */ void *Obj);
 	int __stdcall _AddRef();
@@ -479,8 +481,8 @@ protected:
 	DYNAMIC System::Classes::TPersistent* __fastcall GetOwner();
 	void __fastcall SetTexture(TGLTexture* const Value);
 	void __fastcall SetTextureIndex(const int Value);
-	void __fastcall SetTextureOffset(Glcoordinates::TGLCoordinates3* const Value);
-	void __fastcall SetTextureScale(Glcoordinates::TGLCoordinates3* const Value);
+	void __fastcall SetTextureOffset(Glcoordinates::TGLCoordinates* const Value);
+	void __fastcall SetTextureScale(Glcoordinates::TGLCoordinates* const Value);
 	void __fastcall NotifyTexMapChange(System::TObject* Sender);
 	void __fastcall CalculateTextureMatrix();
 	void __fastcall OnNotifyChange(System::TObject* Sender);
@@ -496,8 +498,8 @@ public:
 __published:
 	__property TGLTexture* Texture = {read=FTexture, write=SetTexture};
 	__property int TextureIndex = {read=FTextureIndex, write=SetTextureIndex, nodefault};
-	__property Glcoordinates::TGLCoordinates3* TextureOffset = {read=FTextureOffset, write=SetTextureOffset};
-	__property Glcoordinates::TGLCoordinates3* TextureScale = {read=FTextureScale, write=SetTextureScale};
+	__property Glcoordinates::TGLCoordinates* TextureOffset = {read=FTextureOffset, write=SetTextureOffset};
+	__property Glcoordinates::TGLCoordinates* TextureScale = {read=FTextureScale, write=SetTextureScale};
 private:
 	void *__IGLTextureNotifyAble;	// IGLTextureNotifyAble 
 	
@@ -553,17 +555,17 @@ class PASCALIMPLEMENTATION ETexture : public System::Sysutils::Exception
 	
 public:
 	/* Exception.Create */ inline __fastcall ETexture(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall ETexture(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall ETexture(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall ETexture(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall ETexture(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall ETexture(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall ETexture(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall ETexture(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall ETexture(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall ETexture(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall ETexture(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall ETexture(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall ETexture(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ETexture(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ETexture(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall ETexture(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall ETexture(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall ETexture(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ETexture(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ETexture(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~ETexture() { }
 	
 };
@@ -575,17 +577,17 @@ class PASCALIMPLEMENTATION EGLShaderException : public System::Sysutils::Excepti
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLShaderException(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLShaderException(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLShaderException(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLShaderException(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLShaderException(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLShaderException(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLShaderException(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLShaderException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLShaderException() { }
 	
 };

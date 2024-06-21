@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FileGL2.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FileGL2.pas' rev: 36.00 (Windows)
 
 #ifndef Filegl2HPP
 #define Filegl2HPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -65,7 +67,7 @@ private:
 	
 public:
 	System::StaticArray<System::WideChar, 64> name;
-	unsigned flags;
+	System::LongWord flags;
 	System::StaticArray<System::WideChar, 64> shader;
 	int shaderIndex;
 	int parentIndex;
@@ -183,7 +185,7 @@ private:
 	
 public:
 	System::StaticArray<System::WideChar, 64> name;
-	unsigned flags;
+	System::LongWord flags;
 	int parent;
 	TGLABone BasePoseMat;
 	TGLABone BasePoseMatInv;
@@ -239,7 +241,7 @@ public:
 	_TFileGLA__2 BoneIndices;
 	_TFileGLA__3 CompBonePool;
 	TGLACompQuatBone __fastcall GetCompressedMatrix(int Frame, int Bone);
-	Glvectortypes::TMatrix4f __fastcall GetUnCompressedMatrix(int Frame, int Bone);
+	Glvectorgeometry::TMatrix __fastcall GetUnCompressedMatrix(int Frame, int Bone);
 	void __fastcall LoadFromStream(System::Classes::TStream* aStream);
 public:
 	/* TObject.Create */ inline __fastcall TFileGLA() : System::TObject() { }
@@ -253,7 +255,7 @@ public:
 extern DELPHI_PACKAGE int __fastcall G2_GetVertWeights(const TGLMVertex &vert);
 extern DELPHI_PACKAGE int __fastcall G2_GetVertBoneIndex(const TGLMVertex &vert, int iWeightNum);
 extern DELPHI_PACKAGE float __fastcall G2_GetVertBoneWeight(const TGLMVertex &vert, unsigned iWeightNum, float &fTotalWeight, const unsigned iNumWeights);
-extern DELPHI_PACKAGE void __fastcall MC_UnCompressQuat(Glvectortypes::TMatrix4f &mat, const TGLACompQuatBone &comp);
+extern DELPHI_PACKAGE void __fastcall MC_UnCompressQuat(Glvectorgeometry::TMatrix &mat, const TGLACompQuatBone &comp);
 }	/* namespace Filegl2 */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_FILEGL2)
 using namespace Filegl2;

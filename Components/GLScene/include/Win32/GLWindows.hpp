@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLWindows.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLWindows.pas' rev: 36.00 (Windows)
 
 #ifndef GlwindowsHPP
 #define GlwindowsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -73,15 +75,15 @@ class PASCALIMPLEMENTATION TGLBaseComponent : public Glgui::TGLBaseGuiObject
 private:
 	bool FGUIRedraw;
 	Glgui::TGLGuiLayout* FGuiLayout;
-	System::UnicodeString FGuiLayoutName;
+	Glgui::TGLGuiComponentName FGuiLayoutName;
 	Glgui::TGLGuiComponent* FGuiComponent;
 	bool FReBuildGui;
 	bool FRedrawAtOnce;
-	float MoveX;
-	float MoveY;
+	Opengltokens::TGLfloat MoveX;
+	Opengltokens::TGLfloat MoveY;
 	Glgui::TGUIDrawResult FRenderStatus;
 	float FAlphaChannel;
-	float FRotation;
+	Opengltokens::TGLfloat FRotation;
 	bool FNoZWrite;
 	bool BlockRendering;
 	int RenderingCount;
@@ -97,9 +99,9 @@ protected:
 	void __fastcall RenderHeader(Glrendercontextinfo::TGLRenderContextInfo &rci, bool renderSelf, bool renderChildren);
 	void __fastcall RenderFooter(Glrendercontextinfo::TGLRenderContextInfo &rci, bool renderSelf, bool renderChildren);
 	virtual void __fastcall SetGuiLayout(Glgui::TGLGuiLayout* NewGui);
-	void __fastcall SetGuiLayoutName(const System::UnicodeString NewName);
+	void __fastcall SetGuiLayoutName(const Glgui::TGLGuiComponentName NewName);
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);
-	HIDESBASE void __fastcall SetRotation(const float val);
+	HIDESBASE void __fastcall SetRotation(const Opengltokens::TGLfloat val);
 	void __fastcall SetAlphaChannel(const float val);
 	bool __fastcall StoreAlphaChannel();
 	void __fastcall SetNoZWrite(const bool val);
@@ -123,8 +125,8 @@ __published:
 	__property bool Autosize = {read=FAutosize, write=SetAutosize, nodefault};
 	__property bool RedrawAtOnce = {read=FRedrawAtOnce, write=FRedrawAtOnce, nodefault};
 	__property Glgui::TGLGuiLayout* GuiLayout = {read=FGuiLayout, write=SetGuiLayout};
-	__property System::UnicodeString GuiLayoutName = {read=FGuiLayoutName, write=SetGuiLayoutName};
-	__property float Rotation = {read=FRotation, write=SetRotation};
+	__property Glgui::TGLGuiComponentName GuiLayoutName = {read=FGuiLayoutName, write=SetGuiLayoutName};
+	__property Opengltokens::TGLfloat Rotation = {read=FRotation, write=SetRotation};
 	__property float AlphaChannel = {read=FAlphaChannel, write=SetAlphaChannel, stored=StoreAlphaChannel};
 	__property bool NoZWrite = {read=FNoZWrite, write=SetNoZWrite, nodefault};
 	__property bool DoChangesOnProgress = {read=FDoChangesOnProgress, write=SetDoChangesOnProgress, nodefault};
@@ -205,15 +207,15 @@ class PASCALIMPLEMENTATION TGLBaseFontControl : public TGLBaseControl
 	
 private:
 	Glbitmapfont::TGLCustomBitmapFont* FBitmapFont;
-	Glvectortypes::TVector4f FDefaultColor;
+	Glcolor::TColorVector FDefaultColor;
 	
 protected:
 	System::Uitypes::TColor __fastcall GetDefaultColor();
 	void __fastcall SetDefaultColor(System::Uitypes::TColor value);
 	void __fastcall SetBitmapFont(Glbitmapfont::TGLCustomBitmapFont* NewFont);
 	Glbitmapfont::TGLCustomBitmapFont* __fastcall GetBitmapFont();
-	void __fastcall WriteTextAt(Glrendercontextinfo::TGLRenderContextInfo &rci, const float X, const float Y, const System::UnicodeString Data, const Glvectortypes::TVector4f &Color)/* overload */;
-	void __fastcall WriteTextAt(Glrendercontextinfo::TGLRenderContextInfo &rci, const float X1, const float Y1, const float X2, const float Y2, const System::UnicodeString Data, const Glvectortypes::TVector4f &Color)/* overload */;
+	void __fastcall WriteTextAt(Glrendercontextinfo::TGLRenderContextInfo &rci, const Opengltokens::TGLfloat X, const Opengltokens::TGLfloat Y, const System::UnicodeString Data, const Glcolor::TColorVector &Color)/* overload */;
+	void __fastcall WriteTextAt(Glrendercontextinfo::TGLRenderContextInfo &rci, const Opengltokens::TGLfloat X1, const Opengltokens::TGLfloat Y1, const Opengltokens::TGLfloat X2, const Opengltokens::TGLfloat Y2, const System::UnicodeString Data, const Glcolor::TColorVector &Color)/* overload */;
 	int __fastcall GetFontHeight();
 	
 public:
@@ -263,7 +265,7 @@ private:
 	Vcl::Controls::TKeyEvent FOnKeyUp;
 	Vcl::Controls::TKeyPressEvent FOnKeyPress;
 	System::Classes::TShiftState FShiftState;
-	Glvectortypes::TVector4f FFocusedColor;
+	Glcolor::TColorVector FFocusedColor;
 	
 protected:
 	virtual void __fastcall InternalKeyPress(System::WideChar &Key);
@@ -412,7 +414,7 @@ private:
 	bool Moving;
 	int OldX;
 	int OldY;
-	Glvectortypes::TVector4f FTitleColor;
+	Glcolor::TColorVector FTitleColor;
 	float FTitleOffset;
 	
 protected:
@@ -470,7 +472,7 @@ class PASCALIMPLEMENTATION TGLCheckBox : public TGLBaseControl
 private:
 	bool FChecked;
 	System::Classes::TNotifyEvent FOnChange;
-	System::UnicodeString FGuiLayoutNameChecked;
+	Glgui::TGLGuiComponentName FGuiLayoutNameChecked;
 	Glgui::TGLGuiComponent* FGuiCheckedComponent;
 	int FGroup;
 	
@@ -478,7 +480,7 @@ protected:
 	void __fastcall SetChecked(bool NewChecked);
 	virtual void __fastcall InternalMouseDown(System::Classes::TShiftState Shift, System::Uitypes::TMouseButton Button, int X, int Y);
 	virtual void __fastcall InternalMouseUp(System::Classes::TShiftState Shift, System::Uitypes::TMouseButton Button, int X, int Y);
-	void __fastcall SetGuiLayoutNameChecked(const System::UnicodeString newName);
+	void __fastcall SetGuiLayoutNameChecked(const Glgui::TGLGuiComponentName newName);
 	virtual void __fastcall SetGuiLayout(Glgui::TGLGuiLayout* NewGui);
 	void __fastcall SetGroup(const int val);
 	
@@ -491,7 +493,7 @@ __published:
 	__property int Group = {read=FGroup, write=SetGroup, nodefault};
 	__property bool Checked = {read=FChecked, write=SetChecked, nodefault};
 	__property System::Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
-	__property System::UnicodeString GuiLayoutNameChecked = {read=FGuiLayoutNameChecked, write=SetGuiLayoutNameChecked};
+	__property Glgui::TGLGuiComponentName GuiLayoutNameChecked = {read=FGuiLayoutNameChecked, write=SetGuiLayoutNameChecked};
 public:
 	/* TGLBaseComponent.Destroy */ inline __fastcall virtual ~TGLCheckBox() { }
 	
@@ -508,7 +510,7 @@ class PASCALIMPLEMENTATION TGLButton : public TGLFocusControl
 private:
 	bool FPressed;
 	System::Classes::TNotifyEvent FOnButtonClick;
-	System::UnicodeString FGuiLayoutNamePressed;
+	Glgui::TGLGuiComponentName FGuiLayoutNamePressed;
 	Glgui::TGLGuiComponent* FGuiPressedComponent;
 	Glmaterial::TGLMaterial* FBitBtn;
 	int FGroup;
@@ -525,7 +527,7 @@ protected:
 	virtual void __fastcall InternalKeyDown(System::Word &Key, System::Classes::TShiftState Shift);
 	virtual void __fastcall InternalKeyUp(System::Word &Key, System::Classes::TShiftState Shift);
 	virtual void __fastcall SetFocused(bool Value);
-	void __fastcall SetGuiLayoutNamePressed(const System::UnicodeString newName);
+	void __fastcall SetGuiLayoutNamePressed(const Glgui::TGLGuiComponentName newName);
 	virtual void __fastcall SetGuiLayout(Glgui::TGLGuiLayout* NewGui);
 	void __fastcall SetBitBtn(Glmaterial::TGLMaterial* AValue);
 	virtual void __fastcall DestroyHandle();
@@ -545,7 +547,7 @@ __published:
 	__property Glmaterial::TGLMaterial* BitBtn = {read=FBitBtn, write=SetBitBtn};
 	__property bool Pressed = {read=FPressed, write=SetPressed, nodefault};
 	__property System::Classes::TNotifyEvent OnButtonClick = {read=FOnButtonClick, write=FOnButtonClick};
-	__property System::UnicodeString GuiLayoutNamePressed = {read=FGuiLayoutNamePressed, write=SetGuiLayoutNamePressed};
+	__property Glgui::TGLGuiComponentName GuiLayoutNamePressed = {read=FGuiLayoutNamePressed, write=SetGuiLayoutNamePressed};
 	__property float LogicWidth = {read=FLogicWidth, write=SetLogicWidth};
 	__property float LogicHeight = {read=FLogicHeight, write=SetLogicHeight};
 	__property float XOffset = {read=FXOffSet, write=SetXOffset};
@@ -649,7 +651,7 @@ private:
 	float FPos;
 	float FPageSize;
 	System::Classes::TNotifyEvent FOnChange;
-	System::UnicodeString FGuiLayoutKnobName;
+	Glgui::TGLGuiComponentName FGuiLayoutKnobName;
 	Glgui::TGLGuiComponent* FGuiKnobComponent;
 	Glgui::TGUIDrawResult FKnobRenderStatus;
 	float FScrollOffs;
@@ -663,7 +665,7 @@ protected:
 	void __fastcall SetPos(const float val);
 	void __fastcall SetPageSize(const float val);
 	void __fastcall SetHorizontal(const bool val);
-	void __fastcall SetGuiLayoutKnobName(const System::UnicodeString newName);
+	void __fastcall SetGuiLayoutKnobName(const Glgui::TGLGuiComponentName newName);
 	virtual void __fastcall SetGuiLayout(Glgui::TGLGuiLayout* NewGui);
 	float __fastcall GetScrollPosY(float ScrollPos);
 	float __fastcall GetYScrollPos(float Y);
@@ -691,7 +693,7 @@ __published:
 	__property float Step = {read=FStep, write=FStep};
 	__property float PageSize = {read=FPageSize, write=SetPageSize};
 	__property System::Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
-	__property System::UnicodeString GuiLayoutKnobName = {read=FGuiLayoutKnobName, write=SetGuiLayoutKnobName};
+	__property Glgui::TGLGuiComponentName GuiLayoutKnobName = {read=FGuiLayoutKnobName, write=SetGuiLayoutKnobName};
 	__property bool Locked = {read=FLocked, write=FLocked, default=0};
 public:
 	/* TGLFocusControl.Destroy */ inline __fastcall virtual ~TGLScrollbar() { }
@@ -713,7 +715,7 @@ private:
 	bool FColSelect;
 	System::Classes::TStrings* FColumns;
 	System::Classes::TList* FRows;
-	Glvectortypes::TVector4f FHeaderColor;
+	Glcolor::TColorVector FHeaderColor;
 	int FMarginSize;
 	int FColumnSize;
 	int FRowHeight;
@@ -745,7 +747,7 @@ public:
 	__fastcall virtual TGLStringGrid(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLStringGrid();
 	void __fastcall Clear();
-	int __fastcall Add(const System::UnicodeString *Data, const int Data_High)/* overload */;
+	int __fastcall Add(const System::UnicodeString *Data, const System::NativeInt Data_High)/* overload */;
 	int __fastcall Add(const System::UnicodeString Data)/* overload */;
 	void __fastcall SetText(System::UnicodeString Data);
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSmoothNavigator.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSmoothNavigator.pas' rev: 36.00 (Windows)
 
 #ifndef GlsmoothnavigatorHPP
 #define GlsmoothnavigatorHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -143,19 +145,19 @@ public:
 };
 
 
-typedef Glvectortypes::TVector4f __fastcall (__closure *TGLNavigatorSmoothChangeVectorGetEvent)(TGLNavigatorSmoothChangeVector* const ASender);
+typedef Glvectorgeometry::TVector __fastcall (__closure *TGLNavigatorSmoothChangeVectorGetEvent)(TGLNavigatorSmoothChangeVector* const ASender);
 
-typedef void __fastcall (__closure *TGLNavigatorSmoothChangeVectorSetEvent)(TGLNavigatorSmoothChangeVector* const ASender, const Glvectortypes::TVector4f &AValue);
+typedef void __fastcall (__closure *TGLNavigatorSmoothChangeVectorSetEvent)(TGLNavigatorSmoothChangeVector* const ASender, const Glvectorgeometry::TVector &AValue);
 
 class PASCALIMPLEMENTATION TGLNavigatorSmoothChangeVector : public TGLNavigatorSmoothChangeItem
 {
 	typedef TGLNavigatorSmoothChangeItem inherited;
 	
 private:
-	Glcoordinates::TGLCoordinates3* FTargetValue;
+	Glcoordinates::TGLCoordinates* FTargetValue;
 	TGLNavigatorSmoothChangeVectorGetEvent FOnGetCurrentValue;
 	TGLNavigatorSmoothChangeVectorSetEvent FOnSetCurrentValue;
-	void __fastcall SetTargetValue(Glcoordinates::TGLCoordinates3* const Value);
+	void __fastcall SetTargetValue(Glcoordinates::TGLCoordinates* const Value);
 	
 public:
 	__classmethod virtual System::UnicodeString __fastcall FriendlyName();
@@ -166,7 +168,7 @@ public:
 	virtual void __fastcall ResetTargetValue();
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* TargetValue = {read=FTargetValue, write=SetTargetValue};
+	__property Glcoordinates::TGLCoordinates* TargetValue = {read=FTargetValue, write=SetTargetValue};
 	__property TGLNavigatorSmoothChangeVectorGetEvent OnGetCurrentValue = {read=FOnGetCurrentValue, write=FOnGetCurrentValue};
 	__property TGLNavigatorSmoothChangeVectorSetEvent OnSetCurrentValue = {read=FOnSetCurrentValue, write=FOnSetCurrentValue};
 };
@@ -402,9 +404,9 @@ public:
 	HIDESBASE virtual void __fastcall StrafeVertical(const bool Plus, const bool Minus, double ADeltaTime, const bool Accelerate = false);
 	bool __fastcall MoveAroundTarget(const float PitchDelta, const float TurnDelta, const double ADeltaTime);
 	bool __fastcall MoveObjectAround(Glscene::TGLBaseSceneObject* const AObject, float PitchDelta, float TurnDelta, double ADeltaTime);
-	bool __fastcall AdjustDistanceToPoint(const Glvectortypes::TVector4f &APoint, const float DistanceRatio, double ADeltaTime);
+	bool __fastcall AdjustDistanceToPoint(const Glvectorgeometry::TVector &APoint, const float DistanceRatio, double ADeltaTime);
 	bool __fastcall AdjustDistanceToTarget(const float DistanceRatio, const double ADeltaTime);
-	bool __fastcall AdjustDistanceToPointEx(const Glvectortypes::TVector4f &APoint, double ADeltaTime);
+	bool __fastcall AdjustDistanceToPointEx(const Glvectorgeometry::TVector &APoint, double ADeltaTime);
 	bool __fastcall AdjustDistanceToTargetEx(const double ADeltaTime);
 	virtual void __fastcall AnimateCustomItems(const double ADeltaTime);
 	virtual void __fastcall ScaleParameters(const float Value);

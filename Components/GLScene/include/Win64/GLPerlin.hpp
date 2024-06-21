@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLPerlin.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLPerlin.pas' rev: 36.00 (Windows)
 
 #ifndef GlperlinHPP
 #define GlperlinHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -218,7 +220,7 @@ public:
 public:
 	/* TThread.Create */ inline __fastcall TGLPerlinHDSThread()/* overload */ : Glheightdata::TGLHeightDataThread() { }
 	/* TThread.Create */ inline __fastcall TGLPerlinHDSThread(bool CreateSuspended)/* overload */ : Glheightdata::TGLHeightDataThread(CreateSuspended) { }
-	/* TThread.Create */ inline __fastcall TGLPerlinHDSThread(bool CreateSuspended, NativeUInt ReservedStackSize)/* overload */ : Glheightdata::TGLHeightDataThread(CreateSuspended, ReservedStackSize) { }
+	/* TThread.Create */ inline __fastcall TGLPerlinHDSThread(bool CreateSuspended, System::NativeUInt ReservedStackSize)/* overload */ : Glheightdata::TGLHeightDataThread(CreateSuspended, ReservedStackSize) { }
 	
 };
 

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSRedBlackTree.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSRedBlackTree.pas' rev: 36.00 (Windows)
 
 #ifndef GlsredblacktreeHPP
 #define GlsredblacktreeHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -80,9 +82,11 @@ public:
 	TRBNode* FLastFound;
 	TRBNode* FLastNode;
 	int FCount;
-	TKeyCompareFunc FKeyCompareFunc;
+	typedef int __fastcall (*_dt_Glsredblacktree_1)(const TKey Item1, const TKey Item2);
+	_dt_Glsredblacktree_1 FKeyCompareFunc;
 	bool FDuplicateKeys;
-	TValueCompareFunc FValueCompareFunc;
+	typedef bool __fastcall (*_dt_Glsredblacktree_2)(const TValue Item1, const TValue Item2);
+	_dt_Glsredblacktree_2 FValueCompareFunc;
 	System::Classes::TNotifyEvent FOnChange;
 	TRBNode* __fastcall FindNode(const TKey key);
 	void __fastcall RotateLeft(TRBNode* &x);
@@ -93,7 +97,9 @@ public:
 	TKey __fastcall GetLast();
 	void __fastcall SetDuplicateKeys(bool Value);
 	__classmethod void __fastcall FastErase(TRBNode* x);
-	__fastcall GRedBlackTree__2(TKeyCompareFunc KeyCompare, TValueCompareFunc ValueCompare);
+	typedef int __fastcall (*_dt_Glsredblacktree_3)(const TKey Item1, const TKey Item2);
+	typedef bool __fastcall (*_dt_Glsredblacktree_4)(const TValue Item1, const TValue Item2);
+	__fastcall GRedBlackTree__2(_dt_Glsredblacktree_3 KeyCompare, _dt_Glsredblacktree_4 ValueCompare);
 	__fastcall virtual ~GRedBlackTree__2();
 	void __fastcall Clear();
 	bool __fastcall Find(const TKey key, /* out */ TValue &Value);
@@ -102,7 +108,8 @@ public:
 	bool __fastcall NextDublicate(/* out */ TValue &Value);
 	void __fastcall Add(const TKey key, const TValue Value);
 	void __fastcall Delete(const TKey key);
-	void __fastcall ForEach(TForEachProc AProc);
+	typedef void __fastcall (*_dt_Glsredblacktree_5)(TKey AKey, TValue AValue, bool &AContinue);
+	void __fastcall ForEach(_dt_Glsredblacktree_5 AProc);
 	__property int Count = {read=FCount, nodefault};
 	__property TKey First = {read=GetFirst};
 	__property TKey Last = {read=GetLast};

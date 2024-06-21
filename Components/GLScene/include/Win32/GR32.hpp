@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32HPP
 #define Gr32HPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -211,8 +213,8 @@ typedef TFloatPoint *PFloatPoint;
 struct DECLSPEC_DRECORD TFloatPoint
 {
 public:
-	float X;
-	float Y;
+	TFloat X;
+	TFloat Y;
 };
 
 
@@ -270,10 +272,10 @@ public:
 		};
 		struct 
 		{
-			float Left;
-			float Top;
-			float Right;
-			float Bottom;
+			TFloat Left;
+			TFloat Top;
+			TFloat Right;
+			TFloat Bottom;
 		};
 		
 	};
@@ -399,7 +401,7 @@ private:
 	int FLockCount;
 	
 protected:
-	_RTL_CRITICAL_SECTION FLock;
+	Winapi::Windows::TRTLCriticalSection FLock;
 	__property int LockCount = {read=FLockCount, nodefault};
 	
 public:
@@ -440,7 +442,7 @@ public:
 
 typedef void __fastcall (__closure *TPixelCombineEvent)(TColor32 F, TColor32 &B, TColor32 M);
 
-typedef void __fastcall (__closure *TAreaChangedEvent)(System::TObject* Sender, const System::Types::TRect &Area, const unsigned Info);
+typedef void __fastcall (__closure *TAreaChangedEvent)(System::TObject* Sender, const TRect &Area, const unsigned Info);
 
 typedef System::TMetaClass* TCustomBackendClass;
 
@@ -450,10 +452,10 @@ class PASCALIMPLEMENTATION TCustomBitmap32 : public TCustomMap
 	
 private:
 	TCustomBackend* FBackend;
-	TColor32Array *FBits;
-	System::Types::TRect FClipRect;
+	PColor32Array FBits;
+	TRect FClipRect;
 	TFixedRect FFixedClipRect;
-	System::Types::TRect F256ClipRect;
+	TRect F256ClipRect;
 	bool FClipping;
 	TDrawMode FDrawMode;
 	TCombineMode FCombineMode;
@@ -477,7 +479,7 @@ private:
 	void __fastcall SetDrawMode(TDrawMode Value);
 	void __fastcall SetWrapMode(TWrapMode Value);
 	void __fastcall SetMasterAlpha(unsigned Value);
-	void __fastcall SetClipRect(const System::Types::TRect &Value);
+	void __fastcall SetClipRect(const TRect &Value);
 	void __fastcall SetResampler(TCustomResampler* Resampler);
 	System::UnicodeString __fastcall GetResamplerClassName();
 	void __fastcall SetResamplerClassName(System::UnicodeString Value);
@@ -532,7 +534,7 @@ public:
 	__fastcall virtual TCustomBitmap32();
 	__fastcall virtual ~TCustomBitmap32();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	System::Types::TRect __fastcall BoundsRect();
+	TRect __fastcall BoundsRect();
 	virtual bool __fastcall Empty();
 	void __fastcall Clear()/* overload */;
 	void __fastcall Clear(TColor32 FillColor)/* overload */;
@@ -542,28 +544,28 @@ public:
 	TCustomBackend* __fastcall ReleaseBackend();
 	virtual void __fastcall PropertyChanged();
 	virtual void __fastcall Changed()/* overload */;
-	HIDESBASE virtual void __fastcall Changed(const System::Types::TRect &Area, const unsigned Info = (unsigned)(0x80000000))/* overload */;
+	HIDESBASE virtual void __fastcall Changed(const TRect &Area, const unsigned Info = (unsigned)(0x80000000))/* overload */;
 	virtual void __fastcall LoadFromStream(System::Classes::TStream* Stream);
 	virtual void __fastcall SaveToStream(System::Classes::TStream* Stream, bool SaveTopDown = false);
 	virtual void __fastcall LoadFromFile(const System::UnicodeString FileName);
 	virtual void __fastcall SaveToFile(const System::UnicodeString FileName, bool SaveTopDown = false);
-	void __fastcall LoadFromResourceID(NativeUInt Instance, int ResID);
-	void __fastcall LoadFromResourceName(NativeUInt Instance, const System::UnicodeString ResName);
+	void __fastcall LoadFromResourceID(Winapi::Windows::THandle Instance, int ResID);
+	void __fastcall LoadFromResourceName(Winapi::Windows::THandle Instance, const System::UnicodeString ResName);
 	void __fastcall ResetAlpha()/* overload */;
 	void __fastcall ResetAlpha(const System::Byte AlphaValue)/* overload */;
 	void __fastcall Draw(int DstX, int DstY, TCustomBitmap32* Src)/* overload */;
-	void __fastcall Draw(int DstX, int DstY, const System::Types::TRect &SrcRect, TCustomBitmap32* Src)/* overload */;
-	void __fastcall Draw(const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect, TCustomBitmap32* Src)/* overload */;
+	void __fastcall Draw(int DstX, int DstY, const TRect &SrcRect, TCustomBitmap32* Src)/* overload */;
+	void __fastcall Draw(const TRect &DstRect, const TRect &SrcRect, TCustomBitmap32* Src)/* overload */;
 	void __fastcall SetPixelT(int X, int Y, TColor32 Value)/* overload */;
 	void __fastcall SetPixelT(PColor32 &Ptr, TColor32 Value)/* overload */;
 	void __fastcall SetPixelTS(int X, int Y, TColor32 Value);
 	void __fastcall DrawTo(TCustomBitmap32* Dst)/* overload */;
-	void __fastcall DrawTo(TCustomBitmap32* Dst, int DstX, int DstY, const System::Types::TRect &SrcRect)/* overload */;
+	void __fastcall DrawTo(TCustomBitmap32* Dst, int DstX, int DstY, const TRect &SrcRect)/* overload */;
 	void __fastcall DrawTo(TCustomBitmap32* Dst, int DstX, int DstY)/* overload */;
-	void __fastcall DrawTo(TCustomBitmap32* Dst, const System::Types::TRect &DstRect)/* overload */;
-	void __fastcall DrawTo(TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect)/* overload */;
+	void __fastcall DrawTo(TCustomBitmap32* Dst, const TRect &DstRect)/* overload */;
+	void __fastcall DrawTo(TCustomBitmap32* Dst, const TRect &DstRect, const TRect &SrcRect)/* overload */;
 	void __fastcall SetStipple(TArrayOfColor32 NewStipple)/* overload */;
-	void __fastcall SetStipple(TColor32 *NewStipple, const int NewStipple_High)/* overload */;
+	void __fastcall SetStipple(TColor32 *NewStipple, const System::NativeInt NewStipple_High)/* overload */;
 	void __fastcall AdvanceStippleCounter(float LengthPixels);
 	TColor32 __fastcall GetStippleColor();
 	void __fastcall HorzLine(int X1, int Y, int X2, TColor32 Value);
@@ -609,15 +611,15 @@ public:
 	void __fastcall FillRectS(int X1, int Y1, int X2, int Y2, TColor32 Value)/* overload */;
 	void __fastcall FillRectT(int X1, int Y1, int X2, int Y2, TColor32 Value);
 	void __fastcall FillRectTS(int X1, int Y1, int X2, int Y2, TColor32 Value)/* overload */;
-	void __fastcall FillRectS(const System::Types::TRect &ARect, TColor32 Value)/* overload */;
-	void __fastcall FillRectTS(const System::Types::TRect &ARect, TColor32 Value)/* overload */;
+	void __fastcall FillRectS(const TRect &ARect, TColor32 Value)/* overload */;
+	void __fastcall FillRectTS(const TRect &ARect, TColor32 Value)/* overload */;
 	void __fastcall FrameRectS(int X1, int Y1, int X2, int Y2, TColor32 Value)/* overload */;
 	void __fastcall FrameRectTS(int X1, int Y1, int X2, int Y2, TColor32 Value)/* overload */;
 	void __fastcall FrameRectTSP(int X1, int Y1, int X2, int Y2);
-	void __fastcall FrameRectS(const System::Types::TRect &ARect, TColor32 Value)/* overload */;
-	void __fastcall FrameRectTS(const System::Types::TRect &ARect, TColor32 Value)/* overload */;
+	void __fastcall FrameRectS(const TRect &ARect, TColor32 Value)/* overload */;
+	void __fastcall FrameRectTS(const TRect &ARect, TColor32 Value)/* overload */;
 	void __fastcall RaiseRectTS(int X1, int Y1, int X2, int Y2, int Contrast)/* overload */;
-	void __fastcall RaiseRectTS(const System::Types::TRect &ARect, int Contrast)/* overload */;
+	void __fastcall RaiseRectTS(const TRect &ARect, int Contrast)/* overload */;
 	void __fastcall Roll(int Dx, int Dy, bool FillBack, TColor32 FillColor);
 	void __fastcall FlipHorz(TCustomBitmap32* Dst = (TCustomBitmap32*)(0x0));
 	void __fastcall FlipVert(TCustomBitmap32* Dst = (TCustomBitmap32*)(0x0));
@@ -638,7 +640,7 @@ public:
 	__property TColor32 PixelXR[TFixed X][TFixed Y] = {read=GetPixelXR};
 	__property TCustomBackend* Backend = {read=FBackend, write=SetBackend};
 	__property PColor32Array Bits = {read=FBits};
-	__property System::Types::TRect ClipRect = {read=FClipRect, write=SetClipRect};
+	__property TRect ClipRect = {read=FClipRect, write=SetClipRect};
 	__property bool Clipping = {read=FClipping, nodefault};
 	__property PColor32 PixelPtr[int X][int Y] = {read=GetPixelPtr};
 	__property PColor32Array ScanLine[int Y] = {read=GetScanLine};
@@ -672,7 +674,7 @@ private:
 	void __fastcall FontChanged(System::TObject* Sender);
 	void __fastcall CanvasChanged(System::TObject* Sender);
 	Vcl::Graphics::TCanvas* __fastcall GetCanvas();
-	tagBITMAPINFO __fastcall GetBitmapInfo();
+	Winapi::Windows::TBitmapInfo __fastcall GetBitmapInfo();
 	HBITMAP __fastcall GetHandle();
 	HDC __fastcall GetHDC();
 	Vcl::Graphics::TFont* __fastcall GetFont();
@@ -686,21 +688,21 @@ protected:
 	virtual void __fastcall CopyPropertiesTo(TCustomBitmap32* Dst);
 	
 public:
-	HIDESBASE void __fastcall Draw(const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect, HDC hSrc)/* overload */;
+	HIDESBASE void __fastcall Draw(const TRect &DstRect, const TRect &SrcRect, HDC hSrc)/* overload */;
 	HIDESBASE void __fastcall DrawTo(HDC hDst, int DstX, int DstY)/* overload */;
-	HIDESBASE void __fastcall DrawTo(HDC hDst, const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect)/* overload */;
-	void __fastcall TileTo(HDC hDst, const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect);
+	HIDESBASE void __fastcall DrawTo(HDC hDst, const TRect &DstRect, const TRect &SrcRect)/* overload */;
+	void __fastcall TileTo(HDC hDst, const TRect &DstRect, const TRect &SrcRect);
 	void __fastcall UpdateFont();
 	void __fastcall Textout(int X, int Y, const System::UnicodeString Text)/* overload */;
-	void __fastcall Textout(int X, int Y, const System::Types::TRect &ClipRect, const System::UnicodeString Text)/* overload */;
-	void __fastcall Textout(const System::Types::TRect &DstRect, const unsigned Flags, const System::UnicodeString Text)/* overload */;
+	void __fastcall Textout(int X, int Y, const TRect &ClipRect, const System::UnicodeString Text)/* overload */;
+	void __fastcall Textout(const TRect &DstRect, const unsigned Flags, const System::UnicodeString Text)/* overload */;
 	System::Types::TSize __fastcall TextExtent(const System::UnicodeString Text);
 	int __fastcall TextHeight(const System::UnicodeString Text);
 	int __fastcall TextWidth(const System::UnicodeString Text);
 	void __fastcall RenderText(int X, int Y, const System::UnicodeString Text, int AALevel, TColor32 Color);
 	void __fastcall TextoutW(int X, int Y, const System::WideString Text)/* overload */;
-	void __fastcall TextoutW(int X, int Y, const System::Types::TRect &ClipRect, const System::WideString Text)/* overload */;
-	void __fastcall TextoutW(const System::Types::TRect &DstRect, const unsigned Flags, const System::WideString Text)/* overload */;
+	void __fastcall TextoutW(int X, int Y, const TRect &ClipRect, const System::WideString Text)/* overload */;
+	void __fastcall TextoutW(const TRect &DstRect, const unsigned Flags, const System::WideString Text)/* overload */;
 	System::Types::TSize __fastcall TextExtentW(const System::WideString Text);
 	int __fastcall TextHeightW(const System::WideString Text);
 	int __fastcall TextWidthW(const System::WideString Text);
@@ -710,7 +712,7 @@ public:
 	void __fastcall DeleteCanvas();
 	__property Vcl::Graphics::TFont* Font = {read=GetFont, write=SetFont};
 	__property HBITMAP BitmapHandle = {read=GetHandle, nodefault};
-	__property tagBITMAPINFO BitmapInfo = {read=GetBitmapInfo};
+	__property Winapi::Windows::TBitmapInfo BitmapInfo = {read=GetBitmapInfo};
 	__property HDC Handle = {read=GetHDC, nodefault};
 	
 __published:
@@ -723,13 +725,13 @@ public:
 	
 public:
 	inline void __fastcall  Draw(int DstX, int DstY, TCustomBitmap32* Src){ TCustomBitmap32::Draw(DstX, DstY, Src); }
-	inline void __fastcall  Draw(int DstX, int DstY, const System::Types::TRect &SrcRect, TCustomBitmap32* Src){ TCustomBitmap32::Draw(DstX, DstY, SrcRect, Src); }
-	inline void __fastcall  Draw(const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect, TCustomBitmap32* Src){ TCustomBitmap32::Draw(DstRect, SrcRect, Src); }
+	inline void __fastcall  Draw(int DstX, int DstY, const TRect &SrcRect, TCustomBitmap32* Src){ TCustomBitmap32::Draw(DstX, DstY, SrcRect, Src); }
+	inline void __fastcall  Draw(const TRect &DstRect, const TRect &SrcRect, TCustomBitmap32* Src){ TCustomBitmap32::Draw(DstRect, SrcRect, Src); }
 	inline void __fastcall  DrawTo(TCustomBitmap32* Dst){ TCustomBitmap32::DrawTo(Dst); }
-	inline void __fastcall  DrawTo(TCustomBitmap32* Dst, int DstX, int DstY, const System::Types::TRect &SrcRect){ TCustomBitmap32::DrawTo(Dst, DstX, DstY, SrcRect); }
+	inline void __fastcall  DrawTo(TCustomBitmap32* Dst, int DstX, int DstY, const TRect &SrcRect){ TCustomBitmap32::DrawTo(Dst, DstX, DstY, SrcRect); }
 	inline void __fastcall  DrawTo(TCustomBitmap32* Dst, int DstX, int DstY){ TCustomBitmap32::DrawTo(Dst, DstX, DstY); }
-	inline void __fastcall  DrawTo(TCustomBitmap32* Dst, const System::Types::TRect &DstRect){ TCustomBitmap32::DrawTo(Dst, DstRect); }
-	inline void __fastcall  DrawTo(TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect){ TCustomBitmap32::DrawTo(Dst, DstRect, SrcRect); }
+	inline void __fastcall  DrawTo(TCustomBitmap32* Dst, const TRect &DstRect){ TCustomBitmap32::DrawTo(Dst, DstRect); }
+	inline void __fastcall  DrawTo(TCustomBitmap32* Dst, const TRect &DstRect, const TRect &SrcRect){ TCustomBitmap32::DrawTo(Dst, DstRect, SrcRect); }
 	
 };
 
@@ -739,7 +741,7 @@ class PASCALIMPLEMENTATION TCustomBackend : public TThreadPersistent
 	typedef TThreadPersistent inherited;
 	
 protected:
-	TColor32Array *FBits;
+	PColor32Array FBits;
 	TCustomBitmap32* FOwner;
 	System::Classes::TNotifyEvent FOnChanging;
 	virtual void __fastcall Changing();
@@ -766,7 +768,7 @@ class PASCALIMPLEMENTATION TCustomSampler : public TNotifiablePersistent
 public:
 	virtual TColor32 __fastcall GetSampleInt(int X, int Y);
 	virtual TColor32 __fastcall GetSampleFixed(TFixed X, TFixed Y);
-	virtual TColor32 __fastcall GetSampleFloat(float X, float Y);
+	virtual TColor32 __fastcall GetSampleFloat(TFloat X, TFloat Y);
 	virtual void __fastcall PrepareSampling();
 	virtual void __fastcall FinalizeSampling();
 	virtual bool __fastcall HasBounds();
@@ -788,15 +790,15 @@ class PASCALIMPLEMENTATION TCustomResampler : public TCustomSampler
 	
 private:
 	TCustomBitmap32* FBitmap;
-	System::Types::TRect FClipRect;
+	TRect FClipRect;
 	TPixelAccessMode FPixelAccessMode;
 	void __fastcall SetPixelAccessMode(const TPixelAccessMode Value);
 	
 protected:
-	virtual float __fastcall GetWidth();
-	virtual void __fastcall Resample(TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const System::Types::TRect &DstClip, TCustomBitmap32* Src, const System::Types::TRect &SrcRect, TDrawMode CombineOp, TPixelCombineEvent CombineCallBack) = 0 ;
+	virtual TFloat __fastcall GetWidth();
+	virtual void __fastcall Resample(TCustomBitmap32* Dst, const TRect &DstRect, const TRect &DstClip, TCustomBitmap32* Src, const TRect &SrcRect, TDrawMode CombineOp, TPixelCombineEvent CombineCallBack) = 0 ;
 	virtual void __fastcall AssignTo(System::Classes::TPersistent* Dst);
-	__property System::Types::TRect ClipRect = {read=FClipRect};
+	__property TRect ClipRect = {read=FClipRect};
 	
 public:
 	__fastcall virtual TCustomResampler()/* overload */;
@@ -806,7 +808,7 @@ public:
 	virtual bool __fastcall HasBounds();
 	virtual TFloatRect __fastcall GetSampleBounds();
 	__property TCustomBitmap32* Bitmap = {read=FBitmap, write=FBitmap};
-	__property float Width = {read=GetWidth};
+	__property TFloat Width = {read=GetWidth};
 	
 __published:
 	__property TPixelAccessMode PixelAccessMode = {read=FPixelAccessMode, write=SetPixelAccessMode, default=1};
@@ -989,7 +991,7 @@ extern DELPHI_PACKAGE TColor32 __fastcall Color32(System::Byte R, System::Byte G
 extern DELPHI_PACKAGE TColor32 __fastcall Color32(System::Byte Index, TPalette32 &Palette)/* overload */;
 extern DELPHI_PACKAGE TColor32 __fastcall Gray32(System::Byte Intensity, System::Byte Alpha = (System::Byte)(0xff));
 extern DELPHI_PACKAGE System::Uitypes::TColor __fastcall WinColor(TColor32 Color32);
-extern DELPHI_PACKAGE TArrayOfColor32 __fastcall ArrayOfColor32(TColor32 *Colors, const int Colors_High);
+extern DELPHI_PACKAGE TArrayOfColor32 __fastcall ArrayOfColor32(TColor32 *Colors, const System::NativeInt Colors_High);
 extern DELPHI_PACKAGE void __fastcall Color32ToRGB(TColor32 Color32, System::Byte &R, System::Byte &G, System::Byte &B);
 extern DELPHI_PACKAGE void __fastcall Color32ToRGBA(TColor32 Color32, System::Byte &R, System::Byte &G, System::Byte &B, System::Byte &A);
 extern DELPHI_PACKAGE TColor32Components __fastcall Color32Components(bool R, bool G, bool B, bool A);
@@ -1006,42 +1008,42 @@ extern DELPHI_PACKAGE void __fastcall RGBtoHSL(TColor32 RGB, /* out */ System::B
 extern DELPHI_PACKAGE HPALETTE __fastcall WinPalette(const TPalette32 &P);
 extern DELPHI_PACKAGE TFixed __fastcall Fixed(float S)/* overload */;
 extern DELPHI_PACKAGE TFixed __fastcall Fixed(int I)/* overload */;
-extern DELPHI_PACKAGE System::Types::TPoint __fastcall Point(int X, int Y)/* overload */;
+extern DELPHI_PACKAGE TPoint __fastcall Point(int X, int Y)/* overload */;
 extern DELPHI_PACKAGE System::Types::TPoint __fastcall Point(const TFloatPoint &FP)/* overload */;
 extern DELPHI_PACKAGE System::Types::TPoint __fastcall Point(const TFixedPoint &FXP)/* overload */;
 extern DELPHI_PACKAGE TFloatPoint __fastcall FloatPoint(float X, float Y)/* overload */;
-extern DELPHI_PACKAGE TFloatPoint __fastcall FloatPoint(const System::Types::TPoint &P)/* overload */;
+extern DELPHI_PACKAGE TFloatPoint __fastcall FloatPoint(const TPoint &P)/* overload */;
 extern DELPHI_PACKAGE TFloatPoint __fastcall FloatPoint(const TFixedPoint &FXP)/* overload */;
 extern DELPHI_PACKAGE TFixedPoint __fastcall FixedPoint(int X, int Y)/* overload */;
 extern DELPHI_PACKAGE TFixedPoint __fastcall FixedPoint(float X, float Y)/* overload */;
-extern DELPHI_PACKAGE TFixedPoint __fastcall FixedPoint(const System::Types::TPoint &P)/* overload */;
+extern DELPHI_PACKAGE TFixedPoint __fastcall FixedPoint(const TPoint &P)/* overload */;
 extern DELPHI_PACKAGE TFixedPoint __fastcall FixedPoint(const TFloatPoint &FP)/* overload */;
-extern DELPHI_PACKAGE System::Types::TRect __fastcall MakeRect(const int L, const int T, const int R, const int B)/* overload */;
+extern DELPHI_PACKAGE TRect __fastcall MakeRect(const int L, const int T, const int R, const int B)/* overload */;
 extern DELPHI_PACKAGE System::Types::TRect __fastcall MakeRect(const TFloatRect &FR, TRectRounding Rounding = (TRectRounding)(0x0))/* overload */;
 extern DELPHI_PACKAGE System::Types::TRect __fastcall MakeRect(const TFixedRect &FXR, TRectRounding Rounding = (TRectRounding)(0x0))/* overload */;
 extern DELPHI_PACKAGE TFixedRect __fastcall FixedRect(const TFixed L, const TFixed T, const TFixed R, const TFixed B)/* overload */;
-extern DELPHI_PACKAGE TFixedRect __fastcall FixedRect(const System::Types::TRect &ARect)/* overload */;
+extern DELPHI_PACKAGE TFixedRect __fastcall FixedRect(const TRect &ARect)/* overload */;
 extern DELPHI_PACKAGE TFixedRect __fastcall FixedRect(const TFloatRect &FR)/* overload */;
-extern DELPHI_PACKAGE TFloatRect __fastcall FloatRect(const float L, const float T, const float R, const float B)/* overload */;
-extern DELPHI_PACKAGE TFloatRect __fastcall FloatRect(const System::Types::TRect &ARect)/* overload */;
+extern DELPHI_PACKAGE TFloatRect __fastcall FloatRect(const TFloat L, const TFloat T, const TFloat R, const TFloat B)/* overload */;
+extern DELPHI_PACKAGE TFloatRect __fastcall FloatRect(const TRect &ARect)/* overload */;
 extern DELPHI_PACKAGE TFloatRect __fastcall FloatRect(const TFixedRect &FXR)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall IntersectRect(/* out */ System::Types::TRect &Dst, const System::Types::TRect &R1, const System::Types::TRect &R2)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall IntersectRect(/* out */ TRect &Dst, const TRect &R1, const TRect &R2)/* overload */;
 extern DELPHI_PACKAGE bool __fastcall IntersectRect(/* out */ TFloatRect &Dst, const TFloatRect &FR1, const TFloatRect &FR2)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall UnionRect(/* out */ System::Types::TRect &Rect, const System::Types::TRect &R1, const System::Types::TRect &R2)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall UnionRect(/* out */ TRect &Rect, const TRect &R1, const TRect &R2)/* overload */;
 extern DELPHI_PACKAGE bool __fastcall UnionRect(/* out */ TFloatRect &Rect, const TFloatRect &R1, const TFloatRect &R2)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall EqualRect(const System::Types::TRect &R1, const System::Types::TRect &R2)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall EqualRect(const TRect &R1, const TRect &R2)/* overload */;
 extern DELPHI_PACKAGE bool __fastcall EqualRect(const TFloatRect &R1, const TFloatRect &R2)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall EqualRectSize(const System::Types::TRect &R1, const System::Types::TRect &R2)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall EqualRectSize(const TRect &R1, const TRect &R2)/* overload */;
 extern DELPHI_PACKAGE bool __fastcall EqualRectSize(const TFloatRect &R1, const TFloatRect &R2)/* overload */;
-extern DELPHI_PACKAGE void __fastcall InflateRect(System::Types::TRect &R, int Dx, int Dy)/* overload */;
-extern DELPHI_PACKAGE void __fastcall InflateRect(TFloatRect &FR, float Dx, float Dy)/* overload */;
-extern DELPHI_PACKAGE void __fastcall OffsetRect(System::Types::TRect &R, int Dx, int Dy)/* overload */;
-extern DELPHI_PACKAGE void __fastcall OffsetRect(TFloatRect &FR, float Dx, float Dy)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall IsRectEmpty(const System::Types::TRect &R)/* overload */;
+extern DELPHI_PACKAGE void __fastcall InflateRect(TRect &R, int Dx, int Dy)/* overload */;
+extern DELPHI_PACKAGE void __fastcall InflateRect(TFloatRect &FR, TFloat Dx, TFloat Dy)/* overload */;
+extern DELPHI_PACKAGE void __fastcall OffsetRect(TRect &R, int Dx, int Dy)/* overload */;
+extern DELPHI_PACKAGE void __fastcall OffsetRect(TFloatRect &FR, TFloat Dx, TFloat Dy)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall IsRectEmpty(const TRect &R)/* overload */;
 extern DELPHI_PACKAGE bool __fastcall IsRectEmpty(const TFloatRect &FR)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall PtInRect(const System::Types::TRect &R, const System::Types::TPoint &P)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall PtInRect(const TFloatRect &R, const System::Types::TPoint &P)/* overload */;
-extern DELPHI_PACKAGE bool __fastcall PtInRect(const System::Types::TRect &R, const TFloatPoint &P)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall PtInRect(const TRect &R, const TPoint &P)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall PtInRect(const TFloatRect &R, const TPoint &P)/* overload */;
+extern DELPHI_PACKAGE bool __fastcall PtInRect(const TRect &R, const TFloatPoint &P)/* overload */;
 extern DELPHI_PACKAGE bool __fastcall PtInRect(const TFloatRect &R, const TFloatPoint &P)/* overload */;
 extern DELPHI_PACKAGE void __fastcall SetGamma(float Gamma = 7.000000E-01f);
 extern DELPHI_PACKAGE TCustomBackendClass __fastcall GetPlatformBackendClass(void);

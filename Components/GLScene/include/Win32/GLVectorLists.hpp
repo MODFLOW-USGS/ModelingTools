@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLVectorLists.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLVectorLists.pas' rev: 36.00 (Windows)
 
 #ifndef GlvectorlistsHPP
 #define GlvectorlistsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -52,17 +54,17 @@ private:
 	int FCount;
 	int FCapacity;
 	int FGrowthDelta;
-	Glvectorgeometry::TByteVector *FBufferItem;
+	Glvectorgeometry::PByteArray FBufferItem;
 	TBaseListOptions FOptions;
-	unsigned FRevision;
+	System::LongWord FRevision;
 	System::UnicodeString FTagString;
 	
 protected:
-	Glvectorgeometry::TByteVector *FBaseList;
+	Glvectorgeometry::PByteArray FBaseList;
 	int FItemSize;
 	void __fastcall SetCount(int Val);
 	virtual void __fastcall SetCapacity(int NewCapacity);
-	Glvectorgeometry::PByteVector __fastcall BufferItem();
+	Glvectorgeometry::PByteArray __fastcall BufferItem();
 	bool __fastcall GetSetCountResetsMemory();
 	void __fastcall SetSetCountResetsMemory(const bool Val);
 	virtual void __fastcall ReadItemsData(System::Classes::TReader* AReader);
@@ -92,7 +94,7 @@ public:
 	__property int GrowthDelta = {read=FGrowthDelta, write=FGrowthDelta, nodefault};
 	__property bool SetCountResetsMemory = {read=GetSetCountResetsMemory, write=SetSetCountResetsMemory, nodefault};
 	__property System::UnicodeString TagString = {read=FTagString, write=FTagString};
-	__property unsigned Revision = {read=FRevision, write=FRevision, nodefault};
+	__property System::LongWord Revision = {read=FRevision, write=FRevision, nodefault};
 public:
 	/* TPersistentObject.CreateFromFiler */ inline __fastcall TBaseList(Glpersistentclasses::TVirtualReader* reader) : Glpersistentclasses::TPersistentObject(reader) { }
 	
@@ -106,23 +108,23 @@ class PASCALIMPLEMENTATION TBaseVectorList : public TBaseList
 	typedef TBaseList inherited;
 	
 protected:
-	Glvectorgeometry::PFloatVector __fastcall GetItemAddress(int Index);
+	Glvectorgeometry::PFloatArray __fastcall GetItemAddress(int Index);
 	
 public:
 	DYNAMIC void __fastcall WriteToFiler(Glpersistentclasses::TVirtualWriter* writer);
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* reader);
-	virtual void __fastcall GetExtents(/* out */ Glvectortypes::TVector3f &min, /* out */ Glvectortypes::TVector3f &max);
-	Glvectortypes::TVector3f __fastcall Sum();
+	virtual void __fastcall GetExtents(/* out */ Glvectorgeometry::TAffineVector &min, /* out */ Glvectorgeometry::TAffineVector &max);
+	Glvectorgeometry::TAffineVector __fastcall Sum();
 	virtual void __fastcall Normalize();
 	float __fastcall MaxSpacing(TBaseVectorList* list2);
-	virtual void __fastcall Translate(const Glvectortypes::TVector3f &delta)/* overload */;
+	virtual void __fastcall Translate(const Glvectorgeometry::TAffineVector &delta)/* overload */;
 	virtual void __fastcall Translate(TBaseVectorList* const delta)/* overload */;
 	virtual void __fastcall TranslateInv(TBaseVectorList* const delta)/* overload */;
 	virtual void __fastcall Lerp(TBaseVectorList* const list1, TBaseVectorList* const list2, float lerpFactor) = 0 ;
 	void __fastcall AngleLerp(TBaseVectorList* const list1, TBaseVectorList* const list2, float lerpFactor);
 	void __fastcall AngleCombine(TBaseVectorList* const list1, float intensity);
 	virtual void __fastcall Combine(TBaseVectorList* const list2, float factor);
-	__property Glvectorgeometry::PFloatVector ItemAddress[int Index] = {read=GetItemAddress};
+	__property Glvectorgeometry::PFloatArray ItemAddress[int Index] = {read=GetItemAddress};
 public:
 	/* TBaseList.Create */ inline __fastcall virtual TBaseVectorList() : TBaseList() { }
 	/* TBaseList.Destroy */ inline __fastcall virtual ~TBaseVectorList() { }
@@ -140,51 +142,51 @@ class PASCALIMPLEMENTATION TAffineVectorList : public TBaseVectorList
 	typedef TBaseVectorList inherited;
 	
 public:
-	Glvectortypes::TVector3f operator[](int Index) { return this->Items[Index]; }
+	Glvectorgeometry::TAffineVector operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	Glvectorgeometry::TAffineVectorArray *FList;
+	Glvectorgeometry::PAffineVectorArray FList;
 	
 protected:
-	Glvectortypes::TVector3f __fastcall Get(int Index);
-	void __fastcall Put(int Index, const Glvectortypes::TVector3f &item);
+	Glvectorgeometry::TAffineVector __fastcall Get(int Index);
+	void __fastcall Put(int Index, const Glvectorgeometry::TAffineVector &item);
 	virtual void __fastcall SetCapacity(int NewCapacity);
 	
 public:
 	__fastcall virtual TAffineVectorList();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Src);
-	int __fastcall Add(const Glvectortypes::TVector3f &item)/* overload */;
-	int __fastcall Add(const Glvectortypes::TVector4f &item)/* overload */;
-	void __fastcall Add(const Glvectortypes::TVector3f &i1, const Glvectortypes::TVector3f &i2)/* overload */;
-	void __fastcall Add(const Glvectortypes::TVector3f &i1, const Glvectortypes::TVector3f &i2, const Glvectortypes::TVector3f &i3)/* overload */;
+	int __fastcall Add(const Glvectorgeometry::TAffineVector &item)/* overload */;
+	int __fastcall Add(const Glvectorgeometry::TVector &item)/* overload */;
+	void __fastcall Add(const Glvectorgeometry::TAffineVector &i1, const Glvectorgeometry::TAffineVector &i2)/* overload */;
+	void __fastcall Add(const Glvectorgeometry::TAffineVector &i1, const Glvectorgeometry::TAffineVector &i2, const Glvectorgeometry::TAffineVector &i3)/* overload */;
 	int __fastcall Add(const Glvectortypes::TVector2f &item)/* overload */;
 	int __fastcall Add(const Glvectorgeometry::TTexPoint &item)/* overload */;
 	int __fastcall Add(const float X, const float Y)/* overload */;
 	int __fastcall Add(const float X, const float Y, const float Z)/* overload */;
 	int __fastcall Add(const int X, const int Y, const int Z)/* overload */;
 	int __fastcall AddNC(const int X, const int Y, const int Z)/* overload */;
-	int __fastcall Add(const Glvectorgeometry::PIntegerVector xy, const int Z)/* overload */;
-	int __fastcall AddNC(const Glvectorgeometry::PIntegerVector xy, const int Z)/* overload */;
+	int __fastcall Add(const Glvectorgeometry::PIntegerArray xy, const int Z)/* overload */;
+	int __fastcall AddNC(const Glvectorgeometry::PIntegerArray xy, const int Z)/* overload */;
 	void __fastcall Add(TAffineVectorList* const list)/* overload */;
-	void __fastcall Push(const Glvectortypes::TVector3f &Val);
-	Glvectortypes::TVector3f __fastcall Pop();
-	void __fastcall Insert(int Index, const Glvectortypes::TVector3f &item);
-	int __fastcall IndexOf(const Glvectortypes::TVector3f &item);
-	int __fastcall FindOrAdd(const Glvectortypes::TVector3f &item);
-	__property Glvectortypes::TVector3f Items[int Index] = {read=Get, write=Put/*, default*/};
+	void __fastcall Push(const Glvectorgeometry::TAffineVector &Val);
+	Glvectorgeometry::TAffineVector __fastcall Pop();
+	void __fastcall Insert(int Index, const Glvectorgeometry::TAffineVector &item);
+	int __fastcall IndexOf(const Glvectorgeometry::TAffineVector &item);
+	int __fastcall FindOrAdd(const Glvectorgeometry::TAffineVector &item);
+	__property Glvectorgeometry::TAffineVector Items[int Index] = {read=Get, write=Put/*, default*/};
 	__property Glvectorgeometry::PAffineVectorArray List = {read=FList};
-	virtual void __fastcall Translate(const Glvectortypes::TVector3f &delta)/* overload */;
-	HIDESBASE void __fastcall Translate(const Glvectortypes::TVector3f &delta, int base, int nb)/* overload */;
-	void __fastcall TranslateItem(int Index, const Glvectortypes::TVector3f &delta);
-	void __fastcall TranslateItems(int Index, const Glvectortypes::TVector3f &delta, int nb);
-	void __fastcall CombineItem(int Index, const Glvectortypes::TVector3f &vector, const float f);
-	void __fastcall TransformAsPoints(const Glvectortypes::TMatrix4f &matrix);
-	void __fastcall TransformAsVectors(const Glvectortypes::TMatrix4f &matrix)/* overload */;
-	void __fastcall TransformAsVectors(const Glvectortypes::TMatrix3f &matrix)/* overload */;
+	virtual void __fastcall Translate(const Glvectorgeometry::TAffineVector &delta)/* overload */;
+	HIDESBASE void __fastcall Translate(const Glvectorgeometry::TAffineVector &delta, int base, int nb)/* overload */;
+	void __fastcall TranslateItem(int Index, const Glvectorgeometry::TAffineVector &delta);
+	void __fastcall TranslateItems(int Index, const Glvectorgeometry::TAffineVector &delta, int nb);
+	void __fastcall CombineItem(int Index, const Glvectorgeometry::TAffineVector &vector, const float f);
+	void __fastcall TransformAsPoints(const Glvectorgeometry::TMatrix &matrix);
+	void __fastcall TransformAsVectors(const Glvectorgeometry::TMatrix &matrix)/* overload */;
+	void __fastcall TransformAsVectors(const Glvectorgeometry::TAffineMatrix &matrix)/* overload */;
 	virtual void __fastcall Normalize();
 	virtual void __fastcall Lerp(TBaseVectorList* const list1, TBaseVectorList* const list2, float lerpFactor);
 	void __fastcall Scale(float factor)/* overload */;
-	void __fastcall Scale(const Glvectortypes::TVector3f &factors)/* overload */;
+	void __fastcall Scale(const Glvectorgeometry::TAffineVector &factors)/* overload */;
 public:
 	/* TBaseList.Destroy */ inline __fastcall virtual ~TAffineVectorList() { }
 	
@@ -206,33 +208,33 @@ class PASCALIMPLEMENTATION TVectorList : public TBaseVectorList
 	typedef TBaseVectorList inherited;
 	
 public:
-	Glvectortypes::TVector4f operator[](int Index) { return this->Items[Index]; }
+	Glvectorgeometry::TVector operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	Glvectorgeometry::TVectorArray *FList;
+	Glvectorgeometry::PVectorArray FList;
 	
 protected:
-	Glvectortypes::TVector4f __fastcall Get(int Index);
-	void __fastcall Put(int Index, const Glvectortypes::TVector4f &item);
+	Glvectorgeometry::TVector __fastcall Get(int Index);
+	void __fastcall Put(int Index, const Glvectorgeometry::TVector &item);
 	virtual void __fastcall SetCapacity(int NewCapacity);
 	
 public:
 	__fastcall virtual TVectorList();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Src);
-	int __fastcall Add(const Glvectortypes::TVector4f &item)/* overload */;
-	int __fastcall Add(const Glvectortypes::TVector3f &item, float w)/* overload */;
+	int __fastcall Add(const Glvectorgeometry::TVector &item)/* overload */;
+	int __fastcall Add(const Glvectorgeometry::TAffineVector &item, float w)/* overload */;
 	int __fastcall Add(const float X, const float Y, const float Z, const float w)/* overload */;
-	void __fastcall Add(const Glvectortypes::TVector3f &i1, const Glvectortypes::TVector3f &i2, const Glvectortypes::TVector3f &i3, float w)/* overload */;
-	int __fastcall AddVector(const Glvectortypes::TVector3f &item)/* overload */;
-	int __fastcall AddPoint(const Glvectortypes::TVector3f &item)/* overload */;
+	void __fastcall Add(const Glvectorgeometry::TAffineVector &i1, const Glvectorgeometry::TAffineVector &i2, const Glvectorgeometry::TAffineVector &i3, float w)/* overload */;
+	int __fastcall AddVector(const Glvectorgeometry::TAffineVector &item)/* overload */;
+	int __fastcall AddPoint(const Glvectorgeometry::TAffineVector &item)/* overload */;
 	int __fastcall AddPoint(const float X, const float Y, const float Z = 0.000000E+00f)/* overload */;
-	void __fastcall Push(const Glvectortypes::TVector4f &Val);
-	Glvectortypes::TVector4f __fastcall Pop();
-	int __fastcall IndexOf(const Glvectortypes::TVector4f &item);
-	int __fastcall FindOrAdd(const Glvectortypes::TVector4f &item);
-	int __fastcall FindOrAddPoint(const Glvectortypes::TVector3f &item);
-	void __fastcall Insert(int Index, const Glvectortypes::TVector4f &item);
-	__property Glvectortypes::TVector4f Items[int Index] = {read=Get, write=Put/*, default*/};
+	void __fastcall Push(const Glvectorgeometry::TVector &Val);
+	Glvectorgeometry::TVector __fastcall Pop();
+	int __fastcall IndexOf(const Glvectorgeometry::TVector &item);
+	int __fastcall FindOrAdd(const Glvectorgeometry::TVector &item);
+	int __fastcall FindOrAddPoint(const Glvectorgeometry::TAffineVector &item);
+	void __fastcall Insert(int Index, const Glvectorgeometry::TVector &item);
+	__property Glvectorgeometry::TVector Items[int Index] = {read=Get, write=Put/*, default*/};
 	__property Glvectorgeometry::PVectorArray List = {read=FList};
 	virtual void __fastcall Lerp(TBaseVectorList* const list1, TBaseVectorList* const list2, float lerpFactor);
 public:
@@ -254,7 +256,7 @@ public:
 	Glvectorgeometry::TTexPoint operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	Glvectorgeometry::TTexPointArray *FList;
+	Glvectorgeometry::PTexPointArray FList;
 	
 protected:
 	Glvectorgeometry::TTexPoint __fastcall Get(int Index);
@@ -271,8 +273,8 @@ public:
 	int __fastcall Add(const float texS, const float Text)/* overload */;
 	int __fastcall Add(const int texS, const int Text)/* overload */;
 	int __fastcall AddNC(const int texS, const int Text)/* overload */;
-	int __fastcall Add(const Glvectorgeometry::PIntegerVector texST)/* overload */;
-	int __fastcall AddNC(const Glvectorgeometry::PIntegerVector texST)/* overload */;
+	int __fastcall Add(const Glvectorgeometry::PIntegerArray texST)/* overload */;
+	int __fastcall AddNC(const Glvectorgeometry::PIntegerArray texST)/* overload */;
 	void __fastcall Push(const Glvectorgeometry::TTexPoint &Val);
 	Glvectorgeometry::TTexPoint __fastcall Pop();
 	void __fastcall Insert(int Index, const Glvectorgeometry::TTexPoint &item);
@@ -301,7 +303,7 @@ public:
 	int operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	Glvectorgeometry::TIntegerVector *FList;
+	Glvectorgeometry::PIntegerArray FList;
 	
 protected:
 	int __fastcall Get(int Index);
@@ -322,11 +324,11 @@ public:
 	void __fastcall Remove(const int item);
 	int __fastcall IndexOf(int item);
 	__property int Items[int Index] = {read=Get, write=Put/*, default*/};
-	__property Glvectorgeometry::PIntegerVector List = {read=FList};
+	__property Glvectorgeometry::PIntegerArray List = {read=FList};
 	void __fastcall AddSerie(int aBase, int aDelta, int aCount);
 	void __fastcall AddIntegers(const System::PInteger First, int n)/* overload */;
 	void __fastcall AddIntegers(TIntegerList* const aList)/* overload */;
-	void __fastcall AddIntegers(const int *anArray, const int anArray_High)/* overload */;
+	void __fastcall AddIntegers(const int *anArray, const System::NativeInt anArray_High)/* overload */;
 	int __fastcall MinInteger();
 	int __fastcall MaxInteger();
 	void __fastcall Sort();
@@ -360,7 +362,7 @@ public:
 	float operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	TSingleArrayList *FList;
+	PSingleArrayList FList;
 	
 protected:
 	float __fastcall Get(int Index);
@@ -373,7 +375,7 @@ public:
 	int __fastcall Add(const float item)/* overload */;
 	void __fastcall Add(const float i1, const float i2)/* overload */;
 	void __fastcall AddSingles(const System::PSingle First, int n)/* overload */;
-	void __fastcall AddSingles(const float *anArray, const int anArray_High)/* overload */;
+	void __fastcall AddSingles(const float *anArray, const System::NativeInt anArray_High)/* overload */;
 	void __fastcall Push(const float Val);
 	float __fastcall Pop();
 	void __fastcall Insert(int Index, const float item);
@@ -411,7 +413,7 @@ public:
 	double operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	TDoubleArrayList *FList;
+	PDoubleArrayList FList;
 	
 protected:
 	double __fastcall Get(int Index);
@@ -455,7 +457,7 @@ public:
 	System::Byte operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	Glvectorgeometry::TByteVector *FList;
+	Glvectorgeometry::PByteArray FList;
 	
 protected:
 	System::Byte __fastcall Get(int Index);
@@ -468,7 +470,7 @@ public:
 	int __fastcall Add(const System::Byte item);
 	void __fastcall Insert(int Index, const System::Byte item);
 	__property System::Byte Items[int Index] = {read=Get, write=Put/*, default*/};
-	__property Glvectorgeometry::PByteVector List = {read=FList};
+	__property Glvectorgeometry::PByteArray List = {read=FList};
 public:
 	/* TBaseList.Destroy */ inline __fastcall virtual ~TByteList() { }
 	
@@ -488,7 +490,7 @@ public:
 	Glvectorgeometry::TQuaternion operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	Glvectorgeometry::TQuaternionArray *FList;
+	Glvectorgeometry::PQuaternionArray FList;
 	
 protected:
 	Glvectorgeometry::TQuaternion __fastcall Get(int Index);
@@ -499,7 +501,7 @@ public:
 	__fastcall virtual TQuaternionList();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Src);
 	int __fastcall Add(const Glvectorgeometry::TQuaternion &item)/* overload */;
-	int __fastcall Add(const Glvectortypes::TVector3f &item, float w)/* overload */;
+	int __fastcall Add(const Glvectorgeometry::TAffineVector &item, float w)/* overload */;
 	int __fastcall Add(const float X, const float Y, const float Z, const float W)/* overload */;
 	void __fastcall Push(const Glvectorgeometry::TQuaternion &Val);
 	Glvectorgeometry::TQuaternion __fastcall Pop();
@@ -604,7 +606,7 @@ public:
 	T4ByteData operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	T4ByteArrayList *FList;
+	P4ByteArrayList FList;
 	
 protected:
 	T4ByteData __fastcall Get(int Index);
@@ -649,34 +651,34 @@ class PASCALIMPLEMENTATION TLongWordList : public TBaseList
 	typedef TBaseList inherited;
 	
 public:
-	unsigned operator[](int Index) { return this->Items[Index]; }
+	System::LongWord operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	Glvectorgeometry::TLongWordVector *FList;
+	Glvectorgeometry::PLongWordArray FList;
 	
 protected:
-	unsigned __fastcall Get(int Index);
-	void __fastcall Put(int Index, const unsigned item);
+	System::LongWord __fastcall Get(int Index);
+	void __fastcall Put(int Index, const System::LongWord item);
 	virtual void __fastcall SetCapacity(int newCapacity);
 	
 public:
 	__fastcall virtual TLongWordList();
 	virtual void __fastcall Assign(System::Classes::TPersistent* src);
-	int __fastcall Add(const unsigned item)/* overload */;
-	int __fastcall AddNC(const unsigned item)/* overload */;
-	void __fastcall Add(const unsigned i1, const unsigned i2)/* overload */;
-	void __fastcall Add(const unsigned i1, const unsigned i2, const unsigned i3)/* overload */;
+	int __fastcall Add(const System::LongWord item)/* overload */;
+	int __fastcall AddNC(const System::LongWord item)/* overload */;
+	void __fastcall Add(const System::LongWord i1, const System::LongWord i2)/* overload */;
+	void __fastcall Add(const System::LongWord i1, const System::LongWord i2, const System::LongWord i3)/* overload */;
 	void __fastcall Add(TLongWordList* const AList)/* overload */;
-	void __fastcall Push(const unsigned Val);
-	unsigned __fastcall Pop();
-	void __fastcall Insert(int Index, const unsigned item);
-	void __fastcall Remove(const unsigned item);
-	unsigned __fastcall IndexOf(int item);
-	__property unsigned Items[int Index] = {read=Get, write=Put/*, default*/};
-	__property Glvectorgeometry::PLongWordVector List = {read=FList};
+	void __fastcall Push(const System::LongWord Val);
+	System::LongWord __fastcall Pop();
+	void __fastcall Insert(int Index, const System::LongWord item);
+	void __fastcall Remove(const System::LongWord item);
+	System::LongWord __fastcall IndexOf(int item);
+	__property System::LongWord Items[int Index] = {read=Get, write=Put/*, default*/};
+	__property Glvectorgeometry::PLongWordArray List = {read=FList};
 	void __fastcall AddLongWords(const System::PLongWord First, int n)/* overload */;
 	void __fastcall AddLongWords(TLongWordList* const aList)/* overload */;
-	void __fastcall AddLongWords(const unsigned *anArray, const int anArray_High)/* overload */;
+	void __fastcall AddLongWords(const unsigned *anArray, const System::NativeInt anArray_High)/* overload */;
 public:
 	/* TBaseList.Destroy */ inline __fastcall virtual ~TLongWordList() { }
 	

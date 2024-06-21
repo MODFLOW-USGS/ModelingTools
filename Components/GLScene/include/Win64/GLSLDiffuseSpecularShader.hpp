@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLDiffuseSpecularShader.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLDiffuseSpecularShader.pas' rev: 36.00 (Windows)
 
 #ifndef GlsldiffusespecularshaderHPP
 #define GlsldiffusespecularshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -53,17 +55,17 @@ class PASCALIMPLEMENTATION EGLSLDiffuseSpecularShaderException : public Glslshad
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLSLDiffuseSpecularShaderException(const System::UnicodeString Msg) : Glslshader::EGLSLShaderException(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLSLDiffuseSpecularShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : Glslshader::EGLSLShaderException(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLSLDiffuseSpecularShaderException(NativeUInt Ident)/* overload */ : Glslshader::EGLSLShaderException(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLSLDiffuseSpecularShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : Glslshader::EGLSLShaderException(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::NativeUInt Ident)/* overload */ : Glslshader::EGLSLShaderException(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::PResStringRec ResStringRec)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLSLDiffuseSpecularShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : Glslshader::EGLSLShaderException(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : Glslshader::EGLSLShaderException(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(const System::UnicodeString Msg, int AHelpContext) : Glslshader::EGLSLShaderException(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : Glslshader::EGLSLShaderException(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(NativeUInt Ident, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : Glslshader::EGLSLShaderException(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::NativeUInt Ident, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLDiffuseSpecularShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLSLDiffuseSpecularShaderException() { }
 	
 };
@@ -102,9 +104,9 @@ class PASCALIMPLEMENTATION TGLBaseGLSLDiffuseSpecularShaderMT : public TGLBaseCu
 private:
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
 	Gltexture::TGLTexture* FMainTexture;
-	System::UnicodeString FMainTextureName;
-	System::UnicodeString __fastcall GetMainTextureName();
-	void __fastcall SetMainTextureName(const System::UnicodeString Value);
+	Glmaterial::TGLLibMaterialName FMainTextureName;
+	Glmaterial::TGLLibMaterialName __fastcall GetMainTextureName();
+	void __fastcall SetMainTextureName(const Glmaterial::TGLLibMaterialName Value);
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	
 protected:
@@ -114,7 +116,7 @@ protected:
 	
 public:
 	__property Gltexture::TGLTexture* MainTexture = {read=FMainTexture, write=FMainTexture};
-	__property System::UnicodeString MainTextureName = {read=GetMainTextureName, write=SetMainTextureName};
+	__property Glmaterial::TGLLibMaterialName MainTextureName = {read=GetMainTextureName, write=SetMainTextureName};
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
 public:
 	/* TGLBaseCustomGLSLDiffuseSpecular.Create */ inline __fastcall virtual TGLBaseGLSLDiffuseSpecularShaderMT(System::Classes::TComponent* AOwner) : TGLBaseCustomGLSLDiffuseSpecular(AOwner) { }

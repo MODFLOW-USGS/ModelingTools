@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLProxyObjects.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLProxyObjects.pas' rev: 36.00 (Windows)
 
 #ifndef GlproxyobjectsHPP
 #define GlproxyobjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -50,17 +52,17 @@ class PASCALIMPLEMENTATION EGLProxyException : public System::Sysutils::Exceptio
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLProxyException(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLProxyException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLProxyException(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLProxyException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLProxyException(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLProxyException(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLProxyException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLProxyException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLProxyException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLProxyException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLProxyException(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLProxyException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLProxyException(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLProxyException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLProxyException(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLProxyException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLProxyException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLProxyException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLProxyException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLProxyException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLProxyException() { }
 	
 };
@@ -100,8 +102,8 @@ private:
 	Glmaterial::TGLLibMaterial* FMasterLibMaterial;
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
 	void __fastcall SetMaterialLibrary(Glmaterial::TGLMaterialLibrary* const Value);
-	System::UnicodeString __fastcall GetMasterLibMaterialName();
-	void __fastcall SetMasterLibMaterialName(const System::UnicodeString Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetMasterLibMaterialName();
+	void __fastcall SetMasterLibMaterialName(const Glmaterial::TGLLibMaterialName Value);
 	Glscene::TGLCustomSceneObject* __fastcall GetMasterMaterialObject();
 	void __fastcall SetMasterMaterialObject(Glscene::TGLCustomSceneObject* const Value);
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
@@ -115,7 +117,7 @@ public:
 	
 __published:
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
-	__property System::UnicodeString MasterLibMaterialName = {read=GetMasterLibMaterialName, write=SetMasterLibMaterialName};
+	__property Glmaterial::TGLLibMaterialName MasterLibMaterialName = {read=GetMasterLibMaterialName, write=SetMasterLibMaterialName};
 	__property Glscene::TGLCustomSceneObject* MasterObject = {read=GetMasterMaterialObject, write=SetMasterMaterialObject};
 public:
 	/* TGLBaseSceneObject.CreateAsChild */ inline __fastcall TGLMaterialProxy(Glscene::TGLBaseSceneObject* aParentOwner) : Glscene::TGLProxyObject(aParentOwner) { }
@@ -148,8 +150,8 @@ private:
 	void __fastcall SetMasterFreeFormObject(Glvectorfileobjects::TGLFreeForm* const Value);
 	
 public:
-	bool __fastcall OctreeRayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
-	bool __fastcall OctreeSphereSweepIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, const float velocity, const float radius, const float modelscale, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	bool __fastcall OctreeRayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	bool __fastcall OctreeSphereSweepIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, const float velocity, const float radius, const float modelscale, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	
 __published:
 	__property Glvectorfileobjects::TGLFreeForm* MasterObject = {read=GetMasterFreeFormObject, write=SetMasterFreeFormObject};
@@ -169,7 +171,7 @@ class PASCALIMPLEMENTATION TBoneMatrixObj : public System::TObject
 	typedef System::TObject inherited;
 	
 public:
-	Glvectortypes::TMatrix4f Matrix;
+	Glvectorgeometry::TMatrix Matrix;
 	System::UnicodeString BoneName;
 	int BoneIndex;
 public:
@@ -193,7 +195,7 @@ private:
 	int FLastFrame;
 	float FCurrentFrameDelta;
 	Glbaseclasses::TGLProgressTimes FCurrentTime;
-	System::UnicodeString FAnimation;
+	Glvectorfileobjects::TGLActorAnimationName FAnimation;
 	System::UnicodeString FTempLibMaterialName;
 	Glmaterial::TGLLibMaterial* FMasterLibMaterial;
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
@@ -202,11 +204,11 @@ private:
 	System::Classes::TStrings* FStoredBoneNames;
 	Glbaseclasses::TGLProgressEvent FOnBeforeRender;
 	TGLActorProxyAnimationMode FAnimationMode;
-	void __fastcall SetAnimation(const System::UnicodeString Value);
+	void __fastcall SetAnimation(const Glvectorfileobjects::TGLActorAnimationName Value);
 	void __fastcall SetMasterActorObject(Glvectorfileobjects::TGLActor* const Value);
 	Glvectorfileobjects::TGLActor* __fastcall GetMasterActorObject();
-	System::UnicodeString __fastcall GetLibMaterialName();
-	void __fastcall SetLibMaterialName(const System::UnicodeString Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetLibMaterialName();
+	void __fastcall SetLibMaterialName(const Glmaterial::TGLLibMaterialName Value);
 	void __fastcall SetMaterialLibrary(Glmaterial::TGLMaterialLibrary* const Value);
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	void __fastcall SetStoreBonesMatrix(const bool Value);
@@ -227,19 +229,19 @@ public:
 	__property int EndFrame = {read=FEndFrame, nodefault};
 	__property float CurrentFrameDelta = {read=FCurrentFrameDelta};
 	__property Glbaseclasses::TGLProgressTimes CurrentTime = {read=FCurrentTime};
-	Glvectortypes::TMatrix4f __fastcall BoneMatrix(int BoneIndex)/* overload */;
-	Glvectortypes::TMatrix4f __fastcall BoneMatrix(System::UnicodeString BoneName)/* overload */;
+	Glvectorgeometry::TMatrix __fastcall BoneMatrix(int BoneIndex)/* overload */;
+	Glvectorgeometry::TMatrix __fastcall BoneMatrix(System::UnicodeString BoneName)/* overload */;
 	void __fastcall BoneMatricesClear();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
-	bool __fastcall RayCastIntersectEx(Glvectorfileobjects::TGLActor* RefActor, const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0))/* overload */;
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	bool __fastcall RayCastIntersectEx(Glvectorfileobjects::TGLActor* RefActor, const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0))/* overload */;
 	
 __published:
 	__property TGLActorProxyAnimationMode AnimationMode = {read=FAnimationMode, write=FAnimationMode, default=0};
-	__property System::UnicodeString Animation = {read=FAnimation, write=SetAnimation};
+	__property Glvectorfileobjects::TGLActorAnimationName Animation = {read=FAnimation, write=SetAnimation};
 	__property Glvectorfileobjects::TGLActor* MasterObject = {read=GetMasterActorObject, write=SetMasterActorObject};
 	__property ProxyOptions = {default=3};
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
-	__property System::UnicodeString LibMaterialName = {read=GetLibMaterialName, write=SetLibMaterialName};
+	__property Glmaterial::TGLLibMaterialName LibMaterialName = {read=GetLibMaterialName, write=SetLibMaterialName};
 	__property bool StoreBonesMatrix = {read=FStoreBonesMatrix, write=SetStoreBonesMatrix, nodefault};
 	__property System::Classes::TStrings* StoredBoneNames = {read=FStoredBoneNames, write=SetStoredBoneNames};
 	__property Glbaseclasses::TGLProgressEvent OnBeforeRender = {read=FOnBeforeRender, write=SetOnBeforeRender};

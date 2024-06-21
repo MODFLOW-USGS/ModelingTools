@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLGlassShader.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLGlassShader.pas' rev: 36.00 (Windows)
 
 #ifndef GlslglassshaderHPP
 #define GlslglassshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -51,19 +53,19 @@ private:
 	float FAlpha;
 	Glmaterial::TGLAbstractMaterialLibrary* FMaterialLibrary;
 	Gltexture::TGLTexture* FMainTexture;
-	System::UnicodeString FMainTexName;
+	Glmaterial::TGLLibMaterialName FMainTexName;
 	Gltexture::TGLTexture* FRefractionTexture;
-	System::UnicodeString FRefractionTexName;
+	Glmaterial::TGLLibMaterialName FRefractionTexName;
 	Glscene::TGLBaseSceneObject* FOwnerObject;
 	Glstate::TBlendFunction FBlendSrc;
 	Glstate::TBlendFunction FBlendDst;
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	void __fastcall SetMainTexTexture(Gltexture::TGLTexture* const Value);
-	System::UnicodeString __fastcall GetMainTexName();
-	void __fastcall SetMainTexName(const System::UnicodeString Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetMainTexName();
+	void __fastcall SetMainTexName(const Glmaterial::TGLLibMaterialName Value);
 	void __fastcall SetRefractionTexTexture(Gltexture::TGLTexture* const Value);
-	System::UnicodeString __fastcall GetRefractionTexName();
-	void __fastcall SetRefractionTexName(const System::UnicodeString Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetRefractionTexName();
+	void __fastcall SetRefractionTexName(const Glmaterial::TGLLibMaterialName Value);
 	void __fastcall SetDiffuseColor(Glcolor::TGLColor* AValue);
 	
 protected:
@@ -81,9 +83,9 @@ public:
 	__property float Alpha = {read=FAlpha, write=FAlpha};
 	__property Glmaterial::TGLAbstractMaterialLibrary* MaterialLibrary = {read=GetMaterialLibrary, write=SetMaterialLibrary};
 	__property Gltexture::TGLTexture* MainTexture = {read=FMainTexture, write=SetMainTexTexture};
-	__property System::UnicodeString MainTextureName = {read=GetMainTexName, write=SetMainTexName};
+	__property Glmaterial::TGLLibMaterialName MainTextureName = {read=GetMainTexName, write=SetMainTexName};
 	__property Gltexture::TGLTexture* RefractionTexture = {read=FRefractionTexture, write=SetRefractionTexTexture};
-	__property System::UnicodeString RefractionTextureName = {read=GetRefractionTexName, write=SetRefractionTexName};
+	__property Glmaterial::TGLLibMaterialName RefractionTextureName = {read=GetRefractionTexName, write=SetRefractionTexName};
 	__property Glscene::TGLBaseSceneObject* OwnerObject = {read=FOwnerObject, write=FOwnerObject};
 	__property Glstate::TBlendFunction BlendSrc = {read=FBlendSrc, write=FBlendSrc, default=6};
 	__property Glstate::TBlendFunction BlendDst = {read=FBlendDst, write=FBlendDst, default=8};

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLShadowHDS.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLShadowHDS.pas' rev: 36.00 (Windows)
 
 #ifndef GlshadowhdsHPP
 #define GlshadowhdsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -36,7 +38,7 @@ class DELPHICLASS TGLShadowHDS;
 //-- type declarations -------------------------------------------------------
 typedef void __fastcall (__closure *TNewTilePreparedEvent)(TGLShadowHDS* Sender, Glheightdata::TGLHeightData* heightData, Glmaterial::TGLLibMaterial* ShadowMapMaterial);
 
-typedef void __fastcall (__closure *TThreadBmp32)(TGLShadowHDS* Sender, Glheightdata::TGLHeightData* heightData, Glgraphics::TGLImage* bmp32);
+typedef void __fastcall (__closure *TThreadBmp32)(TGLShadowHDS* Sender, Glheightdata::TGLHeightData* heightData, Glgraphics::TGLBitmap32* bmp32);
 
 class PASCALIMPLEMENTATION TGLShadowHDS : public Glheightdata::TGLHeightDataSourceFilter
 {
@@ -45,8 +47,8 @@ class PASCALIMPLEMENTATION TGLShadowHDS : public Glheightdata::TGLHeightDataSour
 private:
 	int FTileSize;
 	Glmaterial::TGLMaterialLibrary* FShadowmapLibrary;
-	Glcoordinates::TGLCoordinates3* FLightVector;
-	Glcoordinates::TGLCoordinates3* FScale;
+	Glcoordinates::TGLCoordinates* FLightVector;
+	Glcoordinates::TGLCoordinates* FScale;
 	Glvectortypes::TVector3f FScaleVec;
 	TNewTilePreparedEvent FOnNewTilePrepared;
 	TThreadBmp32 FOnThreadBmp32;
@@ -60,15 +62,15 @@ private:
 	
 protected:
 	void __fastcall SetShadowmapLibrary(Glmaterial::TGLMaterialLibrary* const val);
-	void __fastcall SetScale(Glcoordinates::TGLCoordinates3* AValue);
-	void __fastcall SetLightVector(Glcoordinates::TGLCoordinates3* AValue);
+	void __fastcall SetScale(Glcoordinates::TGLCoordinates* AValue);
+	void __fastcall SetLightVector(Glcoordinates::TGLCoordinates* AValue);
 	void __fastcall SetSoftRange(unsigned AValue);
 	void __fastcall SetDiffuse(float AValue);
 	void __fastcall SetAmbient(float AValue);
 	void __fastcall Trim(int MaxTextureCount);
 	Glmaterial::TGLLibMaterial* __fastcall FindUnusedMaterial();
-	Glvectortypes::TVector3f __fastcall CalcStep();
-	Glvectortypes::TVector3f __fastcall CalcScale();
+	Glvectorgeometry::TAffineVector __fastcall CalcStep();
+	Glvectorgeometry::TAffineVector __fastcall CalcScale();
 	int __fastcall WrapDist(float Lx, float Ly);
 	void __fastcall LocalToWorld(float Lx, float Ly, Glheightdata::TGLHeightData* HD, float &Wx, float &Wy);
 	void __fastcall WorldToLocal(float Wx, float Wy, Glheightdata::TGLHeightData* &HD, float &Lx, float &Ly);
@@ -82,17 +84,17 @@ public:
 	virtual void __fastcall BeforePreparingData(Glheightdata::TGLHeightData* heightData);
 	virtual void __fastcall PreparingData(Glheightdata::TGLHeightData* heightData);
 	virtual void __fastcall AfterPreparingData(Glheightdata::TGLHeightData* heightData);
-	void __fastcall GenerateShadowMap(Glheightdata::TGLHeightData* heightData, Glgraphics::TGLImage* ShadowMap, float scale);
+	void __fastcall GenerateShadowMap(Glheightdata::TGLHeightData* heightData, Glgraphics::TGLBitmap32* ShadowMap, float scale);
 	float __fastcall RayCastShadowHeight(Glheightdata::TGLHeightData* HD, float localX, float localY)/* overload */;
-	void __fastcall RayCastLine(Glheightdata::TGLHeightData* heightData, float Lx, float Ly, Glgraphics::TGLImage* ShadowMap);
+	void __fastcall RayCastLine(Glheightdata::TGLHeightData* heightData, float Lx, float Ly, Glgraphics::TGLBitmap32* ShadowMap);
 	System::Byte __fastcall Shade(Glheightdata::TGLHeightData* heightData, int x, int y, float ShadowHeight, float TerrainHeight);
 	
 __published:
 	__property Glmaterial::TGLMaterialLibrary* ShadowmapLibrary = {read=FShadowmapLibrary, write=SetShadowmapLibrary};
 	__property TThreadBmp32 OnThreadBmp32 = {read=FOnThreadBmp32, write=FOnThreadBmp32};
 	__property TNewTilePreparedEvent OnNewTilePrepared = {read=FOnNewTilePrepared, write=FOnNewTilePrepared};
-	__property Glcoordinates::TGLCoordinates3* LightVector = {read=FLightVector, write=SetLightVector};
-	__property Glcoordinates::TGLCoordinates3* scale = {read=FScale, write=FScale};
+	__property Glcoordinates::TGLCoordinates* LightVector = {read=FLightVector, write=SetLightVector};
+	__property Glcoordinates::TGLCoordinates* scale = {read=FScale, write=FScale};
 	__property int ScanDistance = {read=FScanDistance, write=FScanDistance, nodefault};
 	__property unsigned SoftRange = {read=FSoftRange, write=SetSoftRange, nodefault};
 	__property float Diffuse = {read=FDiffuse, write=SetDiffuse};

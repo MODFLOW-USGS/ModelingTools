@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScene.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLScene.pas' rev: 36.00 (Windows)
 
 #ifndef GlsceneHPP
 #define GlsceneHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -156,15 +158,15 @@ public:
 	TGLBaseSceneObject* operator[](int Index) { return this->Children[Index]; }
 	
 private:
-	Glvectortypes::TMatrix4f FAbsoluteMatrix;
-	Glvectortypes::TMatrix4f FInvAbsoluteMatrix;
-	Glvectortypes::TMatrix4f FLocalMatrix;
+	Glvectorgeometry::TMatrix FAbsoluteMatrix;
+	Glvectorgeometry::TMatrix FInvAbsoluteMatrix;
+	Glvectorgeometry::TMatrix FLocalMatrix;
 	TGLObjectStyles FObjectStyle;
 	Glcontext::TGLListHandle* FListHandle;
-	Glcoordinates::TGLCoordinates3* FPosition;
-	Glcoordinates::TGLCoordinates3* FDirection;
-	Glcoordinates::TGLCoordinates3* FUp;
-	Glcoordinates::TGLCoordinates3* FScaling;
+	Glcoordinates::TGLCoordinates* FPosition;
+	Glcoordinates::TGLCoordinates* FDirection;
+	Glcoordinates::TGLCoordinates* FUp;
+	Glcoordinates::TGLCoordinates* FScaling;
 	TGLObjectChanges FChanges;
 	TGLBaseSceneObject* FParent;
 	TGLScene* FScene;
@@ -176,7 +178,7 @@ private:
 	bool FVisible;
 	int FUpdateCount;
 	bool FShowAxes;
-	Glcoordinates::TGLCoordinates3* FRotation;
+	Glcoordinates::TGLCoordinates* FRotation;
 	bool FIsCalculating;
 	Glrendercontextinfo::TGLObjectsSorting FObjectsSorting;
 	Glrendercontextinfo::TGLVisibilityCulling FVisibilityCulling;
@@ -195,31 +197,31 @@ private:
 	int __fastcall GetIndex();
 	void __fastcall SetParent(TGLBaseSceneObject* const val);
 	void __fastcall SetIndex(int aValue);
-	void __fastcall SetDirection(Glcoordinates::TGLCoordinates3* AVector);
-	void __fastcall SetUp(Glcoordinates::TGLCoordinates3* AVector);
+	void __fastcall SetDirection(Glcoordinates::TGLCoordinates* AVector);
+	void __fastcall SetUp(Glcoordinates::TGLCoordinates* AVector);
 	Glvectorgeometry::PMatrix __fastcall GetMatrix();
-	void __fastcall SetPosition(Glcoordinates::TGLCoordinates3* APosition);
+	void __fastcall SetPosition(Glcoordinates::TGLCoordinates* APosition);
 	void __fastcall SetPitchAngle(float AValue);
 	void __fastcall SetRollAngle(float AValue);
 	void __fastcall SetTurnAngle(float AValue);
-	void __fastcall SetRotation(Glcoordinates::TGLCoordinates3* aRotation);
+	void __fastcall SetRotation(Glcoordinates::TGLCoordinates* aRotation);
 	float __fastcall GetPitchAngle();
 	float __fastcall GetTurnAngle();
 	float __fastcall GetRollAngle();
 	void __fastcall SetShowAxes(bool AValue);
-	void __fastcall SetScaling(Glcoordinates::TGLCoordinates3* AValue);
+	void __fastcall SetScaling(Glcoordinates::TGLCoordinates* AValue);
 	void __fastcall SetObjectsSorting(const Glrendercontextinfo::TGLObjectsSorting val);
 	void __fastcall SetVisibilityCulling(const Glrendercontextinfo::TGLVisibilityCulling val);
 	void __fastcall SetBehaviours(TGLBehaviours* const val);
 	TGLBehaviours* __fastcall GetBehaviours();
 	void __fastcall SetEffects(TGLObjectEffects* const val);
 	TGLObjectEffects* __fastcall GetEffects();
-	Glvectortypes::TVector3f __fastcall GetAbsoluteAffineScale();
-	Glvectortypes::TVector4f __fastcall GetAbsoluteScale();
-	void __fastcall SetAbsoluteAffineScale(const Glvectortypes::TVector3f &Value);
-	void __fastcall SetAbsoluteScale(const Glvectortypes::TVector4f &Value);
-	Glvectortypes::TMatrix4f __fastcall GetAbsoluteMatrix();
-	void __fastcall SetAbsoluteMatrix(const Glvectortypes::TMatrix4f &Value);
+	Glvectorgeometry::TAffineVector __fastcall GetAbsoluteAffineScale();
+	Glvectorgeometry::TVector __fastcall GetAbsoluteScale();
+	void __fastcall SetAbsoluteAffineScale(const Glvectorgeometry::TAffineVector &Value);
+	void __fastcall SetAbsoluteScale(const Glvectorgeometry::TVector &Value);
+	Glvectorgeometry::TMatrix __fastcall GetAbsoluteMatrix();
+	void __fastcall SetAbsoluteMatrix(const Glvectorgeometry::TMatrix &Value);
 	void __fastcall SetBBChanges(const TObjectBBChanges Value);
 	Glvectorgeometry::PMatrix __fastcall GetDirectAbsoluteMatrix();
 	Glvectorgeometry::PMatrix __fastcall GetLocalMatrix();
@@ -238,18 +240,18 @@ protected:
 	virtual bool __fastcall GetPickable();
 	virtual void __fastcall SetVisible(bool aValue);
 	virtual void __fastcall SetPickable(bool aValue);
-	void __fastcall SetAbsolutePosition(const Glvectortypes::TVector4f &v);
-	Glvectortypes::TVector4f __fastcall GetAbsolutePosition();
-	void __fastcall SetAbsoluteUp(const Glvectortypes::TVector4f &v);
-	Glvectortypes::TVector4f __fastcall GetAbsoluteUp();
-	void __fastcall SetAbsoluteDirection(const Glvectortypes::TVector4f &v);
-	Glvectortypes::TVector4f __fastcall GetAbsoluteDirection();
-	Glvectortypes::TVector3f __fastcall GetAbsoluteAffinePosition();
-	void __fastcall SetAbsoluteAffinePosition(const Glvectortypes::TVector3f &Value);
-	void __fastcall SetAbsoluteAffineUp(const Glvectortypes::TVector3f &v);
-	Glvectortypes::TVector3f __fastcall GetAbsoluteAffineUp();
-	void __fastcall SetAbsoluteAffineDirection(const Glvectortypes::TVector3f &v);
-	Glvectortypes::TVector3f __fastcall GetAbsoluteAffineDirection();
+	void __fastcall SetAbsolutePosition(const Glvectorgeometry::TVector &v);
+	Glvectorgeometry::TVector __fastcall GetAbsolutePosition();
+	void __fastcall SetAbsoluteUp(const Glvectorgeometry::TVector &v);
+	Glvectorgeometry::TVector __fastcall GetAbsoluteUp();
+	void __fastcall SetAbsoluteDirection(const Glvectorgeometry::TVector &v);
+	Glvectorgeometry::TVector __fastcall GetAbsoluteDirection();
+	Glvectorgeometry::TAffineVector __fastcall GetAbsoluteAffinePosition();
+	void __fastcall SetAbsoluteAffinePosition(const Glvectorgeometry::TAffineVector &Value);
+	void __fastcall SetAbsoluteAffineUp(const Glvectorgeometry::TAffineVector &v);
+	Glvectorgeometry::TAffineVector __fastcall GetAbsoluteAffineUp();
+	void __fastcall SetAbsoluteAffineDirection(const Glvectorgeometry::TAffineVector &v);
+	Glvectorgeometry::TAffineVector __fastcall GetAbsoluteAffineDirection();
 	void __fastcall RecTransformationChanged();
 	void __fastcall DrawAxes(Glrendercontextinfo::TGLRenderContextInfo &rci, System::Word pattern);
 	DYNAMIC void __fastcall GetChildren(System::Classes::TGetChildProc AProc, System::Classes::TComponent* Root);
@@ -271,47 +273,47 @@ public:
 	__property TGLObjectStyles ObjectStyle = {read=FObjectStyle, write=FObjectStyle, nodefault};
 	unsigned __fastcall GetHandle(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	bool __fastcall ListHandleAllocated();
-	void __fastcall SetMatrix(const Glvectortypes::TMatrix4f &aValue);
+	void __fastcall SetMatrix(const Glvectorgeometry::TMatrix &aValue);
 	__property Glvectorgeometry::PMatrix Matrix = {read=GetMatrix};
 	__property Glvectorgeometry::PMatrix LocalMatrix = {read=GetLocalMatrix};
-	void __fastcall ForceLocalMatrix(const Glvectortypes::TMatrix4f &aMatrix);
+	void __fastcall ForceLocalMatrix(const Glvectorgeometry::TMatrix &aMatrix);
 	Glvectorgeometry::PMatrix __fastcall AbsoluteMatrixAsAddress();
 	__property Glvectorgeometry::PMatrix DirectAbsoluteMatrix = {read=GetDirectAbsoluteMatrix};
-	Glvectortypes::TMatrix4f __fastcall InvAbsoluteMatrix();
+	Glvectorgeometry::TMatrix __fastcall InvAbsoluteMatrix();
 	Glvectorgeometry::PMatrix __fastcall InvAbsoluteMatrixAsAddress();
-	__property Glvectortypes::TMatrix4f AbsoluteMatrix = {read=GetAbsoluteMatrix, write=SetAbsoluteMatrix};
-	__property Glvectortypes::TVector4f AbsoluteDirection = {read=GetAbsoluteDirection, write=SetAbsoluteDirection};
-	__property Glvectortypes::TVector3f AbsoluteAffineDirection = {read=GetAbsoluteAffineDirection, write=SetAbsoluteAffineDirection};
-	__property Glvectortypes::TVector4f AbsoluteScale = {read=GetAbsoluteScale, write=SetAbsoluteScale};
-	__property Glvectortypes::TVector3f AbsoluteAffineScale = {read=GetAbsoluteAffineScale, write=SetAbsoluteAffineScale};
-	__property Glvectortypes::TVector4f AbsoluteUp = {read=GetAbsoluteUp, write=SetAbsoluteUp};
-	__property Glvectortypes::TVector3f AbsoluteAffineUp = {read=GetAbsoluteAffineUp, write=SetAbsoluteAffineUp};
-	Glvectortypes::TVector4f __fastcall AbsoluteRight();
-	Glvectortypes::TVector4f __fastcall AbsoluteLeft();
-	__property Glvectortypes::TVector4f AbsolutePosition = {read=GetAbsolutePosition, write=SetAbsolutePosition};
-	__property Glvectortypes::TVector3f AbsoluteAffinePosition = {read=GetAbsoluteAffinePosition, write=SetAbsoluteAffinePosition};
+	__property Glvectorgeometry::TMatrix AbsoluteMatrix = {read=GetAbsoluteMatrix, write=SetAbsoluteMatrix};
+	__property Glvectorgeometry::TVector AbsoluteDirection = {read=GetAbsoluteDirection, write=SetAbsoluteDirection};
+	__property Glvectorgeometry::TAffineVector AbsoluteAffineDirection = {read=GetAbsoluteAffineDirection, write=SetAbsoluteAffineDirection};
+	__property Glvectorgeometry::TVector AbsoluteScale = {read=GetAbsoluteScale, write=SetAbsoluteScale};
+	__property Glvectorgeometry::TAffineVector AbsoluteAffineScale = {read=GetAbsoluteAffineScale, write=SetAbsoluteAffineScale};
+	__property Glvectorgeometry::TVector AbsoluteUp = {read=GetAbsoluteUp, write=SetAbsoluteUp};
+	__property Glvectorgeometry::TAffineVector AbsoluteAffineUp = {read=GetAbsoluteAffineUp, write=SetAbsoluteAffineUp};
+	Glvectorgeometry::TVector __fastcall AbsoluteRight();
+	Glvectorgeometry::TVector __fastcall AbsoluteLeft();
+	__property Glvectorgeometry::TVector AbsolutePosition = {read=GetAbsolutePosition, write=SetAbsolutePosition};
+	__property Glvectorgeometry::TAffineVector AbsoluteAffinePosition = {read=GetAbsoluteAffinePosition, write=SetAbsoluteAffinePosition};
 	Glvectorgeometry::PVector __fastcall AbsolutePositionAsAddress();
-	Glvectortypes::TVector4f __fastcall AbsoluteXVector();
-	Glvectortypes::TVector4f __fastcall AbsoluteYVector();
-	Glvectortypes::TVector4f __fastcall AbsoluteZVector();
-	Glvectortypes::TVector4f __fastcall AbsoluteToLocal(const Glvectortypes::TVector4f &v)/* overload */;
-	Glvectortypes::TVector3f __fastcall AbsoluteToLocal(const Glvectortypes::TVector3f &v)/* overload */;
-	Glvectortypes::TVector4f __fastcall LocalToAbsolute(const Glvectortypes::TVector4f &v)/* overload */;
-	Glvectortypes::TVector3f __fastcall LocalToAbsolute(const Glvectortypes::TVector3f &v)/* overload */;
-	Glvectortypes::TVector4f __fastcall Right();
-	Glvectortypes::TVector4f __fastcall LeftVector();
-	Glvectortypes::TVector3f __fastcall AffineRight();
-	Glvectortypes::TVector3f __fastcall AffineLeftVector();
+	Glvectorgeometry::TVector __fastcall AbsoluteXVector();
+	Glvectorgeometry::TVector __fastcall AbsoluteYVector();
+	Glvectorgeometry::TVector __fastcall AbsoluteZVector();
+	Glvectorgeometry::TVector __fastcall AbsoluteToLocal(const Glvectorgeometry::TVector &v)/* overload */;
+	Glvectorgeometry::TAffineVector __fastcall AbsoluteToLocal(const Glvectorgeometry::TAffineVector &v)/* overload */;
+	Glvectorgeometry::TVector __fastcall LocalToAbsolute(const Glvectorgeometry::TVector &v)/* overload */;
+	Glvectorgeometry::TAffineVector __fastcall LocalToAbsolute(const Glvectorgeometry::TAffineVector &v)/* overload */;
+	Glvectorgeometry::TVector __fastcall Right();
+	Glvectorgeometry::TVector __fastcall LeftVector();
+	Glvectorgeometry::TAffineVector __fastcall AffineRight();
+	Glvectorgeometry::TAffineVector __fastcall AffineLeftVector();
 	float __fastcall SqrDistanceTo(TGLBaseSceneObject* anObject)/* overload */;
-	float __fastcall SqrDistanceTo(const Glvectortypes::TVector4f &pt)/* overload */;
-	float __fastcall SqrDistanceTo(const Glvectortypes::TVector3f &pt)/* overload */;
+	float __fastcall SqrDistanceTo(const Glvectorgeometry::TVector &pt)/* overload */;
+	float __fastcall SqrDistanceTo(const Glvectorgeometry::TAffineVector &pt)/* overload */;
 	float __fastcall DistanceTo(TGLBaseSceneObject* anObject)/* overload */;
-	float __fastcall DistanceTo(const Glvectortypes::TVector3f &pt)/* overload */;
-	float __fastcall DistanceTo(const Glvectortypes::TVector4f &pt)/* overload */;
-	virtual Glvectortypes::TVector4f __fastcall BarycenterAbsolutePosition();
-	float __fastcall BarycenterSqrDistanceTo(const Glvectortypes::TVector4f &pt);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensions();
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	float __fastcall DistanceTo(const Glvectorgeometry::TAffineVector &pt)/* overload */;
+	float __fastcall DistanceTo(const Glvectorgeometry::TVector &pt)/* overload */;
+	virtual Glvectorgeometry::TVector __fastcall BarycenterAbsolutePosition();
+	float __fastcall BarycenterSqrDistanceTo(const Glvectorgeometry::TVector &pt);
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensions();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
 	Glgeometrybb::TAABB __fastcall AxisAlignedBoundingBox(const bool AIncludeChilden = true);
 	Glgeometrybb::TAABB __fastcall AxisAlignedBoundingBoxUnscaled(const bool AIncludeChilden = true);
 	Glgeometrybb::TAABB __fastcall AxisAlignedBoundingBoxAbsolute(const bool AIncludeChilden = true, const bool AUseBaryCenter = false);
@@ -325,8 +327,8 @@ public:
 	Glgeometrybb::THmgBoundingBox __fastcall BoundingBoxIncludingChildrenEx();
 	float __fastcall BoundingSphereRadius();
 	float __fastcall BoundingSphereRadiusUnscaled();
-	virtual bool __fastcall PointInObject(const Glvectortypes::TVector4f &point);
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual bool __fastcall PointInObject(const Glvectorgeometry::TVector &point);
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
 	__property TGLBaseSceneObject* Children[int Index] = {read=Get/*, default*/};
 	__property int Count = {read=GetCount, nodefault};
@@ -373,10 +375,10 @@ public:
 	void __fastcall ResetRotations();
 	void __fastcall ResetAndPitchTurnRoll(const float degX, const float degY, const float degZ);
 	void __fastcall RotateAbsolute(const float rx, const float ry, const float rz)/* overload */;
-	void __fastcall RotateAbsolute(const Glvectortypes::TVector3f &axis, float angle)/* overload */;
+	void __fastcall RotateAbsolute(const Glvectorgeometry::TAffineVector &axis, float angle)/* overload */;
 	void __fastcall Slide(float ADistance);
-	void __fastcall PointTo(TGLBaseSceneObject* const ATargetObject, const Glvectortypes::TVector4f &AUpVector)/* overload */;
-	void __fastcall PointTo(const Glvectortypes::TVector4f &AAbsolutePosition, const Glvectortypes::TVector4f &AUpVector)/* overload */;
+	void __fastcall PointTo(TGLBaseSceneObject* const ATargetObject, const Glvectorgeometry::TVector &AUpVector)/* overload */;
+	void __fastcall PointTo(const Glvectorgeometry::TVector &AAbsolutePosition, const Glvectorgeometry::TVector &AUpVector)/* overload */;
 	void __fastcall Render(Glrendercontextinfo::TGLRenderContextInfo &ARci);
 	virtual void __fastcall DoRender(Glrendercontextinfo::TGLRenderContextInfo &ARci, bool ARenderSelf, bool ARenderChildren);
 	void __fastcall RenderChildren(int firstChildIndex, int lastChildIndex, Glrendercontextinfo::TGLRenderContextInfo &rci);
@@ -385,7 +387,7 @@ public:
 	virtual void __fastcall CoordinateChanged(Glcoordinates::TGLCustomCoordinates* Sender);
 	void __fastcall TransformationChanged();
 	virtual void __fastcall NotifyChange(System::TObject* Sender);
-	__property Glcoordinates::TGLCoordinates3* Rotation = {read=FRotation, write=SetRotation};
+	__property Glcoordinates::TGLCoordinates* Rotation = {read=FRotation, write=SetRotation};
 	__property float PitchAngle = {read=GetPitchAngle, write=SetPitchAngle};
 	__property float RollAngle = {read=GetRollAngle, write=SetRollAngle};
 	__property float TurnAngle = {read=GetTurnAngle, write=SetTurnAngle};
@@ -393,10 +395,10 @@ public:
 	__property TGLObjectChanges Changes = {read=FChanges, nodefault};
 	__property TObjectBBChanges BBChanges = {read=FBBChanges, write=SetBBChanges, nodefault};
 	__property TGLBaseSceneObject* Parent = {read=FParent, write=SetParent};
-	__property Glcoordinates::TGLCoordinates3* Position = {read=FPosition, write=SetPosition};
-	__property Glcoordinates::TGLCoordinates3* Direction = {read=FDirection, write=SetDirection};
-	__property Glcoordinates::TGLCoordinates3* Up = {read=FUp, write=SetUp};
-	__property Glcoordinates::TGLCoordinates3* Scale = {read=FScaling, write=SetScaling};
+	__property Glcoordinates::TGLCoordinates* Position = {read=FPosition, write=SetPosition};
+	__property Glcoordinates::TGLCoordinates* Direction = {read=FDirection, write=SetDirection};
+	__property Glcoordinates::TGLCoordinates* Up = {read=FUp, write=SetUp};
+	__property Glcoordinates::TGLCoordinates* Scale = {read=FScaling, write=SetScaling};
 	__property TGLScene* Scene = {read=FScene};
 	__property bool Visible = {read=FVisible, write=SetVisible, default=1};
 	__property bool Pickable = {read=FPickable, write=SetPickable, default=1};
@@ -708,7 +710,7 @@ public:
 	__fastcall virtual TGLDirectOpenGL(System::Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
 	
 __published:
 	__property bool UseBuildList = {read=FUseBuildList, write=SetUseBuildList, nodefault};
@@ -770,10 +772,10 @@ public:
 	__fastcall virtual ~TGLProxyObject();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall DoRender(Glrendercontextinfo::TGLRenderContextInfo &ARci, bool ARenderSelf, bool ARenderChildren);
-	virtual Glvectortypes::TVector4f __fastcall BarycenterAbsolutePosition();
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensions();
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall BarycenterAbsolutePosition();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensions();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
 	
 __published:
@@ -809,7 +811,7 @@ class PASCALIMPLEMENTATION TGLLightSource : public TGLBaseSceneObject
 	
 private:
 	unsigned FLightID;
-	Glcoordinates::TGLCoordinates3* FSpotDirection;
+	Glcoordinates::TGLCoordinates* FSpotDirection;
 	float FSpotExponent;
 	float FSpotCutOff;
 	float FConstAttenuation;
@@ -829,7 +831,7 @@ protected:
 	void __fastcall SetLinearAttenuation(float AValue);
 	void __fastcall SetQuadraticAttenuation(float AValue);
 	void __fastcall SetShining(bool AValue);
-	void __fastcall SetSpotDirection(Glcoordinates::TGLCoordinates3* AVector);
+	void __fastcall SetSpotDirection(Glcoordinates::TGLCoordinates* AVector);
 	void __fastcall SetSpotExponent(float AValue);
 	void __fastcall SetSpotCutOff(const float val);
 	void __fastcall SetLightStyle(const TGLLightStyle val);
@@ -838,7 +840,7 @@ public:
 	__fastcall virtual TGLLightSource(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLLightSource();
 	virtual void __fastcall DoRender(Glrendercontextinfo::TGLRenderContextInfo &ARci, bool ARenderSelf, bool ARenderChildren);
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	virtual void __fastcall CoordinateChanged(Glcoordinates::TGLCustomCoordinates* Sender);
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
 	__property unsigned LightID = {read=FLightID, nodefault};
@@ -855,7 +857,7 @@ __published:
 	__property bool Shining = {read=FShining, write=SetShining, default=1};
 	__property Glcolor::TGLColor* Specular = {read=FSpecular, write=SetSpecular};
 	__property float SpotCutOff = {read=FSpotCutOff, write=SetSpotCutOff};
-	__property Glcoordinates::TGLCoordinates3* SpotDirection = {read=FSpotDirection, write=SetSpotDirection};
+	__property Glcoordinates::TGLCoordinates* SpotDirection = {read=FSpotDirection, write=SetSpotDirection};
 	__property float SpotExponent = {read=FSpotExponent, write=SetSpotExponent};
 	__property OnProgress;
 public:
@@ -881,7 +883,7 @@ private:
 	float FNearPlaneBias;
 	float FViewPortRadius;
 	TGLBaseSceneObject* FTargetObject;
-	Glvectortypes::TVector4f FLastDirection;
+	Glvectorgeometry::TVector FLastDirection;
 	TGLCameraStyle FCameraStyle;
 	TGLCameraKeepFOVMode FKeepFOVMode;
 	float FSceneScale;
@@ -910,7 +912,7 @@ public:
 	__property float NearPlane = {read=FNearPlane};
 	void __fastcall Apply();
 	virtual void __fastcall DoRender(Glrendercontextinfo::TGLRenderContextInfo &ARci, bool ARenderSelf, bool ARenderChildren);
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	void __fastcall ApplyPerspective(const Glvectorgeometry::TRectangle &AViewport, int AWidth, int AHeight, int ADPI);
 	void __fastcall AutoLeveling(float Factor);
 	void __fastcall Reset(TGLSceneBuffer* aSceneBuffer);
@@ -921,17 +923,17 @@ public:
 	void __fastcall MoveAllAroundTarget(float pitchDelta, float turnDelta);
 	void __fastcall MoveInEyeSpace(float forwardDistance, float rightDistance, float upDistance);
 	void __fastcall MoveTargetInEyeSpace(float forwardDistance, float rightDistance, float upDistance);
-	Glvectortypes::TVector4f __fastcall AbsoluteEyeSpaceVector(float forwardDistance, float rightDistance, float upDistance);
+	Glvectorgeometry::TVector __fastcall AbsoluteEyeSpaceVector(float forwardDistance, float rightDistance, float upDistance);
 	void __fastcall AdjustDistanceToTarget(float distanceRatio);
 	float __fastcall DistanceToTarget();
-	Glvectortypes::TVector4f __fastcall AbsoluteVectorToTarget();
-	Glvectortypes::TVector4f __fastcall AbsoluteRightVectorToTarget();
-	Glvectortypes::TVector4f __fastcall AbsoluteUpVectorToTarget();
-	Glvectortypes::TVector4f __fastcall ScreenDeltaToVector(int deltaX, int deltaY, float ratio, const Glvectortypes::TVector4f &planeNormal);
-	Glvectortypes::TVector4f __fastcall ScreenDeltaToVectorXY(int deltaX, int deltaY, float ratio);
-	Glvectortypes::TVector4f __fastcall ScreenDeltaToVectorXZ(int deltaX, int deltaY, float ratio);
-	Glvectortypes::TVector4f __fastcall ScreenDeltaToVectorYZ(int deltaX, int deltaY, float ratio);
-	bool __fastcall PointInFront(const Glvectortypes::TVector4f &point)/* overload */;
+	Glvectorgeometry::TVector __fastcall AbsoluteVectorToTarget();
+	Glvectorgeometry::TVector __fastcall AbsoluteRightVectorToTarget();
+	Glvectorgeometry::TVector __fastcall AbsoluteUpVectorToTarget();
+	Glvectorgeometry::TVector __fastcall ScreenDeltaToVector(int deltaX, int deltaY, float ratio, const Glvectorgeometry::TVector &planeNormal);
+	Glvectorgeometry::TVector __fastcall ScreenDeltaToVectorXY(int deltaX, int deltaY, float ratio);
+	Glvectorgeometry::TVector __fastcall ScreenDeltaToVectorXZ(int deltaX, int deltaY, float ratio);
+	Glvectorgeometry::TVector __fastcall ScreenDeltaToVectorYZ(int deltaX, int deltaY, float ratio);
+	bool __fastcall PointInFront(const Glvectorgeometry::TVector &point)/* overload */;
 	float __fastcall GetFieldOfView(const float AViewportDimension);
 	void __fastcall SetFieldOfView(const float AFieldOfView, const float AViewportDimension);
 	
@@ -996,7 +998,7 @@ public:
 	virtual void __fastcall NotifyChange(System::TObject* Sender);
 	void __fastcall Progress(const double deltaTime, const double newTime);
 	TGLBaseSceneObject* __fastcall FindSceneObject(const System::UnicodeString AName);
-	TGLBaseSceneObject* __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	TGLBaseSceneObject* __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	void __fastcall ShutdownAllLights();
 	void __fastcall SaveToFile(const System::UnicodeString fileName);
 	void __fastcall LoadFromFile(const System::UnicodeString fileName);
@@ -1081,8 +1083,8 @@ private:
 	Glpersistentclasses::TPersistentObjectList* FAfterRenderEffects;
 	_TGLSceneBuffer__1 FViewMatrixStack;
 	_TGLSceneBuffer__2 FProjectionMatrixStack;
-	Glvectortypes::TMatrix4f FBaseProjectionMatrix;
-	Glvectortypes::TVector4f FCameraAbsolutePosition;
+	Glvectorgeometry::TMatrix FBaseProjectionMatrix;
+	Glvectorgeometry::TVector FCameraAbsolutePosition;
 	Glvectorgeometry::TRectangle FViewPort;
 	Glselection::TGLBaseSelectTechnique* FSelector;
 	bool FFaceCulling;
@@ -1105,7 +1107,7 @@ private:
 	void *FFreezeBuffer;
 	bool FFreezed;
 	Glvectorgeometry::TRectangle FFreezedViewPort;
-	int FFrameCount;
+	System::LongInt FFrameCount;
 	float FFramesPerSecond;
 	__int64 FFirstPerfCounter;
 	float FLastFrameTime;
@@ -1188,30 +1190,30 @@ public:
 	void __fastcall ShowInfo(bool Modal = false);
 	__property bool Rendering = {read=FRendering, nodefault};
 	__property float BackgroundAlpha = {read=FBackgroundAlpha, write=SetBackgroundAlpha};
-	Glvectortypes::TMatrix4f __fastcall ProjectionMatrix _DEPRECATED_ATTRIBUTE0 ();
-	Glvectortypes::TMatrix4f __fastcall ViewMatrix _DEPRECATED_ATTRIBUTE0 ();
-	Glvectortypes::TMatrix4f __fastcall ModelMatrix _DEPRECATED_ATTRIBUTE0 ();
-	__property Glvectortypes::TMatrix4f BaseProjectionMatrix = {read=FBaseProjectionMatrix};
-	void __fastcall PushViewMatrix _DEPRECATED_ATTRIBUTE0 (const Glvectortypes::TMatrix4f &newMatrix);
+	Glvectorgeometry::TMatrix __fastcall ProjectionMatrix _DEPRECATED_ATTRIBUTE0 ();
+	Glvectorgeometry::TMatrix __fastcall ViewMatrix _DEPRECATED_ATTRIBUTE0 ();
+	Glvectorgeometry::TMatrix __fastcall ModelMatrix _DEPRECATED_ATTRIBUTE0 ();
+	__property Glvectorgeometry::TMatrix BaseProjectionMatrix = {read=FBaseProjectionMatrix};
+	void __fastcall PushViewMatrix _DEPRECATED_ATTRIBUTE0 (const Glvectorgeometry::TMatrix &newMatrix);
 	void __fastcall PopViewMatrix _DEPRECATED_ATTRIBUTE0 ();
-	void __fastcall PushProjectionMatrix _DEPRECATED_ATTRIBUTE0 (const Glvectortypes::TMatrix4f &newMatrix);
+	void __fastcall PushProjectionMatrix _DEPRECATED_ATTRIBUTE0 (const Glvectorgeometry::TMatrix &newMatrix);
 	void __fastcall PopProjectionMatrix _DEPRECATED_ATTRIBUTE0 ();
-	Glvectortypes::TVector3f __fastcall OrthoScreenToWorld(int screenX, int screenY)/* overload */;
-	Glvectortypes::TVector3f __fastcall ScreenToWorld(const Glvectortypes::TVector3f &aPoint)/* overload */;
-	Glvectortypes::TVector4f __fastcall ScreenToWorld(const Glvectortypes::TVector4f &aPoint)/* overload */;
-	Glvectortypes::TVector3f __fastcall ScreenToWorld(int screenX, int screenY)/* overload */;
-	Glvectortypes::TVector3f __fastcall WorldToScreen(const Glvectortypes::TVector3f &aPoint)/* overload */;
-	Glvectortypes::TVector4f __fastcall WorldToScreen(const Glvectortypes::TVector4f &aPoint)/* overload */;
+	Glvectorgeometry::TAffineVector __fastcall OrthoScreenToWorld(int screenX, int screenY)/* overload */;
+	Glvectorgeometry::TAffineVector __fastcall ScreenToWorld(const Glvectorgeometry::TAffineVector &aPoint)/* overload */;
+	Glvectorgeometry::TVector __fastcall ScreenToWorld(const Glvectorgeometry::TVector &aPoint)/* overload */;
+	Glvectorgeometry::TAffineVector __fastcall ScreenToWorld(int screenX, int screenY)/* overload */;
+	Glvectorgeometry::TAffineVector __fastcall WorldToScreen(const Glvectorgeometry::TAffineVector &aPoint)/* overload */;
+	Glvectorgeometry::TVector __fastcall WorldToScreen(const Glvectorgeometry::TVector &aPoint)/* overload */;
 	void __fastcall WorldToScreen(Glvectorgeometry::PVector points, int nbPoints)/* overload */;
-	Glvectortypes::TVector3f __fastcall ScreenToVector(const Glvectortypes::TVector3f &aPoint)/* overload */;
-	Glvectortypes::TVector4f __fastcall ScreenToVector(const Glvectortypes::TVector4f &aPoint)/* overload */;
-	Glvectortypes::TVector4f __fastcall ScreenToVector(const int x, const int y)/* overload */;
-	Glvectortypes::TVector3f __fastcall VectorToScreen(const Glvectortypes::TVector3f &VectToCam);
-	bool __fastcall ScreenVectorIntersectWithPlane(const Glvectortypes::TVector4f &aScreenPoint, const Glvectortypes::TVector4f &planePoint, const Glvectortypes::TVector4f &planeNormal, Glvectortypes::TVector4f &intersectPoint);
-	bool __fastcall ScreenVectorIntersectWithPlaneXY(const Glvectortypes::TVector4f &aScreenPoint, const float z, Glvectortypes::TVector4f &intersectPoint);
-	bool __fastcall ScreenVectorIntersectWithPlaneYZ(const Glvectortypes::TVector4f &aScreenPoint, const float x, Glvectortypes::TVector4f &intersectPoint);
-	bool __fastcall ScreenVectorIntersectWithPlaneXZ(const Glvectortypes::TVector4f &aScreenPoint, const float y, Glvectortypes::TVector4f &intersectPoint);
-	Glvectortypes::TVector3f __fastcall PixelRayToWorld(int x, int y);
+	Glvectorgeometry::TAffineVector __fastcall ScreenToVector(const Glvectorgeometry::TAffineVector &aPoint)/* overload */;
+	Glvectorgeometry::TVector __fastcall ScreenToVector(const Glvectorgeometry::TVector &aPoint)/* overload */;
+	Glvectorgeometry::TVector __fastcall ScreenToVector(const int x, const int y)/* overload */;
+	Glvectorgeometry::TAffineVector __fastcall VectorToScreen(const Glvectorgeometry::TAffineVector &VectToCam);
+	bool __fastcall ScreenVectorIntersectWithPlane(const Glvectorgeometry::TVector &aScreenPoint, const Glvectorgeometry::TVector &planePoint, const Glvectorgeometry::TVector &planeNormal, Glvectorgeometry::TVector &intersectPoint);
+	bool __fastcall ScreenVectorIntersectWithPlaneXY(const Glvectorgeometry::TVector &aScreenPoint, const float z, Glvectorgeometry::TVector &intersectPoint);
+	bool __fastcall ScreenVectorIntersectWithPlaneYZ(const Glvectorgeometry::TVector &aScreenPoint, const float x, Glvectorgeometry::TVector &intersectPoint);
+	bool __fastcall ScreenVectorIntersectWithPlaneXZ(const Glvectorgeometry::TVector &aScreenPoint, const float y, Glvectorgeometry::TVector &intersectPoint);
+	Glvectorgeometry::TAffineVector __fastcall PixelRayToWorld(int x, int y);
 	__property float LastFrameTime = {read=FLastFrameTime};
 	__property float FramesPerSecond = {read=FFramesPerSecond};
 	void __fastcall ResetPerformanceMonitor();
@@ -1255,7 +1257,7 @@ private:
 	int FCubeMapRotIdx;
 	float FCubeMapZNear;
 	float FCubeMapZFar;
-	Glvectortypes::TVector3f FCubeMapTranslation;
+	Glvectorgeometry::TAffineVector FCubeMapTranslation;
 	
 protected:
 	void __fastcall SetBeforeRender(const System::Classes::TNotifyEvent val);

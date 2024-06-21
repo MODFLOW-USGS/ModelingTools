@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileJPEG.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFileJPEG.pas' rev: 36.00 (Windows)
 
 #ifndef GlfilejpegHPP
 #define GlfilejpegHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -39,7 +41,7 @@ class PASCALIMPLEMENTATION TGLJPEGImage : public Glgraphics::TGLBaseImage
 	
 private:
 	bool FAbortLoading;
-	unsigned FDivScale;
+	System::LongWord FDivScale;
 	bool FDither;
 	bool FSmoothing;
 	bool FProgressiveEncoding;
@@ -53,7 +55,7 @@ public:
 	virtual void __fastcall LoadFromStream(System::Classes::TStream* AStream);
 	virtual void __fastcall SaveToStream(System::Classes::TStream* AStream);
 	HIDESBASE void __fastcall AssignFromTexture(Glcontext::TGLContext* textureContext, const unsigned textureHandle, Gltextureformat::TGLTextureTarget textureTarget, const bool CurrentFormat, const Gltextureformat::TGLInternalFormat intFormat);
-	__property unsigned DivScale = {read=FDivScale, write=FDivScale, nodefault};
+	__property System::LongWord DivScale = {read=FDivScale, write=FDivScale, nodefault};
 	__property bool Dither = {read=FDither, write=FDither, nodefault};
 	__property bool Smoothing = {read=FSmoothing, write=SetSmoothing, nodefault};
 	__property bool ProgressiveEncoding = {read=FProgressiveEncoding, nodefault};

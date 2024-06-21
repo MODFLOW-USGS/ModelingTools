@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScene_Sounds_RT.dpk' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLScene_Sounds_RT.dpk' rev: 36.00 (Windows)
 
 #ifndef Glscene_sounds_rtHPP
 #define Glscene_sounds_rtHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>	// (rtl)
 #include <SysInit.hpp>
@@ -25,7 +27,7 @@
 #include <GLSMOpenAL.hpp>
 #include <GLSMWaveOut.hpp>
 #include <System.UITypes.hpp>	// (rtl)
-#include <Winapi.Windows.hpp>	// (rtl)
+#include <Winapi.Windows.PkgHelper.hpp>	// (rtl)
 #include <Winapi.PsAPI.hpp>	// (rtl)
 #include <System.Character.hpp>	// (rtl)
 #include <System.Internal.ExcUtils.hpp>	// (rtl)
@@ -35,24 +37,23 @@
 #include <System.TypInfo.hpp>	// (rtl)
 #include <System.Math.hpp>	// (rtl)
 #include <System.Generics.Defaults.hpp>	// (rtl)
-#include <System.Rtti.hpp>	// (rtl)
 #include <System.TimeSpan.hpp>	// (rtl)
+#include <System.SyncObjs.hpp>	// (rtl)
+#include <System.Rtti.hpp>	// (rtl)
 #include <System.Classes.hpp>	// (rtl)
 #include <System.Messaging.hpp>	// (rtl)
 #include <System.Actions.hpp>	// (rtl)
-#include <Winapi.ShellAPI.hpp>	// (rtl)
 #include <System.DateUtils.hpp>	// (rtl)
 #include <System.IOUtils.hpp>	// (rtl)
 #include <System.IniFiles.hpp>	// (rtl)
 #include <System.Win.Registry.hpp>	// (rtl)
 #include <System.UIConsts.hpp>	// (rtl)
 #include <Vcl.Graphics.hpp>	// (vcl)
-#include <System.SyncObjs.hpp>	// (rtl)
 #include <Winapi.UxTheme.hpp>	// (rtl)
 #include <Vcl.ActnList.hpp>	// (vcl)
+#include <Winapi.MsCTF.PkgHelper.hpp>	// (rtl)
 #include <System.AnsiStrings.hpp>	// (rtl)
 #include <System.Win.ComObj.hpp>	// (rtl)
-#include <Winapi.MsCTF.hpp>	// (rtl)
 #include <Vcl.GraphUtil.hpp>	// (vcl)
 #include <Vcl.Controls.hpp>	// (vcl)
 #include <Vcl.StdCtrls.hpp>	// (vcl)
@@ -78,20 +79,20 @@
 #include <GLXCollection.hpp>	// (GLScene_RT)
 #include <GLVectorLists.hpp>	// (GLScene_RT)
 #include <Vcl.Imaging.pngimage.hpp>	// (vclimg)
-#include <GR32_System.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Blend.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Filters.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Image.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS11_3)
-#include <GR32.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_System.hpp>	// (GLScene_RT)
+#include <GR32_Bindings.hpp>	// (GLScene_RT)
+#include <GR32_LowLevel.hpp>	// (GLScene_RT)
+#include <GR32_Blend.hpp>	// (GLScene_RT)
+#include <GR32_Filters.hpp>	// (GLScene_RT)
+#include <GR32_Rasterizers.hpp>	// (GLScene_RT)
+#include <GR32_Transforms.hpp>	// (GLScene_RT)
+#include <GR32_Resamplers.hpp>	// (GLScene_RT)
+#include <GR32_XPThemes.hpp>	// (GLScene_RT)
+#include <GR32_MicroTiles.hpp>	// (GLScene_RT)
+#include <GR32_Image.hpp>	// (GLScene_RT)
+#include <GR32_Backends_Generic.hpp>	// (GLScene_RT)
+#include <GR32_Backends_VCL.hpp>	// (GLScene_RT)
+#include <GR32.hpp>	// (GLScene_RT)
 #include <Vcl.Buttons.hpp>	// (vcl)
 #include <Vcl.ExtDlgs.hpp>	// (vcl)
 #include <GLGraphics.hpp>	// (GLScene_RT)

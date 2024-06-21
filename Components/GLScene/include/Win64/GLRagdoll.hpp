@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLRagdoll.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLRagdoll.pas' rev: 36.00 (Windows)
 
 #ifndef GlragdollHPP
 #define GlragdollHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -81,18 +83,18 @@ private:
 	TGLRagdolBoneList* FOwner;
 	System::UnicodeString FName;
 	int FBoneID;
-	Glvectortypes::TVector3f FBoundMax;
-	Glvectortypes::TVector3f FBoundMin;
-	Glvectortypes::TVector3f FBoundBoneDelta;
-	Glvectortypes::TVector3f FOrigin;
-	Glvectortypes::TVector3f FSize;
-	Glvectortypes::TMatrix4f FBoneMatrix;
+	Glvectorgeometry::TAffineVector FBoundMax;
+	Glvectorgeometry::TAffineVector FBoundMin;
+	Glvectorgeometry::TAffineVector FBoundBoneDelta;
+	Glvectorgeometry::TAffineVector FOrigin;
+	Glvectorgeometry::TAffineVector FSize;
+	Glvectorgeometry::TMatrix FBoneMatrix;
 	TGLRagdolJoint* FJoint;
-	Glvectortypes::TMatrix4f FOriginalMatrix;
-	Glvectortypes::TMatrix4f FReferenceMatrix;
-	Glvectortypes::TVector3f FAnchor;
+	Glvectorgeometry::TMatrix FOriginalMatrix;
+	Glvectorgeometry::TMatrix FReferenceMatrix;
+	Glvectorgeometry::TAffineVector FAnchor;
 	void __fastcall CreateBoundingBox();
-	void __fastcall SetAnchor(const Glvectortypes::TVector3f &Anchor);
+	void __fastcall SetAnchor(const Glvectorgeometry::TAffineVector &Anchor);
 	void __fastcall AlignToSkeleton();
 	void __fastcall CreateBoundsChild();
 	void __fastcall StartChild();
@@ -116,11 +118,11 @@ public:
 	__property TGLRagdolBoneList* Owner = {read=FOwner};
 	__property System::UnicodeString Name = {read=FName, write=FName};
 	__property int BoneID = {read=FBoneID, write=FBoneID, nodefault};
-	__property Glvectortypes::TVector3f Origin = {read=FOrigin};
-	__property Glvectortypes::TVector3f Size = {read=FSize};
-	__property Glvectortypes::TMatrix4f BoneMatrix = {read=FBoneMatrix};
-	__property Glvectortypes::TMatrix4f ReferenceMatrix = {read=FReferenceMatrix};
-	__property Glvectortypes::TVector3f Anchor = {read=FAnchor};
+	__property Glvectorgeometry::TAffineVector Origin = {read=FOrigin};
+	__property Glvectorgeometry::TAffineVector Size = {read=FSize};
+	__property Glvectorgeometry::TMatrix BoneMatrix = {read=FBoneMatrix};
+	__property Glvectorgeometry::TMatrix ReferenceMatrix = {read=FReferenceMatrix};
+	__property Glvectorgeometry::TAffineVector Anchor = {read=FAnchor};
 	__property TGLRagdolJoint* Joint = {read=FJoint, write=FJoint};
 	__property TGLRagdolBone* Items[int Index] = {read=GetRagdollBone/*, default*/};
 public:

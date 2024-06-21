@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLParticles.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLParticles.pas' rev: 36.00 (Windows)
 
 #ifndef GlparticlesHPP
 #define GlparticlesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -41,7 +43,7 @@ class PASCALIMPLEMENTATION TGLParticles : public Glscene::TGLImmaterialSceneObje
 	typedef Glscene::TGLImmaterialSceneObject inherited;
 	
 private:
-	float FCubeSize;
+	Opengltokens::TGLfloat FCubeSize;
 	Glcolor::TGLColor* FEdgeColor;
 	bool FVisibleAtRunTime;
 	System::Classes::TList* particlePool;
@@ -54,7 +56,7 @@ private:
 	Glscene::TGLDirectRenderEvent FOnAfterRenderParticles;
 	
 protected:
-	void __fastcall SetCubeSize(const float val);
+	void __fastcall SetCubeSize(const Opengltokens::TGLfloat val);
 	void __fastcall SetEdgeColor(Glcolor::TGLColor* const val);
 	void __fastcall SetVisibleAtRunTime(const bool val);
 	void __fastcall SetParticlePoolSize(int val);
@@ -72,7 +74,7 @@ public:
 	void __fastcall KillParticles();
 	
 __published:
-	__property float CubeSize = {read=FCubeSize, write=SetCubeSize};
+	__property Opengltokens::TGLfloat CubeSize = {read=FCubeSize, write=SetCubeSize};
 	__property Glcolor::TGLColor* EdgeColor = {read=FEdgeColor, write=SetEdgeColor};
 	__property bool VisibleAtRunTime = {read=FVisibleAtRunTime, write=SetVisibleAtRunTime, default=0};
 	__property int ParticlePoolSize = {read=FParticlePoolSize, write=SetParticlePoolSize, default=0};

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGizmo.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLGizmo.pas' rev: 36.00 (Windows)
 
 #ifndef GlgizmoHPP
 #define GlgizmoHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -52,13 +54,13 @@ class PASCALIMPLEMENTATION TGLGizmoUndoItem : public System::Classes::TCollectio
 	
 private:
 	System::UnicodeString FOldLibMaterialName;
-	Glcoordinates::TGLCoordinates3* FOldAutoScaling;
+	Glcoordinates::TGLCoordinates* FOldAutoScaling;
 	Glscene::TGLCustomSceneObject* FEffectedObject;
-	Glvectortypes::TMatrix4f FOldMatr;
-	Glvectortypes::TMatrix4f FOldMatrix;
+	Glvectorgeometry::TMatrix FOldMatr;
+	Glvectorgeometry::TMatrix FOldMatrix;
 	void __fastcall SetEffectedObject(Glscene::TGLCustomSceneObject* const Value);
-	void __fastcall SetOldAutoScaling(Glcoordinates::TGLCoordinates3* const Value);
-	void __fastcall SetOldMatrix(const Glvectortypes::TMatrix4f &Value);
+	void __fastcall SetOldAutoScaling(Glcoordinates::TGLCoordinates* const Value);
+	void __fastcall SetOldMatrix(const Glvectorgeometry::TMatrix &Value);
 	
 protected:
 	virtual void __fastcall DoUndo();
@@ -70,11 +72,11 @@ public:
 	__fastcall virtual ~TGLGizmoUndoItem();
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);
 	void __fastcall AssignFromObject(Glscene::TGLCustomSceneObject* const AObject);
-	__property Glvectortypes::TMatrix4f OldMatrix = {read=FOldMatrix, write=SetOldMatrix};
+	__property Glvectorgeometry::TMatrix OldMatrix = {read=FOldMatrix, write=SetOldMatrix};
 	
 __published:
 	__property Glscene::TGLCustomSceneObject* EffectedObject = {read=FEffectedObject, write=SetEffectedObject};
-	__property Glcoordinates::TGLCoordinates3* OldAutoScaling = {read=FOldAutoScaling, write=SetOldAutoScaling};
+	__property Glcoordinates::TGLCoordinates* OldAutoScaling = {read=FOldAutoScaling, write=SetOldAutoScaling};
 	__property System::UnicodeString OldLibMaterialName = {read=FOldLibMaterialName, write=FOldLibMaterialName};
 };
 
@@ -119,9 +121,9 @@ enum DECLSPEC_DENUM TGLGizmoAxis : unsigned char { gaNone, gaX, gaY, gaZ, gaXY, 
 
 enum DECLSPEC_DENUM TGLGizmoOperation : unsigned char { gopMove, gopRotate, gopScale, gopNone, gpMoveGizmo, gpRotateGizmo };
 
-typedef void __fastcall (__closure *TGLGizmoAcceptEvent)(System::TObject* Sender, Glscene::TGLBaseSceneObject* &Obj, bool &Accept, Glvectortypes::TVector4f &Dimensions);
+typedef void __fastcall (__closure *TGLGizmoAcceptEvent)(System::TObject* Sender, Glscene::TGLBaseSceneObject* &Obj, bool &Accept, Glvectorgeometry::TVector &Dimensions);
 
-typedef void __fastcall (__closure *TGLGizmoUpdateEvent)(System::TObject* Sender, Glscene::TGLBaseSceneObject* Obj, TGLGizmoAxis Axis, TGLGizmoOperation Operation, Glvectortypes::TVector4f &Vector);
+typedef void __fastcall (__closure *TGLGizmoUpdateEvent)(System::TObject* Sender, Glscene::TGLBaseSceneObject* Obj, TGLGizmoAxis Axis, TGLGizmoOperation Operation, Glvectorgeometry::TVector &Vector);
 
 enum DECLSPEC_DENUM TGLGizmoPickMode : unsigned char { pmGetPickedObjects, pmRayCast };
 
@@ -131,7 +133,7 @@ class PASCALIMPLEMENTATION TGLGizmoRayCastHitData : public System::Classes::TPer
 	
 public:
 	Glscene::TGLBaseSceneObject* Obj;
-	Glvectortypes::TVector4f Point;
+	Glvectorgeometry::TVector Point;
 public:
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TGLGizmoRayCastHitData() { }
 	
@@ -241,8 +243,8 @@ private:
 	Glscene::TGLDirectOpenGL* dglaDisable;
 	Glscene::TGLDirectOpenGL* dgliEnable;
 	Glscene::TGLDirectOpenGL* dgliDisable;
-	Glvectortypes::TVector4f LastMousePos;
-	Glvectortypes::TVector4f ObjDimensions;
+	Glvectorgeometry::TVector LastMousePos;
+	Glvectorgeometry::TVector ObjDimensions;
 	TGLGizmoAcceptEvent FOnBeforeSelect;
 	TGLGizmoUpdateEvent FOnBeforeUpdate;
 	System::Classes::TNotifyEvent FOnSelectionLost;
@@ -261,7 +263,7 @@ private:
 	void __fastcall SetExcludeObjectsList(System::Classes::TStrings* const AValue);
 	void __fastcall DirectGlDisable(System::TObject* Sender, Glrendercontextinfo::TGLRenderContextInfo &Rci);
 	void __fastcall DirectGlEnable(System::TObject* Sender, Glrendercontextinfo::TGLRenderContextInfo &Rci);
-	Glvectortypes::TVector4f __fastcall MouseWorldPos(const int X, const int Y);
+	Glvectorgeometry::TVector __fastcall MouseWorldPos(const int X, const int Y);
 	bool __fastcall CheckObjectInExcludeList(Glscene::TGLBaseSceneObject* const Obj);
 	void __fastcall UpdateVisibleInfoLabels();
 	void __fastcall SetGLGizmoThickness(const float Value);
@@ -281,9 +283,9 @@ public:
 	void __fastcall ViewerMouseDown(const int X, const int Y);
 	void __fastcall ViewerMouseUp(const int X, const int Y);
 	void __fastcall UpdateGizmo()/* overload */;
-	void __fastcall UpdateGizmo(const Glvectortypes::TVector4f &NewDimensions)/* overload */;
+	void __fastcall UpdateGizmo(const Glvectorgeometry::TVector &NewDimensions)/* overload */;
 	void __fastcall SetVisible(const bool AValue);
-	Glvectortypes::TVector4f __fastcall GetPickedObjectPoint(Glscene::TGLBaseSceneObject* const Obj);
+	Glvectorgeometry::TVector __fastcall GetPickedObjectPoint(Glscene::TGLBaseSceneObject* const Obj);
 	virtual void __fastcall LooseSelection();
 	void __fastcall UndoAdd(Glscene::TGLCustomSceneObject* const AObject);
 	__property Glscene::TGLBaseSceneObject* RootGizmo = {read=FRootGizmo, write=SetRootGizmo};

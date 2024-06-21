@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLWin32Viewer.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLWin32Viewer.pas' rev: 36.00 (Windows)
 
 #ifndef Glwin32viewerHPP
 #define Glwin32viewerHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -57,7 +59,7 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMPaint(Winapi::Messages::TWMPaint &Message);
 	HIDESBASE MESSAGE void __fastcall WMSize(Winapi::Messages::TWMSize &Message);
 	MESSAGE void __fastcall WMGetDglCode(Winapi::Messages::TMessage &Message);
-	HIDESBASE MESSAGE void __fastcall WMDestroy(Winapi::Messages::TWMNoParams &Message);
+	HIDESBASE MESSAGE void __fastcall WMDestroy(Winapi::Messages::TWMDestroy &Message);
 	MESSAGE void __fastcall WMTouch(Winapi::Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMMouseEnter(Winapi::Messages::TMessage &msg);
 	HIDESBASE MESSAGE void __fastcall CMMouseLeave(Winapi::Messages::TMessage &msg);

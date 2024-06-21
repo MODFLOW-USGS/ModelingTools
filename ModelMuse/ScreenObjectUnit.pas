@@ -355,11 +355,11 @@ type
     FRangeTree: TRbwRangeTree;
     // See @link(Items).
     // @param(Index indicates the position of the @link(TCellElementSegment).)
-    function GetSegment(Index: Integer): TCellElementSegment;
+    function GetSegment(Index: NativeInt): TCellElementSegment;
     // See @link(Items).
     // @param(Index indicates the position of the @link(TCellElementSegment).)
     // @param(Value is the @link(TCellElementSegment) to be stored.)
-    procedure SetSegment(Index: Integer; const Value: TCellElementSegment);
+    procedure SetSegment(Index: NativeInt; const Value: TCellElementSegment);
     // See @link(UpToDate).
     procedure SetUpToDate(const Value: boolean);
     procedure RestoreData;
@@ -373,7 +373,7 @@ type
     // @param(ASegment is the @link(TCellElementSegment) to be added.)
     function Add(ASegment: TCellElementSegment): Integer;
     // @name is used to access the @link(TCellElementSegment)s in the list.
-    property Items[Index: Integer]: TCellElementSegment read GetSegment
+    property Items[Index: NativeInt]: TCellElementSegment read GetSegment
       write SetSegment; default;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     // @name creates an instance of @classname and assigns Model
@@ -24108,6 +24108,7 @@ var
   IntervalCheckIndex: Integer;
   EpsilonX: double;
   EpsilonY: double;
+  OtherSegment: TCellElementSegment;
   procedure ProcessSegment;
   begin
     if MinX > Segment.X1  then
@@ -24619,7 +24620,7 @@ begin
   inherited;
 end;
 
-function TCellElementSegmentList.GetSegment(Index: Integer):
+function TCellElementSegmentList.GetSegment(Index: NativeInt):
   TCellElementSegment;
 begin
   result := TCellElementSegment(inherited Items[Index]); 
@@ -24664,7 +24665,7 @@ begin
   FCleared := False;
 end;
 
-procedure TCellElementSegmentList.SetSegment(Index: Integer;
+procedure TCellElementSegmentList.SetSegment(Index: NativeInt;
   const Value: TCellElementSegment);
 begin
   inherited Items[Index] := Value;

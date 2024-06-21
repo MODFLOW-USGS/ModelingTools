@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Bass.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Bass.pas' rev: 36.00 (Windows)
 
 #ifndef BassHPP
 #define BassHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -43,103 +45,103 @@ struct BASS_DX8_I3DL2REVERB;
 struct BASS_DX8_PARAMEQ;
 struct BASS_DX8_REVERB;
 //-- type declarations -------------------------------------------------------
-typedef unsigned DWORD;
+typedef System::LongWord DWORD;
 
 typedef System::LongBool BOOL;
 
 typedef __int64 QWORD;
 
-typedef unsigned HMUSIC;
+typedef DWORD HMUSIC;
 
-typedef unsigned HSAMPLE;
+typedef DWORD HSAMPLE;
 
-typedef unsigned HCHANNEL;
+typedef DWORD HCHANNEL;
 
-typedef unsigned HSTREAM;
+typedef DWORD HSTREAM;
 
-typedef unsigned HRECORD;
+typedef DWORD HRECORD;
 
-typedef unsigned HSYNC;
+typedef DWORD HSYNC;
 
-typedef unsigned HDSP;
+typedef DWORD HDSP;
 
-typedef unsigned HFX;
+typedef DWORD HFX;
 
-typedef unsigned HPLUGIN;
+typedef DWORD HPLUGIN;
 
 struct DECLSPEC_DRECORD BASS_DEVICEINFO
 {
 public:
 	char *name;
 	char *driver;
-	unsigned flags;
+	DWORD flags;
 };
 
 
 struct DECLSPEC_DRECORD BASS_INFO
 {
 public:
-	unsigned flags;
-	unsigned hwsize;
-	unsigned hwfree;
-	unsigned freesam;
-	unsigned free3d;
-	unsigned minrate;
-	unsigned maxrate;
-	System::LongBool eax;
-	unsigned minbuf;
-	unsigned dsver;
-	unsigned latency;
-	unsigned initflags;
-	unsigned speakers;
-	unsigned freq;
+	DWORD flags;
+	DWORD hwsize;
+	DWORD hwfree;
+	DWORD freesam;
+	DWORD free3d;
+	DWORD minrate;
+	DWORD maxrate;
+	BOOL eax;
+	DWORD minbuf;
+	DWORD dsver;
+	DWORD latency;
+	DWORD initflags;
+	DWORD speakers;
+	DWORD freq;
 };
 
 
 struct DECLSPEC_DRECORD BASS_RECORDINFO
 {
 public:
-	unsigned flags;
-	unsigned formats;
-	unsigned inputs;
-	System::LongBool singlein;
-	unsigned freq;
+	DWORD flags;
+	DWORD formats;
+	DWORD inputs;
+	BOOL singlein;
+	DWORD freq;
 };
 
 
 struct DECLSPEC_DRECORD BASS_SAMPLE
 {
 public:
-	unsigned freq;
+	DWORD freq;
 	float volume;
 	float pan;
-	unsigned flags;
-	unsigned length;
-	unsigned max;
-	unsigned origres;
-	unsigned chans;
-	unsigned mingap;
-	unsigned mode3d;
+	DWORD flags;
+	DWORD length;
+	DWORD max;
+	DWORD origres;
+	DWORD chans;
+	DWORD mingap;
+	DWORD mode3d;
 	float mindist;
 	float maxdist;
-	unsigned iangle;
-	unsigned oangle;
+	DWORD iangle;
+	DWORD oangle;
 	float outvol;
-	unsigned vam;
-	unsigned priority;
+	DWORD vam;
+	DWORD priority;
 };
 
 
 struct DECLSPEC_DRECORD BASS_CHANNELINFO
 {
 public:
-	unsigned freq;
-	unsigned chans;
-	unsigned flags;
-	unsigned ctype;
-	unsigned origres;
-	unsigned plugin;
-	unsigned sample;
+	DWORD freq;
+	DWORD chans;
+	DWORD flags;
+	DWORD ctype;
+	DWORD origres;
+	HPLUGIN plugin;
+	HSAMPLE sample;
 	System::WideChar *filename;
 };
 
@@ -147,7 +149,7 @@ public:
 struct DECLSPEC_DRECORD BASS_PLUGINFORM
 {
 public:
-	unsigned ctype;
+	DWORD ctype;
 	char *name;
 	char *exts;
 };
@@ -162,9 +164,9 @@ typedef BASS_PLUGININFO *PBASS_PLUGININFO;
 struct DECLSPEC_DRECORD BASS_PLUGININFO
 {
 public:
-	unsigned version;
-	unsigned formatc;
-	TBASS_PLUGINFORMS *formats;
+	DWORD version;
+	DWORD formatc;
+	PBASS_PLUGINFORMS formats;
 };
 
 
@@ -179,11 +181,11 @@ public:
 
 typedef void __stdcall (*FILECLOSEPROC)(void * user);
 
-typedef __int64 __stdcall (*FILELENPROC)(void * user);
+typedef QWORD __stdcall (*FILELENPROC)(void * user);
 
-typedef unsigned __stdcall (*FILEREADPROC)(void * buffer, unsigned length, void * user);
+typedef DWORD __stdcall (*FILEREADPROC)(void * buffer, DWORD length, void * user);
 
-typedef System::LongBool __stdcall (*FILESEEKPROC)(__int64 offset, void * user);
+typedef BOOL __stdcall (*FILESEEKPROC)(QWORD offset, void * user);
 
 struct DECLSPEC_DRECORD BASS_FILEPROCS
 {
@@ -217,7 +219,7 @@ struct DECLSPEC_DRECORD TAG_APE_BINARY
 public:
 	char *key;
 	char *data;
-	unsigned length;
+	DWORD length;
 };
 
 
@@ -232,7 +234,7 @@ public:
 	System::StaticArray<char, 32> OriginatorReference;
 	System::StaticArray<char, 10> OriginationDate;
 	System::StaticArray<char, 8> OriginationTime;
-	__int64 TimeReference;
+	QWORD TimeReference;
 	System::Word Version;
 	System::StaticArray<System::Byte, 64> UMID;
 	System::StaticArray<System::Byte, 190> Reserved;
@@ -248,9 +250,9 @@ public:
 	float fDepth;
 	float fFeedback;
 	float fFrequency;
-	unsigned lWaveform;
+	DWORD lWaveform;
 	float fDelay;
-	unsigned lPhase;
+	DWORD lPhase;
 };
 
 
@@ -284,7 +286,7 @@ public:
 	float fFeedback;
 	float fLeftDelay;
 	float fRightDelay;
-	System::LongBool lPanDelay;
+	BOOL lPanDelay;
 };
 
 
@@ -295,31 +297,31 @@ public:
 	float fDepth;
 	float fFeedback;
 	float fFrequency;
-	unsigned lWaveform;
+	DWORD lWaveform;
 	float fDelay;
-	unsigned lPhase;
+	DWORD lPhase;
 };
 
 
 struct DECLSPEC_DRECORD BASS_DX8_GARGLE
 {
 public:
-	unsigned dwRateHz;
-	unsigned dwWaveShape;
+	DWORD dwRateHz;
+	DWORD dwWaveShape;
 };
 
 
 struct DECLSPEC_DRECORD BASS_DX8_I3DL2REVERB
 {
 public:
-	int lRoom;
-	int lRoomHF;
+	System::LongInt lRoom;
+	System::LongInt lRoomHF;
 	float flRoomRolloffFactor;
 	float flDecayTime;
 	float flDecayHFRatio;
-	int lReflections;
+	System::LongInt lReflections;
 	float flReflectionsDelay;
-	int lReverb;
+	System::LongInt lReverb;
 	float flReverbDelay;
 	float flDiffusion;
 	float flDensity;
@@ -346,17 +348,17 @@ public:
 };
 
 
-typedef unsigned __stdcall (*STREAMPROC)(unsigned handle, void * buffer, unsigned length, void * user);
+typedef DWORD __stdcall (*STREAMPROC)(HSTREAM handle, void * buffer, DWORD length, void * user);
 
-typedef void __stdcall (*DOWNLOADPROC)(void * buffer, unsigned length, void * user);
+typedef void __stdcall (*DOWNLOADPROC)(void * buffer, DWORD length, void * user);
 
-typedef void __stdcall (*SYNCPROC)(unsigned handle, unsigned channel, unsigned data, void * user);
+typedef void __stdcall (*SYNCPROC)(HSYNC handle, DWORD channel, DWORD data, void * user);
 
-typedef void __stdcall (*DSPPROC)(unsigned handle, unsigned channel, void * buffer, unsigned length, void * user);
+typedef void __stdcall (*DSPPROC)(HDSP handle, DWORD channel, void * buffer, DWORD length, void * user);
 
-typedef System::LongBool __stdcall (*RECORDPROC)(unsigned handle, void * buffer, unsigned length, void * user);
+typedef BOOL __stdcall (*RECORDPROC)(HRECORD handle, void * buffer, DWORD length, void * user);
 
-typedef NativeUInt TBASSModuleHandle;
+typedef Winapi::Windows::HINST TBASSModuleHandle;
 
 //-- var, const, procedure ---------------------------------------------------
 static const System::Word BASSVERSION = System::Word(0x204);
@@ -728,109 +730,109 @@ static const System::Int8 BASS_DX8_PHASE_180 = System::Int8(0x4);
 #define STREAMPROC_DUMMY (void *)(0)
 #define STREAMPROC_PUSH (void *)(0xffffffff)
 #define bassdll L"bass.dll"
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetConfig)(unsigned option, unsigned value);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_GetConfig)(unsigned option);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetConfigPtr)(unsigned option, void * value);
-extern DELPHI_PACKAGE void * __stdcall (*BASS_GetConfigPtr)(unsigned option);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetConfig)(DWORD option, DWORD value);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_GetConfig)(DWORD option);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetConfigPtr)(DWORD option, void * value);
+extern DELPHI_PACKAGE void * __stdcall (*BASS_GetConfigPtr)(DWORD option);
 extern DELPHI_PACKAGE unsigned __stdcall (*BASS_GetVersion)(void);
 extern DELPHI_PACKAGE int __stdcall (*BASS_ErrorGetCode)(void);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_GetDeviceInfo)(unsigned device, BASS_DEVICEINFO &info);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Init)(int device, unsigned freq, unsigned flags, HWND win, System::PGUID clsid);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetDevice)(unsigned device);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_GetDeviceInfo)(DWORD device, BASS_DEVICEINFO &info);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Init)(System::LongInt device, DWORD freq, DWORD flags, HWND win, System::PGUID clsid);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetDevice)(DWORD device);
 extern DELPHI_PACKAGE unsigned __stdcall (*BASS_GetDevice)(void);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Free)(void);
-extern DELPHI_PACKAGE void * __stdcall (*BASS_GetDSoundObject)(unsigned obj);
+extern DELPHI_PACKAGE void * __stdcall (*BASS_GetDSoundObject)(DWORD obj);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_GetInfo)(BASS_INFO &info);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Update)(unsigned length);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Update)(DWORD length);
 extern DELPHI_PACKAGE float __stdcall (*BASS_GetCPU)(void);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Start)(void);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Stop)(void);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Pause)(void);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetVolume)(float volume);
 extern DELPHI_PACKAGE float __stdcall (*BASS_GetVolume)(void);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_PluginLoad)(System::WideChar * filename, unsigned flags);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_PluginFree)(unsigned handle);
-extern DELPHI_PACKAGE PBASS_PLUGININFO __stdcall (*BASS_PluginGetInfo)(unsigned handle);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_PluginLoad)(System::WideChar * filename, DWORD flags);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_PluginFree)(HPLUGIN handle);
+extern DELPHI_PACKAGE PBASS_PLUGININFO __stdcall (*BASS_PluginGetInfo)(HPLUGIN handle);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Set3DFactors)(float distf, float rollf, float doppf);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Get3DFactors)(float &distf, float &rollf, float &doppf);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Set3DPosition)(BASS_3DVECTOR &pos, BASS_3DVECTOR &vel, BASS_3DVECTOR &front, BASS_3DVECTOR &top);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_Get3DPosition)(BASS_3DVECTOR &pos, BASS_3DVECTOR &vel, BASS_3DVECTOR &front, BASS_3DVECTOR &top);
 extern DELPHI_PACKAGE void __stdcall (*BASS_Apply3D)(void);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetEAXParameters)(int env, float vol, float decay, float damp);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_GetEAXParameters)(unsigned &env, float &vol, float &decay, float &damp);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_MusicLoad)(System::LongBool mem, void * f, __int64 offset, unsigned length, unsigned flags, unsigned freq);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_MusicFree)(unsigned handle);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_SampleLoad)(System::LongBool mem, void * f, __int64 offset, unsigned length, unsigned max, unsigned flags);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_SampleCreate)(unsigned length, unsigned freq, unsigned chans, unsigned max, unsigned flags);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleFree)(unsigned handle);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleSetData)(unsigned handle, void * buffer);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleGetData)(unsigned handle, void * buffer);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleGetInfo)(unsigned handle, BASS_SAMPLE &info);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleSetInfo)(unsigned handle, BASS_SAMPLE &info);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_SampleGetChannel)(unsigned handle, System::LongBool onlynew);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_SampleGetChannels)(unsigned handle, void * channels);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleStop)(unsigned handle);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamCreate)(unsigned freq, unsigned chans, unsigned flags, STREAMPROC proc, void * user);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamCreateFile)(System::LongBool mem, void * f, __int64 offset, __int64 length, unsigned flags);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamCreateURL)(char * url, unsigned offset, unsigned flags, DOWNLOADPROC proc, void * user);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamCreateFileUser)(unsigned system, unsigned flags, BASS_FILEPROCS &procs, void * user);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_StreamFree)(unsigned handle);
-extern DELPHI_PACKAGE __int64 __stdcall (*BASS_StreamGetFilePosition)(unsigned handle, unsigned mode);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamPutData)(unsigned handle, void * buffer, unsigned length);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamPutFileData)(unsigned handle, void * buffer, unsigned length);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordGetDeviceInfo)(unsigned device, BASS_DEVICEINFO &info);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordInit)(int device);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordSetDevice)(unsigned device);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SetEAXParameters)(System::LongInt env, float vol, float decay, float damp);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_GetEAXParameters)(DWORD &env, float &vol, float &decay, float &damp);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_MusicLoad)(BOOL mem, void * f, QWORD offset, DWORD length, DWORD flags, DWORD freq);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_MusicFree)(HMUSIC handle);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_SampleLoad)(BOOL mem, void * f, QWORD offset, DWORD length, DWORD max, DWORD flags);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_SampleCreate)(DWORD length, DWORD freq, DWORD chans, DWORD max, DWORD flags);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleFree)(HSAMPLE handle);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleSetData)(HSAMPLE handle, void * buffer);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleGetData)(HSAMPLE handle, void * buffer);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleGetInfo)(HSAMPLE handle, BASS_SAMPLE &info);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleSetInfo)(HSAMPLE handle, BASS_SAMPLE &info);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_SampleGetChannel)(HSAMPLE handle, BOOL onlynew);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_SampleGetChannels)(HSAMPLE handle, void * channels);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_SampleStop)(HSAMPLE handle);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamCreate)(DWORD freq, DWORD chans, DWORD flags, STREAMPROC proc, void * user);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamCreateFile)(BOOL mem, void * f, QWORD offset, QWORD length, DWORD flags);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamCreateURL)(char * url, DWORD offset, DWORD flags, DOWNLOADPROC proc, void * user);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamCreateFileUser)(DWORD system, DWORD flags, BASS_FILEPROCS &procs, void * user);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_StreamFree)(HSTREAM handle);
+extern DELPHI_PACKAGE __int64 __stdcall (*BASS_StreamGetFilePosition)(HSTREAM handle, DWORD mode);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamPutData)(HSTREAM handle, void * buffer, DWORD length);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_StreamPutFileData)(HSTREAM handle, void * buffer, DWORD length);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordGetDeviceInfo)(DWORD device, BASS_DEVICEINFO &info);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordInit)(System::LongInt device);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordSetDevice)(DWORD device);
 extern DELPHI_PACKAGE unsigned __stdcall (*BASS_RecordGetDevice)(void);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordFree)(void);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordGetInfo)(BASS_RECORDINFO &info);
-extern DELPHI_PACKAGE char * __stdcall (*BASS_RecordGetInputName)(int input);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordSetInput)(int input, unsigned flags, float volume);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_RecordGetInput)(int input, float &volume);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_RecordStart)(unsigned freq, unsigned chans, unsigned flags, RECORDPROC proc, void * user);
-extern DELPHI_PACKAGE double __stdcall (*BASS_ChannelBytes2Seconds)(unsigned handle, __int64 pos);
-extern DELPHI_PACKAGE __int64 __stdcall (*BASS_ChannelSeconds2Bytes)(unsigned handle, double pos);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelGetDevice)(unsigned handle);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetDevice)(unsigned handle, unsigned device);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelIsActive)(unsigned handle);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGetInfo)(unsigned handle, BASS_CHANNELINFO &info);
-extern DELPHI_PACKAGE char * __stdcall (*BASS_ChannelGetTags)(unsigned handle, unsigned tags);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelFlags)(unsigned handle, unsigned flags, unsigned mask);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelUpdate)(unsigned handle, unsigned length);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelLock)(unsigned handle, System::LongBool lock);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelPlay)(unsigned handle, System::LongBool restart);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelStop)(unsigned handle);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelPause)(unsigned handle);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetAttribute)(unsigned handle, unsigned attrib, float value);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGetAttribute)(unsigned handle, unsigned attrib, float &value);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSlideAttribute)(unsigned handle, unsigned attrib, float value, unsigned time);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelIsSliding)(unsigned handle, unsigned attrib);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetAttributeEx)(unsigned handle, unsigned attrib, void * value, unsigned size);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelGetAttributeEx)(unsigned handle, unsigned attrib, void * value, unsigned size);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSet3DAttributes)(unsigned handle, int mode, float min, float max, int iangle, int oangle, int outvol);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGet3DAttributes)(unsigned handle, unsigned &mode, float &min, float &max, unsigned &iangle, unsigned &oangle, unsigned &outvol);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSet3DPosition)(unsigned handle, BASS_3DVECTOR &pos, BASS_3DVECTOR &orient, BASS_3DVECTOR &vel);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGet3DPosition)(unsigned handle, BASS_3DVECTOR &pos, BASS_3DVECTOR &orient, BASS_3DVECTOR &vel);
-extern DELPHI_PACKAGE __int64 __stdcall (*BASS_ChannelGetLength)(unsigned handle, unsigned mode);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetPosition)(unsigned handle, __int64 pos, unsigned mode);
-extern DELPHI_PACKAGE __int64 __stdcall (*BASS_ChannelGetPosition)(unsigned handle, unsigned mode);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelGetLevel)(unsigned handle);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGetLevelEx)(unsigned handle, Winapi::Windows::PSingle levels, float length, unsigned flags);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelGetData)(unsigned handle, void * buffer, unsigned length);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelSetSync)(unsigned handle, unsigned type_, __int64 param, SYNCPROC proc, void * user);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelRemoveSync)(unsigned handle, unsigned sync);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelSetDSP)(unsigned handle, DSPPROC proc, void * user, int priority);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelRemoveDSP)(unsigned handle, unsigned dsp);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetLink)(unsigned handle, unsigned chan);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelRemoveLink)(unsigned handle, unsigned chan);
-extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelSetFX)(unsigned handle, unsigned type_, int priority);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelRemoveFX)(unsigned handle, unsigned fx);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_FXSetParameters)(unsigned handle, void * par);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_FXGetParameters)(unsigned handle, void * par);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_FXReset)(unsigned handle);
-extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_FXSetPriority)(unsigned handle, int priority);
-extern DELPHI_PACKAGE unsigned __fastcall BASS_SPEAKER_N(unsigned n);
-extern DELPHI_PACKAGE System::LongBool __fastcall BASS_SetEAXPreset(int env);
+extern DELPHI_PACKAGE char * __stdcall (*BASS_RecordGetInputName)(System::LongInt input);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_RecordSetInput)(System::LongInt input, DWORD flags, float volume);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_RecordGetInput)(System::LongInt input, float &volume);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_RecordStart)(DWORD freq, DWORD chans, DWORD flags, RECORDPROC proc, void * user);
+extern DELPHI_PACKAGE double __stdcall (*BASS_ChannelBytes2Seconds)(DWORD handle, QWORD pos);
+extern DELPHI_PACKAGE __int64 __stdcall (*BASS_ChannelSeconds2Bytes)(DWORD handle, double pos);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelGetDevice)(DWORD handle);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetDevice)(DWORD handle, DWORD device);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelIsActive)(DWORD handle);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGetInfo)(DWORD handle, BASS_CHANNELINFO &info);
+extern DELPHI_PACKAGE char * __stdcall (*BASS_ChannelGetTags)(HSTREAM handle, DWORD tags);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelFlags)(DWORD handle, DWORD flags, DWORD mask);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelUpdate)(DWORD handle, DWORD length);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelLock)(DWORD handle, BOOL lock);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelPlay)(DWORD handle, BOOL restart);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelStop)(DWORD handle);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelPause)(DWORD handle);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetAttribute)(DWORD handle, DWORD attrib, float value);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGetAttribute)(DWORD handle, DWORD attrib, float &value);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSlideAttribute)(DWORD handle, DWORD attrib, float value, DWORD time);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelIsSliding)(DWORD handle, DWORD attrib);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetAttributeEx)(DWORD handle, DWORD attrib, void * value, DWORD size);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelGetAttributeEx)(DWORD handle, DWORD attrib, void * value, DWORD size);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSet3DAttributes)(DWORD handle, System::LongInt mode, float min, float max, System::LongInt iangle, System::LongInt oangle, System::LongInt outvol);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGet3DAttributes)(DWORD handle, DWORD &mode, float &min, float &max, DWORD &iangle, DWORD &oangle, DWORD &outvol);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSet3DPosition)(DWORD handle, BASS_3DVECTOR &pos, BASS_3DVECTOR &orient, BASS_3DVECTOR &vel);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGet3DPosition)(DWORD handle, BASS_3DVECTOR &pos, BASS_3DVECTOR &orient, BASS_3DVECTOR &vel);
+extern DELPHI_PACKAGE __int64 __stdcall (*BASS_ChannelGetLength)(DWORD handle, DWORD mode);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetPosition)(DWORD handle, QWORD pos, DWORD mode);
+extern DELPHI_PACKAGE __int64 __stdcall (*BASS_ChannelGetPosition)(DWORD handle, DWORD mode);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelGetLevel)(DWORD handle);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelGetLevelEx)(DWORD handle, Winapi::Windows::PSingle levels, float length, DWORD flags);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelGetData)(DWORD handle, void * buffer, DWORD length);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelSetSync)(DWORD handle, DWORD type_, QWORD param, SYNCPROC proc, void * user);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelRemoveSync)(DWORD handle, HSYNC sync);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelSetDSP)(DWORD handle, DSPPROC proc, void * user, System::LongInt priority);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelRemoveDSP)(DWORD handle, HDSP dsp);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelSetLink)(DWORD handle, DWORD chan);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelRemoveLink)(DWORD handle, DWORD chan);
+extern DELPHI_PACKAGE unsigned __stdcall (*BASS_ChannelSetFX)(DWORD handle, DWORD type_, System::LongInt priority);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_ChannelRemoveFX)(DWORD handle, HFX fx);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_FXSetParameters)(HFX handle, void * par);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_FXGetParameters)(HFX handle, void * par);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_FXReset)(HFX handle);
+extern DELPHI_PACKAGE System::LongBool __stdcall (*BASS_FXSetPriority)(HFX handle, System::LongInt priority);
+extern DELPHI_PACKAGE DWORD __fastcall BASS_SPEAKER_N(DWORD n);
+extern DELPHI_PACKAGE BOOL __fastcall BASS_SetEAXPreset(System::LongInt env);
 extern DELPHI_PACKAGE bool __fastcall BASS_Load(System::WideChar * LibName);
 extern DELPHI_PACKAGE void __fastcall BASS_UnLoad(void);
 extern DELPHI_PACKAGE bool __fastcall BASS_IsLoaded(void);

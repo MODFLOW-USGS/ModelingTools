@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTeapot.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLTeapot.pas' rev: 36.00 (Windows)
 
 #ifndef GlteapotHPP
 #define GlteapotHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -41,7 +43,7 @@ private:
 	
 public:
 	__fastcall virtual TGLTeapot(System::Classes::TComponent* AOwner);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall DoRender(Glrendercontextinfo::TGLRenderContextInfo &ARci, bool ARenderSelf, bool ARenderChildren);
 public:

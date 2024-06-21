@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLAVIRecorder.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLAVIRecorder.pas' rev: 36.00 (Windows)
 
 #ifndef GlavirecorderHPP
 #define GlavirecorderHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -56,11 +58,11 @@ private:
 	Vcl::Graphics::TBitmap* AVIBitmap;
 	int AVIFrameIndex;
 	int AVI_DPI;
-	Glsvfw::TAVIStreamInfoW asi;
+	Glsvfw::TAVIStreamInfo asi;
 	Glsvfw::_di_IAVIFile pfile;
 	Glsvfw::_di_IAVIStream Stream;
 	Glsvfw::_di_IAVIStream Stream_c;
-	tagBITMAPINFOHEADER *FBitmapInfo;
+	Winapi::Windows::PBitmapInfoHeader FBitmapInfo;
 	void *FBitmapBits;
 	unsigned FBitmapSize;
 	System::UnicodeString FTempName;

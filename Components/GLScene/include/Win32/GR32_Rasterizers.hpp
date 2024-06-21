@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Rasterizers.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Rasterizers.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_rasterizersHPP
 #define Gr32_rasterizersHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -70,16 +72,16 @@ private:
 	
 protected:
 	virtual void __fastcall AssignTo(System::Classes::TPersistent* Dst);
-	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect) = 0 ;
+	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect) = 0 ;
 	__property TAssignColor AssignColor = {read=FAssignColor, write=FAssignColor};
 	
 public:
 	__fastcall virtual TRasterizer();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	void __fastcall Rasterize(Gr32::TCustomBitmap32* Dst)/* overload */;
-	void __fastcall Rasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect)/* overload */;
-	void __fastcall Rasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect, const TCombineInfo &CombineInfo)/* overload */;
-	void __fastcall Rasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect, Gr32::TCustomBitmap32* Src)/* overload */;
+	void __fastcall Rasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect)/* overload */;
+	void __fastcall Rasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect, const TCombineInfo &CombineInfo)/* overload */;
+	void __fastcall Rasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect, Gr32::TCustomBitmap32* Src)/* overload */;
 	
 __published:
 	__property Gr32::TCustomSampler* Sampler = {read=FSampler, write=SetSampler};
@@ -99,7 +101,7 @@ private:
 	int FUpdateRowCount;
 	
 protected:
-	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect);
+	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect);
 	
 public:
 	__fastcall virtual TRegularRasterizer();
@@ -121,7 +123,7 @@ private:
 	void __fastcall SetBlockSize(const int Value);
 	
 protected:
-	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect);
+	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect);
 	
 public:
 	__fastcall virtual TSwizzlingRasterizer();
@@ -145,7 +147,7 @@ private:
 	void __fastcall SetUpdateRows(const bool Value);
 	
 protected:
-	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect);
+	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect);
 	
 public:
 	__fastcall virtual TProgressiveRasterizer();
@@ -164,7 +166,7 @@ class PASCALIMPLEMENTATION TTesseralRasterizer : public TRasterizer
 	typedef TRasterizer inherited;
 	
 protected:
-	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect);
+	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect);
 public:
 	/* TRasterizer.Create */ inline __fastcall virtual TTesseralRasterizer() : TRasterizer() { }
 	
@@ -179,7 +181,7 @@ class PASCALIMPLEMENTATION TContourRasterizer : public TRasterizer
 	typedef TRasterizer inherited;
 	
 protected:
-	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect);
+	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect);
 public:
 	/* TRasterizer.Create */ inline __fastcall virtual TContourRasterizer() : TRasterizer() { }
 	
@@ -194,7 +196,7 @@ class PASCALIMPLEMENTATION TMultithreadedRegularRasterizer : public TRasterizer
 	typedef TRasterizer inherited;
 	
 protected:
-	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const System::Types::TRect &DstRect);
+	virtual void __fastcall DoRasterize(Gr32::TCustomBitmap32* Dst, const Gr32::TRect &DstRect);
 public:
 	/* TRasterizer.Create */ inline __fastcall virtual TMultithreadedRegularRasterizer() : TRasterizer() { }
 	

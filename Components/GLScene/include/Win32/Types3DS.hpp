@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Types3DS.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Types3DS.pas' rev: 36.00 (Windows)
 
 #ifndef Types3dsHPP
 #define Types3dsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -272,7 +274,7 @@ struct DECLSPEC_DRECORD TChunkListEntry3DS
 {
 public:
 	System::UnicodeString NameStr;
-	TChunk3DS *Chunk;
+	PChunk3DS Chunk;
 };
 
 
@@ -286,7 +288,7 @@ struct DECLSPEC_DRECORD TChunkList3DS
 {
 public:
 	int Count;
-	TChunkList *List;
+	PChunkList List;
 };
 
 
@@ -302,7 +304,7 @@ public:
 	System::UnicodeString Name;
 	System::UnicodeString InstStr;
 	short ParentID;
-	TNodeList *Next;
+	PNodeList Next;
 };
 
 
@@ -311,13 +313,13 @@ typedef TDatabase3DS *PDatabase3DS;
 struct DECLSPEC_DRECORD TDatabase3DS
 {
 public:
-	TChunk3DS *TopChunk;
+	PChunk3DS TopChunk;
 	bool ObjListDirty;
 	bool MatListDirty;
 	bool NodeListDirty;
-	TChunkList3DS *ObjList;
-	TChunkList3DS *MatList;
-	TChunkList3DS *NodeList;
+	PChunkList3DS ObjList;
+	PChunkList3DS MatList;
+	PChunkList3DS NodeList;
 };
 
 
@@ -479,8 +481,8 @@ typedef TBackground3DS *PBackground3DS;
 struct DECLSPEC_DRECORD TBackground3DS
 {
 public:
-	System::AnsiString Bitmap;
-	TFColor3DS Solid;
+	TBitmapBgnd3DS Bitmap;
+	TSolidBgnd3DS Solid;
 	TVGradientBgnd3DS VGradient;
 	TBackgroundType3DS BgndUsed;
 };
@@ -622,7 +624,7 @@ struct DECLSPEC_DRECORD TObjMat3DS
 public:
 	System::AnsiString NameStr;
 	System::Word NFaces;
-	TWordList *FaceIndex;
+	PWordList FaceIndex;
 };
 
 
@@ -649,22 +651,22 @@ public:
 	bool IsNorcvShad;
 	bool IsFrozen;
 	System::Word NVertices;
-	TPointList *VertexArray;
+	PPointList VertexArray;
 	System::Word NVFlags;
-	TWordList *VFlagArray;
+	PWordList VFlagArray;
 	System::Word NTextVerts;
-	TTexVertList *TextArray;
+	PTexVertList TextArray;
 	bool UseMapInfo;
 	TMapInfo3DS Map;
 	TMeshMatrix LocMatrix;
 	System::Word NFaces;
-	TFaceList *FaceArray;
-	TCardinalArray *SmoothArray;
+	PFaceList FaceArray;
+	PCardinalArray SmoothArray;
 	bool UseBoxMap;
 	_TMesh3DS__1 BoxMapStr;
 	System::Byte MeshColor;
 	System::Word NMats;
-	TObjMatList *MatArray;
+	PObjMatList MatArray;
 	bool UseProc;
 	int ProcSize;
 	System::UnicodeString ProcNameStr;
@@ -749,7 +751,7 @@ public:
 	bool DLOff;
 	TLiteAttenuate3DS Attenuation;
 	System::Classes::TStringList* Exclude;
-	TSpotLight3DS *Spot;
+	PSpotLight3DS Spot;
 };
 
 
@@ -820,21 +822,21 @@ public:
 	System::Word Flags2;
 	int NPKeys;
 	System::Word NPFlag;
-	TKeyHeaderList *PKeys;
-	TPointList *Pos;
+	PKeyHeaderList PKeys;
+	PPointList Pos;
 	int NFKeys;
 	System::Word NFFlag;
-	TKeyHeaderList *FKeys;
-	TSingleList *FOV;
+	PKeyHeaderList FKeys;
+	PSingleList FOV;
 	int NRKeys;
 	System::Word NRFlag;
-	TKeyHeaderList *RKeys;
-	TSingleList *Roll;
+	PKeyHeaderList RKeys;
+	PSingleList Roll;
 	System::UnicodeString TParentStr;
 	int NTKeys;
 	System::Word NTFlag;
-	TKeyHeaderList *TKeys;
-	TPointList *TPos;
+	PKeyHeaderList TKeys;
+	PPointList TPos;
 	System::Word TFlags1;
 	System::Word TFlags2;
 };
@@ -849,8 +851,8 @@ public:
 	System::Word Flags2;
 	int NCKeys;
 	System::Word NCFlag;
-	TKeyHeaderList *CKeys;
-	TFColorList *Color;
+	PKeyHeaderList CKeys;
+	PFColorList Color;
 };
 
 
@@ -869,23 +871,23 @@ public:
 	TPoint3DS BoundMax;
 	int NPKeys;
 	short NPFlag;
-	TKeyHeaderList *PKeys;
-	TPointList *Pos;
+	PKeyHeaderList PKeys;
+	PPointList Pos;
 	int NRKeys;
 	short NRFlag;
-	TKeyHeaderList *RKeys;
-	TKFRotKeyList *Rot;
+	PKeyHeaderList RKeys;
+	PKFRotKeyList Rot;
 	int NSKeys;
 	short NSFlag;
-	TKeyHeaderList *SKeys;
-	TPointList *Scale;
+	PKeyHeaderList SKeys;
+	PPointList Scale;
 	int NMKeys;
 	short NMFlag;
-	TKeyHeaderList *MKeys;
-	TKFMorphKeyList *Morph;
+	PKeyHeaderList MKeys;
+	PKFMorphKeyList Morph;
 	int NHKeys;
 	short NHFlag;
-	TKeyHeaderList *HKeys;
+	PKeyHeaderList HKeys;
 	float MSAngle;
 };
 
@@ -901,12 +903,12 @@ public:
 	System::Word Flags2;
 	int NPKeys;
 	System::Word NPFlag;
-	TKeyHeaderList *PKeys;
-	TPointList *Pos;
+	PKeyHeaderList PKeys;
+	PPointList Pos;
 	int NCKeys;
 	System::Word NCFlag;
-	TKeyHeaderList *CKeys;
-	TFColorList *Color;
+	PKeyHeaderList CKeys;
+	PFColorList Color;
 };
 
 
@@ -921,29 +923,29 @@ public:
 	System::Word Flags2;
 	int NPKeys;
 	System::Word NPFlag;
-	TKeyHeaderList *PKeys;
-	TPointList *Pos;
+	PKeyHeaderList PKeys;
+	PPointList Pos;
 	int NCKeys;
 	System::Word NCFlag;
-	TKeyHeaderList *CKeys;
-	TFColorList *Color;
+	PKeyHeaderList CKeys;
+	PFColorList Color;
 	int NHKeys;
 	System::Word NHFlag;
-	TKeyHeaderList *HKeys;
-	TSingleList *Hot;
+	PKeyHeaderList HKeys;
+	PSingleList Hot;
 	int NFKeys;
 	System::Word NFFlag;
-	TKeyHeaderList *FKeys;
-	TSingleList *Fall;
+	PKeyHeaderList FKeys;
+	PSingleList Fall;
 	int NRKeys;
 	System::Word NRFlag;
-	TKeyHeaderList *RKeys;
-	TSingleList *Roll;
+	PKeyHeaderList RKeys;
+	PSingleList Roll;
 	System::AnsiString TParent;
 	int NTKeys;
 	System::Word NTFlag;
-	TKeyHeaderList *TKeys;
-	TPointList *TPos;
+	PKeyHeaderList TKeys;
+	PPointList TPos;
 	System::Word TFlags1;
 	System::Word TFlags2;
 };
@@ -1021,13 +1023,13 @@ typedef short TIntPercentage;
 
 typedef short *PMatBumpPercent;
 
-typedef short TMatBumpPercent;
+typedef TIntPercentage TMatBumpPercent;
 
 typedef float *PFloatPercentage;
 
 typedef float TFloatPercentage;
 
-typedef char * PMatMapname;
+typedef PChar3DS PMatMapname;
 
 typedef int *PMeshVersion;
 
@@ -1043,11 +1045,11 @@ typedef float TLoShadowBias;
 
 typedef float *PHiShadowBias;
 
-typedef float THiShadowBias;
+typedef TLoShadowBias THiShadowBias;
 
 typedef float *PRayBias;
 
-typedef float TRayBias;
+typedef THiShadowBias TRayBias;
 
 typedef short *PShadowMapSize;
 
@@ -1069,7 +1071,7 @@ typedef TPoint3DS *POConsts;
 
 typedef TPoint3DS TOConsts;
 
-typedef char * PBitMapName;
+typedef PChar3DS PBitMapName;
 
 typedef float *PVGradient;
 
@@ -1134,9 +1136,9 @@ public:
 };
 
 
-typedef char * PViewCamera;
+typedef PChar3DS PViewCamera;
 
-typedef char * PMatName;
+typedef PChar3DS PMatName;
 
 typedef short *PMatShading;
 
@@ -1183,7 +1185,7 @@ typedef float TMatMapUScale;
 
 typedef float *PMatMapVScale;
 
-typedef float TMatMapVScale;
+typedef TMatMapUScale TMatMapVScale;
 
 typedef float *PMatMapUOffset;
 
@@ -1191,13 +1193,13 @@ typedef float TMatMapUOffset;
 
 typedef float *PMatMapVOffset;
 
-typedef float TMatMapVOffset;
+typedef TMatMapUOffset TMatMapVOffset;
 
 typedef float *PMatMapAng;
 
 typedef float TMatMapAng;
 
-typedef char * PNamedObject;
+typedef PChar3DS PNamedObject;
 
 typedef TPointArray *PPointArray;
 
@@ -1205,7 +1207,7 @@ struct DECLSPEC_DRECORD TPointArray
 {
 public:
 	System::Word Vertices;
-	TPointList *PointList;
+	PPointList PointList;
 };
 
 
@@ -1215,7 +1217,7 @@ struct DECLSPEC_DRECORD TPointFlagArray
 {
 public:
 	System::Word Flags;
-	TWordList *FlagList;
+	PWordList FlagList;
 };
 
 
@@ -1225,7 +1227,7 @@ struct DECLSPEC_DRECORD TFaceArray
 {
 public:
 	System::Word Faces;
-	TFaceList *FaceList;
+	PFaceList FaceList;
 };
 
 
@@ -1236,7 +1238,7 @@ struct DECLSPEC_DRECORD TMshMatGroup
 public:
 	System::AnsiString MatNameStr;
 	System::Word Faces;
-	TWordList *FaceList;
+	PWordList FaceList;
 };
 
 
@@ -1250,7 +1252,7 @@ struct DECLSPEC_DRECORD TSmoothGroup
 {
 public:
 	System::Word Groups;
-	TCardinalArray *GroupList;
+	PCardinalArray GroupList;
 };
 
 
@@ -1260,7 +1262,7 @@ struct DECLSPEC_DRECORD TTexVerts
 {
 public:
 	System::Word NumCoords;
-	TTexVertList *TextVertList;
+	PTexVertList TextVertList;
 };
 
 
@@ -1285,13 +1287,13 @@ public:
 };
 
 
-typedef char * PProcName;
+typedef PChar3DS PProcName;
 
 typedef TPoint3DS *PNDirectLight;
 
 typedef TPoint3DS TNDirectLight;
 
-typedef char * PDlExclude;
+typedef PChar3DS PDlExclude;
 
 typedef TDlSpotlight *PDlSpotlight;
 
@@ -1310,7 +1312,7 @@ typedef float TDlOuterRange;
 
 typedef float *PDlInnerRange;
 
-typedef float TDlInnerRange;
+typedef TDlOuterRange TDlInnerRange;
 
 typedef float *PDlMultiplier;
 
@@ -1324,7 +1326,7 @@ typedef float *PDlSpotAspect;
 
 typedef float TDlSpotAspect;
 
-typedef char * PDlSpotProjector;
+typedef PChar3DS PDlSpotProjector;
 
 typedef float *PDlRayBias;
 
@@ -1459,7 +1461,7 @@ typedef TPoint3DS *PPivot;
 
 typedef TPoint3DS TPivot;
 
-typedef char * PInstanceName;
+typedef PChar3DS PInstanceName;
 
 typedef float *PMorphSmooth;
 
@@ -1481,8 +1483,8 @@ struct DECLSPEC_DRECORD TPosTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TPointList *PositionList;
+	PKeyHeaderList KeyHdrList;
+	PPointList PositionList;
 };
 
 
@@ -1492,8 +1494,8 @@ struct DECLSPEC_DRECORD TColTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TFColorList *ColorList;
+	PKeyHeaderList KeyHdrList;
+	PFColorList ColorList;
 };
 
 
@@ -1503,8 +1505,8 @@ struct DECLSPEC_DRECORD TRotTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TKFRotKeyList *RotationList;
+	PKeyHeaderList KeyHdrList;
+	PKFRotKeyList RotationList;
 };
 
 
@@ -1514,8 +1516,8 @@ struct DECLSPEC_DRECORD TScaleTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TPointList *ScaleList;
+	PKeyHeaderList KeyHdrList;
+	PPointList ScaleList;
 };
 
 
@@ -1525,8 +1527,8 @@ struct DECLSPEC_DRECORD TMorphTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TKFMorphKeyList *MorphList;
+	PKeyHeaderList KeyHdrList;
+	PKFMorphKeyList MorphList;
 };
 
 
@@ -1536,7 +1538,7 @@ struct DECLSPEC_DRECORD THideTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
+	PKeyHeaderList KeyHdrList;
 };
 
 
@@ -1546,8 +1548,8 @@ struct DECLSPEC_DRECORD TFovTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TSingleList *FOVAngleList;
+	PKeyHeaderList KeyHdrList;
+	PSingleList FOVAngleList;
 };
 
 
@@ -1557,8 +1559,8 @@ struct DECLSPEC_DRECORD TRollTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TSingleList *RollAngleList;
+	PKeyHeaderList KeyHdrList;
+	PSingleList RollAngleList;
 };
 
 
@@ -1568,8 +1570,8 @@ struct DECLSPEC_DRECORD THotTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TSingleList *HotspotAngleList;
+	PKeyHeaderList KeyHdrList;
+	PSingleList HotspotAngleList;
 };
 
 
@@ -1579,8 +1581,8 @@ struct DECLSPEC_DRECORD TFallTrackTag
 {
 public:
 	TTrackHeader3DS TrackHdr;
-	TKeyHeaderList *KeyHdrList;
-	TSingleList *FalloffAngleList;
+	PKeyHeaderList KeyHdrList;
+	PSingleList FalloffAngleList;
 };
 
 
@@ -1594,9 +1596,9 @@ public:
 };
 
 
-typedef char * PXDataAppName;
+typedef PChar3DS PXDataAppName;
 
-typedef char * PXDataString;
+typedef PChar3DS PXDataString;
 
 typedef float *PXDataFloat;
 
@@ -1632,379 +1634,379 @@ public:
 		};
 		struct 
 		{
-			THideTrackTag *HideTrackTag;
+			PHideTrackTag HideTrackTag;
 		};
 		struct 
 		{
-			TFallTrackTag *FallTrackTag;
+			PFallTrackTag FallTrackTag;
 		};
 		struct 
 		{
-			THotTrackTag *HotTrackTag;
+			PHotTrackTag HotTrackTag;
 		};
 		struct 
 		{
-			TRollTrackTag *RollTrackTag;
+			PRollTrackTag RollTrackTag;
 		};
 		struct 
 		{
-			TFovTrackTag *FovTrackTag;
+			PFovTrackTag FovTrackTag;
 		};
 		struct 
 		{
-			TMorphTrackTag *MorphTrackTag;
+			PMorphTrackTag MorphTrackTag;
 		};
 		struct 
 		{
-			TScaleTrackTag *ScaleTrackTag;
+			PScaleTrackTag ScaleTrackTag;
 		};
 		struct 
 		{
-			TRotTrackTag *RotTrackTag;
+			PRotTrackTag RotTrackTag;
 		};
 		struct 
 		{
-			TColTrackTag *ColTrackTag;
+			PColTrackTag ColTrackTag;
 		};
 		struct 
 		{
-			TPosTrackTag *PosTrackTag;
+			PPosTrackTag PosTrackTag;
 		};
 		struct 
 		{
-			TBoundBox *BoundBox;
+			PBoundBox BoundBox;
 		};
 		struct 
 		{
-			float *MorphSmooth;
+			PMorphSmooth MorphSmooth;
 		};
 		struct 
 		{
-			char *InstanceName;
+			PInstanceName InstanceName;
 		};
 		struct 
 		{
-			TPoint3DS *Pivot;
+			PPivot Pivot;
 		};
 		struct 
 		{
-			TNodeHdr *NodeHdr;
+			PNodeHdr NodeHdr;
 		};
 		struct 
 		{
-			short *KFId;
+			PKFId KFId;
 		};
 		struct 
 		{
-			int *KFCurtime;
+			PKFCurtime KFCurtime;
 		};
 		struct 
 		{
-			TKFSeg *KFSeg;
+			PKFSeg KFSeg;
 		};
 		struct 
 		{
-			TKFHdr *KFHdr;
+			PKFHdr KFHdr;
 		};
 		struct 
 		{
-			char *XDataString;
+			PXDataString XDataString;
 		};
 		struct 
 		{
-			char *XDataAppName;
+			PXDataAppName XDataAppName;
 		};
 		struct 
 		{
-			TXDataEntry *XDataEntry;
+			PXDataEntry XDataEntry;
 		};
 		struct 
 		{
-			TViewportData *ViewportData;
+			PViewportData ViewportData;
 		};
 		struct 
 		{
-			TViewportSize *ViewportSize;
+			PViewportSize ViewportSize;
 		};
 		struct 
 		{
-			TViewportLayout *ViewportLayout;
+			PViewportLayout ViewportLayout;
 		};
 		struct 
 		{
-			TCamRanges *CamRanges;
+			PCamRanges CamRanges;
 		};
 		struct 
 		{
-			TNCamera *NCamera;
+			PNCamera NCamera;
 		};
 		struct 
 		{
-			float *DlRayBias;
+			PDlRayBias DlRayBias;
 		};
 		struct 
 		{
-			char *DlSpotProjector;
+			PDlSpotProjector DlSpotProjector;
 		};
 		struct 
 		{
-			float *DlSpotAspect;
+			PDlSpotAspect DlSpotAspect;
 		};
 		struct 
 		{
-			float *DlSpotRoll;
+			PDlSpotRoll DlSpotRoll;
 		};
 		struct 
 		{
-			TDlLocalShadow2 *DlLocalShadow2;
+			PDlLocalShadow2 DlLocalShadow2;
 		};
 		struct 
 		{
-			TDlSpotlight *DlSpotlight;
+			PDlSpotlight DlSpotlight;
 		};
 		struct 
 		{
-			float *DlMultiplier;
+			PDlMultiplier DlMultiplier;
 		};
 		struct 
 		{
-			float *DlOuterRange;
+			PDlOuterRange DlOuterRange;
 		};
 		struct 
 		{
-			float *DlInnerRange;
+			PDlInnerRange DlInnerRange;
 		};
 		struct 
 		{
-			char *DlExclude;
+			PDlExclude DlExclude;
 		};
 		struct 
 		{
-			TPoint3DS *NDirectLight;
+			PNDirectLight NDirectLight;
 		};
 		struct 
 		{
-			char *ProcName;
+			PProcName ProcName;
 		};
 		struct 
 		{
-			TMeshTextureInfo *MeshTextureInfo;
+			PMeshTextureInfo MeshTextureInfo;
 		};
 		struct 
 		{
-			System::Byte *MeshColor;
+			PMeshColor MeshColor;
 		};
 		struct 
 		{
-			TMeshMatrix *MeshMatrix;
+			PMeshMatrix MeshMatrix;
 		};
 		struct 
 		{
-			TTexVerts *TexVerts;
+			PTexVerts TexVerts;
 		};
 		struct 
 		{
-			TSmoothGroup *SmoothGroup;
+			PSmoothGroup SmoothGroup;
 		};
 		struct 
 		{
-			TMshBoxmap *MshBoxmap;
+			PMshBoxmap MshBoxmap;
 		};
 		struct 
 		{
-			TMshMatGroup *MshMatGroup;
+			PMshMatGroup MshMatGroup;
 		};
 		struct 
 		{
-			TFaceArray *FaceArray;
+			PFaceArray FaceArray;
 		};
 		struct 
 		{
-			TPointFlagArray *PointFlagArray;
+			PPointFlagArray PointFlagArray;
 		};
 		struct 
 		{
-			TPointArray *PointArray;
+			PPointArray PointArray;
 		};
 		struct 
 		{
-			char *NamedObject;
+			PNamedObject NamedObject;
 		};
 		struct 
 		{
-			short *MatBumpPercent;
+			PMatBumpPercent MatBumpPercent;
 		};
 		struct 
 		{
-			TColor24 *MatMapBCol;
+			PMatMapBCol MatMapBCol;
 		};
 		struct 
 		{
-			TColor24 *MatMapGCol;
+			PMatMapGCol MatMapGCol;
 		};
 		struct 
 		{
-			TColor24 *MatMapRCol;
+			PMatMapRCol MatMapRCol;
 		};
 		struct 
 		{
-			TColor24 *MatMapCol2;
+			PMatMapCol2 MatMapCol2;
 		};
 		struct 
 		{
-			TColor24 *MatMapCol1;
+			PMatMapCol1 MatMapCol1;
 		};
 		struct 
 		{
-			float *MatMapAng;
+			PMatMapAng MatMapAng;
 		};
 		struct 
 		{
-			float *MatMapVOffset;
+			PMatMapVOffset MatMapVOffset;
 		};
 		struct 
 		{
-			float *MatMapUOffset;
+			PMatMapUOffset MatMapUOffset;
 		};
 		struct 
 		{
-			float *MatMapVScale;
+			PMatMapVScale MatMapVScale;
 		};
 		struct 
 		{
-			float *MatMapUScale;
+			PMatMapUScale MatMapUScale;
 		};
 		struct 
 		{
-			float *MatMapTexblur;
+			PMatMapTexblur MatMapTexblur;
 		};
 		struct 
 		{
-			System::Word *MatMapTiling;
+			PMatMapTiling MatMapTiling;
 		};
 		struct 
 		{
-			float *MatWireSize;
+			PMatWireSize MatWireSize;
 		};
 		struct 
 		{
-			TIpasData *IpasData;
+			PIpasData IpasData;
 		};
 		struct 
 		{
-			TMatAcubic *MatAcubic;
+			PMatAcubic MatAcubic;
 		};
 		struct 
 		{
-			short *MatShading;
+			PMatShading MatShading;
 		};
 		struct 
 		{
-			char *MatName;
+			PMatName MatName;
 		};
 		struct 
 		{
-			char *ViewCamera;
+			PViewCamera ViewCamera;
 		};
 		struct 
 		{
-			TViewUser *ViewUser;
+			PViewUser ViewUser;
 		};
 		struct 
 		{
-			TViewStandard *ViewStandard;
+			PViewStandard ViewStandard;
 		};
 		struct 
 		{
-			TDistanceCue *DistanceCue;
+			PDistanceCue DistanceCue;
 		};
 		struct 
 		{
-			TLayerFog *LayerFog;
+			PLayerFog LayerFog;
 		};
 		struct 
 		{
-			TFog *Fog;
+			PFog Fog;
 		};
 		struct 
 		{
-			float *VGradient;
+			PVGradient VGradient;
 		};
 		struct 
 		{
-			char *BitMapName;
+			PBitMapName BitMapName;
 		};
 		struct 
 		{
-			TPoint3DS *OConsts;
+			POConsts OConsts;
 		};
 		struct 
 		{
-			short *ShadowSamples;
+			PShadowSamples ShadowSamples;
 		};
 		struct 
 		{
-			short *ShadowMapSize;
+			PShadowMapSize ShadowMapSize;
 		};
 		struct 
 		{
-			float *RayBias;
+			PRayBias RayBias;
 		};
 		struct 
 		{
-			float *HiShadowBias;
+			PHiShadowBias HiShadowBias;
 		};
 		struct 
 		{
-			int *ShadowRange;
+			PShadowRange ShadowRange;
 		};
 		struct 
 		{
-			float *ShadowFilter;
+			PShadowFilter ShadowFilter;
 		};
 		struct 
 		{
-			float *LoShadowBias;
+			PLoShadowBias LoShadowBias;
 		};
 		struct 
 		{
-			float *MasterScale;
+			PMasterScale MasterScale;
 		};
 		struct 
 		{
-			int *MeshVersion;
+			PMeshVersion MeshVersion;
 		};
 		struct 
 		{
-			unsigned *M3dVersion;
+			PM3dVersion M3dVersion;
 		};
 		struct 
 		{
-			char *MatMapname;
+			PMatMapname MatMapname;
 		};
 		struct 
 		{
-			float *FloatPercentage;
+			PFloatPercentage FloatPercentage;
 		};
 		struct 
 		{
-			short *IntPercentage;
+			PIntPercentage IntPercentage;
 		};
 		struct 
 		{
-			TColor24 *LinColor24;
+			PLinColor24 LinColor24;
 		};
 		struct 
 		{
-			TColor24 *Color24;
+			PColor24 Color24;
 		};
 		struct 
 		{
-			TColorF *LinColorF;
+			PLinColorF LinColorF;
 		};
 		struct 
 		{
-			TColorF *ColorF;
+			PColorF ColorF;
 		};
 		
 	};
@@ -2018,8 +2020,8 @@ public:
 	unsigned Size;
 	unsigned Position;
 	TChunkData Data;
-	TChunk3DS *Sibling;
-	TChunk3DS *Children;
+	PChunk3DS Sibling;
+	PChunk3DS Children;
 };
 
 

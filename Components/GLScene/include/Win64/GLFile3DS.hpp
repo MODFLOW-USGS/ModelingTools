@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFile3DS.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFile3DS.pas' rev: 36.00 (Windows)
 
 #ifndef Glfile3dsHPP
 #define Glfile3dsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -66,17 +68,17 @@ class PASCALIMPLEMENTATION EGLFile3DS : public System::Sysutils::Exception
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLFile3DS(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLFile3DS(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLFile3DS(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLFile3DS(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLFile3DS(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLFile3DS(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLFile3DS(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLFile3DS(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLFile3DS(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLFile3DS(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLFile3DS(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLFile3DS(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLFile3DS(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLFile3DS(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLFile3DS(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLFile3DS(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLFile3DS(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLFile3DS(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLFile3DS(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLFile3DS(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLFile3DS() { }
 	
 };
@@ -86,9 +88,9 @@ public:
 struct DECLSPEC_DRECORD TGLFile3DSAnimationData
 {
 public:
-	Glvectortypes::TMatrix4f ModelMatrix;
-	Glvectortypes::TVector4f Color;
-	Glvectortypes::TVector3f TargetPos;
+	Glvectorgeometry::TMatrix ModelMatrix;
+	Glvectorgeometry::TVector Color;
+	Glvectorgeometry::TAffineVector TargetPos;
 	float SpotLightCutOff;
 	float HotSpot;
 	float Roll;
@@ -111,9 +113,9 @@ private:
 	void __fastcall InterpolateFrame(int &I, double &w, const double AFrame);
 	
 protected:
-	float __fastcall InterpolateValue(const float *AValues, const int AValues_High, const double AFrame)/* overload */;
-	Glvectortypes::TVector3f __fastcall InterpolateValue(const Glvectortypes::TVector3f *AValues, const int AValues_High, const double AFrame)/* overload */;
-	Glvectortypes::TMatrix4f __fastcall InterpolateValue(const Types3ds::TKFRotKey3DS *AValues, const int AValues_High, const double AFrame)/* overload */;
+	float __fastcall InterpolateValue(const float *AValues, const System::NativeInt AValues_High, const double AFrame)/* overload */;
+	Glvectorgeometry::TAffineVector __fastcall InterpolateValue(const Glvectortypes::TVector3f *AValues, const System::NativeInt AValues_High, const double AFrame)/* overload */;
+	Glvectorgeometry::TMatrix __fastcall InterpolateValue(const Types3ds::TKFRotKey3DS *AValues, const System::NativeInt AValues_High, const double AFrame)/* overload */;
 	
 public:
 	virtual void __fastcall LoadData(const int ANumKeys, const Types3ds::PKeyHeaderList Keys, const void * AData);
@@ -386,7 +388,7 @@ public:
 	virtual void __fastcall SetFrame(const double AFrame);
 	virtual void __fastcall MorphTo(int morphTargetIndex);
 	virtual void __fastcall Lerp(int morphTargetIndex1, int morphTargetIndex2, float lerpFactor);
-	virtual void __fastcall GetExtents(/* out */ Glvectortypes::TVector3f &min, /* out */ Glvectortypes::TVector3f &max)/* overload */;
+	virtual void __fastcall GetExtents(/* out */ Glvectorgeometry::TAffineVector &min, /* out */ Glvectorgeometry::TAffineVector &max)/* overload */;
 	virtual Glvectorlists::TAffineVectorList* __fastcall ExtractTriangles(Glvectorlists::TAffineVectorList* texCoords = (Glvectorlists::TAffineVectorList*)(0x0), Glvectorlists::TAffineVectorList* normals = (Glvectorlists::TAffineVectorList*)(0x0));
 	DYNAMIC void __fastcall WriteToFiler(Glpersistentclasses::TVirtualWriter* Writer);
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* Reader);

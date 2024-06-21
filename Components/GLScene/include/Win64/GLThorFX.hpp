@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLThorFX.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLThorFX.pas' rev: 36.00 (Windows)
 
 #ifndef GlthorfxHPP
 #define GlthorfxHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -49,7 +51,7 @@ typedef TThorpoint *PThorpoint;
 struct DECLSPEC_DRECORD TThorpoint
 {
 public:
-	Glvectortypes::TVector4f Position;
+	Glvectorgeometry::TVector Position;
 	float Size;
 };
 
@@ -66,8 +68,8 @@ class PASCALIMPLEMENTATION TGLThorFXManager : public Glbaseclasses::TGLCadenceAb
 	
 private:
 	System::Classes::TList* FClients;
-	TThorpointArray *FThorpoints;
-	Glcoordinates::TGLCoordinates3* FTarget;
+	PThorpointArray FThorpoints;
+	Glcoordinates::TGLCoordinates* FTarget;
 	Glcadencer::TGLCadencer* FCadencer;
 	int FMaxpoints;
 	float FGlowSize;
@@ -86,7 +88,7 @@ protected:
 	void __fastcall RegisterClient(TGLBThorFX* aClient);
 	void __fastcall DeRegisterClient(TGLBThorFX* aClient);
 	void __fastcall DeRegisterAllClients();
-	void __fastcall SetTarget(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetTarget(Glcoordinates::TGLCoordinates* const val);
 	void __fastcall SetCadencer(Glcadencer::TGLCadencer* const val);
 	void __fastcall SetMaxpoints(const int val);
 	bool __fastcall StoreGlowSize();
@@ -105,7 +107,7 @@ public:
 	virtual void __fastcall DoProgress(const Glbaseclasses::TGLProgressTimes &progressTime);
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* Target = {read=FTarget, write=SetTarget};
+	__property Glcoordinates::TGLCoordinates* Target = {read=FTarget, write=SetTarget};
 	__property Glcadencer::TGLCadencer* Cadencer = {read=FCadencer, write=SetCadencer};
 	__property int Maxpoints = {read=FMaxpoints, write=SetMaxpoints, default=256};
 	__property float GlowSize = {read=FGlowSize, write=FGlowSize, stored=StoreGlowSize};
@@ -128,14 +130,14 @@ class PASCALIMPLEMENTATION TGLBThorFX : public Glscene::TGLObjectPostEffect
 private:
 	TGLThorFXManager* FManager;
 	System::UnicodeString FManagerName;
-	Glcoordinates::TGLCoordinates3* FTarget;
+	Glcoordinates::TGLCoordinates* FTarget;
 	
 protected:
 	void __fastcall SetManager(TGLThorFXManager* const val);
 	virtual void __fastcall WriteToFiler(System::Classes::TWriter* writer);
 	virtual void __fastcall ReadFromFiler(System::Classes::TReader* reader);
 	DYNAMIC void __fastcall Loaded();
-	void __fastcall SetTarget(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetTarget(Glcoordinates::TGLCoordinates* const val);
 	
 public:
 	__fastcall virtual TGLBThorFX(Glxcollection::TXCollection* AOwner);

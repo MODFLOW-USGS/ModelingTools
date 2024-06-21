@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Image.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Image.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_imageHPP
 #define Gr32_imageHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -123,12 +125,12 @@ private:
 	System::Classes::TNotifyEvent FOnMouseLeave;
 	void __fastcall SetBufferOversize(int Value);
 	HIDESBASE MESSAGE void __fastcall WMEraseBkgnd(Winapi::Messages::TWMEraseBkgnd &Message);
-	MESSAGE void __fastcall WMGetDlgCode(Winapi::Messages::TWMNoParams &Msg);
+	MESSAGE void __fastcall WMGetDlgCode(Winapi::Messages::TWMGetDlgCode &Msg);
 	HIDESBASE MESSAGE void __fastcall WMPaint(Winapi::Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMMouseEnter(Winapi::Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMMouseLeave(Winapi::Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMInvalidate(Winapi::Messages::TMessage &Message);
-	void __fastcall DirectAreaUpdateHandler(System::TObject* Sender, const System::Types::TRect &Area, const unsigned Info);
+	void __fastcall DirectAreaUpdateHandler(System::TObject* Sender, const Gr32::TRect &Area, const unsigned Info);
 	
 protected:
 	virtual void __fastcall SetRepaintMode(const TRepaintMode Value);
@@ -151,9 +153,9 @@ protected:
 public:
 	__fastcall virtual TCustomPaintBox32(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomPaintBox32();
-	virtual System::Types::TRect __fastcall GetViewportRect();
+	virtual Gr32::TRect __fastcall GetViewportRect();
 	void __fastcall Flush()/* overload */;
-	void __fastcall Flush(const System::Types::TRect &SrcRect)/* overload */;
+	void __fastcall Flush(const Gr32::TRect &SrcRect)/* overload */;
 	virtual void __fastcall Invalidate();
 	virtual void __fastcall ForceFullInvalidate();
 	virtual void __fastcall Loaded();
@@ -252,13 +254,13 @@ private:
 	Gr32::TBitmap32* FBitmap;
 	TBitmapAlign FBitmapAlign;
 	Gr32_layers::TLayerCollection* FLayers;
-	float FOffsetHorz;
-	float FOffsetVert;
+	Gr32::TFloat FOffsetHorz;
+	Gr32::TFloat FOffsetVert;
 	TPaintStages* FPaintStages;
 	_TCustomImage32__1 FPaintStageHandlers;
 	_TCustomImage32__2 FPaintStageNum;
-	float FScaleX;
-	float FScaleY;
+	Gr32::TFloat FScaleX;
+	Gr32::TFloat FScaleY;
 	TScaleMode FScaleMode;
 	int FUpdateCount;
 	System::Classes::TNotifyEvent FOnBitmapResize;
@@ -271,37 +273,37 @@ private:
 	System::Classes::TNotifyEvent FOnScaleChange;
 	void __fastcall BitmapResizeHandler(System::TObject* Sender);
 	void __fastcall BitmapChangeHandler(System::TObject* Sender);
-	void __fastcall BitmapAreaChangeHandler(System::TObject* Sender, const System::Types::TRect &Area, const unsigned Info);
-	void __fastcall BitmapDirectAreaChangeHandler(System::TObject* Sender, const System::Types::TRect &Area, const unsigned Info);
+	void __fastcall BitmapAreaChangeHandler(System::TObject* Sender, const Gr32::TRect &Area, const unsigned Info);
+	void __fastcall BitmapDirectAreaChangeHandler(System::TObject* Sender, const Gr32::TRect &Area, const unsigned Info);
 	void __fastcall LayerCollectionChangeHandler(System::TObject* Sender);
 	void __fastcall LayerCollectionGDIUpdateHandler(System::TObject* Sender);
-	void __fastcall LayerCollectionGetViewportScaleHandler(System::TObject* Sender, /* out */ float &ScaleX, /* out */ float &ScaleY);
-	void __fastcall LayerCollectionGetViewportShiftHandler(System::TObject* Sender, /* out */ float &ShiftX, /* out */ float &ShiftY);
+	void __fastcall LayerCollectionGetViewportScaleHandler(System::TObject* Sender, /* out */ Gr32::TFloat &ScaleX, /* out */ Gr32::TFloat &ScaleY);
+	void __fastcall LayerCollectionGetViewportShiftHandler(System::TObject* Sender, /* out */ Gr32::TFloat &ShiftX, /* out */ Gr32::TFloat &ShiftY);
 	Gr32::TPixelCombineEvent __fastcall GetOnPixelCombine();
 	void __fastcall SetBitmap(Gr32::TBitmap32* Value);
 	void __fastcall SetBitmapAlign(TBitmapAlign Value);
 	void __fastcall SetLayers(Gr32_layers::TLayerCollection* Value);
-	void __fastcall SetOffsetHorz(float Value);
-	void __fastcall SetOffsetVert(float Value);
-	void __fastcall SetScale(float Value);
-	void __fastcall SetScaleX(float Value);
-	void __fastcall SetScaleY(float Value);
+	void __fastcall SetOffsetHorz(Gr32::TFloat Value);
+	void __fastcall SetOffsetVert(Gr32::TFloat Value);
+	void __fastcall SetScale(Gr32::TFloat Value);
+	void __fastcall SetScaleX(Gr32::TFloat Value);
+	void __fastcall SetScaleY(Gr32::TFloat Value);
 	void __fastcall SetOnPixelCombine(Gr32::TPixelCombineEvent Value);
 	
 protected:
-	System::Types::TRect CachedBitmapRect;
-	float CachedShiftX;
-	float CachedShiftY;
-	float CachedScaleX;
-	float CachedScaleY;
-	float CachedRecScaleX;
-	float CachedRecScaleY;
+	Gr32::TRect CachedBitmapRect;
+	Gr32::TFloat CachedShiftX;
+	Gr32::TFloat CachedShiftY;
+	Gr32::TFloat CachedScaleX;
+	Gr32::TFloat CachedScaleY;
+	Gr32::TFloat CachedRecScaleX;
+	Gr32::TFloat CachedRecScaleY;
 	bool CacheValid;
 	int OldSzX;
 	int OldSzY;
 	bool PaintToMode;
 	virtual void __fastcall BitmapResized();
-	virtual void __fastcall BitmapChanged(const System::Types::TRect &Area);
+	virtual void __fastcall BitmapChanged(const Gr32::TRect &Area);
 	virtual bool __fastcall CanAutoSize(int &NewWidth, int &NewHeight);
 	virtual void __fastcall DoInitStages();
 	virtual void __fastcall DoPaintBuffer();
@@ -320,7 +322,7 @@ protected:
 	virtual void __fastcall MouseLeave();
 	virtual void __fastcall SetRepaintMode(const TRepaintMode Value);
 	virtual void __fastcall SetScaleMode(TScaleMode Value);
-	void __fastcall SetXForm(float ShiftX, float ShiftY, float ScaleX, float ScaleY);
+	void __fastcall SetXForm(Gr32::TFloat ShiftX, Gr32::TFloat ShiftY, Gr32::TFloat ScaleX, Gr32::TFloat ScaleY);
 	virtual void __fastcall UpdateCache();
 	__property int UpdateCount = {read=FUpdateCount, nodefault};
 	
@@ -328,11 +330,11 @@ public:
 	__fastcall virtual TCustomImage32(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomImage32();
 	virtual void __fastcall BeginUpdate();
-	System::Types::TPoint __fastcall BitmapToControl(const System::Types::TPoint &APoint)/* overload */;
+	Gr32::TPoint __fastcall BitmapToControl(const Gr32::TPoint &APoint)/* overload */;
 	Gr32::TFloatPoint __fastcall BitmapToControl(const Gr32::TFloatPoint &APoint)/* overload */;
 	HIDESBASE virtual void __fastcall Changed();
-	HIDESBASE virtual void __fastcall Update(const System::Types::TRect &Rect)/* overload */;
-	System::Types::TPoint __fastcall ControlToBitmap(const System::Types::TPoint &APoint)/* overload */;
+	HIDESBASE virtual void __fastcall Update(const Gr32::TRect &Rect)/* overload */;
+	Gr32::TPoint __fastcall ControlToBitmap(const Gr32::TPoint &APoint)/* overload */;
 	Gr32::TFloatPoint __fastcall ControlToBitmap(const Gr32::TFloatPoint &APoint)/* overload */;
 	virtual void __fastcall EndUpdate();
 	virtual void __fastcall ExecBitmapFrame(Gr32::TBitmap32* Dest, int StageNum);
@@ -342,23 +344,23 @@ public:
 	virtual void __fastcall ExecCustom(Gr32::TBitmap32* Dest, int StageNum);
 	virtual void __fastcall ExecDrawBitmap(Gr32::TBitmap32* Dest, int StageNum);
 	virtual void __fastcall ExecDrawLayers(Gr32::TBitmap32* Dest, int StageNum);
-	virtual System::Types::TRect __fastcall GetBitmapRect();
+	virtual Gr32::TRect __fastcall GetBitmapRect();
 	virtual System::Types::TSize __fastcall GetBitmapSize();
 	virtual void __fastcall Invalidate();
 	virtual void __fastcall Loaded();
-	HIDESBASE virtual void __fastcall PaintTo(Gr32::TBitmap32* Dest, const System::Types::TRect &DestRect);
+	HIDESBASE virtual void __fastcall PaintTo(Gr32::TBitmap32* Dest, const Gr32::TRect &DestRect);
 	DYNAMIC void __fastcall Resize();
 	virtual void __fastcall SetupBitmap(bool DoClear = false, Gr32::TColor32 ClearColor = (Gr32::TColor32)(0xff000000));
 	__property Gr32::TBitmap32* Bitmap = {read=FBitmap, write=SetBitmap};
 	__property TBitmapAlign BitmapAlign = {read=FBitmapAlign, write=SetBitmapAlign, nodefault};
 	__property Canvas;
 	__property Gr32_layers::TLayerCollection* Layers = {read=FLayers, write=SetLayers};
-	__property float OffsetHorz = {read=FOffsetHorz, write=SetOffsetHorz};
-	__property float OffsetVert = {read=FOffsetVert, write=SetOffsetVert};
+	__property Gr32::TFloat OffsetHorz = {read=FOffsetHorz, write=SetOffsetHorz};
+	__property Gr32::TFloat OffsetVert = {read=FOffsetVert, write=SetOffsetVert};
 	__property TPaintStages* PaintStages = {read=FPaintStages};
-	__property float Scale = {read=FScaleX, write=SetScale};
-	__property float ScaleX = {read=FScaleX, write=SetScaleX};
-	__property float ScaleY = {read=FScaleY, write=SetScaleY};
+	__property Gr32::TFloat Scale = {read=FScaleX, write=SetScale};
+	__property Gr32::TFloat ScaleX = {read=FScaleX, write=SetScaleX};
+	__property Gr32::TFloat ScaleY = {read=FScaleY, write=SetScaleY};
 	__property TScaleMode ScaleMode = {read=FScaleMode, write=SetScaleMode, nodefault};
 	__property System::Classes::TNotifyEvent OnBitmapResize = {read=FOnBitmapResize, write=FOnBitmapResize};
 	__property Gr32::TPixelCombineEvent OnBitmapPixelCombine = {read=GetOnPixelCombine, write=SetOnPixelCombine};
@@ -489,12 +491,12 @@ protected:
 	Gr32_rangebars::TCustomRangeBar* VScroll;
 	void __fastcall AlignAll();
 	virtual void __fastcall BitmapResized();
-	void __fastcall DoDrawSizeGrip(const System::Types::TRect &R);
+	void __fastcall DoDrawSizeGrip(const Gr32::TRect &R);
 	virtual void __fastcall DoScaleChange();
 	virtual void __fastcall DoScroll();
 	bool __fastcall GetScrollBarsVisible();
 	int __fastcall GetScrollBarSize();
-	System::Types::TRect __fastcall GetSizeGripRect();
+	Gr32::TRect __fastcall GetSizeGripRect();
 	bool __fastcall IsSizeGripVisible();
 	DYNAMIC void __fastcall MouseDown(System::Uitypes::TMouseButton Button, System::Classes::TShiftState Shift, int X, int Y)/* overload */;
 	DYNAMIC void __fastcall MouseMove(System::Classes::TShiftState Shift, int X, int Y)/* overload */;
@@ -508,7 +510,7 @@ protected:
 public:
 	__fastcall virtual TCustomImgView32(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomImgView32();
-	virtual System::Types::TRect __fastcall GetViewportRect();
+	virtual Gr32::TRect __fastcall GetViewportRect();
 	virtual void __fastcall Loaded();
 	DYNAMIC void __fastcall Resize();
 	void __fastcall ScrollToCenter(int X, int Y);

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLExplosionFx.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLExplosionFx.pas' rev: 36.00 (Windows)
 
 #ifndef GlexplosionfxHPP
 #define GlexplosionfxHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -47,14 +49,14 @@ private:
 	bool FEnabled;
 	int FFaceCount;
 	float FSpeed;
-	Glcoordinates::TGLCoordinates3* FDirection;
+	Glcoordinates::TGLCoordinates* FDirection;
 	int FMaxSteps;
 	int FStep;
 	void __fastcall SetTriList(Glvectorlists::TAffineVectorList* Value);
 	void __fastcall SetRotList(Glvectorlists::TAffineVectorList* Value);
 	void __fastcall SetDirList(Glvectorlists::TAffineVectorList* Value);
 	void __fastcall SetPosList(Glvectorlists::TAffineVectorList* Value);
-	void __fastcall SetDirection(Glcoordinates::TGLCoordinates3* value);
+	void __fastcall SetDirection(Glcoordinates::TGLCoordinates* value);
 	void __fastcall SetEnabled(bool value);
 	
 protected:
@@ -78,7 +80,7 @@ public:
 __published:
 	__property int MaxSteps = {read=FMaxSteps, write=FMaxSteps, nodefault};
 	__property float Speed = {read=FSpeed, write=FSpeed};
-	__property Glcoordinates::TGLCoordinates3* Direction = {read=FDirection, write=SetDirection};
+	__property Glcoordinates::TGLCoordinates* Direction = {read=FDirection, write=SetDirection};
 };
 
 #pragma pack(pop)

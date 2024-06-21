@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLBehaviours.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLBehaviours.pas' rev: 36.00 (Windows)
 
 #ifndef GlbehavioursHPP
 #define GlbehavioursHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -64,7 +66,7 @@ class PASCALIMPLEMENTATION TGLBInertia : public Glscene::TGLBehaviour
 	
 private:
 	float FMass;
-	Glcoordinates::TGLCoordinates3* FTranslationSpeed;
+	Glcoordinates::TGLCoordinates* FTranslationSpeed;
 	float FTurnSpeed;
 	float FRollSpeed;
 	float FPitchSpeed;
@@ -73,7 +75,7 @@ private:
 	bool FDampingEnabled;
 	
 protected:
-	void __fastcall SetTranslationSpeed(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetTranslationSpeed(Glcoordinates::TGLCoordinates* const val);
 	void __fastcall SetTranslationDamping(TGLDamping* const val);
 	void __fastcall SetRotationDamping(TGLDamping* const val);
 	virtual void __fastcall WriteToFiler(System::Classes::TWriter* writer);
@@ -87,15 +89,15 @@ public:
 	__classmethod virtual System::UnicodeString __fastcall FriendlyDescription();
 	__classmethod virtual bool __fastcall UniqueItem();
 	virtual void __fastcall DoProgress(const Glbaseclasses::TGLProgressTimes &progressTime);
-	void __fastcall ApplyTranslationAcceleration(const double deltaTime, const Glvectortypes::TVector4f &accel);
-	void __fastcall ApplyForce(const double deltaTime, const Glvectortypes::TVector4f &Force);
+	void __fastcall ApplyTranslationAcceleration(const double deltaTime, const Glvectorgeometry::TVector &accel);
+	void __fastcall ApplyForce(const double deltaTime, const Glvectorgeometry::TVector &Force);
 	void __fastcall ApplyTorque(const double deltaTime, const float turnTorque, const float rollTorque, const float pitchTorque);
 	void __fastcall MirrorTranslation();
-	void __fastcall SurfaceBounce(const Glvectortypes::TVector4f &surfaceNormal, float restitution);
+	void __fastcall SurfaceBounce(const Glvectorgeometry::TVector &surfaceNormal, float restitution);
 	
 __published:
 	__property float Mass = {read=FMass, write=FMass};
-	__property Glcoordinates::TGLCoordinates3* TranslationSpeed = {read=FTranslationSpeed, write=SetTranslationSpeed};
+	__property Glcoordinates::TGLCoordinates* TranslationSpeed = {read=FTranslationSpeed, write=SetTranslationSpeed};
 	__property float TurnSpeed = {read=FTurnSpeed, write=FTurnSpeed};
 	__property float RollSpeed = {read=FRollSpeed, write=FRollSpeed};
 	__property float PitchSpeed = {read=FPitchSpeed, write=FPitchSpeed};
@@ -110,10 +112,10 @@ class PASCALIMPLEMENTATION TGLBAcceleration : public Glscene::TGLBehaviour
 	typedef Glscene::TGLBehaviour inherited;
 	
 private:
-	Glcoordinates::TGLCoordinates3* FAcceleration;
+	Glcoordinates::TGLCoordinates* FAcceleration;
 	
 protected:
-	void __fastcall SetAcceleration(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetAcceleration(Glcoordinates::TGLCoordinates* const val);
 	virtual void __fastcall WriteToFiler(System::Classes::TWriter* writer);
 	virtual void __fastcall ReadFromFiler(System::Classes::TReader* reader);
 	
@@ -127,7 +129,7 @@ public:
 	virtual void __fastcall DoProgress(const Glbaseclasses::TGLProgressTimes &progressTime);
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* Acceleration = {read=FAcceleration, write=FAcceleration};
+	__property Glcoordinates::TGLCoordinates* Acceleration = {read=FAcceleration, write=FAcceleration};
 };
 
 

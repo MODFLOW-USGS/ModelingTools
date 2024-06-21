@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLErosionShader.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLErosionShader.pas' rev: 36.00 (Windows)
 
 #ifndef GlslerosionshaderHPP
 #define GlslerosionshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -48,9 +50,9 @@ private:
 	Gltexture::TGLTexture* FMainTex;
 	Gltexture::TGLTexture* FNoiseTex;
 	Gltexture::TGLTexture* FErosionTex;
-	System::UnicodeString FMainTexName;
-	System::UnicodeString FNoiseTexName;
-	System::UnicodeString FErosionTexName;
+	Glmaterial::TGLLibMaterialName FMainTexName;
+	Glmaterial::TGLLibMaterialName FNoiseTexName;
+	Glmaterial::TGLLibMaterialName FErosionTexName;
 	float FErosionScale;
 	float FErosionFactor;
 	float FIntensityFactor1;
@@ -66,12 +68,12 @@ private:
 	void __fastcall SetMainTexTexture(Gltexture::TGLTexture* const Value);
 	void __fastcall SetNoiseTexTexture(Gltexture::TGLTexture* const Value);
 	void __fastcall SetErosionTexTexture(Gltexture::TGLTexture* const Value);
-	System::UnicodeString __fastcall GetMainTexName();
-	void __fastcall SetMainTexName(const System::UnicodeString Value);
-	System::UnicodeString __fastcall GetNoiseTexName();
-	void __fastcall SetNoiseTexName(const System::UnicodeString Value);
-	System::UnicodeString __fastcall GetErosionTexName();
-	void __fastcall SetErosionTexName(const System::UnicodeString Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetMainTexName();
+	void __fastcall SetMainTexName(const Glmaterial::TGLLibMaterialName Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetNoiseTexName();
+	void __fastcall SetNoiseTexName(const Glmaterial::TGLLibMaterialName Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetErosionTexName();
+	void __fastcall SetErosionTexName(const Glmaterial::TGLLibMaterialName Value);
 	void __fastcall SetAmbientColor(Glcolor::TGLColor* AValue);
 	void __fastcall SetSpecularColor(Glcolor::TGLColor* AValue);
 	
@@ -86,11 +88,11 @@ public:
 	__fastcall virtual ~TGLCustomGLSLSimpleErosionShader();
 	__property Glmaterial::TGLAbstractMaterialLibrary* MaterialLibrary = {read=GetMaterialLibrary, write=SetMaterialLibrary};
 	__property Gltexture::TGLTexture* MainTexture = {read=FMainTex, write=SetMainTexTexture};
-	__property System::UnicodeString MainTextureName = {read=GetMainTexName, write=SetMainTexName};
+	__property Glmaterial::TGLLibMaterialName MainTextureName = {read=GetMainTexName, write=SetMainTexName};
 	__property Gltexture::TGLTexture* NoiseTexture = {read=FNoiseTex, write=SetNoiseTexTexture};
-	__property System::UnicodeString NoiseTextureName = {read=GetNoiseTexName, write=SetNoiseTexName};
+	__property Glmaterial::TGLLibMaterialName NoiseTextureName = {read=GetNoiseTexName, write=SetNoiseTexName};
 	__property Gltexture::TGLTexture* ErosionTexture = {read=FErosionTex, write=SetErosionTexTexture};
-	__property System::UnicodeString ErosionTextureName = {read=GetErosionTexName, write=SetErosionTexName};
+	__property Glmaterial::TGLLibMaterialName ErosionTextureName = {read=GetErosionTexName, write=SetErosionTexName};
 	__property float ErosionFactor = {read=FErosionFactor, write=FErosionFactor};
 	__property float ErosionScale = {read=FErosionFactor, write=FErosionFactor};
 	__property float IntensityFactor1 = {read=FIntensityFactor1, write=FIntensityFactor1};

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLDCE.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLDCE.pas' rev: 36.00 (Windows)
 
 #ifndef GldceHPP
 #define GldceHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -47,9 +49,9 @@ enum DECLSPEC_DENUM TDCECollisionSelection : unsigned char { ccsDCEStandard, ccs
 struct DECLSPEC_DRECORD TDCECollision
 {
 public:
-	Glvectortypes::TVector3f Position;
-	Glvectortypes::TVector3f Normal;
-	Glvectortypes::TVector3f Bounce;
+	Glvectorgeometry::TAffineVector Position;
+	Glvectorgeometry::TAffineVector Normal;
+	Glvectorgeometry::TAffineVector Bounce;
 	bool Nearest;
 	bool RootCollision;
 	float Distance;
@@ -68,13 +70,13 @@ private:
 	System::Classes::TList* FStatics;
 	System::Classes::TList* FDynamics;
 	float FGravity;
-	Glcoordinates::TGLCoordinates3* FWorldDirection;
+	Glcoordinates::TGLCoordinates* FWorldDirection;
 	float FWorldScale;
 	float FMovimentScale;
 	TDCECollisionSelection FStandardiseLayers;
 	bool FManualStep;
 	TDCECollisionEvent FOnCollision;
-	void __fastcall SetWorldDirection(Glcoordinates::TGLCoordinates3* const Value);
+	void __fastcall SetWorldDirection(Glcoordinates::TGLCoordinates* const Value);
 	void __fastcall SetWorldScale(const float Value);
 	int __fastcall GetDynamicCount();
 	int __fastcall GetStaticCount();
@@ -90,14 +92,14 @@ protected:
 public:
 	__fastcall virtual TGLDCEManager(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLDCEManager();
-	float __fastcall MoveByDistance(TGLDCEDynamic* &Body, const Glvectortypes::TVector3f &deltaS, const Glvectortypes::TVector3f &deltaAbsS);
+	float __fastcall MoveByDistance(TGLDCEDynamic* &Body, const Glvectorgeometry::TAffineVector &deltaS, const Glvectorgeometry::TAffineVector &deltaAbsS);
 	void __fastcall Step(double deltaTime);
 	__property int DynamicCount = {read=GetDynamicCount, nodefault};
 	__property int StaticCount = {read=GetStaticCount, nodefault};
 	
 __published:
 	__property float Gravity = {read=FGravity, write=FGravity};
-	__property Glcoordinates::TGLCoordinates3* WorldDirection = {read=FWorldDirection, write=SetWorldDirection};
+	__property Glcoordinates::TGLCoordinates* WorldDirection = {read=FWorldDirection, write=SetWorldDirection};
 	__property float WorldScale = {read=FWorldScale, write=SetWorldScale};
 	__property float MovimentScale = {read=FMovimentScale, write=FMovimentScale};
 	__property TDCECollisionSelection StandardiseLayers = {read=FStandardiseLayers, write=FStandardiseLayers, nodefault};
@@ -119,12 +121,12 @@ private:
 	bool FSolid;
 	float FFriction;
 	float FBounceFactor;
-	Glcoordinates::TGLCoordinates3* FSize;
+	Glcoordinates::TGLCoordinates* FSize;
 	TDCEObjectCollisionEvent FOnCollision;
 	void __fastcall SetShape(const TDCEShape Value);
 	void __fastcall SetFriction(const float Value);
 	void __fastcall SetBounceFactor(const float Value);
-	void __fastcall SetSize(Glcoordinates::TGLCoordinates3* const Value);
+	void __fastcall SetSize(Glcoordinates::TGLCoordinates* const Value);
 	
 protected:
 	void __fastcall SetManager(TGLDCEManager* const val);
@@ -148,7 +150,7 @@ __published:
 	__property bool Solid = {read=FSolid, write=FSolid, nodefault};
 	__property float Friction = {read=FFriction, write=SetFriction};
 	__property float BounceFactor = {read=FBounceFactor, write=SetBounceFactor};
-	__property Glcoordinates::TGLCoordinates3* Size = {read=FSize, write=SetSize};
+	__property Glcoordinates::TGLCoordinates* Size = {read=FSize, write=SetSize};
 };
 
 
@@ -167,17 +169,17 @@ private:
 	bool FSolid;
 	float FFriction;
 	float FBounceFactor;
-	Glcoordinates::TGLCoordinates3* FSize;
+	Glcoordinates::TGLCoordinates* FSize;
 	System::Byte FMaxRecursionDepth;
 	TDCESlideOrBounce FSlideOrBounce;
-	Glvectortypes::TVector3f FAccel;
-	Glvectortypes::TVector3f FSpeed;
-	Glvectortypes::TVector3f FAbsAccel;
-	Glvectortypes::TVector3f FAbsSpeed;
-	Glvectortypes::TVector3f FGravSpeed;
+	Glvectorgeometry::TAffineVector FAccel;
+	Glvectorgeometry::TAffineVector FSpeed;
+	Glvectorgeometry::TAffineVector FAbsAccel;
+	Glvectorgeometry::TAffineVector FAbsSpeed;
+	Glvectorgeometry::TAffineVector FGravSpeed;
 	float FTotalFriction;
 	bool FInGround;
-	Glvectortypes::TVector3f FGroundNormal;
+	Glvectorgeometry::TAffineVector FGroundNormal;
 	float FJumpHeight;
 	float FJumpForce;
 	float FJumpSpeed;
@@ -185,7 +187,7 @@ private:
 	TDCEObjectCollisionEvent FOnCollision;
 	void __fastcall SetFriction(const float Value);
 	void __fastcall SetBounceFactor(const float Value);
-	void __fastcall SetSize(Glcoordinates::TGLCoordinates3* const Value);
+	void __fastcall SetSize(Glcoordinates::TGLCoordinates* const Value);
 	
 protected:
 	void __fastcall SetManager(TGLDCEManager* const val);
@@ -199,18 +201,18 @@ public:
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	__classmethod virtual System::UnicodeString __fastcall FriendlyName();
 	__classmethod virtual System::UnicodeString __fastcall FriendlyDescription();
-	void __fastcall ApplyAccel(const Glvectortypes::TVector3f &NewAccel)/* overload */;
+	void __fastcall ApplyAccel(const Glvectorgeometry::TAffineVector &NewAccel)/* overload */;
 	void __fastcall ApplyAccel(float x, float y, float z)/* overload */;
-	void __fastcall ApplyAbsAccel(const Glvectortypes::TVector3f &NewAccel)/* overload */;
+	void __fastcall ApplyAbsAccel(const Glvectorgeometry::TAffineVector &NewAccel)/* overload */;
 	void __fastcall ApplyAbsAccel(float x, float y, float z)/* overload */;
 	void __fastcall StopAccel();
 	void __fastcall StopAbsAccel();
 	void __fastcall Jump(float jHeight, float jSpeed);
-	void __fastcall Move(const Glvectortypes::TVector3f &deltaS, double deltaTime);
-	void __fastcall MoveTo(const Glvectortypes::TVector3f &Position, float Amount);
+	void __fastcall Move(const Glvectorgeometry::TAffineVector &deltaS, double deltaTime);
+	void __fastcall MoveTo(const Glvectorgeometry::TAffineVector &Position, float Amount);
 	void __fastcall DoMove(double deltaTime);
 	virtual void __fastcall DoProgress(const Glbaseclasses::TGLProgressTimes &progressTime);
-	__property Glvectortypes::TVector3f Speed = {read=FSpeed, write=FSpeed};
+	__property Glvectorgeometry::TAffineVector Speed = {read=FSpeed, write=FSpeed};
 	__property bool InGround = {read=FInGround, nodefault};
 	__property System::Byte MaxRecursionDepth = {read=FMaxRecursionDepth, write=FMaxRecursionDepth, nodefault};
 	__property TDCEObjectCollisionEvent OnCollision = {read=FOnCollision, write=FOnCollision};
@@ -223,7 +225,7 @@ __published:
 	__property bool Solid = {read=FSolid, write=FSolid, nodefault};
 	__property float Friction = {read=FFriction, write=SetFriction};
 	__property float BounceFactor = {read=FBounceFactor, write=SetBounceFactor};
-	__property Glcoordinates::TGLCoordinates3* Size = {read=FSize, write=SetSize};
+	__property Glcoordinates::TGLCoordinates* Size = {read=FSize, write=SetSize};
 	__property TDCESlideOrBounce SlideOrBounce = {read=FSlideOrBounce, write=FSlideOrBounce, nodefault};
 };
 

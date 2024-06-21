@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLCrossPlatform.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLCrossPlatform.pas' rev: 36.00 (Windows)
 
 #ifndef GlcrossplatformHPP
 #define GlcrossplatformHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -62,7 +64,7 @@ extern DELPHI_PACKAGE bool __fastcall IsSubComponent(System::Classes::TComponent
 extern DELPHI_PACKAGE void __fastcall MakeSubComponent(System::Classes::TComponent* const AComponent, const bool Value);
 extern DELPHI_PACKAGE bool __fastcall AnsiStartsText(const System::UnicodeString ASubText, const System::UnicodeString AText);
 extern DELPHI_PACKAGE int __fastcall GLOKMessageBox(const System::UnicodeString Text, const System::UnicodeString Caption);
-extern DELPHI_PACKAGE void __fastcall GLLoadBitmapFromInstance(int Instance, Vcl::Graphics::TBitmap* ABitmap, const System::UnicodeString AName);
+extern DELPHI_PACKAGE void __fastcall GLLoadBitmapFromInstance(System::LongInt Instance, Vcl::Graphics::TBitmap* ABitmap, const System::UnicodeString AName);
 extern DELPHI_PACKAGE void __fastcall ShowHTMLUrl(const System::UnicodeString Url);
 extern DELPHI_PACKAGE System::Types::TRect __fastcall GetGLRect(const int aLeft, const int aTop, const int aRight, const int aBottom);
 extern DELPHI_PACKAGE void __fastcall InflateGLRect(System::Types::TRect &aRect, int dx, int dy);

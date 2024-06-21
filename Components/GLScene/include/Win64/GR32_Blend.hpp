@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Blend.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Blend.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_blendHPP
 #define Gr32_blendHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -76,12 +78,18 @@ extern DELPHI_PACKAGE void *AlphaTable;
 extern DELPHI_PACKAGE void *bias_ptr;
 extern DELPHI_PACKAGE void *alpha_ptr;
 extern DELPHI_PACKAGE TLightenReg LightenReg;
-extern DELPHI_PACKAGE System::StaticArray<Gr32::TColor32 __fastcall (*)(Gr32::TColor32 F, Gr32::TColor32 B)*, 2> BLEND_REG;
-extern DELPHI_PACKAGE System::StaticArray<void __fastcall (*)(Gr32::TColor32 F, Gr32::TColor32 &B)*, 2> BLEND_MEM;
-extern DELPHI_PACKAGE System::StaticArray<Gr32::TColor32 __fastcall (*)(Gr32::TColor32 F, Gr32::TColor32 B, Gr32::TColor32 M)*, 2> BLEND_REG_EX;
-extern DELPHI_PACKAGE System::StaticArray<void __fastcall (*)(Gr32::TColor32 F, Gr32::TColor32 &B, Gr32::TColor32 M)*, 2> BLEND_MEM_EX;
-extern DELPHI_PACKAGE System::StaticArray<void __fastcall (*)(Gr32::PColor32 Src, Gr32::PColor32 Dst, int Count)*, 2> BLEND_LINE;
-extern DELPHI_PACKAGE System::StaticArray<void __fastcall (*)(Gr32::PColor32 Src, Gr32::PColor32 Dst, int Count, Gr32::TColor32 M)*, 2> BLEND_LINE_EX;
+typedef Gr32::TColor32 __fastcall (*_dt_Gr32_blend_1)(Gr32::TColor32 F, Gr32::TColor32 B);
+extern DELPHI_PACKAGE System::StaticArray<_dt_Gr32_blend_1*, 2> BLEND_REG;
+typedef void __fastcall (*_dt_Gr32_blend_2)(Gr32::TColor32 F, Gr32::TColor32 &B);
+extern DELPHI_PACKAGE System::StaticArray<_dt_Gr32_blend_2*, 2> BLEND_MEM;
+typedef Gr32::TColor32 __fastcall (*_dt_Gr32_blend_3)(Gr32::TColor32 F, Gr32::TColor32 B, Gr32::TColor32 M);
+extern DELPHI_PACKAGE System::StaticArray<_dt_Gr32_blend_3*, 2> BLEND_REG_EX;
+typedef void __fastcall (*_dt_Gr32_blend_4)(Gr32::TColor32 F, Gr32::TColor32 &B, Gr32::TColor32 M);
+extern DELPHI_PACKAGE System::StaticArray<_dt_Gr32_blend_4*, 2> BLEND_MEM_EX;
+typedef void __fastcall (*_dt_Gr32_blend_5)(Gr32::PColor32 Src, Gr32::PColor32 Dst, int Count);
+extern DELPHI_PACKAGE System::StaticArray<_dt_Gr32_blend_5*, 2> BLEND_LINE;
+typedef void __fastcall (*_dt_Gr32_blend_6)(Gr32::PColor32 Src, Gr32::PColor32 Dst, int Count, Gr32::TColor32 M);
+extern DELPHI_PACKAGE System::StaticArray<_dt_Gr32_blend_6*, 2> BLEND_LINE_EX;
 extern DELPHI_PACKAGE Gr32_bindings::TFunctionRegistry* BlendRegistry;
 extern DELPHI_PACKAGE void __fastcall EMMS(void);
 extern DELPHI_PACKAGE Gr32::TColor32 __fastcall Lighten(Gr32::TColor32 C, int Amount);

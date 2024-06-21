@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScene_RT.dpk' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLScene_RT.dpk' rev: 36.00 (Windows)
 
 #ifndef Glscene_rtHPP
 #define Glscene_rtHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>	// (rtl)
 #include <SysInit.hpp>
@@ -273,6 +275,7 @@
 #include <XOpenGL.hpp>
 #include <System.Types.hpp>	// (rtl)
 #include <System.UITypes.hpp>	// (rtl)
+#include <Winapi.Windows.PkgHelper.hpp>	// (rtl)
 #include <Winapi.Windows.hpp>	// (rtl)
 #include <Winapi.Messages.hpp>	// (rtl)
 #include <System.SysConst.hpp>	// (rtl)
@@ -291,9 +294,10 @@
 #include <System.Math.hpp>	// (rtl)
 #include <System.Generics.Defaults.hpp>	// (rtl)
 #include <System.Generics.Collections.hpp>	// (rtl)
-#include <System.Rtti.hpp>	// (rtl)
 #include <System.TimeSpan.hpp>	// (rtl)
 #include <System.Diagnostics.hpp>	// (rtl)
+#include <System.SyncObjs.hpp>	// (rtl)
+#include <System.Rtti.hpp>	// (rtl)
 #include <System.Classes.hpp>	// (rtl)
 #include <Winapi.Wincodec.hpp>	// (rtl)
 #include <Winapi.CommCtrl.hpp>	// (rtl)
@@ -319,7 +323,7 @@
 #include <System.UIConsts.hpp>	// (rtl)
 #include <Vcl.Consts.hpp>	// (vcl)
 #include <Vcl.Graphics.hpp>	// (vcl)
-#include <System.SyncObjs.hpp>	// (rtl)
+#include <System.AnsiStrings.hpp>	// (rtl)
 #include <System.Win.Crtl.hpp>	// (rtl)
 #include <System.ZLib.hpp>	// (rtl)
 #include <Vcl.Imaging.pnglang.hpp>	// (vclimg)
@@ -353,17 +357,18 @@
 #include <Vcl.Dialogs.hpp>	// (vcl)
 #include <Vcl.ExtCtrls.hpp>	// (vcl)
 #include <Vcl.Themes.hpp>	// (vcl)
-#include <System.AnsiStrings.hpp>	// (rtl)
 #include <System.Win.ComConst.hpp>	// (rtl)
 #include <System.Win.ComObj.hpp>	// (rtl)
 #include <System.Win.Taskbar.hpp>	// (rtl)
 #include <System.Win.TaskbarCore.hpp>	// (rtl)
 #include <Winapi.ShellScaling.hpp>	// (rtl)
+#include <Winapi.Wtsapi32.hpp>	// (rtl)
 #include <Winapi.FlatSB.hpp>	// (rtl)
 #include <Vcl.Forms.hpp>	// (vcl)
 #include <Vcl.ImgList.hpp>	// (vcl)
 #include <Vcl.Menus.hpp>	// (vcl)
 #include <Winapi.TpcShrd.hpp>	// (rtl)
+#include <Winapi.MsCTF.PkgHelper.hpp>	// (rtl)
 #include <Winapi.MsCTF.hpp>	// (rtl)
 #include <Winapi.MsInkAut.hpp>	// (rtl)
 #include <Winapi.PenInputPanel.hpp>	// (rtl)
@@ -397,6 +402,7 @@
 #include <Vcl.Imaging.JConsts.hpp>	// (vclimg)
 #include <Vcl.Imaging.jpeg.hpp>	// (vclimg)
 #include <System.Math.Vectors.hpp>	// (rtl)
+#include <Winapi.OpenGL.PkgHelper.hpp>	// (rtl)
 #include <Winapi.OpenGL.hpp>	// (rtl)
 #include <Xml.XMLConst.hpp>	// (xmlrtl)
 #include <Winapi.msxml.hpp>	// (rtl)

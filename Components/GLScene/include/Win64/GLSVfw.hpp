@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSVfw.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSVfw.pas' rev: 36.00 (Windows)
 
 #ifndef GlsvfwHPP
 #define GlsvfwHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -68,13 +70,13 @@ struct TCAPINFOCHUNK;
 //-- type declarations -------------------------------------------------------
 typedef void * PVOID;
 
-typedef int LONG;
+typedef System::LongInt LONG;
 
 typedef int *PLONG;
 
 typedef int Int;
 
-typedef NativeUInt HIC;
+typedef Winapi::Windows::THandle HIC;
 
 typedef System::Word TWOCC;
 
@@ -90,8 +92,8 @@ public:
 	unsigned dwVersion;
 	unsigned dwFlags;
 	unsigned dwError;
-	void *pV1Reserved;
-	void *pV2Reserved;
+	PVOID pV1Reserved;
+	PVOID pV2Reserved;
 	unsigned dnDevNode;
 };
 #pragma pack(pop)
@@ -123,22 +125,22 @@ struct DECLSPEC_DRECORD TICCOMPRESS
 {
 public:
 	unsigned dwFlags;
-	tagBITMAPINFOHEADER *lpbiOutput;
-	void *lpOutput;
-	tagBITMAPINFOHEADER *lpbiInput;
-	void *lpInput;
+	Winapi::Windows::PBitmapInfoHeader lpbiOutput;
+	PVOID lpOutput;
+	Winapi::Windows::PBitmapInfoHeader lpbiInput;
+	PVOID lpInput;
 	unsigned *lpckid;
 	unsigned *lpdwFlags;
-	int lFrameNum;
+	LONG lFrameNum;
 	unsigned dwFrameSize;
 	unsigned dwQuality;
-	tagBITMAPINFOHEADER *lpbiPrev;
-	void *lpPrev;
+	Winapi::Windows::PBitmapInfoHeader lpbiPrev;
+	PVOID lpPrev;
 };
 #pragma pack(pop)
 
 
-typedef int __stdcall (*TICCompressProc)(NativeInt lInputOutput, unsigned lFrame, void * lpBits, int len);
+typedef LONG __stdcall (*TICCompressProc)(__int64 lInputOutput, unsigned lFrame, PVOID lpBits, LONG len);
 
 typedef TICCOMPRESSFRAMES *PICCOMPRESSFRAMES;
 
@@ -147,15 +149,15 @@ struct DECLSPEC_DRECORD TICCOMPRESSFRAMES
 {
 public:
 	unsigned dwFlags;
-	tagBITMAPINFOHEADER *lpbiOutput;
-	NativeInt lOutput;
-	tagBITMAPINFOHEADER *lpbiInput;
-	NativeInt lInput;
-	int lStartFrame;
-	int lFrameCount;
-	int lQuality;
-	int lDataRate;
-	int lKeyRate;
+	Winapi::Windows::PBitmapInfoHeader lpbiOutput;
+	__int64 lOutput;
+	Winapi::Windows::PBitmapInfoHeader lpbiInput;
+	__int64 lInput;
+	LONG lStartFrame;
+	LONG lFrameCount;
+	LONG lQuality;
+	LONG lDataRate;
+	LONG lKeyRate;
 	unsigned dwRate;
 	unsigned dwScale;
 	unsigned dwOverheadPerFrame;
@@ -166,7 +168,7 @@ public:
 #pragma pack(pop)
 
 
-typedef int __stdcall (*TICStatusProc)(NativeInt lParam, unsigned message, int l);
+typedef LONG __stdcall (*TICStatusProc)(__int64 lParam, unsigned message, LONG l);
 
 typedef TICSETSTATUSPROC *PICSETSTATUSPROC;
 
@@ -175,7 +177,7 @@ struct DECLSPEC_DRECORD TICSETSTATUSPROC
 {
 public:
 	unsigned dwFlags;
-	NativeInt lParam;
+	__int64 lParam;
 	TICStatusProc Status;
 };
 #pragma pack(pop)
@@ -188,10 +190,10 @@ struct DECLSPEC_DRECORD TICDECOMPRESS
 {
 public:
 	unsigned dwFlags;
-	tagBITMAPINFOHEADER *lpbiInput;
-	void *lpInput;
-	tagBITMAPINFOHEADER *lpbiOutput;
-	void *lpOutput;
+	Winapi::Windows::PBitmapInfoHeader lpbiInput;
+	PVOID lpInput;
+	Winapi::Windows::PBitmapInfoHeader lpbiOutput;
+	PVOID lpOutput;
 	unsigned ckid;
 };
 #pragma pack(pop)
@@ -204,18 +206,18 @@ struct DECLSPEC_DRECORD TICDECOMPRESSEX
 {
 public:
 	unsigned dwFlags;
-	tagBITMAPINFOHEADER *lpbiSrc;
-	void *lpSrc;
-	tagBITMAPINFOHEADER *lpbiDst;
-	void *lpDst;
-	int xDst;
-	int yDst;
-	int dxDst;
-	int dyDst;
-	int xSrc;
-	int ySrc;
-	int dxSrc;
-	int dySrc;
+	Winapi::Windows::PBitmapInfoHeader lpbiSrc;
+	PVOID lpSrc;
+	Winapi::Windows::PBitmapInfoHeader lpbiDst;
+	PVOID lpDst;
+	Int xDst;
+	Int yDst;
+	Int dxDst;
+	Int dyDst;
+	Int xSrc;
+	Int ySrc;
+	Int dxSrc;
+	Int dySrc;
 };
 #pragma pack(pop)
 
@@ -230,15 +232,15 @@ public:
 	HPALETTE hpal;
 	HWND hwnd;
 	HDC hdc;
-	int xDst;
-	int yDst;
-	int dxDst;
-	int dyDst;
-	tagBITMAPINFOHEADER *lpbi;
-	int xSrc;
-	int ySrc;
-	int dxSrc;
-	int dySrc;
+	Int xDst;
+	Int yDst;
+	Int dxDst;
+	Int dyDst;
+	Winapi::Windows::PBitmapInfoHeader lpbi;
+	Int xSrc;
+	Int ySrc;
+	Int dxSrc;
+	Int dySrc;
 	unsigned dwRate;
 	unsigned dwScale;
 };
@@ -252,10 +254,10 @@ struct DECLSPEC_DRECORD TICDRAW
 {
 public:
 	unsigned dwFlags;
-	void *lpFormat;
-	void *lpData;
+	PVOID lpFormat;
+	PVOID lpData;
 	unsigned cbData;
-	int lTime;
+	LONG lTime;
 };
 #pragma pack(pop)
 
@@ -266,13 +268,13 @@ typedef TICDRAWSUGGEST *PICDRAWSUGGEST;
 struct DECLSPEC_DRECORD TICDRAWSUGGEST
 {
 public:
-	tagBITMAPINFOHEADER *lpbiIn;
-	tagBITMAPINFOHEADER *lpbiSuggest;
-	int dxSrc;
-	int dySrc;
-	int dxDst;
-	int dyDst;
-	NativeUInt hicDecompressor;
+	Winapi::Windows::PBitmapInfoHeader lpbiIn;
+	Winapi::Windows::PBitmapInfoHeader lpbiSuggest;
+	Int dxSrc;
+	Int dySrc;
+	Int dxDst;
+	Int dyDst;
+	HIC hicDecompressor;
 };
 #pragma pack(pop)
 
@@ -284,9 +286,9 @@ struct DECLSPEC_DRECORD TICPALETTE
 {
 public:
 	unsigned dwFlags;
-	int iStart;
-	int iLen;
-	tagPALETTEENTRY *lppe;
+	Int iStart;
+	Int iLen;
+	Winapi::Windows::PPaletteEntry lppe;
 };
 #pragma pack(pop)
 
@@ -299,25 +301,25 @@ struct DECLSPEC_DRECORD TCOMPVARS
 public:
 	unsigned cbSize;
 	unsigned dwFlags;
-	NativeUInt hic;
+	HIC hic;
 	unsigned fccType;
 	unsigned fccHandler;
-	tagBITMAPINFO *lpbiIn;
-	tagBITMAPINFO *lpbiOut;
-	void *lpBitsOut;
-	void *lpBitsPrev;
-	int lFrame;
-	int lKey;
-	int lDataRate;
-	int lQ;
-	int lKeyCount;
-	void *lpState;
-	int cbState;
+	Winapi::Windows::PBitmapInfo lpbiIn;
+	Winapi::Windows::PBitmapInfo lpbiOut;
+	PVOID lpBitsOut;
+	PVOID lpBitsPrev;
+	LONG lFrame;
+	LONG lKey;
+	LONG lDataRate;
+	LONG lQ;
+	LONG lKeyCount;
+	PVOID lpState;
+	LONG cbState;
 };
 #pragma pack(pop)
 
 
-typedef NativeUInt HDRAWDIB;
+typedef Winapi::Windows::THandle HDRAWDIB;
 
 typedef TDRAWDIBTIME *PDRAWDIBTIME;
 
@@ -325,13 +327,13 @@ typedef TDRAWDIBTIME *PDRAWDIBTIME;
 struct DECLSPEC_DRECORD TDRAWDIBTIME
 {
 public:
-	int timeCount;
-	int timeDraw;
-	int timeDecompress;
-	int timeDither;
-	int timeStretch;
-	int timeBlt;
-	int timeSetDIBits;
+	LONG timeCount;
+	LONG timeDraw;
+	LONG timeDecompress;
+	LONG timeDither;
+	LONG timeStretch;
+	LONG timeBlt;
+	LONG timeSetDIBits;
 };
 #pragma pack(pop)
 
@@ -517,7 +519,7 @@ typedef TAVIFileInfoW *PAVIFileInfo;
 
 typedef TAVIFileInfoW TAVIFileInfo;
 
-typedef System::LongBool __pascal (*TAVISAVECALLBACK)(int i);
+typedef System::LongBool __pascal (*TAVISAVECALLBACK)(Int i);
 
 typedef TAVICOMPRESSOPTIONS *PAVICOMPRESSOPTIONS;
 
@@ -531,9 +533,9 @@ public:
 	unsigned dwQuality;
 	unsigned dwBytesPerSecond;
 	unsigned dwFlags;
-	void *lpFormat;
+	PVOID lpFormat;
 	unsigned cbFormat;
-	void *lpParms;
+	PVOID lpParms;
 	unsigned cbParms;
 	unsigned dwInterleaveEvery;
 };
@@ -542,65 +544,65 @@ public:
 
 __interface IAVIStream  : public System::IInterface 
 {
-	virtual HRESULT __stdcall Create(NativeInt lParam1, NativeInt lParam2) = 0 ;
-	virtual HRESULT __stdcall Info(TAVIStreamInfoW &psi, int lSize) = 0 ;
-	virtual int __stdcall FindSample(int lPos, int lFlags) = 0 ;
-	virtual HRESULT __stdcall ReadFormat(int lPos, void * lpFormat, int &lpcbFormat) = 0 ;
-	virtual HRESULT __stdcall SetFormat(int lPos, void * lpFormat, int cbFormat) = 0 ;
-	virtual HRESULT __stdcall Read(int lStart, int lSamples, void * lpBuffer, int cbBuffer, int &plBytes, int &plSamples) = 0 ;
-	virtual HRESULT __stdcall Write(int lStart, int lSamples, void * lpBuffer, int cbBuffer, unsigned dwFlags, int &plSampWritten, int &plBytesWritten) = 0 ;
-	virtual HRESULT __stdcall Delete(int lStart, int lSamples) = 0 ;
-	virtual HRESULT __stdcall ReadData(unsigned fcc, void * lp, int &lpcb) = 0 ;
-	virtual HRESULT __stdcall WriteData(unsigned fcc, void * lp, int cb) = 0 ;
-	virtual HRESULT __stdcall SetInfo(TAVIStreamInfoW &lpInfo, int cbInfo) = 0 ;
+	virtual HRESULT __stdcall Create(__int64 lParam1, __int64 lParam2) = 0 ;
+	virtual HRESULT __stdcall Info(TAVIStreamInfoW &psi, LONG lSize) = 0 ;
+	virtual LONG __stdcall FindSample(LONG lPos, LONG lFlags) = 0 ;
+	virtual HRESULT __stdcall ReadFormat(LONG lPos, PVOID lpFormat, LONG &lpcbFormat) = 0 ;
+	virtual HRESULT __stdcall SetFormat(LONG lPos, PVOID lpFormat, LONG cbFormat) = 0 ;
+	virtual HRESULT __stdcall Read(LONG lStart, LONG lSamples, PVOID lpBuffer, LONG cbBuffer, LONG &plBytes, LONG &plSamples) = 0 ;
+	virtual HRESULT __stdcall Write(LONG lStart, LONG lSamples, PVOID lpBuffer, LONG cbBuffer, unsigned dwFlags, LONG &plSampWritten, LONG &plBytesWritten) = 0 ;
+	virtual HRESULT __stdcall Delete(LONG lStart, LONG lSamples) = 0 ;
+	virtual HRESULT __stdcall ReadData(unsigned fcc, PVOID lp, LONG &lpcb) = 0 ;
+	virtual HRESULT __stdcall WriteData(unsigned fcc, PVOID lp, LONG cb) = 0 ;
+	virtual HRESULT __stdcall SetInfo(TAVIStreamInfoW &lpInfo, LONG cbInfo) = 0 ;
 };
 
 __interface IAVIStreaming  : public System::IInterface 
 {
-	virtual HRESULT __stdcall _Begin(int lStart, int lEnd, int lRate) = 0 ;
+	virtual HRESULT __stdcall _Begin(LONG lStart, LONG lEnd, LONG lRate) = 0 ;
 	virtual HRESULT __stdcall _End() = 0 ;
 };
 
 __interface IAVIEditStream  : public System::IInterface 
 {
-	virtual HRESULT __stdcall Cut(int &plStart, int &plLength, _di_IAVIStream &ppResult) = 0 ;
-	virtual HRESULT __stdcall Copy(int &plStart, int &plLength, _di_IAVIStream &ppResult) = 0 ;
-	virtual HRESULT __stdcall Paste(int &plPos, int &plLength, _di_IAVIStream pstream, int lStart, int lEnd) = 0 ;
+	virtual HRESULT __stdcall Cut(LONG &plStart, LONG &plLength, _di_IAVIStream &ppResult) = 0 ;
+	virtual HRESULT __stdcall Copy(LONG &plStart, LONG &plLength, _di_IAVIStream &ppResult) = 0 ;
+	virtual HRESULT __stdcall Paste(LONG &plPos, LONG &plLength, _di_IAVIStream pstream, LONG lStart, LONG lEnd) = 0 ;
 	virtual HRESULT __stdcall Clone(_di_IAVIStream &ppResult) = 0 ;
-	virtual HRESULT __stdcall SetInfo(TAVIStreamInfoW &lpInfo, int cbInfo) = 0 ;
+	virtual HRESULT __stdcall SetInfo(TAVIStreamInfoW &lpInfo, LONG cbInfo) = 0 ;
 };
 
 __interface IAVIFile  : public System::IInterface 
 {
-	virtual HRESULT __stdcall Info(TAVIFileInfoW &pfi, int iSize) = 0 ;
-	virtual HRESULT __stdcall GetStream(_di_IAVIStream &ppStream, unsigned fccType, int lParam) = 0 ;
+	virtual HRESULT __stdcall Info(TAVIFileInfoW &pfi, LONG iSize) = 0 ;
+	virtual HRESULT __stdcall GetStream(_di_IAVIStream &ppStream, unsigned fccType, LONG lParam) = 0 ;
 	virtual HRESULT __stdcall CreateStream(_di_IAVIStream &ppStream, TAVIStreamInfoW &psi) = 0 ;
-	virtual HRESULT __stdcall WriteData(unsigned ckid, void * lpData, int cbData) = 0 ;
-	virtual HRESULT __stdcall ReadData(unsigned ckid, void * lpData, PLONG lpcbData) = 0 ;
+	virtual HRESULT __stdcall WriteData(unsigned ckid, PVOID lpData, LONG cbData) = 0 ;
+	virtual HRESULT __stdcall ReadData(unsigned ckid, PVOID lpData, PLONG lpcbData) = 0 ;
 	virtual HRESULT __stdcall EndRecord() = 0 ;
-	virtual HRESULT __stdcall DeleteStream(unsigned fccType, int lParam) = 0 ;
+	virtual HRESULT __stdcall DeleteStream(unsigned fccType, LONG lParam) = 0 ;
 };
 
 __interface IGetFrame  : public System::IInterface 
 {
-	virtual Winapi::Windows::PBitmapInfoHeader __stdcall GetFrame(int lPos) = 0 ;
-	virtual HRESULT __stdcall BeginExtraction(int lStart, int lEnd, int lRate) = 0 ;
+	virtual Winapi::Windows::PBitmapInfoHeader __stdcall GetFrame(LONG lPos) = 0 ;
+	virtual HRESULT __stdcall BeginExtraction(LONG lStart, LONG lEnd, LONG lRate) = 0 ;
 	virtual HRESULT __stdcall EndExtraction() = 0 ;
-	virtual HRESULT __stdcall SetFormat(tagBITMAPINFOHEADER &lpbi, void * lpBits, int x, int y, int dx, int dy) = 0 ;
+	virtual HRESULT __stdcall SetFormat(Winapi::Windows::TBitmapInfoHeader &lpbi, void * lpBits, int x, int y, int dx, int dy) = 0 ;
 };
 
 typedef System::_di_IInterface *PUnknown;
 
-typedef NativeUInt HVIDEO;
+typedef Winapi::Windows::THandle HVIDEO;
 
-typedef NativeUInt *PHVIDEO;
+typedef unsigned __int64 *PHVIDEO;
 
 typedef TVIDEOHDR *PVIDEOHDR;
 
 struct DECLSPEC_DRECORD TVIDEOHDR
 {
 public:
-	System::Byte *lpData;
+	Winapi::Windows::PByte lpData;
 	unsigned dwBufferLength;
 	unsigned dwBytesUsed;
 	unsigned dwTimeCaptured;
@@ -629,13 +631,13 @@ public:
 
 typedef unsigned __stdcall (*TCAPYIELDCALLBACK)(HWND hWnd);
 
-typedef unsigned __stdcall (*TCAPSTATUSCALLBACKW)(HWND hWnd, int nID, System::WideChar * lpsz);
+typedef unsigned __stdcall (*TCAPSTATUSCALLBACKW)(HWND hWnd, Int nID, System::WideChar * lpsz);
 
-typedef unsigned __stdcall (*TCAPERRORCALLBACKW)(HWND hWnd, int nID, System::WideChar * lpsz);
+typedef unsigned __stdcall (*TCAPERRORCALLBACKW)(HWND hWnd, Int nID, System::WideChar * lpsz);
 
-typedef unsigned __stdcall (*TCAPSTATUSCALLBACKA)(HWND hWnd, int nID, char * lpsz);
+typedef unsigned __stdcall (*TCAPSTATUSCALLBACKA)(HWND hWnd, Int nID, char * lpsz);
 
-typedef unsigned __stdcall (*TCAPERRORCALLBACKA)(HWND hWnd, int nID, char * lpsz);
+typedef unsigned __stdcall (*TCAPERRORCALLBACKA)(HWND hWnd, Int nID, char * lpsz);
 
 typedef TCAPSTATUSCALLBACKA TCAPSTATUSCALLBACK;
 
@@ -645,7 +647,7 @@ typedef unsigned __stdcall (*TCAPVIDEOCALLBACK)(HWND hWnd, PVIDEOHDR lpVHdr);
 
 typedef unsigned __stdcall (*TCAPWAVECALLBACK)(HWND hWnd, Winapi::Mmsystem::PWaveHdr lpWHdr);
 
-typedef unsigned __stdcall (*TCAPCONTROLCALLBACK)(HWND hWnd, int nState);
+typedef unsigned __stdcall (*TCAPCONTROLCALLBACK)(HWND hWnd, Int nState);
 
 typedef TCAPDRIVERCAPS *PCAPDRIVERCAPS;
 
@@ -659,10 +661,10 @@ public:
 	System::LongBool fHasDlgVideoDisplay;
 	System::LongBool fCaptureInitialized;
 	System::LongBool fDriverSuppliesPalettes;
-	NativeUInt hVideoIn;
-	NativeUInt hVideoOut;
-	NativeUInt hVideoExtIn;
-	NativeUInt hVideoExtOut;
+	Winapi::Windows::THandle hVideoIn;
+	Winapi::Windows::THandle hVideoOut;
+	Winapi::Windows::THandle hVideoExtIn;
+	Winapi::Windows::THandle hVideoExtOut;
 };
 
 
@@ -730,7 +732,7 @@ struct DECLSPEC_DRECORD TCAPINFOCHUNK
 {
 public:
 	unsigned fccInfoID;
-	void *lpData;
+	PVOID lpData;
 	unsigned cbData;
 };
 
@@ -1303,79 +1305,79 @@ static const System::Word IDS_CAP_STAT_VIDEOONLY = System::Word(0x200);
 static const System::Word IDS_CAP_STAT_FRAMESDROPPED = System::Word(0x201);
 extern DELPHI_PACKAGE unsigned __fastcall MKFOURCC(char ch0, char ch1, char ch2, char ch3);
 extern DELPHI_PACKAGE unsigned __fastcall mmioFOURCC(char ch0, char ch1, char ch2, char ch3);
-extern DELPHI_PACKAGE System::Word __fastcall aviTWOCC(char ch0, char ch1);
-extern DELPHI_PACKAGE System::LongBool __fastcall ICQueryAbout(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICAbout(NativeUInt hic, HWND hwnd);
-extern DELPHI_PACKAGE System::LongBool __fastcall ICQueryConfigure(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICConfigure(NativeUInt hic, HWND hwnd);
-extern DELPHI_PACKAGE unsigned __fastcall ICGetState(NativeUInt hic, void * pv, unsigned cb);
-extern DELPHI_PACKAGE unsigned __fastcall ICSetState(NativeUInt hic, void * pv, unsigned cb);
-extern DELPHI_PACKAGE unsigned __fastcall ICGetStateSize(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICGetDefaultQuality(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICGetDefaultKeyFrameRate(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawWindow(NativeUInt hic, System::Types::PRect prc);
-extern DELPHI_PACKAGE unsigned __fastcall ICCompressBegin(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
-extern DELPHI_PACKAGE unsigned __fastcall ICCompressQuery(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
-extern DELPHI_PACKAGE unsigned __fastcall ICCompressGetFormat(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
-extern DELPHI_PACKAGE unsigned __fastcall ICCompressGetFormatSize(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbi);
-extern DELPHI_PACKAGE unsigned __fastcall ICCompressGetSize(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
-extern DELPHI_PACKAGE unsigned __fastcall ICCompressEnd(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICDecompressBegin(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
-extern DELPHI_PACKAGE unsigned __fastcall ICDecompressQuery(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
-extern DELPHI_PACKAGE unsigned __fastcall ICDecompressGetFormat(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
-extern DELPHI_PACKAGE unsigned __fastcall ICDecompressGetFormatSize(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbi);
-extern DELPHI_PACKAGE unsigned __fastcall ICDecompressGetPalette(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
-extern DELPHI_PACKAGE unsigned __fastcall ICDecompressSetPalette(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiPalette);
-extern DELPHI_PACKAGE unsigned __fastcall ICDecompressEnd(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __stdcall ICDecompressEx(NativeUInt hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiSrc, void * lpSrc, int xSrc, int ySrc, int dxSrc, int dySrc, Winapi::Windows::PBitmapInfoHeader lpbiDst, void * lpDst, int xDst, int yDst, int dxDst, int dyDst);
-extern DELPHI_PACKAGE unsigned __stdcall ICDecompressExBegin(NativeUInt hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiSrc, void * lpSrc, int xSrc, int ySrc, int dxSrc, int dySrc, Winapi::Windows::PBitmapInfoHeader lpbiDst, void * lpDst, int xDst, int yDst, int dxDst, int dyDst);
-extern DELPHI_PACKAGE unsigned __stdcall ICDecompressExQuery(NativeUInt hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiSrc, void * lpSrc, int xSrc, int ySrc, int dxSrc, int dySrc, Winapi::Windows::PBitmapInfoHeader lpbiDst, void * lpDst, int xDst, int yDst, int dxDst, int dyDst);
-extern DELPHI_PACKAGE unsigned __fastcall ICDecompressExEnd(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __stdcall ICDrawSuggestFormat(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiIn, Winapi::Windows::PBitmapInfoHeader lpbiOut, int dxSrc, int dySrc, int dxDst, int dyDst, NativeUInt hicDecomp);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawQuery(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawChangePalette(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiInput);
-extern DELPHI_PACKAGE unsigned __fastcall ICGetBuffersWanted(NativeUInt hic, unsigned* lpdwBuffers);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawEnd(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawStart(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawStartPlay(NativeUInt hic, unsigned lFrom, unsigned lTo);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawStop(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawStopPlay(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawGetTime(NativeUInt hic, unsigned* lplTime);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawSetTime(NativeUInt hic, unsigned lTime);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawRealize(NativeUInt hic, HDC hdc, System::LongBool fBackground);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawFlush(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __fastcall ICDrawRenderBuffer(NativeUInt hic);
-extern DELPHI_PACKAGE unsigned __stdcall ICSetStatusProc(NativeUInt hic, unsigned dwFlags, unsigned lParam, TICStatusProc fpfnStatus);
-extern DELPHI_PACKAGE NativeUInt __fastcall ICDecompressOpen(unsigned fccType, unsigned fccHandler, Winapi::Windows::PBitmapInfoHeader lpbiIn, Winapi::Windows::PBitmapInfoHeader lpbiOut);
-extern DELPHI_PACKAGE NativeUInt __fastcall ICDrawOpen(unsigned fccType, unsigned fccHandler, Winapi::Windows::PBitmapInfoHeader lpbiIn);
-extern DELPHI_PACKAGE System::LongBool __fastcall DrawDibUpdate(NativeUInt hdd, HDC hdc, int x, int y);
+extern DELPHI_PACKAGE TWOCC __fastcall aviTWOCC(char ch0, char ch1);
+extern DELPHI_PACKAGE System::LongBool __fastcall ICQueryAbout(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICAbout(HIC hic, HWND hwnd);
+extern DELPHI_PACKAGE System::LongBool __fastcall ICQueryConfigure(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICConfigure(HIC hic, HWND hwnd);
+extern DELPHI_PACKAGE unsigned __fastcall ICGetState(HIC hic, PVOID pv, unsigned cb);
+extern DELPHI_PACKAGE unsigned __fastcall ICSetState(HIC hic, PVOID pv, unsigned cb);
+extern DELPHI_PACKAGE unsigned __fastcall ICGetStateSize(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICGetDefaultQuality(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICGetDefaultKeyFrameRate(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawWindow(HIC hic, System::Types::PRect prc);
+extern DELPHI_PACKAGE unsigned __fastcall ICCompressBegin(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
+extern DELPHI_PACKAGE unsigned __fastcall ICCompressQuery(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
+extern DELPHI_PACKAGE unsigned __fastcall ICCompressGetFormat(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
+extern DELPHI_PACKAGE unsigned __fastcall ICCompressGetFormatSize(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbi);
+extern DELPHI_PACKAGE unsigned __fastcall ICCompressGetSize(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
+extern DELPHI_PACKAGE unsigned __fastcall ICCompressEnd(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICDecompressBegin(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
+extern DELPHI_PACKAGE unsigned __fastcall ICDecompressQuery(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
+extern DELPHI_PACKAGE unsigned __fastcall ICDecompressGetFormat(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
+extern DELPHI_PACKAGE unsigned __fastcall ICDecompressGetFormatSize(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbi);
+extern DELPHI_PACKAGE unsigned __fastcall ICDecompressGetPalette(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput, Winapi::Windows::PBitmapInfoHeader lpbiOutput);
+extern DELPHI_PACKAGE unsigned __fastcall ICDecompressSetPalette(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiPalette);
+extern DELPHI_PACKAGE unsigned __fastcall ICDecompressEnd(HIC hic);
+extern DELPHI_PACKAGE unsigned __stdcall ICDecompressEx(HIC hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiSrc, PVOID lpSrc, Int xSrc, Int ySrc, Int dxSrc, Int dySrc, Winapi::Windows::PBitmapInfoHeader lpbiDst, PVOID lpDst, Int xDst, Int yDst, Int dxDst, Int dyDst);
+extern DELPHI_PACKAGE unsigned __stdcall ICDecompressExBegin(HIC hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiSrc, PVOID lpSrc, Int xSrc, Int ySrc, Int dxSrc, Int dySrc, Winapi::Windows::PBitmapInfoHeader lpbiDst, PVOID lpDst, Int xDst, Int yDst, Int dxDst, Int dyDst);
+extern DELPHI_PACKAGE unsigned __stdcall ICDecompressExQuery(HIC hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiSrc, PVOID lpSrc, Int xSrc, Int ySrc, Int dxSrc, Int dySrc, Winapi::Windows::PBitmapInfoHeader lpbiDst, PVOID lpDst, Int xDst, Int yDst, Int dxDst, Int dyDst);
+extern DELPHI_PACKAGE unsigned __fastcall ICDecompressExEnd(HIC hic);
+extern DELPHI_PACKAGE unsigned __stdcall ICDrawSuggestFormat(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiIn, Winapi::Windows::PBitmapInfoHeader lpbiOut, Int dxSrc, Int dySrc, Int dxDst, Int dyDst, HIC hicDecomp);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawQuery(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawChangePalette(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiInput);
+extern DELPHI_PACKAGE unsigned __fastcall ICGetBuffersWanted(HIC hic, unsigned* lpdwBuffers);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawEnd(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawStart(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawStartPlay(HIC hic, unsigned lFrom, unsigned lTo);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawStop(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawStopPlay(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawGetTime(HIC hic, unsigned* lplTime);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawSetTime(HIC hic, unsigned lTime);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawRealize(HIC hic, HDC hdc, System::LongBool fBackground);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawFlush(HIC hic);
+extern DELPHI_PACKAGE unsigned __fastcall ICDrawRenderBuffer(HIC hic);
+extern DELPHI_PACKAGE unsigned __stdcall ICSetStatusProc(HIC hic, unsigned dwFlags, unsigned lParam, TICStatusProc fpfnStatus);
+extern DELPHI_PACKAGE HIC __fastcall ICDecompressOpen(unsigned fccType, unsigned fccHandler, Winapi::Windows::PBitmapInfoHeader lpbiIn, Winapi::Windows::PBitmapInfoHeader lpbiOut);
+extern DELPHI_PACKAGE HIC __fastcall ICDrawOpen(unsigned fccType, unsigned fccHandler, Winapi::Windows::PBitmapInfoHeader lpbiIn);
+extern DELPHI_PACKAGE System::LongBool __fastcall DrawDibUpdate(HDRAWDIB hdd, HDC hdc, Int x, Int y);
 extern DELPHI_PACKAGE System::Byte __fastcall FromHex(System::Byte n);
 extern DELPHI_PACKAGE System::Byte __fastcall StreamFromFOURCC(unsigned fcc);
 extern DELPHI_PACKAGE System::Word __fastcall TWOCCFromFOURCC(unsigned fcc);
 extern DELPHI_PACKAGE System::Byte __fastcall ToHex(System::Byte n);
 extern DELPHI_PACKAGE unsigned __fastcall MAKEAVICKID(System::Word tcc, System::Byte stream);
-extern DELPHI_PACKAGE int __fastcall AVIStreamSampleToSample(_di_IAVIStream pavi1, _di_IAVIStream pavi2, int l);
-extern DELPHI_PACKAGE int __fastcall AVIStreamNextSample(_di_IAVIStream pavi, int l);
-extern DELPHI_PACKAGE int __fastcall AVIStreamPrevSample(_di_IAVIStream pavi, int l);
-extern DELPHI_PACKAGE int __fastcall AVIStreamNearestSample(_di_IAVIStream pavi, int l);
-extern DELPHI_PACKAGE int __fastcall AVIStreamNextKeyFrame(_di_IAVIStream pavi, int l);
-extern DELPHI_PACKAGE int __fastcall AVIStreamPrevKeyFrame(_di_IAVIStream pavi, int l);
-extern DELPHI_PACKAGE int __fastcall AVIStreamNearestKeyFrame(_di_IAVIStream pavi, int l);
-extern DELPHI_PACKAGE System::LongBool __fastcall AVIStreamIsKeyFrame(_di_IAVIStream pavi, int l);
-extern DELPHI_PACKAGE int __fastcall AVIStreamPrevSampleTime(_di_IAVIStream pavi, int t);
-extern DELPHI_PACKAGE int __fastcall AVIStreamNextSampleTime(_di_IAVIStream pavi, int t);
-extern DELPHI_PACKAGE int __fastcall AVIStreamNearestSampleTime(_di_IAVIStream pavi, int t);
-extern DELPHI_PACKAGE int __fastcall AVIStreamNextKeyFrameTime(_di_IAVIStream pavi, int t);
-extern DELPHI_PACKAGE int __fastcall AVIStreamPrevKeyFrameTime(_di_IAVIStream pavi, int t);
-extern DELPHI_PACKAGE int __fastcall AVIStreamNearestKeyFrameTime(_di_IAVIStream pavi, int t);
-extern DELPHI_PACKAGE int __fastcall AVIStreamStartTime(_di_IAVIStream pavi);
-extern DELPHI_PACKAGE int __fastcall AVIStreamLengthTime(_di_IAVIStream pavi);
-extern DELPHI_PACKAGE int __fastcall AVIStreamEnd(_di_IAVIStream pavi);
-extern DELPHI_PACKAGE int __fastcall AVIStreamEndTime(_di_IAVIStream pavi);
-extern DELPHI_PACKAGE int __fastcall AVIStreamSampleSize(_di_IAVIStream pavi, int lPos, PLONG plSize);
-extern DELPHI_PACKAGE HRESULT __fastcall AVIStreamFormatSize(_di_IAVIStream pavi, int lPos, PLONG plSize);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamSampleToSample(_di_IAVIStream pavi1, _di_IAVIStream pavi2, LONG l);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamNextSample(_di_IAVIStream pavi, LONG l);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamPrevSample(_di_IAVIStream pavi, LONG l);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamNearestSample(_di_IAVIStream pavi, LONG l);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamNextKeyFrame(_di_IAVIStream pavi, LONG l);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamPrevKeyFrame(_di_IAVIStream pavi, LONG l);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamNearestKeyFrame(_di_IAVIStream pavi, LONG l);
+extern DELPHI_PACKAGE System::LongBool __fastcall AVIStreamIsKeyFrame(_di_IAVIStream pavi, LONG l);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamPrevSampleTime(_di_IAVIStream pavi, LONG t);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamNextSampleTime(_di_IAVIStream pavi, LONG t);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamNearestSampleTime(_di_IAVIStream pavi, LONG t);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamNextKeyFrameTime(_di_IAVIStream pavi, LONG t);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamPrevKeyFrameTime(_di_IAVIStream pavi, LONG t);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamNearestKeyFrameTime(_di_IAVIStream pavi, LONG t);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamStartTime(_di_IAVIStream pavi);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamLengthTime(_di_IAVIStream pavi);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamEnd(_di_IAVIStream pavi);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamEndTime(_di_IAVIStream pavi);
+extern DELPHI_PACKAGE LONG __fastcall AVIStreamSampleSize(_di_IAVIStream pavi, LONG lPos, PLONG plSize);
+extern DELPHI_PACKAGE HRESULT __fastcall AVIStreamFormatSize(_di_IAVIStream pavi, LONG lPos, PLONG plSize);
 extern DELPHI_PACKAGE HRESULT __fastcall AVIStreamDataSize(_di_IAVIStream pavi, unsigned fcc, PLONG plSize);
-extern DELPHI_PACKAGE unsigned __fastcall MCIWndSM(HWND hWnd, unsigned Msg, NativeUInt wParam, NativeInt lParam);
+extern DELPHI_PACKAGE unsigned __fastcall MCIWndSM(HWND hWnd, unsigned Msg, unsigned __int64 wParam, __int64 lParam);
 extern DELPHI_PACKAGE System::LongBool __fastcall MCIWndCanPlay(HWND hwnd);
 extern DELPHI_PACKAGE System::LongBool __fastcall MCIWndCanRecord(HWND hwnd);
 extern DELPHI_PACKAGE System::LongBool __fastcall MCIWndCanSave(HWND hwnd);
@@ -1385,7 +1387,7 @@ extern DELPHI_PACKAGE System::LongBool __fastcall MCIWndCanConfig(HWND hwnd);
 extern DELPHI_PACKAGE System::LongBool __fastcall MCIWndPaletteKick(HWND hwnd);
 extern DELPHI_PACKAGE unsigned __fastcall MCIWndSave(HWND hwnd, char * szFile);
 extern DELPHI_PACKAGE unsigned __fastcall MCIWndSaveDialog(HWND hwnd);
-extern DELPHI_PACKAGE unsigned __fastcall MCIWndNew(HWND hwnd, void * lp);
+extern DELPHI_PACKAGE unsigned __fastcall MCIWndNew(HWND hwnd, PVOID lp);
 extern DELPHI_PACKAGE unsigned __fastcall MCIWndRecord(HWND hwnd);
 extern DELPHI_PACKAGE unsigned __fastcall MCIWndOpen(HWND hwnd, char * sz, System::LongBool f);
 extern DELPHI_PACKAGE unsigned __fastcall MCIWndOpenDialog(HWND hwnd);
@@ -1446,9 +1448,9 @@ extern DELPHI_PACKAGE unsigned __fastcall MCIWndGetStyles(HWND hwnd);
 extern DELPHI_PACKAGE unsigned __fastcall MCIWndChangeStyles(HWND hwnd, unsigned mask, unsigned value);
 extern DELPHI_PACKAGE unsigned __fastcall MCIWndOpenInterface(HWND hwnd, PUnknown pUnk);
 extern DELPHI_PACKAGE unsigned __fastcall MCIWndSetOwner(HWND hwnd, HWND hwndP);
-extern DELPHI_PACKAGE unsigned __fastcall AVICapSM(HWND hwnd, unsigned m, NativeUInt w, NativeInt l);
-extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnError(HWND hwnd, TCAPERRORCALLBACKA fpProc);
-extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnStatus(HWND hwnd, TCAPSTATUSCALLBACKA fpProc);
+extern DELPHI_PACKAGE unsigned __fastcall AVICapSM(HWND hwnd, unsigned m, unsigned __int64 w, __int64 l);
+extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnError(HWND hwnd, TCAPERRORCALLBACK fpProc);
+extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnStatus(HWND hwnd, TCAPSTATUSCALLBACK fpProc);
 extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnYield(HWND hwnd, TCAPYIELDCALLBACK fpProc);
 extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnFrame(HWND hwnd, TCAPVIDEOCALLBACK fpProc);
 extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnVideoStream(HWND hwnd, TCAPVIDEOCALLBACK fpProc);
@@ -1456,7 +1458,7 @@ extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnWaveStream(HWN
 extern DELPHI_PACKAGE System::LongBool __fastcall capSetCallbackOnCapControl(HWND hwnd, TCAPCONTROLCALLBACK fpProc);
 extern DELPHI_PACKAGE System::LongBool __fastcall capSetUserData(HWND hwnd, unsigned lUser);
 extern DELPHI_PACKAGE unsigned __fastcall capGetUserData(HWND hwnd);
-extern DELPHI_PACKAGE System::LongBool __fastcall capDriverConnect(HWND hwnd, int i);
+extern DELPHI_PACKAGE System::LongBool __fastcall capDriverConnect(HWND hwnd, Int i);
 extern DELPHI_PACKAGE System::LongBool __fastcall capDriverDisconnect(HWND hwnd);
 extern DELPHI_PACKAGE System::LongBool __fastcall capDriverGetName(HWND hwnd, char * szName, System::Word wSize);
 extern DELPHI_PACKAGE System::LongBool __fastcall capDriverGetVersion(HWND hwnd, char * szVer, System::Word wSize);
@@ -1475,9 +1477,9 @@ extern DELPHI_PACKAGE System::LongBool __fastcall capDlgVideoFormat(HWND hwnd);
 extern DELPHI_PACKAGE System::LongBool __fastcall capDlgVideoSource(HWND hwnd);
 extern DELPHI_PACKAGE System::LongBool __fastcall capDlgVideoDisplay(HWND hwnd);
 extern DELPHI_PACKAGE System::LongBool __fastcall capDlgVideoCompression(HWND hwnd);
-extern DELPHI_PACKAGE unsigned __fastcall capGetVideoFormat(HWND hwnd, void * s, System::Word wSize);
+extern DELPHI_PACKAGE unsigned __fastcall capGetVideoFormat(HWND hwnd, PVOID s, System::Word wSize);
 extern DELPHI_PACKAGE unsigned __fastcall capGetVideoFormatSize(HWND hwnd);
-extern DELPHI_PACKAGE System::LongBool __fastcall capSetVideoFormat(HWND hwnd, void * s, System::Word wSize);
+extern DELPHI_PACKAGE System::LongBool __fastcall capSetVideoFormat(HWND hwnd, PVOID s, System::Word wSize);
 extern DELPHI_PACKAGE System::LongBool __fastcall capPreview(HWND hwnd, System::LongBool f);
 extern DELPHI_PACKAGE System::LongBool __fastcall capPreviewRate(HWND hwnd, System::Word wMS);
 extern DELPHI_PACKAGE System::LongBool __fastcall capOverlay(HWND hwnd, System::LongBool f);
@@ -1500,126 +1502,126 @@ extern DELPHI_PACKAGE System::LongBool __fastcall capGetMCIDeviceName(HWND hwnd,
 extern DELPHI_PACKAGE System::LongBool __fastcall capPaletteOpen(HWND hwnd, char * szName);
 extern DELPHI_PACKAGE System::LongBool __fastcall capPaletteSave(HWND hwnd, char * szName);
 extern DELPHI_PACKAGE System::LongBool __fastcall capPalettePaste(HWND hwnd);
-extern DELPHI_PACKAGE System::LongBool __fastcall capPaletteAuto(HWND hwnd, int iFrames, int iColors);
-extern DELPHI_PACKAGE System::LongBool __fastcall capPaletteManual(HWND hwnd, System::LongBool fGrab, int iColors);
+extern DELPHI_PACKAGE System::LongBool __fastcall capPaletteAuto(HWND hwnd, Int iFrames, Int iColors);
+extern DELPHI_PACKAGE System::LongBool __fastcall capPaletteManual(HWND hwnd, System::LongBool fGrab, Int iColors);
 extern "C" unsigned __pascal VideoForWindowsVersion(void);
 extern "C" System::LongBool __stdcall ICInfo(unsigned fccType, unsigned fccHandler, PICINFO lpicinfo);
-extern "C" System::LongBool __stdcall ICInstall(unsigned fccType, unsigned fccHandler, NativeInt lParam, char * szDesc, unsigned wFlags);
+extern "C" System::LongBool __stdcall ICInstall(unsigned fccType, unsigned fccHandler, __int64 lParam, char * szDesc, unsigned wFlags);
 extern "C" System::LongBool __stdcall ICRemove(unsigned fccType, unsigned fccHandler, unsigned wFlags);
-extern "C" unsigned __stdcall ICGetInfo(NativeUInt hic, PICINFO picinfo, unsigned cb);
-extern "C" NativeUInt __stdcall ICOpen(unsigned fccType, unsigned fccHandler, unsigned wMode);
-extern "C" NativeUInt __stdcall ICOpenFunction(unsigned fccType, unsigned fccHandler, unsigned wMode, void * lpfnHandler);
-extern "C" unsigned __stdcall ICClose(NativeUInt hic);
-extern "C" unsigned __stdcall ICSendMessage(NativeUInt hic, unsigned msg, unsigned dw1, unsigned dw2);
-extern "C" unsigned __cdecl ICCompress(NativeUInt hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiOutput, void * lpData, Winapi::Windows::PBitmapInfoHeader lpbiInput, void * lpBits, unsigned* lpckid, unsigned* lpdwFlags, unsigned lFrameNum, unsigned dwFrameSize, unsigned dwQuality, Winapi::Windows::PBitmapInfoHeader lpbiPrev, void * lpPrev);
-extern "C" unsigned __cdecl ICDecompress(NativeUInt hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiFormat, void * lpData, Winapi::Windows::PBitmapInfoHeader lpbi, void * lpBits);
-extern "C" unsigned __cdecl ICDrawBegin(NativeUInt hic, unsigned dwFlags, HPALETTE hpal, HWND hwnd, HDC hdc, int xDst, int yDst, int dxDst, int dyDst, Winapi::Windows::PBitmapInfoHeader lpbi, int xSrc, int ySrc, int dxSrc, int dySrc, unsigned dwRate, unsigned dwScale);
-extern "C" unsigned __cdecl ICDraw(NativeUInt hic, unsigned dwFlags, void * lpFormat, void * lpData, unsigned cbData, unsigned lTime);
-extern "C" NativeUInt __stdcall ICLocate(unsigned fccType, unsigned fccHandler, Winapi::Windows::PBitmapInfoHeader lpbiIn, Winapi::Windows::PBitmapInfoHeader lpbiOut, System::Word wFlags);
-extern "C" NativeUInt __stdcall ICGetDisplayFormat(NativeUInt hic, Winapi::Windows::PBitmapInfoHeader lpbiIn, Winapi::Windows::PBitmapInfoHeader lpbiOut, int BitDepth, int dx, int dy);
-extern "C" NativeUInt __stdcall ICImageCompress(NativeUInt hic, unsigned uiFlags, Winapi::Windows::PBitmapInfo lpbiIn, void * lpBits, Winapi::Windows::PBitmapInfo lpbiOut, int lQuality, unsigned* plSize);
-extern "C" NativeUInt __stdcall ICImageDecompress(NativeUInt hic, unsigned uiFlags, Winapi::Windows::PBitmapInfo lpbiIn, void * lpBits, Winapi::Windows::PBitmapInfo lpbiOut);
-extern "C" System::LongBool __stdcall ICCompressorChoose(HWND hwnd, unsigned uiFlags, void * pvIn, void * lpData, PCOMPVARS pc, char * lpszTitle);
+extern "C" unsigned __stdcall ICGetInfo(HIC hic, PICINFO picinfo, unsigned cb);
+extern "C" HIC __stdcall ICOpen(unsigned fccType, unsigned fccHandler, unsigned wMode);
+extern "C" HIC __stdcall ICOpenFunction(unsigned fccType, unsigned fccHandler, unsigned wMode, Winapi::Windows::TFarProc lpfnHandler);
+extern "C" unsigned __stdcall ICClose(HIC hic);
+extern "C" unsigned __stdcall ICSendMessage(HIC hic, unsigned msg, unsigned dw1, unsigned dw2);
+extern "C" unsigned __cdecl ICCompress(HIC hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiOutput, PVOID lpData, Winapi::Windows::PBitmapInfoHeader lpbiInput, PVOID lpBits, unsigned* lpckid, unsigned* lpdwFlags, unsigned lFrameNum, unsigned dwFrameSize, unsigned dwQuality, Winapi::Windows::PBitmapInfoHeader lpbiPrev, PVOID lpPrev);
+extern "C" unsigned __cdecl ICDecompress(HIC hic, unsigned dwFlags, Winapi::Windows::PBitmapInfoHeader lpbiFormat, PVOID lpData, Winapi::Windows::PBitmapInfoHeader lpbi, PVOID lpBits);
+extern "C" unsigned __cdecl ICDrawBegin(HIC hic, unsigned dwFlags, HPALETTE hpal, HWND hwnd, HDC hdc, Int xDst, Int yDst, Int dxDst, Int dyDst, Winapi::Windows::PBitmapInfoHeader lpbi, Int xSrc, Int ySrc, Int dxSrc, Int dySrc, unsigned dwRate, unsigned dwScale);
+extern "C" unsigned __cdecl ICDraw(HIC hic, unsigned dwFlags, PVOID lpFormat, PVOID lpData, unsigned cbData, unsigned lTime);
+extern "C" HIC __stdcall ICLocate(unsigned fccType, unsigned fccHandler, Winapi::Windows::PBitmapInfoHeader lpbiIn, Winapi::Windows::PBitmapInfoHeader lpbiOut, System::Word wFlags);
+extern "C" HIC __stdcall ICGetDisplayFormat(HIC hic, Winapi::Windows::PBitmapInfoHeader lpbiIn, Winapi::Windows::PBitmapInfoHeader lpbiOut, Int BitDepth, Int dx, Int dy);
+extern "C" Winapi::Windows::THandle __stdcall ICImageCompress(HIC hic, unsigned uiFlags, Winapi::Windows::PBitmapInfo lpbiIn, PVOID lpBits, Winapi::Windows::PBitmapInfo lpbiOut, LONG lQuality, unsigned* plSize);
+extern "C" Winapi::Windows::THandle __stdcall ICImageDecompress(HIC hic, unsigned uiFlags, Winapi::Windows::PBitmapInfo lpbiIn, PVOID lpBits, Winapi::Windows::PBitmapInfo lpbiOut);
+extern "C" System::LongBool __stdcall ICCompressorChoose(HWND hwnd, unsigned uiFlags, PVOID pvIn, PVOID lpData, PCOMPVARS pc, char * lpszTitle);
 extern "C" System::LongBool __stdcall ICSeqCompressFrameStart(PCOMPVARS pc, Winapi::Windows::PBitmapInfo lpbiIn);
 extern "C" void __stdcall ICSeqCompressFrameEnd(PCOMPVARS pc);
-extern "C" void * __stdcall ICSeqCompressFrame(PCOMPVARS pc, unsigned uiFlags, void * lpBits, PBOOL pfKey, unsigned* plSize);
+extern "C" PVOID __stdcall ICSeqCompressFrame(PCOMPVARS pc, unsigned uiFlags, PVOID lpBits, PBOOL pfKey, unsigned* plSize);
 extern "C" void __stdcall ICCompressorFree(PCOMPVARS pc);
-extern "C" NativeUInt __stdcall DrawDibOpen(void);
-extern "C" System::LongBool __stdcall DrawDibClose(NativeUInt hdd);
-extern "C" void * __stdcall DrawDibGetBuffer(NativeUInt hdd, Winapi::Windows::PBitmapInfoHeader lpbi, unsigned dwSize, unsigned dwFlags);
-extern "C" HPALETTE __stdcall DrawDibGetPalette(NativeUInt hdd);
-extern "C" System::LongBool __stdcall DrawDibSetPalette(NativeUInt hdd, HPALETTE hpal);
-extern "C" System::LongBool __stdcall DrawDibChangePalette(NativeUInt hdd, int iStart, int iLen, Winapi::Windows::PPaletteEntry lppe);
-extern "C" unsigned __stdcall DrawDibRealize(NativeUInt hdd, HDC hdc, System::LongBool fBackground);
-extern "C" System::LongBool __stdcall DrawDibStart(NativeUInt hdd, unsigned rate);
-extern "C" System::LongBool __stdcall DrawDibStop(NativeUInt hdd);
-extern "C" System::LongBool __stdcall DrawDibBegin(NativeUInt hdd, HDC hdc, int dxDst, int dyDst, Winapi::Windows::PBitmapInfoHeader lpbi, int dxSrc, int dySrc, unsigned wFlags);
-extern "C" System::LongBool __stdcall DrawDibDraw(NativeUInt hdd, HDC hdc, int xDst, int yDst, int dxDst, int dyDst, Winapi::Windows::PBitmapInfoHeader lpbi, void * lpBits, int xSrc, int ySrc, int dxSrc, int dySrc, unsigned wFlags);
-extern "C" System::LongBool __stdcall DrawDibEnd(NativeUInt hdd);
-extern "C" System::LongBool __stdcall DrawDibTime(NativeUInt hdd, PDRAWDIBTIME lpddtime);
+extern "C" HDRAWDIB __stdcall DrawDibOpen(void);
+extern "C" System::LongBool __stdcall DrawDibClose(HDRAWDIB hdd);
+extern "C" PVOID __stdcall DrawDibGetBuffer(HDRAWDIB hdd, Winapi::Windows::PBitmapInfoHeader lpbi, unsigned dwSize, unsigned dwFlags);
+extern "C" HPALETTE __stdcall DrawDibGetPalette(HDRAWDIB hdd);
+extern "C" System::LongBool __stdcall DrawDibSetPalette(HDRAWDIB hdd, HPALETTE hpal);
+extern "C" System::LongBool __stdcall DrawDibChangePalette(HDRAWDIB hdd, Int iStart, Int iLen, Winapi::Windows::PPaletteEntry lppe);
+extern "C" unsigned __stdcall DrawDibRealize(HDRAWDIB hdd, HDC hdc, System::LongBool fBackground);
+extern "C" System::LongBool __stdcall DrawDibStart(HDRAWDIB hdd, unsigned rate);
+extern "C" System::LongBool __stdcall DrawDibStop(HDRAWDIB hdd);
+extern "C" System::LongBool __stdcall DrawDibBegin(HDRAWDIB hdd, HDC hdc, Int dxDst, Int dyDst, Winapi::Windows::PBitmapInfoHeader lpbi, Int dxSrc, Int dySrc, unsigned wFlags);
+extern "C" System::LongBool __stdcall DrawDibDraw(HDRAWDIB hdd, HDC hdc, Int xDst, Int yDst, Int dxDst, Int dyDst, Winapi::Windows::PBitmapInfoHeader lpbi, PVOID lpBits, Int xSrc, Int ySrc, Int dxSrc, Int dySrc, unsigned wFlags);
+extern "C" System::LongBool __stdcall DrawDibEnd(HDRAWDIB hdd);
+extern "C" System::LongBool __stdcall DrawDibTime(HDRAWDIB hdd, PDRAWDIBTIME lpddtime);
 extern "C" unsigned __stdcall DrawDibProfileDisplay(Winapi::Windows::PBitmapInfoHeader lpbi);
 extern "C" void __stdcall AVIFileInit(void);
 extern "C" void __stdcall AVIFileExit(void);
 extern "C" unsigned __stdcall AVIFileAddRef(_di_IAVIFile pfile);
 extern "C" unsigned __stdcall AVIFileRelease(_di_IAVIFile pfile);
-extern "C" HRESULT __stdcall AVIFileOpenA(_di_IAVIFile &ppfile, char * szFile, unsigned uMode, System::PGUID lpHandler);
-extern "C" HRESULT __stdcall AVIFileOpenW(_di_IAVIFile &ppfile, System::WideChar * szFile, unsigned uMode, System::PGUID lpHandler);
-extern "C" HRESULT __stdcall AVIFileOpen(_di_IAVIFile &ppfile, System::WideChar * szFile, unsigned uMode, System::PGUID lpHandler);
-extern "C" HRESULT __stdcall AVIFileInfoW(_di_IAVIFile pfile, TAVIFileInfoW &pfi, int lSize);
-extern "C" HRESULT __stdcall AVIFileInfoA(_di_IAVIFile pfile, TAVIFileInfoA &pfi, int lSize);
-extern "C" HRESULT __stdcall AVIFileInfo(_di_IAVIFile pfile, TAVIFileInfoW &pfi, int lSize);
-extern "C" HRESULT __stdcall AVIFileGetStream(_di_IAVIFile pfile, _di_IAVIStream &ppavi, unsigned fccType, int lParam);
+extern "C" HRESULT __stdcall AVIFileOpenA(_di_IAVIFile &ppfile, char * szFile, unsigned uMode, Winapi::Activex::PCLSID lpHandler);
+extern "C" HRESULT __stdcall AVIFileOpenW(_di_IAVIFile &ppfile, System::WideChar * szFile, unsigned uMode, Winapi::Activex::PCLSID lpHandler);
+extern "C" HRESULT __stdcall AVIFileOpen(_di_IAVIFile &ppfile, System::WideChar * szFile, unsigned uMode, Winapi::Activex::PCLSID lpHandler);
+extern "C" HRESULT __stdcall AVIFileInfoW(_di_IAVIFile pfile, TAVIFileInfoW &pfi, LONG lSize);
+extern "C" HRESULT __stdcall AVIFileInfoA(_di_IAVIFile pfile, TAVIFileInfoA &pfi, LONG lSize);
+extern "C" HRESULT __stdcall AVIFileInfo(_di_IAVIFile pfile, TAVIFileInfo &pfi, LONG lSize);
+extern "C" HRESULT __stdcall AVIFileGetStream(_di_IAVIFile pfile, _di_IAVIStream &ppavi, unsigned fccType, LONG lParam);
 extern "C" HRESULT __stdcall AVIFileCreateStreamW(_di_IAVIFile pfile, _di_IAVIStream &ppavi, TAVIStreamInfoW &psi);
 extern "C" HRESULT __stdcall AVIFileCreateStreamA(_di_IAVIFile pfile, _di_IAVIStream &ppavi, TAVIStreamInfoA &psi);
-extern "C" HRESULT __stdcall AVIFileCreateStream(_di_IAVIFile pfile, _di_IAVIStream &ppavi, TAVIStreamInfoW &psi);
-extern "C" HRESULT __stdcall AVIFileWriteData(_di_IAVIFile pfile, unsigned ckid, void * lpData, int cbData);
-extern "C" HRESULT __stdcall AVIFileReadData(_di_IAVIFile pfile, unsigned ckid, void * lpData, int &lpcbData);
+extern "C" HRESULT __stdcall AVIFileCreateStream(_di_IAVIFile pfile, _di_IAVIStream &ppavi, TAVIStreamInfo &psi);
+extern "C" HRESULT __stdcall AVIFileWriteData(_di_IAVIFile pfile, unsigned ckid, PVOID lpData, LONG cbData);
+extern "C" HRESULT __stdcall AVIFileReadData(_di_IAVIFile pfile, unsigned ckid, PVOID lpData, LONG &lpcbData);
 extern "C" HRESULT __stdcall AVIFileEndRecord(_di_IAVIFile pfile);
 extern "C" unsigned __stdcall AVIStreamAddRef(_di_IAVIStream pavi);
 extern "C" unsigned __stdcall AVIStreamRelease(_di_IAVIStream pavi);
-extern "C" HRESULT __stdcall AVIStreamInfoW(_di_IAVIStream pavi, TAVIStreamInfoW &psi, int lSize);
-extern "C" HRESULT __stdcall AVIStreamInfoA(_di_IAVIStream pavi, TAVIStreamInfoA &psi, int lSize);
-extern "C" HRESULT __stdcall AVIStreamInfo(_di_IAVIStream pavi, TAVIStreamInfoW &psi, int lSize);
-extern "C" int __stdcall AVIStreamFindSample(_di_IAVIStream pavi, int lPos, int lFlags);
-extern "C" HRESULT __stdcall AVIStreamReadFormat(_di_IAVIStream pavi, int lPos, void * lpFormat, PLONG lpcbFormat);
-extern "C" HRESULT __stdcall AVIStreamSetFormat(_di_IAVIStream pavi, int lPos, void * lpFormat, int cbFormat);
-extern "C" HRESULT __stdcall AVIStreamReadData(_di_IAVIStream pavi, unsigned fcc, void * lp, PLONG lpcb);
-extern "C" HRESULT __stdcall AVIStreamWriteData(_di_IAVIStream pavi, unsigned fcc, void * lp, int cb);
-extern "C" HRESULT __stdcall AVIStreamRead(_di_IAVIStream pavi, int lStart, int lSamples, void * lpBuffer, int cbBuffer, PLONG plBytes, PLONG plSamples);
-extern "C" HRESULT __stdcall AVIStreamWrite(_di_IAVIStream pavi, int lStart, int lSamples, void * lpBuffer, int cbBuffer, unsigned dwFlags, PLONG plSampWritten, PLONG plBytesWritten);
-extern "C" int __stdcall AVIStreamStart(_di_IAVIStream pavi);
-extern "C" int __stdcall AVIStreamLength(_di_IAVIStream pavi);
-extern "C" int __stdcall AVIStreamTimeToSample(_di_IAVIStream pavi, int lTime);
-extern "C" int __stdcall AVIStreamSampleToTime(_di_IAVIStream pavi, int lSample);
-extern "C" HRESULT __stdcall AVIStreamBeginStreaming(_di_IAVIStream pavi, int lStart, int lEnd, int lRate);
+extern "C" HRESULT __stdcall AVIStreamInfoW(_di_IAVIStream pavi, TAVIStreamInfoW &psi, LONG lSize);
+extern "C" HRESULT __stdcall AVIStreamInfoA(_di_IAVIStream pavi, TAVIStreamInfoA &psi, LONG lSize);
+extern "C" HRESULT __stdcall AVIStreamInfo(_di_IAVIStream pavi, TAVIStreamInfo &psi, LONG lSize);
+extern "C" LONG __stdcall AVIStreamFindSample(_di_IAVIStream pavi, LONG lPos, LONG lFlags);
+extern "C" HRESULT __stdcall AVIStreamReadFormat(_di_IAVIStream pavi, LONG lPos, PVOID lpFormat, PLONG lpcbFormat);
+extern "C" HRESULT __stdcall AVIStreamSetFormat(_di_IAVIStream pavi, LONG lPos, PVOID lpFormat, LONG cbFormat);
+extern "C" HRESULT __stdcall AVIStreamReadData(_di_IAVIStream pavi, unsigned fcc, PVOID lp, PLONG lpcb);
+extern "C" HRESULT __stdcall AVIStreamWriteData(_di_IAVIStream pavi, unsigned fcc, PVOID lp, LONG cb);
+extern "C" HRESULT __stdcall AVIStreamRead(_di_IAVIStream pavi, LONG lStart, LONG lSamples, PVOID lpBuffer, LONG cbBuffer, PLONG plBytes, PLONG plSamples);
+extern "C" HRESULT __stdcall AVIStreamWrite(_di_IAVIStream pavi, LONG lStart, LONG lSamples, PVOID lpBuffer, LONG cbBuffer, unsigned dwFlags, PLONG plSampWritten, PLONG plBytesWritten);
+extern "C" LONG __stdcall AVIStreamStart(_di_IAVIStream pavi);
+extern "C" LONG __stdcall AVIStreamLength(_di_IAVIStream pavi);
+extern "C" LONG __stdcall AVIStreamTimeToSample(_di_IAVIStream pavi, LONG lTime);
+extern "C" LONG __stdcall AVIStreamSampleToTime(_di_IAVIStream pavi, LONG lSample);
+extern "C" HRESULT __stdcall AVIStreamBeginStreaming(_di_IAVIStream pavi, LONG lStart, LONG lEnd, LONG lRate);
 extern "C" HRESULT __stdcall AVIStreamEndStreaming(_di_IAVIStream pavi);
-extern "C" Winapi::Windows::PBitmapInfoHeader __stdcall AVIStreamGetFrame(_di_IGetFrame pg, int lPos);
+extern "C" Winapi::Windows::PBitmapInfoHeader __stdcall AVIStreamGetFrame(_di_IGetFrame pg, LONG lPos);
 extern "C" HRESULT __stdcall AVIStreamGetFrameClose(_di_IGetFrame pg);
 extern DELPHI_PACKAGE _di_IGetFrame __stdcall AVIStreamGetFrameOpen(_di_IAVIStream pavi, Winapi::Windows::PBitmapInfoHeader lpbiWanted);
-extern "C" HRESULT __stdcall AVIStreamOpenFromFileA(_di_IAVIStream &ppavi, char * szFile, unsigned fccType, int lParam, unsigned mode, System::PGUID pclsidHandler);
-extern "C" HRESULT __stdcall AVIStreamOpenFromFileW(_di_IAVIStream &ppavi, System::WideChar * szFile, unsigned fccType, int lParam, unsigned mode, System::PGUID pclsidHandler);
-extern "C" HRESULT __stdcall AVIStreamOpenFromFile(_di_IAVIStream &ppavi, System::WideChar * szFile, unsigned fccType, int lParam, unsigned mode, System::PGUID pclsidHandler);
-extern "C" HRESULT __stdcall AVIStreamCreate(_di_IAVIStream &ppavi, int lParam1, int lParam2, System::PGUID pclsidHandler);
-extern "C" unsigned __stdcall AVIStreamFindKeyFrame(_di_IAVIStream &pavi, int lPos, int lFlags);
+extern "C" HRESULT __stdcall AVIStreamOpenFromFileA(_di_IAVIStream &ppavi, char * szFile, unsigned fccType, LONG lParam, unsigned mode, Winapi::Activex::PCLSID pclsidHandler);
+extern "C" HRESULT __stdcall AVIStreamOpenFromFileW(_di_IAVIStream &ppavi, System::WideChar * szFile, unsigned fccType, LONG lParam, unsigned mode, Winapi::Activex::PCLSID pclsidHandler);
+extern "C" HRESULT __stdcall AVIStreamOpenFromFile(_di_IAVIStream &ppavi, System::WideChar * szFile, unsigned fccType, LONG lParam, unsigned mode, Winapi::Activex::PCLSID pclsidHandler);
+extern "C" HRESULT __stdcall AVIStreamCreate(_di_IAVIStream &ppavi, LONG lParam1, LONG lParam2, Winapi::Activex::PCLSID pclsidHandler);
+extern "C" unsigned __stdcall AVIStreamFindKeyFrame(_di_IAVIStream &pavi, LONG lPos, LONG lFlags);
 extern "C" unsigned __stdcall AVIStreamClose(_di_IAVIStream pavi);
 extern "C" unsigned __stdcall AVIFileClose(_di_IAVIFile pfile);
 extern "C" void __stdcall AVIStreamInit(void);
 extern "C" void __stdcall AVIStreamExit(void);
-extern "C" HRESULT __stdcall AVIMakeCompressedStream(_di_IAVIStream &ppsCompressed, _di_IAVIStream ppsSource, PAVICOMPRESSOPTIONS lpOptions, System::PGUID pclsidHandler);
-extern "C" HRESULT __stdcall AVISaveVA(char * szFile, System::PGUID pclsidHandler, TAVISAVECALLBACK lpfnCallback, int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions);
-extern "C" HRESULT __stdcall AVISaveVW(System::WideChar * szFile, System::PGUID pclsidHandler, TAVISAVECALLBACK lpfnCallback, int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions);
-extern "C" HRESULT __stdcall AVISaveV(char * szFile, System::PGUID pclsidHandler, TAVISAVECALLBACK lpfnCallback, int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions);
-extern "C" System::LongBool __stdcall AVISaveOptions(HWND hwnd, unsigned uiFlags, int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions);
-extern "C" HRESULT __stdcall AVISaveOptionsFree(int nStreams, PAVICOMPRESSOPTIONS &plpOptions);
-extern "C" HRESULT __stdcall AVIBuildFilterW(System::WideChar * lpszFilter, int cbFilter, System::LongBool fSaving);
-extern "C" HRESULT __stdcall AVIBuildFilterA(char * lpszFilter, int cbFilter, System::LongBool fSaving);
-extern "C" HRESULT __stdcall AVIBuildFilter(char * lpszFilter, int cbFilter, System::LongBool fSaving);
-extern "C" HRESULT __stdcall AVIMakeFileFromStreams(_di_IAVIFile &ppfile, int nStreams, _di_IAVIStream &papStreams);
-extern "C" HRESULT __stdcall AVIMakeStreamFromClipboard(unsigned cfFormat, NativeUInt hGlobal, _di_IAVIStream &ppstream);
+extern "C" HRESULT __stdcall AVIMakeCompressedStream(_di_IAVIStream &ppsCompressed, _di_IAVIStream ppsSource, PAVICOMPRESSOPTIONS lpOptions, Winapi::Activex::PCLSID pclsidHandler);
+extern "C" HRESULT __stdcall AVISaveVA(char * szFile, Winapi::Activex::PCLSID pclsidHandler, TAVISAVECALLBACK lpfnCallback, Int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions);
+extern "C" HRESULT __stdcall AVISaveVW(System::WideChar * szFile, Winapi::Activex::PCLSID pclsidHandler, TAVISAVECALLBACK lpfnCallback, Int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions);
+extern "C" HRESULT __stdcall AVISaveV(char * szFile, Winapi::Activex::PCLSID pclsidHandler, TAVISAVECALLBACK lpfnCallback, Int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions);
+extern "C" System::LongBool __stdcall AVISaveOptions(HWND hwnd, unsigned uiFlags, Int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions);
+extern "C" HRESULT __stdcall AVISaveOptionsFree(Int nStreams, PAVICOMPRESSOPTIONS &plpOptions);
+extern "C" HRESULT __stdcall AVIBuildFilterW(System::WideChar * lpszFilter, LONG cbFilter, System::LongBool fSaving);
+extern "C" HRESULT __stdcall AVIBuildFilterA(char * lpszFilter, LONG cbFilter, System::LongBool fSaving);
+extern "C" HRESULT __stdcall AVIBuildFilter(char * lpszFilter, LONG cbFilter, System::LongBool fSaving);
+extern "C" HRESULT __stdcall AVIMakeFileFromStreams(_di_IAVIFile &ppfile, Int nStreams, _di_IAVIStream &papStreams);
+extern "C" HRESULT __stdcall AVIMakeStreamFromClipboard(unsigned cfFormat, Winapi::Windows::THandle hGlobal, _di_IAVIStream &ppstream);
 extern "C" HRESULT __stdcall AVIPutFileOnClipboard(_di_IAVIFile pf);
 extern "C" HRESULT __stdcall AVIGetFromClipboard(_di_IAVIFile &lppf);
 extern "C" HRESULT __stdcall AVIClearClipboard(void);
 extern "C" HRESULT __stdcall CreateEditableStream(_di_IAVIStream &ppsEditable, _di_IAVIStream psSource);
-extern "C" HRESULT __stdcall EditStreamCut(_di_IAVIStream pavi, int &plStart, int &plLength, _di_IAVIStream &ppResult);
-extern "C" HRESULT __stdcall EditStreamCopy(_di_IAVIStream pavi, int &plStart, int &plLength, _di_IAVIStream &ppResult);
-extern "C" HRESULT __stdcall EditStreamPaste(_di_IAVIStream pavi, int &plPos, int &plLength, _di_IAVIStream pstream, int lStart, int lEnd);
+extern "C" HRESULT __stdcall EditStreamCut(_di_IAVIStream pavi, LONG &plStart, LONG &plLength, _di_IAVIStream &ppResult);
+extern "C" HRESULT __stdcall EditStreamCopy(_di_IAVIStream pavi, LONG &plStart, LONG &plLength, _di_IAVIStream &ppResult);
+extern "C" HRESULT __stdcall EditStreamPaste(_di_IAVIStream pavi, LONG &plPos, LONG &plLength, _di_IAVIStream pstream, LONG lStart, LONG lEnd);
 extern "C" HRESULT __stdcall EditStreamClone(_di_IAVIStream pavi, _di_IAVIStream &ppResult);
 extern "C" HRESULT __stdcall EditStreamSetNameA(_di_IAVIStream pavi, char * lpszName);
 extern "C" HRESULT __stdcall EditStreamSetNameW(_di_IAVIStream pavi, System::WideChar * lpszName);
-extern "C" HRESULT __stdcall EditStreamSetInfoW(_di_IAVIStream pavi, PAVIStreamInfoW lpInfo, int cbInfo);
-extern "C" HRESULT __stdcall EditStreamSetInfoA(_di_IAVIStream pavi, PAVIStreamInfoA lpInfo, int cbInfo);
-extern "C" HRESULT __stdcall EditStreamSetInfo(_di_IAVIStream pavi, PAVIStreamInfoA lpInfo, int cbInfo);
+extern "C" HRESULT __stdcall EditStreamSetInfoW(_di_IAVIStream pavi, PAVIStreamInfoW lpInfo, LONG cbInfo);
+extern "C" HRESULT __stdcall EditStreamSetInfoA(_di_IAVIStream pavi, PAVIStreamInfoA lpInfo, LONG cbInfo);
+extern "C" HRESULT __stdcall EditStreamSetInfo(_di_IAVIStream pavi, PAVIStreamInfoA lpInfo, LONG cbInfo);
 extern "C" HRESULT __stdcall EditStreamSetName(_di_IAVIStream pavi, char * lpszName);
-extern "C" HWND __cdecl MCIWndCreateA(HWND hwndParent, NativeUInt hInstance, unsigned dwStyle, char * szFile);
-extern "C" HWND __cdecl MCIWndCreateW(HWND hwndParent, NativeUInt hInstance, unsigned dwStyle, System::WideChar * szFile);
-extern "C" HWND __cdecl MCIWndCreate(HWND hwndParent, NativeUInt hInstance, unsigned dwStyle, char * szFile);
+extern "C" HWND __cdecl MCIWndCreateA(HWND hwndParent, Winapi::Windows::HINST hInstance, unsigned dwStyle, char * szFile);
+extern "C" HWND __cdecl MCIWndCreateW(HWND hwndParent, Winapi::Windows::HINST hInstance, unsigned dwStyle, System::WideChar * szFile);
+extern "C" HWND __cdecl MCIWndCreate(HWND hwndParent, Winapi::Windows::HINST hInstance, unsigned dwStyle, char * szFile);
 extern "C" System::LongBool __cdecl MCIWndRegisterClass(void);
-extern "C" HWND __stdcall capCreateCaptureWindowA(char * lpszWindowName, unsigned dwStyle, int x, int y, int nWidth, int nHeight, HWND hwndParent, int nID);
-extern "C" System::LongBool __stdcall capGetDriverDescriptionA(unsigned wDriverIndex, char * lpszName, int cbName, char * lpszVer, int cbVer);
-extern "C" HWND __stdcall capCreateCaptureWindowW(System::WideChar * lpszWindowName, unsigned dwStyle, int x, int y, int nWidth, int nHeight, HWND hwndParent, int nID);
-extern "C" System::LongBool __stdcall capGetDriverDescriptionW(unsigned wDriverIndex, System::WideChar * lpszName, int cbName, System::WideChar * lpszVer, int cbVer);
-extern "C" HWND __stdcall capCreateCaptureWindow(char * lpszWindowName, unsigned dwStyle, int x, int y, int nWidth, int nHeight, HWND hwndParent, int nID);
-extern "C" System::LongBool __stdcall capGetDriverDescription(unsigned wDriverIndex, char * lpszName, int cbName, char * lpszVer, int cbVer);
+extern "C" HWND __stdcall capCreateCaptureWindowA(char * lpszWindowName, unsigned dwStyle, Int x, Int y, Int nWidth, Int nHeight, HWND hwndParent, Int nID);
+extern "C" System::LongBool __stdcall capGetDriverDescriptionA(unsigned wDriverIndex, char * lpszName, Int cbName, char * lpszVer, Int cbVer);
+extern "C" HWND __stdcall capCreateCaptureWindowW(System::WideChar * lpszWindowName, unsigned dwStyle, Int x, Int y, Int nWidth, Int nHeight, HWND hwndParent, Int nID);
+extern "C" System::LongBool __stdcall capGetDriverDescriptionW(unsigned wDriverIndex, System::WideChar * lpszName, Int cbName, System::WideChar * lpszVer, Int cbVer);
+extern "C" HWND __stdcall capCreateCaptureWindow(char * lpszWindowName, unsigned dwStyle, Int x, Int y, Int nWidth, Int nHeight, HWND hwndParent, Int nID);
+extern "C" System::LongBool __stdcall capGetDriverDescription(unsigned wDriverIndex, char * lpszName, Int cbName, char * lpszVer, Int cbVer);
 extern "C" System::LongBool __stdcall GetOpenFileNamePreviewA(Winapi::Commdlg::POpenFilenameA lpofn);
 extern "C" System::LongBool __stdcall GetSaveFileNamePreviewA(Winapi::Commdlg::POpenFilenameA lpofn);
 extern "C" System::LongBool __stdcall GetOpenFileNamePreviewW(Winapi::Commdlg::POpenFilenameW lpofn);
@@ -1628,267 +1630,379 @@ extern "C" System::LongBool __stdcall GetOpenFileNamePreview(Winapi::Commdlg::PO
 extern "C" System::LongBool __stdcall GetSaveFileNamePreview(Winapi::Commdlg::POpenFilenameA lpofn);
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIFileOpen(_di_IAVIFile &ppfile, System::WideChar * szFile, unsigned uMode, System::PGUID lpHandler)
+#endif
+inline HRESULT __stdcall AVIFileOpen(_di_IAVIFile &ppfile, System::WideChar * szFile, unsigned uMode, Winapi::Activex::PCLSID lpHandler)
 {
 	return AVIFileOpenW(ppfile, szFile, uMode, lpHandler);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIFileOpen(_di_IAVIFile &ppfile, System::WideChar * szFile, unsigned uMode, System::PGUID lpHandler)
+#endif
+inline HRESULT __stdcall AVIFileOpen(_di_IAVIFile &ppfile, System::WideChar * szFile, unsigned uMode, Winapi::Activex::PCLSID lpHandler)
 {
 	return AVIFileOpenA(ppfile, szFile, uMode, lpHandler);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIFileInfo(_di_IAVIFile pfile, TAVIFileInfoW &pfi, int lSize)
+#endif
+inline HRESULT __stdcall AVIFileInfo(_di_IAVIFile pfile, TAVIFileInfo &pfi, LONG lSize)
 {
 	return AVIFileInfoW(pfile, pfi, lSize);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIFileInfo(_di_IAVIFile pfile, TAVIFileInfoW &pfi, int lSize)
+#endif
+inline HRESULT __stdcall AVIFileInfo(_di_IAVIFile pfile, TAVIFileInfo &pfi, LONG lSize)
 {
 	return AVIFileInfoA(pfile, pfi, lSize);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIFileCreateStream(_di_IAVIFile pfile, _di_IAVIStream &ppavi, TAVIStreamInfoW &psi)
+#endif
+inline HRESULT __stdcall AVIFileCreateStream(_di_IAVIFile pfile, _di_IAVIStream &ppavi, TAVIStreamInfo &psi)
 {
 	return AVIFileCreateStreamW(pfile, ppavi, psi);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIFileCreateStream(_di_IAVIFile pfile, _di_IAVIStream &ppavi, TAVIStreamInfoW &psi)
+#endif
+inline HRESULT __stdcall AVIFileCreateStream(_di_IAVIFile pfile, _di_IAVIStream &ppavi, TAVIStreamInfo &psi)
 {
 	return AVIFileCreateStreamA(pfile, ppavi, psi);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIStreamInfo(_di_IAVIStream pavi, TAVIStreamInfoW &psi, int lSize)
+#endif
+inline HRESULT __stdcall AVIStreamInfo(_di_IAVIStream pavi, TAVIStreamInfo &psi, LONG lSize)
 {
 	return AVIStreamInfoW(pavi, psi, lSize);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIStreamInfo(_di_IAVIStream pavi, TAVIStreamInfoW &psi, int lSize)
+#endif
+inline HRESULT __stdcall AVIStreamInfo(_di_IAVIStream pavi, TAVIStreamInfo &psi, LONG lSize)
 {
 	return AVIStreamInfoA(pavi, psi, lSize);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIStreamOpenFromFile(_di_IAVIStream &ppavi, System::WideChar * szFile, unsigned fccType, int lParam, unsigned mode, System::PGUID pclsidHandler)
+#endif
+inline HRESULT __stdcall AVIStreamOpenFromFile(_di_IAVIStream &ppavi, System::WideChar * szFile, unsigned fccType, LONG lParam, unsigned mode, Winapi::Activex::PCLSID pclsidHandler)
 {
 	return AVIStreamOpenFromFileW(ppavi, szFile, fccType, lParam, mode, pclsidHandler);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIStreamOpenFromFile(_di_IAVIStream &ppavi, System::WideChar * szFile, unsigned fccType, int lParam, unsigned mode, System::PGUID pclsidHandler)
+#endif
+inline HRESULT __stdcall AVIStreamOpenFromFile(_di_IAVIStream &ppavi, System::WideChar * szFile, unsigned fccType, LONG lParam, unsigned mode, Winapi::Activex::PCLSID pclsidHandler)
 {
 	return AVIStreamOpenFromFileA(ppavi, szFile, fccType, lParam, mode, pclsidHandler);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVISaveV(char * szFile, System::PGUID pclsidHandler, TAVISAVECALLBACK lpfnCallback, int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions)
+#endif
+inline HRESULT __stdcall AVISaveV(char * szFile, Winapi::Activex::PCLSID pclsidHandler, TAVISAVECALLBACK lpfnCallback, Int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions)
 {
 	return AVISaveVW(szFile, pclsidHandler, lpfnCallback, nStreams, ppavi, plpOptions);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVISaveV(char * szFile, System::PGUID pclsidHandler, TAVISAVECALLBACK lpfnCallback, int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions)
+#endif
+inline HRESULT __stdcall AVISaveV(char * szFile, Winapi::Activex::PCLSID pclsidHandler, TAVISAVECALLBACK lpfnCallback, Int nStreams, _di_IAVIStream &ppavi, PAVICOMPRESSOPTIONS &plpOptions)
 {
 	return AVISaveVA(szFile, pclsidHandler, lpfnCallback, nStreams, ppavi, plpOptions);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIBuildFilter(char * lpszFilter, int cbFilter, System::LongBool fSaving)
+#endif
+inline HRESULT __stdcall AVIBuildFilter(char * lpszFilter, LONG cbFilter, System::LongBool fSaving)
 {
 	return AVIBuildFilterW(lpszFilter, cbFilter, fSaving);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall AVIBuildFilter(char * lpszFilter, int cbFilter, System::LongBool fSaving)
+#endif
+inline HRESULT __stdcall AVIBuildFilter(char * lpszFilter, LONG cbFilter, System::LongBool fSaving)
 {
 	return AVIBuildFilterA(lpszFilter, cbFilter, fSaving);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall EditStreamSetInfo(_di_IAVIStream pavi, PAVIStreamInfoA lpInfo, int cbInfo)
+#endif
+inline HRESULT __stdcall EditStreamSetInfo(_di_IAVIStream pavi, PAVIStreamInfoA lpInfo, LONG cbInfo)
 {
 	return EditStreamSetInfoW(pavi, lpInfo, cbInfo);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HRESULT __stdcall EditStreamSetInfo(_di_IAVIStream pavi, PAVIStreamInfoA lpInfo, int cbInfo)
+#endif
+inline HRESULT __stdcall EditStreamSetInfo(_di_IAVIStream pavi, PAVIStreamInfoA lpInfo, LONG cbInfo)
 {
 	return EditStreamSetInfoA(pavi, lpInfo, cbInfo);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
+#endif
 inline HRESULT __stdcall EditStreamSetName(_di_IAVIStream pavi, char * lpszName)
 {
 	return EditStreamSetNameW(pavi, lpszName);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
+#endif
 inline HRESULT __stdcall EditStreamSetName(_di_IAVIStream pavi, char * lpszName)
 {
 	return EditStreamSetNameA(pavi, lpszName);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HWND __cdecl MCIWndCreate(HWND hwndParent, NativeUInt hInstance, unsigned dwStyle, char * szFile)
+#endif
+inline HWND __cdecl MCIWndCreate(HWND hwndParent, Winapi::Windows::HINST hInstance, unsigned dwStyle, char * szFile)
 {
 	return MCIWndCreateW(hwndParent, hInstance, dwStyle, szFile);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HWND __cdecl MCIWndCreate(HWND hwndParent, NativeUInt hInstance, unsigned dwStyle, char * szFile)
+#endif
+inline HWND __cdecl MCIWndCreate(HWND hwndParent, Winapi::Windows::HINST hInstance, unsigned dwStyle, char * szFile)
 {
 	return MCIWndCreateA(hwndParent, hInstance, dwStyle, szFile);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HWND __stdcall capCreateCaptureWindow(char * lpszWindowName, unsigned dwStyle, int x, int y, int nWidth, int nHeight, HWND hwndParent, int nID)
+#endif
+inline HWND __stdcall capCreateCaptureWindow(char * lpszWindowName, unsigned dwStyle, Int x, Int y, Int nWidth, Int nHeight, HWND hwndParent, Int nID)
 {
 	return capCreateCaptureWindowW(lpszWindowName, dwStyle, x, y, nWidth, nHeight, hwndParent, nID);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline HWND __stdcall capCreateCaptureWindow(char * lpszWindowName, unsigned dwStyle, int x, int y, int nWidth, int nHeight, HWND hwndParent, int nID)
+#endif
+inline HWND __stdcall capCreateCaptureWindow(char * lpszWindowName, unsigned dwStyle, Int x, Int y, Int nWidth, Int nHeight, HWND hwndParent, Int nID)
 {
 	return capCreateCaptureWindowA(lpszWindowName, dwStyle, x, y, nWidth, nHeight, hwndParent, nID);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline System::LongBool __stdcall capGetDriverDescription(unsigned wDriverIndex, char * lpszName, int cbName, char * lpszVer, int cbVer)
+#endif
+inline System::LongBool __stdcall capGetDriverDescription(unsigned wDriverIndex, char * lpszName, Int cbName, char * lpszVer, Int cbVer)
 {
 	return capGetDriverDescriptionW(wDriverIndex, lpszName, cbName, lpszVer, cbVer);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-inline System::LongBool __stdcall capGetDriverDescription(unsigned wDriverIndex, char * lpszName, int cbName, char * lpszVer, int cbVer)
+#endif
+inline System::LongBool __stdcall capGetDriverDescription(unsigned wDriverIndex, char * lpszName, Int cbName, char * lpszVer, Int cbVer)
 {
 	return capGetDriverDescriptionA(wDriverIndex, lpszName, cbName, lpszVer, cbVer);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
+#endif
 inline System::LongBool __stdcall GetOpenFileNamePreview(Winapi::Commdlg::POpenFilenameA lpofn)
 {
 	return GetOpenFileNamePreviewW(lpofn);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
+#endif
 inline System::LongBool __stdcall GetOpenFileNamePreview(Winapi::Commdlg::POpenFilenameA lpofn)
 {
 	return GetOpenFileNamePreviewA(lpofn);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 
 
 #if defined(UNICODE)
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
+#endif
 inline System::LongBool __stdcall GetSaveFileNamePreview(Winapi::Commdlg::POpenFilenameA lpofn)
 {
 	return GetSaveFileNamePreviewW(lpofn);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #else
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
+#endif
 inline System::LongBool __stdcall GetSaveFileNamePreview(Winapi::Commdlg::POpenFilenameA lpofn)
 {
 	return GetSaveFileNamePreviewA(lpofn);
 }
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
+#endif
 
 #endif
 

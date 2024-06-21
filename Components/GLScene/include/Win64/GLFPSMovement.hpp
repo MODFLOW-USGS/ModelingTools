@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFPSMovement.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFPSMovement.pas' rev: 36.00 (Windows)
 
 #ifndef GlfpsmovementHPP
 #define GlfpsmovementHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -50,8 +52,8 @@ class DELPHICLASS TGLBFPSMovement;
 struct DECLSPEC_DRECORD TContactPoint
 {
 public:
-	Glvectortypes::TVector4f intPoint;
-	Glvectortypes::TVector4f intNormal;
+	Glvectorgeometry::TVector intPoint;
+	Glvectorgeometry::TVector intNormal;
 };
 
 
@@ -60,7 +62,7 @@ class PASCALIMPLEMENTATION TCollisionState : public System::TObject
 	typedef System::TObject inherited;
 	
 public:
-	Glvectortypes::TVector4f Position;
+	Glvectorgeometry::TVector Position;
 	TContactPoint Contact;
 	__int64 Time;
 public:
@@ -140,7 +142,7 @@ private:
 	Glscene::TGLScene* FScene;
 	void __fastcall SetNavigator(Glnavigator::TGLNavigator* value);
 	void __fastcall setScene(Glscene::TGLScene* value);
-	void __fastcall DrawArrows(const Glvectortypes::TVector4f &intPoint, const Glvectortypes::TVector4f &intNormal, const Glvectortypes::TVector4f &Ray, Glgeomobjects::TGLArrowLine* Arrow1, Glgeomobjects::TGLArrowLine* Arrow2);
+	void __fastcall DrawArrows(const Glvectorgeometry::TVector &intPoint, const Glvectorgeometry::TVector &intNormal, const Glvectorgeometry::TVector &Ray, Glgeomobjects::TGLArrowLine* Arrow1, Glgeomobjects::TGLArrowLine* Arrow2);
 	
 protected:
 	virtual void __fastcall Loaded();
@@ -152,8 +154,8 @@ protected:
 public:
 	__fastcall virtual TGLFPSMovementManager(System::Classes::TComponent* aOwner);
 	__fastcall virtual ~TGLFPSMovementManager();
-	bool __fastcall SphereSweepAndSlide(Glvectorfileobjects::TGLFreeForm* freeform, TGLBFPSMovement* behaviour, const Glvectortypes::TVector4f &SphereStart, Glvectortypes::TVector4f &Velocity, Glvectortypes::TVector4f &newPosition, float sphereRadius)/* overload */;
-	void __fastcall SphereSweepAndSlide(TGLBFPSMovement* behaviour, const Glvectortypes::TVector4f &SphereStart, Glvectortypes::TVector4f &Velocity, Glvectortypes::TVector4f &newPosition, float sphereRadius)/* overload */;
+	bool __fastcall SphereSweepAndSlide(Glvectorfileobjects::TGLFreeForm* freeform, TGLBFPSMovement* behaviour, const Glvectorgeometry::TVector &SphereStart, Glvectorgeometry::TVector &Velocity, Glvectorgeometry::TVector &newPosition, float sphereRadius)/* overload */;
+	void __fastcall SphereSweepAndSlide(TGLBFPSMovement* behaviour, const Glvectorgeometry::TVector &SphereStart, Glvectorgeometry::TVector &Velocity, Glvectorgeometry::TVector &newPosition, float sphereRadius)/* overload */;
 	
 __published:
 	__property TGLMapCollection* Maps = {read=FMaps, write=FMaps};
@@ -179,7 +181,7 @@ private:
 	Glgeomobjects::TGLArrowLine* ArrowLine6;
 	Glscene::TGLDirectOpenGL* dirGl;
 	__int64 tickCount;
-	Glvectortypes::TVector4f oldPosition;
+	Glvectorgeometry::TVector oldPosition;
 	bool FGravityEnabled;
 	float FSphereRadius;
 	bool FShowArrows;
@@ -194,7 +196,7 @@ protected:
 	DYNAMIC void __fastcall Loaded();
 	
 public:
-	Glvectortypes::TVector4f Velocity;
+	Glvectorgeometry::TVector Velocity;
 	__fastcall virtual TGLBFPSMovement(Glxcollection::TXCollection* aOwner);
 	__fastcall virtual ~TGLBFPSMovement();
 	virtual void __fastcall DoProgress(const Glbaseclasses::TGLProgressTimes &progressTime);

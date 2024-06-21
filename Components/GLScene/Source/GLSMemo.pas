@@ -4188,7 +4188,7 @@ begin
   CheckRange(Index);
   P := TCharStyle(Items[Index]);
   P.Free;
-  inherited;
+  inherited Delete(Index);
 end;
 //-------------------- GET/SET TEXT COLOR ---------------------------
 
@@ -4820,7 +4820,7 @@ end;
 procedure TGLSMemoUndoList.Delete(Index: Integer);
 begin
   TGLSMemoUndo(Items[Index]).Free;
-  inherited;
+  inherited Delete(Index);
 end;
 
 procedure TGLSMemoUndoList.Undo;

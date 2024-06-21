@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLParameter.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLParameter.pas' rev: 36.00 (Windows)
 
 #ifndef GlslparameterHPP
 #define GlslparameterHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -63,7 +65,7 @@ __interface IShaderParameter  : public System::IInterface
 	virtual Glvectortypes::TVector2ui __fastcall GetUVec2() = 0 ;
 	virtual Glvectortypes::TVector3ui __fastcall GetUVec3() = 0 ;
 	virtual Glvectortypes::TVector4ui __fastcall GetUVec4() = 0 ;
-	virtual void __fastcall SetFloat(const float Value) = 0 ;
+	virtual void __fastcall SetFloat(const Opengltokens::TGLfloat Value) = 0 ;
 	virtual void __fastcall SetVec2(const Glvectortypes::TVector2f &Value) = 0 ;
 	virtual void __fastcall SetVec3(const Glvectortypes::TVector3f &Value) = 0 ;
 	virtual void __fastcall SetVec4(const Glvectortypes::TVector4f &Value) = 0 ;
@@ -81,13 +83,13 @@ __interface IShaderParameter  : public System::IInterface
 	virtual void __fastcall SetMat2(const Glvectortypes::TMatrix2f &Value) = 0 ;
 	virtual void __fastcall SetMat3(const Glvectortypes::TMatrix3f &Value) = 0 ;
 	virtual void __fastcall SetMat4(const Glvectortypes::TMatrix4f &Value) = 0 ;
-	virtual void __fastcall SetFloatArray(const System::PSingle Values, int Count) = 0 ;
-	virtual void __fastcall SetIntArray(const System::PInteger Values, int Count) = 0 ;
-	virtual void __fastcall SetUIntArray(const System::PCardinal Values, int Count) = 0 ;
+	virtual void __fastcall SetFloatArray(const Opengltokens::PGLfloat Values, int Count) = 0 ;
+	virtual void __fastcall SetIntArray(const Opengltokens::PGLint Values, int Count) = 0 ;
+	virtual void __fastcall SetUIntArray(const Opengltokens::PGLuint Values, int Count) = 0 ;
 	__property System::UnicodeString Name = {read=GetName};
 	__property TGLSLDataType GLSLType = {read=GetGLSLType};
 	__property TGLSLSamplerType GLSLSamplerType = {read=GetGLSLSamplerType};
-	__property float Float = {read=GetFloat, write=SetFloat};
+	__property Opengltokens::TGLfloat Float = {read=GetFloat, write=SetFloat};
 	__property int Int = {read=GetInt, write=SetInt};
 	__property unsigned uint = {read=GetUInt, write=SetUInt};
 	__property Glvectortypes::TVector2f vec2 = {read=GetVec2, write=SetVec2};

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMeshLines.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLMeshLines.pas' rev: 36.00 (Windows)
 
 #ifndef GlmeshlinesHPP
 #define GlmeshlinesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -155,26 +157,26 @@ class PASCALIMPLEMENTATION TLightmapBounds : public Glcoordinates::TGLCustomCoor
 	typedef Glcoordinates::TGLCustomCoordinates inherited;
 	
 private:
-	float __fastcall GetLeft();
-	float __fastcall GetTop();
-	float __fastcall GetRight();
-	float __fastcall GetBottom();
-	float __fastcall GetWidth();
-	float __fastcall GetHeight();
-	void __fastcall SetLeft(const float value);
-	void __fastcall SetTop(const float value);
-	void __fastcall SetRight(const float value);
-	void __fastcall SetBottom(const float value);
+	Opengltokens::TGLfloat __fastcall GetLeft();
+	Opengltokens::TGLfloat __fastcall GetTop();
+	Opengltokens::TGLfloat __fastcall GetRight();
+	Opengltokens::TGLfloat __fastcall GetBottom();
+	Opengltokens::TGLfloat __fastcall GetWidth();
+	Opengltokens::TGLfloat __fastcall GetHeight();
+	void __fastcall SetLeft(const Opengltokens::TGLfloat value);
+	void __fastcall SetTop(const Opengltokens::TGLfloat value);
+	void __fastcall SetRight(const Opengltokens::TGLfloat value);
+	void __fastcall SetBottom(const Opengltokens::TGLfloat value);
 	
 __published:
-	__property float Left = {read=GetLeft, write=SetLeft, stored=false};
-	__property float Top = {read=GetTop, write=SetTop, stored=false};
-	__property float Right = {read=GetRight, write=SetRight, stored=false};
-	__property float Bottom = {read=GetBottom, write=SetBottom, stored=false};
-	__property float Width = {read=GetWidth};
-	__property float Height = {read=GetHeight};
+	__property Opengltokens::TGLfloat Left = {read=GetLeft, write=SetLeft, stored=false};
+	__property Opengltokens::TGLfloat Top = {read=GetTop, write=SetTop, stored=false};
+	__property Opengltokens::TGLfloat Right = {read=GetRight, write=SetRight, stored=false};
+	__property Opengltokens::TGLfloat Bottom = {read=GetBottom, write=SetBottom, stored=false};
+	__property Opengltokens::TGLfloat Width = {read=GetWidth};
+	__property Opengltokens::TGLfloat Height = {read=GetHeight};
 public:
-	/* TGLCustomCoordinates.CreateInitialized */ inline __fastcall TLightmapBounds(System::Classes::TPersistent* AOwner, const Glvectortypes::TVector4f &AValue, const Glcoordinates::TGLCoordinatesStyle AStyle) : Glcoordinates::TGLCustomCoordinates(AOwner, AValue, AStyle) { }
+	/* TGLCustomCoordinates.CreateInitialized */ inline __fastcall TLightmapBounds(System::Classes::TPersistent* AOwner, const Glvectorgeometry::TVector &AValue, const Glcoordinates::TGLCoordinatesStyle AStyle) : Glcoordinates::TGLCustomCoordinates(AOwner, AValue, AStyle) { }
 	/* TGLCustomCoordinates.Destroy */ inline __fastcall virtual ~TLightmapBounds() { }
 	
 public:
@@ -214,7 +216,7 @@ private:
 	void __fastcall SetLightmapBounds(TLightmapBounds* const value);
 	void __fastcall DoChanged();
 	void __fastcall AddIndex();
-	void __fastcall AddVertices(const Glvectortypes::TVector3f &Up, const Glvectortypes::TVector3f &Inner, const Glvectortypes::TVector3f &Outer, float S, float Correction, bool UseDegenerate, TLineItem* LineItem);
+	void __fastcall AddVertices(const Glvectorgeometry::TAffineVector &Up, const Glvectorgeometry::TAffineVector &Inner, const Glvectorgeometry::TAffineVector &Outer, float S, float Correction, bool UseDegenerate, TLineItem* LineItem);
 	void __fastcall BuildLineItem(TLineItem* LineItem);
 	void __fastcall BuildGeometry();
 	void __fastcall DrawNode(Glrendercontextinfo::TGLRenderContextInfo &rci, TLineNode* Node, float LineWidth);

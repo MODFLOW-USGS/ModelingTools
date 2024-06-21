@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSceneForm.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSceneForm.pas' rev: 36.00 (Windows)
 
 #ifndef GlsceneformHPP
 #define GlsceneformHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -92,7 +94,7 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMEraseBkgnd(Winapi::Messages::TWMEraseBkgnd &Message);
 	HIDESBASE MESSAGE void __fastcall WMPaint(Winapi::Messages::TWMPaint &Message);
 	HIDESBASE MESSAGE void __fastcall WMSize(Winapi::Messages::TWMSize &Message);
-	HIDESBASE MESSAGE void __fastcall WMDestroy(Winapi::Messages::TWMNoParams &Message);
+	HIDESBASE MESSAGE void __fastcall WMDestroy(Winapi::Messages::TWMDestroy &Message);
 	MESSAGE void __fastcall LastFocus(Winapi::Messages::TMessage &Mess);
 	void __fastcall SetFullScreenVideoMode(TGLFullScreenVideoMode* AValue);
 	void __fastcall StartupFS();
@@ -125,6 +127,7 @@ __published:
 	__property TGLFullScreenVideoMode* FullScreenVideoMode = {read=FFullScreenVideoMode, write=SetFullScreenVideoMode};
 public:
 	/* TCustomForm.CreateNew */ inline __fastcall virtual TGLSceneForm(System::Classes::TComponent* AOwner, int Dummy) : Vcl::Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateScaledNew */ inline __fastcall virtual TGLSceneForm(System::Classes::TComponent* AOwner, int ADPI, int Dummy) : Vcl::Forms::TForm(AOwner, ADPI, Dummy) { }
 	
 public:
 	/* TWinControl.CreateParented */ inline __fastcall TGLSceneForm(HWND ParentWindow) : Vcl::Forms::TForm(ParentWindow) { }

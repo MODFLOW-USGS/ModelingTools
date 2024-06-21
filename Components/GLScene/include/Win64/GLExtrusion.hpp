@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLExtrusion.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLExtrusion.pas' rev: 36.00 (Windows)
 
 #ifndef GlextrusionHPP
 #define GlextrusionHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -61,7 +63,7 @@ private:
 	int FTriangleCount;
 	Glscene::TNormalDirection FNormalDirection;
 	TRevolutionSolidParts FParts;
-	Glvectortypes::TVector4f FAxisAlignedDimensionsCache;
+	Glvectorgeometry::TVector FAxisAlignedDimensionsCache;
 	
 protected:
 	void __fastcall SetStartAngle(const float val);
@@ -79,7 +81,7 @@ public:
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	__property int TriangleCount = {read=FTriangleCount, nodefault};
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
 	virtual void __fastcall StructureChanged();
 	
 __published:
@@ -106,11 +108,11 @@ private:
 	int FTriangleCount;
 	Glscene::TNormalDirection FNormalDirection;
 	TExtrusionSolidParts FParts;
-	float FHeight;
+	Opengltokens::TGLfloat FHeight;
 	float FMinSmoothAngle;
 	float FMinSmoothAngleCos;
-	Glvectortypes::TVector4f FAxisAlignedDimensionsCache;
-	void __fastcall SetHeight(const float Value);
+	Glvectorgeometry::TVector FAxisAlignedDimensionsCache;
+	void __fastcall SetHeight(const Opengltokens::TGLfloat Value);
 	void __fastcall SetMinSmoothAngle(const float Value);
 	
 protected:
@@ -125,12 +127,12 @@ public:
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	__property int TriangleCount = {read=FTriangleCount, nodefault};
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
 	virtual void __fastcall StructureChanged();
 	
 __published:
 	__property TExtrusionSolidParts Parts = {read=FParts, write=SetParts, default=1};
-	__property float Height = {read=FHeight, write=SetHeight};
+	__property Opengltokens::TGLfloat Height = {read=FHeight, write=SetHeight};
 	__property int Stacks = {read=FStacks, write=SetStacks, default=1};
 	__property Globjects::TNormalSmoothing Normals = {read=FNormals, write=SetNormals, default=0};
 	__property Glscene::TNormalDirection NormalDirection = {read=FNormalDirection, write=SetNormalDirection, default=1};

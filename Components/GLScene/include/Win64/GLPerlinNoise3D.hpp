@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLPerlinNoise3D.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLPerlinNoise3D.pas' rev: 36.00 (Windows)
 
 #ifndef Glperlinnoise3dHPP
 #define Glperlinnoise3dHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -40,8 +42,8 @@ public:
 	void __fastcall Initialize(int randomSeed);
 	float __fastcall Noise(const float x, const float y)/* overload */;
 	float __fastcall Noise(const float x, const float y, const float z)/* overload */;
-	float __fastcall Noise(const Glvectortypes::TVector3f &v)/* overload */;
-	float __fastcall Noise(const Glvectortypes::TVector4f &v)/* overload */;
+	float __fastcall Noise(const Glvectorgeometry::TAffineVector &v)/* overload */;
+	float __fastcall Noise(const Glvectorgeometry::TVector &v)/* overload */;
 public:
 	/* TObject.Destroy */ inline __fastcall virtual ~TGLPerlin3DNoise() { }
 	

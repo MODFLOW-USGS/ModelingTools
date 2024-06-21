@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLEParticleMasksManager.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLEParticleMasksManager.pas' rev: 36.00 (Windows)
 
 #ifndef GleparticlemasksmanagerHPP
 #define GleparticlemasksmanagerHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -45,11 +47,11 @@ class PASCALIMPLEMENTATION TGLEParticleMask : public System::Classes::TCollectio
 	
 private:
 	System::UnicodeString FName;
-	Glcoordinates::TGLCoordinates3* FScale;
-	Glcoordinates::TGLCoordinates3* FPosition;
-	System::UnicodeString FYMask;
-	System::UnicodeString FZMask;
-	System::UnicodeString FXMask;
+	Glcoordinates::TGLCoordinates* FScale;
+	Glcoordinates::TGLCoordinates* FPosition;
+	Glmaterial::TGLLibMaterialName FYMask;
+	Glmaterial::TGLLibMaterialName FZMask;
+	Glmaterial::TGLLibMaterialName FXMask;
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
 	System::Uitypes::TColor FBackgroundColor;
 	System::Uitypes::TColor FMaskColor;
@@ -78,9 +80,9 @@ private:
 	float FPitchAngle;
 	float FTurnAngle;
 	void __fastcall SetName(const System::UnicodeString Value);
-	void __fastcall SetXMask(const System::UnicodeString Value);
-	void __fastcall SetYMask(const System::UnicodeString Value);
-	void __fastcall SetZMask(const System::UnicodeString Value);
+	void __fastcall SetXMask(const Glmaterial::TGLLibMaterialName Value);
+	void __fastcall SetYMask(const Glmaterial::TGLLibMaterialName Value);
+	void __fastcall SetZMask(const Glmaterial::TGLLibMaterialName Value);
 	void __fastcall SetMaterialLibrary(Glmaterial::TGLMaterialLibrary* const Value);
 	Vcl::Graphics::TBitmap* __fastcall XCan();
 	Vcl::Graphics::TBitmap* __fastcall YCan();
@@ -104,13 +106,13 @@ public:
 	void __fastcall GenerateMaskFromProjection(TGLEProjectedParticleMask FromMask, TGLEProjectedParticleMask ToMask, int Depth);
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* Scale = {read=FScale, write=FScale};
-	__property Glcoordinates::TGLCoordinates3* Position = {read=FPosition, write=FPosition};
+	__property Glcoordinates::TGLCoordinates* Scale = {read=FScale, write=FScale};
+	__property Glcoordinates::TGLCoordinates* Position = {read=FPosition, write=FPosition};
 	__property System::UnicodeString Name = {read=FName, write=SetName};
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
-	__property System::UnicodeString XMask = {read=FXMask, write=SetXMask};
-	__property System::UnicodeString YMask = {read=FYMask, write=SetYMask};
-	__property System::UnicodeString ZMask = {read=FZMask, write=SetZMask};
+	__property Glmaterial::TGLLibMaterialName XMask = {read=FXMask, write=SetXMask};
+	__property Glmaterial::TGLLibMaterialName YMask = {read=FYMask, write=SetYMask};
+	__property Glmaterial::TGLLibMaterialName ZMask = {read=FZMask, write=SetZMask};
 	__property System::Uitypes::TColor BackgroundColor = {read=FBackgroundColor, write=FBackgroundColor, nodefault};
 	__property System::Uitypes::TColor MaskColor = {read=FMaskColor, write=FMaskColor, nodefault};
 	__property float RollAngle = {read=FRollAngle, write=FRollAngle};

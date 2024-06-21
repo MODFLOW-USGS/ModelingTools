@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_MicroTiles.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_MicroTiles.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_microtilesHPP
 #define Gr32_microtilesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -49,12 +51,12 @@ typedef PMicroTiles *PPMicroTiles;
 struct DECLSPEC_DRECORD TMicroTiles
 {
 public:
-	System::Types::TRect BoundsRect;
+	Gr32::TRect BoundsRect;
 	int Columns;
 	int Rows;
-	System::Types::TRect BoundsUsedTiles;
+	Gr32::TRect BoundsUsedTiles;
 	int Count;
-	TMicroTileArray *Tiles;
+	PMicroTileArray Tiles;
 };
 
 
@@ -89,8 +91,8 @@ class PASCALIMPLEMENTATION TMicroTilesRepaintOptimizer : public Gr32_repaintopt:
 	typedef Gr32_repaintopt::TCustomRepaintOptimizer inherited;
 	
 private:
-	System::Types::TRect FBufferBounds;
-	TMicroTiles *FWorkMicroTiles;
+	Gr32::TRect FBufferBounds;
+	PMicroTiles FWorkMicroTiles;
 	TMicroTiles FTempTiles;
 	TMicroTiles FInvalidTiles;
 	TMicroTiles FForcedInvalidTiles;
@@ -111,14 +113,14 @@ private:
 	__int64 FElapsedTimeOnLastPenalty;
 	int FOldInvalidRectsCount;
 	void __fastcall DrawLayerToMicroTiles(TMicroTiles &DstTiles, Gr32_layers::TCustomLayer* Layer);
-	void __fastcall DrawMeasuringHandler(System::TObject* Sender, const System::Types::TRect &Area, const unsigned Info);
+	void __fastcall DrawMeasuringHandler(System::TObject* Sender, const Gr32::TRect &Area, const unsigned Info);
 	void __fastcall ValidateWorkingTiles();
 	void __fastcall UpdateOldInvalidTiles();
 	void __fastcall SetAdaptiveMode(const bool Value);
 	void __fastcall ResetAdaptiveMode();
 	void __fastcall BeginAdaption();
 	void __fastcall EndAdaption();
-	void __fastcall AddArea(TMicroTiles &Tiles, const System::Types::TRect &Area, const unsigned Info);
+	void __fastcall AddArea(TMicroTiles &Tiles, const Gr32::TRect &Area, const unsigned Info);
 	
 protected:
 	virtual void __fastcall SetEnabled(const bool Value);
@@ -134,7 +136,7 @@ public:
 	virtual void __fastcall PerformOptimization();
 	virtual void __fastcall BeginPaintBuffer();
 	virtual void __fastcall EndPaintBuffer();
-	virtual void __fastcall AreaUpdateHandler(System::TObject* Sender, const System::Types::TRect &Area, const unsigned Info);
+	virtual void __fastcall AreaUpdateHandler(System::TObject* Sender, const Gr32::TRect &Area, const unsigned Info);
 	virtual void __fastcall LayerUpdateHandler(System::TObject* Sender, Gr32_layers::TCustomLayer* Layer);
 	virtual void __fastcall BufferResizedHandler(const int NewWidth, const int NewHeight);
 	__property bool AdaptiveMode = {read=FAdaptiveMode, write=SetAdaptiveMode, nodefault};
@@ -154,15 +156,15 @@ extern DELPHI_PACKAGE int __fastcall MicroTileWidth(const TMicroTile Tile);
 extern DELPHI_PACKAGE TMicroTiles __fastcall MakeEmptyMicroTiles(void);
 extern DELPHI_PACKAGE void __fastcall MicroTilesCreate(TMicroTiles &MicroTiles);
 extern DELPHI_PACKAGE void __fastcall MicroTilesDestroy(TMicroTiles &MicroTiles);
-extern DELPHI_PACKAGE void __fastcall MicroTilesSetSize(TMicroTiles &MicroTiles, const System::Types::TRect &DstRect);
+extern DELPHI_PACKAGE void __fastcall MicroTilesSetSize(TMicroTiles &MicroTiles, const Gr32::TRect &DstRect);
 extern DELPHI_PACKAGE void __fastcall MicroTilesClear(TMicroTiles &MicroTiles, const TMicroTile Value = (TMicroTile)(0x0));
 extern DELPHI_PACKAGE void __fastcall MicroTilesClearUsed(TMicroTiles &MicroTiles, const TMicroTile Value = (TMicroTile)(0x0));
 extern DELPHI_PACKAGE void __fastcall MicroTilesCopy(TMicroTiles &DstTiles, const TMicroTiles &SrcTiles);
 extern DELPHI_PACKAGE void __fastcall MicroTilesAddLine(TMicroTiles &MicroTiles, int X1, int Y1, int X2, int Y2, int LineWidth, bool RoundToWholeTiles = false);
-extern DELPHI_PACKAGE void __fastcall MicroTilesAddRect(TMicroTiles &MicroTiles, const System::Types::TRect &Rect, bool RoundToWholeTiles = false);
+extern DELPHI_PACKAGE void __fastcall MicroTilesAddRect(TMicroTiles &MicroTiles, const Gr32::TRect &Rect, bool RoundToWholeTiles = false);
 extern DELPHI_PACKAGE void __fastcall MicroTilesUnion(TMicroTiles &DstTiles, const TMicroTiles &SrcTiles, bool RoundToWholeTiles = false);
 extern DELPHI_PACKAGE int __fastcall MicroTilesCalcRects(const TMicroTiles &MicroTiles, Gr32_containers::TRectList* DstRects, bool CountOnly = false, bool RoundToWholeTiles = false)/* overload */;
-extern DELPHI_PACKAGE int __fastcall MicroTilesCalcRects(const TMicroTiles &MicroTiles, Gr32_containers::TRectList* DstRects, const System::Types::TRect &Clip, bool CountOnly = false, bool RoundToWholeTiles = false)/* overload */;
+extern DELPHI_PACKAGE int __fastcall MicroTilesCalcRects(const TMicroTiles &MicroTiles, Gr32_containers::TRectList* DstRects, const Gr32::TRect &Clip, bool CountOnly = false, bool RoundToWholeTiles = false)/* overload */;
 extern DELPHI_PACKAGE int __fastcall MicroTilesCountEmptyTiles(const TMicroTiles &MicroTiles);
 }	/* namespace Gr32_microtiles */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GR32_MICROTILES)

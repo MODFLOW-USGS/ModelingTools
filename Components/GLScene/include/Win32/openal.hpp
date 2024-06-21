@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OpenAL.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'OpenAL.pas' rev: 36.00 (Windows)
 
 #ifndef OpenalHPP
 #define OpenalHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -85,11 +87,11 @@ typedef unsigned TALbitfield;
 
 typedef unsigned *PALbitfield;
 
-typedef float TALclampf;
+typedef TALfloat TALclampf;
 
 typedef float *PALclampf;
 
-typedef double TALclampd;
+typedef TALdouble TALclampd;
 
 typedef double *PALclampd;
 
@@ -145,17 +147,17 @@ typedef void * TALCvoid;
 
 typedef void * *PALCvoid;
 
-typedef void * TALCdevice;
+typedef TALCvoid TALCdevice;
 
 typedef void * *PALCdevice;
 
-typedef void * TALCcontext;
+typedef TALCvoid TALCcontext;
 
 typedef void * *PALCcontext;
 
-typedef unsigned DSPROPERTY_EAX_LISTENERPROPERTY;
+typedef System::LongWord DSPROPERTY_EAX_LISTENERPROPERTY;
 
-typedef unsigned DSPROPERTY_EAX_BUFFERPROPERTY;
+typedef System::LongWord DSPROPERTY_EAX_BUFFERPROPERTY;
 
 #pragma pack(push,1)
 struct DECLSPEC_DRECORD TEaxListenerProperties
@@ -253,7 +255,7 @@ typedef _EFXLOWPASSFILTER EFXLOWPASSFILTER;
 
 typedef _EFXLOWPASSFILTER *PEFXLOWPASSFILTER;
 
-typedef NativeUInt HMODULE;
+typedef Winapi::Windows::THandle HMODULE;
 
 //-- var, const, procedure ---------------------------------------------------
 #define callibname L"OpenAL32.dll"
@@ -1007,147 +1009,147 @@ static const short EAX_MATERIAL_STONEWALL = short(-6000);
 static const short EAX_MATERIAL_CURTAIN = short(-1200);
 #define EAX_MATERIAL_CURTAINLF  (1.500000E-01)
 #define EAX_MATERIAL_CURTAINROOMRATIO  (1.000000E+00)
-extern DELPHI_PACKAGE void __cdecl (*alEnable)(int capability);
-extern DELPHI_PACKAGE void __cdecl (*alDisable)(int capability);
-extern DELPHI_PACKAGE bool __cdecl (*alIsEnabled)(int capability);
-extern DELPHI_PACKAGE void __cdecl (*alHint)(int target, int mode);
-extern DELPHI_PACKAGE void __cdecl (*alGetBooleanv)(int param, PALboolean data);
-extern DELPHI_PACKAGE void __cdecl (*alGetIntegerv)(int param, PALint data);
-extern DELPHI_PACKAGE void __cdecl (*alGetFloatv)(int param, PALfloat data);
-extern DELPHI_PACKAGE void __cdecl (*alGetDoublev)(int param, PALdouble data);
-extern DELPHI_PACKAGE char * __cdecl (*alGetString)(int param);
-extern DELPHI_PACKAGE bool __cdecl (*alGetBoolean)(int param);
-extern DELPHI_PACKAGE int __cdecl (*alGetInteger)(int param);
-extern DELPHI_PACKAGE float __cdecl (*alGetFloat)(int param);
-extern DELPHI_PACKAGE double __cdecl (*alGetDouble)(int param);
+extern DELPHI_PACKAGE void __cdecl (*alEnable)(TALenum capability);
+extern DELPHI_PACKAGE void __cdecl (*alDisable)(TALenum capability);
+extern DELPHI_PACKAGE bool __cdecl (*alIsEnabled)(TALenum capability);
+extern DELPHI_PACKAGE void __cdecl (*alHint)(TALenum target, TALenum mode);
+extern DELPHI_PACKAGE void __cdecl (*alGetBooleanv)(TALenum param, PALboolean data);
+extern DELPHI_PACKAGE void __cdecl (*alGetIntegerv)(TALenum param, PALint data);
+extern DELPHI_PACKAGE void __cdecl (*alGetFloatv)(TALenum param, PALfloat data);
+extern DELPHI_PACKAGE void __cdecl (*alGetDoublev)(TALenum param, PALdouble data);
+extern DELPHI_PACKAGE char * __cdecl (*alGetString)(TALenum param);
+extern DELPHI_PACKAGE bool __cdecl (*alGetBoolean)(TALenum param);
+extern DELPHI_PACKAGE int __cdecl (*alGetInteger)(TALenum param);
+extern DELPHI_PACKAGE float __cdecl (*alGetFloat)(TALenum param);
+extern DELPHI_PACKAGE double __cdecl (*alGetDouble)(TALenum param);
 extern DELPHI_PACKAGE int __cdecl (*alGetError)(void);
 extern DELPHI_PACKAGE bool __cdecl (*alIsExtensionPresent)(char * fname);
-extern DELPHI_PACKAGE void * __cdecl (*alGetProcAddress)(char * fname);
-extern DELPHI_PACKAGE int __cdecl (*alGetEnumValue)(char * ename);
-extern DELPHI_PACKAGE void __cdecl (*alListenerf)(int param, float value);
-extern DELPHI_PACKAGE void __cdecl (*alListener3f)(int param, float f1, float f2, float f3);
-extern DELPHI_PACKAGE void __cdecl (*alListenerfv)(int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*alListeneri)(int param, int value);
-extern DELPHI_PACKAGE void __fastcall (*alListener3i)(int param, int value1, int value2, int value3);
-extern DELPHI_PACKAGE void __fastcall (*alListeneriv)(int param, const PALint values);
-extern DELPHI_PACKAGE void __cdecl (*alGetListeneriv)(int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*alGetListenerfv)(int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*alGenSources)(unsigned n, PALuint sources);
-extern DELPHI_PACKAGE void __cdecl (*alDeleteSources)(unsigned n, PALuint sources);
-extern DELPHI_PACKAGE bool __cdecl (*alIsSource)(unsigned id);
-extern DELPHI_PACKAGE void __cdecl (*alSourcei)(unsigned source, int param, int value);
-extern DELPHI_PACKAGE void __cdecl (*alSource3i)(unsigned source, int param, int v1, int v2, int v3);
-extern DELPHI_PACKAGE void __cdecl (*alSourceiv)(unsigned source, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*alSourcef)(unsigned source, int param, float value);
-extern DELPHI_PACKAGE void __cdecl (*alSource3f)(unsigned source, int param, float v1, float v2, float v3);
-extern DELPHI_PACKAGE void __cdecl (*alSourcefv)(unsigned source, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*alGetSourcei)(unsigned source, int param, PALint value);
-extern DELPHI_PACKAGE void __cdecl (*alGetSource3i)(unsigned source, int param, PALint v1, PALint v2, PALint v3);
-extern DELPHI_PACKAGE void __cdecl (*alGetSourceiv)(unsigned source, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*alGetSourcef)(unsigned source, int param, PALfloat value);
-extern DELPHI_PACKAGE void __cdecl (*alGetSource3f)(unsigned source, int param, PALfloat v1, PALfloat v2, PALfloat v3);
-extern DELPHI_PACKAGE void __cdecl (*alGetSourcefv)(unsigned source, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*alSourcePlay)(unsigned source);
-extern DELPHI_PACKAGE void __cdecl (*alSourcePause)(unsigned source);
-extern DELPHI_PACKAGE void __cdecl (*alSourceStop)(unsigned source);
-extern DELPHI_PACKAGE void __cdecl (*alSourceRewind)(unsigned source);
-extern DELPHI_PACKAGE void __cdecl (*alSourcePlayv)(unsigned n, PALuint sources);
-extern DELPHI_PACKAGE void __cdecl (*alSourceStopv)(unsigned n, PALuint sources);
-extern DELPHI_PACKAGE void __cdecl (*alSourceRewindv)(unsigned n, PALuint sources);
-extern DELPHI_PACKAGE void __cdecl (*alSourcePausev)(unsigned n, PALuint sources);
-extern DELPHI_PACKAGE void __cdecl (*alSourceQueueBuffers)(unsigned source, unsigned n, PALuint buffers);
-extern DELPHI_PACKAGE void __cdecl (*alSourceUnqueueBuffers)(unsigned source, unsigned n, PALuint buffers);
-extern DELPHI_PACKAGE void __cdecl (*alGenBuffers)(unsigned n, PALuint buffers);
-extern DELPHI_PACKAGE void __cdecl (*alDeleteBuffers)(unsigned n, PALuint buffers);
-extern DELPHI_PACKAGE bool __cdecl (*alIsBuffer)(unsigned buffer);
-extern DELPHI_PACKAGE void __cdecl (*alBufferData)(unsigned buffer, int format, void * data, unsigned size, unsigned freq);
-extern DELPHI_PACKAGE void __cdecl (*alBufferi)(unsigned buffer, int param, int value);
-extern DELPHI_PACKAGE void __cdecl (*alBuffer3i)(unsigned buffer, int param, int v1, int v2, int v3);
-extern DELPHI_PACKAGE void __cdecl (*alBufferiv)(unsigned buffer, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*alBufferf)(unsigned buffer, int param, float value);
-extern DELPHI_PACKAGE void __cdecl (*alBuffer3f)(unsigned buffer, int param, float v1, float v2, float v3);
-extern DELPHI_PACKAGE void __cdecl (*alBufferfv)(unsigned buffer, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*alGetBufferi)(unsigned buffer, int param, PALint value);
-extern DELPHI_PACKAGE void __cdecl (*alGetBuffer3i)(unsigned buffer, int param, PALint v1, PALint v2, PALint v3);
-extern DELPHI_PACKAGE void __cdecl (*alGetBufferiv)(unsigned buffer, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*alGetBufferf)(unsigned buffer, int param, PALfloat value);
-extern DELPHI_PACKAGE void __cdecl (*alGetBuffer3f)(unsigned buffer, int param, PALfloat v1, PALfloat v2, PALfloat v3);
-extern DELPHI_PACKAGE void __cdecl (*alGetBufferfv)(unsigned buffer, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*alDistanceModel)(int value);
-extern DELPHI_PACKAGE void __cdecl (*alDopplerFactor)(float value);
-extern DELPHI_PACKAGE void __cdecl (*alDopplerVelocity)(float value);
-extern DELPHI_PACKAGE void __cdecl (*alSpeedOfSound)(float value);
-extern DELPHI_PACKAGE void * __cdecl (*alcCreateContext)(void * device, PALCint attrlist);
-extern DELPHI_PACKAGE int __cdecl (*alcMakeContextCurrent)(void * context);
-extern DELPHI_PACKAGE void __cdecl (*alcProcessContext)(void * context);
-extern DELPHI_PACKAGE void __cdecl (*alcSuspendContext)(void * context);
-extern DELPHI_PACKAGE void __cdecl (*alcDestroyContext)(void * context);
+extern DELPHI_PACKAGE void * __cdecl (*alGetProcAddress)(PALuByte fname);
+extern DELPHI_PACKAGE int __cdecl (*alGetEnumValue)(PALuByte ename);
+extern DELPHI_PACKAGE void __cdecl (*alListenerf)(TALenum param, TALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*alListener3f)(TALenum param, TALfloat f1, TALfloat f2, TALfloat f3);
+extern DELPHI_PACKAGE void __cdecl (*alListenerfv)(TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*alListeneri)(TALenum param, TALint value);
+extern DELPHI_PACKAGE void __fastcall (*alListener3i)(TALenum param, TALint value1, TALint value2, TALint value3);
+extern DELPHI_PACKAGE void __fastcall (*alListeneriv)(TALenum param, const PALint values);
+extern DELPHI_PACKAGE void __cdecl (*alGetListeneriv)(TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*alGetListenerfv)(TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*alGenSources)(TALsizei n, PALuint sources);
+extern DELPHI_PACKAGE void __cdecl (*alDeleteSources)(TALsizei n, PALuint sources);
+extern DELPHI_PACKAGE bool __cdecl (*alIsSource)(TALuint id);
+extern DELPHI_PACKAGE void __cdecl (*alSourcei)(TALuint source, TALenum param, TALint value);
+extern DELPHI_PACKAGE void __cdecl (*alSource3i)(TALuint source, TALenum param, TALint v1, TALint v2, TALint v3);
+extern DELPHI_PACKAGE void __cdecl (*alSourceiv)(TALuint source, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*alSourcef)(TALuint source, TALenum param, TALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*alSource3f)(TALuint source, TALenum param, TALfloat v1, TALfloat v2, TALfloat v3);
+extern DELPHI_PACKAGE void __cdecl (*alSourcefv)(TALuint source, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*alGetSourcei)(TALuint source, TALenum param, PALint value);
+extern DELPHI_PACKAGE void __cdecl (*alGetSource3i)(TALuint source, TALenum param, PALint v1, PALint v2, PALint v3);
+extern DELPHI_PACKAGE void __cdecl (*alGetSourceiv)(TALuint source, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*alGetSourcef)(TALuint source, TALenum param, PALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*alGetSource3f)(TALuint source, TALenum param, PALfloat v1, PALfloat v2, PALfloat v3);
+extern DELPHI_PACKAGE void __cdecl (*alGetSourcefv)(TALuint source, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*alSourcePlay)(TALuint source);
+extern DELPHI_PACKAGE void __cdecl (*alSourcePause)(TALuint source);
+extern DELPHI_PACKAGE void __cdecl (*alSourceStop)(TALuint source);
+extern DELPHI_PACKAGE void __cdecl (*alSourceRewind)(TALuint source);
+extern DELPHI_PACKAGE void __cdecl (*alSourcePlayv)(TALsizei n, PALuint sources);
+extern DELPHI_PACKAGE void __cdecl (*alSourceStopv)(TALsizei n, PALuint sources);
+extern DELPHI_PACKAGE void __cdecl (*alSourceRewindv)(TALsizei n, PALuint sources);
+extern DELPHI_PACKAGE void __cdecl (*alSourcePausev)(TALsizei n, PALuint sources);
+extern DELPHI_PACKAGE void __cdecl (*alSourceQueueBuffers)(TALuint source, TALsizei n, PALuint buffers);
+extern DELPHI_PACKAGE void __cdecl (*alSourceUnqueueBuffers)(TALuint source, TALsizei n, PALuint buffers);
+extern DELPHI_PACKAGE void __cdecl (*alGenBuffers)(TALsizei n, PALuint buffers);
+extern DELPHI_PACKAGE void __cdecl (*alDeleteBuffers)(TALsizei n, PALuint buffers);
+extern DELPHI_PACKAGE bool __cdecl (*alIsBuffer)(TALuint buffer);
+extern DELPHI_PACKAGE void __cdecl (*alBufferData)(TALuint buffer, TALenum format, void * data, TALsizei size, TALsizei freq);
+extern DELPHI_PACKAGE void __cdecl (*alBufferi)(TALuint buffer, TALenum param, TALint value);
+extern DELPHI_PACKAGE void __cdecl (*alBuffer3i)(TALuint buffer, TALenum param, TALint v1, TALint v2, TALint v3);
+extern DELPHI_PACKAGE void __cdecl (*alBufferiv)(TALuint buffer, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*alBufferf)(TALuint buffer, TALenum param, TALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*alBuffer3f)(TALuint buffer, TALenum param, TALfloat v1, TALfloat v2, TALfloat v3);
+extern DELPHI_PACKAGE void __cdecl (*alBufferfv)(TALuint buffer, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*alGetBufferi)(TALuint buffer, TALenum param, PALint value);
+extern DELPHI_PACKAGE void __cdecl (*alGetBuffer3i)(TALuint buffer, TALenum param, PALint v1, PALint v2, PALint v3);
+extern DELPHI_PACKAGE void __cdecl (*alGetBufferiv)(TALuint buffer, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*alGetBufferf)(TALuint buffer, TALenum param, PALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*alGetBuffer3f)(TALuint buffer, TALenum param, PALfloat v1, PALfloat v2, PALfloat v3);
+extern DELPHI_PACKAGE void __cdecl (*alGetBufferfv)(TALuint buffer, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*alDistanceModel)(TALenum value);
+extern DELPHI_PACKAGE void __cdecl (*alDopplerFactor)(TALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*alDopplerVelocity)(TALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*alSpeedOfSound)(TALfloat value);
+extern DELPHI_PACKAGE void * __cdecl (*alcCreateContext)(TALCdevice device, PALCint attrlist);
+extern DELPHI_PACKAGE int __cdecl (*alcMakeContextCurrent)(TALCcontext context);
+extern DELPHI_PACKAGE void __cdecl (*alcProcessContext)(TALCcontext context);
+extern DELPHI_PACKAGE void __cdecl (*alcSuspendContext)(TALCcontext context);
+extern DELPHI_PACKAGE void __cdecl (*alcDestroyContext)(TALCcontext context);
 extern DELPHI_PACKAGE void * __cdecl (*alcGetCurrentContext)(void);
-extern DELPHI_PACKAGE void * __cdecl (*alcGetContextsDevice)(void * context);
-extern DELPHI_PACKAGE void * __cdecl (*alcOpenDevice)(char * deviceName);
-extern DELPHI_PACKAGE void __cdecl (*alcCloseDevice)(void * device);
-extern DELPHI_PACKAGE int __cdecl (*alcGetError)(void * device);
-extern DELPHI_PACKAGE bool __cdecl (*alcIsExtensionPresent)(void * device, char * extName);
-extern DELPHI_PACKAGE void * __cdecl (*alcGetProcAddress)(void * device, char * funcName);
-extern DELPHI_PACKAGE int __cdecl (*alcGetEnumValue)(void * device, char * enumName);
-extern DELPHI_PACKAGE char * __cdecl (*alcGetString)(void * device, int param);
-extern DELPHI_PACKAGE void __cdecl (*alcGetIntegerv)(void * device, int param, int size, PALCint data);
-extern DELPHI_PACKAGE PALCdevice __cdecl (*alcCaptureOpenDevice)(const char * devicename, unsigned frequency, int format, int buffersize);
+extern DELPHI_PACKAGE void * __cdecl (*alcGetContextsDevice)(TALCcontext context);
+extern DELPHI_PACKAGE void * __cdecl (*alcOpenDevice)(PALCubyte deviceName);
+extern DELPHI_PACKAGE void __cdecl (*alcCloseDevice)(TALCdevice device);
+extern DELPHI_PACKAGE int __cdecl (*alcGetError)(TALCdevice device);
+extern DELPHI_PACKAGE bool __cdecl (*alcIsExtensionPresent)(TALCdevice device, PALuByte extName);
+extern DELPHI_PACKAGE void * __cdecl (*alcGetProcAddress)(TALCdevice device, PALuByte funcName);
+extern DELPHI_PACKAGE int __cdecl (*alcGetEnumValue)(TALCdevice device, PALuByte enumName);
+extern DELPHI_PACKAGE char * __cdecl (*alcGetString)(TALCdevice device, TALCenum param);
+extern DELPHI_PACKAGE void __cdecl (*alcGetIntegerv)(TALCdevice device, TALCenum param, TALCsizei size, PALCint data);
+extern DELPHI_PACKAGE PALCdevice __cdecl (*alcCaptureOpenDevice)(const PALCchar devicename, TALCuint frequency, TALCenum format, TALCsizei buffersize);
 extern DELPHI_PACKAGE bool __cdecl (*alcCaptureCloseDevice)(PALCdevice device);
 extern DELPHI_PACKAGE void __cdecl (*alcCaptureStart)(PALCdevice device);
 extern DELPHI_PACKAGE void __cdecl (*alcCaptureStop)(PALCdevice device);
-extern DELPHI_PACKAGE void __cdecl (*alcCaptureSamples)(PALCdevice device, void * buffer, int samples);
-extern DELPHI_PACKAGE int __cdecl (*EAXSet)(const GUID &Guid, unsigned ALuint1, unsigned ALuint2, void * point, unsigned ALuint3);
-extern DELPHI_PACKAGE int __cdecl (*EAXGet)(const GUID &Guid, unsigned ALuint1, unsigned ALuint2, void * point, unsigned ALuint3);
-extern DELPHI_PACKAGE int AL_EAX_RAM_SIZE;
-extern DELPHI_PACKAGE int AL_EAX_RAM_FREE;
-extern DELPHI_PACKAGE int AL_STORAGE_AUTOMATIC;
-extern DELPHI_PACKAGE int AL_STORAGE_HARDWARE;
-extern DELPHI_PACKAGE int AL_STORAGE_ACCESSIBLE;
-extern DELPHI_PACKAGE bool __cdecl (*EAXSetBufferMode)(unsigned n, PALuint buffers, int value);
-extern DELPHI_PACKAGE int __cdecl (*EAXGetBufferMode)(unsigned buffer, PALint value);
-extern DELPHI_PACKAGE void __cdecl (*ALGENEFFECTS)(unsigned n, PALuint effects);
-extern DELPHI_PACKAGE void __cdecl (*ALDELETEEFFECTS)(unsigned n, PALuint effects);
-extern DELPHI_PACKAGE bool __cdecl (*ALISEFFECT)(unsigned eid);
-extern DELPHI_PACKAGE void __cdecl (*ALEFFECTI)(unsigned eid, int param, int value);
-extern DELPHI_PACKAGE void __cdecl (*ALEFFECTIV)(unsigned eid, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*ALEFFECTF)(unsigned eid, int param, float value);
-extern DELPHI_PACKAGE void __cdecl (*ALEFFECTFV)(unsigned eid, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*ALGETEFFECTI)(unsigned eid, int param, PALint value);
-extern DELPHI_PACKAGE void __cdecl (*ALGETEFFECTIV)(unsigned eid, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*ALGETEFFECTF)(unsigned eid, int param, PALfloat value);
-extern DELPHI_PACKAGE void __cdecl (*ALGETEFFECTFV)(unsigned eid, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*ALGENFILTERS)(unsigned n, PALuint filters);
-extern DELPHI_PACKAGE void __cdecl (*ALDELETEFILTERS)(unsigned n, PALuint filters);
-extern DELPHI_PACKAGE bool __cdecl (*ALISFILTER)(unsigned fid);
-extern DELPHI_PACKAGE void __cdecl (*ALFILTERI)(unsigned fid, int param, int value);
-extern DELPHI_PACKAGE void __cdecl (*ALFILTERIV)(unsigned fid, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*ALFILTERF)(unsigned fid, int param, float value);
-extern DELPHI_PACKAGE void __cdecl (*ALFILTERFV)(unsigned fid, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*ALGETFILTERI)(unsigned fid, int param, PALint value);
-extern DELPHI_PACKAGE void __cdecl (*ALGETFILTERIV)(unsigned fid, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*ALGETFILTERF)(unsigned fid, int param, PALfloat value);
-extern DELPHI_PACKAGE void __cdecl (*ALGETFILTERFV)(unsigned fid, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*ALGENAUXILIARYEFFECTSLOTS)(unsigned n, PALuint slots);
-extern DELPHI_PACKAGE void __cdecl (*ALDELETEAUXILIARYEFFECTSLOTS)(unsigned n, PALuint slots);
-extern DELPHI_PACKAGE bool __cdecl (*ALISAUXILIARYEFFECTSLOT)(unsigned slot);
-extern DELPHI_PACKAGE void __cdecl (*ALAUXILIARYEFFECTSLOTI)(unsigned asid, int param, int value);
-extern DELPHI_PACKAGE void __cdecl (*ALAUXILIARYEFFECTSLOTIV)(unsigned asid, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*ALAUXILIARYEFFECTSLOTF)(unsigned asid, int param, float value);
-extern DELPHI_PACKAGE void __cdecl (*ALAUXILIARYEFFECTSLOTFV)(unsigned asid, int param, PALfloat values);
-extern DELPHI_PACKAGE void __cdecl (*ALGETAUXILIARYEFFECTSLOTI)(unsigned asid, int param, PALint value);
-extern DELPHI_PACKAGE void __cdecl (*ALGETAUXILIARYEFFECTSLOTIV)(unsigned asid, int param, PALint values);
-extern DELPHI_PACKAGE void __cdecl (*ALGETAUXILIARYEFFECTSLOTF)(unsigned asid, int param, PALfloat value);
-extern DELPHI_PACKAGE void __cdecl (*ALGETAUXILIARYEFFECTSLOTFV)(unsigned asid, int param, PALfloat values);
-extern DELPHI_PACKAGE NativeUInt LibHandle;
-extern DELPHI_PACKAGE NativeUInt EFXUtilLibHandle;
+extern DELPHI_PACKAGE void __cdecl (*alcCaptureSamples)(PALCdevice device, TALCvoid buffer, TALCsizei samples);
+extern DELPHI_PACKAGE int __cdecl (*EAXSet)(const GUID &Guid, TALuint ALuint1, TALuint ALuint2, void * point, TALuint ALuint3);
+extern DELPHI_PACKAGE int __cdecl (*EAXGet)(const GUID &Guid, TALuint ALuint1, TALuint ALuint2, void * point, TALuint ALuint3);
+extern DELPHI_PACKAGE TALenum AL_EAX_RAM_SIZE;
+extern DELPHI_PACKAGE TALenum AL_EAX_RAM_FREE;
+extern DELPHI_PACKAGE TALenum AL_STORAGE_AUTOMATIC;
+extern DELPHI_PACKAGE TALenum AL_STORAGE_HARDWARE;
+extern DELPHI_PACKAGE TALenum AL_STORAGE_ACCESSIBLE;
+extern DELPHI_PACKAGE bool __cdecl (*EAXSetBufferMode)(TALsizei n, PALuint buffers, TALint value);
+extern DELPHI_PACKAGE int __cdecl (*EAXGetBufferMode)(TALuint buffer, PALint value);
+extern DELPHI_PACKAGE void __cdecl (*ALGENEFFECTS)(TALsizei n, PALuint effects);
+extern DELPHI_PACKAGE void __cdecl (*ALDELETEEFFECTS)(TALsizei n, PALuint effects);
+extern DELPHI_PACKAGE bool __cdecl (*ALISEFFECT)(TALuint eid);
+extern DELPHI_PACKAGE void __cdecl (*ALEFFECTI)(TALuint eid, TALCenum param, TALint value);
+extern DELPHI_PACKAGE void __cdecl (*ALEFFECTIV)(TALuint eid, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*ALEFFECTF)(TALuint eid, TALenum param, TALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*ALEFFECTFV)(TALuint eid, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*ALGETEFFECTI)(TALuint eid, TALenum param, PALint value);
+extern DELPHI_PACKAGE void __cdecl (*ALGETEFFECTIV)(TALuint eid, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*ALGETEFFECTF)(TALuint eid, TALenum param, PALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*ALGETEFFECTFV)(TALuint eid, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*ALGENFILTERS)(TALsizei n, PALuint filters);
+extern DELPHI_PACKAGE void __cdecl (*ALDELETEFILTERS)(TALsizei n, PALuint filters);
+extern DELPHI_PACKAGE bool __cdecl (*ALISFILTER)(TALuint fid);
+extern DELPHI_PACKAGE void __cdecl (*ALFILTERI)(TALuint fid, TALenum param, TALint value);
+extern DELPHI_PACKAGE void __cdecl (*ALFILTERIV)(TALuint fid, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*ALFILTERF)(TALuint fid, TALenum param, TALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*ALFILTERFV)(TALuint fid, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*ALGETFILTERI)(TALuint fid, TALenum param, PALint value);
+extern DELPHI_PACKAGE void __cdecl (*ALGETFILTERIV)(TALuint fid, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*ALGETFILTERF)(TALuint fid, TALenum param, PALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*ALGETFILTERFV)(TALuint fid, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*ALGENAUXILIARYEFFECTSLOTS)(TALsizei n, PALuint slots);
+extern DELPHI_PACKAGE void __cdecl (*ALDELETEAUXILIARYEFFECTSLOTS)(TALsizei n, PALuint slots);
+extern DELPHI_PACKAGE bool __cdecl (*ALISAUXILIARYEFFECTSLOT)(TALuint slot);
+extern DELPHI_PACKAGE void __cdecl (*ALAUXILIARYEFFECTSLOTI)(TALuint asid, TALenum param, TALint value);
+extern DELPHI_PACKAGE void __cdecl (*ALAUXILIARYEFFECTSLOTIV)(TALuint asid, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*ALAUXILIARYEFFECTSLOTF)(TALuint asid, TALenum param, TALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*ALAUXILIARYEFFECTSLOTFV)(TALuint asid, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE void __cdecl (*ALGETAUXILIARYEFFECTSLOTI)(TALuint asid, TALenum param, PALint value);
+extern DELPHI_PACKAGE void __cdecl (*ALGETAUXILIARYEFFECTSLOTIV)(TALuint asid, TALenum param, PALint values);
+extern DELPHI_PACKAGE void __cdecl (*ALGETAUXILIARYEFFECTSLOTF)(TALuint asid, TALenum param, PALfloat value);
+extern DELPHI_PACKAGE void __cdecl (*ALGETAUXILIARYEFFECTSLOTFV)(TALuint asid, TALenum param, PALfloat values);
+extern DELPHI_PACKAGE Winapi::Windows::THandle LibHandle;
+extern DELPHI_PACKAGE Winapi::Windows::THandle EFXUtilLibHandle;
 extern DELPHI_PACKAGE bool __fastcall InitOpenAL(System::UnicodeString LibName = L"OpenAL32.dll");
 extern DELPHI_PACKAGE void __fastcall ReadOpenALExtensions(void);
-extern DELPHI_PACKAGE void __fastcall alutInit(PALint argc, PALbyte *argv, const int argv_High);
+extern DELPHI_PACKAGE void __fastcall alutInit(PALint argc, PALbyte *argv, const System::NativeInt argv_High);
 extern DELPHI_PACKAGE void __fastcall alutExit(void);
-extern DELPHI_PACKAGE void __fastcall alutLoadWAVFile(System::UnicodeString fname, int &format, void * &data, unsigned &size, unsigned &freq, int &loop);
-extern DELPHI_PACKAGE void __fastcall alutLoadWAVMemory(PALbyte memory, int &format, void * &data, unsigned &size, unsigned &freq, int &loop);
-extern DELPHI_PACKAGE void __fastcall alutUnloadWAV(int format, void * data, unsigned size, unsigned freq);
+extern DELPHI_PACKAGE void __fastcall alutLoadWAVFile(System::UnicodeString fname, TALenum &format, TALvoid &data, TALsizei &size, TALsizei &freq, TALint &loop);
+extern DELPHI_PACKAGE void __fastcall alutLoadWAVMemory(PALbyte memory, TALenum &format, TALvoid &data, TALsizei &size, TALsizei &freq, TALint &loop);
+extern DELPHI_PACKAGE void __fastcall alutUnloadWAV(TALenum format, TALvoid data, TALsizei size, TALsizei freq);
 }	/* namespace Openal */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_OPENAL)
 using namespace Openal;

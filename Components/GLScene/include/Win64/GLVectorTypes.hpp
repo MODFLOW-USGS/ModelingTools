@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLVectorTypes.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLVectorTypes.pas' rev: 36.00 (Windows)
 
 #ifndef GlvectortypesHPP
 #define GlvectortypesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -152,8 +154,8 @@ public:
 	{
 		struct 
 		{
-			int X;
-			int Y;
+			System::LongInt X;
+			System::LongInt Y;
 		};
 		struct 
 		{
@@ -172,8 +174,8 @@ public:
 	{
 		struct 
 		{
-			unsigned X;
-			unsigned Y;
+			System::LongWord X;
+			System::LongWord Y;
 		};
 		struct 
 		{
@@ -379,9 +381,9 @@ public:
 	{
 		struct 
 		{
-			int X;
-			int Y;
-			int Z;
+			System::LongInt X;
+			System::LongInt Y;
+			System::LongInt Z;
 		};
 		struct 
 		{
@@ -400,9 +402,9 @@ public:
 	{
 		struct 
 		{
-			unsigned X;
-			unsigned Y;
-			unsigned Z;
+			System::LongWord X;
+			System::LongWord Y;
+			System::LongWord Z;
 		};
 		struct 
 		{
@@ -617,10 +619,10 @@ public:
 	{
 		struct 
 		{
-			int X;
-			int Y;
-			int Z;
-			int W;
+			System::LongInt X;
+			System::LongInt Y;
+			System::LongInt Z;
+			System::LongInt W;
 		};
 		struct 
 		{
@@ -639,10 +641,10 @@ public:
 	{
 		struct 
 		{
-			unsigned X;
-			unsigned Y;
-			unsigned Z;
-			unsigned W;
+			System::LongWord X;
+			System::LongWord Y;
+			System::LongWord Z;
+			System::LongWord W;
 		};
 		struct 
 		{

@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFireFX.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFireFX.pas' rev: 36.00 (Windows)
 
 #ifndef GlfirefxHPP
 #define GlfirefxHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -48,8 +50,8 @@ typedef TFireParticle *PFireParticle;
 struct DECLSPEC_DRECORD TFireParticle
 {
 public:
-	Glvectortypes::TVector4f Position;
-	Glvectortypes::TVector4f Speed;
+	Glvectorgeometry::TVector Position;
+	Glvectorgeometry::TVector Speed;
 	float Alpha;
 	float TimeToLive;
 	float LifeLength;
@@ -66,9 +68,9 @@ class PASCALIMPLEMENTATION TGLFireFXManager : public Glbaseclasses::TGLCadenceAb
 	
 private:
 	System::Classes::TList* FClients;
-	TFireParticleArray *FFireParticles;
-	Glcoordinates::TGLCoordinates3* FFireDir;
-	Glcoordinates::TGLCoordinates3* FInitialDir;
+	PFireParticleArray FFireParticles;
+	Glcoordinates::TGLCoordinates* FFireDir;
+	Glcoordinates::TGLCoordinates* FInitialDir;
 	Glcadencer::TGLCadencer* FCadencer;
 	int FMaxParticles;
 	int FParticleLife;
@@ -93,8 +95,8 @@ protected:
 	void __fastcall RegisterClient(TGLBFireFX* aClient);
 	void __fastcall DeRegisterClient(TGLBFireFX* aClient);
 	void __fastcall DeRegisterAllClients();
-	void __fastcall SetFireDir(Glcoordinates::TGLCoordinates3* const val);
-	void __fastcall SetInitialDir(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetFireDir(Glcoordinates::TGLCoordinates* const val);
+	void __fastcall SetInitialDir(Glcoordinates::TGLCoordinates* const val);
 	void __fastcall SetCadencer(Glcadencer::TGLCadencer* const val);
 	bool __fastcall StoreParticleSize();
 	void __fastcall SetInnerColor(Glcolor::TGLColor* const val);
@@ -103,20 +105,20 @@ protected:
 	void __fastcall SetMaxParticles(const int val);
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);
 	void __fastcall CalcFire(double deltaTime, float ParticleInterval, float ParticleLife, float FireAlpha);
-	void __fastcall AffParticle3d(const Glvectortypes::TVector4f &Color2, const Glvectortypes::TMatrix4f &mat);
+	void __fastcall AffParticle3d(const Glcolor::TColorVector &Color2, const Glvectorgeometry::TMatrix &mat);
 	
 public:
 	__fastcall virtual TGLFireFXManager(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLFireFXManager();
 	void __fastcall FireInit();
 	void __fastcall IsotropicExplosion(float minInitialSpeed, float maxInitialSpeed, float lifeBoostFactor, int nbParticles = 0xffffffff);
-	void __fastcall RingExplosion(float minInitialSpeed, float maxInitialSpeed, float lifeBoostFactor, const Glvectortypes::TVector3f &ringVectorX, const Glvectortypes::TVector3f &ringVectorY, int nbParticles = 0xffffffff);
+	void __fastcall RingExplosion(float minInitialSpeed, float maxInitialSpeed, float lifeBoostFactor, const Glvectorgeometry::TAffineVector &ringVectorX, const Glvectorgeometry::TAffineVector &ringVectorY, int nbParticles = 0xffffffff);
 	__property int ParticleCount = {read=NP, nodefault};
 	virtual void __fastcall DoProgress(const Glbaseclasses::TGLProgressTimes &progressTime);
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* FireDir = {read=FFireDir, write=SetFireDir};
-	__property Glcoordinates::TGLCoordinates3* InitialDir = {read=FInitialDir, write=SetInitialDir};
+	__property Glcoordinates::TGLCoordinates* FireDir = {read=FFireDir, write=SetFireDir};
+	__property Glcoordinates::TGLCoordinates* InitialDir = {read=FInitialDir, write=SetInitialDir};
 	__property Glcadencer::TGLCadencer* Cadencer = {read=FCadencer, write=SetCadencer};
 	__property int MaxParticles = {read=FMaxParticles, write=SetMaxParticles, default=256};
 	__property float ParticleSize = {read=FParticleSize, write=FParticleSize, stored=StoreParticleSize};

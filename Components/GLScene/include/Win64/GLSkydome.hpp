@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSkydome.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSkydome.pas' rev: 36.00 (Windows)
 
 #ifndef GlskydomeHPP
 #define GlskydomeHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -130,7 +132,7 @@ private:
 	float FDec;
 	float FMagnitude;
 	System::Uitypes::TColor FColor;
-	Glvectortypes::TVector3f FCacheCoord;
+	Glvectorgeometry::TAffineVector FCacheCoord;
 	
 protected:
 	virtual System::UnicodeString __fastcall GetDisplayName();
@@ -222,9 +224,9 @@ class PASCALIMPLEMENTATION TGLEarthSkyDome : public TGLSkyDome
 private:
 	float FSunElevation;
 	float FTurbidity;
-	Glvectortypes::TVector4f FCurSunColor;
-	Glvectortypes::TVector4f FCurSkyColor;
-	Glvectortypes::TVector4f FCurHazeColor;
+	Glcolor::TColorVector FCurSunColor;
+	Glcolor::TColorVector FCurSkyColor;
+	Glcolor::TColorVector FCurHazeColor;
 	float FCurHazeTurbid;
 	float FCurSunSkyTurbid;
 	Glcolor::TGLColor* FSunZenithColor;
@@ -253,7 +255,7 @@ protected:
 	void __fastcall OnColorChanged(System::TObject* Sender);
 	void __fastcall PreCalculate();
 	void __fastcall RenderDome();
-	Glvectortypes::TVector4f __fastcall CalculateColor(const float theta, const float cosGamma);
+	Glcolor::TColorVector __fastcall CalculateColor(const float theta, const float cosGamma);
 	
 public:
 	__fastcall virtual TGLEarthSkyDome(System::Classes::TComponent* AOwner);
@@ -281,9 +283,9 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern DELPHI_PACKAGE Glvectortypes::TVector3f __fastcall StarRecordPositionYUp(const TGLStarRecord &starRecord);
-extern DELPHI_PACKAGE Glvectortypes::TVector3f __fastcall StarRecordPositionZUp(const TGLStarRecord &starRecord);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall StarRecordColor(const TGLStarRecord &starRecord, float bias);
+extern DELPHI_PACKAGE Glvectorgeometry::TAffineVector __fastcall StarRecordPositionYUp(const TGLStarRecord &starRecord);
+extern DELPHI_PACKAGE Glvectorgeometry::TAffineVector __fastcall StarRecordPositionZUp(const TGLStarRecord &starRecord);
+extern DELPHI_PACKAGE Glvectorgeometry::TVector __fastcall StarRecordColor(const TGLStarRecord &starRecord, float bias);
 }	/* namespace Glskydome */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLSKYDOME)
 using namespace Glskydome;

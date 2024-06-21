@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSilhouette.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSilhouette.pas' rev: 36.00 (Windows)
 
 #ifndef GlsilhouetteHPP
 #define GlsilhouetteHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -36,8 +38,8 @@ enum DECLSPEC_DENUM TGLSilhouetteStyle : unsigned char { ssOmni, ssParallel };
 struct DECLSPEC_DRECORD TGLSilhouetteParameters
 {
 public:
-	Glvectortypes::TVector3f SeenFrom;
-	Glvectortypes::TVector3f LightDirection;
+	Glvectorgeometry::TAffineVector SeenFrom;
+	Glvectorgeometry::TAffineVector LightDirection;
 	TGLSilhouetteStyle Style;
 	bool CappingRequired;
 };
@@ -68,10 +70,10 @@ public:
 	__property Glvectorlists::TIntegerList* CapIndices = {read=FCapIndices, write=SetCapIndices};
 	virtual void __fastcall Flush();
 	void __fastcall Clear();
-	void __fastcall ExtrudeVerticesToInfinity(const Glvectortypes::TVector3f &origin);
-	void __fastcall AddEdgeToSilhouette(const Glvectortypes::TVector3f &v0, const Glvectortypes::TVector3f &v1, bool tightButSlow);
+	void __fastcall ExtrudeVerticesToInfinity(const Glvectorgeometry::TAffineVector &origin);
+	void __fastcall AddEdgeToSilhouette(const Glvectorgeometry::TAffineVector &v0, const Glvectorgeometry::TAffineVector &v1, bool tightButSlow);
 	void __fastcall AddIndexedEdgeToSilhouette(const int Vi0, const int Vi1);
-	void __fastcall AddCapToSilhouette(const Glvectortypes::TVector3f &v0, const Glvectortypes::TVector3f &v1, const Glvectortypes::TVector3f &v2, bool tightButSlow);
+	void __fastcall AddCapToSilhouette(const Glvectorgeometry::TAffineVector &v0, const Glvectorgeometry::TAffineVector &v1, const Glvectorgeometry::TAffineVector &v2, bool tightButSlow);
 	void __fastcall AddIndexedCapToSilhouette(const int Vi0, const int Vi1, const int vi2);
 };
 
@@ -111,15 +113,15 @@ protected:
 	Glvectorlists::TAffineVectorList* FVertices;
 	HIDESBASE int __fastcall GetEdgeCount();
 	HIDESBASE int __fastcall GetFaceCount();
-	int __fastcall ReuseOrFindVertexID(const Glvectortypes::TVector3f &SeenFrom, TGLSilhouette* ASilhouette, int index);
+	int __fastcall ReuseOrFindVertexID(const Glvectorgeometry::TAffineVector &SeenFrom, TGLSilhouette* ASilhouette, int index);
 	
 public:
 	virtual void __fastcall Clear();
 	HIDESBASE void __fastcall CreateSilhouette(const TGLSilhouetteParameters &silhouetteParameters, TGLSilhouette* &ASilhouette, bool AddToSilhouette);
 	int __fastcall AddIndexedEdge(int vertexIndex0, int vertexIndex1, int FaceID);
 	int __fastcall AddIndexedFace(int Vi0, int Vi1, int vi2);
-	int __fastcall AddFace(const Glvectortypes::TVector3f &vertex0, const Glvectortypes::TVector3f &vertex1, const Glvectortypes::TVector3f &vertex2);
-	int __fastcall AddQuad(const Glvectortypes::TVector3f &vertex0, const Glvectortypes::TVector3f &vertex1, const Glvectortypes::TVector3f &vertex2, const Glvectortypes::TVector3f &vertex3);
+	int __fastcall AddFace(const Glvectorgeometry::TAffineVector &vertex0, const Glvectorgeometry::TAffineVector &vertex1, const Glvectorgeometry::TAffineVector &vertex2);
+	int __fastcall AddQuad(const Glvectorgeometry::TAffineVector &vertex0, const Glvectorgeometry::TAffineVector &vertex1, const Glvectorgeometry::TAffineVector &vertex2, const Glvectorgeometry::TAffineVector &vertex3);
 	__property int EdgeCount = {read=GetEdgeCount, nodefault};
 	__property int FaceCount = {read=GetFaceCount, nodefault};
 	__fastcall virtual TConnectivity(bool APrecomputeFaceNormal);

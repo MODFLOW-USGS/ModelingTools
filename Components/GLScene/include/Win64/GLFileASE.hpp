@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileASE.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFileASE.pas' rev: 36.00 (Windows)
 
 #ifndef GlfileaseHPP
 #define GlfileaseHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -75,7 +77,7 @@ class PASCALIMPLEMENTATION TGLASEFace : public System::TObject
 	
 private:
 	System::StaticArray<int, 3> FV;
-	Glvectortypes::TVector3f FNormal;
+	Glvectorgeometry::TAffineVector FNormal;
 	System::StaticArray<Glvectortypes::TVector3f, 3> FN;
 	TGLASESmoothingGroups FSmoothing;
 	int FSubMaterialID;
@@ -86,10 +88,10 @@ public:
 	// [SKIPPED] __property int VertIdx1 = {read=FV[0], nodefault};
 	// [SKIPPED] __property int VertIdx2 = {read=FV[1], nodefault};
 	// [SKIPPED] __property int VertIdx3 = {read=FV[2], nodefault};
-	__property Glvectortypes::TVector3f Normal = {read=FNormal};
-	// [SKIPPED] __property Glvectortypes::TVector3f Normal1 = {read=FN[0]};
-	// [SKIPPED] __property Glvectortypes::TVector3f Normal2 = {read=FN[1]};
-	// [SKIPPED] __property Glvectortypes::TVector3f Normal3 = {read=FN[2]};
+	__property Glvectorgeometry::TAffineVector Normal = {read=FNormal};
+	// [SKIPPED] __property Glvectorgeometry::TAffineVector Normal1 = {read=FN[0]};
+	// [SKIPPED] __property Glvectorgeometry::TAffineVector Normal2 = {read=FN[1]};
+	// [SKIPPED] __property Glvectorgeometry::TAffineVector Normal3 = {read=FN[2]};
 	__property TGLASEFaceTexureChannels TextChannels = {read=FTextChannels};
 	__property TGLASESmoothingGroups Smoothing = {read=FSmoothing};
 	__property int SubMaterialID = {read=FSubMaterialID, nodefault};
@@ -129,16 +131,16 @@ class PASCALIMPLEMENTATION TGLASEMeshObject : public System::TObject
 private:
 	TGLASEFaceList* FFaces;
 	Glvectorlists::TAffineVectorList* FVertices;
-	Glvectortypes::TMatrix4f FMatrix;
-	Glvectortypes::TVector3f FInheritedPosition;
-	Glvectortypes::TVector3f FInheritedScale;
-	Glvectortypes::TVector3f FInheritedRotation;
+	Glvectorgeometry::TMatrix FMatrix;
+	Glvectorgeometry::TAffineVector FInheritedPosition;
+	Glvectorgeometry::TAffineVector FInheritedScale;
+	Glvectorgeometry::TAffineVector FInheritedRotation;
 	float FRotationAngle;
-	Glvectortypes::TVector3f FRotationAxis;
-	Glvectortypes::TVector4f FPosition;
-	Glvectortypes::TVector3f FScale;
+	Glvectorgeometry::TAffineVector FRotationAxis;
+	Glvectorgeometry::TVector FPosition;
+	Glvectorgeometry::TAffineVector FScale;
 	float FScaleAxisAngle;
-	Glvectortypes::TVector3f FScaleAxis;
+	Glvectorgeometry::TAffineVector FScaleAxis;
 	System::StaticArray<Glvectorlists::TAffineVectorList*, 12> FTexChannels;
 	int FTexChannelsCount;
 	bool FHasNormals;
@@ -153,15 +155,15 @@ public:
 	__property Glvectorlists::TAffineVectorList* Vertices = {read=FVertices};
 	__property Glvectorlists::TAffineVectorList* TextChannel[int Channel] = {read=GetTextChannel};
 	__property int TextChannelsCount = {read=FTexChannelsCount, nodefault};
-	__property Glvectortypes::TMatrix4f Matrix = {read=FMatrix};
-	__property Glvectortypes::TVector3f InheritedPosition = {read=FInheritedPosition};
-	__property Glvectortypes::TVector3f InheritedRotation = {read=FInheritedRotation};
-	__property Glvectortypes::TVector3f InheritedScale = {read=FInheritedScale};
-	__property Glvectortypes::TVector4f Position = {read=FPosition};
-	__property Glvectortypes::TVector3f RotationAxis = {read=FRotationAxis};
+	__property Glvectorgeometry::TMatrix Matrix = {read=FMatrix};
+	__property Glvectorgeometry::TAffineVector InheritedPosition = {read=FInheritedPosition};
+	__property Glvectorgeometry::TAffineVector InheritedRotation = {read=FInheritedRotation};
+	__property Glvectorgeometry::TAffineVector InheritedScale = {read=FInheritedScale};
+	__property Glvectorgeometry::TVector Position = {read=FPosition};
+	__property Glvectorgeometry::TAffineVector RotationAxis = {read=FRotationAxis};
 	__property float RotationAngle = {read=FRotationAngle};
-	__property Glvectortypes::TVector3f Scale = {read=FScale};
-	__property Glvectortypes::TVector3f ScaleAxis = {read=FScaleAxis};
+	__property Glvectorgeometry::TAffineVector Scale = {read=FScale};
+	__property Glvectorgeometry::TAffineVector ScaleAxis = {read=FScaleAxis};
 	__property float ScaleAxisAngle = {read=FScaleAxisAngle};
 	__property bool HasNormals = {read=FHasNormals, nodefault};
 	__property int MaterialID = {read=FMaterialID, nodefault};
@@ -208,9 +210,9 @@ struct DECLSPEC_DRECORD TGLASESubMaterial
 {
 public:
 	System::UnicodeString Name;
-	Glvectortypes::TVector3f Ambient;
-	Glvectortypes::TVector3f Diffuse;
-	Glvectortypes::TVector3f Specular;
+	Glvectorgeometry::TAffineVector Ambient;
+	Glvectorgeometry::TAffineVector Diffuse;
+	Glvectorgeometry::TAffineVector Specular;
 	float Shiness;
 	float ShineStrength;
 	float Transparency;
@@ -243,18 +245,18 @@ private:
 	float FShiness;
 	float FTransparency;
 	System::UnicodeString FName;
-	Glvectortypes::TVector3f FDiffuse;
-	Glvectortypes::TVector3f FAmbient;
-	Glvectortypes::TVector3f FSpecular;
+	Glvectorgeometry::TAffineVector FDiffuse;
+	Glvectorgeometry::TAffineVector FAmbient;
+	Glvectorgeometry::TAffineVector FSpecular;
 	TGLASESubMaterialList FSubMaterials;
 	TGLASEMaterialTextureMaps FTextureMaps;
 	
 public:
 	__fastcall TGLASEMaterial();
 	__property System::UnicodeString Name = {read=FName};
-	__property Glvectortypes::TVector3f Ambient = {read=FAmbient};
-	__property Glvectortypes::TVector3f Diffuse = {read=FDiffuse};
-	__property Glvectortypes::TVector3f Specular = {read=FSpecular};
+	__property Glvectorgeometry::TAffineVector Ambient = {read=FAmbient};
+	__property Glvectorgeometry::TAffineVector Diffuse = {read=FDiffuse};
+	__property Glvectorgeometry::TAffineVector Specular = {read=FSpecular};
 	__property float Shiness = {read=FShiness};
 	__property float ShineStrength = {read=FShineStrength};
 	__property float Transparency = {read=FTransparency};
@@ -305,8 +307,8 @@ private:
 	bool __fastcall ContainString(const System::UnicodeString aData, const System::UnicodeString aString);
 	int __fastcall GetTagOnData(const System::UnicodeString aData);
 	bool __fastcall IsEndOfSection(const System::UnicodeString aData);
-	Glvectortypes::TVector3f __fastcall GetValue3D(const System::UnicodeString aData);
-	Glvectortypes::TVector3f __fastcall GetValue4D(const System::UnicodeString aData, int &Value0);
+	Glvectorgeometry::TAffineVector __fastcall GetValue3D(const System::UnicodeString aData);
+	Glvectorgeometry::TAffineVector __fastcall GetValue4D(const System::UnicodeString aData, int &Value0);
 	System::UnicodeString __fastcall GetStringValue(const System::UnicodeString aData);
 	double __fastcall GetDoubleValue(const System::UnicodeString aData);
 	System::UnicodeString __fastcall GetFirstValue(System::UnicodeString aData);

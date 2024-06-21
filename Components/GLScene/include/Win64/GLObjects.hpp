@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLObjects.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLObjects.pas' rev: 36.00 (Windows)
 
 #ifndef GlobjectsHPP
 #define GlobjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -79,7 +81,7 @@ class PASCALIMPLEMENTATION TGLDummyCube : public Glscene::TGLCameraInvariantObje
 	typedef Glscene::TGLCameraInvariantObject inherited;
 	
 private:
-	float FCubeSize;
+	Opengltokens::TGLfloat FCubeSize;
 	Glcolor::TGLColor* FEdgeColor;
 	bool FVisibleAtRunTime;
 	bool FAmalgamate;
@@ -87,7 +89,7 @@ private:
 	TGLVisibilityDeterminationEvent FOnVisibilityDetermination;
 	
 protected:
-	void __fastcall SetCubeSize(const float val);
+	void __fastcall SetCubeSize(const Opengltokens::TGLfloat val);
 	void __fastcall SetEdgeColor(Glcolor::TGLColor* const val);
 	void __fastcall SetVisibleAtRunTime(const bool val);
 	void __fastcall SetAmalgamate(const bool val);
@@ -96,15 +98,15 @@ public:
 	__fastcall virtual TGLDummyCube(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLDummyCube();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall DoRender(Glrendercontextinfo::TGLRenderContextInfo &rci, bool renderSelf, bool renderChildren);
 	virtual void __fastcall StructureChanged();
-	virtual Glvectortypes::TVector4f __fastcall BarycenterAbsolutePosition();
+	virtual Glvectorgeometry::TVector __fastcall BarycenterAbsolutePosition();
 	
 __published:
-	__property float CubeSize = {read=FCubeSize, write=SetCubeSize};
+	__property Opengltokens::TGLfloat CubeSize = {read=FCubeSize, write=SetCubeSize};
 	__property Glcolor::TGLColor* EdgeColor = {read=FEdgeColor, write=SetEdgeColor};
 	__property bool VisibleAtRunTime = {read=FVisibleAtRunTime, write=SetVisibleAtRunTime, default=0};
 	__property bool Amalgamate = {read=FAmalgamate, write=SetAmalgamate, default=0};
@@ -132,12 +134,12 @@ private:
 	
 	
 private:
-	float FXOffset;
-	float FYOffset;
-	float FXScope;
-	float FYScope;
-	float FWidth;
-	float FHeight;
+	Opengltokens::TGLfloat FXOffset;
+	Opengltokens::TGLfloat FYOffset;
+	Opengltokens::TGLfloat FXScope;
+	Opengltokens::TGLfloat FYScope;
+	Opengltokens::TGLfloat FWidth;
+	Opengltokens::TGLfloat FHeight;
 	unsigned FXTiles;
 	unsigned FYTiles;
 	TGLPlaneStyles FStyle;
@@ -146,12 +148,12 @@ private:
 protected:
 	void __fastcall SetHeight(const float aValue);
 	void __fastcall SetWidth(const float aValue);
-	void __fastcall SetXOffset(const float Value);
-	void __fastcall SetXScope(const float Value);
+	void __fastcall SetXOffset(const Opengltokens::TGLfloat Value);
+	void __fastcall SetXScope(const Opengltokens::TGLfloat Value);
 	bool __fastcall StoreXScope();
 	void __fastcall SetXTiles(const unsigned Value);
-	void __fastcall SetYOffset(const float Value);
-	void __fastcall SetYScope(const float Value);
+	void __fastcall SetYOffset(const Opengltokens::TGLfloat Value);
+	void __fastcall SetYScope(const Opengltokens::TGLfloat Value);
 	bool __fastcall StoreYScope();
 	void __fastcall SetYTiles(const unsigned Value);
 	void __fastcall SetStyle(const TGLPlaneStyles val);
@@ -161,19 +163,19 @@ public:
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	System::Types::TRect __fastcall ScreenRect(Glscene::TGLSceneBuffer* aBuffer);
-	float __fastcall PointDistance(const Glvectortypes::TVector4f &aPoint);
+	float __fastcall PointDistance(const Glvectorgeometry::TVector &aPoint);
 	
 __published:
-	__property float Height = {read=FHeight, write=SetHeight};
-	__property float Width = {read=FWidth, write=SetWidth};
-	__property float XOffset = {read=FXOffset, write=SetXOffset};
-	__property float XScope = {read=FXScope, write=SetXScope, stored=StoreXScope};
+	__property Opengltokens::TGLfloat Height = {read=FHeight, write=SetHeight};
+	__property Opengltokens::TGLfloat Width = {read=FWidth, write=SetWidth};
+	__property Opengltokens::TGLfloat XOffset = {read=FXOffset, write=SetXOffset};
+	__property Opengltokens::TGLfloat XScope = {read=FXScope, write=SetXScope, stored=StoreXScope};
 	__property unsigned XTiles = {read=FXTiles, write=SetXTiles, default=1};
-	__property float YOffset = {read=FYOffset, write=SetYOffset};
-	__property float YScope = {read=FYScope, write=SetYScope, stored=StoreYScope};
+	__property Opengltokens::TGLfloat YOffset = {read=FYOffset, write=SetYOffset};
+	__property Opengltokens::TGLfloat YScope = {read=FYScope, write=SetYScope, stored=StoreYScope};
 	__property unsigned YTiles = {read=FYTiles, write=SetYTiles, default=1};
 	__property TGLPlaneStyles Style = {read=FStyle, write=SetStyle, default=3};
 public:
@@ -190,17 +192,17 @@ class PASCALIMPLEMENTATION TGLSprite : public Glscene::TGLSceneObject
 	typedef Glscene::TGLSceneObject inherited;
 	
 private:
-	float FWidth;
-	float FHeight;
-	float FRotation;
+	Opengltokens::TGLfloat FWidth;
+	Opengltokens::TGLfloat FHeight;
+	Opengltokens::TGLfloat FRotation;
 	float FAlphaChannel;
 	bool FMirrorU;
 	bool FMirrorV;
 	
 protected:
-	void __fastcall SetWidth(const float val);
-	void __fastcall SetHeight(const float val);
-	HIDESBASE void __fastcall SetRotation(const float val);
+	void __fastcall SetWidth(const Opengltokens::TGLfloat val);
+	void __fastcall SetHeight(const Opengltokens::TGLfloat val);
+	HIDESBASE void __fastcall SetRotation(const Opengltokens::TGLfloat val);
 	void __fastcall SetAlphaChannel(const float val);
 	bool __fastcall StoreAlphaChannel();
 	void __fastcall SetMirrorU(const bool val);
@@ -210,14 +212,14 @@ public:
 	__fastcall virtual TGLSprite(System::Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	void __fastcall SetSize(const float Width, const float Height);
-	void __fastcall SetSquareSize(const float Size);
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	void __fastcall SetSize(const Opengltokens::TGLfloat Width, const Opengltokens::TGLfloat Height);
+	void __fastcall SetSquareSize(const Opengltokens::TGLfloat Size);
 	
 __published:
-	__property float Width = {read=FWidth, write=SetWidth};
-	__property float Height = {read=FHeight, write=SetHeight};
-	__property float Rotation = {read=FRotation, write=SetRotation};
+	__property Opengltokens::TGLfloat Width = {read=FWidth, write=SetWidth};
+	__property Opengltokens::TGLfloat Height = {read=FHeight, write=SetHeight};
+	__property Opengltokens::TGLfloat Rotation = {read=FRotation, write=SetRotation};
 	__property float AlphaChannel = {read=FAlphaChannel, write=SetAlphaChannel, stored=StoreAlphaChannel};
 	__property bool MirrorU = {read=FMirrorU, write=SetMirrorU, default=0};
 	__property bool MirrorV = {read=FMirrorV, write=SetMirrorV, default=0};
@@ -241,14 +243,14 @@ private:
 	float FMinSize;
 	float FMaxSize;
 	float FFadeTresholdSize;
-	Glcoordinates::TGLCoordinates3* FDistanceAttenuation;
+	Glcoordinates::TGLCoordinates* FDistanceAttenuation;
 	
 protected:
 	void __fastcall SetEnabled(const bool val);
 	void __fastcall SetMinSize(const float val);
 	void __fastcall SetMaxSize(const float val);
 	void __fastcall SetFadeTresholdSize(const float val);
-	void __fastcall SetDistanceAttenuation(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetDistanceAttenuation(Glcoordinates::TGLCoordinates* const val);
 	virtual void __fastcall DefineProperties(System::Classes::TFiler* Filer);
 	void __fastcall ReadData(System::Classes::TStream* Stream);
 	void __fastcall WriteData(System::Classes::TStream* Stream);
@@ -265,7 +267,7 @@ __published:
 	__property float MinSize = {read=FMinSize, write=SetMinSize, stored=false};
 	__property float MaxSize = {read=FMaxSize, write=SetMaxSize, stored=false};
 	__property float FadeTresholdSize = {read=FFadeTresholdSize, write=SetFadeTresholdSize, stored=false};
-	__property Glcoordinates::TGLCoordinates3* DistanceAttenuation = {read=FDistanceAttenuation, write=SetDistanceAttenuation};
+	__property Glcoordinates::TGLCoordinates* DistanceAttenuation = {read=FDistanceAttenuation, write=SetDistanceAttenuation};
 };
 
 
@@ -357,13 +359,13 @@ class PASCALIMPLEMENTATION TGLLineBase : public Glscene::TGLImmaterialSceneObjec
 	
 private:
 	Glcolor::TGLColor* FLineColor;
-	System::Word FLinePattern;
+	Opengltokens::TGLushort FLinePattern;
 	float FLineWidth;
 	bool FAntiAliased;
 	
 protected:
 	void __fastcall SetLineColor(Glcolor::TGLColor* const Value);
-	void __fastcall SetLinePattern(const System::Word Value);
+	void __fastcall SetLinePattern(const Opengltokens::TGLushort Value);
 	void __fastcall SetLineWidth(const float val);
 	bool __fastcall StoreLineWidth();
 	void __fastcall SetAntiAliased(const bool val);
@@ -378,7 +380,7 @@ public:
 __published:
 	__property bool AntiAliased = {read=FAntiAliased, write=SetAntiAliased, default=0};
 	__property Glcolor::TGLColor* LineColor = {read=FLineColor, write=SetLineColor};
-	__property System::Word LinePattern = {read=FLinePattern, write=SetLinePattern, default=65535};
+	__property Opengltokens::TGLushort LinePattern = {read=FLinePattern, write=SetLinePattern, default=65535};
 	__property float LineWidth = {read=FLineWidth, write=SetLineWidth, stored=StoreLineWidth};
 	__property Visible = {default=1};
 public:
@@ -396,7 +398,7 @@ private:
 	TGLLineNodesAspect FNodesAspect;
 	Glcolor::TGLColor* FNodeColor;
 	float FNodeSize;
-	Glvectortypes::TVector4f FOldNodeColor;
+	Glcolor::TColorVector FOldNodeColor;
 	
 protected:
 	void __fastcall SetNodesAspect(const TGLLineNodesAspect Value);
@@ -411,11 +413,11 @@ public:
 	__fastcall virtual TGLNodedLines(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLNodedLines();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	void __fastcall AddNode(Glcoordinates::TGLCoordinates3* const coords)/* overload */;
-	void __fastcall AddNode(const float X, const float Y, const float Z)/* overload */;
-	void __fastcall AddNode(const Glvectortypes::TVector4f &Value)/* overload */;
-	void __fastcall AddNode(const Glvectortypes::TVector3f &Value)/* overload */;
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	void __fastcall AddNode(Glcoordinates::TGLCoordinates* const coords)/* overload */;
+	void __fastcall AddNode(const Opengltokens::TGLfloat X, const Opengltokens::TGLfloat Y, const Opengltokens::TGLfloat Z)/* overload */;
+	void __fastcall AddNode(const Glvectorgeometry::TVector &Value)/* overload */;
+	void __fastcall AddNode(const Glvectorgeometry::TAffineVector &Value)/* overload */;
 	
 __published:
 	__property Glcolor::TGLColor* NodeColor = {read=FNodeColor, write=SetNodeColor};
@@ -479,11 +481,11 @@ class PASCALIMPLEMENTATION TGLCube : public Glscene::TGLSceneObject
 	typedef Glscene::TGLSceneObject inherited;
 	
 private:
-	Glvectortypes::TVector3f FCubeSize;
+	Glvectorgeometry::TAffineVector FCubeSize;
 	TCubeParts FParts;
 	Glscene::TNormalDirection FNormalDirection;
-	float __fastcall GetCubeWHD(const int Index);
-	void __fastcall SetCubeWHD(int Index, float AValue);
+	Opengltokens::TGLfloat __fastcall GetCubeWHD(const int Index);
+	void __fastcall SetCubeWHD(int Index, Opengltokens::TGLfloat AValue);
 	void __fastcall SetParts(TCubeParts aValue);
 	void __fastcall SetNormalDirection(Glscene::TNormalDirection aValue);
 	
@@ -497,13 +499,13 @@ public:
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	
 __published:
-	__property float CubeWidth = {read=GetCubeWHD, write=SetCubeWHD, stored=false, index=0};
-	__property float CubeHeight = {read=GetCubeWHD, write=SetCubeWHD, stored=false, index=1};
-	__property float CubeDepth = {read=GetCubeWHD, write=SetCubeWHD, stored=false, index=2};
+	__property Opengltokens::TGLfloat CubeWidth = {read=GetCubeWHD, write=SetCubeWHD, stored=false, index=0};
+	__property Opengltokens::TGLfloat CubeHeight = {read=GetCubeWHD, write=SetCubeWHD, stored=false, index=1};
+	__property Opengltokens::TGLfloat CubeDepth = {read=GetCubeWHD, write=SetCubeWHD, stored=false, index=2};
 	__property Glscene::TNormalDirection NormalDirection = {read=FNormalDirection, write=SetNormalDirection, default=1};
 	__property TCubeParts Parts = {read=FParts, write=SetParts, default=63};
 public:
@@ -528,9 +530,9 @@ private:
 protected:
 	void __fastcall SetNormals(TNormalSmoothing aValue);
 	void __fastcall SetNormalDirection(Glscene::TNormalDirection aValue);
-	void __fastcall SetupQuadricParams(Opengltokens::PGLUQuadric quadric);
-	void __fastcall SetNormalQuadricOrientation(Opengltokens::PGLUQuadric quadric);
-	void __fastcall SetInvertedQuadricOrientation(Opengltokens::PGLUQuadric quadric);
+	void __fastcall SetupQuadricParams(Opengltokens::PGLUQuadricObj quadric);
+	void __fastcall SetNormalQuadricOrientation(Opengltokens::PGLUQuadricObj quadric);
+	void __fastcall SetInvertedQuadricOrientation(Opengltokens::PGLUQuadricObj quadric);
 	
 public:
 	__fastcall virtual TGLQuadricObject(System::Classes::TComponent* AOwner);
@@ -559,9 +561,9 @@ class PASCALIMPLEMENTATION TGLSphere : public TGLQuadricObject
 	typedef TGLQuadricObject inherited;
 	
 private:
-	float FRadius;
-	int FSlices;
-	int FStacks;
+	Opengltokens::TGLfloat FRadius;
+	Opengltokens::TGLint FSlices;
+	Opengltokens::TGLint FStacks;
 	TAngleLimit1 FTop;
 	TAngleLimit1 FBottom;
 	TAngleLimit2 FStart;
@@ -570,11 +572,11 @@ private:
 	TCapType FBottomCap;
 	void __fastcall SetBottom(TAngleLimit1 aValue);
 	void __fastcall SetBottomCap(TCapType aValue);
-	void __fastcall SetRadius(const float aValue);
-	void __fastcall SetSlices(int aValue);
+	void __fastcall SetRadius(const Opengltokens::TGLfloat aValue);
+	void __fastcall SetSlices(Opengltokens::TGLint aValue);
 	void __fastcall SetStart(TAngleLimit2 aValue);
 	void __fastcall SetStop(TAngleLimit2 aValue);
-	void __fastcall SetStacks(int aValue);
+	void __fastcall SetStacks(Opengltokens::TGLint aValue);
 	void __fastcall SetTop(TAngleLimit1 aValue);
 	void __fastcall SetTopCap(TCapType aValue);
 	
@@ -582,16 +584,16 @@ public:
 	__fastcall virtual TGLSphere(System::Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
 	
 __published:
 	__property TAngleLimit1 Bottom = {read=FBottom, write=SetBottom, default=-90};
 	__property TCapType BottomCap = {read=FBottomCap, write=SetBottomCap, default=0};
-	__property float Radius = {read=FRadius, write=SetRadius};
-	__property int Slices = {read=FSlices, write=SetSlices, default=16};
-	__property int Stacks = {read=FStacks, write=SetStacks, default=16};
+	__property Opengltokens::TGLfloat Radius = {read=FRadius, write=SetRadius};
+	__property Opengltokens::TGLint Slices = {read=FSlices, write=SetSlices, default=16};
+	__property Opengltokens::TGLint Stacks = {read=FStacks, write=SetStacks, default=16};
 	__property TAngleLimit2 Start = {read=FStart, write=SetStart, default=0};
 	__property TAngleLimit2 Stop = {read=FStop, write=SetStop, default=360};
 	__property TAngleLimit1 Top = {read=FTop, write=SetTop, default=90};
@@ -625,10 +627,10 @@ public:
 	__fastcall virtual ~TGLPolygonBase();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall NotifyChange(System::TObject* Sender);
-	void __fastcall AddNode(Glcoordinates::TGLCoordinates3* const coords)/* overload */;
-	void __fastcall AddNode(const float X, const float Y, const float Z)/* overload */;
-	void __fastcall AddNode(const Glvectortypes::TVector4f &Value)/* overload */;
-	void __fastcall AddNode(const Glvectortypes::TVector3f &Value)/* overload */;
+	void __fastcall AddNode(Glcoordinates::TGLCoordinates* const coords)/* overload */;
+	void __fastcall AddNode(const Opengltokens::TGLfloat X, const Opengltokens::TGLfloat Y, const Opengltokens::TGLfloat Z)/* overload */;
+	void __fastcall AddNode(const Glvectorgeometry::TVector &Value)/* overload */;
+	void __fastcall AddNode(const Glvectorgeometry::TAffineVector &Value)/* overload */;
 	
 __published:
 	__property Glnodes::TGLNodes* Nodes = {read=FNodes, write=SetNodes};
@@ -645,11 +647,11 @@ class PASCALIMPLEMENTATION TGLSuperellipsoid : public TGLQuadricObject
 	typedef TGLQuadricObject inherited;
 	
 private:
-	float FRadius;
-	float FVCurve;
-	float FHCurve;
-	int FSlices;
-	int FStacks;
+	Opengltokens::TGLfloat FRadius;
+	Opengltokens::TGLfloat FVCurve;
+	Opengltokens::TGLfloat FHCurve;
+	Opengltokens::TGLint FSlices;
+	Opengltokens::TGLint FStacks;
 	TAngleLimit1 FTop;
 	TAngleLimit1 FBottom;
 	TAngleLimit2 FStart;
@@ -658,13 +660,13 @@ private:
 	TCapType FBottomCap;
 	void __fastcall SetBottom(TAngleLimit1 aValue);
 	void __fastcall SetBottomCap(TCapType aValue);
-	void __fastcall SetRadius(const float aValue);
-	void __fastcall SetVCurve(const float aValue);
-	void __fastcall SetHCurve(const float aValue);
-	void __fastcall SetSlices(int aValue);
+	void __fastcall SetRadius(const Opengltokens::TGLfloat aValue);
+	void __fastcall SetVCurve(const Opengltokens::TGLfloat aValue);
+	void __fastcall SetHCurve(const Opengltokens::TGLfloat aValue);
+	void __fastcall SetSlices(Opengltokens::TGLint aValue);
 	void __fastcall SetStart(TAngleLimit2 aValue);
 	void __fastcall SetStop(TAngleLimit2 aValue);
-	void __fastcall SetStacks(int aValue);
+	void __fastcall SetStacks(Opengltokens::TGLint aValue);
 	void __fastcall SetTop(TAngleLimit1 aValue);
 	void __fastcall SetTopCap(TCapType aValue);
 	
@@ -672,18 +674,18 @@ public:
 	__fastcall virtual TGLSuperellipsoid(System::Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
 	
 __published:
 	__property TAngleLimit1 Bottom = {read=FBottom, write=SetBottom, default=-90};
 	__property TCapType BottomCap = {read=FBottomCap, write=SetBottomCap, default=0};
-	__property float Radius = {read=FRadius, write=SetRadius};
-	__property float VCurve = {read=FVCurve, write=SetVCurve};
-	__property float HCurve = {read=FHCurve, write=SetHCurve};
-	__property int Slices = {read=FSlices, write=SetSlices, default=16};
-	__property int Stacks = {read=FStacks, write=SetStacks, default=16};
+	__property Opengltokens::TGLfloat Radius = {read=FRadius, write=SetRadius};
+	__property Opengltokens::TGLfloat VCurve = {read=FVCurve, write=SetVCurve};
+	__property Opengltokens::TGLfloat HCurve = {read=FHCurve, write=SetHCurve};
+	__property Opengltokens::TGLint Slices = {read=FSlices, write=SetSlices, default=16};
+	__property Opengltokens::TGLint Stacks = {read=FStacks, write=SetStacks, default=16};
 	__property TAngleLimit2 Start = {read=FStart, write=SetStart, default=0};
 	__property TAngleLimit2 Stop = {read=FStop, write=SetStop, default=360};
 	__property TAngleLimit1 Top = {read=FTop, write=SetTop, default=90};
@@ -701,7 +703,7 @@ public:
 extern DELPHI_PACKAGE float cDefaultPointSize;
 extern DELPHI_PACKAGE char *TangentAttributeName;
 extern DELPHI_PACKAGE char *BinormalAttributeName;
-extern DELPHI_PACKAGE void __fastcall CubeWireframeBuildList(Glrendercontextinfo::TGLRenderContextInfo &rci, float Size, bool Stipple, const Glvectortypes::TVector4f &Color);
+extern DELPHI_PACKAGE void __fastcall CubeWireframeBuildList(Glrendercontextinfo::TGLRenderContextInfo &rci, Opengltokens::TGLfloat Size, bool Stipple, const Glcolor::TColorVector &Color);
 }	/* namespace Globjects */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLOBJECTS)
 using namespace Globjects;

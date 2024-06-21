@@ -2,15 +2,17 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLImposter.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLImposter.pas' rev: 36.00 (Windows)
 
 #ifndef GlimposterHPP
 #define GlimposterHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -67,21 +69,21 @@ private:
 	bool FModulated;
 	
 protected:
-	Glvectortypes::TVector4f FVx;
-	Glvectortypes::TVector4f FVy;
-	Glvectortypes::TVector4f FStaticOffset;
+	Glvectorgeometry::TVector FVx;
+	Glvectorgeometry::TVector FVy;
+	Glvectorgeometry::TVector FStaticOffset;
 	System::StaticArray<Glvectortypes::TVector4f, 4> FQuad;
 	float FStaticScale;
 	virtual void __fastcall PrepareTexture(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	void __fastcall RenderQuad(const Glvectortypes::TVector4f &texExtents, const Glvectortypes::TVector4f &objPos, float size);
+	void __fastcall RenderQuad(const Glvectorgeometry::TVector &texExtents, const Glvectorgeometry::TVector &objPos, float size);
 	
 public:
 	__fastcall virtual TImposter(TGLImposterBuilder* aBuilder);
 	__fastcall virtual ~TImposter();
 	virtual void __fastcall BeginRender(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual void __fastcall Render(Glrendercontextinfo::TGLRenderContextInfo &rci, const Glvectortypes::TVector4f &objPos, const Glvectortypes::TVector4f &localCameraPos, float size);
+	virtual void __fastcall Render(Glrendercontextinfo::TGLRenderContextInfo &rci, const Glvectorgeometry::TVector &objPos, const Glvectorgeometry::TVector &localCameraPos, float size);
 	virtual void __fastcall EndRender(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	void __fastcall RenderOnce(Glrendercontextinfo::TGLRenderContextInfo &rci, const Glvectortypes::TVector4f &objPos, const Glvectortypes::TVector4f &localCameraPos, float size);
+	void __fastcall RenderOnce(Glrendercontextinfo::TGLRenderContextInfo &rci, const Glvectorgeometry::TVector &objPos, const Glvectorgeometry::TVector &localCameraPos, float size);
 	__property float AspectRatio = {read=FAspectRatio, write=FAspectRatio};
 	__property TGLImposterBuilder* Builder = {read=FBuilder};
 	__property Glcontext::TGLTextureHandle* Texture = {read=FTexture};
@@ -100,7 +102,7 @@ class PASCALIMPLEMENTATION TGLImposterBuilder : public Glbaseclasses::TGLUpdateA
 	
 private:
 	Glcolor::TGLColor* FBackColor;
-	Glcoordinates::TGLCoordinates3* FBuildOffset;
+	Glcoordinates::TGLCoordinates* FBuildOffset;
 	Glpersistentclasses::TPersistentObjectList* FImposterRegister;
 	Glscene::TGLRenderPoint* FRenderPoint;
 	TImposterOptions FImposterOptions;
@@ -113,7 +115,7 @@ protected:
 	void __fastcall SetRenderPoint(Glscene::TGLRenderPoint* AValue);
 	void __fastcall RenderPointFreed(System::TObject* Sender);
 	void __fastcall SetBackColor(Glcolor::TGLColor* AValue);
-	void __fastcall SetBuildOffset(Glcoordinates::TGLCoordinates3* AValue);
+	void __fastcall SetBuildOffset(Glcoordinates::TGLCoordinates* AValue);
 	void __fastcall SetImposterReference(TImposterReference AValue);
 	void __fastcall InitializeImpostorTexture(const System::Types::TPoint &TextureSize);
 	__property Glpersistentclasses::TPersistentObjectList* ImposterRegister = {read=FImposterRegister};
@@ -121,7 +123,7 @@ protected:
 	virtual TImposter* __fastcall CreateNewImposter();
 	virtual void __fastcall PrepareImposters(System::TObject* Sender, Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall DoPrepareImposter(Glrendercontextinfo::TGLRenderContextInfo &rci, Glscene::TGLBaseSceneObject* impostoredObject, TImposter* destImposter) = 0 ;
-	virtual void __fastcall DoUserSpecifiedImposter(Glrendercontextinfo::TGLRenderContextInfo &rci, TImposter* destImposter, Glgraphics::TGLImage* bmp32);
+	virtual void __fastcall DoUserSpecifiedImposter(Glrendercontextinfo::TGLRenderContextInfo &rci, TImposter* destImposter, Glgraphics::TGLBitmap32* bmp32);
 	
 public:
 	__fastcall virtual TGLImposterBuilder(System::Classes::TComponent* AOwner);
@@ -135,7 +137,7 @@ public:
 __published:
 	__property Glscene::TGLRenderPoint* RenderPoint = {read=FRenderPoint, write=SetRenderPoint};
 	__property Glcolor::TGLColor* BackColor = {read=FBackColor, write=SetBackColor};
-	__property Glcoordinates::TGLCoordinates3* BuildOffset = {read=FBuildOffset, write=SetBuildOffset};
+	__property Glcoordinates::TGLCoordinates* BuildOffset = {read=FBuildOffset, write=SetBuildOffset};
 	__property TImposterOptions ImposterOptions = {read=FImposterOptions, write=FImposterOptions, default=3};
 	__property TImposterReference ImposterReference = {read=FImposterReference, write=SetImposterReference, default=0};
 	__property float AlphaTreshold = {read=FAlphaTreshold, write=FAlphaTreshold};
@@ -220,7 +222,7 @@ class PASCALIMPLEMENTATION TStaticImposter : public TImposter
 	typedef TImposter inherited;
 	
 public:
-	virtual void __fastcall Render(Glrendercontextinfo::TGLRenderContextInfo &rci, const Glvectortypes::TVector4f &objPos, const Glvectortypes::TVector4f &localCameraPos, float size);
+	virtual void __fastcall Render(Glrendercontextinfo::TGLRenderContextInfo &rci, const Glvectorgeometry::TVector &objPos, const Glvectorgeometry::TVector &localCameraPos, float size);
 public:
 	/* TImposter.Create */ inline __fastcall virtual TStaticImposter(TGLImposterBuilder* aBuilder) : TImposter(aBuilder) { }
 	/* TImposter.Destroy */ inline __fastcall virtual ~TStaticImposter() { }
@@ -258,7 +260,7 @@ protected:
 	System::Types::TPoint __fastcall ComputeOptimalTextureSize();
 	virtual TImposter* __fastcall CreateNewImposter();
 	virtual void __fastcall DoPrepareImposter(Glrendercontextinfo::TGLRenderContextInfo &rci, Glscene::TGLBaseSceneObject* impostoredObject, TImposter* destImposter);
-	virtual void __fastcall DoUserSpecifiedImposter(Glrendercontextinfo::TGLRenderContextInfo &rci, TImposter* destImposter, Glgraphics::TGLImage* bmp32);
+	virtual void __fastcall DoUserSpecifiedImposter(Glrendercontextinfo::TGLRenderContextInfo &rci, TImposter* destImposter, Glgraphics::TGLBitmap32* bmp32);
 	void __fastcall ComputeStaticParams(TImposter* destImposter);
 	
 public:
