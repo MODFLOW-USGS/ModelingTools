@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLVectorGeometry.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glvectorgeometry.pas' rev: 36.00 (Windows)
 
 #ifndef GlvectorgeometryHPP
 #define GlvectorgeometryHPP
@@ -15,11 +15,11 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <System.SysUtils.hpp>
+#include <Sysinit.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Types.hpp>
 #include <System.Math.hpp>
-#include <GLVectorTypes.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -294,7 +294,7 @@ enum DECLSPEC_DENUM TGLInterpolationType : unsigned char { itLinear, itPower, it
 enum DECLSPEC_DENUM TEulerOrder : unsigned char { eulXYZ, eulXZY, eulYXZ, eulYZX, eulZXY, eulZYX };
 
 //-- var, const, procedure ---------------------------------------------------
-static const int cMaxArray = int(0x7ffffff);
+static _DELPHI_CONST int cMaxArray = int(0x7ffffff);
 static const double cColinearBias = 1.000000E-08;
 extern DELPHI_PACKAGE TTexPoint XTexPoint;
 extern DELPHI_PACKAGE TTexPoint YTexPoint;

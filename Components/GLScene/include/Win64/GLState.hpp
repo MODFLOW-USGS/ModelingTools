@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLState.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glstate.pas' rev: 36.00 (Windows)
 
 #ifndef GlstateHPP
 #define GlstateHPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLTextureFormat.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Gltextureformat.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -631,14 +631,14 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 GLS_VERTEX_ATTR_NUM = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 GLS_VERTEX_ATTR_NUM = System::Int8(0x10);
 #define cAllAttribBits (System::Set<TGLStateType, TGLStateType::sttCurrent, TGLStateType::sttMultisample>() << TGLStateType::sttCurrent << TGLStateType::sttPoint << TGLStateType::sttLine << TGLStateType::sttPolygon << TGLStateType::sttPolygonStipple << TGLStateType::sttPixelMode << TGLStateType::sttLighting << TGLStateType::sttFog << TGLStateType::sttDepthBuffer << TGLStateType::sttAccumBuffer << TGLStateType::sttStencilBuffer << TGLStateType::sttViewport << TGLStateType::sttTransform << TGLStateType::sttEnable << TGLStateType::sttColorBuffer << TGLStateType::sttHint << TGLStateType::sttEval << TGLStateType::sttList << TGLStateType::sttTexture << TGLStateType::sttScissor << TGLStateType::sttMultisample )
 #define cAllMeshPrimitive (System::Set<TGLMeshPrimitive, TGLMeshPrimitive::mpNOPRIMITIVE, TGLMeshPrimitive::mpPATCHES>() << TGLMeshPrimitive::mpTRIANGLES << TGLMeshPrimitive::mpTRIANGLE_STRIP << TGLMeshPrimitive::mpTRIANGLE_FAN << TGLMeshPrimitive::mpPOINTS << TGLMeshPrimitive::mpLINES << TGLMeshPrimitive::mpLINE_LOOP << TGLMeshPrimitive::mpLINE_STRIP << TGLMeshPrimitive::mpLINES_ADJACENCY << TGLMeshPrimitive::mpLINE_STRIP_ADJACENCY << TGLMeshPrimitive::mpTRIANGLES_ADJACENCY << TGLMeshPrimitive::mpTRIANGLE_STRIP_ADJACENCY << TGLMeshPrimitive::mpPATCHES )
 #define cAllColorComponents (System::Set<TColorComponent, TColorComponent::ccRed, TColorComponent::ccAlpha>() << TColorComponent::ccRed << TColorComponent::ccGreen << TColorComponent::ccBlue << TColorComponent::ccAlpha )
-static const System::Int8 MAX_HARDWARE_LIGHT = System::Int8(0x10);
-static const System::Int8 MAX_SHADER_LIGHT = System::Int8(0x8);
-static const System::Int8 MAX_HARDWARE_TEXTURE_UNIT = System::Int8(0x30);
-static const System::Int8 MAX_HARDWARE_UNIFORM_BUFFER_BINDING = System::Int8(0x4b);
+static _DELPHI_CONST System::Int8 MAX_HARDWARE_LIGHT = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 MAX_SHADER_LIGHT = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 MAX_HARDWARE_TEXTURE_UNIT = System::Int8(0x30);
+static _DELPHI_CONST System::Int8 MAX_HARDWARE_UNIFORM_BUFFER_BINDING = System::Int8(0x4b);
 extern DELPHI_PACKAGE System::StaticArray<unsigned, 21> cGLStateTypeToGLEnum;
 extern DELPHI_PACKAGE System::StaticArray<TStateRecord, 24> cGLStateToGLEnum;
 extern DELPHI_PACKAGE System::StaticArray<unsigned, 12> cGLTexTypeToGLEnum;

@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLRenderContextInfo.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLRenderContextInfo.pas' rev: 35.00 (Windows)
 
 #ifndef GlrendercontextinfoHPP
 #define GlrendercontextinfoHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -37,8 +35,8 @@ enum DECLSPEC_DENUM TDrawState : unsigned char { dsRendering, dsPicking, dsPrint
 struct DECLSPEC_DRECORD TGLSize
 {
 public:
-	System::LongInt cx;
-	System::LongInt cy;
+	int cx;
+	int cy;
 };
 
 
@@ -49,8 +47,8 @@ enum DECLSPEC_DENUM TGLVisibilityCulling : unsigned char { vcInherited, vcNone, 
 struct DECLSPEC_DRECORD TRenderContextClippingInfo
 {
 public:
-	Glvectorgeometry::TVector origin;
-	Glvectorgeometry::TVector clippingDirection;
+	Glvectortypes::TVector4f origin;
+	Glvectortypes::TVector4f clippingDirection;
 	float viewPortRadius;
 	float nearClippingDistance;
 	float farClippingDistance;
@@ -63,9 +61,9 @@ struct DECLSPEC_DRECORD TGLRenderContextInfo
 public:
 	System::TObject* scene;
 	System::TObject* buffer;
-	Glvectorgeometry::TVector cameraPosition;
-	Glvectorgeometry::TVector cameraDirection;
-	Glvectorgeometry::TVector cameraUp;
+	Glvectortypes::TVector4f cameraPosition;
+	Glvectortypes::TVector4f cameraDirection;
+	Glvectortypes::TVector4f cameraUp;
 	TGLSize viewPortSize;
 	int renderDPI;
 	System::TObject* materialLibrary;
@@ -77,7 +75,7 @@ public:
 	Glstate::TGLStateCache* GLStates;
 	Glpipelinetransformation::TGLTransformation* PipelineTransformation;
 	TRenderContextClippingInfo rcci;
-	Glcolor::TColorVector sceneAmbientColor;
+	Glvectortypes::TVector4f sceneAmbientColor;
 	bool bufferFaceCull;
 	bool bufferLighting;
 	bool bufferFog;

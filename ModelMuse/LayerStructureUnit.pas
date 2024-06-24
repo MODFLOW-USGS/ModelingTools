@@ -1794,14 +1794,6 @@ begin
   begin
     Assert(False);
   end;
-//  case Model.ModelSelection of
-//    msUndefined, msPhast, msModflow, msModflowLGR,msModflowNWT:
-//      FAquiferDisplayName := StrModelTop;
-//    {$IFDEF SUTRA}
-//    msSutra: FAquiferDisplayName := StrSUTRAMeshTop;
-//    {$ENDIF}
-//    else Assert(False);
-//  end;
 end;
 
 procedure TCustomLayerGroup.UpdateDataArray(const NewName, NewDisplayName: string);

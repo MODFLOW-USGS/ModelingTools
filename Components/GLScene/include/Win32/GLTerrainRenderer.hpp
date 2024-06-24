@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTerrainRenderer.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLTerrainRenderer.pas' rev: 35.00 (Windows)
 
 #ifndef GlterrainrendererHPP
 #define GlterrainrendererHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -87,8 +85,8 @@ protected:
 	System::StaticArray<System::Classes::TList*, 256> FTilesHash;
 	void __fastcall MarkAllTilesAsUnused();
 	void __fastcall ReleaseAllUnusedTiles();
-	void __fastcall MarkHashedTileAsUsed(const Glvectorgeometry::TAffineVector &tilePos);
-	Glheightdata::TGLHeightData* __fastcall HashedTile(const Glvectorgeometry::TAffineVector &tilePos, bool canAllocate = true)/* overload */;
+	void __fastcall MarkHashedTileAsUsed(const Glvectortypes::TVector3f &tilePos);
+	Glheightdata::TGLHeightData* __fastcall HashedTile(const Glvectortypes::TVector3f &tilePos, bool canAllocate = true)/* overload */;
 	Glheightdata::TGLHeightData* __fastcall HashedTile(const int xLeft, const int yTop, bool canAllocate = true)/* overload */;
 	void __fastcall SetHeightDataSource(Glheightdata::TGLHeightDataSource* const val);
 	void __fastcall SetTileSize(const int val);
@@ -101,16 +99,16 @@ protected:
 	virtual void __fastcall DestroyHandle();
 	void __fastcall ReleaseAllTiles();
 	void __fastcall OnTileDestroyed(System::TObject* Sender);
-	Glroampatch::TGLROAMPatch* __fastcall GetPreparedPatch(const Glvectorgeometry::TAffineVector &TilePos, const Glvectorgeometry::TAffineVector &EyePos, float TexFactor, System::Classes::TList* HDList);
+	Glroampatch::TGLROAMPatch* __fastcall GetPreparedPatch(const Glvectortypes::TVector3f &TilePos, const Glvectortypes::TVector3f &EyePos, float TexFactor, System::Classes::TList* HDList);
 	
 public:
 	TTileManagementFlags TileManagement;
 	__fastcall virtual TGLTerrainRenderer(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLTerrainRenderer();
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
-	float __fastcall InterpolatedHeight(const Glvectorgeometry::TVector &p)/* overload */;
-	float __fastcall InterpolatedHeight(const Glvectorgeometry::TAffineVector &p)/* overload */;
+	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	float __fastcall InterpolatedHeight(const Glvectortypes::TVector4f &p)/* overload */;
+	float __fastcall InterpolatedHeight(const Glvectortypes::TVector3f &p)/* overload */;
 	__property int LastTriangleCount = {read=FLastTriangleCount, nodefault};
 	int __fastcall HashedTileCount();
 	

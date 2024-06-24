@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTexture.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gltexture.pas' rev: 36.00 (Windows)
 
 #ifndef GltextureHPP
 #define GltextureHPP
@@ -15,29 +15,29 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <Vcl.Graphics.hpp>
-#include <Vcl.Imaging.jpeg.hpp>
-#include <Vcl.Imaging.pngimage.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLGraphics.hpp>
-#include <GLContext.hpp>
-#include <GLState.hpp>
-#include <GLColor.hpp>
-#include <GLCoordinates.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLUtils.hpp>
-#include <GLStrings.hpp>
-#include <GLVectorTypes.hpp>
+#include <Vcl.Imaging.Jpeg.hpp>
+#include <Vcl.Imaging.Pngimage.hpp>
+#include <Opengltokens.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glgraphics.hpp>
+#include <Glcontext.hpp>
+#include <Glstate.hpp>
+#include <Glcolor.hpp>
+#include <Glcoordinates.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Gltextureformat.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glutils.hpp>
+#include <Glstrings.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -595,12 +595,12 @@ public:
 
 //-- var, const, procedure ---------------------------------------------------
 #define cDefaultNormalMapScale  (1.250000E-01)
-static const System::Int8 CmtPX = System::Int8(0x0);
-static const System::Int8 CmtNX = System::Int8(0x1);
-static const System::Int8 CmtPY = System::Int8(0x2);
-static const System::Int8 CmtNY = System::Int8(0x3);
-static const System::Int8 CmtPZ = System::Int8(0x4);
-static const System::Int8 CmtNZ = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 CmtPX = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 CmtNX = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 CmtPY = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 CmtNY = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 CmtPZ = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 CmtNZ = System::Int8(0x5);
 extern DELPHI_PACKAGE void __fastcall RegisterTGraphicClassFileExtension(const System::UnicodeString extension, const Vcl::Graphics::TGraphicClass aClass);
 extern DELPHI_PACKAGE Vcl::Graphics::TGraphic* __fastcall CreateGraphicFromFile(const System::UnicodeString fileName);
 extern DELPHI_PACKAGE void __fastcall RegisterGLTextureImageClass(TGLTextureImageClass textureImageClass);

@@ -2945,11 +2945,11 @@ var
   Index: Integer;
 begin
   WriteCommentLine('Data set 6');
-    for Index := 0 to FSchedules.Count - 1 do
-    begin
-      WriteString(FSchedules[Index]);
-      NewLine;
-    end;
+  for Index := 0 to FSchedules.Count - 1 do
+  begin
+    WriteString(FSchedules[Index]);
+    NewLine;
+  end;
 end;
 
 procedure TSutraInputWriter.WriteDataSet7A;

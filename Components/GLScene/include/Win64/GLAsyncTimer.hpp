@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLAsyncTimer.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glasynctimer.pas' rev: 36.00 (Windows)
 
 #ifndef GlasynctimerHPP
 #define GlasynctimerHPP
@@ -15,11 +15,11 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <System.SyncObjs.hpp>
-#include <GLCrossPlatform.hpp>
+#include <System.Sysutils.hpp>
+#include <System.Syncobjs.hpp>
+#include <Glcrossplatform.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -59,7 +59,7 @@ __published:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Word cDEFAULT_TIMER_INTERVAL = System::Word(0x3e8);
+static _DELPHI_CONST System::Word cDEFAULT_TIMER_INTERVAL = System::Word(0x3e8);
 }	/* namespace Glasynctimer */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLASYNCTIMER)
 using namespace Glasynctimer;

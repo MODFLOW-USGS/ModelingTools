@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLColor.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glcolor.pas' rev: 36.00 (Windows)
 
 #ifndef GlcolorHPP
 #define GlcolorHPP
@@ -15,17 +15,17 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Types.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Classes.hpp>
-#include <System.UITypes.hpp>
+#include <System.Uitypes.hpp>
 #include <Vcl.Dialogs.hpp>
 #include <Vcl.Graphics.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLBaseClasses.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -120,68 +120,68 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Uitypes::TColor clForeground = System::Uitypes::TColor(-1);
-static const System::Uitypes::TColor clButton = System::Uitypes::TColor(-2);
-static const System::Uitypes::TColor clLight = System::Uitypes::TColor(-3);
-static const System::Uitypes::TColor clMidlight = System::Uitypes::TColor(-4);
-static const System::Uitypes::TColor clDark = System::Uitypes::TColor(-5);
-static const System::Uitypes::TColor clMid = System::Uitypes::TColor(-6);
-static const System::Uitypes::TColor clText = System::Uitypes::TColor(-7);
-static const System::Uitypes::TColor clBrightText = System::Uitypes::TColor(-8);
-static const System::Uitypes::TColor clButtonText = System::Uitypes::TColor(-9);
-static const System::Uitypes::TColor clBase = System::Uitypes::TColor(-10);
-static const System::Uitypes::TColor clBackground = System::Uitypes::TColor(-11);
-static const System::Uitypes::TColor clShadow = System::Uitypes::TColor(-12);
-static const System::Uitypes::TColor clHighlight = System::Uitypes::TColor(-13);
-static const System::Uitypes::TColor clHighlightedText = System::Uitypes::TColor(-14);
-static const System::Int8 cloNormal = System::Int8(0x20);
-static const System::Int8 cloDisabled = System::Int8(0x40);
-static const System::Int8 cloActive = System::Int8(0x60);
-static const System::Uitypes::TColor clNormalForeground = System::Uitypes::TColor(-33);
-static const System::Uitypes::TColor clNormalButton = System::Uitypes::TColor(-34);
-static const System::Uitypes::TColor clNormalLight = System::Uitypes::TColor(-35);
-static const System::Uitypes::TColor clNormalMidlight = System::Uitypes::TColor(-36);
-static const System::Uitypes::TColor clNormalDark = System::Uitypes::TColor(-37);
-static const System::Uitypes::TColor clNormalMid = System::Uitypes::TColor(-38);
-static const System::Uitypes::TColor clNormalText = System::Uitypes::TColor(-39);
-static const System::Uitypes::TColor clNormalBrightText = System::Uitypes::TColor(-40);
-static const System::Uitypes::TColor clNormalButtonText = System::Uitypes::TColor(-41);
-static const System::Uitypes::TColor clNormalBase = System::Uitypes::TColor(-42);
-static const System::Uitypes::TColor clNormalBackground = System::Uitypes::TColor(-43);
-static const System::Uitypes::TColor clNormalShadow = System::Uitypes::TColor(-44);
-static const System::Uitypes::TColor clNormalHighlight = System::Uitypes::TColor(-45);
-static const System::Uitypes::TColor clNormalHighlightedText = System::Uitypes::TColor(-46);
-static const System::Uitypes::TColor clDisabledForeground = System::Uitypes::TColor(-65);
-static const System::Uitypes::TColor clDisabledButton = System::Uitypes::TColor(-66);
-static const System::Uitypes::TColor clDisabledLight = System::Uitypes::TColor(-67);
-static const System::Uitypes::TColor clDisabledMidlight = System::Uitypes::TColor(-68);
-static const System::Uitypes::TColor clDisabledDark = System::Uitypes::TColor(-69);
-static const System::Uitypes::TColor clDisabledMid = System::Uitypes::TColor(-70);
-static const System::Uitypes::TColor clDisabledText = System::Uitypes::TColor(-71);
-static const System::Uitypes::TColor clDisabledBrightText = System::Uitypes::TColor(-72);
-static const System::Uitypes::TColor clDisabledButtonText = System::Uitypes::TColor(-73);
-static const System::Uitypes::TColor clDisabledBase = System::Uitypes::TColor(-74);
-static const System::Uitypes::TColor clDisabledBackground = System::Uitypes::TColor(-75);
-static const System::Uitypes::TColor clDisabledShadow = System::Uitypes::TColor(-76);
-static const System::Uitypes::TColor clDisabledHighlight = System::Uitypes::TColor(-77);
-static const System::Uitypes::TColor clDisabledHighlightedText = System::Uitypes::TColor(-78);
-static const System::Uitypes::TColor clActiveForeground = System::Uitypes::TColor(-97);
-static const System::Uitypes::TColor clActiveButton = System::Uitypes::TColor(-98);
-static const System::Uitypes::TColor clActiveLight = System::Uitypes::TColor(-99);
-static const System::Uitypes::TColor clActiveMidlight = System::Uitypes::TColor(-100);
-static const System::Uitypes::TColor clActiveDark = System::Uitypes::TColor(-101);
-static const System::Uitypes::TColor clActiveMid = System::Uitypes::TColor(-102);
-static const System::Uitypes::TColor clActiveText = System::Uitypes::TColor(-103);
-static const System::Uitypes::TColor clActiveBrightText = System::Uitypes::TColor(-104);
-static const System::Uitypes::TColor clActiveButtonText = System::Uitypes::TColor(-105);
-static const System::Uitypes::TColor clActiveBase = System::Uitypes::TColor(-106);
-static const System::Uitypes::TColor clActiveBackground = System::Uitypes::TColor(-107);
-static const System::Uitypes::TColor clActiveShadow = System::Uitypes::TColor(-108);
-static const System::Uitypes::TColor clActiveHighlight = System::Uitypes::TColor(-109);
-static const System::Uitypes::TColor clActiveHighlightedText = System::Uitypes::TColor(-110);
-static const System::Uitypes::TColor clFirstSpecialColor = System::Uitypes::TColor(-110);
-static const int clMask = int(16777215);
-static const int clDontMask = int(0);
+static _DELPHI_CONST System::Uitypes::TColor clForeground = System::Uitypes::TColor(-1);
+static _DELPHI_CONST System::Uitypes::TColor clButton = System::Uitypes::TColor(-2);
+static _DELPHI_CONST System::Uitypes::TColor clLight = System::Uitypes::TColor(-3);
+static _DELPHI_CONST System::Uitypes::TColor clMidlight = System::Uitypes::TColor(-4);
+static _DELPHI_CONST System::Uitypes::TColor clDark = System::Uitypes::TColor(-5);
+static _DELPHI_CONST System::Uitypes::TColor clMid = System::Uitypes::TColor(-6);
+static _DELPHI_CONST System::Uitypes::TColor clText = System::Uitypes::TColor(-7);
+static _DELPHI_CONST System::Uitypes::TColor clBrightText = System::Uitypes::TColor(-8);
+static _DELPHI_CONST System::Uitypes::TColor clButtonText = System::Uitypes::TColor(-9);
+static _DELPHI_CONST System::Uitypes::TColor clBase = System::Uitypes::TColor(-10);
+static _DELPHI_CONST System::Uitypes::TColor clBackground = System::Uitypes::TColor(-11);
+static _DELPHI_CONST System::Uitypes::TColor clShadow = System::Uitypes::TColor(-12);
+static _DELPHI_CONST System::Uitypes::TColor clHighlight = System::Uitypes::TColor(-13);
+static _DELPHI_CONST System::Uitypes::TColor clHighlightedText = System::Uitypes::TColor(-14);
+static _DELPHI_CONST System::Int8 cloNormal = System::Int8(0x20);
+static _DELPHI_CONST System::Int8 cloDisabled = System::Int8(0x40);
+static _DELPHI_CONST System::Int8 cloActive = System::Int8(0x60);
+static _DELPHI_CONST System::Uitypes::TColor clNormalForeground = System::Uitypes::TColor(-33);
+static _DELPHI_CONST System::Uitypes::TColor clNormalButton = System::Uitypes::TColor(-34);
+static _DELPHI_CONST System::Uitypes::TColor clNormalLight = System::Uitypes::TColor(-35);
+static _DELPHI_CONST System::Uitypes::TColor clNormalMidlight = System::Uitypes::TColor(-36);
+static _DELPHI_CONST System::Uitypes::TColor clNormalDark = System::Uitypes::TColor(-37);
+static _DELPHI_CONST System::Uitypes::TColor clNormalMid = System::Uitypes::TColor(-38);
+static _DELPHI_CONST System::Uitypes::TColor clNormalText = System::Uitypes::TColor(-39);
+static _DELPHI_CONST System::Uitypes::TColor clNormalBrightText = System::Uitypes::TColor(-40);
+static _DELPHI_CONST System::Uitypes::TColor clNormalButtonText = System::Uitypes::TColor(-41);
+static _DELPHI_CONST System::Uitypes::TColor clNormalBase = System::Uitypes::TColor(-42);
+static _DELPHI_CONST System::Uitypes::TColor clNormalBackground = System::Uitypes::TColor(-43);
+static _DELPHI_CONST System::Uitypes::TColor clNormalShadow = System::Uitypes::TColor(-44);
+static _DELPHI_CONST System::Uitypes::TColor clNormalHighlight = System::Uitypes::TColor(-45);
+static _DELPHI_CONST System::Uitypes::TColor clNormalHighlightedText = System::Uitypes::TColor(-46);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledForeground = System::Uitypes::TColor(-65);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledButton = System::Uitypes::TColor(-66);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledLight = System::Uitypes::TColor(-67);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledMidlight = System::Uitypes::TColor(-68);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledDark = System::Uitypes::TColor(-69);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledMid = System::Uitypes::TColor(-70);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledText = System::Uitypes::TColor(-71);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledBrightText = System::Uitypes::TColor(-72);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledButtonText = System::Uitypes::TColor(-73);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledBase = System::Uitypes::TColor(-74);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledBackground = System::Uitypes::TColor(-75);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledShadow = System::Uitypes::TColor(-76);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledHighlight = System::Uitypes::TColor(-77);
+static _DELPHI_CONST System::Uitypes::TColor clDisabledHighlightedText = System::Uitypes::TColor(-78);
+static _DELPHI_CONST System::Uitypes::TColor clActiveForeground = System::Uitypes::TColor(-97);
+static _DELPHI_CONST System::Uitypes::TColor clActiveButton = System::Uitypes::TColor(-98);
+static _DELPHI_CONST System::Uitypes::TColor clActiveLight = System::Uitypes::TColor(-99);
+static _DELPHI_CONST System::Uitypes::TColor clActiveMidlight = System::Uitypes::TColor(-100);
+static _DELPHI_CONST System::Uitypes::TColor clActiveDark = System::Uitypes::TColor(-101);
+static _DELPHI_CONST System::Uitypes::TColor clActiveMid = System::Uitypes::TColor(-102);
+static _DELPHI_CONST System::Uitypes::TColor clActiveText = System::Uitypes::TColor(-103);
+static _DELPHI_CONST System::Uitypes::TColor clActiveBrightText = System::Uitypes::TColor(-104);
+static _DELPHI_CONST System::Uitypes::TColor clActiveButtonText = System::Uitypes::TColor(-105);
+static _DELPHI_CONST System::Uitypes::TColor clActiveBase = System::Uitypes::TColor(-106);
+static _DELPHI_CONST System::Uitypes::TColor clActiveBackground = System::Uitypes::TColor(-107);
+static _DELPHI_CONST System::Uitypes::TColor clActiveShadow = System::Uitypes::TColor(-108);
+static _DELPHI_CONST System::Uitypes::TColor clActiveHighlight = System::Uitypes::TColor(-109);
+static _DELPHI_CONST System::Uitypes::TColor clActiveHighlightedText = System::Uitypes::TColor(-110);
+static _DELPHI_CONST System::Uitypes::TColor clFirstSpecialColor = System::Uitypes::TColor(-110);
+static _DELPHI_CONST int clMask = int(16777215);
+static _DELPHI_CONST int clDontMask = int(0);
 extern DELPHI_PACKAGE TColorVector clrScrollBar;
 extern DELPHI_PACKAGE TColorVector clrBackground;
 extern DELPHI_PACKAGE TColorVector clrActiveCaption;

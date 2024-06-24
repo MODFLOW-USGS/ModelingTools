@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLzBuffer.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLzBuffer.pas' rev: 35.00 (Windows)
 
 #ifndef GlzbufferHPP
 #define GlzbufferHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -51,17 +49,17 @@ class PASCALIMPLEMENTATION EZBufferException : public System::Sysutils::Exceptio
 	
 public:
 	/* Exception.Create */ inline __fastcall EZBufferException(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EZBufferException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EZBufferException(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EZBufferException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EZBufferException(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EZBufferException(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EZBufferException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EZBufferException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EZBufferException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EZBufferException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EZBufferException(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EZBufferException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EZBufferException(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EZBufferException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EZBufferException(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EZBufferException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EZBufferException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EZBufferException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EZBufferException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EZBufferException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EZBufferException() { }
 	
 };
@@ -88,7 +86,7 @@ class PASCALIMPLEMENTATION TGLzBuffer : public System::Classes::TPersistent
 	typedef System::Classes::TPersistent inherited;
 	
 private:
-	PZArray FData;
+	TZArray *FData;
 	TZArrayIdx FDataIdx;
 	TZArrayIdx FDataInvIdx;
 	int FWidth;
@@ -103,18 +101,18 @@ private:
 	float s2;
 	float vw;
 	float vh;
-	Glvectorgeometry::TAffineVector lt;
-	Glvectorgeometry::TAffineVector rt;
-	Glvectorgeometry::TAffineVector lb;
-	Glvectorgeometry::TAffineVector rb;
-	Glvectorgeometry::TAffineVector UpVec;
-	Glvectorgeometry::TAffineVector riVec;
-	Glvectorgeometry::TAffineVector ltW;
-	Glvectorgeometry::TAffineVector rtW;
-	Glvectorgeometry::TAffineVector lbW;
-	Glvectorgeometry::TAffineVector rbW;
-	Glvectorgeometry::TAffineVector UpVecW;
-	Glvectorgeometry::TAffineVector riVecW;
+	Glvectortypes::TVector3f lt;
+	Glvectortypes::TVector3f rt;
+	Glvectortypes::TVector3f lb;
+	Glvectortypes::TVector3f rb;
+	Glvectortypes::TVector3f UpVec;
+	Glvectortypes::TVector3f riVec;
+	Glvectortypes::TVector3f ltW;
+	Glvectortypes::TVector3f rtW;
+	Glvectortypes::TVector3f lbW;
+	Glvectortypes::TVector3f rbW;
+	Glvectortypes::TVector3f UpVecW;
+	Glvectortypes::TVector3f riVecW;
 	float OrthInvDov;
 	float OrthAddX;
 	float OrthMulX;
@@ -138,7 +136,7 @@ public:
 	Glwin32viewer::TGLSceneViewer* SceneViewer;
 	Glscene::TGLMemoryViewer* MemoryViewer;
 	Glscene::TGLSceneBuffer* Buffer;
-	Glvectorgeometry::TAffineVector Normal;
+	Glvectortypes::TVector3f Normal;
 	__fastcall TGLzBuffer();
 	__fastcall virtual ~TGLzBuffer();
 	void __fastcall LinkToViewer(Glwin32viewer::TGLSceneViewer* viewer)/* overload */;
@@ -154,13 +152,13 @@ public:
 	__property TZArrayIdx DataIdx = {read=FDataIdx};
 	__property TZArrayIdx DataInvIdx = {read=FDataIdx};
 	void __fastcall Refresh();
-	Glvectorgeometry::TAffineVector __fastcall FastScreenToVector(int x, int y);
-	Glvectorgeometry::TAffineVector __fastcall FastVectorToScreen(const Glvectorgeometry::TAffineVector &vec);
-	Glvectorgeometry::TAffineVector __fastcall PixelToWorld(const int x, const int y);
-	bool __fastcall WorldToPixel(const Glvectorgeometry::TAffineVector &aPoint, /* out */ int &pixX, /* out */ int &pixY, /* out */ float &pixZ);
-	bool __fastcall WorldToPixelZ(const Glvectorgeometry::TAffineVector &aPoint, /* out */ int &pixX, /* out */ int &pixY, /* out */ float &pixZ)/* overload */;
-	bool __fastcall WorldToPixelZ(const Glvectorgeometry::TAffineVector &aPoint, /* out */ float &pixX, /* out */ float &pixY, /* out */ float &pixZ)/* overload */;
-	bool __fastcall OrthWorldToPixelZ(const Glvectorgeometry::TAffineVector &aPoint, /* out */ float &pixX, /* out */ float &pixY, /* out */ float &pixZ);
+	Glvectortypes::TVector3f __fastcall FastScreenToVector(int x, int y);
+	Glvectortypes::TVector3f __fastcall FastVectorToScreen(const Glvectortypes::TVector3f &vec);
+	Glvectortypes::TVector3f __fastcall PixelToWorld(const int x, const int y);
+	bool __fastcall WorldToPixel(const Glvectortypes::TVector3f &aPoint, /* out */ int &pixX, /* out */ int &pixY, /* out */ float &pixZ);
+	bool __fastcall WorldToPixelZ(const Glvectortypes::TVector3f &aPoint, /* out */ int &pixX, /* out */ int &pixY, /* out */ float &pixZ)/* overload */;
+	bool __fastcall WorldToPixelZ(const Glvectortypes::TVector3f &aPoint, /* out */ float &pixX, /* out */ float &pixY, /* out */ float &pixZ)/* overload */;
+	bool __fastcall OrthWorldToPixelZ(const Glvectortypes::TVector3f &aPoint, /* out */ float &pixX, /* out */ float &pixY, /* out */ float &pixZ);
 };
 
 #pragma pack(pop)
@@ -176,7 +174,7 @@ private:
 	bool FFrustShadow;
 	bool FSkyShadow;
 	TOptimise FOptimise;
-	PAArray FData;
+	TAArray *FData;
 	TAArrayIdx FDataIdx;
 	TAArrayIdx FDataInvIdx;
 	int FDataSize;

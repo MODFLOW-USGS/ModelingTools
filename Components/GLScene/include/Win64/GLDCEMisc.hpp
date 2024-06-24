@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLDCEMisc.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gldcemisc.pas' rev: 36.00 (Windows)
 
 #ifndef GldcemiscHPP
 #define GldcemiscHPP
@@ -15,18 +15,18 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <GLScene.hpp>
-#include <GLCoordinates.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLEllipseCollision.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorLists.hpp>
-#include <GLTerrainRenderer.hpp>
-#include <GLProxyObjects.hpp>
-#include <GLMultiProxy.hpp>
-#include <GLVectorTypes.hpp>
+#include <Glscene.hpp>
+#include <Glcoordinates.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glellipsecollision.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorlists.hpp>
+#include <Glterrainrenderer.hpp>
+#include <Glproxyobjects.hpp>
+#include <Glmultiproxy.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

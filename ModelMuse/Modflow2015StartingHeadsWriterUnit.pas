@@ -114,10 +114,15 @@ end;
 
 procedure TModflowStartingHeadsWriter.WriteOptions;
 begin
-  Exit;
-  // There is no options block in the Initial Conditions file.
+//  Exit;
+  // There used to be no options block in the Initial Conditions file.
   WriteBeginOptions;
-  WriteEndOptions;
+  try
+    WriteExportAsciiArray;
+  finally
+    WriteEndOptions;
+  end;
+
 end;
 
 end.

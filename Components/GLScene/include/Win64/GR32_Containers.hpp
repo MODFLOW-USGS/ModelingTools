@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Containers.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gr32_containers.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_containersHPP
 #define Gr32_containersHPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
-#include <System.RTLConsts.hpp>
-#include <GR32.hpp>
-#include <System.SysUtils.hpp>
-#include <GR32_LowLevel.hpp>
+#include <System.Rtlconsts.hpp>
+#include <Gr32.hpp>
+#include <System.Sysutils.hpp>
+#include <Gr32_lowlevel.hpp>
 #include <System.Classes.hpp>
-#include <System.TypInfo.hpp>
+#include <System.Typinfo.hpp>
 #include <System.Types.hpp>
 
 //-- user supplied -----------------------------------------------------------
@@ -250,8 +250,8 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte BUCKET_MASK = System::Byte(0xff);
-static const System::Word BUCKET_COUNT = System::Word(0x100);
+static _DELPHI_CONST System::Byte BUCKET_MASK = System::Byte(0xff);
+static _DELPHI_CONST System::Word BUCKET_COUNT = System::Word(0x100);
 extern DELPHI_PACKAGE void __fastcall SmartAssign(System::Classes::TPersistent* Src, System::Classes::TPersistent* Dst, System::Typinfo::TTypeKinds TypeKinds = (System::Typinfo::TTypeKinds() << System::TTypeKind::tkInteger << System::TTypeKind::tkChar << System::TTypeKind::tkEnumeration << System::TTypeKind::tkFloat << System::TTypeKind::tkString << System::TTypeKind::tkSet << System::TTypeKind::tkClass << System::TTypeKind::tkWChar << System::TTypeKind::tkLString << System::TTypeKind::tkWString << System::TTypeKind::tkVariant << System::TTypeKind::tkArray << System::TTypeKind::tkRecord << System::TTypeKind::tkInterface << System::TTypeKind::tkInt64 << System::TTypeKind::tkDynArray << System::TTypeKind::tkUString << System::TTypeKind::tkClassRef << System::TTypeKind::tkPointer << System::TTypeKind::tkProcedure << System::TTypeKind::tkMRecord ));
 extern DELPHI_PACKAGE void __fastcall Advance(PLinkedNode &Node, int Steps = 0x1);
 }	/* namespace Gr32_containers */

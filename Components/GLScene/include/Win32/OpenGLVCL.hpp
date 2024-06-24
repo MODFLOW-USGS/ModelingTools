@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OpenGLVCL.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'OpenGLVCL.pas' rev: 35.00 (Windows)
 
 #ifndef OpenglvclHPP
 #define OpenglvclHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -49,14 +47,14 @@ private:
 	HDC _DC;
 	
 protected:
-	Winapi::Windows::TPixelFormatDescriptor _PFD;
+	tagPIXELFORMATDESCRIPTOR _PFD;
 	int _PFI;
-	unsigned _RC;
-	void __fastcall SetPFD(const Winapi::Windows::TPixelFormatDescriptor &PFD_);
+	NativeUInt _RC;
+	void __fastcall SetPFD(const tagPIXELFORMATDESCRIPTOR &PFD_);
 	void __fastcall SetPFI(const int PFI_);
 	void __fastcall CreateWindow();
 	void __fastcall DestroyWindow();
-	void __fastcall ValidatePFD(const Winapi::Windows::TPixelFormatDescriptor &PFD_);
+	void __fastcall ValidatePFD(const tagPIXELFORMATDESCRIPTOR &PFD_);
 	void __fastcall ValidatePFI(const int PFI_);
 	void __fastcall CreateDC();
 	void __fastcall DestroyDC();
@@ -66,10 +64,10 @@ protected:
 public:
 	__fastcall TGLOpenGL();
 	__fastcall virtual ~TGLOpenGL();
-	__property Winapi::Windows::TPixelFormatDescriptor PFD = {read=_PFD, write=SetPFD};
+	__property tagPIXELFORMATDESCRIPTOR PFD = {read=_PFD, write=SetPFD};
 	__property int PFI = {read=_PFI, write=SetPFI, nodefault};
-	__property unsigned RC = {read=_RC, nodefault};
-	__classmethod Winapi::Windows::TPixelFormatDescriptor __fastcall DefaultPFD();
+	__property NativeUInt RC = {read=_RC, nodefault};
+	__classmethod tagPIXELFORMATDESCRIPTOR __fastcall DefaultPFD();
 	void __fastcall BeginGL();
 	void __fastcall EndGL();
 	void __fastcall InitOpenGL();

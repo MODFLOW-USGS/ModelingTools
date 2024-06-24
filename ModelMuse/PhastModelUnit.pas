@@ -48326,8 +48326,10 @@ begin
 end;
 
 procedure TChildModel.UpdateGrid;
+const
+  Zero: NativeInt = 0;
 var
-  SegIndex: Integer;
+  SegIndex: NativeInt;
   SegmentList: TCellElementSegmentList;
   Segment: TCellElementSegment;
   NewColumnPositions: TOneDRealArray;
@@ -48378,7 +48380,7 @@ begin
       SegmentList := HorizontalPositionScreenObject.Segments[ParentModel];
       if (SegmentList.Count >= 1) then
       begin
-        Segment := SegmentList[0];
+        Segment := SegmentList[Zero];
         FFirstCol :=  Segment.Col;
         FLastCol := FFirstCol;
         FFirstRow :=  Segment.Row;

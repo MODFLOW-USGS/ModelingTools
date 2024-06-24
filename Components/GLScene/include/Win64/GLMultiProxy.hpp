@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMultiProxy.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glmultiproxy.pas' rev: 36.00 (Windows)
 
 #ifndef GlmultiproxyHPP
 #define GlmultiproxyHPP
@@ -15,19 +15,19 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLContext.hpp>
-#include <GLScene.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLSilhouette.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLCoordinates.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glcontext.hpp>
+#include <Glscene.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glsilhouette.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glvectortypes.hpp>
+#include <Glcoordinates.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

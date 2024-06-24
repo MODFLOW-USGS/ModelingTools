@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSpacePartition.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glspacepartition.pas' rev: 36.00 (Windows)
 
 #ifndef GlspacepartitionHPP
 #define GlspacepartitionHPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLGeometryBB.hpp>
-#include <GLPersistentClasses.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glgeometrybb.hpp>
+#include <Glpersistentclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -361,8 +361,8 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 COctree_LEAF_TRHESHOLD = System::Int8(0x1e);
-static const System::Int8 COctree_MAX_TREE_DEPTH = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 COctree_LEAF_TRHESHOLD = System::Int8(0x1e);
+static _DELPHI_CONST System::Int8 COctree_MAX_TREE_DEPTH = System::Int8(0x8);
 #define COctree_GROW_GRAVY  (1.000000E-01)
 extern DELPHI_PACKAGE Glgeometrybb::TSpaceContains __fastcall ConeContainsBSphere(const TSPCone &Cone, const Glgeometrybb::TBSphere &BSphere);
 extern DELPHI_PACKAGE bool __fastcall ExtendedFrustumIntersectsBSphere(const TExtendedFrustum &AExtendedFrustum, const Glgeometrybb::TBSphere &ABSphere);

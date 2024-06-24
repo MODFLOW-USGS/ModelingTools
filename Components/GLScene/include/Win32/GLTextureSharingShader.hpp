@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTextureSharingShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLTextureSharingShader.pas' rev: 35.00 (Windows)
 
 #ifndef GltexturesharingshaderHPP
 #define GltexturesharingshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -49,7 +47,7 @@ class PASCALIMPLEMENTATION TGLTextureSharingShaderMaterial : public Glpersistent
 	typedef Glpersistentclasses::TGLInterfacedCollectionItem inherited;
 	
 private:
-	Glvectorgeometry::TMatrix FTextureMatrix;
+	Glvectortypes::TMatrix4f FTextureMatrix;
 	bool FNeedToUpdateTextureMatrix;
 	bool FTextureMatrixIsUnitary;
 	Glmaterial::TGLLibMaterial* FLibMaterial;
@@ -62,19 +60,19 @@ private:
 	Glcolor::TGLColor* FEmission;
 	Glmaterial::TShininess FShininess;
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
-	Glmaterial::TGLLibMaterialName FLibMaterialName;
+	System::UnicodeString FLibMaterialName;
 	void __fastcall SetAmbient(Glcolor::TGLColor* const Value);
 	void __fastcall SetDiffuse(Glcolor::TGLColor* const Value);
 	void __fastcall SetEmission(Glcolor::TGLColor* const Value);
 	void __fastcall SetShininess(const Glmaterial::TShininess Value);
 	void __fastcall SetSpecular(Glcolor::TGLColor* const Value);
 	void __fastcall SetMaterialLibrary(Glmaterial::TGLMaterialLibrary* const Value);
-	void __fastcall SetLibMaterialName(const Glmaterial::TGLLibMaterialName Value);
+	void __fastcall SetLibMaterialName(const System::UnicodeString Value);
 	void __fastcall SetBlendingMode(const Glmaterial::TGLBlendingMode Value);
 	void __fastcall SetLibMaterial(Glmaterial::TGLLibMaterial* const Value);
 	void __fastcall SetTexOffset(Glcoordinates::TGLCoordinates2* const Value);
 	void __fastcall SetTexScale(Glcoordinates::TGLCoordinates2* const Value);
-	Glvectorgeometry::TMatrix __fastcall GetTextureMatrix();
+	Glvectortypes::TMatrix4f __fastcall GetTextureMatrix();
 	bool __fastcall GetTextureMatrixIsUnitary();
 	
 protected:
@@ -90,7 +88,7 @@ public:
 	__fastcall virtual TGLTextureSharingShaderMaterial(System::Classes::TCollection* Collection);
 	__fastcall virtual ~TGLTextureSharingShaderMaterial();
 	__property Glmaterial::TGLLibMaterial* LibMaterial = {read=FLibMaterial, write=SetLibMaterial};
-	__property Glvectorgeometry::TMatrix TextureMatrix = {read=GetTextureMatrix};
+	__property Glvectortypes::TMatrix4f TextureMatrix = {read=GetTextureMatrix};
 	__property bool TextureMatrixIsUnitary = {read=GetTextureMatrixIsUnitary, nodefault};
 	
 __published:
@@ -103,7 +101,7 @@ __published:
 	__property Glcolor::TGLColor* Specular = {read=FSpecular, write=SetSpecular};
 	__property Glmaterial::TShininess Shininess = {read=FShininess, write=SetShininess, nodefault};
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
-	__property Glmaterial::TGLLibMaterialName LibMaterialName = {read=FLibMaterialName, write=SetLibMaterialName};
+	__property System::UnicodeString LibMaterialName = {read=FLibMaterialName, write=SetLibMaterialName};
 private:
 	void *__IGLMaterialLibrarySupported;	// Glmaterial::IGLMaterialLibrarySupported 
 	

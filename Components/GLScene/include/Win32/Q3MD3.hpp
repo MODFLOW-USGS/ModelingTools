@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Q3MD3.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Q3MD3.pas' rev: 35.00 (Windows)
 
 #ifndef Q3md3HPP
 #define Q3md3HPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -53,7 +51,7 @@ private:
 public:
 	void __fastcall LoadFromFile(const System::UnicodeString FileName);
 	void __fastcall LoadFromStream(System::Classes::TStream* AStream);
-	Glvectorgeometry::TMatrix __fastcall GetTransform(const System::UnicodeString TagName, int Frame);
+	Glvectortypes::TMatrix4f __fastcall GetTransform(const System::UnicodeString TagName, int Frame);
 	__property int TagCount = {read=FNumTags, nodefault};
 	__property int FrameCount = {read=FNumFrames, nodefault};
 	__property Filemd3::TMD3Tag Tags[int index] = {read=GetTag};

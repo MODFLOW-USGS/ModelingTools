@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'fmodpresets.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Fmodpresets.pas' rev: 36.00 (Windows)
 
 #ifndef FmodpresetsHPP
 #define FmodpresetsHPP
@@ -15,8 +15,8 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <fmodtypes.hpp>
+#include <Sysinit.hpp>
+#include <Fmodtypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

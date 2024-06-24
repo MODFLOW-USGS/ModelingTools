@@ -38,7 +38,7 @@ requires
   vclimg,
   vcl,
   VclSmp,
-  GLScene_RT;
+  GR32_DSGN_RS11_3;
 
 contains
   FRFaceEditor in '..\..\Source\DesignTime\FRFaceEditor.pas' {RFaceEditor: TFrame},

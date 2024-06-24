@@ -1,7 +1,7 @@
-# Initial concentration file for Temperature file created on 11/17/2023 by ModelMuse version 5.1.1.45.
+# Initial concentration file for Temperature file created on 6/21/2024 by ModelMuse version 5.2.0.18.
 BEGIN GRIDDATA
   STRT LAYERED IPRN    12
-    CONSTANT   3.500000000000E+001  # STRT Aquifer
+    CONSTANT   3.500000000000E+001  # STRT 1
 
 END GRIDDATA
 

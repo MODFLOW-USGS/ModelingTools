@@ -56,6 +56,7 @@ type
     jvspGwt: TJvStandardPage;
     frameGWT: TframeOutputControl;
     cbSaveCSV: TCheckBox;
+    cbEXPORT_ARRAY_ASCII: TCheckBox;
     procedure FormCreate(Sender: TObject); override;
     procedure btnOKClick(Sender: TObject);
     procedure jvPagesChange(Sender: TObject);
@@ -174,6 +175,8 @@ begin
     [msModflowFmp, msModflowOwhm2];
   cbSaveCSV.Checked := OutputControl.SaveBudgetCSV;
   cbSaveCSV.Enabled := frmGoPhast.ModelSelection = msModflow2015;
+  cbEXPORT_ARRAY_ASCII.Checked := OutputControl.ExportArrays;
+  cbEXPORT_ARRAY_ASCII.Enabled := frmGoPhast.ModelSelection = msModflow2015;
 
   comboFrequency.ItemIndex := Ord(OutputControl.BudgetFrequencyChoice);
   spN.AsInteger := OutputControl.BudgetFrequency;
@@ -248,6 +251,7 @@ begin
     TOutputSuppression(comboOutputSuppression.ItemIndex);
   FOutputControl.SaveBudgetSummary := cbSaveBudgetSummary.Checked;
   FOutputControl.SaveBudgetCSV := cbSaveCSV.Checked;
+  FOutputControl.ExportArrays := cbEXPORT_ARRAY_ASCII.Checked;
 
   FMt3dmsOutputControl:= TMt3dmsOutputControl.Create(nil);
   FMt3dmsOutputControl.SaveConcentrations := cbMt3dSaveConc.Checked;

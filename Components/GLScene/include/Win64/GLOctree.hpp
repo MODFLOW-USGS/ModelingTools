@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLOctree.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gloctree.pas' rev: 36.00 (Windows)
 
 #ifndef GloctreeHPP
 #define GloctreeHPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Math.hpp>
 #include <System.Classes.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorLists.hpp>
-#include <GLGeometryBB.hpp>
-#include <GLContext.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorlists.hpp>
+#include <Glgeometrybb.hpp>
+#include <Glcontext.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

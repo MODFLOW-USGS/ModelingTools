@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSCrossXML.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glscrossxml.pas' rev: 36.00 (Windows)
 
 #ifndef GlscrossxmlHPP
 #define GlscrossxmlHPP
@@ -15,13 +15,13 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Variants.hpp>
-#include <Xml.XMLIntf.hpp>
-#include <Xml.XMLDoc.hpp>
-#include <Xml.xmldom.hpp>
+#include <Xml.Xmlintf.hpp>
+#include <Xml.Xmldoc.hpp>
+#include <Xml.Xmldom.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

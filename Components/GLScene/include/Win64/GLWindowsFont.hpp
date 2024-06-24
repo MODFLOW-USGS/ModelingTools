@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLWindowsFont.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glwindowsfont.pas' rev: 36.00 (Windows)
 
 #ifndef GlwindowsfontHPP
 #define GlwindowsfontHPP
@@ -15,25 +15,25 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <System.Classes.hpp>
 #include <System.Math.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Types.hpp>
-#include <System.UITypes.hpp>
+#include <System.Uitypes.hpp>
 #include <Vcl.Graphics.hpp>
-#include <GLScene.hpp>
-#include <GLTexture.hpp>
-#include <GLBitmapFont.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLVectorLists.hpp>
-#include <GLUtils.hpp>
-#include <GLVectorGeometry.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLBaseClasses.hpp>
+#include <Glscene.hpp>
+#include <Gltexture.hpp>
+#include <Glbitmapfont.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glvectorlists.hpp>
+#include <Glutils.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Opengltokens.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glvectortypes.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

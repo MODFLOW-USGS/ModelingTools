@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGizmoEx.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLGizmoEx.pas' rev: 35.00 (Windows)
 
 #ifndef GlgizmoexHPP
 #define GlgizmoexHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -66,16 +64,16 @@ class PASCALIMPLEMENTATION TGLGizmoExObjectItem : public System::Classes::TColle
 	typedef System::Classes::TCollectionItem inherited;
 	
 private:
-	Glvectorgeometry::TVector FOldAutoScaling;
+	Glvectortypes::TVector4f FOldAutoScaling;
 	Glscene::TGLBaseSceneObject* FEffectedObject;
 	Glscene::TGLBaseSceneObject* FParentOldObject;
 	int FIndexOldObject;
 	System::UnicodeString FNameOldObject;
 	bool FReturnObject;
-	Glvectorgeometry::TMatrix FOldMatrix;
+	Glvectortypes::TMatrix4f FOldMatrix;
 	Glscene::TGLBaseSceneObject* FGizmoTmpRoot;
 	void __fastcall SetEffectedObject(Glscene::TGLBaseSceneObject* const Value);
-	void __fastcall SetOldMatrix(const Glvectorgeometry::TMatrix &Value);
+	void __fastcall SetOldMatrix(const Glvectortypes::TMatrix4f &Value);
 	
 protected:
 	void __fastcall DoUndo();
@@ -88,7 +86,7 @@ public:
 	__fastcall virtual ~TGLGizmoExObjectItem();
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);
 	void __fastcall AssignFromObject(Glscene::TGLBaseSceneObject* const AObject, bool AssignAndRemoveObj = false);
-	__property Glvectorgeometry::TMatrix OldMatrix = {read=FOldMatrix, write=SetOldMatrix};
+	__property Glvectortypes::TMatrix4f OldMatrix = {read=FOldMatrix, write=SetOldMatrix};
 	
 __published:
 	__property Glscene::TGLBaseSceneObject* EffectedObject = {read=FEffectedObject, write=SetEffectedObject};
@@ -494,9 +492,9 @@ private:
 	int my;
 	System::Types::TPoint fCursorPos;
 	System::Types::TPoint fLastCursorPos;
-	Glvectorgeometry::TAffineVector fChangeRate;
+	Glvectortypes::TVector3f fChangeRate;
 	bool FEnableLoopCursorMoving;
-	Glvectorgeometry::TVector lastMousePos;
+	Glvectortypes::TVector4f lastMousePos;
 	System::Classes::TNotifyEvent FOnUpdate;
 	TGLGizmoExAcceptEvent FOnSelect;
 	System::Classes::TNotifyEvent FOnOperationChange;
@@ -525,7 +523,7 @@ private:
 	void __fastcall SetHistoryStepsCount(int aValue);
 	void __fastcall SetExcludeObjectsList(System::Classes::TStrings* const AValue);
 	void __fastcall SetExcludeClassNameList(System::Classes::TStrings* const AValue);
-	Glvectorgeometry::TVector __fastcall MouseWorldPos(const int X, const int Y);
+	Glvectortypes::TVector4f __fastcall MouseWorldPos(const int X, const int Y);
 	bool __fastcall CheckObjectInExcludeList(Glscene::TGLBaseSceneObject* const Obj);
 	bool __fastcall CheckClassNameInExcludeList(Glscene::TGLBaseSceneObject* const Obj);
 	void __fastcall UpdateVisibleInfoLabels();

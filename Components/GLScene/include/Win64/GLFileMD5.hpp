@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileMD5.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glfilemd5.pas' rev: 36.00 (Windows)
 
 #ifndef Glfilemd5HPP
 #define Glfilemd5HPP
@@ -15,17 +15,17 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLUtils.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorLists.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glutils.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorlists.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

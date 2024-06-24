@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTree.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLTree.pas' rev: 35.00 (Windows)
 
 #ifndef GltreeHPP
 #define GltreeHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -60,7 +58,7 @@ public:
 	__fastcall TGLTreeLeaves(TGLTree* AOwner);
 	__fastcall virtual ~TGLTreeLeaves();
 	void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	void __fastcall AddNew(const Glvectorgeometry::TMatrix &matrix);
+	void __fastcall AddNew(const Glvectortypes::TMatrix4f &matrix);
 	void __fastcall Clear();
 	__property TGLTree* Owner = {read=FOwner};
 	__property int Count = {read=FCount, nodefault};
@@ -84,11 +82,11 @@ private:
 	TGLTreeBranch* FParent;
 	int FBranchID;
 	int FParentID;
-	Glvectorgeometry::TMatrix FMatrix;
+	Glvectortypes::TMatrix4f FMatrix;
 	Glvectorlists::TIntegerList* FLower;
 	Glvectorlists::TIntegerList* FUpper;
 	bool FCentralLeader;
-	void __fastcall BuildBranch(TGLTreeBranchNoise* branchNoise, const Glvectorgeometry::TMatrix &matrix, float TexCoordY, float Twist, int Level);
+	void __fastcall BuildBranch(TGLTreeBranchNoise* branchNoise, const Glvectortypes::TMatrix4f &matrix, float TexCoordY, float Twist, int Level);
 	
 public:
 	__fastcall TGLTreeBranch(TGLTreeBranches* AOwner, TGLTreeBranch* AParent);
@@ -98,7 +96,7 @@ public:
 	__property TGLTreeBranch* Center = {read=FCenter};
 	__property TGLTreeBranch* Right = {read=FRight};
 	__property TGLTreeBranch* Parent = {read=FParent};
-	__property Glvectorgeometry::TMatrix matrix = {read=FMatrix};
+	__property Glvectortypes::TMatrix4f matrix = {read=FMatrix};
 	__property Glvectorlists::TIntegerList* Lower = {read=FLower};
 	__property Glvectorlists::TIntegerList* Upper = {read=FUpper};
 };
@@ -190,11 +188,11 @@ private:
 	TGLTreeBranches* FBranches;
 	TGLTreeBranchNoise* FNoise;
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
-	Glmaterial::TGLLibMaterialName FLeafMaterialName;
-	Glmaterial::TGLLibMaterialName FLeafBackMaterialName;
-	Glmaterial::TGLLibMaterialName FBranchMaterialName;
+	System::UnicodeString FLeafMaterialName;
+	System::UnicodeString FLeafBackMaterialName;
+	System::UnicodeString FBranchMaterialName;
 	bool FRebuildTree;
-	Glvectorgeometry::TVector FAxisAlignedDimensionsCache;
+	Glvectortypes::TVector4f FAxisAlignedDimensionsCache;
 	
 protected:
 	void __fastcall SetDepth(const int Value);
@@ -214,9 +212,9 @@ protected:
 	void __fastcall SetAutoRebuild(const bool Value);
 	void __fastcall SetCenterBranchConstant(const float Value);
 	void __fastcall SetMaterialLibrary(Glmaterial::TGLMaterialLibrary* const Value);
-	void __fastcall SetLeafMaterialName(const Glmaterial::TGLLibMaterialName Value);
-	void __fastcall SetLeafBackMaterialName(const Glmaterial::TGLLibMaterialName Value);
-	void __fastcall SetBranchMaterialName(const Glmaterial::TGLLibMaterialName Value);
+	void __fastcall SetLeafMaterialName(const System::UnicodeString Value);
+	void __fastcall SetLeafBackMaterialName(const System::UnicodeString Value);
+	void __fastcall SetBranchMaterialName(const System::UnicodeString Value);
 	virtual void __fastcall Loaded();
 	
 public:
@@ -230,8 +228,8 @@ public:
 	void __fastcall RebuildTree();
 	void __fastcall ForceTotalRebuild();
 	void __fastcall Clear();
-	void __fastcall GetExtents(Glvectorgeometry::TAffineVector &min, Glvectorgeometry::TAffineVector &max);
-	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	void __fastcall GetExtents(Glvectortypes::TVector3f &min, Glvectortypes::TVector3f &max);
+	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
 	void __fastcall LoadFromStream(System::Classes::TStream* aStream);
 	void __fastcall SaveToStream(System::Classes::TStream* aStream);
 	void __fastcall LoadFromFile(const System::UnicodeString aFileName);
@@ -258,9 +256,9 @@ __published:
 	__property bool AutoRebuild = {read=FAutoRebuild, write=SetAutoRebuild, nodefault};
 	__property float CenterBranchConstant = {read=FCenterBranchConstant, write=SetCenterBranchConstant};
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
-	__property Glmaterial::TGLLibMaterialName LeafMaterialName = {read=FLeafMaterialName, write=SetLeafMaterialName};
-	__property Glmaterial::TGLLibMaterialName LeafBackMaterialName = {read=FLeafBackMaterialName, write=SetLeafBackMaterialName};
-	__property Glmaterial::TGLLibMaterialName BranchMaterialName = {read=FBranchMaterialName, write=SetBranchMaterialName};
+	__property System::UnicodeString LeafMaterialName = {read=FLeafMaterialName, write=SetLeafMaterialName};
+	__property System::UnicodeString LeafBackMaterialName = {read=FLeafBackMaterialName, write=SetLeafBackMaterialName};
+	__property System::UnicodeString BranchMaterialName = {read=FBranchMaterialName, write=SetBranchMaterialName};
 public:
 	/* TGLBaseSceneObject.CreateAsChild */ inline __fastcall TGLTree(Glscene::TGLBaseSceneObject* aParentOwner) : Glscene::TGLImmaterialSceneObject(aParentOwner) { }
 	

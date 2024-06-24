@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLIsolines.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLIsolines.pas' rev: 35.00 (Windows)
 
 #ifndef GlisolinesHPP
 #define GlisolinesHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -72,7 +70,7 @@ class PASCALIMPLEMENTATION TGLIsoline : public System::TObject
 	
 public:
 	int NP;
-	PVertex2DArr Line;
+	TVertex2DArr *Line;
 	__fastcall virtual TGLIsoline(int LineSize);
 	__fastcall virtual ~TGLIsoline();
 };
@@ -91,7 +89,7 @@ private:
 	
 	
 public:
-	Glvectorgeometry::TAffineVector IsoVertex;
+	Glvectortypes::TVector3f IsoVertex;
 	_TGLIsolines__1 GLSpaceTextSF;
 	void __fastcall MakeIsolines(TMatrixArr &Depths, int bmSize, float StartDepth, float EndDepth, int Interval);
 	void __fastcall FreeList();
@@ -113,7 +111,7 @@ public:
 extern DELPHI_PACKAGE void __fastcall Initialize_Contouring(TMatrixArr &DataGrid, int NXpoints, int NYpoints, float CurrentIsoline);
 extern DELPHI_PACKAGE void __fastcall Release_Memory_Isoline(void);
 extern DELPHI_PACKAGE bool __fastcall GetNextIsoline(TGLIsoline* &Isoline);
-extern DELPHI_PACKAGE void __fastcall TriangleElevationSegments(const Glvectorgeometry::TAffineVector &p1, const Glvectorgeometry::TAffineVector &p2, const Glvectorgeometry::TAffineVector &p3, float ElevationDelta, Glvectorlists::TAffineVectorList* Segments);
+extern DELPHI_PACKAGE void __fastcall TriangleElevationSegments(const Glvectortypes::TVector3f &p1, const Glvectortypes::TVector3f &p2, const Glvectortypes::TVector3f &p3, float ElevationDelta, Glvectorlists::TAffineVectorList* Segments);
 }	/* namespace Glisolines */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLISOLINES)
 using namespace Glisolines;

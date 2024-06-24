@@ -7,7 +7,7 @@
 ;MMCurrentVersion is updated for each version released
 #define MMCurrentVersion "5_2" 
 ;#define MMCurrentVersion "5_1_Beta" 
-AppVerName=ModelMuse 5.2.0.0
+AppVerName=ModelMuse 5.3.0.0
 
 ;enable or disable the following to install in 32-bit or 64-bit mode
 ;#define Win64

@@ -2423,7 +2423,7 @@ function TSfrDiversion.SegmentReach: TSegmentReach;
 var
   ScreenObject: TScreenObject;
   PointNumber: Integer;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   ASegment: TCellElementSegment;
   ReachNumber: Integer;
   PriorSegment: TCellElementSegment;

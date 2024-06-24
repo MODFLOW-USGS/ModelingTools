@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'LWObjects.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'LWObjects.pas' rev: 35.00 (Windows)
 
 #ifndef LwobjectsHPP
 #define LwobjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -61,7 +59,7 @@ typedef short TI2;
 
 typedef short *PI2;
 
-typedef System::LongInt TI4;
+typedef int TI4;
 
 typedef int *PI4;
 
@@ -81,7 +79,7 @@ typedef TU2Array *PU2Array;
 
 typedef System::DynamicArray<System::Word> TU2DynArray;
 
-typedef System::LongWord TU4;
+typedef unsigned TU4;
 
 typedef unsigned *PU4;
 
@@ -101,7 +99,7 @@ typedef TF4Array *PF4Array;
 
 typedef System::DynamicArray<float> TF4DynArray;
 
-typedef TF4 TANG4;
+typedef float TANG4;
 
 typedef float *PANG4;
 
@@ -131,7 +129,7 @@ struct DECLSPEC_DRECORD TLWChunkRec
 {
 public:
 	TID4 id;
-	TU4 size;
+	unsigned size;
 	void *data;
 };
 
@@ -142,7 +140,7 @@ struct DECLSPEC_DRECORD TLWSubChunkRec
 {
 public:
 	TID4 id;
-	TU2 size;
+	System::Word size;
 	void *data;
 };
 
@@ -152,7 +150,7 @@ struct DECLSPEC_DRECORD TLWPolsInfo
 public:
 	TVec12 norm;
 	TVec12DynArray vnorms;
-	TU2 surfid;
+	System::Word surfid;
 };
 
 
@@ -161,7 +159,7 @@ typedef System::DynamicArray<TLWPolsInfo> TLWPolsInfoDynArray;
 struct DECLSPEC_DRECORD TLWPntsInfo
 {
 public:
-	TU2 npols;
+	System::Word npols;
 	TU2DynArray pols;
 };
 
@@ -175,8 +173,8 @@ typedef TU2DynArray TLWPolyTagMapDynArray;
 struct DECLSPEC_DRECORD TLWPolyTagMap
 {
 public:
-	TU2 poly;
-	TU2 tag;
+	System::Word poly;
+	System::Word tag;
 };
 
 
@@ -185,7 +183,7 @@ typedef TLWPolyTagMap *PLWPolyTagMap;
 struct DECLSPEC_DRECORD TLWVertexMap
 {
 public:
-	TU2 vert;
+	System::Word vert;
 	TF4DynArray values;
 };
 
@@ -200,7 +198,7 @@ class PASCALIMPLEMENTATION TLWChunk : public System::Classes::TPersistent
 private:
 	void *FData;
 	TID4 FID;
-	TU4 FSize;
+	unsigned FSize;
 	TLWParentChunk* FParentChunk;
 	TLWChunkList* FOwner;
 	TLWChunkList* __fastcall GetRootChunks();
@@ -208,7 +206,7 @@ private:
 	
 protected:
 	virtual void __fastcall Clear();
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	virtual void __fastcall Loaded();
 	
 public:
@@ -217,7 +215,7 @@ public:
 	virtual void __fastcall LoadFromStream(System::Classes::TStream* AStream);
 	__property void * Data = {read=FData};
 	__property TID4 ID = {read=FID};
-	__property TU4 Size = {read=FSize, nodefault};
+	__property unsigned Size = {read=FSize, nodefault};
 	__property TLWParentChunk* ParentChunk = {read=FParentChunk};
 	__property TLWChunkList* RootChunks = {read=GetRootChunks};
 	__property int Index = {read=GetIndex, nodefault};
@@ -291,7 +289,7 @@ private:
 	float __fastcall GetFloatParam(TID4 Param);
 	System::Word __fastcall GetWordParam(TID4 Param);
 	TVec12 __fastcall GetVec3Param(TID4 Param);
-	System::LongWord __fastcall GetLongParam(TID4 Param);
+	unsigned __fastcall GetLongParam(TID4 Param);
 	System::Word __fastcall GetVXParam(TID4 Param);
 	
 protected:
@@ -304,7 +302,7 @@ public:
 	__property void * ParamAddr[TID4 Param] = {read=GetParamAddr};
 	__property float FloatParam[TID4 Param] = {read=GetFloatParam};
 	__property System::Word WordParam[TID4 Param] = {read=GetWordParam};
-	__property System::LongWord LongParam[TID4 Param] = {read=GetLongParam};
+	__property unsigned LongParam[TID4 Param] = {read=GetLongParam};
 	__property TVec12 Vec3Param[TID4 Param] = {read=GetVec3Param};
 	__property System::Word VXParam[TID4 Param] = {read=GetVXParam};
 public:
@@ -325,17 +323,17 @@ class PASCALIMPLEMENTATION TLWPnts : public TLWParentChunk
 private:
 	TVec12DynArray FPnts;
 	TLWPntsInfoDynArray FPntsInfo;
-	System::LongWord __fastcall GetPntsCount();
+	unsigned __fastcall GetPntsCount();
 	int __fastcall AddPoly(int PntIdx, int PolyIdx);
 	
 protected:
 	virtual void __fastcall Clear();
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	
 public:
 	__classmethod virtual TID4 __fastcall GetID();
 	bool __fastcall GetVMap(TID4 VMapID, /* out */ TLWVMap* &VMap);
-	__property System::LongWord PntsCount = {read=GetPntsCount, nodefault};
+	__property unsigned PntsCount = {read=GetPntsCount, nodefault};
 	__property TVec12DynArray Pnts = {read=FPnts};
 	__property TLWPntsInfoDynArray PntsInfo = {read=FPntsInfo};
 public:
@@ -355,27 +353,27 @@ class PASCALIMPLEMENTATION TLWPols : public TLWParentChunk
 	
 private:
 	TID4 FPolsType;
-	TLWPolsDynArray FPols;
+	TU2DynArray FPols;
 	TLWPolsInfoDynArray FPolsInfo;
 	int FPolsCount;
-	int __fastcall GetPolsByIndex(TU2 AIndex);
-	TU4 __fastcall GetIndiceCount();
-	TU2 __fastcall GetIndice(int AIndex);
+	int __fastcall GetPolsByIndex(System::Word AIndex);
+	unsigned __fastcall GetIndiceCount();
+	System::Word __fastcall GetIndice(int AIndex);
 	int __fastcall GetPolsCount();
 	void __fastcall CalcPolsNormals();
 	void __fastcall CalcPntsNormals();
 	
 protected:
 	virtual void __fastcall Clear();
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	virtual void __fastcall Loaded();
 	
 public:
 	__classmethod virtual TID4 __fastcall GetID();
-	int __fastcall GetPolsByPntIdx(TU2 VertIdx, TU2DynArray &VertPolys);
-	__property int PolsByIndex[TU2 AIndex] = {read=GetPolsByIndex};
-	__property TU4 IndiceCount = {read=GetIndiceCount, nodefault};
-	__property TU2 Indices[int AIndex] = {read=GetIndice};
+	int __fastcall GetPolsByPntIdx(System::Word VertIdx, TU2DynArray &VertPolys);
+	__property int PolsByIndex[System::Word AIndex] = {read=GetPolsByIndex};
+	__property unsigned IndiceCount = {read=GetIndiceCount, nodefault};
+	__property System::Word Indices[int AIndex] = {read=GetIndice};
 	__property TID4 PolsType = {read=FPolsType};
 	__property int PolsCount = {read=GetPolsCount, nodefault};
 	__property TLWPolsInfoDynArray PolsInfo = {read=FPolsInfo};
@@ -395,22 +393,22 @@ class PASCALIMPLEMENTATION TLWVMap : public TLWChunk
 	typedef TLWChunk inherited;
 	
 private:
-	TU2 FDimensions;
+	System::Word FDimensions;
 	System::UnicodeString FName;
 	TLWVertexMapDynArray FValues;
 	TID4 FVMapType;
-	TLWVertexMap __fastcall GetValue(TU2 AIndex);
+	TLWVertexMap __fastcall GetValue(System::Word AIndex);
 	int __fastcall GetValueCount();
 	
 protected:
 	virtual void __fastcall Clear();
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	
 public:
 	__classmethod virtual TID4 __fastcall GetID();
-	__property TU2 Dimensions = {read=FDimensions, nodefault};
+	__property System::Word Dimensions = {read=FDimensions, nodefault};
 	__property System::UnicodeString Name = {read=FName};
-	__property TLWVertexMap Value[TU2 AIndex] = {read=GetValue};
+	__property TLWVertexMap Value[System::Word AIndex] = {read=GetValue};
 	__property int ValueCount = {read=GetValueCount, nodefault};
 	__property TID4 VMapType = {read=FVMapType};
 public:
@@ -434,12 +432,12 @@ private:
 	
 protected:
 	virtual void __fastcall Clear();
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	
 public:
 	__fastcall virtual ~TLWTags();
 	__classmethod virtual TID4 __fastcall GetID();
-	System::UnicodeString __fastcall TagToName(TU2 Tag);
+	System::UnicodeString __fastcall TagToName(System::Word Tag);
 	__property System::Classes::TStrings* Tags = {read=GetTags};
 public:
 	/* TObject.Create */ inline __fastcall TLWTags() : TLWChunk() { }
@@ -460,7 +458,7 @@ private:
 	
 protected:
 	virtual void * __fastcall GetParamAddr(TID4 Param);
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	
 public:
 	__fastcall virtual ~TLWSurf();
@@ -481,22 +479,22 @@ class PASCALIMPLEMENTATION TLWLayr : public TLWParentChunk
 	typedef TLWParentChunk inherited;
 	
 private:
-	TU2 FFlags;
+	System::Word FFlags;
 	System::UnicodeString FName;
-	TU2 FNumber;
-	TU2 FParent;
+	System::Word FNumber;
+	System::Word FParent;
 	TVec12 FPivot;
 	
 protected:
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	
 public:
 	__fastcall virtual ~TLWLayr();
 	__classmethod virtual TID4 __fastcall GetID();
-	__property TU2 Flags = {read=FFlags, nodefault};
+	__property System::Word Flags = {read=FFlags, nodefault};
 	__property System::UnicodeString Name = {read=FName};
-	__property TU2 Number = {read=FNumber, nodefault};
-	__property TU2 Parent = {read=FParent, nodefault};
+	__property System::Word Number = {read=FNumber, nodefault};
+	__property System::Word Parent = {read=FParent, nodefault};
 	__property TVec12 Pivot = {read=FPivot};
 public:
 	/* TObject.Create */ inline __fastcall TLWLayr() : TLWParentChunk() { }
@@ -515,10 +513,10 @@ public:
 	
 private:
 	TID4 FMapType;
-	TLWPolyTagMapDynArray FTagMaps;
+	TU2DynArray FTagMaps;
 	TU2DynArray FTags;
-	int __fastcall AddTag(TU2 Value);
-	TU2 __fastcall GetTag(int AIndex);
+	int __fastcall AddTag(System::Word Value);
+	System::Word __fastcall GetTag(int AIndex);
 	int __fastcall GetTagCount();
 	int __fastcall GetTagMapCount();
 	TLWPolyTagMap __fastcall GetTagMaps(int AIndex);
@@ -526,17 +524,17 @@ private:
 	
 protected:
 	virtual void __fastcall Clear();
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	
 public:
 	__fastcall TLWPTag();
-	int __fastcall GetPolsByTag(TU2 Tag, TU2DynArray &PolyIndices);
+	int __fastcall GetPolsByTag(System::Word Tag, TU2DynArray &PolyIndices);
 	__classmethod virtual TID4 __fastcall GetID();
 	__property TID4 MapType = {read=FMapType};
 	__property int TagCount = {read=GetTagCount, nodefault};
 	__property int TagMapCount = {read=GetTagMapCount, nodefault};
 	__property TLWPolyTagMap TagMaps[int AIndex] = {read=GetTagMaps/*, default*/};
-	__property TU2 Tags[int AIndex] = {read=GetTag};
+	__property System::Word Tags[int AIndex] = {read=GetTag};
 public:
 	/* TLWChunk.Destroy */ inline __fastcall virtual ~TLWPTag() { }
 	
@@ -555,19 +553,19 @@ private:
 	TLWChunkList* __fastcall GetChunks();
 	int __fastcall GetCount();
 	TLWSurf* __fastcall GetSurfaceByName(System::UnicodeString Index);
-	TLWSurf* __fastcall GetSurfaceByTag(TU2 Index);
+	TLWSurf* __fastcall GetSurfaceByTag(System::Word Index);
 	
 public:
 	__fastcall TLWObjectFile();
 	__fastcall virtual ~TLWObjectFile();
-	System::UnicodeString __fastcall TagToName(TU2 Tag);
+	System::UnicodeString __fastcall TagToName(System::Word Tag);
 	void __fastcall LoadFromFile(const System::UnicodeString AFilename);
 	void __fastcall LoadFromStream(System::Classes::TStream* AStream);
 	__property int ChunkCount = {read=GetCount, nodefault};
 	__property TLWChunkList* Chunks = {read=GetChunks};
 	__property System::UnicodeString FileName = {read=FFileName};
 	__property TLWSurf* SurfaceByName[System::UnicodeString Index] = {read=GetSurfaceByName};
-	__property TLWSurf* SurfaceByTag[TU2 Index] = {read=GetSurfaceByTag};
+	__property TLWSurf* SurfaceByTag[System::Word Index] = {read=GetSurfaceByTag};
 };
 
 #pragma pack(pop)
@@ -578,14 +576,14 @@ class PASCALIMPLEMENTATION TLWClip : public TLWParentChunk
 	typedef TLWParentChunk inherited;
 	
 private:
-	TU4 FClipIndex;
+	unsigned FClipIndex;
 	
 protected:
-	virtual void __fastcall LoadData(System::Classes::TStream* AStream, System::LongWord DataStart, System::LongWord DataSize);
+	virtual void __fastcall LoadData(System::Classes::TStream* AStream, unsigned DataStart, unsigned DataSize);
 	
 public:
 	__classmethod virtual TID4 __fastcall GetID();
-	__property TU4 ClipIndex = {read=FClipIndex, nodefault};
+	__property unsigned ClipIndex = {read=FClipIndex, nodefault};
 public:
 	/* TLWChunk.Destroy */ inline __fastcall virtual ~TLWClip() { }
 	
@@ -779,8 +777,8 @@ extern DELPHI_PACKAGE void __fastcall FindSurfaceByName(TLWChunk* AChunk, void *
 extern DELPHI_PACKAGE void __fastcall FindSurfaceByTag(TLWChunk* AChunk, void * ATag, bool &Found);
 extern DELPHI_PACKAGE void __fastcall FindVMapByName(TLWChunk* AChunk, void * AName, bool &Found);
 extern DELPHI_PACKAGE void __fastcall RegisterChunkClass(TLWChunkClass ChunkClass);
-extern DELPHI_PACKAGE System::LongWord __cdecl LoadLW0FromStream(System::Classes::TStream* Stream, TLWOReadCallback ReadCallback, void * UserData);
-extern DELPHI_PACKAGE System::LongWord __fastcall LoadLWOFromFile(const System::UnicodeString AFilename, TLWOReadCallback ReadCallback, void * UserData);
+extern DELPHI_PACKAGE unsigned __cdecl LoadLW0FromStream(System::Classes::TStream* Stream, TLWOReadCallback ReadCallback, void * UserData);
+extern DELPHI_PACKAGE unsigned __fastcall LoadLWOFromFile(const System::UnicodeString AFilename, TLWOReadCallback ReadCallback, void * UserData);
 extern DELPHI_PACKAGE void __fastcall ReverseByteOrder(void * ValueIn, int Size, int Count = 0x1);
 extern DELPHI_PACKAGE void __fastcall ReadMotorolaNumber(System::Classes::TStream* Stream, void * Data, int ElementSize, int Count = 0x1);
 extern DELPHI_PACKAGE int __fastcall WriteMotorolaNumber(System::Classes::TStream* Stream, void * Data, int ElementSize, int Count = 0x1);

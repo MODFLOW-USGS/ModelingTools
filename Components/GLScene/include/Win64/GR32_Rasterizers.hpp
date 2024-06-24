@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Rasterizers.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gr32_rasterizers.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_rasterizersHPP
 #define Gr32_rasterizersHPP
@@ -15,12 +15,12 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <System.Classes.hpp>
-#include <GR32.hpp>
-#include <GR32_Blend.hpp>
-#include <GR32_OrdinalMaps.hpp>
+#include <Gr32.hpp>
+#include <Gr32_blend.hpp>
+#include <Gr32_ordinalmaps.hpp>
 #include <System.Types.hpp>
 
 //-- user supplied -----------------------------------------------------------

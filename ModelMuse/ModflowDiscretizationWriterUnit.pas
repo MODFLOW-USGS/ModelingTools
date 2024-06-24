@@ -578,57 +578,62 @@ begin
   begin
     WriteBeginOptions;
 
-    if ModflowOptions.LengthUnit <> 0 then
-    begin
-      WriteString('  LENGTH_UNITS ');
-      case ModflowOptions.LengthUnit of
-        0:
-          begin
-            // WriteString('UNKNOWN');
-          end;
-        1:
-          begin
-            WriteString('FEET');
-          end;
-        2:
-          begin
-            WriteString('METERS');
-          end;
-        3:
-          begin
-            WriteString('CENTIMETERS');
-          end;
-        else
-          Assert(False);
+    try
+      if ModflowOptions.LengthUnit <> 0 then
+      begin
+        WriteString('  LENGTH_UNITS ');
+        case ModflowOptions.LengthUnit of
+          0:
+            begin
+              // WriteString('UNKNOWN');
+            end;
+          1:
+            begin
+              WriteString('FEET');
+            end;
+          2:
+            begin
+              WriteString('METERS');
+            end;
+          3:
+            begin
+              WriteString('CENTIMETERS');
+            end;
+          else
+            Assert(False);
+        end;
+        NewLine;
       end;
+
+      if not ModflowOptions.WriteBinaryGridFile then
+      begin
+        WriteString('NOGRB');
+        NewLine;
+      end
+      else
+      begin
+        Model.AddModelOutputFile(FNameOfFile + '.grb');
+      end;
+
+      OriginCorner := Model.Grid.TwoDElementCorner(0,Model.Grid.RowCount);
+      WriteString('  XORIGIN');
+      WriteFloat(OriginCorner.x);
       NewLine;
-    end;
 
-    if not ModflowOptions.WriteBinaryGridFile then
-    begin
-      WriteString('NOGRB');
+      WriteString('  YORIGIN');
+      WriteFloat(OriginCorner.y);
       NewLine;
-    end
-    else
-    begin
-      Model.AddModelOutputFile(FNameOfFile + '.grb');
+
+      GridAngle := Model.Grid.GridAngle * 180 / Pi;
+      WriteString('  ANGROT');
+      WriteFloat(GridAngle);
+      NewLine;
+
+      WriteExportAsciiArray;
+
+    finally
+      WriteEndOptions;
     end;
-
-    OriginCorner := Model.Grid.TwoDElementCorner(0,Model.Grid.RowCount);
-    WriteString('  XORIGIN');
-    WriteFloat(OriginCorner.x);
-    NewLine;
-
-    WriteString('  YORIGIN');
-    WriteFloat(OriginCorner.y);
-    NewLine;
-
-    GridAngle := Model.Grid.GridAngle * 180 / Pi;
-    WriteString('  ANGROT');
-    WriteFloat(GridAngle);
-    NewLine;
-
-    WriteEndOptions;
 
     WriteBeginDimensions;
 
@@ -1299,6 +1304,8 @@ begin
     begin
       Model.AddModelOutputFile(FNameOfFile + '.grb');
     end;
+
+    WriteExportAsciiArray;
     // XORIGIN not supported at this time.
     // YORIGIN not supported at this time.
     // ANGROT not supported at this time.

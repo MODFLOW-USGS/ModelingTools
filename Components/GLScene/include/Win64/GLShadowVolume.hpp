@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLShadowVolume.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glshadowvolume.pas' rev: 36.00 (Windows)
 
 #ifndef GlshadowvolumeHPP
 #define GlshadowvolumeHPP
@@ -15,25 +15,25 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLSLog.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLContext.hpp>
-#include <GLSilhouette.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLCoordinates.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLGeometryBB.hpp>
-#include <GLColor.hpp>
-#include <GLSelection.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLVectorLists.hpp>
-#include <GLState.hpp>
-#include <GLVectorTypes.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glslog.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glcontext.hpp>
+#include <Glsilhouette.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glcoordinates.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glgeometrybb.hpp>
+#include <Glcolor.hpp>
+#include <Glselection.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glvectorlists.hpp>
+#include <Glstate.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

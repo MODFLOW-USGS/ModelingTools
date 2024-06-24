@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLProjectedTextures.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glprojectedtextures.pas' rev: 36.00 (Windows)
 
 #ifndef GlprojectedtexturesHPP
 #define GlprojectedtexturesHPP
@@ -15,16 +15,16 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLTexture.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLState.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glvectortypes.hpp>
+#include <Gltexture.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glstate.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

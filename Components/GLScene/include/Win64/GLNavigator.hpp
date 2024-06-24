@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLNavigator.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glnavigator.pas' rev: 36.00 (Windows)
 
 #ifndef GlnavigatorHPP
 #define GlnavigatorHPP
@@ -15,17 +15,17 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Types.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLScene.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLCoordinates.hpp>
-#include <GLScreen.hpp>
-#include <GLVectorTypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glscene.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glcoordinates.hpp>
+#include <Glscreen.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

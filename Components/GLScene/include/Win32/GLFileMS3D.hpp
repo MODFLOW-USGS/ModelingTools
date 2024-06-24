@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileMS3D.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFileMS3D.pas' rev: 35.00 (Windows)
 
 #ifndef Glfilems3dHPP
 #define Glfilems3dHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -116,10 +114,10 @@ struct DECLSPEC_DRECORD TMS3DMaterial
 {
 public:
 	System::StaticArray<char, 32> Name;
-	Glcolor::TColorVector Ambient;
-	Glcolor::TColorVector Diffuse;
-	Glcolor::TColorVector Specular;
-	Glcolor::TColorVector Emissive;
+	Glvectortypes::TVector4f Ambient;
+	Glvectortypes::TVector4f Diffuse;
+	Glvectortypes::TVector4f Specular;
+	Glvectortypes::TVector4f Emissive;
 	float Shininess;
 	float Transparency;
 	char Mode;
@@ -177,8 +175,8 @@ struct DECLSPEC_DRECORD TMS3DJoint
 {
 public:
 	TMS3DJointBase Base;
-	PMS3DKeyframeRotationArray KeyFramesRot;
-	PMS3DKeyframePositionArray KeyFramesTrans;
+	TMS3DKeyframeRotationArray *KeyFramesRot;
+	TMS3DKeyframePositionArray *KeyFramesTrans;
 };
 #pragma pack(pop)
 

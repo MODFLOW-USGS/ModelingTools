@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OpenGLAdapter.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'OpenGLAdapter.pas' rev: 35.00 (Windows)
 
 #ifndef OpengladapterHPP
 #define OpengladapterHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -39,17 +37,17 @@ class PASCALIMPLEMENTATION EOpenGLError : public System::Sysutils::Exception
 	
 public:
 	/* Exception.Create */ inline __fastcall EOpenGLError(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EOpenGLError(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EOpenGLError(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EOpenGLError(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EOpenGLError(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EOpenGLError(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EOpenGLError(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EOpenGLError(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EOpenGLError(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EOpenGLError(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EOpenGLError(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EOpenGLError(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EOpenGLError(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EOpenGLError(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EOpenGLError(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EOpenGLError(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EOpenGLError(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EOpenGLError(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EOpenGLError(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EOpenGLError(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EOpenGLError() { }
 	
 };
@@ -329,340 +327,340 @@ public:
 	bool ARB_debug_output;
 	void __stdcall (*BindTexture)(unsigned target, unsigned texture);
 	void __stdcall (*BlendFunc)(unsigned sfactor, unsigned dfactor);
-	void __stdcall (*Clear)(Opengltokens::TGLbitfield mask);
+	void __stdcall (*Clear)(unsigned mask);
 	void __stdcall (*ClearColor)(float red, float green, float blue, float alpha);
-	void __stdcall (*ClearDepth)(Opengltokens::TGLclampd depth);
-	void __stdcall (*ClearStencil)(Opengltokens::TGLint s);
-	void __stdcall (*ColorMask)(Opengltokens::TGLboolean red, Opengltokens::TGLboolean green, Opengltokens::TGLboolean blue, Opengltokens::TGLboolean alpha);
-	void __stdcall (*CopyTexImage1D)(unsigned target, Opengltokens::TGLint level, unsigned internalFormat, Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLsizei Width, Opengltokens::TGLint border);
-	void __stdcall (*CopyTexImage2D)(unsigned target, Opengltokens::TGLint level, unsigned internalFormat, Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height, Opengltokens::TGLint border);
-	void __stdcall (*CopyTexSubImage1D)(unsigned target, Opengltokens::TGLint level, Opengltokens::TGLint xoffset, Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLsizei Width);
-	void __stdcall (*CopyTexSubImage2D)(unsigned target, Opengltokens::TGLint level, Opengltokens::TGLint xoffset, Opengltokens::TGLint yoffset, Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height);
+	void __stdcall (*ClearDepth)(double depth);
+	void __stdcall (*ClearStencil)(int s);
+	void __stdcall (*ColorMask)(System::ByteBool red, System::ByteBool green, System::ByteBool blue, System::ByteBool alpha);
+	void __stdcall (*CopyTexImage1D)(unsigned target, int level, unsigned internalFormat, int X, int y, int Width, int border);
+	void __stdcall (*CopyTexImage2D)(unsigned target, int level, unsigned internalFormat, int X, int y, int Width, int Height, int border);
+	void __stdcall (*CopyTexSubImage1D)(unsigned target, int level, int xoffset, int X, int y, int Width);
+	void __stdcall (*CopyTexSubImage2D)(unsigned target, int level, int xoffset, int yoffset, int X, int y, int Width, int Height);
 	void __stdcall (*CullFace)(unsigned mode);
-	void __stdcall (*DeleteTextures)(Opengltokens::TGLsizei n, Opengltokens::PGLuint textures);
+	void __stdcall (*DeleteTextures)(int n, System::PCardinal textures);
 	void __stdcall (*DepthFunc)(unsigned func);
-	void __stdcall (*DepthMask)(Opengltokens::TGLboolean flag);
-	void __stdcall (*DepthRange)(Opengltokens::TGLclampd zNear, Opengltokens::TGLclampd zFar);
+	void __stdcall (*DepthMask)(System::ByteBool flag);
+	void __stdcall (*DepthRange)(double zNear, double zFar);
 	void __stdcall (*Disable)(unsigned cap);
-	void __stdcall (*DrawArrays)(unsigned mode, Opengltokens::TGLint First, Opengltokens::TGLsizei Count);
+	void __stdcall (*DrawArrays)(unsigned mode, int First, int Count);
 	void __stdcall (*DrawBuffer)(unsigned mode);
-	void __stdcall (*DrawElements)(unsigned mode, Opengltokens::TGLsizei Count, unsigned atype, void * indices);
+	void __stdcall (*DrawElements)(unsigned mode, int Count, unsigned atype, void * indices);
 	void __stdcall (*Enable)(unsigned cap);
 	void __stdcall (*Finish)(void);
 	void __stdcall (*Flush)(void);
 	void __stdcall (*FrontFace)(unsigned mode);
-	void __stdcall (*GenTextures)(Opengltokens::TGLsizei n, Opengltokens::PGLuint textures);
+	void __stdcall (*GenTextures)(int n, System::PCardinal textures);
 	void __stdcall (*GetBooleanv)(unsigned pname, Opengltokens::PGLboolean params);
-	void __stdcall (*GetDoublev)(unsigned pname, Opengltokens::PGLdouble params);
+	void __stdcall (*GetDoublev)(unsigned pname, System::PDouble params);
 	unsigned __stdcall (*GetError)(void);
-	void __stdcall (*GetFloatv)(unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*GetIntegerv)(unsigned pname, Opengltokens::PGLint params);
+	void __stdcall (*GetFloatv)(unsigned pname, System::PSingle params);
+	void __stdcall (*GetIntegerv)(unsigned pname, System::PInteger params);
 	void __stdcall (*GetPointerv)(unsigned pname, void *params);
 	char * __stdcall (*GetString)(unsigned Name);
-	void __stdcall (*GetTexImage)(unsigned target, Opengltokens::TGLint level, unsigned format, unsigned atype, void * pixels);
-	void __stdcall (*GetTexLevelParameterfv)(unsigned target, Opengltokens::TGLint level, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*GetTexLevelParameteriv)(unsigned target, Opengltokens::TGLint level, unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*GetTexParameterfv)(unsigned target, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*GetTexParameteriv)(unsigned target, unsigned pname, Opengltokens::PGLint params);
+	void __stdcall (*GetTexImage)(unsigned target, int level, unsigned format, unsigned atype, void * pixels);
+	void __stdcall (*GetTexLevelParameterfv)(unsigned target, int level, unsigned pname, System::PSingle params);
+	void __stdcall (*GetTexLevelParameteriv)(unsigned target, int level, unsigned pname, System::PInteger params);
+	void __stdcall (*GetTexParameterfv)(unsigned target, unsigned pname, System::PSingle params);
+	void __stdcall (*GetTexParameteriv)(unsigned target, unsigned pname, System::PInteger params);
 	void __stdcall (*Hint)(unsigned target, unsigned mode);
 	System::ByteBool __stdcall (*IsEnabled)(unsigned cap);
 	System::ByteBool __stdcall (*IsTexture)(unsigned texture);
-	void __stdcall (*LineWidth)(Opengltokens::TGLfloat Width);
+	void __stdcall (*LineWidth)(float Width);
 	void __stdcall (*LogicOp)(unsigned opcode);
-	void __stdcall (*PixelStoref)(unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*PixelStorei)(unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*PointSize)(Opengltokens::TGLfloat size);
+	void __stdcall (*PixelStoref)(unsigned pname, float param);
+	void __stdcall (*PixelStorei)(unsigned pname, int param);
+	void __stdcall (*PointSize)(float size);
 	void __stdcall (*PolygonMode)(unsigned face, unsigned mode);
-	void __stdcall (*PolygonOffset)(Opengltokens::TGLfloat factor, Opengltokens::TGLfloat units);
+	void __stdcall (*PolygonOffset)(float factor, float units);
 	void __stdcall (*ReadBuffer)(unsigned mode);
-	void __stdcall (*ReadPixels)(Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height, unsigned format, unsigned atype, void * pixels);
-	void __stdcall (*Scissor)(Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height);
-	void __stdcall (*StencilFunc)(unsigned func, Opengltokens::TGLint ref, unsigned mask);
+	void __stdcall (*ReadPixels)(int X, int y, int Width, int Height, unsigned format, unsigned atype, void * pixels);
+	void __stdcall (*Scissor)(int X, int y, int Width, int Height);
+	void __stdcall (*StencilFunc)(unsigned func, int ref, unsigned mask);
 	void __stdcall (*StencilMask)(unsigned mask);
 	void __stdcall (*StencilOp)(unsigned fail, unsigned zfail, unsigned zpass);
-	void __stdcall (*TexImage1D)(unsigned target, Opengltokens::TGLint level, Opengltokens::TGLint internalFormat, Opengltokens::TGLsizei Width, Opengltokens::TGLint border, unsigned format, unsigned atype, void * pixels);
-	void __stdcall (*TexImage2D)(unsigned target, Opengltokens::TGLint level, Opengltokens::TGLint internalFormat, Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height, Opengltokens::TGLint border, unsigned format, unsigned atype, void * pixels);
-	void __stdcall (*TexParameterf)(unsigned target, unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*TexParameterfv)(unsigned target, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*TexParameteri)(unsigned target, unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*TexParameteriv)(unsigned target, unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*TexSubImage1D)(unsigned target, Opengltokens::TGLint level, Opengltokens::TGLint xoffset, Opengltokens::TGLsizei Width, unsigned format, unsigned atype, void * pixels);
-	void __stdcall (*TexSubImage2D)(unsigned target, Opengltokens::TGLint level, Opengltokens::TGLint xoffset, Opengltokens::TGLint yoffset, Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height, unsigned format, unsigned atype, void * pixels);
-	void __stdcall (*Viewport)(Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height);
-	void __stdcall (*Accum)(unsigned op, Opengltokens::TGLfloat Value);
+	void __stdcall (*TexImage1D)(unsigned target, int level, int internalFormat, int Width, int border, unsigned format, unsigned atype, void * pixels);
+	void __stdcall (*TexImage2D)(unsigned target, int level, int internalFormat, int Width, int Height, int border, unsigned format, unsigned atype, void * pixels);
+	void __stdcall (*TexParameterf)(unsigned target, unsigned pname, float param);
+	void __stdcall (*TexParameterfv)(unsigned target, unsigned pname, System::PSingle params);
+	void __stdcall (*TexParameteri)(unsigned target, unsigned pname, int param);
+	void __stdcall (*TexParameteriv)(unsigned target, unsigned pname, System::PInteger params);
+	void __stdcall (*TexSubImage1D)(unsigned target, int level, int xoffset, int Width, unsigned format, unsigned atype, void * pixels);
+	void __stdcall (*TexSubImage2D)(unsigned target, int level, int xoffset, int yoffset, int Width, int Height, unsigned format, unsigned atype, void * pixels);
+	void __stdcall (*Viewport)(int X, int y, int Width, int Height);
+	void __stdcall (*Accum)(unsigned op, float Value);
 	void __stdcall (*AlphaFunc)(unsigned func, float ref);
-	System::ByteBool __stdcall (*AreTexturesResident)(Opengltokens::TGLsizei n, Opengltokens::PGLuint textures, Opengltokens::PGLboolean residences);
-	void __stdcall (*ArrayElement)(Opengltokens::TGLint i);
+	System::ByteBool __stdcall (*AreTexturesResident)(int n, System::PCardinal textures, Opengltokens::PGLboolean residences);
+	void __stdcall (*ArrayElement)(int i);
 	void __stdcall (*Begin_)(unsigned mode);
-	void __stdcall (*Bitmap)(Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height, Opengltokens::TGLfloat xorig, Opengltokens::TGLfloat yorig, Opengltokens::TGLfloat xmove, Opengltokens::TGLfloat ymove, void * Bitmap);
+	void __stdcall (*Bitmap)(int Width, int Height, float xorig, float yorig, float xmove, float ymove, void * Bitmap);
 	void __stdcall (*CallList)(unsigned list);
-	void __stdcall (*CallLists)(Opengltokens::TGLsizei n, unsigned atype, void * lists);
-	void __stdcall (*ClearAccum)(Opengltokens::TGLfloat red, Opengltokens::TGLfloat green, Opengltokens::TGLfloat blue, Opengltokens::TGLfloat alpha);
-	void __stdcall (*ClearIndex)(Opengltokens::TGLfloat c);
-	void __stdcall (*ClipPlane)(unsigned plane, Opengltokens::PGLdouble equation);
-	void __stdcall (*Color3b)(Opengltokens::TGLbyte red, Opengltokens::TGLbyte green, Opengltokens::TGLbyte blue);
+	void __stdcall (*CallLists)(int n, unsigned atype, void * lists);
+	void __stdcall (*ClearAccum)(float red, float green, float blue, float alpha);
+	void __stdcall (*ClearIndex)(float c);
+	void __stdcall (*ClipPlane)(unsigned plane, System::PDouble equation);
+	void __stdcall (*Color3b)(System::Int8 red, System::Int8 green, System::Int8 blue);
 	void __stdcall (*Color3bv)(Opengltokens::PGLbyte v);
-	void __stdcall (*Color3d)(Opengltokens::TGLdouble red, Opengltokens::TGLdouble green, Opengltokens::TGLdouble blue);
-	void __stdcall (*Color3dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*Color3f)(Opengltokens::TGLfloat red, Opengltokens::TGLfloat green, Opengltokens::TGLfloat blue);
-	void __stdcall (*Color3fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*Color3i)(Opengltokens::TGLint red, Opengltokens::TGLint green, Opengltokens::TGLint blue);
-	void __stdcall (*Color3iv)(Opengltokens::PGLint v);
-	void __stdcall (*Color3s)(Opengltokens::TGLshort red, Opengltokens::TGLshort green, Opengltokens::TGLshort blue);
+	void __stdcall (*Color3d)(double red, double green, double blue);
+	void __stdcall (*Color3dv)(System::PDouble v);
+	void __stdcall (*Color3f)(float red, float green, float blue);
+	void __stdcall (*Color3fv)(System::PSingle v);
+	void __stdcall (*Color3i)(int red, int green, int blue);
+	void __stdcall (*Color3iv)(System::PInteger v);
+	void __stdcall (*Color3s)(short red, short green, short blue);
 	void __stdcall (*Color3sv)(Opengltokens::PGLshort v);
-	void __stdcall (*Color3ub)(Opengltokens::TGLubyte red, Opengltokens::TGLubyte green, Opengltokens::TGLubyte blue);
-	void __stdcall (*Color3ubv)(Opengltokens::PGLubyte v);
+	void __stdcall (*Color3ub)(System::Byte red, System::Byte green, System::Byte blue);
+	void __stdcall (*Color3ubv)(System::PByte v);
 	void __stdcall (*Color3ui)(unsigned red, unsigned green, unsigned blue);
-	void __stdcall (*Color3uiv)(Opengltokens::PGLuint v);
-	void __stdcall (*Color3us)(Opengltokens::TGLushort red, Opengltokens::TGLushort green, Opengltokens::TGLushort blue);
-	void __stdcall (*Color3usv)(Opengltokens::PGLushort v);
-	void __stdcall (*Color4b)(Opengltokens::TGLbyte red, Opengltokens::TGLbyte green, Opengltokens::TGLbyte blue, Opengltokens::TGLbyte alpha);
+	void __stdcall (*Color3uiv)(System::PCardinal v);
+	void __stdcall (*Color3us)(System::Word red, System::Word green, System::Word blue);
+	void __stdcall (*Color3usv)(System::PWord v);
+	void __stdcall (*Color4b)(System::Int8 red, System::Int8 green, System::Int8 blue, System::Int8 alpha);
 	void __stdcall (*Color4bv)(Opengltokens::PGLbyte v);
-	void __stdcall (*Color4d)(Opengltokens::TGLdouble red, Opengltokens::TGLdouble green, Opengltokens::TGLdouble blue, Opengltokens::TGLdouble alpha);
-	void __stdcall (*Color4dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*Color4f)(Opengltokens::TGLfloat red, Opengltokens::TGLfloat green, Opengltokens::TGLfloat blue, Opengltokens::TGLfloat alpha);
-	void __stdcall (*Color4fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*Color4i)(Opengltokens::TGLint red, Opengltokens::TGLint green, Opengltokens::TGLint blue, Opengltokens::TGLint alpha);
-	void __stdcall (*Color4iv)(Opengltokens::PGLint v);
-	void __stdcall (*Color4s)(Opengltokens::TGLshort red, Opengltokens::TGLshort green, Opengltokens::TGLshort blue, Opengltokens::TGLshort alpha);
-	void __stdcall (*Color4sv)(Opengltokens::TGLshort v);
-	void __stdcall (*Color4ub)(Opengltokens::TGLubyte red, Opengltokens::TGLubyte green, Opengltokens::TGLubyte blue, Opengltokens::TGLubyte alpha);
-	void __stdcall (*Color4ubv)(Opengltokens::PGLubyte v);
+	void __stdcall (*Color4d)(double red, double green, double blue, double alpha);
+	void __stdcall (*Color4dv)(System::PDouble v);
+	void __stdcall (*Color4f)(float red, float green, float blue, float alpha);
+	void __stdcall (*Color4fv)(System::PSingle v);
+	void __stdcall (*Color4i)(int red, int green, int blue, int alpha);
+	void __stdcall (*Color4iv)(System::PInteger v);
+	void __stdcall (*Color4s)(short red, short green, short blue, short alpha);
+	void __stdcall (*Color4sv)(short v);
+	void __stdcall (*Color4ub)(System::Byte red, System::Byte green, System::Byte blue, System::Byte alpha);
+	void __stdcall (*Color4ubv)(System::PByte v);
 	void __stdcall (*Color4ui)(unsigned red, unsigned green, unsigned blue, unsigned alpha);
-	void __stdcall (*Color4uiv)(Opengltokens::PGLuint v);
-	void __stdcall (*Color4us)(Opengltokens::TGLushort red, Opengltokens::TGLushort green, Opengltokens::TGLushort blue, Opengltokens::TGLushort alpha);
-	void __stdcall (*Color4usv)(Opengltokens::PGLushort v);
+	void __stdcall (*Color4uiv)(System::PCardinal v);
+	void __stdcall (*Color4us)(System::Word red, System::Word green, System::Word blue, System::Word alpha);
+	void __stdcall (*Color4usv)(System::PWord v);
 	void __stdcall (*ColorMaterial)(unsigned face, unsigned mode);
-	void __stdcall (*ColorPointer)(Opengltokens::TGLint size, unsigned atype, Opengltokens::TGLsizei stride, void * Data);
-	void __stdcall (*CopyPixels)(Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height, unsigned atype);
-	void __stdcall (*DeleteLists)(unsigned list, Opengltokens::TGLsizei range);
+	void __stdcall (*ColorPointer)(int size, unsigned atype, int stride, void * Data);
+	void __stdcall (*CopyPixels)(int X, int y, int Width, int Height, unsigned atype);
+	void __stdcall (*DeleteLists)(unsigned list, int range);
 	void __stdcall (*DisableClientState)(unsigned aarray);
-	void __stdcall (*DrawPixels)(Opengltokens::TGLsizei Width, Opengltokens::TGLsizei Height, unsigned format, unsigned atype, void * pixels);
-	void __stdcall (*EdgeFlag)(Opengltokens::TGLboolean flag);
-	void __stdcall (*EdgeFlagPointer)(Opengltokens::TGLsizei stride, void * Data);
+	void __stdcall (*DrawPixels)(int Width, int Height, unsigned format, unsigned atype, void * pixels);
+	void __stdcall (*EdgeFlag)(System::ByteBool flag);
+	void __stdcall (*EdgeFlagPointer)(int stride, void * Data);
 	void __stdcall (*EdgeFlagv)(Opengltokens::PGLboolean flag);
 	void __stdcall (*EnableClientState)(unsigned aarray);
 	void __stdcall (*End_)(void);
 	void __stdcall (*EndList)(void);
-	void __stdcall (*EvalCoord1d)(Opengltokens::TGLdouble u);
-	void __stdcall (*EvalCoord1dv)(Opengltokens::PGLdouble u);
-	void __stdcall (*EvalCoord1f)(Opengltokens::TGLfloat u);
-	void __stdcall (*EvalCoord1fv)(Opengltokens::PGLfloat u);
-	void __stdcall (*EvalCoord2d)(Opengltokens::TGLdouble u, Opengltokens::TGLdouble v);
-	void __stdcall (*EvalCoord2dv)(Opengltokens::PGLdouble u);
-	void __stdcall (*EvalCoord2f)(Opengltokens::TGLfloat u, Opengltokens::TGLfloat v);
-	void __stdcall (*EvalCoord2fv)(Opengltokens::PGLfloat u);
-	void __stdcall (*EvalMesh1)(unsigned mode, Opengltokens::TGLint i1, Opengltokens::TGLint i2);
-	void __stdcall (*EvalMesh2)(unsigned mode, Opengltokens::TGLint i1, Opengltokens::TGLint i2, Opengltokens::TGLint j1, Opengltokens::TGLint j2);
-	void __stdcall (*EvalPoint1)(Opengltokens::TGLint i);
-	void __stdcall (*EvalPoint2)(Opengltokens::TGLint i, Opengltokens::TGLint j);
-	void __stdcall (*FeedbackBuffer)(Opengltokens::TGLsizei size, unsigned atype, Opengltokens::PGLfloat buffer);
-	void __stdcall (*Fogf)(unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*Fogfv)(unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*Fogi)(unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*Fogiv)(unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*Frustum)(Opengltokens::TGLdouble left, Opengltokens::TGLdouble right, Opengltokens::TGLdouble bottom, Opengltokens::TGLdouble top, Opengltokens::TGLdouble zNear, Opengltokens::TGLdouble zFar);
-	unsigned __stdcall (*GenLists)(Opengltokens::TGLsizei range);
-	void __stdcall (*GetClipPlane)(unsigned plane, Opengltokens::PGLdouble equation);
-	void __stdcall (*GetLightfv)(unsigned light, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*GetLightiv)(unsigned light, unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*GetMapdv)(unsigned target, unsigned query, Opengltokens::PGLdouble v);
-	void __stdcall (*GetMapfv)(unsigned target, unsigned query, Opengltokens::PGLfloat v);
-	void __stdcall (*GetMapiv)(unsigned target, unsigned query, Opengltokens::PGLint v);
-	void __stdcall (*GetMaterialfv)(unsigned face, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*GetMaterialiv)(unsigned face, unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*GetPixelMapfv)(unsigned map, Opengltokens::PGLfloat values);
-	void __stdcall (*GetPixelMapuiv)(unsigned map, Opengltokens::PGLuint values);
-	void __stdcall (*GetPixelMapusv)(unsigned map, Opengltokens::PGLushort values);
-	void __stdcall (*GetPolygonStipple)(Opengltokens::PGLubyte mask);
-	void __stdcall (*GetTexEnvfv)(unsigned target, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*GetTexEnviv)(unsigned target, unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*GetTexGendv)(unsigned coord, unsigned pname, Opengltokens::PGLdouble params);
-	void __stdcall (*GetTexGenfv)(unsigned coord, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*GetTexGeniv)(unsigned coord, unsigned pname, Opengltokens::PGLint params);
+	void __stdcall (*EvalCoord1d)(double u);
+	void __stdcall (*EvalCoord1dv)(System::PDouble u);
+	void __stdcall (*EvalCoord1f)(float u);
+	void __stdcall (*EvalCoord1fv)(System::PSingle u);
+	void __stdcall (*EvalCoord2d)(double u, double v);
+	void __stdcall (*EvalCoord2dv)(System::PDouble u);
+	void __stdcall (*EvalCoord2f)(float u, float v);
+	void __stdcall (*EvalCoord2fv)(System::PSingle u);
+	void __stdcall (*EvalMesh1)(unsigned mode, int i1, int i2);
+	void __stdcall (*EvalMesh2)(unsigned mode, int i1, int i2, int j1, int j2);
+	void __stdcall (*EvalPoint1)(int i);
+	void __stdcall (*EvalPoint2)(int i, int j);
+	void __stdcall (*FeedbackBuffer)(int size, unsigned atype, System::PSingle buffer);
+	void __stdcall (*Fogf)(unsigned pname, float param);
+	void __stdcall (*Fogfv)(unsigned pname, System::PSingle params);
+	void __stdcall (*Fogi)(unsigned pname, int param);
+	void __stdcall (*Fogiv)(unsigned pname, System::PInteger params);
+	void __stdcall (*Frustum)(double left, double right, double bottom, double top, double zNear, double zFar);
+	unsigned __stdcall (*GenLists)(int range);
+	void __stdcall (*GetClipPlane)(unsigned plane, System::PDouble equation);
+	void __stdcall (*GetLightfv)(unsigned light, unsigned pname, System::PSingle params);
+	void __stdcall (*GetLightiv)(unsigned light, unsigned pname, System::PInteger params);
+	void __stdcall (*GetMapdv)(unsigned target, unsigned query, System::PDouble v);
+	void __stdcall (*GetMapfv)(unsigned target, unsigned query, System::PSingle v);
+	void __stdcall (*GetMapiv)(unsigned target, unsigned query, System::PInteger v);
+	void __stdcall (*GetMaterialfv)(unsigned face, unsigned pname, System::PSingle params);
+	void __stdcall (*GetMaterialiv)(unsigned face, unsigned pname, System::PInteger params);
+	void __stdcall (*GetPixelMapfv)(unsigned map, System::PSingle values);
+	void __stdcall (*GetPixelMapuiv)(unsigned map, System::PCardinal values);
+	void __stdcall (*GetPixelMapusv)(unsigned map, System::PWord values);
+	void __stdcall (*GetPolygonStipple)(System::PByte mask);
+	void __stdcall (*GetTexEnvfv)(unsigned target, unsigned pname, System::PSingle params);
+	void __stdcall (*GetTexEnviv)(unsigned target, unsigned pname, System::PInteger params);
+	void __stdcall (*GetTexGendv)(unsigned coord, unsigned pname, System::PDouble params);
+	void __stdcall (*GetTexGenfv)(unsigned coord, unsigned pname, System::PSingle params);
+	void __stdcall (*GetTexGeniv)(unsigned coord, unsigned pname, System::PInteger params);
 	void __stdcall (*IndexMask)(unsigned mask);
-	void __stdcall (*IndexPointer)(unsigned atype, Opengltokens::TGLsizei stride, void * Data);
-	void __stdcall (*Indexd)(Opengltokens::TGLdouble c);
-	void __stdcall (*Indexdv)(Opengltokens::PGLdouble c);
-	void __stdcall (*Indexf)(Opengltokens::TGLfloat c);
-	void __stdcall (*Indexfv)(Opengltokens::PGLfloat c);
-	void __stdcall (*Indexi)(Opengltokens::TGLint c);
-	void __stdcall (*Indexiv)(Opengltokens::PGLint c);
-	void __stdcall (*Indexs)(Opengltokens::TGLshort c);
+	void __stdcall (*IndexPointer)(unsigned atype, int stride, void * Data);
+	void __stdcall (*Indexd)(double c);
+	void __stdcall (*Indexdv)(System::PDouble c);
+	void __stdcall (*Indexf)(float c);
+	void __stdcall (*Indexfv)(System::PSingle c);
+	void __stdcall (*Indexi)(int c);
+	void __stdcall (*Indexiv)(System::PInteger c);
+	void __stdcall (*Indexs)(short c);
 	void __stdcall (*Indexsv)(Opengltokens::PGLshort c);
-	void __stdcall (*Indexub)(Opengltokens::TGLubyte c);
-	void __stdcall (*Indexubv)(Opengltokens::PGLubyte c);
+	void __stdcall (*Indexub)(System::Byte c);
+	void __stdcall (*Indexubv)(System::PByte c);
 	void __stdcall (*InitNames)(void);
-	void __stdcall (*InterleavedArrays)(unsigned format, Opengltokens::TGLsizei stride, void * Data);
+	void __stdcall (*InterleavedArrays)(unsigned format, int stride, void * Data);
 	System::ByteBool __stdcall (*IsList)(unsigned list);
-	void __stdcall (*LightModelf)(unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*LightModelfv)(unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*LightModeli)(unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*LightModeliv)(unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*Lightf)(unsigned light, unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*Lightfv)(unsigned light, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*Lighti)(unsigned light, unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*Lightiv)(unsigned light, unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*LineStipple)(Opengltokens::TGLint factor, Opengltokens::TGLushort pattern);
+	void __stdcall (*LightModelf)(unsigned pname, float param);
+	void __stdcall (*LightModelfv)(unsigned pname, System::PSingle params);
+	void __stdcall (*LightModeli)(unsigned pname, int param);
+	void __stdcall (*LightModeliv)(unsigned pname, System::PInteger params);
+	void __stdcall (*Lightf)(unsigned light, unsigned pname, float param);
+	void __stdcall (*Lightfv)(unsigned light, unsigned pname, System::PSingle params);
+	void __stdcall (*Lighti)(unsigned light, unsigned pname, int param);
+	void __stdcall (*Lightiv)(unsigned light, unsigned pname, System::PInteger params);
+	void __stdcall (*LineStipple)(int factor, System::Word pattern);
 	void __stdcall (*ListBase)(unsigned base);
 	void __stdcall (*LoadIdentity)(void);
-	void __stdcall (*LoadMatrixd)(Opengltokens::PGLdouble m);
-	void __stdcall (*LoadMatrixf)(Opengltokens::PGLfloat m);
+	void __stdcall (*LoadMatrixd)(System::PDouble m);
+	void __stdcall (*LoadMatrixf)(System::PSingle m);
 	void __stdcall (*LoadName)(unsigned Name);
-	void __stdcall (*Map1d)(unsigned target, Opengltokens::TGLdouble u1, Opengltokens::TGLdouble u2, Opengltokens::TGLint stride, Opengltokens::TGLint order, Opengltokens::PGLdouble points);
-	void __stdcall (*Map1f)(unsigned target, Opengltokens::TGLfloat u1, Opengltokens::TGLfloat u2, Opengltokens::TGLint stride, Opengltokens::TGLint order, Opengltokens::PGLfloat points);
-	void __stdcall (*Map2d)(unsigned target, Opengltokens::TGLdouble u1, Opengltokens::TGLdouble u2, Opengltokens::TGLint ustride, Opengltokens::TGLint uorder, Opengltokens::TGLdouble v1, Opengltokens::TGLdouble v2, Opengltokens::TGLint vstride, Opengltokens::TGLint vorder, Opengltokens::PGLdouble points);
-	void __stdcall (*Map2f)(unsigned target, Opengltokens::TGLfloat u1, Opengltokens::TGLfloat u2, Opengltokens::TGLint ustride, Opengltokens::TGLint uorder, Opengltokens::TGLfloat v1, Opengltokens::TGLfloat v2, Opengltokens::TGLint vstride, Opengltokens::TGLint vorder, Opengltokens::PGLfloat points);
-	void __stdcall (*MapGrid1d)(Opengltokens::TGLint un, Opengltokens::TGLdouble u1, Opengltokens::TGLdouble u2);
-	void __stdcall (*MapGrid1f)(Opengltokens::TGLint un, Opengltokens::TGLfloat u1, Opengltokens::TGLfloat u2);
-	void __stdcall (*MapGrid2d)(Opengltokens::TGLint un, Opengltokens::TGLdouble u1, Opengltokens::TGLdouble u2, Opengltokens::TGLint vn, Opengltokens::TGLdouble v1, Opengltokens::TGLdouble v2);
-	void __stdcall (*MapGrid2f)(Opengltokens::TGLint un, Opengltokens::TGLfloat u1, Opengltokens::TGLfloat u2, Opengltokens::TGLint vn, Opengltokens::TGLfloat v1, Opengltokens::TGLfloat v2);
-	void __stdcall (*Materialf)(unsigned face, unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*Materialfv)(unsigned face, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*Materiali)(unsigned face, unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*Materialiv)(unsigned face, unsigned pname, Opengltokens::PGLint params);
+	void __stdcall (*Map1d)(unsigned target, double u1, double u2, int stride, int order, System::PDouble points);
+	void __stdcall (*Map1f)(unsigned target, float u1, float u2, int stride, int order, System::PSingle points);
+	void __stdcall (*Map2d)(unsigned target, double u1, double u2, int ustride, int uorder, double v1, double v2, int vstride, int vorder, System::PDouble points);
+	void __stdcall (*Map2f)(unsigned target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, System::PSingle points);
+	void __stdcall (*MapGrid1d)(int un, double u1, double u2);
+	void __stdcall (*MapGrid1f)(int un, float u1, float u2);
+	void __stdcall (*MapGrid2d)(int un, double u1, double u2, int vn, double v1, double v2);
+	void __stdcall (*MapGrid2f)(int un, float u1, float u2, int vn, float v1, float v2);
+	void __stdcall (*Materialf)(unsigned face, unsigned pname, float param);
+	void __stdcall (*Materialfv)(unsigned face, unsigned pname, System::PSingle params);
+	void __stdcall (*Materiali)(unsigned face, unsigned pname, int param);
+	void __stdcall (*Materialiv)(unsigned face, unsigned pname, System::PInteger params);
 	void __stdcall (*MatrixMode)(unsigned mode);
-	void __stdcall (*MultMatrixd)(Opengltokens::PGLdouble m);
-	void __stdcall (*MultMatrixf)(Opengltokens::PGLfloat m);
+	void __stdcall (*MultMatrixd)(System::PDouble m);
+	void __stdcall (*MultMatrixf)(System::PSingle m);
 	void __stdcall (*NewList)(unsigned list, unsigned mode);
-	void __stdcall (*Normal3b)(Opengltokens::TGLbyte nx, Opengltokens::TGLbyte ny, Opengltokens::TGLbyte nz);
+	void __stdcall (*Normal3b)(System::Int8 nx, System::Int8 ny, System::Int8 nz);
 	void __stdcall (*Normal3bv)(Opengltokens::PGLbyte v);
-	void __stdcall (*Normal3d)(Opengltokens::TGLdouble nx, Opengltokens::TGLdouble ny, Opengltokens::TGLdouble nz);
-	void __stdcall (*Normal3dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*Normal3f)(Opengltokens::TGLfloat nx, Opengltokens::TGLfloat ny, Opengltokens::TGLfloat nz);
-	void __stdcall (*Normal3fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*Normal3i)(Opengltokens::TGLint nx, Opengltokens::TGLint ny, Opengltokens::TGLint nz);
-	void __stdcall (*Normal3iv)(Opengltokens::PGLint v);
-	void __stdcall (*Normal3s)(Opengltokens::TGLshort nx, Opengltokens::TGLshort ny, Opengltokens::TGLshort nz);
+	void __stdcall (*Normal3d)(double nx, double ny, double nz);
+	void __stdcall (*Normal3dv)(System::PDouble v);
+	void __stdcall (*Normal3f)(float nx, float ny, float nz);
+	void __stdcall (*Normal3fv)(System::PSingle v);
+	void __stdcall (*Normal3i)(int nx, int ny, int nz);
+	void __stdcall (*Normal3iv)(System::PInteger v);
+	void __stdcall (*Normal3s)(short nx, short ny, short nz);
 	void __stdcall (*Normal3sv)(Opengltokens::PGLshort v);
-	void __stdcall (*NormalPointer)(unsigned atype, Opengltokens::TGLsizei stride, void * Data);
-	void __stdcall (*Ortho)(Opengltokens::TGLdouble left, Opengltokens::TGLdouble right, Opengltokens::TGLdouble bottom, Opengltokens::TGLdouble top, Opengltokens::TGLdouble zNear, Opengltokens::TGLdouble zFar);
-	void __stdcall (*PassThrough)(Opengltokens::TGLfloat token);
-	void __stdcall (*PixelMapfv)(unsigned map, Opengltokens::TGLsizei mapsize, Opengltokens::PGLfloat values);
-	void __stdcall (*PixelMapuiv)(unsigned map, Opengltokens::TGLsizei mapsize, Opengltokens::PGLuint values);
-	void __stdcall (*PixelMapusv)(unsigned map, Opengltokens::TGLsizei mapsize, Opengltokens::PGLushort values);
-	void __stdcall (*PixelTransferf)(unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*PixelTransferi)(unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*PixelZoom)(Opengltokens::TGLfloat xfactor, Opengltokens::TGLfloat yfactor);
-	void __stdcall (*PolygonStipple)(Opengltokens::PGLubyte mask);
+	void __stdcall (*NormalPointer)(unsigned atype, int stride, void * Data);
+	void __stdcall (*Ortho)(double left, double right, double bottom, double top, double zNear, double zFar);
+	void __stdcall (*PassThrough)(float token);
+	void __stdcall (*PixelMapfv)(unsigned map, int mapsize, System::PSingle values);
+	void __stdcall (*PixelMapuiv)(unsigned map, int mapsize, System::PCardinal values);
+	void __stdcall (*PixelMapusv)(unsigned map, int mapsize, System::PWord values);
+	void __stdcall (*PixelTransferf)(unsigned pname, float param);
+	void __stdcall (*PixelTransferi)(unsigned pname, int param);
+	void __stdcall (*PixelZoom)(float xfactor, float yfactor);
+	void __stdcall (*PolygonStipple)(System::PByte mask);
 	void __stdcall (*PopAttrib)(void);
 	void __stdcall (*PopClientAttrib)(void);
 	void __stdcall (*PopMatrix)(void);
 	void __stdcall (*PopName)(void);
-	void __stdcall (*PrioritizeTextures)(Opengltokens::TGLsizei n, Opengltokens::PGLuint textures, Winapi::Windows::PSingle priorities);
-	void __stdcall (*PushAttrib)(Opengltokens::TGLbitfield mask);
-	void __stdcall (*PushClientAttrib)(Opengltokens::TGLbitfield mask);
+	void __stdcall (*PrioritizeTextures)(int n, System::PCardinal textures, Winapi::Windows::PSingle priorities);
+	void __stdcall (*PushAttrib)(unsigned mask);
+	void __stdcall (*PushClientAttrib)(unsigned mask);
 	void __stdcall (*PushMatrix)(void);
 	void __stdcall (*PushName)(unsigned Name);
-	void __stdcall (*RasterPos2d)(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y);
-	void __stdcall (*RasterPos2dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*RasterPos2f)(Opengltokens::TGLfloat X, Opengltokens::TGLfloat y);
-	void __stdcall (*RasterPos2fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*RasterPos2i)(Opengltokens::TGLint X, Opengltokens::TGLint y);
-	void __stdcall (*RasterPos2iv)(Opengltokens::PGLint v);
+	void __stdcall (*RasterPos2d)(double X, double y);
+	void __stdcall (*RasterPos2dv)(System::PDouble v);
+	void __stdcall (*RasterPos2f)(float X, float y);
+	void __stdcall (*RasterPos2fv)(System::PSingle v);
+	void __stdcall (*RasterPos2i)(int X, int y);
+	void __stdcall (*RasterPos2iv)(System::PInteger v);
 	void __stdcall (*RasterPos2s)(Opengltokens::PGLshort X, Opengltokens::PGLshort y);
 	void __stdcall (*RasterPos2sv)(Opengltokens::PGLshort v);
-	void __stdcall (*RasterPos3d)(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble z);
-	void __stdcall (*RasterPos3dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*RasterPos3f)(Opengltokens::TGLfloat X, Opengltokens::TGLfloat y, Opengltokens::TGLfloat z);
-	void __stdcall (*RasterPos3fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*RasterPos3i)(Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLint z);
-	void __stdcall (*RasterPos3iv)(Opengltokens::PGLint v);
-	void __stdcall (*RasterPos3s)(Opengltokens::TGLshort X, Opengltokens::TGLshort y, Opengltokens::TGLshort z);
+	void __stdcall (*RasterPos3d)(double X, double y, double z);
+	void __stdcall (*RasterPos3dv)(System::PDouble v);
+	void __stdcall (*RasterPos3f)(float X, float y, float z);
+	void __stdcall (*RasterPos3fv)(System::PSingle v);
+	void __stdcall (*RasterPos3i)(int X, int y, int z);
+	void __stdcall (*RasterPos3iv)(System::PInteger v);
+	void __stdcall (*RasterPos3s)(short X, short y, short z);
 	void __stdcall (*RasterPos3sv)(Opengltokens::PGLshort v);
-	void __stdcall (*RasterPos4d)(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble z, Opengltokens::TGLdouble w);
-	void __stdcall (*RasterPos4dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*RasterPos4f)(Opengltokens::TGLfloat X, Opengltokens::TGLfloat y, Opengltokens::TGLfloat z, Opengltokens::TGLfloat w);
-	void __stdcall (*RasterPos4fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*RasterPos4i)(Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLint z, Opengltokens::TGLint w);
-	void __stdcall (*RasterPos4iv)(Opengltokens::PGLint v);
-	void __stdcall (*RasterPos4s)(Opengltokens::TGLshort X, Opengltokens::TGLshort y, Opengltokens::TGLshort z, Opengltokens::TGLshort w);
+	void __stdcall (*RasterPos4d)(double X, double y, double z, double w);
+	void __stdcall (*RasterPos4dv)(System::PDouble v);
+	void __stdcall (*RasterPos4f)(float X, float y, float z, float w);
+	void __stdcall (*RasterPos4fv)(System::PSingle v);
+	void __stdcall (*RasterPos4i)(int X, int y, int z, int w);
+	void __stdcall (*RasterPos4iv)(System::PInteger v);
+	void __stdcall (*RasterPos4s)(short X, short y, short z, short w);
 	void __stdcall (*RasterPos4sv)(Opengltokens::PGLshort v);
-	void __stdcall (*Rectd)(Opengltokens::TGLdouble x1, Opengltokens::TGLdouble y1, Opengltokens::TGLdouble x2, Opengltokens::TGLdouble y2);
-	void __stdcall (*Rectdv)(Opengltokens::PGLdouble v1, Opengltokens::PGLdouble v2);
-	void __stdcall (*Rectf)(Opengltokens::TGLfloat x1, Opengltokens::TGLfloat y1, Opengltokens::TGLfloat x2, Opengltokens::TGLfloat y2);
-	void __stdcall (*Rectfv)(Opengltokens::PGLfloat v1, Opengltokens::PGLfloat v2);
-	void __stdcall (*Recti)(Opengltokens::TGLint x1, Opengltokens::TGLint y1, Opengltokens::TGLint x2, Opengltokens::TGLint y2);
-	void __stdcall (*Rectiv)(Opengltokens::PGLint v1, Opengltokens::PGLint v2);
-	void __stdcall (*Rects)(Opengltokens::TGLshort x1, Opengltokens::TGLshort y1, Opengltokens::TGLshort x2, Opengltokens::TGLshort y2);
+	void __stdcall (*Rectd)(double x1, double y1, double x2, double y2);
+	void __stdcall (*Rectdv)(System::PDouble v1, System::PDouble v2);
+	void __stdcall (*Rectf)(float x1, float y1, float x2, float y2);
+	void __stdcall (*Rectfv)(System::PSingle v1, System::PSingle v2);
+	void __stdcall (*Recti)(int x1, int y1, int x2, int y2);
+	void __stdcall (*Rectiv)(System::PInteger v1, System::PInteger v2);
+	void __stdcall (*Rects)(short x1, short y1, short x2, short y2);
 	void __stdcall (*Rectsv)(Opengltokens::PGLshort v1, Opengltokens::PGLshort v2);
 	int __stdcall (*RenderMode)(unsigned mode);
-	void __stdcall (*Rotated)(Opengltokens::TGLdouble ane, Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble z);
-	void __stdcall (*Rotatef)(Opengltokens::TGLfloat ane, Opengltokens::TGLfloat X, Opengltokens::TGLfloat y, Opengltokens::TGLfloat z);
-	void __stdcall (*Scaled)(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble z);
-	void __stdcall (*Scalef)(Opengltokens::TGLfloat X, Opengltokens::TGLfloat y, Opengltokens::TGLfloat z);
-	void __stdcall (*SelectBuffer)(Opengltokens::TGLsizei size, Opengltokens::PGLuint buffer);
+	void __stdcall (*Rotated)(double ane, double X, double y, double z);
+	void __stdcall (*Rotatef)(float ane, float X, float y, float z);
+	void __stdcall (*Scaled)(double X, double y, double z);
+	void __stdcall (*Scalef)(float X, float y, float z);
+	void __stdcall (*SelectBuffer)(int size, System::PCardinal buffer);
 	void __stdcall (*ShadeModel)(unsigned mode);
-	void __stdcall (*TexCoord1d)(Opengltokens::TGLdouble s);
-	void __stdcall (*TexCoord1dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*TexCoord1f)(Opengltokens::TGLfloat s);
-	void __stdcall (*TexCoord1fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*TexCoord1i)(Opengltokens::TGLint s);
-	void __stdcall (*TexCoord1iv)(Opengltokens::PGLint v);
-	void __stdcall (*TexCoord1s)(Opengltokens::TGLshort s);
+	void __stdcall (*TexCoord1d)(double s);
+	void __stdcall (*TexCoord1dv)(System::PDouble v);
+	void __stdcall (*TexCoord1f)(float s);
+	void __stdcall (*TexCoord1fv)(System::PSingle v);
+	void __stdcall (*TexCoord1i)(int s);
+	void __stdcall (*TexCoord1iv)(System::PInteger v);
+	void __stdcall (*TexCoord1s)(short s);
 	void __stdcall (*TexCoord1sv)(Opengltokens::PGLshort v);
-	void __stdcall (*TexCoord2d)(Opengltokens::TGLdouble s, Opengltokens::TGLdouble t);
-	void __stdcall (*TexCoord2dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*TexCoord2f)(Opengltokens::TGLfloat s, Opengltokens::TGLfloat t);
-	void __stdcall (*TexCoord2fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*TexCoord2i)(Opengltokens::TGLint s, Opengltokens::TGLint t);
-	void __stdcall (*TexCoord2iv)(Opengltokens::PGLint v);
-	void __stdcall (*TexCoord2s)(Opengltokens::TGLshort s, Opengltokens::TGLshort t);
+	void __stdcall (*TexCoord2d)(double s, double t);
+	void __stdcall (*TexCoord2dv)(System::PDouble v);
+	void __stdcall (*TexCoord2f)(float s, float t);
+	void __stdcall (*TexCoord2fv)(System::PSingle v);
+	void __stdcall (*TexCoord2i)(int s, int t);
+	void __stdcall (*TexCoord2iv)(System::PInteger v);
+	void __stdcall (*TexCoord2s)(short s, short t);
 	void __stdcall (*TexCoord2sv)(Opengltokens::PGLshort v);
-	void __stdcall (*TexCoord3d)(Opengltokens::TGLdouble s, Opengltokens::TGLdouble t, Opengltokens::TGLdouble r);
-	void __stdcall (*TexCoord3dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*TexCoord3f)(Opengltokens::TGLfloat s, Opengltokens::TGLfloat t, Opengltokens::TGLfloat r);
-	void __stdcall (*TexCoord3fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*TexCoord3i)(Opengltokens::TGLint s, Opengltokens::TGLint t, Opengltokens::TGLint r);
-	void __stdcall (*TexCoord3iv)(Opengltokens::PGLint v);
-	void __stdcall (*TexCoord3s)(Opengltokens::TGLshort s, Opengltokens::TGLshort t, Opengltokens::TGLshort r);
+	void __stdcall (*TexCoord3d)(double s, double t, double r);
+	void __stdcall (*TexCoord3dv)(System::PDouble v);
+	void __stdcall (*TexCoord3f)(float s, float t, float r);
+	void __stdcall (*TexCoord3fv)(System::PSingle v);
+	void __stdcall (*TexCoord3i)(int s, int t, int r);
+	void __stdcall (*TexCoord3iv)(System::PInteger v);
+	void __stdcall (*TexCoord3s)(short s, short t, short r);
 	void __stdcall (*TexCoord3sv)(Opengltokens::PGLshort v);
-	void __stdcall (*TexCoord4d)(Opengltokens::TGLdouble s, Opengltokens::TGLdouble t, Opengltokens::TGLdouble r, Opengltokens::TGLdouble q);
-	void __stdcall (*TexCoord4dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*TexCoord4f)(Opengltokens::TGLfloat s, Opengltokens::TGLfloat t, Opengltokens::TGLfloat r, Opengltokens::TGLfloat q);
-	void __stdcall (*TexCoord4fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*TexCoord4i)(Opengltokens::TGLint s, Opengltokens::TGLint t, Opengltokens::TGLint r, Opengltokens::TGLint q);
-	void __stdcall (*TexCoord4iv)(Opengltokens::PGLint v);
-	void __stdcall (*TexCoord4s)(Opengltokens::TGLshort s, Opengltokens::TGLshort t, Opengltokens::TGLshort r, Opengltokens::TGLshort q);
+	void __stdcall (*TexCoord4d)(double s, double t, double r, double q);
+	void __stdcall (*TexCoord4dv)(System::PDouble v);
+	void __stdcall (*TexCoord4f)(float s, float t, float r, float q);
+	void __stdcall (*TexCoord4fv)(System::PSingle v);
+	void __stdcall (*TexCoord4i)(int s, int t, int r, int q);
+	void __stdcall (*TexCoord4iv)(System::PInteger v);
+	void __stdcall (*TexCoord4s)(short s, short t, short r, short q);
 	void __stdcall (*TexCoord4sv)(Opengltokens::PGLshort v);
-	void __stdcall (*TexCoordPointer)(Opengltokens::TGLint size, unsigned atype, Opengltokens::TGLsizei stride, void * Data);
-	void __stdcall (*TexEnvf)(unsigned target, unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*TexEnvfv)(unsigned target, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*TexEnvi)(unsigned target, unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*TexEnviv)(unsigned target, unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*TexGend)(unsigned coord, unsigned pname, Opengltokens::TGLdouble param);
-	void __stdcall (*TexGendv)(unsigned coord, unsigned pname, Opengltokens::PGLdouble params);
-	void __stdcall (*TexGenf)(unsigned coord, unsigned pname, Opengltokens::TGLfloat param);
-	void __stdcall (*TexGenfv)(unsigned coord, unsigned pname, Opengltokens::PGLfloat params);
-	void __stdcall (*TexGeni)(unsigned coord, unsigned pname, Opengltokens::TGLint param);
-	void __stdcall (*TexGeniv)(unsigned coord, unsigned pname, Opengltokens::PGLint params);
-	void __stdcall (*Translated)(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble z);
-	void __stdcall (*Translatef)(Opengltokens::TGLfloat X, Opengltokens::TGLfloat y, Opengltokens::TGLfloat z);
-	void __stdcall (*Vertex2d)(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y);
-	void __stdcall (*Vertex2dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*Vertex2f)(Opengltokens::TGLfloat X, Opengltokens::TGLfloat y);
-	void __stdcall (*Vertex2fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*Vertex2i)(Opengltokens::TGLint X, Opengltokens::TGLint y);
-	void __stdcall (*Vertex2iv)(Opengltokens::PGLint v);
-	void __stdcall (*Vertex2s)(Opengltokens::TGLshort X, Opengltokens::TGLshort y);
+	void __stdcall (*TexCoordPointer)(int size, unsigned atype, int stride, void * Data);
+	void __stdcall (*TexEnvf)(unsigned target, unsigned pname, float param);
+	void __stdcall (*TexEnvfv)(unsigned target, unsigned pname, System::PSingle params);
+	void __stdcall (*TexEnvi)(unsigned target, unsigned pname, int param);
+	void __stdcall (*TexEnviv)(unsigned target, unsigned pname, System::PInteger params);
+	void __stdcall (*TexGend)(unsigned coord, unsigned pname, double param);
+	void __stdcall (*TexGendv)(unsigned coord, unsigned pname, System::PDouble params);
+	void __stdcall (*TexGenf)(unsigned coord, unsigned pname, float param);
+	void __stdcall (*TexGenfv)(unsigned coord, unsigned pname, System::PSingle params);
+	void __stdcall (*TexGeni)(unsigned coord, unsigned pname, int param);
+	void __stdcall (*TexGeniv)(unsigned coord, unsigned pname, System::PInteger params);
+	void __stdcall (*Translated)(double X, double y, double z);
+	void __stdcall (*Translatef)(float X, float y, float z);
+	void __stdcall (*Vertex2d)(double X, double y);
+	void __stdcall (*Vertex2dv)(System::PDouble v);
+	void __stdcall (*Vertex2f)(float X, float y);
+	void __stdcall (*Vertex2fv)(System::PSingle v);
+	void __stdcall (*Vertex2i)(int X, int y);
+	void __stdcall (*Vertex2iv)(System::PInteger v);
+	void __stdcall (*Vertex2s)(short X, short y);
 	void __stdcall (*Vertex2sv)(Opengltokens::PGLshort v);
-	void __stdcall (*Vertex3d)(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble z);
-	void __stdcall (*Vertex3dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*Vertex3f)(Opengltokens::TGLfloat X, Opengltokens::TGLfloat y, Opengltokens::TGLfloat z);
-	void __stdcall (*Vertex3fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*Vertex3i)(Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLint z);
-	void __stdcall (*Vertex3iv)(Opengltokens::PGLint v);
-	void __stdcall (*Vertex3s)(Opengltokens::TGLshort X, Opengltokens::TGLshort y, Opengltokens::TGLshort z);
+	void __stdcall (*Vertex3d)(double X, double y, double z);
+	void __stdcall (*Vertex3dv)(System::PDouble v);
+	void __stdcall (*Vertex3f)(float X, float y, float z);
+	void __stdcall (*Vertex3fv)(System::PSingle v);
+	void __stdcall (*Vertex3i)(int X, int y, int z);
+	void __stdcall (*Vertex3iv)(System::PInteger v);
+	void __stdcall (*Vertex3s)(short X, short y, short z);
 	void __stdcall (*Vertex3sv)(Opengltokens::PGLshort v);
-	void __stdcall (*Vertex4d)(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble z, Opengltokens::TGLdouble w);
-	void __stdcall (*Vertex4dv)(Opengltokens::PGLdouble v);
-	void __stdcall (*Vertex4f)(Opengltokens::TGLfloat X, Opengltokens::TGLfloat y, Opengltokens::TGLfloat z, Opengltokens::TGLfloat w);
-	void __stdcall (*Vertex4fv)(Opengltokens::PGLfloat v);
-	void __stdcall (*Vertex4i)(Opengltokens::TGLint X, Opengltokens::TGLint y, Opengltokens::TGLint z, Opengltokens::TGLint w);
-	void __stdcall (*Vertex4iv)(Opengltokens::PGLint v);
-	void __stdcall (*Vertex4s)(Opengltokens::TGLshort X, Opengltokens::TGLshort y, Opengltokens::TGLshort z, Opengltokens::TGLshort w);
+	void __stdcall (*Vertex4d)(double X, double y, double z, double w);
+	void __stdcall (*Vertex4dv)(System::PDouble v);
+	void __stdcall (*Vertex4f)(float X, float y, float z, float w);
+	void __stdcall (*Vertex4fv)(System::PSingle v);
+	void __stdcall (*Vertex4i)(int X, int y, int z, int w);
+	void __stdcall (*Vertex4iv)(System::PInteger v);
+	void __stdcall (*Vertex4s)(short X, short y, short z, short w);
 	void __stdcall (*Vertex4sv)(Opengltokens::PGLshort v);
-	void __stdcall (*VertexPointer)(Opengltokens::TGLint size, unsigned atype, Opengltokens::TGLsizei stride, void * Data);
+	void __stdcall (*VertexPointer)(int size, unsigned atype, int stride, void * Data);
 	Opengltokens::PFNGLBLENDCOLORPROC BlendColor;
 	Opengltokens::PFNGLBLENDEQUATIONPROC BlendEquation;
 	Opengltokens::PFNGLDRAWRANGEELEMENTSPROC DrawRangeElements;
@@ -1306,7 +1304,7 @@ public:
 	Opengltokens::PFNGLMULTITEXRENDERBUFFEREXTPROC MultiTexRenderbuffer;
 	Opengltokens::PFNGLFRAMETERMINATORGREMEDYPROC FrameTerminatorGREMEDY;
 	Opengltokens::PFNGLSTRINGMARKERGREMEDYPROC StringMarkerGREMEDY;
-	void __fastcall (*DebugMessageEnableAMDX)(unsigned category, unsigned severity, Opengltokens::TGLsizei Count, unsigned &ids, bool Enabled);
+	void __fastcall (*DebugMessageEnableAMDX)(unsigned category, unsigned severity, int Count, unsigned &ids, bool Enabled);
 	Opengltokens::PFNGLPushDebugGroup PushDebugGroup;
 	Opengltokens::PFNGLPopDebugGroup PopDebugGroup;
 	Opengltokens::PFNGLObjectLabel ObjectLabel;
@@ -1314,21 +1312,21 @@ public:
 	Opengltokens::PFNGLObjectPtrLabel ObjectPtrLabel;
 	Opengltokens::PFNGLGetObjectPtrLabel GetObjectPtrLabel;
 	void __stdcall (*DebugMessageCallbackAMDX)(Opengltokens::TDebugProcAMD callback, void * userParam);
-	void __stdcall (*DebugMessageControl)(unsigned type_, unsigned Source, unsigned severity, Opengltokens::TGLsizei Count, unsigned &ids, bool Enabled);
-	void __stdcall (*DebugMessageInsert)(unsigned Source, unsigned severity, unsigned id, Opengltokens::TGLsizei length, const char * buf);
+	void __stdcall (*DebugMessageControl)(unsigned type_, unsigned Source, unsigned severity, int Count, unsigned &ids, bool Enabled);
+	void __stdcall (*DebugMessageInsert)(unsigned Source, unsigned severity, unsigned id, int length, const char * buf);
 	void __stdcall (*DebugMessageCallback)(Opengltokens::TDebugProc callback, void * userParam);
-	unsigned __stdcall (*GetDebugMessageLog)(unsigned Count, Opengltokens::TGLsizei bufSize, unsigned &severity, unsigned &severities, unsigned &ids, Opengltokens::TGLsizei &lengths, char * messageLog);
+	unsigned __stdcall (*GetDebugMessageLog)(unsigned Count, int bufSize, unsigned &severity, unsigned &severities, unsigned &ids, int &lengths, char * messageLog);
 	Opengltokens::PFNGLCreateSyncFromCLevent CreateSyncFromCLevent;
 	void __stdcall (*VDPAUInitNV)(const void * vdpDevice, const void * getProcAddress);
 	void __stdcall (*VDPAUFiniNV)(void);
-	int __stdcall (*VDPAURegisterVideoSurfaceNV)(const void * vdpSurface, unsigned target, Opengltokens::TGLsizei numTextureNames, const Opengltokens::PGLuint textureNames);
-	int __stdcall (*VDPAURegisterOutputSurfaceNV)(const void * vdpSurface, unsigned target, Opengltokens::TGLsizei numTextureNames, const Opengltokens::PGLuint textureNames);
-	void __stdcall (*VDPAUIsSurfaceNV)(Opengltokens::TGLvdpauSurfaceNV surface);
-	void __stdcall (*VDPAUUnregisterSurfaceNV)(Opengltokens::TGLvdpauSurfaceNV surface);
-	void __stdcall (*VDPAUGetSurfaceivNV)(Opengltokens::TGLvdpauSurfaceNV surface, unsigned pname, Opengltokens::TGLsizei bufSize, Opengltokens::PGLsizei length, Opengltokens::PGLint values);
-	void __stdcall (*VDPAUSurfaceAccessNV)(Opengltokens::TGLvdpauSurfaceNV surface, unsigned access);
-	void __stdcall (*VDPAUMapSurfacesNV)(Opengltokens::TGLsizei numSurfaces, const Opengltokens::PGLvdpauSurfaceNV surfaces);
-	void __stdcall (*VDPAUUnmapSurfacesNV)(Opengltokens::TGLsizei numSurface, const Opengltokens::PGLvdpauSurfaceNV surfaces);
+	NativeInt __stdcall (*VDPAURegisterVideoSurfaceNV)(const void * vdpSurface, unsigned target, int numTextureNames, const System::PCardinal textureNames);
+	NativeInt __stdcall (*VDPAURegisterOutputSurfaceNV)(const void * vdpSurface, unsigned target, int numTextureNames, const System::PCardinal textureNames);
+	void __stdcall (*VDPAUIsSurfaceNV)(NativeInt surface);
+	void __stdcall (*VDPAUUnregisterSurfaceNV)(NativeInt surface);
+	void __stdcall (*VDPAUGetSurfaceivNV)(NativeInt surface, unsigned pname, int bufSize, System::PInteger length, System::PInteger values);
+	void __stdcall (*VDPAUSurfaceAccessNV)(NativeInt surface, unsigned access);
+	void __stdcall (*VDPAUMapSurfacesNV)(int numSurfaces, const Opengltokens::PGLvdpauSurfaceNV surfaces);
+	void __stdcall (*VDPAUUnmapSurfacesNV)(int numSurface, const Opengltokens::PGLvdpauSurfaceNV surfaces);
 	Opengltokens::PFNGLGENPATHSNVPROC GenPathsNV;
 	Opengltokens::PFNGLDELETEPATHSNVPROC DeletePathsNV;
 	Opengltokens::PFNGLISPATHNVPROC IsPathNV;
@@ -1459,7 +1457,7 @@ extern "C" System::LongBool __stdcall wglCopyContext(HGLRC p1, HGLRC p2, unsigne
 extern "C" HGLRC __stdcall wglCreateContext(HDC DC);
 extern "C" HGLRC __stdcall wglCreateLayerContext(HDC p1, int p2);
 extern "C" System::LongBool __stdcall wglDeleteContext(HGLRC p1);
-extern "C" System::LongBool __stdcall wglDescribeLayerPlane(HDC p1, int p2, int p3, unsigned p4, Winapi::Windows::TLayerPlaneDescriptor &p5);
+extern "C" System::LongBool __stdcall wglDescribeLayerPlane(HDC p1, int p2, int p3, unsigned p4, tagLAYERPLANEDESCRIPTOR &p5);
 extern "C" HGLRC __stdcall wglGetCurrentContext(void);
 extern "C" HDC __stdcall wglGetCurrentDC(void);
 extern "C" int __stdcall wglGetLayerPaletteEntries(HDC p1, int p2, int p3, int p4, void *pcr);
@@ -1477,25 +1475,25 @@ extern "C" System::LongBool __stdcall wglUseFontBitmaps(HDC DC, unsigned p2, uns
 extern "C" System::LongBool __stdcall wglUseFontOutlines(HDC p1, unsigned p2, unsigned p3, unsigned p4, float p5, float p6, int p7, Winapi::Windows::PGlyphMetricsFloat p8);
 extern "C" char * __stdcall gluErrorString(unsigned errCode);
 extern "C" char * __stdcall gluGetString(unsigned Name);
-extern "C" void __stdcall gluOrtho2D(Opengltokens::TGLdouble left, Opengltokens::TGLdouble right, Opengltokens::TGLdouble bottom, Opengltokens::TGLdouble top);
-extern "C" void __stdcall gluPerspective(Opengltokens::TGLdouble fovy, Opengltokens::TGLdouble aspect, Opengltokens::TGLdouble zNear, Opengltokens::TGLdouble zFar);
-extern "C" void __stdcall gluPickMatrix(Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble Width, Opengltokens::TGLdouble Height, const Glvectortypes::TVector4i &Viewport);
-extern "C" void __stdcall gluLookAt(Opengltokens::TGLdouble eyex, Opengltokens::TGLdouble eyey, Opengltokens::TGLdouble eyez, Opengltokens::TGLdouble centerx, Opengltokens::TGLdouble centery, Opengltokens::TGLdouble centerz, Opengltokens::TGLdouble upx, Opengltokens::TGLdouble upy, Opengltokens::TGLdouble upz);
-extern "C" Opengltokens::TGLint __stdcall gluProject(Opengltokens::TGLdouble objx, Opengltokens::TGLdouble objy, Opengltokens::TGLdouble objz, const Glvectortypes::TMatrix4d &modelMatrix, const Glvectortypes::TMatrix4d &projMatrix, const Glvectortypes::TVector4i &Viewport, Opengltokens::PGLdouble winx, Opengltokens::PGLdouble winy, Opengltokens::PGLdouble winz);
-extern "C" Opengltokens::TGLint __stdcall gluUnProject(Opengltokens::TGLdouble winx, Opengltokens::TGLdouble winy, Opengltokens::TGLdouble winz, const Glvectortypes::TMatrix4d &modelMatrix, const Glvectortypes::TMatrix4d &projMatrix, const Glvectortypes::TVector4i &Viewport, Opengltokens::PGLdouble objx, Opengltokens::PGLdouble objy, Opengltokens::PGLdouble objz);
-extern "C" Opengltokens::TGLint __stdcall gluScaleImage(unsigned format, Opengltokens::TGLint widthin, Opengltokens::TGLint heightin, unsigned typein, void * datain, Opengltokens::TGLint widthout, Opengltokens::TGLint heightout, unsigned typeout, void * dataout);
-extern "C" Opengltokens::TGLint __stdcall gluBuild1DMipmaps(unsigned target, Opengltokens::TGLint Components, Opengltokens::TGLint Width, unsigned format, unsigned atype, void * Data);
-extern "C" Opengltokens::TGLint __stdcall gluBuild2DMipmaps(unsigned target, Opengltokens::TGLint Components, Opengltokens::TGLint Width, Opengltokens::TGLint Height, unsigned format, unsigned atype, void * Data);
+extern "C" void __stdcall gluOrtho2D(double left, double right, double bottom, double top);
+extern "C" void __stdcall gluPerspective(double fovy, double aspect, double zNear, double zFar);
+extern "C" void __stdcall gluPickMatrix(double X, double y, double Width, double Height, const Glvectortypes::TVector4i &Viewport);
+extern "C" void __stdcall gluLookAt(double eyex, double eyey, double eyez, double centerx, double centery, double centerz, double upx, double upy, double upz);
+extern "C" int __stdcall gluProject(double objx, double objy, double objz, const Glvectortypes::TMatrix4d &modelMatrix, const Glvectortypes::TMatrix4d &projMatrix, const Glvectortypes::TVector4i &Viewport, System::PDouble winx, System::PDouble winy, System::PDouble winz);
+extern "C" int __stdcall gluUnProject(double winx, double winy, double winz, const Glvectortypes::TMatrix4d &modelMatrix, const Glvectortypes::TMatrix4d &projMatrix, const Glvectortypes::TVector4i &Viewport, System::PDouble objx, System::PDouble objy, System::PDouble objz);
+extern "C" int __stdcall gluScaleImage(unsigned format, int widthin, int heightin, unsigned typein, void * datain, int widthout, int heightout, unsigned typeout, void * dataout);
+extern "C" int __stdcall gluBuild1DMipmaps(unsigned target, int Components, int Width, unsigned format, unsigned atype, void * Data);
+extern "C" int __stdcall gluBuild2DMipmaps(unsigned target, int Components, int Width, int Height, unsigned format, unsigned atype, void * Data);
 extern "C" Opengltokens::PGLUQuadric __stdcall gluNewQuadric(void);
 extern "C" void __stdcall gluDeleteQuadric(Opengltokens::PGLUQuadric state);
 extern "C" void __stdcall gluQuadricNormals(Opengltokens::PGLUQuadric quadObject, unsigned normals);
-extern "C" void __stdcall gluQuadricTexture(Opengltokens::PGLUQuadric quadObject, Opengltokens::TGLboolean textureCoords);
+extern "C" void __stdcall gluQuadricTexture(Opengltokens::PGLUQuadric quadObject, System::ByteBool textureCoords);
 extern "C" void __stdcall gluQuadricOrientation(Opengltokens::PGLUQuadric quadObject, unsigned orientation);
 extern "C" void __stdcall gluQuadricDrawStyle(Opengltokens::PGLUQuadric quadObject, unsigned drawStyle);
-extern "C" void __stdcall gluCylinder(Opengltokens::PGLUQuadric quadObject, Opengltokens::TGLdouble baseRadius, Opengltokens::TGLdouble topRadius, Opengltokens::TGLdouble Height, Opengltokens::TGLint slices, Opengltokens::TGLint stacks);
-extern "C" void __stdcall gluDisk(Opengltokens::PGLUQuadric quadObject, Opengltokens::TGLdouble innerRadius, Opengltokens::TGLdouble outerRadius, Opengltokens::TGLint slices, Opengltokens::TGLint loops);
-extern "C" void __stdcall gluPartialDisk(Opengltokens::PGLUQuadric quadObject, Opengltokens::TGLdouble innerRadius, Opengltokens::TGLdouble outerRadius, Opengltokens::TGLint slices, Opengltokens::TGLint loops, Opengltokens::TGLdouble startAngle, Opengltokens::TGLdouble sweepAngle);
-extern "C" void __stdcall gluSphere(Opengltokens::PGLUQuadric quadObject, Opengltokens::TGLdouble radius, Opengltokens::TGLint slices, Opengltokens::TGLint stacks);
+extern "C" void __stdcall gluCylinder(Opengltokens::PGLUQuadric quadObject, double baseRadius, double topRadius, double Height, int slices, int stacks);
+extern "C" void __stdcall gluDisk(Opengltokens::PGLUQuadric quadObject, double innerRadius, double outerRadius, int slices, int loops);
+extern "C" void __stdcall gluPartialDisk(Opengltokens::PGLUQuadric quadObject, double innerRadius, double outerRadius, int slices, int loops, double startAngle, double sweepAngle);
+extern "C" void __stdcall gluSphere(Opengltokens::PGLUQuadric quadObject, double radius, int slices, int stacks);
 extern "C" void __stdcall gluQuadricCallback(Opengltokens::PGLUQuadric quadObject, unsigned which, Opengltokens::TGLUQuadricErrorProc fn);
 extern "C" Opengltokens::PGLUTesselator __stdcall gluNewTess(void);
 extern "C" void __stdcall gluDeleteTess(Opengltokens::PGLUTesselator tess);
@@ -1504,10 +1502,10 @@ extern "C" void __stdcall gluTessBeginContour(Opengltokens::PGLUTesselator tess)
 extern "C" void __stdcall gluTessVertex(Opengltokens::PGLUTesselator tess, const Glvectortypes::TVector3d &coords, void * Data);
 extern "C" void __stdcall gluTessEndContour(Opengltokens::PGLUTesselator tess);
 extern "C" void __stdcall gluTessEndPolygon(Opengltokens::PGLUTesselator tess);
-extern "C" void __stdcall gluTessProperty(Opengltokens::PGLUTesselator tess, unsigned which, Opengltokens::TGLdouble Value);
-extern "C" void __stdcall gluTessNormal(Opengltokens::PGLUTesselator tess, Opengltokens::TGLdouble X, Opengltokens::TGLdouble y, Opengltokens::TGLdouble z);
+extern "C" void __stdcall gluTessProperty(Opengltokens::PGLUTesselator tess, unsigned which, double Value);
+extern "C" void __stdcall gluTessNormal(Opengltokens::PGLUTesselator tess, double X, double y, double z);
 extern "C" void __stdcall gluTessCallback(Opengltokens::PGLUTesselator tess, unsigned which, void * fn);
-extern "C" void __stdcall gluGetTessProperty(Opengltokens::PGLUTesselator tess, unsigned which, Opengltokens::PGLdouble Value);
+extern "C" void __stdcall gluGetTessProperty(Opengltokens::PGLUTesselator tess, unsigned which, System::PDouble Value);
 extern "C" Opengltokens::PGLUNurbs __stdcall gluNewNurbsRenderer(void);
 extern "C" void __stdcall gluDeleteNurbsRenderer(Opengltokens::PGLUNurbs nobj);
 extern "C" void __stdcall gluBeginSurface(Opengltokens::PGLUNurbs nobj);
@@ -1516,12 +1514,12 @@ extern "C" void __stdcall gluEndCurve(Opengltokens::PGLUNurbs nobj);
 extern "C" void __stdcall gluEndSurface(Opengltokens::PGLUNurbs nobj);
 extern "C" void __stdcall gluBeginTrim(Opengltokens::PGLUNurbs nobj);
 extern "C" void __stdcall gluEndTrim(Opengltokens::PGLUNurbs nobj);
-extern "C" void __stdcall gluPwlCurve(Opengltokens::PGLUNurbs nobj, Opengltokens::TGLint Count, Opengltokens::PGLfloat points, Opengltokens::TGLint stride, unsigned atype);
-extern "C" void __stdcall gluNurbsCurve(Opengltokens::PGLUNurbs nobj, Opengltokens::TGLint nknots, Opengltokens::PGLfloat knot, Opengltokens::TGLint stride, Opengltokens::PGLfloat ctlarray, Opengltokens::TGLint order, unsigned atype);
-extern "C" void __stdcall gluNurbsSurface(Opengltokens::PGLUNurbs nobj, Opengltokens::TGLint sknot_count, Opengltokens::PGLfloat sknot, Opengltokens::TGLint tknot_count, Opengltokens::PGLfloat tknot, Opengltokens::TGLint s_stride, Opengltokens::TGLint t_stride, Opengltokens::PGLfloat ctlarray, Opengltokens::TGLint sorder, Opengltokens::TGLint torder, unsigned atype);
+extern "C" void __stdcall gluPwlCurve(Opengltokens::PGLUNurbs nobj, int Count, System::PSingle points, int stride, unsigned atype);
+extern "C" void __stdcall gluNurbsCurve(Opengltokens::PGLUNurbs nobj, int nknots, System::PSingle knot, int stride, System::PSingle ctlarray, int order, unsigned atype);
+extern "C" void __stdcall gluNurbsSurface(Opengltokens::PGLUNurbs nobj, int sknot_count, System::PSingle sknot, int tknot_count, System::PSingle tknot, int s_stride, int t_stride, System::PSingle ctlarray, int sorder, int torder, unsigned atype);
 extern "C" void __stdcall gluLoadSamplingMatrices(Opengltokens::PGLUNurbs nobj, const Glvectortypes::TMatrix4f &modelMatrix, const Glvectortypes::TMatrix4f &projMatrix, const Glvectortypes::TVector4i &Viewport);
-extern "C" void __stdcall gluNurbsProperty(Opengltokens::PGLUNurbs nobj, unsigned aproperty, Opengltokens::TGLfloat Value);
-extern "C" void __stdcall gluGetNurbsProperty(Opengltokens::PGLUNurbs nobj, unsigned aproperty, Opengltokens::PGLfloat Value);
+extern "C" void __stdcall gluNurbsProperty(Opengltokens::PGLUNurbs nobj, unsigned aproperty, float Value);
+extern "C" void __stdcall gluGetNurbsProperty(Opengltokens::PGLUNurbs nobj, unsigned aproperty, System::PSingle Value);
 extern "C" void __stdcall gluNurbsCallback(Opengltokens::PGLUNurbs nobj, unsigned which, Opengltokens::TGLUNurbsErrorProc fn);
 extern "C" void __stdcall gluBeginPolygon(Opengltokens::PGLUTesselator tess);
 extern "C" void __stdcall gluNextContour(Opengltokens::PGLUTesselator tess, unsigned atype);
@@ -1541,55 +1539,39 @@ extern DELPHI_PACKAGE bool __fastcall IsOpenGLLoaded(void);
 extern DELPHI_PACKAGE bool __fastcall IsMesaGL(void);
 
 #if defined(UNICODE)
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-#endif
 inline System::LongBool __stdcall wglUseFontBitmaps(HDC DC, unsigned p2, unsigned p3, unsigned p4)
 {
 	return wglUseFontBitmapsW(DC, p2, p3, p4);
 }
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
-#endif
 
 #else
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-#endif
 inline System::LongBool __stdcall wglUseFontBitmaps(HDC DC, unsigned p2, unsigned p3, unsigned p4)
 {
 	return wglUseFontBitmapsA(DC, p2, p3, p4);
 }
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
-#endif
 
 #endif
 
 
 #if defined(UNICODE)
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-#endif
 inline System::LongBool __stdcall wglUseFontOutlines(HDC p1, unsigned p2, unsigned p3, unsigned p4, float p5, float p6, int p7, Winapi::Windows::PGlyphMetricsFloat p8)
 {
 	return wglUseFontOutlinesW(p1, p2, p3, p4, p5, p6, p7, p8);
 }
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
-#endif
 
 #else
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option push -w-inl
-#endif
 inline System::LongBool __stdcall wglUseFontOutlines(HDC p1, unsigned p2, unsigned p3, unsigned p4, float p5, float p6, int p7, Winapi::Windows::PGlyphMetricsFloat p8)
 {
 	return wglUseFontOutlinesA(p1, p2, p3, p4, p5, p6, p7, p8);
 }
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option pop
-#endif
 
 #endif
 

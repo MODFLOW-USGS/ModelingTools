@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_OrdinalMaps.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_OrdinalMaps.pas' rev: 35.00 (Windows)
 
 #ifndef Gr32_ordinalmapsHPP
 #define Gr32_ordinalmapsHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -69,7 +67,7 @@ class PASCALIMPLEMENTATION TByteMap : public Gr32::TCustomMap
 private:
 	Gr32::TArrayOfByte FBits;
 	System::Byte __fastcall GetValue(int X, int Y);
-	Winapi::Windows::PByte __fastcall GetValPtr(int X, int Y);
+	System::PByte __fastcall GetValPtr(int X, int Y);
 	void __fastcall SetValue(int X, int Y, System::Byte Value);
 	Gr32::PByteArray __fastcall GetBits();
 	
@@ -86,7 +84,7 @@ public:
 	void __fastcall WriteTo(Gr32::TCustomBitmap32* Dest, TConversionType Conversion)/* overload */;
 	void __fastcall WriteTo(Gr32::TCustomBitmap32* Dest, const Gr32::TPalette32 &Palette)/* overload */;
 	__property Gr32::PByteArray Bits = {read=GetBits};
-	__property Winapi::Windows::PByte ValPtr[int X][int Y] = {read=GetValPtr};
+	__property System::PByte ValPtr[int X][int Y] = {read=GetValPtr};
 	__property System::Byte Value[int X][int Y] = {read=GetValue, write=SetValue/*, default*/};
 public:
 	/* TThreadPersistent.Create */ inline __fastcall virtual TByteMap() : Gr32::TCustomMap() { }
@@ -155,8 +153,8 @@ class PASCALIMPLEMENTATION TFloatMap : public Gr32::TCustomMap
 private:
 	Gr32::TArrayOfFloat FBits;
 	Gr32::PFloat __fastcall GetValPtr(int X, int Y);
-	Gr32::TFloat __fastcall GetValue(int X, int Y);
-	void __fastcall SetValue(int X, int Y, const Gr32::TFloat Value);
+	float __fastcall GetValue(int X, int Y);
+	void __fastcall SetValue(int X, int Y, const float Value);
 	Gr32::PFloatArray __fastcall GetBits();
 	
 protected:
@@ -166,9 +164,9 @@ public:
 	__fastcall virtual ~TFloatMap();
 	virtual bool __fastcall Empty();
 	void __fastcall Clear()/* overload */;
-	void __fastcall Clear(Gr32::TFloat FillValue)/* overload */;
+	void __fastcall Clear(float FillValue)/* overload */;
 	__property Gr32::PFloat ValPtr[int X][int Y] = {read=GetValPtr};
-	__property Gr32::TFloat Value[int X][int Y] = {read=GetValue, write=SetValue/*, default*/};
+	__property float Value[int X][int Y] = {read=GetValue, write=SetValue/*, default*/};
 	__property Gr32::PFloatArray Bits = {read=GetBits};
 public:
 	/* TThreadPersistent.Create */ inline __fastcall virtual TFloatMap() : Gr32::TCustomMap() { }

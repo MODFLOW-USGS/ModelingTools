@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_RepaintOpt.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_RepaintOpt.pas' rev: 35.00 (Windows)
 
 #ifndef Gr32_repaintoptHPP
 #define Gr32_repaintoptHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -63,7 +61,7 @@ public:
 	virtual void __fastcall Reset() = 0 ;
 	virtual bool __fastcall UpdatesAvailable() = 0 ;
 	virtual void __fastcall PerformOptimization() = 0 ;
-	virtual void __fastcall AreaUpdateHandler(System::TObject* Sender, const Gr32::TRect &Area, const unsigned Info) = 0 ;
+	virtual void __fastcall AreaUpdateHandler(System::TObject* Sender, const System::Types::TRect &Area, const unsigned Info) = 0 ;
 	virtual void __fastcall LayerUpdateHandler(System::TObject* Sender, Gr32_layers::TCustomLayer* Layer) = 0 ;
 	virtual void __fastcall BufferResizedHandler(const int NewWidth, const int NewHeight) = 0 ;
 	__property bool Enabled = {read=GetEnabled, write=SetEnabled, nodefault};
@@ -74,7 +72,7 @@ public:
 typedef System::TMetaClass* TCustomRepaintOptimizerClass;
 
 //-- var, const, procedure ---------------------------------------------------
-extern DELPHI_PACKAGE void __fastcall InflateArea(Gr32::TRect &Area, int Dx, int Dy);
+extern DELPHI_PACKAGE void __fastcall InflateArea(System::Types::TRect &Area, int Dx, int Dy);
 }	/* namespace Gr32_repaintopt */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GR32_REPAINTOPT)
 using namespace Gr32_repaintopt;

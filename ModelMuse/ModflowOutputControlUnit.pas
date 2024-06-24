@@ -104,6 +104,7 @@ type
     FSaveBudgetSummary: boolean;
     FConcentrationOC: THeadDrawdownOutputControl;
     FSaveBudgetCSV: Boolean;
+    FExportArrays: Boolean;
     procedure SetPrintInputArrays(const Value: boolean);
     procedure SetSaveCellFlows(const Value: TCellSaveFormat);
     procedure SetPrintInputCellLists(const Value: boolean);
@@ -118,6 +119,7 @@ type
     procedure SetSaveBudgetSummary(const Value: boolean);
     procedure SetConcentrationOC(const Value: THeadDrawdownOutputControl);
     procedure SetSaveBudgetCSV(const Value: Boolean);
+    procedure SetExportArrays(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     Constructor Create(InvalidateModelEvent: TNotifyEvent);
@@ -175,6 +177,8 @@ type
       write SetConcentrationOC;
     // BUDGETCSV FILEOUT
     Property SaveBudgetCSV: Boolean read FSaveBudgetCSV write SetSaveBudgetCSV;
+    // EXPORT_ARRAY_ASCII
+    property ExportArrays: Boolean read FExportArrays write SetExportArrays;
   end;
 
   TMt3dmsOutputFreq = (mofSpecifiedTimes, mofEndOfSimulation, mofPeriodic);
@@ -301,6 +305,7 @@ begin
   HeadOc.Initialize;
   DrawdownOC.Initialize;
   FSaveBudgetCSV := False;
+  FExportArrays := False;
 end;
 
 procedure TModflowOutputControl.SetBudgetFrequency(const Value: integer);
@@ -366,6 +371,15 @@ procedure TModflowOutputControl.SetDrawdownOC(
   const Value: THeadDrawdownOutputControl);
 begin
   FDrawdownOC.Assign(Value);
+end;
+
+procedure TModflowOutputControl.SetExportArrays(const Value: Boolean);
+begin
+  if FExportArrays <> Value then
+  begin
+    FExportArrays := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TModflowOutputControl.SetHeadOC(

@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLWin32Context.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glwin32context.pas' rev: 36.00 (Windows)
 
 #ifndef Glwin32contextHPP
 #define Glwin32contextHPP
@@ -15,20 +15,20 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <Winapi.Messages.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Classes.hpp>
 #include <Vcl.Forms.hpp>
-#include <OpenGLTokens.hpp>
-#include <OpenGLAdapter.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLContext.hpp>
-#include <GLState.hpp>
-#include <GLSLog.hpp>
-#include <GLStrings.hpp>
-#include <GLVectorGeometry.hpp>
+#include <Opengltokens.hpp>
+#include <Opengladapter.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glcontext.hpp>
+#include <Glstate.hpp>
+#include <Glslog.hpp>
+#include <Glstrings.hpp>
+#include <Glvectorgeometry.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

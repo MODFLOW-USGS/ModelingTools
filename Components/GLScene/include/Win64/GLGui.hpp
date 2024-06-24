@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGui.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glgui.pas' rev: 36.00 (Windows)
 
 #ifndef GlguiHPP
 #define GlguiHPP
@@ -15,20 +15,20 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLScene.hpp>
-#include <GLBitmapFont.hpp>
-#include <GLMaterial.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLContext.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLCoordinates.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Glvectortypes.hpp>
+#include <Glscene.hpp>
+#include <Glbitmapfont.hpp>
+#include <Glmaterial.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glcontext.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glcoordinates.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTexCombineShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLTexCombineShader.pas' rev: 35.00 (Windows)
 
 #ifndef GltexcombineshaderHPP
 #define GltexcombineshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -46,9 +44,9 @@ private:
 	bool FCombinerIsValid;
 	bool FDesignTimeEnabled;
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
-	Glmaterial::TGLLibMaterialName FLibMaterial3Name;
+	System::UnicodeString FLibMaterial3Name;
 	Glmaterial::TGLLibMaterial* currentLibMaterial3;
-	Glmaterial::TGLLibMaterialName FLibMaterial4Name;
+	System::UnicodeString FLibMaterial4Name;
 	Glmaterial::TGLLibMaterial* currentLibMaterial4;
 	bool FApplied3;
 	bool FApplied4;
@@ -57,8 +55,8 @@ protected:
 	void __fastcall SetCombiners(System::Classes::TStringList* const val);
 	void __fastcall SetDesignTimeEnabled(const bool val);
 	void __fastcall SetMaterialLibrary(Glmaterial::TGLMaterialLibrary* const val);
-	void __fastcall SetLibMaterial3Name(const Glmaterial::TGLLibMaterialName val);
-	void __fastcall SetLibMaterial4Name(const Glmaterial::TGLLibMaterialName val);
+	void __fastcall SetLibMaterial3Name(const System::UnicodeString val);
+	void __fastcall SetLibMaterial4Name(const System::UnicodeString val);
 	void __fastcall NotifyLibMaterial3Destruction();
 	void __fastcall NotifyLibMaterial4Destruction();
 	virtual void __fastcall DoInitialize(Glrendercontextinfo::TGLRenderContextInfo &rci, System::TObject* Sender);
@@ -76,8 +74,8 @@ __published:
 	__property System::Classes::TStringList* Combiners = {read=FCombiners, write=SetCombiners};
 	__property bool DesignTimeEnabled = {read=FDesignTimeEnabled, write=SetDesignTimeEnabled, nodefault};
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
-	__property Glmaterial::TGLLibMaterialName LibMaterial3Name = {read=FLibMaterial3Name, write=SetLibMaterial3Name};
-	__property Glmaterial::TGLLibMaterialName LibMaterial4Name = {read=FLibMaterial4Name, write=SetLibMaterial4Name};
+	__property System::UnicodeString LibMaterial3Name = {read=FLibMaterial3Name, write=SetLibMaterial3Name};
+	__property System::UnicodeString LibMaterial4Name = {read=FLibMaterial4Name, write=SetLibMaterial4Name};
 };
 
 

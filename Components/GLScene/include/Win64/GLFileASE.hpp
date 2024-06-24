@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileASE.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glfilease.pas' rev: 36.00 (Windows)
 
 #ifndef GlfileaseHPP
 #define GlfileaseHPP
@@ -15,17 +15,17 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorLists.hpp>
-#include <GLTexture.hpp>
-#include <GLMaterial.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorlists.hpp>
+#include <Gltexture.hpp>
+#include <Glmaterial.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -353,10 +353,10 @@ public:
 enum DECLSPEC_DENUM TASETextureMap : unsigned char { tmGeneric, tmAmbient, tmDiffuse, tmSpecular, tmShine, tmShinestrength, tmSelfillum, tmOpacity, tmFiltercolor, tmBump, tmReflect, tmRefract };
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 GL_ASE_MAX_TEXURE_CHANNELS = System::Int8(0xc);
-static const System::Int8 GL_ASE_MAX_SUBMATERIALS = System::Int8(0x5);
-static const System::Int8 GL_ASE_MAX_SMOOTH_GROUPS = System::Int8(0x5);
-static const System::Int8 GL_ASE_MAX_TEXTURE_MAPS = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 GL_ASE_MAX_TEXURE_CHANNELS = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 GL_ASE_MAX_SUBMATERIALS = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 GL_ASE_MAX_SMOOTH_GROUPS = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 GL_ASE_MAX_TEXTURE_MAPS = System::Int8(0xc);
 extern DELPHI_PACKAGE void __fastcall ASESetPreferredTexture(TASETextureMap aMap, int aSubMaterialIndex = 0xffffffff);
 extern DELPHI_PACKAGE void __fastcall ASESetPreferredLightmap(TASETextureMap aMap, int aSubMaterialIndex = 0xffffffff);
 }	/* namespace Glfilease */

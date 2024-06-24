@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMeshLines.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glmeshlines.pas' rev: 36.00 (Windows)
 
 #ifndef GlmeshlinesHPP
 #define GlmeshlinesHPP
@@ -15,26 +15,26 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLObjects.hpp>
-#include <GLTexture.hpp>
-#include <GLCoordinates.hpp>
-#include <GLContext.hpp>
-#include <GLMaterial.hpp>
-#include <GLColor.hpp>
-#include <GLState.hpp>
-#include <GLNodes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLSpline.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorLists.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Globjects.hpp>
+#include <Gltexture.hpp>
+#include <Glcoordinates.hpp>
+#include <Glcontext.hpp>
+#include <Glmaterial.hpp>
+#include <Glcolor.hpp>
+#include <Glstate.hpp>
+#include <Glnodes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glspline.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorlists.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

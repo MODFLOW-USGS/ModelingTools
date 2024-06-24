@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScene_RT.dpk' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glscene_rt.dpk' rev: 36.00 (Windows)
 
 #ifndef Glscene_rtHPP
 #define Glscene_rtHPP
@@ -15,404 +15,404 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>	// (rtl)
-#include <SysInit.hpp>
-#include <Const3DS.hpp>
-#include <DDSImage.hpp>
-#include <DXTC.hpp>
-#include <File3DS.hpp>
-#include <FileB3D.hpp>
-#include <FileGL2.hpp>
-#include <FileMD2.hpp>
-#include <FileMD3.hpp>
-#include <FileOCT.hpp>
-#include <FileTGA.hpp>
-#include <FileX.hpp>
-#include <GLAVIRecorder.hpp>
-#include <GLAnimatedSprite.hpp>
-#include <GLAnimationUtils.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLAsmShader.hpp>
-#include <GLAsyncHDS.hpp>
-#include <GLAsyncTimer.hpp>
-#include <GLAtmosphere.hpp>
-#include <GLBSP.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLBaseMeshSilhouette.hpp>
-#include <GLBehaviours.hpp>
-#include <GLBitmapFont.hpp>
-#include <GLBlur.hpp>
-#include <GLBumpMapping.hpp>
-#include <GLBumpShader.hpp>
-#include <GLBumpmapHDS.hpp>
-#include <GLCadencer.hpp>
-#include <GLCameraController.hpp>
-#include <GLCanvas.hpp>
-#include <GLCelShader.hpp>
-#include <GLCollision.hpp>
-#include <GLColor.hpp>
-#include <GLCompositeImage.hpp>
-#include <GLConsole.hpp>
-#include <GLContext.hpp>
-#include <GLCoordinates.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLCurvesAndSurfaces.hpp>
-#include <GLCustomShader.hpp>
-#include <GLDCE.hpp>
-#include <GLDCEMisc.hpp>
-#include <GLDynamicTexture.hpp>
-#include <GLEParticleMasksManager.hpp>
-#include <GLEllipseCollision.hpp>
-#include <GLExplosionFx.hpp>
-#include <GLExtrusion.hpp>
-#include <GLFBO.hpp>
-#include <GLFBORenderer.hpp>
-#include <GLFPSMovement.hpp>
-#include <GLFeedback.hpp>
-#include <GLFile3DPDF.hpp>
-#include <GLFile3DS.hpp>
-#include <GLFile3DSSceneObjects.hpp>
-#include <GLFileASE.hpp>
-#include <GLFileB3D.hpp>
-#include <GLFileBMP.hpp>
-#include <GLFileDDS.hpp>
-#include <GLFileDXF.hpp>
-#include <GLFileGL2.hpp>
-#include <GLFileGLB.hpp>
-#include <GLFileGLTF.hpp>
-#include <GLFileGRD.hpp>
-#include <GLFileGTS.hpp>
-#include <GLFileHDR.hpp>
-#include <GLFileJPEG.hpp>
-#include <GLFileLMTS.hpp>
-#include <GLFileLWO.hpp>
-#include <GLFileMD2.hpp>
-#include <GLFileMD3.hpp>
-#include <GLFileMD5.hpp>
-#include <GLFileMDC.hpp>
-#include <GLFileMP3.hpp>
-#include <GLFileMS3D.hpp>
-#include <GLFileNMF.hpp>
-#include <GLFileNurbs.hpp>
-#include <GLFileO3TC.hpp>
-#include <GLFileOBJ.hpp>
-#include <GLFileOCT.hpp>
-#include <GLFilePAK.hpp>
-#include <GLFilePLY.hpp>
-#include <GLFilePNG.hpp>
-#include <GLFileQ3BSP.hpp>
-#include <GLFileSMD.hpp>
-#include <GLFileSTL.hpp>
-#include <GLFileTGA.hpp>
-#include <GLFileTIN.hpp>
-#include <GLFileVRML.hpp>
-#include <GLFileWAV.hpp>
-#include <GLFileX.hpp>
-#include <GLFileZLIB.hpp>
-#include <GLFireFX.hpp>
-#include <GLFullScreenViewer.hpp>
-#include <GLGLUTesselation.hpp>
-#include <GLGameMenu.hpp>
-#include <GLGeomObjects.hpp>
-#include <GLGeometryBB.hpp>
-#include <GLGeometryCoordinates.hpp>
-#include <GLGizmo.hpp>
-#include <GLGizmoEx.hpp>
-#include <GLGraph.hpp>
-#include <GLGraphics.hpp>
-#include <GLGui.hpp>
-#include <GLHUDObjects.hpp>
-#include <GLHeightData.hpp>
-#include <GLHeightTileFile.hpp>
-#include <GLHeightTileFileHDS.hpp>
-#include <GLHiddenLineShader.hpp>
-#include <GLImageUtils.hpp>
-#include <GLImposter.hpp>
-#include <GLIsolines.hpp>
-#include <GLIsosurface.hpp>
-#include <GLJoystick.hpp>
-#include <GLKeyboard.hpp>
-#include <GLLensFlare.hpp>
-#include <GLLinePFX.hpp>
-#include <GLManager.hpp>
-#include <GLMaterial.hpp>
-#include <GLMaterialEx.hpp>
-#include <GLMaterialMultiProxy.hpp>
-#include <GLMaterialScript.hpp>
-#include <GLMesh.hpp>
-#include <GLMeshBuilder.hpp>
-#include <GLMeshCSG.hpp>
-#include <GLMeshLines.hpp>
-#include <GLMeshOptimizer.hpp>
-#include <GLMeshUtils.hpp>
-#include <GLMirror.hpp>
-#include <GLMovement.hpp>
-#include <GLMultiMaterialShader.hpp>
-#include <GLMultiPolygon.hpp>
-#include <GLMultiProxy.hpp>
-#include <GLMultisampleImage.hpp>
-#include <GLNavigator.hpp>
-#include <GLNodes.hpp>
-#include <GLObjectManager.hpp>
-#include <GLObjects.hpp>
-#include <GLOctree.hpp>
-#include <GLOutlineShader.hpp>
-#include <GLParametricSurfaces.hpp>
-#include <GLParticleFX.hpp>
-#include <GLParticles.hpp>
-#include <GLPerlin.hpp>
-#include <GLPerlinBase.hpp>
-#include <GLPerlinNoise3D.hpp>
-#include <GLPerlinPFX.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLPhongShader.hpp>
-#include <GLPictureRegisteredFormats.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLPlugInManager.hpp>
-#include <GLPlugInIntf.hpp>
-#include <GLPolyhedron.hpp>
-#include <GLPolynomials.hpp>
-#include <GLPortal.hpp>
-#include <GLPostEffects.hpp>
-#include <GLProcTextures.hpp>
-#include <GLProjectedTextures.hpp>
-#include <GLProxyObjects.hpp>
-#include <GLROAMPatch.hpp>
-#include <GLRagdoll.hpp>
-#include <GLRandomHDS.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLSArchiveManager.hpp>
-#include <GLSCrossXML.hpp>
-#include <GLSGenerics.hpp>
-#include <GLSLBumpShader.hpp>
-#include <GLSLDiffuseSpecularShader.hpp>
-#include <GLSLErosionShader.hpp>
-#include <GLSLFurShader.hpp>
-#include <GLSLGlassShader.hpp>
-#include <GLSLGoochShader.hpp>
-#include <GLSLIvoryShader.hpp>
-#include <GLSLLatticeShader.hpp>
-#include <GLSLParameter.hpp>
-#include <GLSLPostShaders.hpp>
-#include <GLSLProjectedTextures.hpp>
-#include <GLSLSemShader.hpp>
-#include <GLSLShader.hpp>
-#include <GLSLToonShader.hpp>
-#include <GLSLanguage.hpp>
-#include <GLSLog.hpp>
-#include <GLSMemo.hpp>
-#include <GLSRGBE.hpp>
-#include <GLSRedBlackTree.hpp>
-#include <GLSVfw.hpp>
-#include <GLScene.hpp>
-#include <GLSceneForm.hpp>
-#include <GLScreen.hpp>
-#include <GLScreenSaver.hpp>
-#include <GLSelection.hpp>
-#include <GLShaderCombiner.hpp>
-#include <GLShadowHDS.hpp>
-#include <GLShadowPlane.hpp>
-#include <GLShadowVolume.hpp>
-#include <GLSilhouette.hpp>
-#include <GLSimpleNavigation.hpp>
-#include <GLSkyBox.hpp>
-#include <GLSkydome.hpp>
-#include <GLSLVertexDisplacementShader.hpp>
-#include <GLSmoothNavigator.hpp>
-#include <GLSound.hpp>
-#include <GLSoundFileObjects.hpp>
-#include <GLSpacePartition.hpp>
-#include <GLSpaceText.hpp>
-#include <GLSpatialPartitioning.hpp>
-#include <GLSpline.hpp>
-#include <GLState.hpp>
-#include <GLStrings.hpp>
-#include <GLTeapot.hpp>
-#include <GLTerrainRenderer.hpp>
-#include <GLTexCombineShader.hpp>
-#include <GLTexLensFlare.hpp>
-#include <GLTexture.hpp>
-#include <GLTextureCombiners.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLTextureImageEditors.hpp>
-#include <GLTextureSharingShader.hpp>
-#include <GLTexturedHDS.hpp>
-#include <GLThorFX.hpp>
-#include <GLTilePlane.hpp>
-#include <GLTimeEventsMgr.hpp>
-#include <GLTrail.hpp>
-#include <GLTree.hpp>
-#include <GLTriangulation.hpp>
-#include <GLTypes.hpp>
-#include <GLUserShader.hpp>
-#include <GLUtils.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorLists.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVerletClothify.hpp>
-#include <GLVerletHairClasses.hpp>
-#include <GLVerletSkeletonColliders.hpp>
-#include <GLVerletTypes.hpp>
-#include <GLVfsPAK.hpp>
-#include <GLWaterPlane.hpp>
-#include <GLWin32Context.hpp>
-#include <GLWin32Viewer.hpp>
-#include <GLWindows.hpp>
-#include <GLWindowsFont.hpp>
-#include <GLXCollection.hpp>
-#include <GLzBuffer.hpp>
-#include <HDRImage.hpp>
-#include <LWObjects.hpp>
-#include <O3TCImage.hpp>
-#include <OpenGL1x.hpp>
-#include <OpenGLAdapter.hpp>
-#include <OpenGLTokens.hpp>
-#include <Q3BSP.hpp>
-#include <Q3MD3.hpp>
-#include <Types3DS.hpp>
-#include <Utils3DS.hpp>
-#include <VRMLParser.hpp>
-#include <XOpenGL.hpp>
+#include <Sysinit.hpp>
+#include <Const3ds.hpp>
+#include <Ddsimage.hpp>
+#include <Dxtc.hpp>
+#include <File3ds.hpp>
+#include <Fileb3d.hpp>
+#include <Filegl2.hpp>
+#include <Filemd2.hpp>
+#include <Filemd3.hpp>
+#include <Fileoct.hpp>
+#include <Filetga.hpp>
+#include <Filex.hpp>
+#include <Glavirecorder.hpp>
+#include <Glanimatedsprite.hpp>
+#include <Glanimationutils.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glasmshader.hpp>
+#include <Glasynchds.hpp>
+#include <Glasynctimer.hpp>
+#include <Glatmosphere.hpp>
+#include <Glbsp.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glbasemeshsilhouette.hpp>
+#include <Glbehaviours.hpp>
+#include <Glbitmapfont.hpp>
+#include <Glblur.hpp>
+#include <Glbumpmapping.hpp>
+#include <Glbumpshader.hpp>
+#include <Glbumpmaphds.hpp>
+#include <Glcadencer.hpp>
+#include <Glcameracontroller.hpp>
+#include <Glcanvas.hpp>
+#include <Glcelshader.hpp>
+#include <Glcollision.hpp>
+#include <Glcolor.hpp>
+#include <Glcompositeimage.hpp>
+#include <Glconsole.hpp>
+#include <Glcontext.hpp>
+#include <Glcoordinates.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glcurvesandsurfaces.hpp>
+#include <Glcustomshader.hpp>
+#include <Gldce.hpp>
+#include <Gldcemisc.hpp>
+#include <Gldynamictexture.hpp>
+#include <Gleparticlemasksmanager.hpp>
+#include <Glellipsecollision.hpp>
+#include <Glexplosionfx.hpp>
+#include <Glextrusion.hpp>
+#include <Glfbo.hpp>
+#include <Glfborenderer.hpp>
+#include <Glfpsmovement.hpp>
+#include <Glfeedback.hpp>
+#include <Glfile3dpdf.hpp>
+#include <Glfile3ds.hpp>
+#include <Glfile3dssceneobjects.hpp>
+#include <Glfilease.hpp>
+#include <Glfileb3d.hpp>
+#include <Glfilebmp.hpp>
+#include <Glfiledds.hpp>
+#include <Glfiledxf.hpp>
+#include <Glfilegl2.hpp>
+#include <Glfileglb.hpp>
+#include <Glfilegltf.hpp>
+#include <Glfilegrd.hpp>
+#include <Glfilegts.hpp>
+#include <Glfilehdr.hpp>
+#include <Glfilejpeg.hpp>
+#include <Glfilelmts.hpp>
+#include <Glfilelwo.hpp>
+#include <Glfilemd2.hpp>
+#include <Glfilemd3.hpp>
+#include <Glfilemd5.hpp>
+#include <Glfilemdc.hpp>
+#include <Glfilemp3.hpp>
+#include <Glfilems3d.hpp>
+#include <Glfilenmf.hpp>
+#include <Glfilenurbs.hpp>
+#include <Glfileo3tc.hpp>
+#include <Glfileobj.hpp>
+#include <Glfileoct.hpp>
+#include <Glfilepak.hpp>
+#include <Glfileply.hpp>
+#include <Glfilepng.hpp>
+#include <Glfileq3bsp.hpp>
+#include <Glfilesmd.hpp>
+#include <Glfilestl.hpp>
+#include <Glfiletga.hpp>
+#include <Glfiletin.hpp>
+#include <Glfilevrml.hpp>
+#include <Glfilewav.hpp>
+#include <Glfilex.hpp>
+#include <Glfilezlib.hpp>
+#include <Glfirefx.hpp>
+#include <Glfullscreenviewer.hpp>
+#include <Glglutesselation.hpp>
+#include <Glgamemenu.hpp>
+#include <Glgeomobjects.hpp>
+#include <Glgeometrybb.hpp>
+#include <Glgeometrycoordinates.hpp>
+#include <Glgizmo.hpp>
+#include <Glgizmoex.hpp>
+#include <Glgraph.hpp>
+#include <Glgraphics.hpp>
+#include <Glgui.hpp>
+#include <Glhudobjects.hpp>
+#include <Glheightdata.hpp>
+#include <Glheighttilefile.hpp>
+#include <Glheighttilefilehds.hpp>
+#include <Glhiddenlineshader.hpp>
+#include <Glimageutils.hpp>
+#include <Glimposter.hpp>
+#include <Glisolines.hpp>
+#include <Glisosurface.hpp>
+#include <Gljoystick.hpp>
+#include <Glkeyboard.hpp>
+#include <Gllensflare.hpp>
+#include <Gllinepfx.hpp>
+#include <Glmanager.hpp>
+#include <Glmaterial.hpp>
+#include <Glmaterialex.hpp>
+#include <Glmaterialmultiproxy.hpp>
+#include <Glmaterialscript.hpp>
+#include <Glmesh.hpp>
+#include <Glmeshbuilder.hpp>
+#include <Glmeshcsg.hpp>
+#include <Glmeshlines.hpp>
+#include <Glmeshoptimizer.hpp>
+#include <Glmeshutils.hpp>
+#include <Glmirror.hpp>
+#include <Glmovement.hpp>
+#include <Glmultimaterialshader.hpp>
+#include <Glmultipolygon.hpp>
+#include <Glmultiproxy.hpp>
+#include <Glmultisampleimage.hpp>
+#include <Glnavigator.hpp>
+#include <Glnodes.hpp>
+#include <Globjectmanager.hpp>
+#include <Globjects.hpp>
+#include <Gloctree.hpp>
+#include <Gloutlineshader.hpp>
+#include <Glparametricsurfaces.hpp>
+#include <Glparticlefx.hpp>
+#include <Glparticles.hpp>
+#include <Glperlin.hpp>
+#include <Glperlinbase.hpp>
+#include <Glperlinnoise3d.hpp>
+#include <Glperlinpfx.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glphongshader.hpp>
+#include <Glpictureregisteredformats.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glpluginmanager.hpp>
+#include <Glpluginintf.hpp>
+#include <Glpolyhedron.hpp>
+#include <Glpolynomials.hpp>
+#include <Glportal.hpp>
+#include <Glposteffects.hpp>
+#include <Glproctextures.hpp>
+#include <Glprojectedtextures.hpp>
+#include <Glproxyobjects.hpp>
+#include <Glroampatch.hpp>
+#include <Glragdoll.hpp>
+#include <Glrandomhds.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glsarchivemanager.hpp>
+#include <Glscrossxml.hpp>
+#include <Glsgenerics.hpp>
+#include <Glslbumpshader.hpp>
+#include <Glsldiffusespecularshader.hpp>
+#include <Glslerosionshader.hpp>
+#include <Glslfurshader.hpp>
+#include <Glslglassshader.hpp>
+#include <Glslgoochshader.hpp>
+#include <Glslivoryshader.hpp>
+#include <Glsllatticeshader.hpp>
+#include <Glslparameter.hpp>
+#include <Glslpostshaders.hpp>
+#include <Glslprojectedtextures.hpp>
+#include <Glslsemshader.hpp>
+#include <Glslshader.hpp>
+#include <Glsltoonshader.hpp>
+#include <Glslanguage.hpp>
+#include <Glslog.hpp>
+#include <Glsmemo.hpp>
+#include <Glsrgbe.hpp>
+#include <Glsredblacktree.hpp>
+#include <Glsvfw.hpp>
+#include <Glscene.hpp>
+#include <Glsceneform.hpp>
+#include <Glscreen.hpp>
+#include <Glscreensaver.hpp>
+#include <Glselection.hpp>
+#include <Glshadercombiner.hpp>
+#include <Glshadowhds.hpp>
+#include <Glshadowplane.hpp>
+#include <Glshadowvolume.hpp>
+#include <Glsilhouette.hpp>
+#include <Glsimplenavigation.hpp>
+#include <Glskybox.hpp>
+#include <Glskydome.hpp>
+#include <Glslvertexdisplacementshader.hpp>
+#include <Glsmoothnavigator.hpp>
+#include <Glsound.hpp>
+#include <Glsoundfileobjects.hpp>
+#include <Glspacepartition.hpp>
+#include <Glspacetext.hpp>
+#include <Glspatialpartitioning.hpp>
+#include <Glspline.hpp>
+#include <Glstate.hpp>
+#include <Glstrings.hpp>
+#include <Glteapot.hpp>
+#include <Glterrainrenderer.hpp>
+#include <Gltexcombineshader.hpp>
+#include <Gltexlensflare.hpp>
+#include <Gltexture.hpp>
+#include <Gltexturecombiners.hpp>
+#include <Gltextureformat.hpp>
+#include <Gltextureimageeditors.hpp>
+#include <Gltexturesharingshader.hpp>
+#include <Gltexturedhds.hpp>
+#include <Glthorfx.hpp>
+#include <Gltileplane.hpp>
+#include <Gltimeeventsmgr.hpp>
+#include <Gltrail.hpp>
+#include <Gltree.hpp>
+#include <Gltriangulation.hpp>
+#include <Gltypes.hpp>
+#include <Glusershader.hpp>
+#include <Glutils.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorlists.hpp>
+#include <Glvectortypes.hpp>
+#include <Glverletclothify.hpp>
+#include <Glverlethairclasses.hpp>
+#include <Glverletskeletoncolliders.hpp>
+#include <Glverlettypes.hpp>
+#include <Glvfspak.hpp>
+#include <Glwaterplane.hpp>
+#include <Glwin32context.hpp>
+#include <Glwin32viewer.hpp>
+#include <Glwindows.hpp>
+#include <Glwindowsfont.hpp>
+#include <Glxcollection.hpp>
+#include <Glzbuffer.hpp>
+#include <Hdrimage.hpp>
+#include <Lwobjects.hpp>
+#include <O3tcimage.hpp>
+#include <Opengl1x.hpp>
+#include <Opengladapter.hpp>
+#include <Opengltokens.hpp>
+#include <Q3bsp.hpp>
+#include <Q3md3.hpp>
+#include <Types3ds.hpp>
+#include <Utils3ds.hpp>
+#include <Vrmlparser.hpp>
+#include <Xopengl.hpp>
 #include <System.Types.hpp>	// (rtl)
-#include <System.UITypes.hpp>	// (rtl)
-#include <Winapi.Windows.PkgHelper.hpp>	// (rtl)
+#include <System.Uitypes.hpp>	// (rtl)
+#include <Winapi.Windows.Pkghelper.hpp>	// (rtl)
 #include <Winapi.Windows.hpp>	// (rtl)
 #include <Winapi.Messages.hpp>	// (rtl)
-#include <System.SysConst.hpp>	// (rtl)
-#include <Winapi.ImageHlp.hpp>	// (rtl)
-#include <Winapi.SHFolder.hpp>	// (rtl)
-#include <Winapi.PsAPI.hpp>	// (rtl)
-#include <System.RTLConsts.hpp>	// (rtl)
+#include <System.Sysconst.hpp>	// (rtl)
+#include <Winapi.Imagehlp.hpp>	// (rtl)
+#include <Winapi.Shfolder.hpp>	// (rtl)
+#include <Winapi.Psapi.hpp>	// (rtl)
+#include <System.Rtlconsts.hpp>	// (rtl)
 #include <System.Character.hpp>	// (rtl)
-#include <System.Internal.ExcUtils.hpp>	// (rtl)
-#include <System.SysUtils.hpp>	// (rtl)
-#include <System.VarUtils.hpp>	// (rtl)
+#include <System.Internal.Excutils.hpp>	// (rtl)
+#include <System.Sysutils.hpp>	// (rtl)
+#include <System.Varutils.hpp>	// (rtl)
 #include <System.Variants.hpp>	// (rtl)
-#include <Winapi.ActiveX.hpp>	// (rtl)
-#include <System.TypInfo.hpp>	// (rtl)
+#include <Winapi.Activex.hpp>	// (rtl)
+#include <System.Typinfo.hpp>	// (rtl)
 #include <System.Hash.hpp>	// (rtl)
 #include <System.Math.hpp>	// (rtl)
 #include <System.Generics.Defaults.hpp>	// (rtl)
 #include <System.Generics.Collections.hpp>	// (rtl)
-#include <System.TimeSpan.hpp>	// (rtl)
+#include <System.Timespan.hpp>	// (rtl)
 #include <System.Diagnostics.hpp>	// (rtl)
-#include <System.SyncObjs.hpp>	// (rtl)
+#include <System.Syncobjs.hpp>	// (rtl)
 #include <System.Rtti.hpp>	// (rtl)
 #include <System.Classes.hpp>	// (rtl)
 #include <Winapi.Wincodec.hpp>	// (rtl)
-#include <Winapi.CommCtrl.hpp>	// (rtl)
+#include <Winapi.Commctrl.hpp>	// (rtl)
 #include <Winapi.Qos.hpp>	// (rtl)
 #include <Winapi.Winsock2.hpp>	// (rtl)
-#include <Winapi.IpExport.hpp>	// (rtl)
-#include <Winapi.ShellAPI.hpp>	// (rtl)
-#include <Winapi.RegStr.hpp>	// (rtl)
-#include <Winapi.WinInet.hpp>	// (rtl)
-#include <Winapi.UrlMon.hpp>	// (rtl)
-#include <Winapi.ObjectArray.hpp>	// (rtl)
-#include <Winapi.StructuredQueryCondition.hpp>	// (rtl)
-#include <Winapi.PropSys.hpp>	// (rtl)
-#include <Winapi.MSXMLIntf.hpp>	// (rtl)
-#include <Winapi.ShlObj.hpp>	// (rtl)
-#include <Winapi.KnownFolders.hpp>	// (rtl)
+#include <Winapi.Ipexport.hpp>	// (rtl)
+#include <Winapi.Shellapi.hpp>	// (rtl)
+#include <Winapi.Regstr.hpp>	// (rtl)
+#include <Winapi.Wininet.hpp>	// (rtl)
+#include <Winapi.Urlmon.hpp>	// (rtl)
+#include <Winapi.Objectarray.hpp>	// (rtl)
+#include <Winapi.Structuredquerycondition.hpp>	// (rtl)
+#include <Winapi.Propsys.hpp>	// (rtl)
+#include <Winapi.Msxmlintf.hpp>	// (rtl)
+#include <Winapi.Shlobj.hpp>	// (rtl)
+#include <Winapi.Knownfolders.hpp>	// (rtl)
 #include <System.Masks.hpp>	// (rtl)
-#include <System.StrUtils.hpp>	// (rtl)
-#include <System.DateUtils.hpp>	// (rtl)
-#include <System.IOUtils.hpp>	// (rtl)
-#include <System.IniFiles.hpp>	// (rtl)
+#include <System.Strutils.hpp>	// (rtl)
+#include <System.Dateutils.hpp>	// (rtl)
+#include <System.Ioutils.hpp>	// (rtl)
+#include <System.Inifiles.hpp>	// (rtl)
 #include <System.Win.Registry.hpp>	// (rtl)
-#include <System.UIConsts.hpp>	// (rtl)
+#include <System.Uiconsts.hpp>	// (rtl)
 #include <Vcl.Consts.hpp>	// (vcl)
 #include <Vcl.Graphics.hpp>	// (vcl)
-#include <System.AnsiStrings.hpp>	// (rtl)
+#include <System.Ansistrings.hpp>	// (rtl)
 #include <System.Win.Crtl.hpp>	// (rtl)
-#include <System.ZLib.hpp>	// (rtl)
-#include <Vcl.Imaging.pnglang.hpp>	// (vclimg)
-#include <Vcl.Imaging.pngimage.hpp>	// (vclimg)
-#include <Winapi.MultiMon.hpp>	// (rtl)
+#include <System.Zlib.hpp>	// (rtl)
+#include <Vcl.Imaging.Pnglang.hpp>	// (vclimg)
+#include <Vcl.Imaging.Pngimage.hpp>	// (vclimg)
+#include <Winapi.Multimon.hpp>	// (rtl)
 #include <System.Contnrs.hpp>	// (rtl)
-#include <System.ImageList.hpp>	// (rtl)
+#include <System.Imagelist.hpp>	// (rtl)
 #include <System.Messaging.hpp>	// (rtl)
 #include <System.Actions.hpp>	// (rtl)
 #include <Winapi.Imm.hpp>	// (rtl)
-#include <Vcl.ActnList.hpp>	// (vcl)
-#include <System.HelpIntfs.hpp>	// (rtl)
-#include <Winapi.UxTheme.hpp>	// (rtl)
+#include <Vcl.Actnlist.hpp>	// (vcl)
+#include <System.Helpintfs.hpp>	// (rtl)
+#include <Winapi.Uxtheme.hpp>	// (rtl)
 #include <Winapi.Dwmapi.hpp>	// (rtl)
-#include <Vcl.GraphUtil.hpp>	// (vcl)
-#include <Vcl.StdCtrls.hpp>	// (vcl)
-#include <System.MaskUtils.hpp>	// (rtl)
+#include <Vcl.Graphutil.hpp>	// (vcl)
+#include <Vcl.Stdctrls.hpp>	// (vcl)
+#include <System.Maskutils.hpp>	// (rtl)
 #include <Vcl.Clipbrd.hpp>	// (vcl)
 #include <Vcl.Mask.hpp>	// (vcl)
-#include <Winapi.CommDlg.hpp>	// (rtl)
-#include <Winapi.WinSpool.hpp>	// (rtl)
+#include <Winapi.Commdlg.hpp>	// (rtl)
+#include <Winapi.Winspool.hpp>	// (rtl)
 #include <Vcl.Printers.hpp>	// (vcl)
-#include <Winapi.RichEdit.hpp>	// (rtl)
-#include <Vcl.ToolWin.hpp>	// (vcl)
-#include <Vcl.ListActns.hpp>	// (vcl)
-#include <Vcl.ComStrs.hpp>	// (vcl)
-#include <Vcl.StdActns.hpp>	// (vcl)
-#include <Vcl.ComCtrls.hpp>	// (vcl)
-#include <System.WideStrUtils.hpp>	// (rtl)
+#include <Winapi.Richedit.hpp>	// (rtl)
+#include <Vcl.Toolwin.hpp>	// (vcl)
+#include <Vcl.Listactns.hpp>	// (vcl)
+#include <Vcl.Comstrs.hpp>	// (vcl)
+#include <Vcl.Stdactns.hpp>	// (vcl)
+#include <Vcl.Comctrls.hpp>	// (vcl)
+#include <System.Widestrutils.hpp>	// (rtl)
 #include <Winapi.Dlgs.hpp>	// (rtl)
 #include <Vcl.Dialogs.hpp>	// (vcl)
-#include <Vcl.ExtCtrls.hpp>	// (vcl)
+#include <Vcl.Extctrls.hpp>	// (vcl)
 #include <Vcl.Themes.hpp>	// (vcl)
-#include <System.Win.ComConst.hpp>	// (rtl)
-#include <System.Win.ComObj.hpp>	// (rtl)
+#include <System.Win.Comconst.hpp>	// (rtl)
+#include <System.Win.Comobj.hpp>	// (rtl)
 #include <System.Win.Taskbar.hpp>	// (rtl)
-#include <System.Win.TaskbarCore.hpp>	// (rtl)
-#include <Winapi.ShellScaling.hpp>	// (rtl)
+#include <System.Win.Taskbarcore.hpp>	// (rtl)
+#include <Winapi.Shellscaling.hpp>	// (rtl)
 #include <Winapi.Wtsapi32.hpp>	// (rtl)
-#include <Winapi.FlatSB.hpp>	// (rtl)
+#include <Winapi.Flatsb.hpp>	// (rtl)
 #include <Vcl.Forms.hpp>	// (vcl)
-#include <Vcl.ImgList.hpp>	// (vcl)
+#include <Vcl.Imglist.hpp>	// (vcl)
 #include <Vcl.Menus.hpp>	// (vcl)
-#include <Winapi.TpcShrd.hpp>	// (rtl)
-#include <Winapi.MsCTF.PkgHelper.hpp>	// (rtl)
-#include <Winapi.MsCTF.hpp>	// (rtl)
-#include <Winapi.MsInkAut.hpp>	// (rtl)
-#include <Winapi.PenInputPanel.hpp>	// (rtl)
+#include <Winapi.Tpcshrd.hpp>	// (rtl)
+#include <Winapi.Msctf.Pkghelper.hpp>	// (rtl)
+#include <Winapi.Msctf.hpp>	// (rtl)
+#include <Winapi.Msinkaut.hpp>	// (rtl)
+#include <Winapi.Peninputpanel.hpp>	// (rtl)
 #include <Vcl.Controls.hpp>	// (vcl)
-#include <GR32_System.hpp>
-#include <GR32_Bindings.hpp>
-#include <GR32_Blend.hpp>
-#include <GR32_Math.hpp>
-#include <GR32_LowLevel.hpp>
-#include <GR32_Filters.hpp>
-#include <GR32_VectorMaps.hpp>
-#include <GR32_OrdinalMaps.hpp>
-#include <GR32_Containers.hpp>
-#include <GR32_Rasterizers.hpp>
-#include <GR32_Transforms.hpp>
-#include <GR32_Resamplers.hpp>
-#include <GR32_RepaintOpt.hpp>
-#include <GR32_Layers.hpp>
-#include <GR32_XPThemes.hpp>
-#include <GR32_RangeBars.hpp>
-#include <GR32_MicroTiles.hpp>
-#include <GR32_Image.hpp>
-#include <GR32_Backends.hpp>
-#include <GR32_Backends_Generic.hpp>
-#include <GR32_Backends_VCL.hpp>
-#include <GR32_DrawingEx.hpp>
-#include <GR32.hpp>
+#include <Gr32_system.hpp>
+#include <Gr32_bindings.hpp>
+#include <Gr32_blend.hpp>
+#include <Gr32_math.hpp>
+#include <Gr32_lowlevel.hpp>
+#include <Gr32_filters.hpp>
+#include <Gr32_vectormaps.hpp>
+#include <Gr32_ordinalmaps.hpp>
+#include <Gr32_containers.hpp>
+#include <Gr32_rasterizers.hpp>
+#include <Gr32_transforms.hpp>
+#include <Gr32_resamplers.hpp>
+#include <Gr32_repaintopt.hpp>
+#include <Gr32_layers.hpp>
+#include <Gr32_xpthemes.hpp>
+#include <Gr32_rangebars.hpp>
+#include <Gr32_microtiles.hpp>
+#include <Gr32_image.hpp>
+#include <Gr32_backends.hpp>
+#include <Gr32_backends_generic.hpp>
+#include <Gr32_backends_vcl.hpp>
+#include <Gr32_drawingex.hpp>
+#include <Gr32.hpp>
 #include <Vcl.Buttons.hpp>	// (vcl)
-#include <Vcl.ExtDlgs.hpp>	// (vcl)
-#include <Winapi.MMSystem.hpp>	// (rtl)
-#include <Vcl.Imaging.JConsts.hpp>	// (vclimg)
-#include <Vcl.Imaging.jpeg.hpp>	// (vclimg)
+#include <Vcl.Extdlgs.hpp>	// (vcl)
+#include <Winapi.Mmsystem.hpp>	// (rtl)
+#include <Vcl.Imaging.Jconsts.hpp>	// (vclimg)
+#include <Vcl.Imaging.Jpeg.hpp>	// (vclimg)
 #include <System.Math.Vectors.hpp>	// (rtl)
-#include <Winapi.OpenGL.PkgHelper.hpp>	// (rtl)
-#include <Winapi.OpenGL.hpp>	// (rtl)
-#include <Xml.XMLConst.hpp>	// (xmlrtl)
-#include <Winapi.msxml.hpp>	// (rtl)
-#include <Xml.Win.msxmldom.hpp>	// (xmlrtl)
-#include <Xml.xmldom.hpp>	// (xmlrtl)
-#include <Xml.XMLIntf.hpp>	// (xmlrtl)
-#include <Xml.XMLSchemaTags.hpp>	// (xmlrtl)
-#include <Xml.XMLSchema.hpp>	// (xmlrtl)
-#include <Xml.xmlutil.hpp>	// (xmlrtl)
-#include <Xml.XMLDoc.hpp>	// (xmlrtl)
+#include <Winapi.Opengl.Pkghelper.hpp>	// (rtl)
+#include <Winapi.Opengl.hpp>	// (rtl)
+#include <Xml.Xmlconst.hpp>	// (xmlrtl)
+#include <Winapi.Msxml.hpp>	// (rtl)
+#include <Xml.Win.Msxmldom.hpp>	// (xmlrtl)
+#include <Xml.Xmldom.hpp>	// (xmlrtl)
+#include <Xml.Xmlintf.hpp>	// (xmlrtl)
+#include <Xml.Xmlschematags.hpp>	// (xmlrtl)
+#include <Xml.Xmlschema.hpp>	// (xmlrtl)
+#include <Xml.Xmlutil.hpp>	// (xmlrtl)
+#include <Xml.Xmldoc.hpp>	// (xmlrtl)
 // PRG_EXT: .bpl
 // BPI_DIR: ..\..\lib\Win64
 // OBJ_DIR: ..\..\lib\Win64

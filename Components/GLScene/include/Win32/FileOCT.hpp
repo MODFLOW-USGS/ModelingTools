@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FileOCT.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FileOCT.pas' rev: 35.00 (Windows)
 
 #ifndef FileoctHPP
 #define FileoctHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -51,7 +49,7 @@ struct DECLSPEC_DRECORD TOCTVertex
 public:
 	Glvectorgeometry::TTexPoint tv;
 	Glvectorgeometry::TTexPoint lv;
-	Glvectorgeometry::TAffineVector pos;
+	Glvectortypes::TVector3f pos;
 };
 
 
@@ -62,7 +60,7 @@ public:
 	int num;
 	int id;
 	int lid;
-	Glvectorgeometry::THmgPlane p;
+	Glvectortypes::TVector4f p;
 };
 
 
@@ -89,8 +87,8 @@ typedef TOCTLightmap *POCTLightmap;
 struct DECLSPEC_DRECORD TOCTLight
 {
 public:
-	Glvectorgeometry::TAffineVector pos;
-	Glvectorgeometry::TAffineVector color;
+	Glvectortypes::TVector3f pos;
+	Glvectortypes::TVector3f color;
 	int intensity;
 };
 
@@ -120,12 +118,12 @@ public:
 	_TOCTFile__3 Textures;
 	_TOCTFile__4 Lightmaps;
 	_TOCTFile__5 Lights;
-	Glvectorgeometry::TAffineVector PlayerPos;
+	Glvectortypes::TVector3f PlayerPos;
 	__fastcall TOCTFile()/* overload */;
 	__fastcall TOCTFile(System::Classes::TStream* octStream)/* overload */;
 	void __fastcall SaveToStream(System::Classes::TStream* aStream);
 	void __fastcall AddTriangles(Glvectorlists::TAffineVectorList* vertexCoords, Glvectorlists::TAffineVectorList* texMapCoords, const System::UnicodeString textureName);
-	void __fastcall AddLight(const Glvectorgeometry::TAffineVector &lightPos, const Glvectorgeometry::TVector &lightColor, int lightIntensity);
+	void __fastcall AddLight(const Glvectortypes::TVector3f &lightPos, const Glvectortypes::TVector4f &lightColor, int lightIntensity);
 public:
 	/* TObject.Destroy */ inline __fastcall virtual ~TOCTFile() { }
 	

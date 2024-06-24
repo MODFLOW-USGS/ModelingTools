@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTrail.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gltrail.pas' rev: 36.00 (Windows)
 
 #ifndef GltrailHPP
 #define GltrailHPP
@@ -15,19 +15,19 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GLScene.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLMeshUtils.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLMesh.hpp>
-#include <GLObjects.hpp>
-#include <GLMaterial.hpp>
-#include <GLStrings.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Glscene.hpp>
+#include <Glvectortypes.hpp>
+#include <Glmeshutils.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glmesh.hpp>
+#include <Globjects.hpp>
+#include <Glmaterial.hpp>
+#include <Glstrings.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -110,7 +110,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Word cMaxVerts = System::Word(0x7d0);
+static _DELPHI_CONST System::Word cMaxVerts = System::Word(0x7d0);
 }	/* namespace Gltrail */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLTRAIL)
 using namespace Gltrail;

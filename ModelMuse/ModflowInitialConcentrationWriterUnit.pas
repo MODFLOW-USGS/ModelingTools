@@ -11,6 +11,7 @@ type
     FPestScriptFileName: string;
   protected
     class function Extension: string; override;
+    procedure WriteOptions;
     procedure WriteInitialConcentrations;
   public
     procedure WriteFile(const AFileName: string; SpeciesIndex: Integer);
@@ -73,25 +74,20 @@ begin
 
   WriteBeginGridData;
 
-//  for LayerIndex := 0 to Model.LayerCount - 1 do
-//  begin
-//    if LayerIndex = 0 then
-//    begin
-//      WriteArray(DataArray, LayerIndex,
-//        DataSetName + ' ' + Model.ModflowLayerBottomDescription(LayerIndex),
-//        StrNoValueAssigned, DataSetName);
-//    end
-//    else
-//    begin
-//      WriteArray(DataArray, LayerIndex,
-//        DataSetName + ' ' + Model.ModflowLayerBottomDescription(LayerIndex),
-//        StrNoValueAssigned, '');
-//    end;
-//  end;
   WriteMf6_DataSet(DataArray, 'STRT');
   WritePestZones(DataArray, FPestScriptFileName, 'STRT', '.' + Item.Name, 'STRT');
 
   WriteEndGridData;
+end;
+
+procedure TGwtInitialConcWriter.WriteOptions;
+begin
+  WriteBeginOptions;
+  try
+    WriteExportAsciiArray;
+  finally
+    WriteEndOptions;
+  end;
 end;
 
 end.

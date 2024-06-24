@@ -2,19 +2,19 @@ inherited frmGridValue: TfrmGridValue
   HelpType = htKeyword
   HelpKeyword = 'Grid_Value_Dialog_Box'
   Caption = 'Grid or Mesh Value'
-  ClientHeight = 510
-  ClientWidth = 638
+  ClientHeight = 509
+  ClientWidth = 634
   KeyPreview = True
   OnClose = FormClose
   ExplicitWidth = 650
   ExplicitHeight = 548
   DesignSize = (
-    638
-    510)
+    634
+    509)
   TextHeight = 18
   object btnHelp: TBitBtn
-    Left = 410
-    Top = 470
+    Left = 402
+    Top = 469
     Width = 89
     Height = 33
     Anchors = [akRight, akBottom]
@@ -23,11 +23,10 @@ inherited frmGridValue: TfrmGridValue
     TabOrder = 1
     OnClick = btnHelpClick
     ExplicitLeft = 404
-    ExplicitTop = 469
   end
   object btnClose: TBitBtn
-    Left = 507
-    Top = 470
+    Left = 499
+    Top = 469
     Width = 89
     Height = 33
     Anchors = [akRight, akBottom]
@@ -35,18 +34,16 @@ inherited frmGridValue: TfrmGridValue
     NumGlyphs = 2
     TabOrder = 2
     ExplicitLeft = 501
-    ExplicitTop = 469
   end
   object pnlTabs: TPanel
     Left = 0
     Top = 0
-    Width = 638
-    Height = 464
+    Width = 634
+    Height = 463
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
     ExplicitWidth = 632
-    ExplicitHeight = 463
     object splAllDataSets: TSplitter
       Left = 441
       Top = 1
@@ -111,7 +108,7 @@ inherited frmGridValue: TfrmGridValue
       ExplicitHeight = 461
       DesignSize = (
         440
-        462)
+        461)
       object lblModel: TLabel
         Left = 40
         Top = 19
@@ -142,53 +139,48 @@ inherited frmGridValue: TfrmGridValue
       end
       object lblHigher3rdDimensionCoordinate: TStaticText
         Left = 40
-        Top = 409
+        Top = 408
         Width = 231
         Height = 22
         Anchors = [akLeft, akBottom]
         Caption = 'Higher 3rd dimension coordinate'
         TabOrder = 14
-        ExplicitTop = 408
       end
       object lblLower3rdDimensionCoordinate: TStaticText
         Left = 40
-        Top = 430
+        Top = 429
         Width = 228
         Height = 22
         Anchors = [akLeft, akBottom]
         Caption = 'Lower 3rd dimension coordinate'
         TabOrder = 15
-        ExplicitTop = 429
       end
       object lblSection: TStaticText
         Left = 40
-        Top = 362
+        Top = 361
         Width = 57
         Height = 22
         Anchors = [akLeft, akBottom]
         Caption = 'Section'
         TabOrder = 12
-        ExplicitTop = 361
       end
       object lblSelectedObject: TStaticText
         Left = 40
-        Top = 317
+        Top = 316
         Width = 112
         Height = 22
         Anchors = [akLeft, akBottom]
         Caption = 'Selected object'
         TabOrder = 10
-        ExplicitTop = 316
       end
       object lblVertex: TStaticText
         Left = 40
-        Top = 341
+        Top = 340
         Width = 104
         Height = 22
         Anchors = [akLeft, akBottom]
         Caption = 'Nearest vertex'
         TabOrder = 11
-        ExplicitTop = 340
       end
       object lblColumnWidth: TStaticText
         Left = 169
@@ -250,13 +242,12 @@ inherited frmGridValue: TfrmGridValue
       end
       object cbShowThirdDValues: TCheckBox
         Left = 40
-        Top = 386
+        Top = 385
         Width = 390
         Height = 17
         Anchors = [akLeft, akBottom]
         Caption = 'Show selected object 3rd dimension coordinates'
         TabOrder = 13
-        ExplicitTop = 385
       end
       object comboModel: TComboBox
         Left = 169
@@ -271,20 +262,19 @@ inherited frmGridValue: TfrmGridValue
         Left = 40
         Top = 192
         Width = 390
-        Height = 119
+        Height = 118
         Anchors = [akLeft, akTop, akRight, akBottom]
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 9
         OnKeyUp = memoExplanationKeyUp
-        ExplicitHeight = 118
       end
     end
     object rrlAllDataSets: TRbwRollupPanel
       Left = 444
       Top = 1
       Width = 27
-      Height = 462
+      Height = 461
       Align = alLeft
       Caption = 'rrlAllDataSets'
       Font.Charset = ANSI_CHARSET
@@ -299,10 +289,9 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'All Data Sets'
       LabelWidth = 27
       ExpandedWidth = 399
-      ExplicitHeight = 461
       DesignSize = (
         27
-        462)
+        461)
       object lblSelectExplanation: TLabel
         Left = 31
         Top = 63
@@ -319,14 +308,13 @@ inherited frmGridValue: TfrmGridValue
       end
       object btnUpdate: TButton
         Left = 31
-        Top = 426
+        Top = 425
         Width = 75
         Height = 25
         Anchors = [akLeft, akBottom]
         Caption = 'Update'
         TabOrder = 4
         OnClick = btnUpdateClick
-        ExplicitTop = 425
       end
       object edSelectValue: TEdit
         Left = 77
@@ -341,13 +329,12 @@ inherited frmGridValue: TfrmGridValue
         Left = 32
         Top = 87
         Width = 0
-        Height = 332
+        Height = 331
         Anchors = [akLeft, akTop, akRight, akBottom]
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 3
         OnKeyUp = memoExplanationKeyUp
-        ExplicitHeight = 331
       end
       object virttreecomboDataSets: TRbwStringTreeCombo
         Left = 32
@@ -416,7 +403,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 474
       Top = 1
       Width = 27
-      Height = 462
+      Height = 461
       Align = alLeft
       Caption = 'rrlPathline'
       Font.Charset = ANSI_CHARSET
@@ -431,7 +418,6 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Pathline'
       LabelWidth = 27
       ExpandedWidth = 399
-      ExplicitHeight = 461
       object pnlPathline: TPanel
         Left = 28
         Top = 1
@@ -590,7 +576,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 504
       Top = 1
       Width = 27
-      Height = 462
+      Height = 461
       Align = alLeft
       Caption = 'rrlEndPoint'
       Font.Charset = ANSI_CHARSET
@@ -605,7 +591,6 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'End Point'
       LabelWidth = 27
       ExpandedWidth = 399
-      ExplicitHeight = 461
       object pnlEndpoint: TPanel
         Left = 28
         Top = 1
@@ -765,7 +750,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 534
       Top = 1
       Width = 27
-      Height = 462
+      Height = 461
       Align = alLeft
       Caption = 'rrlSWR'
       Font.Charset = ANSI_CHARSET
@@ -780,7 +765,6 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Surface Water Routing'
       LabelWidth = 27
       ExpandedWidth = 383
-      ExplicitHeight = 461
       object pnlSWR: TPanel
         Left = 28
         Top = 1
@@ -804,11 +788,10 @@ inherited frmGridValue: TfrmGridValue
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 371
+            Width = 103
             Height = 18
             Align = alTop
             Caption = 'SWR Reaches'
-            ExplicitWidth = 103
           end
           object rdgSwrReaches: TRbwDataGrid4
             Left = 1
@@ -940,11 +923,10 @@ inherited frmGridValue: TfrmGridValue
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 371
+            Width = 111
             Height = 18
             Align = alTop
             Caption = 'SWR Structures'
-            ExplicitWidth = 111
           end
           object rdgSwrStructures: TRbwDataGrid4
             Left = 1
@@ -1051,7 +1033,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 564
       Top = 1
       Width = 27
-      Height = 462
+      Height = 461
       Align = alLeft
       Caption = 'GNC'
       Font.Charset = ANSI_CHARSET
@@ -1066,14 +1048,15 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Ghost Node Correction'
       LabelWidth = 27
       ExpandedWidth = 412
+      ExplicitHeight = 462
       DesignSize = (
         27
-        462)
+        461)
       object rdgGhostNode: TRbwDataGrid4
         Left = 40
         Top = 9
         Width = 0
-        Height = 446
+        Height = 445
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColCount = 4
         DoubleBuffered = True
@@ -1188,13 +1171,14 @@ inherited frmGridValue: TfrmGridValue
           end>
         WordWrapRowCaptions = False
         ExplicitWidth = 393
+        ExplicitHeight = 446
       end
     end
     object rrlXt3d: TRbwRollupPanel
       Left = 594
       Top = 1
       Width = 27
-      Height = 462
+      Height = 461
       Align = alLeft
       Caption = 'rrlXt3d'
       Font.Charset = ANSI_CHARSET
@@ -1209,7 +1193,6 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'XT3D Data'
       LabelWidth = 27
       ExpandedWidth = 288
-      ExplicitHeight = 461
       object lblAngle1: TLabel
         Left = 40
         Top = 76

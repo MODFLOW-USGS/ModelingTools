@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFBORenderer.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFBORenderer.pas' rev: 35.00 (Windows)
 
 #ifndef GlfborendererHPP
 #define GlfborendererHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -70,8 +68,8 @@ private:
 	bool FHasDepth;
 	bool FHasStencil;
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
-	Glmaterial::TGLLibMaterialName FColorTextureName;
-	Glmaterial::TGLLibMaterialName FDepthTextureName;
+	System::UnicodeString FColorTextureName;
+	System::UnicodeString FDepthTextureName;
 	int FWidth;
 	int FHeight;
 	bool FForceTextureDimensions;
@@ -97,8 +95,8 @@ private:
 	TSetTextureTargetsEvent FOnSetTextureTargets;
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	void __fastcall SetMaterialLibrary(Glmaterial::TGLAbstractMaterialLibrary* const Value);
-	void __fastcall SetDepthTextureName(const Glmaterial::TGLLibMaterialName Value);
-	void __fastcall SetColorTextureName(const Glmaterial::TGLLibMaterialName Value);
+	void __fastcall SetDepthTextureName(const System::UnicodeString Value);
+	void __fastcall SetColorTextureName(const System::UnicodeString Value);
 	void __fastcall SetForceTextureDimentions(const bool Value);
 	void __fastcall SetHeight(int Value);
 	void __fastcall SetWidth(int Value);
@@ -148,8 +146,8 @@ __published:
 	__property int Width = {read=FWidth, write=SetWidth, default=256};
 	__property int Height = {read=FHeight, write=SetHeight, default=256};
 	__property float Aspect = {read=FAspect, write=FAspect, stored=StoreAspect};
-	__property Glmaterial::TGLLibMaterialName ColorTextureName = {read=FColorTextureName, write=SetColorTextureName};
-	__property Glmaterial::TGLLibMaterialName DepthTextureName = {read=FDepthTextureName, write=SetDepthTextureName};
+	__property System::UnicodeString ColorTextureName = {read=FColorTextureName, write=SetColorTextureName};
+	__property System::UnicodeString DepthTextureName = {read=FDepthTextureName, write=SetDepthTextureName};
 	__property Glmaterial::TGLAbstractMaterialLibrary* MaterialLibrary = {read=GetMaterialLibrary, write=SetMaterialLibrary};
 	__property Glcolor::TGLColor* BackgroundColor = {read=FBackgroundColor, write=SetBackgroundColor};
 	__property TGLFBOClearOptions ClearOptions = {read=FClearOptions, write=FClearOptions, nodefault};

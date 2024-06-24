@@ -850,7 +850,7 @@ var
   VerticalKArray: TDataArray;
   ISFROPT: integer;
   LocalScreenObject: TScreenObject;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   Segment: TCellElementSegment;
   PriorCol, PriorRow, PriorLayer: integer;
   LocalModel: TCustomModel;
@@ -1123,7 +1123,7 @@ var
   LayerIndex: Integer;
   DataArray2: TDataArray;
   SO: TScreenObject;
-  Index: Integer;
+  Index: NativeInt;
   Segment: TCellElementSegment;
   PriorCol, PriorRow, PriorLayer: integer;
   LocalModel: TCustomModel;

@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLBumpShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLBumpShader.pas' rev: 35.00 (Windows)
 
 #ifndef GlslbumpshaderHPP
 #define GlslbumpshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -58,17 +56,17 @@ class PASCALIMPLEMENTATION EGLSLBumpShaderException : public Glslshader::EGLSLSh
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLSLBumpShaderException(const System::UnicodeString Msg) : Glslshader::EGLSLShaderException(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLSLBumpShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : Glslshader::EGLSLShaderException(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLSLBumpShaderException(System::NativeUInt Ident)/* overload */ : Glslshader::EGLSLShaderException(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLSLBumpShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : Glslshader::EGLSLShaderException(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLSLBumpShaderException(NativeUInt Ident)/* overload */ : Glslshader::EGLSLShaderException(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLSLBumpShaderException(System::PResStringRec ResStringRec)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLSLBumpShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : Glslshader::EGLSLShaderException(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLSLBumpShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLSLBumpShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : Glslshader::EGLSLShaderException(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLSLBumpShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLSLBumpShaderException(const System::UnicodeString Msg, int AHelpContext) : Glslshader::EGLSLShaderException(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLSLBumpShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : Glslshader::EGLSLShaderException(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLSLBumpShaderException(System::NativeUInt Ident, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLSLBumpShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : Glslshader::EGLSLShaderException(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLSLBumpShaderException(NativeUInt Ident, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLSLBumpShaderException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLBumpShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLBumpShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLBumpShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLBumpShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : Glslshader::EGLSLShaderException(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLSLBumpShaderException() { }
 	
 };
@@ -88,12 +86,12 @@ private:
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
 	Gltexture::TGLTexture* FNormalTexture;
 	Gltexture::TGLTexture* FSpecularTexture;
-	Glmaterial::TGLLibMaterialName FNormalTextureName;
-	Glmaterial::TGLLibMaterialName FSpecularTextureName;
-	Glmaterial::TGLLibMaterialName __fastcall GetNormalTextureName();
-	Glmaterial::TGLLibMaterialName __fastcall GetSpecularTextureName();
-	void __fastcall SetNormalTextureName(const Glmaterial::TGLLibMaterialName Value);
-	void __fastcall SetSpecularTextureName(const Glmaterial::TGLLibMaterialName Value);
+	System::UnicodeString FNormalTextureName;
+	System::UnicodeString FSpecularTextureName;
+	System::UnicodeString __fastcall GetNormalTextureName();
+	System::UnicodeString __fastcall GetSpecularTextureName();
+	void __fastcall SetNormalTextureName(const System::UnicodeString Value);
+	void __fastcall SetSpecularTextureName(const System::UnicodeString Value);
 	void __fastcall SetSpecularTexture(Gltexture::TGLTexture* const Value);
 	void __fastcall SetNormalTexture(Gltexture::TGLTexture* const Value);
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
@@ -113,8 +111,8 @@ public:
 	__property float LightPower = {read=FLightPower, write=FLightPower};
 	__property Gltexture::TGLTexture* NormalTexture = {read=FNormalTexture, write=SetNormalTexture};
 	__property Gltexture::TGLTexture* SpecularTexture = {read=FSpecularTexture, write=SetSpecularTexture};
-	__property Glmaterial::TGLLibMaterialName NormalTextureName = {read=GetNormalTextureName, write=SetNormalTextureName};
-	__property Glmaterial::TGLLibMaterialName SpecularTextureName = {read=GetSpecularTextureName, write=SetSpecularTextureName};
+	__property System::UnicodeString NormalTextureName = {read=GetNormalTextureName, write=SetNormalTextureName};
+	__property System::UnicodeString SpecularTextureName = {read=GetSpecularTextureName, write=SetSpecularTextureName};
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
 public:
 	/* TGLCustomGLSLShader.Destroy */ inline __fastcall virtual ~TGLBaseCustomGLSLBumpShader() { }
@@ -144,7 +142,7 @@ class PASCALIMPLEMENTATION TGLBaseCustomGLSLBumpShaderMT : public TGLBaseCustomG
 	
 private:
 	Gltexture::TGLTexture* FMainTexture;
-	Glmaterial::TGLLibMaterialName FMainTextureName;
+	System::UnicodeString FMainTextureName;
 	System::UnicodeString __fastcall GetMainTextureName();
 	void __fastcall SetMainTextureName(const System::UnicodeString Value);
 	
@@ -154,7 +152,7 @@ protected:
 	
 public:
 	__property Gltexture::TGLTexture* MainTexture = {read=FMainTexture, write=FMainTexture};
-	__property Glmaterial::TGLLibMaterialName MainTextureName = {read=GetMainTextureName, write=SetMainTextureName};
+	__property System::UnicodeString MainTextureName = {read=GetMainTextureName, write=SetMainTextureName};
 public:
 	/* TGLBaseCustomGLSLBumpShader.Create */ inline __fastcall virtual TGLBaseCustomGLSLBumpShaderMT(System::Classes::TComponent* AOwner) : TGLBaseCustomGLSLBumpShader(AOwner) { }
 	
@@ -210,8 +208,8 @@ class PASCALIMPLEMENTATION TGLCustomGLSLBumpShader : public TGLBaseCustomGLSLBum
 	typedef TGLBaseCustomGLSLBumpShader inherited;
 	
 private:
-	void __fastcall SetShaderTextures(Gltexture::TGLTexture* const *Textures, const System::NativeInt Textures_High);
-	void __fastcall GetShaderTextures(Gltexture::TGLTexture* *Textures, const System::NativeInt Textures_High);
+	void __fastcall SetShaderTextures(Gltexture::TGLTexture* const *Textures, const int Textures_High);
+	void __fastcall GetShaderTextures(Gltexture::TGLTexture* *Textures, const int Textures_High);
 	void __fastcall SetShaderColorParams(const Glvectortypes::TVector4f &AAmbientColor, const Glvectortypes::TVector4f &ADiffuseColor, const Glvectortypes::TVector4f &ASpecularcolor);
 	void __fastcall GetShaderColorParams(Glvectortypes::TVector4f &AAmbientColor, Glvectortypes::TVector4f &ADiffuseColor, Glvectortypes::TVector4f &ASpecularcolor);
 	void __fastcall SetShaderMiscParameters(Glcadencer::TGLCadencer* const ACadencer, Glmaterial::TGLMaterialLibrary* const AMatLib, const Glcustomshader::TGLLightSourceSet ALightSources);
@@ -257,8 +255,8 @@ private:
 	float FLightCompensation;
 	void __fastcall SetLightSources(const Glcustomshader::TGLLightSourceSet Value);
 	void __fastcall SetLightCompensation(const float Value);
-	void __fastcall SetShaderTextures(Gltexture::TGLTexture* const *Textures, const System::NativeInt Textures_High);
-	void __fastcall GetShaderTextures(Gltexture::TGLTexture* *Textures, const System::NativeInt Textures_High);
+	void __fastcall SetShaderTextures(Gltexture::TGLTexture* const *Textures, const int Textures_High);
+	void __fastcall GetShaderTextures(Gltexture::TGLTexture* *Textures, const int Textures_High);
 	void __fastcall SetShaderColorParams(const Glvectortypes::TVector4f &AAmbientColor, const Glvectortypes::TVector4f &ADiffuseColor, const Glvectortypes::TVector4f &ASpecularcolor);
 	void __fastcall GetShaderColorParams(Glvectortypes::TVector4f &AAmbientColor, Glvectortypes::TVector4f &ADiffuseColor, Glvectortypes::TVector4f &ASpecularcolor);
 	void __fastcall SetShaderMiscParameters(Glcadencer::TGLCadencer* const ACadencer, Glmaterial::TGLMaterialLibrary* const AMatLib, const Glcustomshader::TGLLightSourceSet ALightSources);

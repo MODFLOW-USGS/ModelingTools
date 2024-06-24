@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLCustomShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glcustomshader.pas' rev: 36.00 (Windows)
 
 #ifndef GlcustomshaderHPP
 #define GlcustomshaderHPP
@@ -15,23 +15,23 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLTexture.hpp>
-#include <GLCadencer.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLStrings.hpp>
-#include <GLContext.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLMaterial.hpp>
-#include <GLVectorLists.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLSLParameter.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectortypes.hpp>
+#include <Gltexture.hpp>
+#include <Glcadencer.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glstrings.hpp>
+#include <Glcontext.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glmaterial.hpp>
+#include <Glvectorlists.hpp>
+#include <Gltextureformat.hpp>
+#include <Glslparameter.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -307,7 +307,7 @@ public:
 enum DECLSPEC_DENUM TGLBlendingModeEx : unsigned char { bmxOpaque, bmxTransparency, bmxAdditive, bmxAlphaTest50, bmxAlphaTest100, bmxModulate, bmxDestColorOne, bmxDestAlphaOne };
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 glsShaderMaxLightSources = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 glsShaderMaxLightSources = System::Int8(0x8);
 extern DELPHI_PACKAGE void __fastcall GetActiveLightsList(Glvectorlists::TIntegerList* const ALightIDs);
 extern DELPHI_PACKAGE bool __fastcall IsFogEnabled(const TGLShaderFogSupport AFogSupportMode, Glrendercontextinfo::TGLRenderContextInfo &rci);
 extern DELPHI_PACKAGE void __fastcall CopyScreentoTexture(const Glrendercontextinfo::TGLSize &ViewPortSize, const System::Word TextureTarget = (System::Word)(0xde1));

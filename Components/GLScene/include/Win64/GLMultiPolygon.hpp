@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMultiPolygon.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glmultipolygon.pas' rev: 36.00 (Windows)
 
 #ifndef GlmultipolygonHPP
 #define GlmultipolygonHPP
@@ -15,25 +15,25 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <OpenGLAdapter.hpp>
-#include <GLSpline.hpp>
-#include <XOpenGL.hpp>
-#include <GLContext.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorLists.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLScene.hpp>
-#include <GLObjects.hpp>
-#include <GLGeomObjects.hpp>
-#include <GLNodes.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLCoordinates.hpp>
-#include <GLRenderContextInfo.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Opengladapter.hpp>
+#include <Glspline.hpp>
+#include <Xopengl.hpp>
+#include <Glcontext.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorlists.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glscene.hpp>
+#include <Globjects.hpp>
+#include <Glgeomobjects.hpp>
+#include <Glnodes.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glcoordinates.hpp>
+#include <Glrendercontextinfo.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

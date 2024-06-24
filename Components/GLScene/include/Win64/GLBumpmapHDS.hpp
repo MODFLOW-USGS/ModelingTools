@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLBumpmapHDS.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glbumpmaphds.pas' rev: 36.00 (Windows)
 
 #ifndef GlbumpmaphdsHPP
 #define GlbumpmaphdsHPP
@@ -15,19 +15,19 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <System.SyncObjs.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLCoordinates.hpp>
-#include <GLHeightData.hpp>
-#include <GLGraphics.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLTexture.hpp>
-#include <GLMaterial.hpp>
-#include <GLUtils.hpp>
-#include <GLVectorTypes.hpp>
+#include <System.Sysutils.hpp>
+#include <System.Syncobjs.hpp>
+#include <Opengltokens.hpp>
+#include <Glcoordinates.hpp>
+#include <Glheightdata.hpp>
+#include <Glgraphics.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Gltexture.hpp>
+#include <Glmaterial.hpp>
+#include <Glutils.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSMemo.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSMemo.pas' rev: 35.00 (Windows)
 
 #ifndef GlsmemoHPP
 #define GlsmemoHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -310,7 +308,7 @@ public:
 	/* TStringList.Create */ inline __fastcall TGLSMemoStrings(bool OwnsObjects)/* overload */ : System::Classes::TStringList(OwnsObjects) { }
 	/* TStringList.Create */ inline __fastcall TGLSMemoStrings(System::WideChar QuoteChar, System::WideChar Delimiter)/* overload */ : System::Classes::TStringList(QuoteChar, Delimiter) { }
 	/* TStringList.Create */ inline __fastcall TGLSMemoStrings(System::WideChar QuoteChar, System::WideChar Delimiter, System::Classes::TStringsOptions Options)/* overload */ : System::Classes::TStringList(QuoteChar, Delimiter, Options) { }
-	/* TStringList.Create */ inline __fastcall TGLSMemoStrings(System::Classes::TDuplicates Duplicates, bool Sorted, bool CaseSensitive)/* overload */ : System::Classes::TStringList(Duplicates, Sorted, CaseSensitive) { }
+	/* TStringList.Create */ inline __fastcall TGLSMemoStrings(System::Types::TDuplicates Duplicates, bool Sorted, bool CaseSensitive)/* overload */ : System::Classes::TStringList(Duplicates, Sorted, CaseSensitive) { }
 	
 	/* Hoisted overloads: */
 	
@@ -640,7 +638,7 @@ private:
 	int __fastcall GetVisible(int Index);
 	int __fastcall MaxLength();
 	HIDESBASE MESSAGE void __fastcall WMSize(Winapi::Messages::TWMSize &Msg);
-	MESSAGE void __fastcall WMGetDlgCode(Winapi::Messages::TWMGetDlgCode &Msg);
+	MESSAGE void __fastcall WMGetDlgCode(Winapi::Messages::TWMNoParams &Msg);
 	HIDESBASE MESSAGE void __fastcall WMEraseBkgnd(Winapi::Messages::TWMEraseBkgnd &Msg);
 	HIDESBASE MESSAGE void __fastcall WMSetCursor(Winapi::Messages::TWMSetCursor &Msg);
 	HIDESBASE MESSAGE void __fastcall WMSetFocus(Winapi::Messages::TWMSetFocus &Msg);
@@ -650,7 +648,7 @@ private:
 	void __fastcall ResizeEditor();
 	void __fastcall ResizeScrollBars();
 	void __fastcall ResizeGutter();
-	void __fastcall DoCommand(TCommand cmd, const System::Classes::TShiftState AShift);
+	void __fastcall DoCommand(int cmd, const System::Classes::TShiftState AShift);
 	void __fastcall DrawLine(int LineNo);
 	bool __fastcall IsLineVisible(int LineNo);
 	void __fastcall FreshLineBitmap();
@@ -844,7 +842,7 @@ public:
 	/* TStringList.Create */ inline __fastcall TGLSMemoStringList(bool OwnsObjects)/* overload */ : System::Classes::TStringList(OwnsObjects) { }
 	/* TStringList.Create */ inline __fastcall TGLSMemoStringList(System::WideChar QuoteChar, System::WideChar Delimiter)/* overload */ : System::Classes::TStringList(QuoteChar, Delimiter) { }
 	/* TStringList.Create */ inline __fastcall TGLSMemoStringList(System::WideChar QuoteChar, System::WideChar Delimiter, System::Classes::TStringsOptions Options)/* overload */ : System::Classes::TStringList(QuoteChar, Delimiter, Options) { }
-	/* TStringList.Create */ inline __fastcall TGLSMemoStringList(System::Classes::TDuplicates Duplicates, bool Sorted, bool CaseSensitive)/* overload */ : System::Classes::TStringList(Duplicates, Sorted, CaseSensitive) { }
+	/* TStringList.Create */ inline __fastcall TGLSMemoStringList(System::Types::TDuplicates Duplicates, bool Sorted, bool CaseSensitive)/* overload */ : System::Classes::TStringList(Duplicates, Sorted, CaseSensitive) { }
 	/* TStringList.Destroy */ inline __fastcall virtual ~TGLSMemoStringList() { }
 	
 };
@@ -864,7 +862,7 @@ private:
 	TGLSMemoStringList* FWordList;
 	TGLSMemoStringList* FSpecialList;
 	TGLSMemoStringList* FBracketList;
-	TDelimiters FDelimiters;
+	System::Sysutils::TSysCharSet FDelimiters;
 	int FInBrackets;
 	System::UnicodeString FLineComment;
 	System::UnicodeString FMultiCommentLeft;
@@ -890,10 +888,10 @@ protected:
 public:
 	__fastcall virtual TGLSSynHiMemo(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLSSynHiMemo();
-	void __fastcall AddWord(int StyleNo, const System::UnicodeString *ArrS, const System::NativeInt ArrS_High);
-	void __fastcall AddSpecial(int StyleNo, const System::UnicodeString *ArrS, const System::NativeInt ArrS_High);
-	void __fastcall AddBrackets(int StyleNo, const System::UnicodeString *ArrS, const System::NativeInt ArrS_High);
-	__property TDelimiters Delimiters = {read=FDelimiters, write=FDelimiters};
+	void __fastcall AddWord(int StyleNo, const System::UnicodeString *ArrS, const int ArrS_High);
+	void __fastcall AddSpecial(int StyleNo, const System::UnicodeString *ArrS, const int ArrS_High);
+	void __fastcall AddBrackets(int StyleNo, const System::UnicodeString *ArrS, const int ArrS_High);
+	__property System::Sysutils::TSysCharSet Delimiters = {read=FDelimiters, write=FDelimiters};
 	
 __published:
 	__property PopupMenu;

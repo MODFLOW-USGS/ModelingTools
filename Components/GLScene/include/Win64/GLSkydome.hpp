@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSkydome.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glskydome.pas' rev: 36.00 (Windows)
 
 #ifndef GlskydomeHPP
 #define GlskydomeHPP
@@ -15,22 +15,22 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <System.UITypes.hpp>
+#include <System.Sysutils.hpp>
+#include <System.Uitypes.hpp>
 #include <System.Math.hpp>
 #include <Vcl.Graphics.hpp>
-#include <OpenGLAdapter.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLContext.hpp>
-#include <GLState.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLGraphics.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLColor.hpp>
-#include <GLRenderContextInfo.hpp>
+#include <Opengladapter.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glcontext.hpp>
+#include <Glstate.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glgraphics.hpp>
+#include <Glvectortypes.hpp>
+#include <Glcolor.hpp>
+#include <Glrendercontextinfo.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

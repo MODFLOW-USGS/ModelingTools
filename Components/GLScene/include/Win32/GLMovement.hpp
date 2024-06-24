@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMovement.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLMovement.pas' rev: 35.00 (Windows)
 
 #ifndef GlmovementHPP
 #define GlmovementHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -47,26 +45,26 @@ class PASCALIMPLEMENTATION TGLPathNode : public System::Classes::TCollectionItem
 	typedef System::Classes::TCollectionItem inherited;
 	
 private:
-	Glvectorgeometry::TVector FPosition;
-	Glvectorgeometry::TVector FScale;
-	Glvectorgeometry::TVector FRotation;
-	Glvectorgeometry::TVector FDirection;
-	Glvectorgeometry::TVector FUp;
+	Glvectortypes::TVector4f FPosition;
+	Glvectortypes::TVector4f FScale;
+	Glvectortypes::TVector4f FRotation;
+	Glvectortypes::TVector4f FDirection;
+	Glvectortypes::TVector4f FUp;
 	float FSpeed;
-	void __fastcall SetPositionAsVector(const Glvectorgeometry::TVector &Value);
-	void __fastcall SetRotationAsVector(const Glvectorgeometry::TVector &Value);
-	void __fastcall SetScaleAsVector(const Glvectorgeometry::TVector &Value);
-	Opengltokens::TGLfloat __fastcall GetPositionCoordinate(const int Index);
-	void __fastcall SetPositionCoordinate(const int Index, const Opengltokens::TGLfloat AValue);
-	Opengltokens::TGLfloat __fastcall GetRotationCoordinate(const int Index);
-	void __fastcall SetRotationCoordinate(const int Index, const Opengltokens::TGLfloat AValue);
-	Opengltokens::TGLfloat __fastcall GetScaleCoordinate(const int Index);
-	void __fastcall SetScaleCoordinate(const int Index, const Opengltokens::TGLfloat AValue);
+	void __fastcall SetPositionAsVector(const Glvectortypes::TVector4f &Value);
+	void __fastcall SetRotationAsVector(const Glvectortypes::TVector4f &Value);
+	void __fastcall SetScaleAsVector(const Glvectortypes::TVector4f &Value);
+	float __fastcall GetPositionCoordinate(const int Index);
+	void __fastcall SetPositionCoordinate(const int Index, const float AValue);
+	float __fastcall GetRotationCoordinate(const int Index);
+	void __fastcall SetRotationCoordinate(const int Index, const float AValue);
+	float __fastcall GetScaleCoordinate(const int Index);
+	void __fastcall SetScaleCoordinate(const int Index, const float AValue);
 	void __fastcall SetSpeed(const float Value);
-	Opengltokens::TGLfloat __fastcall GetDirectionCoordinate(const int Index);
-	void __fastcall SetDirectionCoordinate(const int Index, const Opengltokens::TGLfloat AValue);
-	Opengltokens::TGLfloat __fastcall GetUpCoordinate(const int Index);
-	void __fastcall SetUpCoordinate(const int Index, const Opengltokens::TGLfloat AValue);
+	float __fastcall GetDirectionCoordinate(const int Index);
+	void __fastcall SetDirectionCoordinate(const int Index, const float AValue);
+	float __fastcall GetUpCoordinate(const int Index);
+	void __fastcall SetUpCoordinate(const int Index, const float AValue);
 	
 protected:
 	virtual System::UnicodeString __fastcall GetDisplayName();
@@ -76,34 +74,34 @@ protected:
 public:
 	__fastcall virtual TGLPathNode(System::Classes::TCollection* Collection);
 	__fastcall virtual ~TGLPathNode();
-	Opengltokens::PGLfloat __fastcall PositionAsAddress();
-	Opengltokens::PGLfloat __fastcall RotationAsAddress();
-	Opengltokens::PGLfloat __fastcall ScaleAsAddress();
+	System::PSingle __fastcall PositionAsAddress();
+	System::PSingle __fastcall RotationAsAddress();
+	System::PSingle __fastcall ScaleAsAddress();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	void __fastcall InitializeByObject(Glscene::TGLBaseSceneObject* const Obj);
 	bool __fastcall EqualNode(TGLPathNode* const aNode);
-	__property Glvectorgeometry::TVector RotationAsVector = {read=FRotation, write=SetRotationAsVector};
-	__property Glvectorgeometry::TVector PositionAsVector = {read=FPosition, write=SetPositionAsVector};
-	__property Glvectorgeometry::TVector ScaleAsVector = {read=FScale, write=SetScaleAsVector};
-	__property Glvectorgeometry::TVector UpAsVector = {read=FUp, write=FUp};
-	__property Glvectorgeometry::TVector DirectionAsVector = {read=FDirection, write=FDirection};
+	__property Glvectortypes::TVector4f RotationAsVector = {read=FRotation, write=SetRotationAsVector};
+	__property Glvectortypes::TVector4f PositionAsVector = {read=FPosition, write=SetPositionAsVector};
+	__property Glvectortypes::TVector4f ScaleAsVector = {read=FScale, write=SetScaleAsVector};
+	__property Glvectortypes::TVector4f UpAsVector = {read=FUp, write=FUp};
+	__property Glvectortypes::TVector4f DirectionAsVector = {read=FDirection, write=FDirection};
 	
 __published:
-	__property Opengltokens::TGLfloat X = {read=GetPositionCoordinate, write=SetPositionCoordinate, index=0};
-	__property Opengltokens::TGLfloat Y = {read=GetPositionCoordinate, write=SetPositionCoordinate, index=1};
-	__property Opengltokens::TGLfloat Z = {read=GetPositionCoordinate, write=SetPositionCoordinate, index=2};
-	__property Opengltokens::TGLfloat PitchAngle = {read=GetRotationCoordinate, write=SetRotationCoordinate, index=0};
-	__property Opengltokens::TGLfloat TurnAngle = {read=GetRotationCoordinate, write=SetRotationCoordinate, index=1};
-	__property Opengltokens::TGLfloat RollAngle = {read=GetRotationCoordinate, write=SetRotationCoordinate, index=2};
-	__property Opengltokens::TGLfloat ScaleX = {read=GetScaleCoordinate, write=SetScaleCoordinate, index=0};
-	__property Opengltokens::TGLfloat ScaleY = {read=GetScaleCoordinate, write=SetScaleCoordinate, index=1};
-	__property Opengltokens::TGLfloat ScaleZ = {read=GetScaleCoordinate, write=SetScaleCoordinate, index=2};
-	__property Opengltokens::TGLfloat DirectionX = {read=GetDirectionCoordinate, write=SetDirectionCoordinate, index=0};
-	__property Opengltokens::TGLfloat DirectionY = {read=GetDirectionCoordinate, write=SetDirectionCoordinate, index=1};
-	__property Opengltokens::TGLfloat DirectionZ = {read=GetDirectionCoordinate, write=SetDirectionCoordinate, index=2};
-	__property Opengltokens::TGLfloat UpX = {read=GetUpCoordinate, write=SetUpCoordinate, index=0};
-	__property Opengltokens::TGLfloat UpY = {read=GetUpCoordinate, write=SetUpCoordinate, index=1};
-	__property Opengltokens::TGLfloat UpZ = {read=GetUpCoordinate, write=SetUpCoordinate, index=2};
+	__property float X = {read=GetPositionCoordinate, write=SetPositionCoordinate, index=0};
+	__property float Y = {read=GetPositionCoordinate, write=SetPositionCoordinate, index=1};
+	__property float Z = {read=GetPositionCoordinate, write=SetPositionCoordinate, index=2};
+	__property float PitchAngle = {read=GetRotationCoordinate, write=SetRotationCoordinate, index=0};
+	__property float TurnAngle = {read=GetRotationCoordinate, write=SetRotationCoordinate, index=1};
+	__property float RollAngle = {read=GetRotationCoordinate, write=SetRotationCoordinate, index=2};
+	__property float ScaleX = {read=GetScaleCoordinate, write=SetScaleCoordinate, index=0};
+	__property float ScaleY = {read=GetScaleCoordinate, write=SetScaleCoordinate, index=1};
+	__property float ScaleZ = {read=GetScaleCoordinate, write=SetScaleCoordinate, index=2};
+	__property float DirectionX = {read=GetDirectionCoordinate, write=SetDirectionCoordinate, index=0};
+	__property float DirectionY = {read=GetDirectionCoordinate, write=SetDirectionCoordinate, index=1};
+	__property float DirectionZ = {read=GetDirectionCoordinate, write=SetDirectionCoordinate, index=2};
+	__property float UpX = {read=GetUpCoordinate, write=SetUpCoordinate, index=0};
+	__property float UpY = {read=GetUpCoordinate, write=SetUpCoordinate, index=1};
+	__property float UpZ = {read=GetUpCoordinate, write=SetUpCoordinate, index=2};
 	__property float Speed = {read=FSpeed, write=SetSpeed};
 };
 

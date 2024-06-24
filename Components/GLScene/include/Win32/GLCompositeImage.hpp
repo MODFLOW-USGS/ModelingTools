@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLCompositeImage.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLCompositeImage.pas' rev: 35.00 (Windows)
 
 #ifndef GlcompositeimageHPP
 #define GlcompositeimageHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -36,7 +34,7 @@ class PASCALIMPLEMENTATION TGLCompositeImage : public Gltexture::TGLTextureImage
 	typedef Gltexture::TGLTextureImage inherited;
 	
 private:
-	Glgraphics::TGLBitmap32* FBitmap;
+	Glgraphics::TGLImage* FBitmap;
 	int FWidth;
 	int FHeight;
 	int FDepth;
@@ -54,7 +52,7 @@ public:
 	__fastcall virtual TGLCompositeImage(System::Classes::TPersistent* AOwner);
 	__fastcall virtual ~TGLCompositeImage();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	virtual Glgraphics::TGLBitmap32* __fastcall GetBitmap32();
+	virtual Glgraphics::TGLImage* __fastcall GetBitmap32();
 	virtual void __fastcall ReleaseBitmap32();
 	virtual void __fastcall SaveToFile(const System::UnicodeString fileName);
 	virtual void __fastcall LoadFromFile(const System::UnicodeString fileName);

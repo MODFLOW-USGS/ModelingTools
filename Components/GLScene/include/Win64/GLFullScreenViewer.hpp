@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFullScreenViewer.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glfullscreenviewer.pas' rev: 36.00 (Windows)
 
 #ifndef GlfullscreenviewerHPP
 #define GlfullscreenviewerHPP
@@ -15,21 +15,21 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <Winapi.Messages.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <Vcl.Forms.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.Menus.hpp>
-#include <OpenGLTokens.hpp>
-#include <OpenGLAdapter.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLContext.hpp>
-#include <GLScene.hpp>
-#include <GLWin32Viewer.hpp>
-#include <System.UITypes.hpp>
+#include <Opengltokens.hpp>
+#include <Opengladapter.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glcontext.hpp>
+#include <Glscene.hpp>
+#include <Glwin32viewer.hpp>
+#include <System.Uitypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

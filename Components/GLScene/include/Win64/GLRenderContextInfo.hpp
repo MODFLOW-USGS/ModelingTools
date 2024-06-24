@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLRenderContextInfo.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glrendercontextinfo.pas' rev: 36.00 (Windows)
 
 #ifndef GlrendercontextinfoHPP
 #define GlrendercontextinfoHPP
@@ -15,13 +15,13 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLState.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLColor.hpp>
-#include <GLVectorTypes.hpp>
+#include <Sysinit.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glstate.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glcolor.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

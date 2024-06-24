@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FileX.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FileX.pas' rev: 35.00 (Windows)
 
 #ifndef FilexHPP
 #define FilexHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -129,12 +127,12 @@ class PASCALIMPLEMENTATION TDXFrame : public TDXNode
 	typedef TDXNode inherited;
 	
 private:
-	Glvectorgeometry::TMatrix FMatrix;
+	Glvectortypes::TMatrix4f FMatrix;
 	
 public:
 	__fastcall virtual TDXFrame();
-	Glvectorgeometry::TMatrix __fastcall GlobalMatrix();
-	__property Glvectorgeometry::TMatrix Matrix = {read=FMatrix, write=FMatrix};
+	Glvectortypes::TMatrix4f __fastcall GlobalMatrix();
+	__property Glvectortypes::TMatrix4f Matrix = {read=FMatrix, write=FMatrix};
 public:
 	/* TDXNode.CreateOwned */ inline __fastcall TDXFrame(TDXNode* AOwner) : TDXNode(AOwner) { }
 	

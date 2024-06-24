@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLShadowHDS.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glshadowhds.pas' rev: 36.00 (Windows)
 
 #ifndef GlshadowhdsHPP
 #define GlshadowhdsHPP
@@ -15,19 +15,19 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLVectorLists.hpp>
-#include <GLHeightData.hpp>
-#include <GLGraphics.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLTexture.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLCoordinates.hpp>
-#include <GLMaterial.hpp>
+#include <Opengltokens.hpp>
+#include <Glvectorlists.hpp>
+#include <Glheightdata.hpp>
+#include <Glgraphics.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Gltexture.hpp>
+#include <Glvectortypes.hpp>
+#include <Glcoordinates.hpp>
+#include <Glmaterial.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -1195,7 +1195,7 @@ var
   BoundaryIndex: Integer;
   PArray: TDataArray;
   LocalScreenObject: TScreenObject;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   Segment: TCellElementSegment;
   PriorCol, PriorRow, PriorLayer: integer;
   LocalModel: TCustomModel;

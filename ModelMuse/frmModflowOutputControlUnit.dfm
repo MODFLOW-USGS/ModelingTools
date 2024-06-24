@@ -4,8 +4,9 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
   Caption = 'MODFLOW Output Control'
   ClientHeight = 402
   ClientWidth = 600
-  ExplicitWidth = 612
-  ExplicitHeight = 440
+  StyleElements = [seFont, seClient, seBorder]
+  ExplicitWidth = 616
+  ExplicitHeight = 441
   TextHeight = 18
   object JvNetscapeSplitter1: TJvNetscapeSplitter
     Left = 121
@@ -26,8 +27,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 360
-    ExplicitWidth = 596
     DesignSize = (
       600
       41)
@@ -41,7 +40,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 316
     end
     object btnOK: TBitBtn
       Left = 408
@@ -53,7 +51,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 404
     end
     object btnCancel: TBitBtn
       Left = 496
@@ -64,7 +61,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 492
     end
   end
   object pltrPageNavigator: TJvPageListTreeView
@@ -82,25 +78,14 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
     RowSelect = True
     TabOrder = 0
     OnCustomDrawItem = pltrPageNavigatorCustomDrawItem
-    Items.NodeData = {
-      03060000002C0000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000
-      00000000000107470065006E006500720061006C002600000000000000000000
-      00FFFFFFFFFFFFFFFFFFFFFFFF0100000000000000010448006500610064002E
-      0000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF020000000000000001
-      08440072006100770064006F0077006E002A0000000000000000000000FFFFFF
-      FFFFFFFFFFFFFFFFFF0300000000000000010642007500640067006500740026
-      0000000000000000000000FFFFFFFFFFFFFFFF00000000040000000000000001
-      044D00540033004400240000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
-      FF00000000000000000103470057005400}
-    Items.Links = {06000000000000000100000002000000030000000400000000000000}
-    ExplicitHeight = 360
+    Items.Links = {00000000}
   end
   object jvPages: TJvPageList
     Left = 131
     Top = 0
     Width = 469
     Height = 361
-    ActivePage = jvspBudget
+    ActivePage = jvspGeneral
     PropagateEnable = False
     Align = alClient
     OnChange = jvPagesChange
@@ -112,29 +97,31 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       HelpType = htKeyword
       HelpKeyword = 'General_Pane'
       Caption = 'jvspGeneral'
+      ExplicitLeft = 6
+      ExplicitTop = -24
       DesignSize = (
         469
         361)
       object Comments: TLabel
         Left = 6
-        Top = 144
+        Top = 153
         Width = 76
         Height = 18
         Caption = 'Comments'
       end
       object lblOutputSuppression: TLabel
         Left = 6
-        Top = 78
-        Width = 351
+        Top = 95
+        Width = 375
         Height = 18
-        Caption = 'Output suppression (LSTLVL MODFLOW-OWHM) '
+        Caption = 'Output suppression (LSTLVL MODFLOW-OWHM V1) '
       end
       object cbPrintInputArrays: TJvCheckBox
         Left = 6
         Top = 3
-        Width = 137
+        Width = 260
         Height = 18
-        Caption = 'Print input arrays'
+        Caption = 'Print input arrays (< MODFLOW 6)'
         Checked = True
         State = cbChecked
         TabOrder = 0
@@ -148,13 +135,13 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       end
       object cbPrintInputCellLists: TJvCheckBox
         Left = 6
-        Top = 26
+        Top = 48
         Width = 148
         Height = 18
         Caption = 'Print input cell lists'
         Checked = True
         State = cbChecked
-        TabOrder = 1
+        TabOrder = 2
         LinkedControls = <>
         HotTrackFont.Charset = DEFAULT_CHARSET
         HotTrackFont.Color = clWindowText
@@ -165,23 +152,23 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       end
       object memoComments: TMemo
         Left = 6
-        Top = 168
+        Top = 177
         Width = 444
-        Height = 187
+        Height = 178
         Anchors = [akLeft, akTop, akRight, akBottom]
-        TabOrder = 4
+        TabOrder = 5
       end
       object cbPrintObservations: TCheckBox
         Left = 6
-        Top = 50
+        Top = 72
         Width = 403
         Height = 17
         Caption = 'Print observation data (inverse of NOPRINT option)'
-        TabOrder = 2
+        TabOrder = 3
       end
       object comboOutputSuppression: TJvImageComboBox
         Left = 6
-        Top = 102
+        Top = 119
         Width = 345
         Height = 28
         Style = csOwnerDrawVariable
@@ -191,7 +178,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         ImageWidth = 0
         ItemHeight = 22
         ItemIndex = -1
-        TabOrder = 3
+        TabOrder = 4
         Items = <
           item
             Brush.Style = bsClear
@@ -213,6 +200,14 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
             Indent = 0
             Text = 'Show all (4)'
           end>
+      end
+      object cbEXPORT_ARRAY_ASCII: TCheckBox
+        Left = 6
+        Top = 25
+        Width = 281
+        Height = 17
+        Caption = 'Export arrays (MODFLOW 6)'
+        TabOrder = 1
       end
     end
     object jvspHeads: TJvStandardPage
@@ -243,24 +238,56 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         inherited lblOutputType: TLabel
           Width = 38
           Caption = 'Head'
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 38
+        end
+        inherited lblFrequency: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited lblN: TLabel
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited lblExternalFormat: TLabel
           Width = 211
           Caption = 'External file format (CHEDFM)'
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 211
+        end
+        inherited lblResult: TLabel
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited lblDot: TLabel
           Font.Pitch = fpVariable
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited lblListinglFormat: TLabel
           Width = 192
           Caption = 'Listing file format (IHEDFM)'
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 192
+        end
+        inherited lblSaveType: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited spN: TJvSpinEdit
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited adeD: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited adeW: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboP: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboREdit: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited comboFrequency: TJvImageComboBox
           Left = 22
           Width = 428
+          StyleElements = [seFont, seClient, seBorder]
           Anchors = [akLeft, akTop, akRight]
           DroppedWidth = 448
           Items = <
@@ -276,6 +303,15 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
             end>
           ExplicitLeft = 22
           ExplicitWidth = 428
+        end
+        inherited comboPrintStyle: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboPrintFormat: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboSaveType: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <
@@ -337,23 +373,55 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         inherited lblOutputType: TLabel
           Width = 74
           Caption = 'Drawdown'
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 74
+        end
+        inherited lblFrequency: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited lblN: TLabel
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited lblExternalFormat: TLabel
           Width = 212
           Caption = 'External file format (CDDNFM)'
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 212
+        end
+        inherited lblResult: TLabel
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited lblDot: TLabel
           Font.Pitch = fpVariable
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited lblListinglFormat: TLabel
           Width = 193
           Caption = 'Listing file format (IDDNFM)'
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 193
+        end
+        inherited lblSaveType: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited spN: TJvSpinEdit
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited adeD: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited adeW: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboP: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboREdit: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited comboFrequency: TJvImageComboBox
           Width = 428
+          StyleElements = [seFont, seClient, seBorder]
           Anchors = [akLeft, akTop, akRight]
           DroppedWidth = 448
           Items = <
@@ -368,6 +436,15 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
               Text = 'Last time step of each N'#39'th stress period'
             end>
           ExplicitWidth = 428
+        end
+        inherited comboPrintStyle: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboPrintFormat: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboSaveType: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <
@@ -409,8 +486,6 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       HelpType = htKeyword
       HelpKeyword = 'Budget_Pane'
       Caption = 'jvspBudget'
-      ExplicitWidth = 465
-      ExplicitHeight = 360
       DesignSize = (
         469
         361)
@@ -478,20 +553,17 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         ImageHeight = 0
         ImageWidth = 0
         ItemHeight = 22
-        ItemIndex = 0
+        ItemIndex = -1
         TabOrder = 1
         Items = <
           item
             Brush.Style = bsClear
             Indent = 0
-            Text = 'First N time steps and each N'#39'th time step thereafter'
           end
           item
             Brush.Style = bsClear
             Indent = 0
-            Text = 'Last time step of each N'#39'th stress period'
           end>
-        ExplicitWidth = 424
       end
       object spN: TJvSpinEdit
         Left = 44
@@ -633,12 +705,14 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         inherited Panel: TPanel
           Top = 120
           Width = 469
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitTop = 120
           ExplicitWidth = 469
           inherited lbNumber: TLabel
             Width = 218
             Height = 18
             Caption = 'Number of output times (NPRS)'
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitWidth = 218
             ExplicitHeight = 18
           end
@@ -656,6 +730,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
           end
           inherited seNumber: TJvSpinEdit
             Height = 26
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitHeight = 26
           end
         end
@@ -720,10 +795,57 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
         inherited lblOutputType: TLabel
           Width = 158
           Caption = 'Groundwater Transport'
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitWidth = 158
+        end
+        inherited lblFrequency: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited lblN: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited lblExternalFormat: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited lblResult: TLabel
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited lblDot: TLabel
           Font.Pitch = fpVariable
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited lblListinglFormat: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited lblSaveType: TLabel
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited spN: TJvSpinEdit
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited adeD: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited adeW: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboP: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboREdit: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboFrequency: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboPrintStyle: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboPrintFormat: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited comboSaveType: TJvImageComboBox
+          StyleElements = [seFont, seClient, seBorder]
         end
         inherited rcExternalFormat: TRbwController
           ControlList = <

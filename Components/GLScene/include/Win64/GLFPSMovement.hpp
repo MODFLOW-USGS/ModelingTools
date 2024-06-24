@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFPSMovement.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glfpsmovement.pas' rev: 36.00 (Windows)
 
 #ifndef GlfpsmovementHPP
 #define GlfpsmovementHPP
@@ -15,26 +15,26 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <Vcl.Graphics.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLCoordinates.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLContext.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLScene.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLVectorLists.hpp>
-#include <GLXCollection.hpp>
-#include <GLGeomObjects.hpp>
-#include <GLNavigator.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLManager.hpp>
-#include <GLState.hpp>
+#include <Opengltokens.hpp>
+#include <Glcoordinates.hpp>
+#include <Glvectortypes.hpp>
+#include <Glcontext.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glscene.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glvectorlists.hpp>
+#include <Glxcollection.hpp>
+#include <Glgeomobjects.hpp>
+#include <Glnavigator.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glmanager.hpp>
+#include <Glstate.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileSTL.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFileSTL.pas' rev: 35.00 (Windows)
 
 #ifndef GlfilestlHPP
 #define GlfilestlHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -40,7 +38,7 @@ struct DECLSPEC_DRECORD TSTLHeader
 {
 public:
 	System::StaticArray<System::Byte, 80> dummy;
-	System::LongInt nbFaces;
+	int nbFaces;
 };
 #pragma pack(pop)
 
@@ -49,10 +47,10 @@ public:
 struct DECLSPEC_DRECORD TSTLFace
 {
 public:
-	Glvectorgeometry::TAffineVector normal;
-	Glvectorgeometry::TAffineVector v1;
-	Glvectorgeometry::TAffineVector v2;
-	Glvectorgeometry::TAffineVector v3;
+	Glvectortypes::TVector3f normal;
+	Glvectortypes::TVector3f v1;
+	Glvectortypes::TVector3f v2;
+	Glvectortypes::TVector3f v3;
 	System::StaticArray<System::Byte, 2> padding;
 };
 #pragma pack(pop)

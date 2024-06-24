@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLUserShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glusershader.pas' rev: 36.00 (Windows)
 
 #ifndef GlusershaderHPP
 #define GlusershaderHPP
@@ -15,11 +15,11 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <GLMaterial.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLBaseClasses.hpp>
+#include <Glmaterial.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

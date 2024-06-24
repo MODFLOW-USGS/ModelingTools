@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLBSP.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLBSP.pas' rev: 35.00 (Windows)
 
 #ifndef GlbspHPP
 #define GlbspHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -42,7 +40,7 @@ class DELPHICLASS TFGBSPNode;
 struct DECLSPEC_DRECORD TBSPCullingSphere
 {
 public:
-	Glvectorgeometry::TVector position;
+	Glvectortypes::TVector4f position;
 	float radius;
 };
 
@@ -55,8 +53,8 @@ private:
 	
 	
 public:
-	Glvectorgeometry::TVector cameraLocal;
-	Glrendercontextinfo::PRenderContextInfo rci;
+	Glvectortypes::TVector4f cameraLocal;
+	Glrendercontextinfo::TGLRenderContextInfo *rci;
 	System::Classes::TList* faceGroups;
 	_TBSPRenderContextInfo__1 cullingSpheres;
 };
@@ -70,7 +68,7 @@ class PASCALIMPLEMENTATION TBSPClusterVisibility : public System::TObject
 	typedef System::TObject inherited;
 	
 private:
-	Glvectorgeometry::PByteArray FData;
+	Glvectorgeometry::TByteVector *FData;
 	int FSize;
 	int FBytesPerCluster;
 	int FCount;
@@ -106,7 +104,7 @@ public:
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &mrci);
 	void __fastcall CleanupUnusedNodes();
 	float __fastcall AverageDepth();
-	TFGBSPNode* __fastcall FindNodeByPoint(const Glvectorgeometry::TVector &aPoint);
+	TFGBSPNode* __fastcall FindNodeByPoint(const Glvectortypes::TVector4f &aPoint);
 	__property TBSPRenderSort RenderSort = {read=FRenderSort, write=FRenderSort, nodefault};
 	__property TBSPClusterVisibility* ClusterVisibility = {read=FClusterVisibility};
 	__property bool UseClusterVisibility = {read=FUseClusterVisibility, write=FUseClusterVisibility, nodefault};
@@ -126,7 +124,7 @@ class PASCALIMPLEMENTATION TFGBSPNode : public Glvectorfileobjects::TFGVertexInd
 	typedef Glvectorfileobjects::TFGVertexIndexList inherited;
 	
 private:
-	Glvectorgeometry::THmgPlane FSplitPlane;
+	Glvectortypes::TVector4f FSplitPlane;
 	int FPositiveSubNodeIndex;
 	int FNegativeSubNodeIndex;
 	int FCluster;
@@ -142,11 +140,11 @@ public:
 	void __fastcall CollectNoSort(TBSPRenderContextInfo &bsprci);
 	void __fastcall CollectFrontToBack(TBSPRenderContextInfo &bsprci);
 	void __fastcall CollectBackToFront(TBSPRenderContextInfo &bsprci);
-	Glvectorgeometry::THmgPlane __fastcall FindSplitPlane(float triangleSplitCost = 1.000000E+00f, float triangleImbalanceCost = 5.000000E-01f);
-	void __fastcall EvaluateSplitPlane(const Glvectorgeometry::THmgPlane &splitPlane, int &nbTriangleSplit, int &nbPositiveTriangles, int &nbNegativeTriangles);
-	void __fastcall PerformSplit(const Glvectorgeometry::THmgPlane &splitPlane, const int maxTrianglesPerLeaf = 0x7fffffff);
+	Glvectortypes::TVector4f __fastcall FindSplitPlane(float triangleSplitCost = 1.000000E+00f, float triangleImbalanceCost = 5.000000E-01f);
+	void __fastcall EvaluateSplitPlane(const Glvectortypes::TVector4f &splitPlane, int &nbTriangleSplit, int &nbPositiveTriangles, int &nbNegativeTriangles);
+	void __fastcall PerformSplit(const Glvectortypes::TVector4f &splitPlane, const int maxTrianglesPerLeaf = 0x7fffffff);
 	void __fastcall FixTJunctions(Glvectorlists::TIntegerList* const tJunctionsCandidates);
-	__property Glvectorgeometry::THmgPlane splitPlane = {read=FSplitPlane, write=FSplitPlane};
+	__property Glvectortypes::TVector4f splitPlane = {read=FSplitPlane, write=FSplitPlane};
 	__property int PositiveSubNodeIndex = {read=FPositiveSubNodeIndex, write=FPositiveSubNodeIndex, nodefault};
 	__property int NegativeSubNodeIndex = {read=FNegativeSubNodeIndex, write=FNegativeSubNodeIndex, nodefault};
 	__property int Cluster = {read=FCluster, write=FCluster, nodefault};

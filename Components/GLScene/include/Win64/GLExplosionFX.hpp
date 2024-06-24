@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLExplosionFx.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glexplosionfx.pas' rev: 36.00 (Windows)
 
 #ifndef GlexplosionfxHPP
 #define GlexplosionfxHPP
@@ -15,18 +15,18 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLScene.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorLists.hpp>
-#include <GLXCollection.hpp>
-#include <GLCoordinates.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLContext.hpp>
-#include <GLState.hpp>
+#include <Sysinit.hpp>
+#include <Opengltokens.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glscene.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorlists.hpp>
+#include <Glxcollection.hpp>
+#include <Glcoordinates.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glcontext.hpp>
+#include <Glstate.hpp>
 #include <System.Classes.hpp>
 
 //-- user supplied -----------------------------------------------------------

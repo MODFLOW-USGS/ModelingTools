@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSceneForm.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glsceneform.pas' rev: 36.00 (Windows)
 
 #ifndef GlsceneformHPP
 #define GlsceneformHPP
@@ -15,17 +15,17 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <Winapi.Messages.hpp>
 #include <System.Classes.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.Forms.hpp>
-#include <GLScene.hpp>
-#include <GLContext.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLScreen.hpp>
-#include <GLWin32Viewer.hpp>
+#include <Glscene.hpp>
+#include <Glcontext.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glscreen.hpp>
+#include <Glwin32viewer.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -136,9 +136,9 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 lcl_major = System::Int8(0x0);
-static const System::Int8 lcl_minor = System::Int8(0x0);
-static const System::Int8 lcl_release = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 lcl_major = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 lcl_minor = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 lcl_release = System::Int8(0x0);
 }	/* namespace Glsceneform */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLSCENEFORM)
 using namespace Glsceneform;

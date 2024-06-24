@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Resamplers.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gr32_resamplers.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_resamplersHPP
 #define Gr32_resamplersHPP
@@ -15,18 +15,18 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <System.Types.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GR32.hpp>
-#include <GR32_Transforms.hpp>
-#include <GR32_Containers.hpp>
-#include <GR32_OrdinalMaps.hpp>
-#include <GR32_Blend.hpp>
-#include <GR32_System.hpp>
-#include <GR32_Bindings.hpp>
+#include <System.Sysutils.hpp>
+#include <Gr32.hpp>
+#include <Gr32_transforms.hpp>
+#include <Gr32_containers.hpp>
+#include <Gr32_ordinalmaps.hpp>
+#include <Gr32_blend.hpp>
+#include <Gr32_system.hpp>
+#include <Gr32_bindings.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -891,7 +891,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 MAX_KERNEL_WIDTH = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 MAX_KERNEL_WIDTH = System::Int8(0x10);
 extern DELPHI_PACKAGE Gr32_containers::TClassList* KernelList;
 extern DELPHI_PACKAGE Gr32_containers::TClassList* ResamplerList;
 extern DELPHI_PACKAGE TBufferEntry EMPTY_ENTRY;

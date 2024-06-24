@@ -7424,7 +7424,7 @@ var
   ColIndex, LayerIndex: integer;
   CellLocation3D: T3DRealPoint;
   Expression: TExpression;
-  SegmentIndex: integer;
+  SegmentIndex: NativeInt;
   ASegment: TCellElementSegment;
   RowIndex: Integer;
   Grid: TCustomModelGrid;
@@ -7655,7 +7655,7 @@ var
   ColIndex, LayerIndex: integer;
   CellLocation3D: T3DRealPoint;
   Expression: TExpression;
-  SegmentIndex: integer;
+  SegmentIndex: NativeInt;
   ASegment: TCellElementSegment;
   RowIndex: Integer;
   Grid: TCustomModelGrid;
@@ -11708,7 +11708,7 @@ function TScreenObject.ObjectSectionIntersectLength(const Col, Row,
   Layer, Section: integer; AModel: TBaseModel): real;
 var
   LocalSegments: TCellElementSegmentList;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   Segment: TCellElementSegment;
 begin
 
@@ -11754,7 +11754,7 @@ end;
 function TScreenObject.ObjectIntersectLength(const Col, Row,
   Layer: integer; AModel: TBaseModel): real;
 var
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   Segment: TCellElementSegment;
   LocalSegments: TCellElementSegmentList;
 begin
@@ -12552,7 +12552,7 @@ var
   end;
   procedure SortSegments;
   var
-    SegIndex: Integer;
+    SegIndex: NativeInt;
   begin
     FSegments.Sort(CompareTopSegments);
     for SegIndex := 0 to FSegments.Count - 1 do
@@ -16608,7 +16608,7 @@ var
   LayerIndex, RowIndex: integer;
   CellLocation3D: T3DRealPoint;
   Expression: TExpression;
-  SegmentIndex: integer;
+  SegmentIndex: NativeInt;
   ASegment: TCellElementSegment;
   FirstColumn, LastColumn, ColIndex: integer;
   Grid: TCustomModelGrid;
@@ -19623,9 +19623,9 @@ end;
 
 procedure TScreenObject.EliminateShortSegments(AModel: TBaseModel);
 var
-  SegIndex: Integer;
-  InnerIndex: Integer;
-  SegIndex1: Integer;
+  SegIndex: NativeInt;
+  InnerIndex: NativeInt;
+  SegIndex1: NativeInt;
   EndSeg: TCellElementSegment;
   TotalSegLength: Double;
   EndIndex: Integer;
@@ -24038,7 +24038,7 @@ var
 //  TempFile: TFileStream;
   Compressor: TCompressionStream;
   LocalCount: integer;
-  Index: Integer;
+  Index: NativeInt;
   Segment: TCellElementSegment;
 //  TempSegStorage: TMemoryStream;
 begin
@@ -24075,16 +24075,18 @@ end;
 
 function TCellElementSegmentList.ClosestSegment(Location: TPoint2D;
   Anisotropy: double): TCellElementSegment;
+const
+  Zero: NativeInt = 0;
 var
   Distance, TempDistance: double;
   Segment: TCellElementSegment;
-  Index: Integer;
+  Index: NativeInt;
   Closest: TPoint2D;
   MinX: double;
   MinY: double;
   MaxX: double;
   MaxY: double;
-  Position: Integer;
+  Position: NativeInt;
   IntervalDefinitions: TSearchArray;
   LeafList: TCellElementLeafList;
   SectionList: TList;
@@ -24108,7 +24110,7 @@ var
   IntervalCheckIndex: Integer;
   EpsilonX: double;
   EpsilonY: double;
-  OtherSegment: TCellElementSegment;
+  PositionX: NativeInt;
   procedure ProcessSegment;
   begin
     if MinX > Segment.X1  then
@@ -24172,13 +24174,14 @@ begin
       FEndPoints := TRbwQuadTree.Create(nil);
       FStartPoints.MaxPoints := Max(100, Count div 10000);
       FEndPoints.MaxPoints := FStartPoints.MaxPoints;
-      Segment := Items[0];
+      Segment := Items[Zero];
       MinX := Segment.X1;
       MinY := Segment.Y1*Anisotropy;
       MaxX := MinX;
       MaxY := MinY;
       ProcessSegment;
-      Segment := Items[Count-1];
+      PositionX := Count-1;
+      Segment := Items[PositionX];
       ProcessSegment;
       for Index := 0 to 50 do
       begin
@@ -24261,7 +24264,7 @@ begin
   end
   else if Count > 25 then
   begin
-    Segment := Items[0];
+    Segment := Items[Zero];
     SecondPoint :=Segment.SecondPointRealCoord(FScreenObject.ViewDirection);
     if (SecondPoint.x = Location.x) and (SecondPoint.y = Location.y) then
     begin
@@ -24282,7 +24285,7 @@ begin
     end;
     for Index := 0 to 24 do
     begin
-      Segment := Items[Random(Count)];
+      Segment := Items[NativeInt(Random(Count))];
 
       SecondPoint :=Segment.SecondPointRealCoord(FScreenObject.ViewDirection);
       if (SecondPoint.x = Location.x) and (SecondPoint.y = Location.y) then
@@ -24548,7 +24551,7 @@ begin
     Exit;
   end;
 
-  Segment := Items[0];
+  Segment := Items[Zero];
 
   Distance := DistanceToSegment(Segment);
   result := Segment;
@@ -26166,7 +26169,7 @@ var
   EAnnotation: string;
   IAnnotation: string;
   ASegment: TCellElementSegment;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   PriorLayer: Integer;
   PriorCol: Integer;
   Annotation: string;
@@ -26596,7 +26599,7 @@ procedure TPhastDelegate.GetSideCellsToAssign(
   AModel: TBaseModel);
 var
   ASegment: TCellElementSegment;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   PriorLayer: Integer;
   PriorRow: Integer;
   Annotation: string;
@@ -27044,7 +27047,7 @@ var
   EAnnotation: string;
   IAnnotation: string;
   ASegment: TCellElementSegment;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   PriorRow: Integer;
   PriorCol: Integer;
   Annotation: string;
@@ -29174,8 +29177,10 @@ procedure TCustomBlockGridDelegate.GetCellsToAssign(
   const EvaluatedAt: TEvaluatedAt; CellList: TCellAssignmentList;
   AssignmentLocation: TAssignmentLocation; Orientation: TDataSetOrientation;
   AModel: TBaseModel);
+const
+  Zero: NativeInt = 0;
 var
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   ASegment: TCellElementSegment;
   SelectY: Double;
   SelectX: Double;
@@ -29203,6 +29208,7 @@ var
   LocalModel: TCustomModel;
   CellIndex: Integer;
   ACell: TCellAssignment;
+  PositionCount: NativeInt;
   procedure GetCellBounds;
   begin
     case FScreenObject.ViewDirection of
@@ -29368,7 +29374,7 @@ begin
           begin
             if Segments.Count > 0 then
             begin
-              ASegment := Segments[0];
+              ASegment := Segments[Zero];
               SelectX := ASegment.X1;
               SelectY := ASegment.Y1;
             end
@@ -29382,8 +29388,8 @@ begin
           begin
             if Segments.Count > 0 then
             begin
-              ASegment := Segments[
-                Segments.Count - 1];
+              PositionCount := Segments.Count - 1;
+              ASegment := Segments[PositionCount];
               SelectX := ASegment.X2;
               SelectY := ASegment.Y2;
             end
@@ -42415,7 +42421,6 @@ begin
     FModflowMnw2Boundary.Assign(Source.FModflowMnw2Boundary);
   end;
 
-{ $IFDEF SWR}
   if Source.FModflowMnw1Boundary = nil then
   begin
     FreeAndNil(FModflowMnw1Boundary);
@@ -42428,7 +42433,6 @@ begin
     end;
     FModflowMnw1Boundary.Assign(Source.FModflowMnw1Boundary);
   end;
-{ $ENDIF}
 
   if Source.FModflowHydmodData = nil then
   begin
@@ -48654,6 +48658,8 @@ end;
 procedure TCustomMeshDelegate.GetFrontCellsToAssign(const DataSetFunction: string;
   OtherData: TObject; const DataSet: TDataArray; CellList: TCellAssignmentList;
   AssignmentLocation: TAssignmentLocation; AModel: TBaseModel);
+const
+  Zero: NativeInt = 0;
 var
   EvaluatedAt: TEvaluatedAt;
   Orientation: TDataSetOrientation;
@@ -48680,7 +48686,7 @@ var
   ASegment: TCellElementSegment;
   SelectX: Double;
   SelectY: Double;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
 //  PointAngle: Extended;
   ACellAssignment: TCellAssignment;
   Block: T2DBlock;
@@ -48694,6 +48700,7 @@ var
   LocalModel: TCustomModel;
   CellIndex: Integer;
   ACell: TCellAssignment;
+  PositionCount: NativeInt;
   procedure GetCellBounds(LayerIndex,ColIndex: integer);
   begin
     UpperLimit := Limits[LayerIndex,ColIndex].UpperLimit;
@@ -49082,7 +49089,7 @@ begin
           begin
             if Segments.Count > 0 then
             begin
-              ASegment := Segments[0];
+              ASegment := Segments[Zero];
               SelectX := ASegment.X1;
               SelectY := ASegment.Y1;
             end
@@ -49096,8 +49103,8 @@ begin
           begin
             if Segments.Count > 0 then
             begin
-              ASegment := Segments[
-                Segments.Count - 1];
+              PositionCount := Segments.Count -1;
+              ASegment := Segments[PositionCount];
               SelectX := ASegment.X2;
               SelectY := ASegment.Y2;
             end
@@ -49229,7 +49236,7 @@ var
   EAnnotation: string;
   IAnnotation: string;
   ASegment: TCellElementSegment;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   PriorRow: Integer;
   PriorCol: Integer;
   Annotation: string;
@@ -50148,7 +50155,7 @@ var
   end;
   procedure SortSegments;
   var
-    SegIndex: Integer;
+    SegIndex: NativeInt;
   begin
     FScreenObject.FSegments.Sort(CompareFrontSegments);
     for SegIndex := 0 to FScreenObject.FSegments.Count - 1 do

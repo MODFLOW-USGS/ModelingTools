@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLCelShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glcelshader.pas' rev: 36.00 (Windows)
 
 #ifndef GlcelshaderHPP
 #define GlcelshaderHPP
@@ -15,21 +15,21 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLTexture.hpp>
-#include <GLContext.hpp>
-#include <GLGraphics.hpp>
-#include <GLUtils.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLColor.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLMaterial.hpp>
-#include <GLState.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Gltexture.hpp>
+#include <Glcontext.hpp>
+#include <Glgraphics.hpp>
+#include <Glutils.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glcolor.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glmaterial.hpp>
+#include <Glstate.hpp>
+#include <Gltextureformat.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

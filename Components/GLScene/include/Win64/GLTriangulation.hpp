@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTriangulation.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gltriangulation.pas' rev: 36.00 (Windows)
 
 #ifndef GltriangulationHPP
 #define GltriangulationHPP
@@ -15,12 +15,12 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
 #include <System.Types.hpp>
 #include <Vcl.Dialogs.hpp>
 #include <Vcl.Graphics.hpp>
-#include <GLVectorGeometry.hpp>
+#include <Glvectorgeometry.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -93,8 +93,8 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const int MaxVertices = int(0x7a120);
-static const int MaxTriangles = int(0xf4240);
+static _DELPHI_CONST int MaxVertices = int(0x7a120);
+static _DELPHI_CONST int MaxTriangles = int(0xf4240);
 static const double ExPtTolerance = 1.000000E-06;
 }	/* namespace Gltriangulation */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLTRIANGULATION)

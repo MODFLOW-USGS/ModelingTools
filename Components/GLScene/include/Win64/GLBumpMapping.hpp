@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLBumpMapping.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glbumpmapping.pas' rev: 36.00 (Windows)
 
 #ifndef GlbumpmappingHPP
 #define GlbumpmappingHPP
@@ -15,13 +15,13 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <System.UITypes.hpp>
+#include <Sysinit.hpp>
+#include <System.Uitypes.hpp>
 #include <Vcl.Graphics.hpp>
-#include <GLColor.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorLists.hpp>
-#include <GLVectorTypes.hpp>
+#include <Glcolor.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorlists.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

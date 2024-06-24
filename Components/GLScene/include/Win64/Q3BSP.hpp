@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Q3BSP.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Q3bsp.pas' rev: 36.00 (Windows)
 
 #ifndef Q3bspHPP
 #define Q3bspHPP
@@ -15,10 +15,10 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GLVectorTypes.hpp>
+#include <System.Sysutils.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -206,26 +206,26 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 FACE_POLYGON = System::Int8(0x1);
-static const System::Word MAX_TEXTURES = System::Word(0x3e8);
-static const System::Int8 kEntities = System::Int8(0x0);
-static const System::Int8 kTextures = System::Int8(0x1);
-static const System::Int8 kPlanes = System::Int8(0x2);
-static const System::Int8 kNodes = System::Int8(0x3);
-static const System::Int8 kLeafs = System::Int8(0x4);
-static const System::Int8 kLeafFaces = System::Int8(0x5);
-static const System::Int8 kLeafBrushes = System::Int8(0x6);
-static const System::Int8 kModels = System::Int8(0x7);
-static const System::Int8 kBrushes = System::Int8(0x8);
-static const System::Int8 kBrushSides = System::Int8(0x9);
-static const System::Int8 kVertices = System::Int8(0xa);
-static const System::Int8 kMeshVerts = System::Int8(0xb);
-static const System::Int8 kShaders = System::Int8(0xc);
-static const System::Int8 kFaces = System::Int8(0xd);
-static const System::Int8 kLightmaps = System::Int8(0xe);
-static const System::Int8 kLightVolumes = System::Int8(0xf);
-static const System::Int8 kVisData = System::Int8(0x10);
-static const System::Int8 kMaxLumps = System::Int8(0x11);
+static _DELPHI_CONST System::Int8 FACE_POLYGON = System::Int8(0x1);
+static _DELPHI_CONST System::Word MAX_TEXTURES = System::Word(0x3e8);
+static _DELPHI_CONST System::Int8 kEntities = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 kTextures = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 kPlanes = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 kNodes = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 kLeafs = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 kLeafFaces = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 kLeafBrushes = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 kModels = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 kBrushes = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 kBrushSides = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 kVertices = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 kMeshVerts = System::Int8(0xb);
+static _DELPHI_CONST System::Int8 kShaders = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 kFaces = System::Int8(0xd);
+static _DELPHI_CONST System::Int8 kLightmaps = System::Int8(0xe);
+static _DELPHI_CONST System::Int8 kLightVolumes = System::Int8(0xf);
+static _DELPHI_CONST System::Int8 kVisData = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 kMaxLumps = System::Int8(0x11);
 }	/* namespace Q3bsp */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_Q3BSP)
 using namespace Q3bsp;

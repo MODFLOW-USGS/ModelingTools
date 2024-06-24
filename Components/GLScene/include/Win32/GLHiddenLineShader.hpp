@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLHiddenLineShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLHiddenLineShader.pas' rev: 35.00 (Windows)
 
 #ifndef GlhiddenlineshaderHPP
 #define GlhiddenlineshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -41,9 +39,9 @@ class PASCALIMPLEMENTATION TGLLineSettings : public Glbaseclasses::TGLUpdateAble
 private:
 	Glcolor::TGLColor* FColor;
 	float FWidth;
-	Opengltokens::TGLushort FPattern;
+	System::Word FPattern;
 	bool FForceMaterial;
-	void __fastcall SetPattern(const Opengltokens::TGLushort value);
+	void __fastcall SetPattern(const System::Word value);
 	void __fastcall SetColor(Glcolor::TGLColor* const v);
 	void __fastcall SetWidth(const float Value);
 	void __fastcall SetForceMaterial(bool v);
@@ -57,7 +55,7 @@ public:
 __published:
 	__property float Width = {read=FWidth, write=SetWidth};
 	__property Glcolor::TGLColor* Color = {read=FColor, write=SetColor};
-	__property Opengltokens::TGLushort Pattern = {read=FPattern, write=SetPattern, default=65535};
+	__property System::Word Pattern = {read=FPattern, write=SetPattern, default=65535};
 	__property bool ForceMaterial = {read=FForceMaterial, write=SetForceMaterial, default=0};
 };
 

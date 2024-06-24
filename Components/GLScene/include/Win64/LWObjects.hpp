@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'LWObjects.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Lwobjects.pas' rev: 36.00 (Windows)
 
 #ifndef LwobjectsHPP
 #define LwobjectsHPP
@@ -15,11 +15,11 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <GLVectorGeometry.hpp>
+#include <Glvectorgeometry.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -667,21 +667,21 @@ extern DELPHI_PACKAGE TID4 ID_SDAT;
 extern DELPHI_PACKAGE TID4 ID_IMSQ;
 extern DELPHI_PACKAGE TID4 ID_FLYR;
 extern DELPHI_PACKAGE TID4 ID_IMCC;
-static const System::Int8 SURF_FLAG_LUMINOUS = System::Int8(0x1);
-static const System::Int8 SURF_FLAG_OUTLINE = System::Int8(0x2);
-static const System::Int8 SURF_FLAG_SMOOTHING = System::Int8(0x4);
-static const System::Int8 SURF_FLAG_COLORHIGHLIGHTS = System::Int8(0x8);
-static const System::Int8 SURF_FLAG_COLORFILTER = System::Int8(0x10);
-static const System::Int8 SURF_FLAG_OPAQUEEDGE = System::Int8(0x20);
-static const System::Int8 SURF_FLAG_TRANSPARENTEDGE = System::Int8(0x40);
-static const System::Byte SURF_FLAG_SHARPTERMINATOR = System::Byte(0x80);
-static const System::Word SURF_FLAG_DOUBLESIDED = System::Word(0x100);
-static const System::Word SURF_FLAG_ADDITIVE = System::Word(0x200);
-static const System::Word SURF_FLAG_SHADOWALPHA = System::Word(0x400);
-static const System::Int8 CURV_CONTINUITY_FIRST = System::Int8(0x1);
-static const System::Int8 CURV_CONTINUITY_LAST = System::Int8(0x2);
-static const System::Int8 IMSQ_FLAG_LOOP = System::Int8(0x1);
-static const System::Int8 IMSQ_FLAG_INTERLACE = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 SURF_FLAG_LUMINOUS = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 SURF_FLAG_OUTLINE = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 SURF_FLAG_SMOOTHING = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 SURF_FLAG_COLORHIGHLIGHTS = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 SURF_FLAG_COLORFILTER = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 SURF_FLAG_OPAQUEEDGE = System::Int8(0x20);
+static _DELPHI_CONST System::Int8 SURF_FLAG_TRANSPARENTEDGE = System::Int8(0x40);
+static _DELPHI_CONST System::Byte SURF_FLAG_SHARPTERMINATOR = System::Byte(0x80);
+static _DELPHI_CONST System::Word SURF_FLAG_DOUBLESIDED = System::Word(0x100);
+static _DELPHI_CONST System::Word SURF_FLAG_ADDITIVE = System::Word(0x200);
+static _DELPHI_CONST System::Word SURF_FLAG_SHADOWALPHA = System::Word(0x400);
+static _DELPHI_CONST System::Int8 CURV_CONTINUITY_FIRST = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 CURV_CONTINUITY_LAST = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 IMSQ_FLAG_LOOP = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 IMSQ_FLAG_INTERLACE = System::Int8(0x2);
 extern DELPHI_PACKAGE TID4 ID_LWO2;
 extern DELPHI_PACKAGE TID4 ID_VMAP;
 extern DELPHI_PACKAGE TID4 ID_TAGS;
@@ -727,21 +727,21 @@ extern DELPHI_PACKAGE TID4 VMAP_TYPE_SPOT;
 extern DELPHI_PACKAGE TID4 PTAG_TYPE_SURF;
 extern DELPHI_PACKAGE TID4 PTAG_TYPE_PART;
 extern DELPHI_PACKAGE TID4 PTAG_TYPE_SMGP;
-static const System::Int8 PRE_POST_RESET = System::Int8(0x0);
-static const System::Int8 PRE_POST_CONSTANT = System::Int8(0x1);
-static const System::Int8 PRE_POST_REPEAT = System::Int8(0x2);
-static const System::Int8 PRE_POST_OSCILLATE = System::Int8(0x3);
-static const System::Int8 PRE_POST_OFFSET = System::Int8(0x4);
-static const System::Int8 PRE_POST_LINEAR = System::Int8(0x5);
-static const System::Word POLS_VCOUNT_MASK = System::Word(0x3ff);
-static const System::Word POLS_FLAGS_MASK = System::Word(0xfc00);
-static const System::Int8 SIDE_FRONT = System::Int8(0x1);
-static const System::Int8 SIDE_BACK = System::Int8(0x2);
-static const System::Int8 SIDE_FRONT_AND_BACK = System::Int8(0x0);
-static const System::Int8 RFOP_BACKDROP = System::Int8(0x0);
-static const System::Int8 RFOP_RAYTRACEANDBACKDROP = System::Int8(0x1);
-static const System::Int8 RFOP_SPHERICALMAP = System::Int8(0x2);
-static const System::Int8 RFOP_RAYTRACEANDSPHERICALMAP = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 PRE_POST_RESET = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 PRE_POST_CONSTANT = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 PRE_POST_REPEAT = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 PRE_POST_OSCILLATE = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 PRE_POST_OFFSET = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 PRE_POST_LINEAR = System::Int8(0x5);
+static _DELPHI_CONST System::Word POLS_VCOUNT_MASK = System::Word(0x3ff);
+static _DELPHI_CONST System::Word POLS_FLAGS_MASK = System::Word(0xfc00);
+static _DELPHI_CONST System::Int8 SIDE_FRONT = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 SIDE_BACK = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 SIDE_FRONT_AND_BACK = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 RFOP_BACKDROP = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 RFOP_RAYTRACEANDBACKDROP = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 RFOP_SPHERICALMAP = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 RFOP_RAYTRACEANDSPHERICALMAP = System::Int8(0x3);
 extern DELPHI_PACKAGE System::UnicodeString __fastcall ToDosPath(const System::UnicodeString Path);
 extern DELPHI_PACKAGE System::UnicodeString __fastcall ToUnixPath(const System::UnicodeString Path);
 extern DELPHI_PACKAGE TLWContentDir* __fastcall GetContentDir(void);

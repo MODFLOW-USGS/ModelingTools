@@ -1697,6 +1697,8 @@ begin
 end;
 
 procedure TModflowMAW_Writer.AssignWellScreensAndWellProperties;
+const
+  Zero: NativeInt = 0;
 var
   AScreenObject: TScreenObject;
   Boundary: TMawBoundary;
@@ -1845,7 +1847,7 @@ var
     Layer := SpecifiedLayer;
     UpdateGlobalLocations(Column, Row, Layer, eaBlocks, Model);
     UpdateCurrentScreenObject(AScreenObject);
-    ASegment := AScreenObject.Segments[Model][0];
+    ASegment := AScreenObject.Segments[Model][Zero];
     UpdateCurrentSegment(ASegment);
   end;
   function LayerCount: integer;

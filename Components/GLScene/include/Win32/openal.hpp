@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OpenAL.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Openal.pas' rev: 36.00 (Windows)
 
 #ifndef OpenalHPP
 #define OpenalHPP
@@ -15,8 +15,8 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <System.SysUtils.hpp>
+#include <Sysinit.hpp>
+#include <System.Sysutils.hpp>
 #include <Winapi.Windows.hpp>
 
 //-- user supplied -----------------------------------------------------------
@@ -260,213 +260,213 @@ typedef Winapi::Windows::THandle HMODULE;
 //-- var, const, procedure ---------------------------------------------------
 #define callibname L"OpenAL32.dll"
 #define calutlibname L"Alut.dll"
-static const System::Int8 AL_INVALID = System::Int8(-1);
-static const System::Int8 AL_NONE = System::Int8(0x0);
-static const System::Int8 AL_FALSE = System::Int8(0x0);
-static const System::Int8 AL_TRUE = System::Int8(0x1);
-static const System::Word AL_SOURCE_ABSOLUTE = System::Word(0x201);
-static const System::Word AL_SOURCE_RELATIVE = System::Word(0x202);
-static const System::Word AL_CONE_INNER_ANGLE = System::Word(0x1001);
-static const System::Word AL_CONE_OUTER_ANGLE = System::Word(0x1002);
-static const System::Word AL_PITCH = System::Word(0x1003);
-static const System::Word AL_POSITION = System::Word(0x1004);
-static const System::Word AL_DIRECTION = System::Word(0x1005);
-static const System::Word AL_VELOCITY = System::Word(0x1006);
-static const System::Word AL_LOOPING = System::Word(0x1007);
-static const System::Word AL_BUFFER = System::Word(0x1009);
-static const System::Word AL_GAIN = System::Word(0x100a);
-static const System::Word AL_MIN_GAIN = System::Word(0x100d);
-static const System::Word AL_MAX_GAIN = System::Word(0x100e);
-static const System::Word AL_ORIENTATION = System::Word(0x100f);
-static const System::Word AL_CHANNEL_MASK = System::Word(0x3000);
-static const System::Word AL_SOURCE_STATE = System::Word(0x1010);
-static const System::Word AL_INITIAL = System::Word(0x1011);
-static const System::Word AL_PLAYING = System::Word(0x1012);
-static const System::Word AL_PAUSED = System::Word(0x1013);
-static const System::Word AL_STOPPED = System::Word(0x1014);
-static const System::Word AL_BUFFERS_QUEUED = System::Word(0x1015);
-static const System::Word AL_BUFFERS_PROCESSED = System::Word(0x1016);
-static const System::Word AL_SEC_OFFSET = System::Word(0x1024);
-static const System::Word AL_SAMPLE_OFFSET = System::Word(0x1025);
-static const System::Word AL_BYTE_OFFSET = System::Word(0x1026);
-static const System::Word AL_SOURCE_TYPE = System::Word(0x1027);
-static const System::Word AL_STATIC = System::Word(0x1028);
-static const System::Word AL_STREAMING = System::Word(0x1029);
-static const System::Word AL_UNDETERMINED = System::Word(0x1030);
-static const System::Word AL_FORMAT_MONO8 = System::Word(0x1100);
-static const System::Word AL_FORMAT_MONO16 = System::Word(0x1101);
-static const System::Word AL_FORMAT_STEREO8 = System::Word(0x1102);
-static const System::Word AL_FORMAT_STEREO16 = System::Word(0x1103);
-static const System::Word AL_REFERENCE_DISTANCE = System::Word(0x1020);
-static const System::Word AL_ROLLOFF_FACTOR = System::Word(0x1021);
-static const System::Word AL_CONE_OUTER_GAIN = System::Word(0x1022);
-static const System::Word AL_MAX_DISTANCE = System::Word(0x1023);
-static const System::Word AL_FREQUENCY = System::Word(0x2001);
-static const System::Word AL_BITS = System::Word(0x2002);
-static const System::Word AL_CHANNELS = System::Word(0x2003);
-static const System::Word AL_SIZE = System::Word(0x2004);
-static const System::Word AL_UNUSED = System::Word(0x2010);
-static const System::Word AL_PENDING = System::Word(0x2011);
-static const System::Word AL_PROCESSED = System::Word(0x2012);
-static const System::Int8 AL_NO_ERROR = System::Int8(0x0);
-static const System::Word AL_INVALID_NAME = System::Word(0xa001);
-static const System::Word AL_ILLEGAL_ENUM = System::Word(0xa002);
-static const System::Word AL_INVALID_ENUM = System::Word(0xa002);
-static const System::Word AL_INVALID_VALUE = System::Word(0xa003);
-static const System::Word AL_ILLEGAL_COMMAND = System::Word(0xa004);
-static const System::Word AL_INVALID_OPERATION = System::Word(0xa004);
-static const System::Word AL_OUT_OF_MEMORY = System::Word(0xa005);
-static const System::Word AL_VENDOR = System::Word(0xb001);
-static const System::Word AL_VERSION = System::Word(0xb002);
-static const System::Word AL_RENDERER = System::Word(0xb003);
-static const System::Word AL_EXTENSIONS = System::Word(0xb004);
-static const System::Word AL_DOPPLER_FACTOR = System::Word(0xc000);
-static const System::Word AL_DOPPLER_VELOCITY = System::Word(0xc001);
-static const System::Word AL_SPEED_OF_SOUND = System::Word(0xc003);
-static const System::Word AL_DISTANCE_MODEL = System::Word(0xd000);
-static const System::Word AL_INVERSE_DISTANCE = System::Word(0xd001);
-static const System::Word AL_INVERSE_DISTANCE_CLAMPED = System::Word(0xd002);
-static const System::Word AL_LINEAR_DISTANCE = System::Word(0xd003);
-static const System::Word AL_LINEAR_DISTANCE_CLAMPED = System::Word(0xd004);
-static const System::Word AL_EXPONENT_DISTANCE = System::Word(0xd005);
-static const System::Word AL_EXPONENT_DISTANCE_CLAMPED = System::Word(0xd006);
-static const System::Int8 ALC_INVALID = System::Int8(0x0);
-static const System::Int8 ALC_FALSE = System::Int8(0x0);
-static const System::Int8 ALC_TRUE = System::Int8(0x1);
-static const System::Word ALC_FREQUENCY = System::Word(0x1007);
-static const System::Word ALC_REFRESH = System::Word(0x1008);
-static const System::Word ALC_SYNC = System::Word(0x1009);
-static const System::Word ALC_MONO_SOURCES = System::Word(0x1010);
-static const System::Word ALC_STEREO_SOURCES = System::Word(0x1011);
-static const System::Int8 ALC_NO_ERROR = System::Int8(0x0);
-static const System::Word ALC_INVALID_DEVICE = System::Word(0xa001);
-static const System::Word ALC_INVALID_CONTEXT = System::Word(0xa002);
-static const System::Word ALC_INVALID_ENUM = System::Word(0xa003);
-static const System::Word ALC_INVALID_VALUE = System::Word(0xa004);
-static const System::Word ALC_OUT_OF_MEMORY = System::Word(0xa005);
-static const System::Word ALC_DEFAULT_DEVICE_SPECIFIER = System::Word(0x1004);
-static const System::Word ALC_DEVICE_SPECIFIER = System::Word(0x1005);
-static const System::Word ALC_EXTENSIONS = System::Word(0x1006);
-static const System::Word ALC_MAJOR_VERSION = System::Word(0x1000);
-static const System::Word ALC_MINOR_VERSION = System::Word(0x1001);
-static const System::Word ALC_ATTRIBUTES_SIZE = System::Word(0x1002);
-static const System::Word ALC_ALL_ATTRIBUTES = System::Word(0x1003);
-static const System::Word ALC_DEFAULT_ALL_DEVICES_SPECIFIER = System::Word(0x1012);
-static const System::Word ALC_ALL_DEVICES_SPECIFIER = System::Word(0x1013);
-static const System::Word ALC_CAPTURE_DEVICE_SPECIFIER = System::Word(0x310);
-static const System::Word ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER = System::Word(0x311);
-static const System::Word ALC_CAPTURE_SAMPLES = System::Word(0x312);
+static _DELPHI_CONST System::Int8 AL_INVALID = System::Int8(-1);
+static _DELPHI_CONST System::Int8 AL_NONE = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FALSE = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_TRUE = System::Int8(0x1);
+static _DELPHI_CONST System::Word AL_SOURCE_ABSOLUTE = System::Word(0x201);
+static _DELPHI_CONST System::Word AL_SOURCE_RELATIVE = System::Word(0x202);
+static _DELPHI_CONST System::Word AL_CONE_INNER_ANGLE = System::Word(0x1001);
+static _DELPHI_CONST System::Word AL_CONE_OUTER_ANGLE = System::Word(0x1002);
+static _DELPHI_CONST System::Word AL_PITCH = System::Word(0x1003);
+static _DELPHI_CONST System::Word AL_POSITION = System::Word(0x1004);
+static _DELPHI_CONST System::Word AL_DIRECTION = System::Word(0x1005);
+static _DELPHI_CONST System::Word AL_VELOCITY = System::Word(0x1006);
+static _DELPHI_CONST System::Word AL_LOOPING = System::Word(0x1007);
+static _DELPHI_CONST System::Word AL_BUFFER = System::Word(0x1009);
+static _DELPHI_CONST System::Word AL_GAIN = System::Word(0x100a);
+static _DELPHI_CONST System::Word AL_MIN_GAIN = System::Word(0x100d);
+static _DELPHI_CONST System::Word AL_MAX_GAIN = System::Word(0x100e);
+static _DELPHI_CONST System::Word AL_ORIENTATION = System::Word(0x100f);
+static _DELPHI_CONST System::Word AL_CHANNEL_MASK = System::Word(0x3000);
+static _DELPHI_CONST System::Word AL_SOURCE_STATE = System::Word(0x1010);
+static _DELPHI_CONST System::Word AL_INITIAL = System::Word(0x1011);
+static _DELPHI_CONST System::Word AL_PLAYING = System::Word(0x1012);
+static _DELPHI_CONST System::Word AL_PAUSED = System::Word(0x1013);
+static _DELPHI_CONST System::Word AL_STOPPED = System::Word(0x1014);
+static _DELPHI_CONST System::Word AL_BUFFERS_QUEUED = System::Word(0x1015);
+static _DELPHI_CONST System::Word AL_BUFFERS_PROCESSED = System::Word(0x1016);
+static _DELPHI_CONST System::Word AL_SEC_OFFSET = System::Word(0x1024);
+static _DELPHI_CONST System::Word AL_SAMPLE_OFFSET = System::Word(0x1025);
+static _DELPHI_CONST System::Word AL_BYTE_OFFSET = System::Word(0x1026);
+static _DELPHI_CONST System::Word AL_SOURCE_TYPE = System::Word(0x1027);
+static _DELPHI_CONST System::Word AL_STATIC = System::Word(0x1028);
+static _DELPHI_CONST System::Word AL_STREAMING = System::Word(0x1029);
+static _DELPHI_CONST System::Word AL_UNDETERMINED = System::Word(0x1030);
+static _DELPHI_CONST System::Word AL_FORMAT_MONO8 = System::Word(0x1100);
+static _DELPHI_CONST System::Word AL_FORMAT_MONO16 = System::Word(0x1101);
+static _DELPHI_CONST System::Word AL_FORMAT_STEREO8 = System::Word(0x1102);
+static _DELPHI_CONST System::Word AL_FORMAT_STEREO16 = System::Word(0x1103);
+static _DELPHI_CONST System::Word AL_REFERENCE_DISTANCE = System::Word(0x1020);
+static _DELPHI_CONST System::Word AL_ROLLOFF_FACTOR = System::Word(0x1021);
+static _DELPHI_CONST System::Word AL_CONE_OUTER_GAIN = System::Word(0x1022);
+static _DELPHI_CONST System::Word AL_MAX_DISTANCE = System::Word(0x1023);
+static _DELPHI_CONST System::Word AL_FREQUENCY = System::Word(0x2001);
+static _DELPHI_CONST System::Word AL_BITS = System::Word(0x2002);
+static _DELPHI_CONST System::Word AL_CHANNELS = System::Word(0x2003);
+static _DELPHI_CONST System::Word AL_SIZE = System::Word(0x2004);
+static _DELPHI_CONST System::Word AL_UNUSED = System::Word(0x2010);
+static _DELPHI_CONST System::Word AL_PENDING = System::Word(0x2011);
+static _DELPHI_CONST System::Word AL_PROCESSED = System::Word(0x2012);
+static _DELPHI_CONST System::Int8 AL_NO_ERROR = System::Int8(0x0);
+static _DELPHI_CONST System::Word AL_INVALID_NAME = System::Word(0xa001);
+static _DELPHI_CONST System::Word AL_ILLEGAL_ENUM = System::Word(0xa002);
+static _DELPHI_CONST System::Word AL_INVALID_ENUM = System::Word(0xa002);
+static _DELPHI_CONST System::Word AL_INVALID_VALUE = System::Word(0xa003);
+static _DELPHI_CONST System::Word AL_ILLEGAL_COMMAND = System::Word(0xa004);
+static _DELPHI_CONST System::Word AL_INVALID_OPERATION = System::Word(0xa004);
+static _DELPHI_CONST System::Word AL_OUT_OF_MEMORY = System::Word(0xa005);
+static _DELPHI_CONST System::Word AL_VENDOR = System::Word(0xb001);
+static _DELPHI_CONST System::Word AL_VERSION = System::Word(0xb002);
+static _DELPHI_CONST System::Word AL_RENDERER = System::Word(0xb003);
+static _DELPHI_CONST System::Word AL_EXTENSIONS = System::Word(0xb004);
+static _DELPHI_CONST System::Word AL_DOPPLER_FACTOR = System::Word(0xc000);
+static _DELPHI_CONST System::Word AL_DOPPLER_VELOCITY = System::Word(0xc001);
+static _DELPHI_CONST System::Word AL_SPEED_OF_SOUND = System::Word(0xc003);
+static _DELPHI_CONST System::Word AL_DISTANCE_MODEL = System::Word(0xd000);
+static _DELPHI_CONST System::Word AL_INVERSE_DISTANCE = System::Word(0xd001);
+static _DELPHI_CONST System::Word AL_INVERSE_DISTANCE_CLAMPED = System::Word(0xd002);
+static _DELPHI_CONST System::Word AL_LINEAR_DISTANCE = System::Word(0xd003);
+static _DELPHI_CONST System::Word AL_LINEAR_DISTANCE_CLAMPED = System::Word(0xd004);
+static _DELPHI_CONST System::Word AL_EXPONENT_DISTANCE = System::Word(0xd005);
+static _DELPHI_CONST System::Word AL_EXPONENT_DISTANCE_CLAMPED = System::Word(0xd006);
+static _DELPHI_CONST System::Int8 ALC_INVALID = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 ALC_FALSE = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 ALC_TRUE = System::Int8(0x1);
+static _DELPHI_CONST System::Word ALC_FREQUENCY = System::Word(0x1007);
+static _DELPHI_CONST System::Word ALC_REFRESH = System::Word(0x1008);
+static _DELPHI_CONST System::Word ALC_SYNC = System::Word(0x1009);
+static _DELPHI_CONST System::Word ALC_MONO_SOURCES = System::Word(0x1010);
+static _DELPHI_CONST System::Word ALC_STEREO_SOURCES = System::Word(0x1011);
+static _DELPHI_CONST System::Int8 ALC_NO_ERROR = System::Int8(0x0);
+static _DELPHI_CONST System::Word ALC_INVALID_DEVICE = System::Word(0xa001);
+static _DELPHI_CONST System::Word ALC_INVALID_CONTEXT = System::Word(0xa002);
+static _DELPHI_CONST System::Word ALC_INVALID_ENUM = System::Word(0xa003);
+static _DELPHI_CONST System::Word ALC_INVALID_VALUE = System::Word(0xa004);
+static _DELPHI_CONST System::Word ALC_OUT_OF_MEMORY = System::Word(0xa005);
+static _DELPHI_CONST System::Word ALC_DEFAULT_DEVICE_SPECIFIER = System::Word(0x1004);
+static _DELPHI_CONST System::Word ALC_DEVICE_SPECIFIER = System::Word(0x1005);
+static _DELPHI_CONST System::Word ALC_EXTENSIONS = System::Word(0x1006);
+static _DELPHI_CONST System::Word ALC_MAJOR_VERSION = System::Word(0x1000);
+static _DELPHI_CONST System::Word ALC_MINOR_VERSION = System::Word(0x1001);
+static _DELPHI_CONST System::Word ALC_ATTRIBUTES_SIZE = System::Word(0x1002);
+static _DELPHI_CONST System::Word ALC_ALL_ATTRIBUTES = System::Word(0x1003);
+static _DELPHI_CONST System::Word ALC_DEFAULT_ALL_DEVICES_SPECIFIER = System::Word(0x1012);
+static _DELPHI_CONST System::Word ALC_ALL_DEVICES_SPECIFIER = System::Word(0x1013);
+static _DELPHI_CONST System::Word ALC_CAPTURE_DEVICE_SPECIFIER = System::Word(0x310);
+static _DELPHI_CONST System::Word ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER = System::Word(0x311);
+static _DELPHI_CONST System::Word ALC_CAPTURE_SAMPLES = System::Word(0x312);
 #define ALC_EXT_EFX_NAME L"ALC_EXT_EFX"
-static const int ALC_EFX_MAJOR_VERSION = int(0x20001);
-static const int ALC_EFX_MINOR_VERSION = int(0x20002);
-static const int ALC_MAX_AUXILIARY_SENDS = int(0x20003);
-static const int AL_METERS_PER_UNIT = int(0x20004);
-static const int AL_DIRECT_FILTER = int(0x20005);
-static const int AL_AUXILIARY_SEND_FILTER = int(0x20006);
-static const int AL_AIR_ABSORPTION_FACTOR = int(0x20007);
-static const int AL_ROOM_ROLLOFF_FACTOR = int(0x20008);
-static const int AL_CONE_OUTER_GAINHF = int(0x20009);
-static const int AL_DIRECT_FILTER_GAINHF_AUTO = int(0x2000a);
-static const int AL_AUXILIARY_SEND_FILTER_GAIN_AUTO = int(0x2000b);
-static const int AL_AUXILIARY_SEND_FILTER_GAINHF_AUTO = int(0x2000c);
-static const System::Int8 AL_REVERB_DENSITY = System::Int8(0x1);
-static const System::Int8 AL_REVERB_DIFFUSION = System::Int8(0x2);
-static const System::Int8 AL_REVERB_GAIN = System::Int8(0x3);
-static const System::Int8 AL_REVERB_GAINHF = System::Int8(0x4);
-static const System::Int8 AL_REVERB_DECAY_TIME = System::Int8(0x5);
-static const System::Int8 AL_REVERB_DECAY_HFRATIO = System::Int8(0x6);
-static const System::Int8 AL_REVERB_REFLECTIONS_GAIN = System::Int8(0x7);
-static const System::Int8 AL_REVERB_REFLECTIONS_DELAY = System::Int8(0x8);
-static const System::Int8 AL_REVERB_LATE_REVERB_GAIN = System::Int8(0x9);
-static const System::Int8 AL_REVERB_LATE_REVERB_DELAY = System::Int8(0xa);
-static const System::Int8 AL_REVERB_AIR_ABSORPTION_GAINHF = System::Int8(0xb);
-static const System::Int8 AL_REVERB_ROOM_ROLLOFF_FACTOR = System::Int8(0xc);
-static const System::Int8 AL_REVERB_DECAY_HFLIMIT = System::Int8(0xd);
-static const System::Int8 AL_CHORUS_WAVEFORM = System::Int8(0x1);
-static const System::Int8 AL_CHORUS_PHASE = System::Int8(0x2);
-static const System::Int8 AL_CHORUS_RATE = System::Int8(0x3);
-static const System::Int8 AL_CHORUS_DEPTH = System::Int8(0x4);
-static const System::Int8 AL_CHORUS_FEEDBACK = System::Int8(0x5);
-static const System::Int8 AL_CHORUS_DELAY = System::Int8(0x6);
-static const System::Int8 AL_DISTORTION_EDGE = System::Int8(0x1);
-static const System::Int8 AL_DISTORTION_GAIN = System::Int8(0x2);
-static const System::Int8 AL_DISTORTION_LOWPASS_CUTOFF = System::Int8(0x3);
-static const System::Int8 AL_DISTORTION_EQCENTER = System::Int8(0x4);
-static const System::Int8 AL_DISTORTION_EQBANDWIDTH = System::Int8(0x5);
-static const System::Int8 AL_ECHO_DELAY = System::Int8(0x1);
-static const System::Int8 AL_ECHO_LRDELAY = System::Int8(0x2);
-static const System::Int8 AL_ECHO_DAMPING = System::Int8(0x3);
-static const System::Int8 AL_ECHO_FEEDBACK = System::Int8(0x4);
-static const System::Int8 AL_ECHO_SPREAD = System::Int8(0x5);
-static const System::Int8 AL_FLANGER_WAVEFORM = System::Int8(0x1);
-static const System::Int8 AL_FLANGER_PHASE = System::Int8(0x2);
-static const System::Int8 AL_FLANGER_RATE = System::Int8(0x3);
-static const System::Int8 AL_FLANGER_DEPTH = System::Int8(0x4);
-static const System::Int8 AL_FLANGER_FEEDBACK = System::Int8(0x5);
-static const System::Int8 AL_FLANGER_DELAY = System::Int8(0x6);
-static const System::Int8 AL_FREQUENCY_SHIFTER_FREQUENCY = System::Int8(0x1);
-static const System::Int8 AL_FREQUENCY_SHIFTER_LEFT_DIRECTION = System::Int8(0x2);
-static const System::Int8 AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION = System::Int8(0x3);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEMEA = System::Int8(0x1);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEMEA_COARSE_TUNING = System::Int8(0x2);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEMEB = System::Int8(0x3);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEMEB_COARSE_TUNING = System::Int8(0x4);
-static const System::Int8 AL_VOCAL_MORPHER_WAVEFORM = System::Int8(0x5);
-static const System::Int8 AL_VOCAL_MORPHER_RATE = System::Int8(0x6);
-static const System::Int8 AL_PITCH_SHIFTER_COARSE_TUNE = System::Int8(0x1);
-static const System::Int8 AL_PITCH_SHIFTER_FINE_TUNE = System::Int8(0x2);
-static const System::Int8 AL_RING_MODULATOR_FREQUENCY = System::Int8(0x1);
-static const System::Int8 AL_RING_MODULATOR_HIGHPASS_CUTOFF = System::Int8(0x2);
-static const System::Int8 AL_RING_MODULATOR_WAVEFORM = System::Int8(0x3);
-static const System::Int8 AL_AUTOWAH_ATTACK_TIME = System::Int8(0x1);
-static const System::Int8 AL_AUTOWAH_RELEASE_TIME = System::Int8(0x2);
-static const System::Int8 AL_AUTOWAH_RESONANCE = System::Int8(0x3);
-static const System::Int8 AL_AUTOWAH_PEAK_GAIN = System::Int8(0x4);
-static const System::Int8 AL_COMPRESSOR_ONOFF = System::Int8(0x1);
-static const System::Int8 AL_EQUALIZER_LOW_GAIN = System::Int8(0x1);
-static const System::Int8 AL_EQUALIZER_LOW_CUTOFF = System::Int8(0x2);
-static const System::Int8 AL_EQUALIZER_MID1_GAIN = System::Int8(0x3);
-static const System::Int8 AL_EQUALIZER_MID1_CENTER = System::Int8(0x4);
-static const System::Int8 AL_EQUALIZER_MID1_WIDTH = System::Int8(0x5);
-static const System::Int8 AL_EQUALIZER_MID2_GAIN = System::Int8(0x6);
-static const System::Int8 AL_EQUALIZER_MID2_CENTER = System::Int8(0x7);
-static const System::Int8 AL_EQUALIZER_MID2_WIDTH = System::Int8(0x8);
-static const System::Int8 AL_EQUALIZER_HIGH_GAIN = System::Int8(0x9);
-static const System::Int8 AL_EQUALIZER_HIGH_CUTOFF = System::Int8(0xa);
-static const System::Int8 AL_EFFECT_FIRST_PARAMETER = System::Int8(0x0);
-static const System::Word AL_EFFECT_LAST_PARAMETER = System::Word(0x8000);
-static const System::Word AL_EFFECT_TYPE = System::Word(0x8001);
-static const System::Int8 AL_EFFECT_NULL = System::Int8(0x0);
-static const System::Int8 AL_EFFECT_REVERB = System::Int8(0x1);
-static const System::Int8 AL_EFFECT_CHORUS = System::Int8(0x2);
-static const System::Int8 AL_EFFECT_DISTORTION = System::Int8(0x3);
-static const System::Int8 AL_EFFECT_ECHO = System::Int8(0x4);
-static const System::Int8 AL_EFFECT_FLANGER = System::Int8(0x5);
-static const System::Int8 AL_EFFECT_FREQUENCY_SHIFTER = System::Int8(0x6);
-static const System::Int8 AL_EFFECT_VOCAL_MORPHER = System::Int8(0x7);
-static const System::Int8 AL_EFFECT_PITCH_SHIFTER = System::Int8(0x8);
-static const System::Int8 AL_EFFECT_RING_MODULATOR = System::Int8(0x9);
-static const System::Int8 AL_EFFECT_AUTOWAH = System::Int8(0xa);
-static const System::Int8 AL_EFFECT_COMPRESSOR = System::Int8(0xb);
-static const System::Int8 AL_EFFECT_EQUALIZER = System::Int8(0xc);
-static const System::Int8 AL_EFFECTSLOT_EFFECT = System::Int8(0x1);
-static const System::Int8 AL_EFFECTSLOT_GAIN = System::Int8(0x2);
-static const System::Int8 AL_EFFECTSLOT_AUXILIARY_SEND_AUTO = System::Int8(0x3);
-static const System::Int8 AL_EFFECTSLOT_NULL = System::Int8(0x0);
-static const System::Int8 AL_LOWPASS_GAIN = System::Int8(0x1);
-static const System::Int8 AL_LOWPASS_GAINHF = System::Int8(0x2);
-static const System::Int8 AL_HIGHPASS_GAIN = System::Int8(0x1);
-static const System::Int8 AL_HIGHPASS_GAINLF = System::Int8(0x2);
-static const System::Int8 AL_BANDPASS_GAIN = System::Int8(0x1);
-static const System::Int8 AL_BANDPASS_GAINLF = System::Int8(0x2);
-static const System::Int8 AL_BANDPASS_GAINHF = System::Int8(0x3);
-static const System::Int8 AL_FILTER_FIRST_PARAMETER = System::Int8(0x0);
-static const System::Word AL_FILTER_LAST_PARAMETER = System::Word(0x8000);
-static const System::Word AL_FILTER_TYPE = System::Word(0x8001);
-static const System::Int8 AL_FILTER_NULL = System::Int8(0x0);
-static const System::Int8 AL_FILTER_LOWPASS = System::Int8(0x1);
-static const System::Int8 AL_FILTER_HIGHPASS = System::Int8(0x2);
-static const System::Int8 AL_FILTER_BANDPASS = System::Int8(0x3);
+static _DELPHI_CONST int ALC_EFX_MAJOR_VERSION = int(0x20001);
+static _DELPHI_CONST int ALC_EFX_MINOR_VERSION = int(0x20002);
+static _DELPHI_CONST int ALC_MAX_AUXILIARY_SENDS = int(0x20003);
+static _DELPHI_CONST int AL_METERS_PER_UNIT = int(0x20004);
+static _DELPHI_CONST int AL_DIRECT_FILTER = int(0x20005);
+static _DELPHI_CONST int AL_AUXILIARY_SEND_FILTER = int(0x20006);
+static _DELPHI_CONST int AL_AIR_ABSORPTION_FACTOR = int(0x20007);
+static _DELPHI_CONST int AL_ROOM_ROLLOFF_FACTOR = int(0x20008);
+static _DELPHI_CONST int AL_CONE_OUTER_GAINHF = int(0x20009);
+static _DELPHI_CONST int AL_DIRECT_FILTER_GAINHF_AUTO = int(0x2000a);
+static _DELPHI_CONST int AL_AUXILIARY_SEND_FILTER_GAIN_AUTO = int(0x2000b);
+static _DELPHI_CONST int AL_AUXILIARY_SEND_FILTER_GAINHF_AUTO = int(0x2000c);
+static _DELPHI_CONST System::Int8 AL_REVERB_DENSITY = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_REVERB_DIFFUSION = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_REVERB_GAIN = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_REVERB_GAINHF = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_REVERB_DECAY_TIME = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_REVERB_DECAY_HFRATIO = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 AL_REVERB_REFLECTIONS_GAIN = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 AL_REVERB_REFLECTIONS_DELAY = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 AL_REVERB_LATE_REVERB_GAIN = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 AL_REVERB_LATE_REVERB_DELAY = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 AL_REVERB_AIR_ABSORPTION_GAINHF = System::Int8(0xb);
+static _DELPHI_CONST System::Int8 AL_REVERB_ROOM_ROLLOFF_FACTOR = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 AL_REVERB_DECAY_HFLIMIT = System::Int8(0xd);
+static _DELPHI_CONST System::Int8 AL_CHORUS_WAVEFORM = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_CHORUS_PHASE = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_CHORUS_RATE = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_CHORUS_DEPTH = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_CHORUS_FEEDBACK = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_CHORUS_DELAY = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 AL_DISTORTION_EDGE = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_DISTORTION_GAIN = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_DISTORTION_LOWPASS_CUTOFF = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_DISTORTION_EQCENTER = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_DISTORTION_EQBANDWIDTH = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_ECHO_DELAY = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_ECHO_LRDELAY = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_ECHO_DAMPING = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_ECHO_FEEDBACK = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_ECHO_SPREAD = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_FLANGER_WAVEFORM = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_FLANGER_PHASE = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_FLANGER_RATE = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_FLANGER_DEPTH = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_FLANGER_FEEDBACK = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_FLANGER_DELAY = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_FREQUENCY = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_LEFT_DIRECTION = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEMEA = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEMEA_COARSE_TUNING = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEMEB = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEMEB_COARSE_TUNING = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_WAVEFORM = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_RATE = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 AL_PITCH_SHIFTER_COARSE_TUNE = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_PITCH_SHIFTER_FINE_TUNE = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_FREQUENCY = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_HIGHPASS_CUTOFF = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_WAVEFORM = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_AUTOWAH_ATTACK_TIME = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_AUTOWAH_RELEASE_TIME = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_AUTOWAH_RESONANCE = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_AUTOWAH_PEAK_GAIN = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_COMPRESSOR_ONOFF = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_LOW_GAIN = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_LOW_CUTOFF = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_MID1_GAIN = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_MID1_CENTER = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_MID1_WIDTH = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_MID2_GAIN = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_MID2_CENTER = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_MID2_WIDTH = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_HIGH_GAIN = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 AL_EQUALIZER_HIGH_CUTOFF = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 AL_EFFECT_FIRST_PARAMETER = System::Int8(0x0);
+static _DELPHI_CONST System::Word AL_EFFECT_LAST_PARAMETER = System::Word(0x8000);
+static _DELPHI_CONST System::Word AL_EFFECT_TYPE = System::Word(0x8001);
+static _DELPHI_CONST System::Int8 AL_EFFECT_NULL = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_EFFECT_REVERB = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_EFFECT_CHORUS = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_EFFECT_DISTORTION = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_EFFECT_ECHO = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_EFFECT_FLANGER = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_EFFECT_FREQUENCY_SHIFTER = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 AL_EFFECT_VOCAL_MORPHER = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 AL_EFFECT_PITCH_SHIFTER = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 AL_EFFECT_RING_MODULATOR = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 AL_EFFECT_AUTOWAH = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 AL_EFFECT_COMPRESSOR = System::Int8(0xb);
+static _DELPHI_CONST System::Int8 AL_EFFECT_EQUALIZER = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 AL_EFFECTSLOT_EFFECT = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_EFFECTSLOT_GAIN = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_EFFECTSLOT_AUXILIARY_SEND_AUTO = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_EFFECTSLOT_NULL = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_LOWPASS_GAIN = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_LOWPASS_GAINHF = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_HIGHPASS_GAIN = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_HIGHPASS_GAINLF = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_BANDPASS_GAIN = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_BANDPASS_GAINLF = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_BANDPASS_GAINHF = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_FILTER_FIRST_PARAMETER = System::Int8(0x0);
+static _DELPHI_CONST System::Word AL_FILTER_LAST_PARAMETER = System::Word(0x8000);
+static _DELPHI_CONST System::Word AL_FILTER_TYPE = System::Word(0x8001);
+static _DELPHI_CONST System::Int8 AL_FILTER_NULL = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FILTER_LOWPASS = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_FILTER_HIGHPASS = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_FILTER_BANDPASS = System::Int8(0x3);
 #define LOWPASS_MIN_GAIN  (0.000000E+00)
 #define LOWPASS_MAX_GAIN  (1.000000E+00)
 #define LOWPASS_DEFAULT_GAIN  (1.000000E+00)
@@ -524,17 +524,17 @@ static const System::Int8 AL_FILTER_BANDPASS = System::Int8(0x3);
 #define AL_REVERB_MIN_ROOM_ROLLOFF_FACTOR  (0.000000E+00)
 #define AL_REVERB_MAX_ROOM_ROLLOFF_FACTOR  (1.000000E+01)
 #define AL_REVERB_DEFAULT_ROOM_ROLLOFF_FACTOR  (0.000000E+00)
-static const System::Int8 AL_REVERB_MIN_DECAY_HFLIMIT = System::Int8(0x0);
-static const System::Int8 AL_REVERB_MAX_DECAY_HFLIMIT = System::Int8(0x1);
-static const System::Int8 AL_REVERB_DEFAULT_DECAY_HFLIMIT = System::Int8(0x1);
-static const System::Int8 AL_CHORUS_MIN_WAVEFORM = System::Int8(0x0);
-static const System::Int8 AL_CHORUS_MAX_WAVEFORM = System::Int8(0x1);
-static const System::Int8 AL_CHORUS_DEFAULT_WAVEFORM = System::Int8(0x1);
-static const System::Int8 AL_CHORUS_WAVEFORM_SINUSOID = System::Int8(0x0);
-static const System::Int8 AL_CHORUS_WAVEFORM_TRIANGLE = System::Int8(0x1);
-static const short AL_CHORUS_MIN_PHASE = short(-180);
-static const System::Byte AL_CHORUS_MAX_PHASE = System::Byte(0xb4);
-static const System::Int8 AL_CHORUS_DEFAULT_PHASE = System::Int8(0x5a);
+static _DELPHI_CONST System::Int8 AL_REVERB_MIN_DECAY_HFLIMIT = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_REVERB_MAX_DECAY_HFLIMIT = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_REVERB_DEFAULT_DECAY_HFLIMIT = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_CHORUS_MIN_WAVEFORM = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_CHORUS_MAX_WAVEFORM = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_CHORUS_DEFAULT_WAVEFORM = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_CHORUS_WAVEFORM_SINUSOID = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_CHORUS_WAVEFORM_TRIANGLE = System::Int8(0x1);
+static _DELPHI_CONST short AL_CHORUS_MIN_PHASE = short(-180);
+static _DELPHI_CONST System::Byte AL_CHORUS_MAX_PHASE = System::Byte(0xb4);
+static _DELPHI_CONST System::Int8 AL_CHORUS_DEFAULT_PHASE = System::Int8(0x5a);
 #define AL_CHORUS_MIN_RATE  (0.000000E+00)
 #define AL_CHORUS_MAX_RATE  (1.000000E+01)
 #define AL_CHORUS_DEFAULT_RATE  (1.100000E+00)
@@ -577,14 +577,14 @@ static const System::Int8 AL_CHORUS_DEFAULT_PHASE = System::Int8(0x5a);
 #define AL_ECHO_MIN_SPREAD  (-1.000000E+00)
 #define AL_ECHO_MAX_SPREAD  (1.000000E+00)
 #define AL_ECHO_DEFAULT_SPREAD  (-1.000000E+00)
-static const System::Int8 AL_FLANGER_MIN_WAVEFORM = System::Int8(0x0);
-static const System::Int8 AL_FLANGER_MAX_WAVEFORM = System::Int8(0x1);
-static const System::Int8 AL_FLANGER_DEFAULT_WAVEFORM = System::Int8(0x1);
-static const System::Int8 AL_FLANGER_WAVEFORM_SINUSOID = System::Int8(0x0);
-static const System::Int8 AL_FLANGER_WAVEFORM_TRIANGLE = System::Int8(0x1);
-static const short AL_FLANGER_MIN_PHASE = short(-180);
-static const System::Byte AL_FLANGER_MAX_PHASE = System::Byte(0xb4);
-static const System::Int8 AL_FLANGER_DEFAULT_PHASE = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FLANGER_MIN_WAVEFORM = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FLANGER_MAX_WAVEFORM = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_FLANGER_DEFAULT_WAVEFORM = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_FLANGER_WAVEFORM_SINUSOID = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FLANGER_WAVEFORM_TRIANGLE = System::Int8(0x1);
+static _DELPHI_CONST short AL_FLANGER_MIN_PHASE = short(-180);
+static _DELPHI_CONST System::Byte AL_FLANGER_MAX_PHASE = System::Byte(0xb4);
+static _DELPHI_CONST System::Int8 AL_FLANGER_DEFAULT_PHASE = System::Int8(0x0);
 #define AL_FLANGER_MIN_RATE  (0.000000E+00)
 #define AL_FLANGER_MAX_RATE  (1.000000E+01)
 #define AL_FLANGER_DEFAULT_RATE  (2.700000E-01)
@@ -600,84 +600,84 @@ static const System::Int8 AL_FLANGER_DEFAULT_PHASE = System::Int8(0x0);
 #define AL_FREQUENCY_SHIFTER_MIN_FREQUENCY  (0.000000E+00)
 #define AL_FREQUENCY_SHIFTER_MAX_FREQUENCY  (2.400000E+04)
 #define AL_FREQUENCY_SHIFTER_DEFAULT_FREQUENCY  (0.000000E+00)
-static const System::Int8 AL_FREQUENCY_SHIFTER_MIN_LEFT_DIRECTION = System::Int8(0x0);
-static const System::Int8 AL_FREQUENCY_SHIFTER_MAX_LEFT_DIRECTION = System::Int8(0x2);
-static const System::Int8 AL_FREQUENCY_SHIFTER_DEFAULT_LEFT_DIRECTION = System::Int8(0x0);
-static const System::Int8 AL_FREQUENCY_SHIFTER_MIN_RIGHT_DIRECTION = System::Int8(0x0);
-static const System::Int8 AL_FREQUENCY_SHIFTER_MAX_RIGHT_DIRECTION = System::Int8(0x2);
-static const System::Int8 AL_FREQUENCY_SHIFTER_DEFAULT_RIGHT_DIRECTION = System::Int8(0x0);
-static const System::Int8 AL_FREQUENCY_SHIFTER_DIRECTION_DOWN = System::Int8(0x0);
-static const System::Int8 AL_FREQUENCY_SHIFTER_DIRECTION_UP = System::Int8(0x1);
-static const System::Int8 AL_FREQUENCY_SHIFTER_DIRECTION_OFF = System::Int8(0x2);
-static const System::Int8 AL_VOCAL_MORPHER_MIN_PHONEMEA = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_MAX_PHONEMEA = System::Int8(0x1d);
-static const System::Int8 AL_VOCAL_MORPHER_DEFAULT_PHONEMEA = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_MIN_PHONEMEA_COARSE_TUNING = System::Int8(-24);
-static const System::Int8 AL_VOCAL_MORPHER_MAX_PHONEMEA_COARSE_TUNING = System::Int8(0x18);
-static const System::Int8 AL_VOCAL_MORPHER_DEFAULT_PHONEMEA_COARSE_TUNING = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_MIN_PHONEMEB = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_MAX_PHONEMEB = System::Int8(0x1d);
-static const System::Int8 AL_VOCAL_MORPHER_DEFAULT_PHONEMEB = System::Int8(0xa);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_A = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_E = System::Int8(0x1);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_I = System::Int8(0x2);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_O = System::Int8(0x3);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_U = System::Int8(0x4);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_AA = System::Int8(0x5);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_AE = System::Int8(0x6);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_AH = System::Int8(0x7);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_AO = System::Int8(0x8);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_EH = System::Int8(0x9);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_ER = System::Int8(0xa);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_IH = System::Int8(0xb);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_IY = System::Int8(0xc);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_UH = System::Int8(0xd);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_UW = System::Int8(0xe);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_B = System::Int8(0xf);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_D = System::Int8(0x10);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_F = System::Int8(0x11);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_G = System::Int8(0x12);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_J = System::Int8(0x13);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_K = System::Int8(0x14);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_L = System::Int8(0x15);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_M = System::Int8(0x16);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_N = System::Int8(0x17);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_P = System::Int8(0x18);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_R = System::Int8(0x19);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_S = System::Int8(0x1a);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_T = System::Int8(0x1b);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_V = System::Int8(0x1c);
-static const System::Int8 AL_VOCAL_MORPHER_PHONEME_Z = System::Int8(0x1d);
-static const System::Int8 AL_VOCAL_MORPHER_MIN_PHONEMEB_COARSE_TUNING = System::Int8(-24);
-static const System::Int8 AL_VOCAL_MORPHER_MAX_PHONEMEB_COARSE_TUNING = System::Int8(0x18);
-static const System::Int8 AL_VOCAL_MORPHER_DEFAULT_PHONEMEB_COARSE_TUNING = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_MIN_WAVEFORM = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_MAX_WAVEFORM = System::Int8(0x2);
-static const System::Int8 AL_VOCAL_MORPHER_DEFAULT_WAVEFORM = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_WAVEFORM_SINUSOID = System::Int8(0x0);
-static const System::Int8 AL_VOCAL_MORPHER_WAVEFORM_TRIANGLE = System::Int8(0x1);
-static const System::Int8 AL_VOCAL_MORPHER_WAVEFORM_SAWTOOTH = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_MIN_LEFT_DIRECTION = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_MAX_LEFT_DIRECTION = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_DEFAULT_LEFT_DIRECTION = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_MIN_RIGHT_DIRECTION = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_MAX_RIGHT_DIRECTION = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_DEFAULT_RIGHT_DIRECTION = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_DIRECTION_DOWN = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_DIRECTION_UP = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_FREQUENCY_SHIFTER_DIRECTION_OFF = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MIN_PHONEMEA = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MAX_PHONEMEA = System::Int8(0x1d);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_DEFAULT_PHONEMEA = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MIN_PHONEMEA_COARSE_TUNING = System::Int8(-24);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MAX_PHONEMEA_COARSE_TUNING = System::Int8(0x18);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_DEFAULT_PHONEMEA_COARSE_TUNING = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MIN_PHONEMEB = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MAX_PHONEMEB = System::Int8(0x1d);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_DEFAULT_PHONEMEB = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_A = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_E = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_I = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_O = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_U = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_AA = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_AE = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_AH = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_AO = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_EH = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_ER = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_IH = System::Int8(0xb);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_IY = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_UH = System::Int8(0xd);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_UW = System::Int8(0xe);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_B = System::Int8(0xf);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_D = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_F = System::Int8(0x11);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_G = System::Int8(0x12);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_J = System::Int8(0x13);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_K = System::Int8(0x14);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_L = System::Int8(0x15);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_M = System::Int8(0x16);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_N = System::Int8(0x17);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_P = System::Int8(0x18);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_R = System::Int8(0x19);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_S = System::Int8(0x1a);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_T = System::Int8(0x1b);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_V = System::Int8(0x1c);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_PHONEME_Z = System::Int8(0x1d);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MIN_PHONEMEB_COARSE_TUNING = System::Int8(-24);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MAX_PHONEMEB_COARSE_TUNING = System::Int8(0x18);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_DEFAULT_PHONEMEB_COARSE_TUNING = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MIN_WAVEFORM = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_MAX_WAVEFORM = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_DEFAULT_WAVEFORM = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_WAVEFORM_SINUSOID = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_WAVEFORM_TRIANGLE = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_VOCAL_MORPHER_WAVEFORM_SAWTOOTH = System::Int8(0x2);
 #define AL_VOCAL_MORPHER_MIN_RATE  (0.000000E+00)
 #define AL_VOCAL_MORPHER_MAX_RATE  (1.000000E+01)
 #define AL_VOCAL_MORPHER_DEFAULT_RATE  (1.410000E+00)
-static const System::Int8 AL_PITCH_SHIFTER_MIN_COARSE_TUNE = System::Int8(-12);
-static const System::Int8 AL_PITCH_SHIFTER_MAX_COARSE_TUNE = System::Int8(0xc);
-static const System::Int8 AL_PITCH_SHIFTER_DEFAULT_COARSE_TUNE = System::Int8(0xc);
-static const System::Int8 AL_PITCH_SHIFTER_MIN_FINE_TUNE = System::Int8(-50);
-static const System::Int8 AL_PITCH_SHIFTER_MAX_FINE_TUNE = System::Int8(0x32);
-static const System::Int8 AL_PITCH_SHIFTER_DEFAULT_FINE_TUNE = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_PITCH_SHIFTER_MIN_COARSE_TUNE = System::Int8(-12);
+static _DELPHI_CONST System::Int8 AL_PITCH_SHIFTER_MAX_COARSE_TUNE = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 AL_PITCH_SHIFTER_DEFAULT_COARSE_TUNE = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 AL_PITCH_SHIFTER_MIN_FINE_TUNE = System::Int8(-50);
+static _DELPHI_CONST System::Int8 AL_PITCH_SHIFTER_MAX_FINE_TUNE = System::Int8(0x32);
+static _DELPHI_CONST System::Int8 AL_PITCH_SHIFTER_DEFAULT_FINE_TUNE = System::Int8(0x0);
 #define AL_RING_MODULATOR_MIN_FREQUENCY  (0.000000E+00)
 #define AL_RING_MODULATOR_MAX_FREQUENCY  (8.000000E+03)
 #define AL_RING_MODULATOR_DEFAULT_FREQUENCY  (4.400000E+02)
 #define AL_RING_MODULATOR_MIN_HIGHPASS_CUTOFF  (0.000000E+00)
 #define AL_RING_MODULATOR_MAX_HIGHPASS_CUTOFF  (2.400000E+04)
 #define AL_RING_MODULATOR_DEFAULT_HIGHPASS_CUTOFF  (8.000000E+02)
-static const System::Int8 AL_RING_MODULATOR_MIN_WAVEFORM = System::Int8(0x0);
-static const System::Int8 AL_RING_MODULATOR_MAX_WAVEFORM = System::Int8(0x2);
-static const System::Int8 AL_RING_MODULATOR_DEFAULT_WAVEFORM = System::Int8(0x0);
-static const System::Int8 AL_RING_MODULATOR_SINUSOID = System::Int8(0x0);
-static const System::Int8 AL_RING_MODULATOR_SAWTOOTH = System::Int8(0x1);
-static const System::Int8 AL_RING_MODULATOR_SQUARE = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_MIN_WAVEFORM = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_MAX_WAVEFORM = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_DEFAULT_WAVEFORM = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_SINUSOID = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_SAWTOOTH = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_RING_MODULATOR_SQUARE = System::Int8(0x2);
 #define AL_AUTOWAH_MIN_ATTACK_TIME  (1.000000E-04)
 #define AL_AUTOWAH_MAX_ATTACK_TIME  (1.000000E+00)
 #define AL_AUTOWAH_DEFAULT_ATTACK_TIME  (6.000000E-02)
@@ -690,9 +690,9 @@ static const System::Int8 AL_RING_MODULATOR_SQUARE = System::Int8(0x2);
 static const System::Extended AL_AUTOWAH_MIN_PEAK_GAIN = 3.000000E-05;
 #define AL_AUTOWAH_MAX_PEAK_GAIN  (3.162100E+04)
 #define AL_AUTOWAH_DEFAULT_PEAK_GAIN  (1.122000E+01)
-static const System::Int8 AL_COMPRESSOR_MIN_ONOFF = System::Int8(0x0);
-static const System::Int8 AL_COMPRESSOR_MAX_ONOFF = System::Int8(0x1);
-static const System::Int8 AL_COMPRESSOR_DEFAULT_ONOFF = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_COMPRESSOR_MIN_ONOFF = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_COMPRESSOR_MAX_ONOFF = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_COMPRESSOR_DEFAULT_ONOFF = System::Int8(0x1);
 #define AL_EQUALIZER_MIN_LOW_GAIN  (1.260000E-01)
 #define AL_EQUALIZER_MAX_LOW_GAIN  (7.943000E+00)
 #define AL_EQUALIZER_DEFAULT_LOW_GAIN  (1.000000E+00)
@@ -732,40 +732,40 @@ static const System::Int8 AL_COMPRESSOR_DEFAULT_ONOFF = System::Int8(0x1);
 #define AL_MIN_CONE_OUTER_GAINHF  (0.000000E+00)
 #define AL_MAX_CONE_OUTER_GAINHF  (1.000000E+00)
 #define AL_DEFAULT_CONE_OUTER_GAINHF  (1.000000E+00)
-static const System::Int8 AL_MIN_DIRECT_FILTER_GAINHF_AUTO = System::Int8(0x0);
-static const System::Int8 AL_MAX_DIRECT_FILTER_GAINHF_AUTO = System::Int8(0x1);
-static const System::Int8 AL_DEFAULT_DIRECT_FILTER_GAINHF_AUTO = System::Int8(0x1);
-static const System::Int8 AL_MIN_AUXILIARY_SEND_FILTER_GAIN_AUTO = System::Int8(0x0);
-static const System::Int8 AL_MAX_AUXILIARY_SEND_FILTER_GAIN_AUTO = System::Int8(0x1);
-static const System::Int8 AL_DEFAULT_AUXILIARY_SEND_FILTER_GAIN_AUTO = System::Int8(0x1);
-static const System::Int8 AL_MIN_AUXILIARY_SEND_FILTER_GAINHF_AUTO = System::Int8(0x0);
-static const System::Int8 AL_MAX_AUXILIARY_SEND_FILTER_GAINHF_AUTO = System::Int8(0x1);
-static const System::Int8 AL_DEFAULT_AUXILIARY_SEND_FILTER_GAINHF_AUTO = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_MIN_DIRECT_FILTER_GAINHF_AUTO = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_MAX_DIRECT_FILTER_GAINHF_AUTO = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_DEFAULT_DIRECT_FILTER_GAINHF_AUTO = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_MIN_AUXILIARY_SEND_FILTER_GAIN_AUTO = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_MAX_AUXILIARY_SEND_FILTER_GAIN_AUTO = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_DEFAULT_AUXILIARY_SEND_FILTER_GAIN_AUTO = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_MIN_AUXILIARY_SEND_FILTER_GAINHF_AUTO = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_MAX_AUXILIARY_SEND_FILTER_GAINHF_AUTO = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_DEFAULT_AUXILIARY_SEND_FILTER_GAINHF_AUTO = System::Int8(0x1);
 #define AL_DEFAULT_METERS_PER_UNIT  (1.000000E+00)
-static const System::Int8 AL_EAXREVERB_DENSITY = System::Int8(0x1);
-static const System::Int8 AL_EAXREVERB_DIFFUSION = System::Int8(0x2);
-static const System::Int8 AL_EAXREVERB_GAIN = System::Int8(0x3);
-static const System::Int8 AL_EAXREVERB_GAINHF = System::Int8(0x4);
-static const System::Int8 AL_EAXREVERB_GAINLF = System::Int8(0x5);
-static const System::Int8 AL_EAXREVERB_DECAY_TIME = System::Int8(0x6);
-static const System::Int8 AL_EAXREVERB_DECAY_HFRATIO = System::Int8(0x7);
-static const System::Int8 AL_EAXREVERB_DECAY_LFRATIO = System::Int8(0x8);
-static const System::Int8 AL_EAXREVERB_REFLECTIONS_GAIN = System::Int8(0x9);
-static const System::Int8 AL_EAXREVERB_REFLECTIONS_DELAY = System::Int8(0xa);
-static const System::Int8 AL_EAXREVERB_REFLECTIONS_PAN = System::Int8(0xb);
-static const System::Int8 AL_EAXREVERB_LATE_REVERB_GAIN = System::Int8(0xc);
-static const System::Int8 AL_EAXREVERB_LATE_REVERB_DELAY = System::Int8(0xd);
-static const System::Int8 AL_EAXREVERB_LATE_REVERB_PAN = System::Int8(0xe);
-static const System::Int8 AL_EAXREVERB_ECHO_TIME = System::Int8(0xf);
-static const System::Int8 AL_EAXREVERB_ECHO_DEPTH = System::Int8(0x10);
-static const System::Int8 AL_EAXREVERB_MODULATION_TIME = System::Int8(0x11);
-static const System::Int8 AL_EAXREVERB_MODULATION_DEPTH = System::Int8(0x12);
-static const System::Int8 AL_EAXREVERB_AIR_ABSORPTION_GAINHF = System::Int8(0x13);
-static const System::Int8 AL_EAXREVERB_HFREFERENCE = System::Int8(0x14);
-static const System::Int8 AL_EAXREVERB_LFREFERENCE = System::Int8(0x15);
-static const System::Int8 AL_EAXREVERB_ROOM_ROLLOFF_FACTOR = System::Int8(0x16);
-static const System::Int8 AL_EAXREVERB_DECAY_HFLIMIT = System::Int8(0x17);
-static const System::Word AL_EFFECT_EAXREVERB = System::Word(0x8000);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_DENSITY = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_DIFFUSION = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_GAIN = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_GAINHF = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_GAINLF = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_DECAY_TIME = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_DECAY_HFRATIO = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_DECAY_LFRATIO = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_REFLECTIONS_GAIN = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_REFLECTIONS_DELAY = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_REFLECTIONS_PAN = System::Int8(0xb);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_LATE_REVERB_GAIN = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_LATE_REVERB_DELAY = System::Int8(0xd);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_LATE_REVERB_PAN = System::Int8(0xe);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_ECHO_TIME = System::Int8(0xf);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_ECHO_DEPTH = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_MODULATION_TIME = System::Int8(0x11);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_MODULATION_DEPTH = System::Int8(0x12);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_AIR_ABSORPTION_GAINHF = System::Int8(0x13);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_HFREFERENCE = System::Int8(0x14);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_LFREFERENCE = System::Int8(0x15);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_ROOM_ROLLOFF_FACTOR = System::Int8(0x16);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_DECAY_HFLIMIT = System::Int8(0x17);
+static _DELPHI_CONST System::Word AL_EFFECT_EAXREVERB = System::Word(0x8000);
 #define AL_EAXREVERB_MIN_DENSITY  (0.000000E+00)
 #define AL_EAXREVERB_MAX_DENSITY  (1.000000E+00)
 #define AL_EAXREVERB_DEFAULT_DENSITY  (1.000000E+00)
@@ -828,70 +828,70 @@ extern DELPHI_PACKAGE System::StaticArray<float, 3> AL_EAXREVERB_DEFAULT_LATE_RE
 #define AL_EAXREVERB_MIN_ROOM_ROLLOFF_FACTOR  (0.000000E+00)
 #define AL_EAXREVERB_MAX_ROOM_ROLLOFF_FACTOR  (1.000000E+01)
 #define AL_EAXREVERB_DEFAULT_ROOM_ROLLOFF_FACTOR  (0.000000E+00)
-static const System::Int8 AL_EAXREVERB_MIN_DECAY_HFLIMIT = System::Int8(0x0);
-static const System::Int8 AL_EAXREVERB_MAX_DECAY_HFLIMIT = System::Int8(0x1);
-static const System::Int8 AL_EAXREVERB_DEFAULT_DECAY_HFLIMIT = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_MIN_DECAY_HFLIMIT = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_MAX_DECAY_HFLIMIT = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 AL_EAXREVERB_DEFAULT_DECAY_HFLIMIT = System::Int8(0x1);
 extern DELPHI_PACKAGE GUID DSPROPSETID_EAX20_ListenerProperties;
 extern DELPHI_PACKAGE GUID DSPROPSETID_EAX20_BufferProperties;
-static const System::Int8 DSPROPERTY_EAXLISTENER_NONE = System::Int8(0x0);
-static const System::Int8 DSPROPERTY_EAXLISTENER_ALLPARAMETERS = System::Int8(0x1);
-static const System::Int8 DSPROPERTY_EAXLISTENER_ROOM = System::Int8(0x2);
-static const System::Int8 DSPROPERTY_EAXLISTENER_ROOMHF = System::Int8(0x3);
-static const System::Int8 DSPROPERTY_EAXLISTENER_ROOMROLLOFFFACTOR = System::Int8(0x4);
-static const System::Int8 DSPROPERTY_EAXLISTENER_DECAYTIME = System::Int8(0x5);
-static const System::Int8 DSPROPERTY_EAXLISTENER_DECAYHFRATIO = System::Int8(0x6);
-static const System::Int8 DSPROPERTY_EAXLISTENER_REFLECTIONS = System::Int8(0x7);
-static const System::Int8 DSPROPERTY_EAXLISTENER_REFLECTIONSDELAY = System::Int8(0x8);
-static const System::Int8 DSPROPERTY_EAXLISTENER_REVERB = System::Int8(0x9);
-static const System::Int8 DSPROPERTY_EAXLISTENER_REVERBDELAY = System::Int8(0xa);
-static const System::Int8 DSPROPERTY_EAXLISTENER_ENVIRONMENT = System::Int8(0xb);
-static const System::Int8 DSPROPERTY_EAXLISTENER_ENVIRONMENTSIZE = System::Int8(0xc);
-static const System::Int8 DSPROPERTY_EAXLISTENER_ENVIRONMENTDIFFUSION = System::Int8(0xd);
-static const System::Int8 DSPROPERTY_EAXLISTENER_AIRABSORPTIONHF = System::Int8(0xe);
-static const System::Int8 DSPROPERTY_EAXLISTENER_FLAGS = System::Int8(0xf);
-static const System::Int8 DSPROPERTY_EAXLISTENER_IMMEDIATE = System::Int8(0x0);
-static const unsigned DSPROPERTY_EAXLISTENER_DEFERRED = unsigned(0x80000000);
-static const System::Int8 DSPROPERTY_EAXLISTENER_COMMITDEFERREDSETTINGS = System::Int8(0x0);
-static const System::Int8 EAX_ENVIRONMENT_GENERIC = System::Int8(0x0);
-static const System::Int8 EAX_ENVIRONMENT_PADDEDCELL = System::Int8(0x1);
-static const System::Int8 EAX_ENVIRONMENT_ROOM = System::Int8(0x2);
-static const System::Int8 EAX_ENVIRONMENT_BATHROOM = System::Int8(0x3);
-static const System::Int8 EAX_ENVIRONMENT_LIVINGROOM = System::Int8(0x4);
-static const System::Int8 EAX_ENVIRONMENT_STONEROOM = System::Int8(0x5);
-static const System::Int8 EAX_ENVIRONMENT_AUDITORIUM = System::Int8(0x6);
-static const System::Int8 EAX_ENVIRONMENT_CONCERTHALL = System::Int8(0x7);
-static const System::Int8 EAX_ENVIRONMENT_CAVE = System::Int8(0x8);
-static const System::Int8 EAX_ENVIRONMENT_ARENA = System::Int8(0x9);
-static const System::Int8 EAX_ENVIRONMENT_HANGAR = System::Int8(0xa);
-static const System::Int8 EAX_ENVIRONMENT_CARPETEDHALLWAY = System::Int8(0xb);
-static const System::Int8 EAX_ENVIRONMENT_HALLWAY = System::Int8(0xc);
-static const System::Int8 EAX_ENVIRONMENT_STONECORRIDOR = System::Int8(0xd);
-static const System::Int8 EAX_ENVIRONMENT_ALLEY = System::Int8(0xe);
-static const System::Int8 EAX_ENVIRONMENT_FOREST = System::Int8(0xf);
-static const System::Int8 EAX_ENVIRONMENT_CITY = System::Int8(0x10);
-static const System::Int8 EAX_ENVIRONMENT_MOUNTAINS = System::Int8(0x11);
-static const System::Int8 EAX_ENVIRONMENT_QUARRY = System::Int8(0x12);
-static const System::Int8 EAX_ENVIRONMENT_PLAIN = System::Int8(0x13);
-static const System::Int8 EAX_ENVIRONMENT_PARKINGLOT = System::Int8(0x14);
-static const System::Int8 EAX_ENVIRONMENT_SEWERPIPE = System::Int8(0x15);
-static const System::Int8 EAX_ENVIRONMENT_UNDERWATER = System::Int8(0x16);
-static const System::Int8 EAX_ENVIRONMENT_DRUGGED = System::Int8(0x17);
-static const System::Int8 EAX_ENVIRONMENT_DIZZY = System::Int8(0x18);
-static const System::Int8 EAX_ENVIRONMENT_PSYCHOTIC = System::Int8(0x19);
-static const System::Int8 EAX_ENVIRONMENT_COUNT = System::Int8(0x1a);
-static const System::Int8 EAXLISTENERFLAGS_DECAYTIMESCALE = System::Int8(0x1);
-static const System::Int8 EAXLISTENERFLAGS_REFLECTIONSSCALE = System::Int8(0x2);
-static const System::Int8 EAXLISTENERFLAGS_REFLECTIONSDELAYSCALE = System::Int8(0x4);
-static const System::Int8 EAXLISTENERFLAGS_REVERBSCALE = System::Int8(0x8);
-static const System::Int8 EAXLISTENERFLAGS_REVERBDELAYSCALE = System::Int8(0x10);
-static const System::Int8 EAXLISTENERFLAGS_DECAYHFLIMIT = System::Int8(0x20);
-static const unsigned EAXLISTENERFLAGS_RESERVED = unsigned(0xffffffc0);
-static const short EAXLISTENER_MINROOM = short(-10000);
-static const System::Int8 EAXLISTENER_MAXROOM = System::Int8(0x0);
-static const short EAXLISTENER_DEFAULTROOM = short(-1000);
-static const short EAXLISTENER_MINROOMHF = short(-10000);
-static const System::Int8 EAXLISTENER_MAXROOMHF = System::Int8(0x0);
-static const System::Int8 EAXLISTENER_DEFAULTROOMHF = System::Int8(-100);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_NONE = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_ALLPARAMETERS = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_ROOM = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_ROOMHF = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_ROOMROLLOFFFACTOR = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_DECAYTIME = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_DECAYHFRATIO = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_REFLECTIONS = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_REFLECTIONSDELAY = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_REVERB = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_REVERBDELAY = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_ENVIRONMENT = System::Int8(0xb);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_ENVIRONMENTSIZE = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_ENVIRONMENTDIFFUSION = System::Int8(0xd);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_AIRABSORPTIONHF = System::Int8(0xe);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_FLAGS = System::Int8(0xf);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_IMMEDIATE = System::Int8(0x0);
+static _DELPHI_CONST unsigned DSPROPERTY_EAXLISTENER_DEFERRED = unsigned(0x80000000);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXLISTENER_COMMITDEFERREDSETTINGS = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_GENERIC = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_PADDEDCELL = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_ROOM = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_BATHROOM = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_LIVINGROOM = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_STONEROOM = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_AUDITORIUM = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_CONCERTHALL = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_CAVE = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_ARENA = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_HANGAR = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_CARPETEDHALLWAY = System::Int8(0xb);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_HALLWAY = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_STONECORRIDOR = System::Int8(0xd);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_ALLEY = System::Int8(0xe);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_FOREST = System::Int8(0xf);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_CITY = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_MOUNTAINS = System::Int8(0x11);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_QUARRY = System::Int8(0x12);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_PLAIN = System::Int8(0x13);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_PARKINGLOT = System::Int8(0x14);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_SEWERPIPE = System::Int8(0x15);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_UNDERWATER = System::Int8(0x16);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_DRUGGED = System::Int8(0x17);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_DIZZY = System::Int8(0x18);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_PSYCHOTIC = System::Int8(0x19);
+static _DELPHI_CONST System::Int8 EAX_ENVIRONMENT_COUNT = System::Int8(0x1a);
+static _DELPHI_CONST System::Int8 EAXLISTENERFLAGS_DECAYTIMESCALE = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 EAXLISTENERFLAGS_REFLECTIONSSCALE = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 EAXLISTENERFLAGS_REFLECTIONSDELAYSCALE = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 EAXLISTENERFLAGS_REVERBSCALE = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 EAXLISTENERFLAGS_REVERBDELAYSCALE = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 EAXLISTENERFLAGS_DECAYHFLIMIT = System::Int8(0x20);
+static _DELPHI_CONST unsigned EAXLISTENERFLAGS_RESERVED = unsigned(0xffffffc0);
+static _DELPHI_CONST short EAXLISTENER_MINROOM = short(-10000);
+static _DELPHI_CONST System::Int8 EAXLISTENER_MAXROOM = System::Int8(0x0);
+static _DELPHI_CONST short EAXLISTENER_DEFAULTROOM = short(-1000);
+static _DELPHI_CONST short EAXLISTENER_MINROOMHF = short(-10000);
+static _DELPHI_CONST System::Int8 EAXLISTENER_MAXROOMHF = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXLISTENER_DEFAULTROOMHF = System::Int8(-100);
 #define EAXLISTENER_MINROOMROLLOFFFACTOR  (0.000000E+00)
 #define EAXLISTENER_MAXROOMROLLOFFFACTOR  (1.000000E+01)
 #define EAXLISTENER_DEFAULTROOMROLLOFFFACTOR  (0.000000E+00)
@@ -901,21 +901,21 @@ static const System::Int8 EAXLISTENER_DEFAULTROOMHF = System::Int8(-100);
 #define EAXLISTENER_MINDECAYHFRATIO  (1.000000E-01)
 #define EAXLISTENER_MAXDECAYHFRATIO  (2.000000E+00)
 #define EAXLISTENER_DEFAULTDECAYHFRATIO  (8.300000E-01)
-static const short EAXLISTENER_MINREFLECTIONS = short(-10000);
-static const System::Word EAXLISTENER_MAXREFLECTIONS = System::Word(0x3e8);
-static const short EAXLISTENER_DEFAULTREFLECTIONS = short(-2602);
+static _DELPHI_CONST short EAXLISTENER_MINREFLECTIONS = short(-10000);
+static _DELPHI_CONST System::Word EAXLISTENER_MAXREFLECTIONS = System::Word(0x3e8);
+static _DELPHI_CONST short EAXLISTENER_DEFAULTREFLECTIONS = short(-2602);
 #define EAXLISTENER_MINREFLECTIONSDELAY  (0.000000E+00)
 #define EAXLISTENER_MAXREFLECTIONSDELAY  (3.000000E-01)
 #define EAXLISTENER_DEFAULTREFLECTIONSDELAY  (7.000000E-03)
-static const short EAXLISTENER_MINREVERB = short(-10000);
-static const System::Word EAXLISTENER_MAXREVERB = System::Word(0x7d0);
-static const System::Byte EAXLISTENER_DEFAULTREVERB = System::Byte(0xc8);
+static _DELPHI_CONST short EAXLISTENER_MINREVERB = short(-10000);
+static _DELPHI_CONST System::Word EAXLISTENER_MAXREVERB = System::Word(0x7d0);
+static _DELPHI_CONST System::Byte EAXLISTENER_DEFAULTREVERB = System::Byte(0xc8);
 #define EAXLISTENER_MINREVERBDELAY  (0.000000E+00)
 #define EAXLISTENER_MAXREVERBDELAY  (1.000000E-01)
 #define EAXLISTENER_DEFAULTREVERBDELAY  (1.100000E-02)
-static const System::Int8 EAXLISTENER_MINENVIRONMENT = System::Int8(0x0);
-static const System::Int8 EAXLISTENER_MAXENVIRONMENT = System::Int8(0x19);
-static const System::Int8 EAXLISTENER_DEFAULTENVIRONMENT = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXLISTENER_MINENVIRONMENT = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXLISTENER_MAXENVIRONMENT = System::Int8(0x19);
+static _DELPHI_CONST System::Int8 EAXLISTENER_DEFAULTENVIRONMENT = System::Int8(0x0);
 #define EAXLISTENER_MINENVIRONMENTSIZE  (1.000000E+00)
 #define EAXLISTENER_MAXENVIRONMENTSIZE  (1.000000E+02)
 #define EAXLISTENER_DEFAULTENVIRONMENTSIZE  (7.500000E+00)
@@ -925,88 +925,88 @@ static const System::Int8 EAXLISTENER_DEFAULTENVIRONMENT = System::Int8(0x0);
 #define EAXLISTENER_MINAIRABSORPTIONHF  (-1.000000E+02)
 #define EAXLISTENER_MAXAIRABSORPTIONHF  (0.000000E+00)
 #define EAXLISTENER_DEFAULTAIRABSORPTIONHF  (-5.000000E+00)
-static const System::Int8 EAXLISTENER_DEFAULTFLAGS = System::Int8(0x3f);
-static const System::Int8 DSPROPERTY_EAXBUFFER_NONE = System::Int8(0x0);
-static const System::Int8 DSPROPERTY_EAXBUFFER_ALLPARAMETERS = System::Int8(0x1);
-static const System::Int8 DSPROPERTY_EAXBUFFER_DIRECT = System::Int8(0x2);
-static const System::Int8 DSPROPERTY_EAXBUFFER_DIRECTHF = System::Int8(0x3);
-static const System::Int8 DSPROPERTY_EAXBUFFER_ROOM = System::Int8(0x4);
-static const System::Int8 DSPROPERTY_EAXBUFFER_ROOMHF = System::Int8(0x5);
-static const System::Int8 DSPROPERTY_EAXBUFFER_ROOMROLLOFFFACTOR = System::Int8(0x6);
-static const System::Int8 DSPROPERTY_EAXBUFFER_OBSTRUCTION = System::Int8(0x7);
-static const System::Int8 DSPROPERTY_EAXBUFFER_OBSTRUCTIONLFRATIO = System::Int8(0x8);
-static const System::Int8 DSPROPERTY_EAXBUFFER_OCCLUSION = System::Int8(0x9);
-static const System::Int8 DSPROPERTY_EAXBUFFER_OCCLUSIONLFRATIO = System::Int8(0xa);
-static const System::Int8 DSPROPERTY_EAXBUFFER_OCCLUSIONROOMRATIO = System::Int8(0xb);
-static const System::Int8 DSPROPERTY_EAXBUFFER_OUTSIDEVOLUMEHF = System::Int8(0xc);
-static const System::Int8 DSPROPERTY_EAXBUFFER_AIRABSORPTIONFACTOR = System::Int8(0xd);
-static const System::Int8 DSPROPERTY_EAXBUFFER_FLAG = System::Int8(0xe);
-static const System::Int8 DSPROPERTY_EAXBUFFER_IMMEDIATE = System::Int8(0x0);
-static const unsigned DSPROPERTY_EAXBUFFER_DEFERRED = unsigned(0x80000000);
-static const System::Int8 DSPROPERTY_EAXBUFFER_COMMITDEFERREDSETTINGS = System::Int8(0x0);
-static const System::Int8 EAXBUFFERFLAGS_DIRECTHFAUTO = System::Int8(0x1);
-static const System::Int8 EAXBUFFERFLAGS_ROOMAUTO = System::Int8(0x2);
-static const System::Int8 EAXBUFFERFLAGS_ROOMHFAUTO = System::Int8(0x4);
-static const unsigned EAXBUFFERFLAGS_RESERVED = unsigned(0xfffffff8);
-static const short EAXBUFFER_MINDIRECT = short(-10000);
-static const System::Word EAXBUFFER_MAXDIRECT = System::Word(0x3e8);
-static const System::Int8 EAXBUFFER_DEFAULTDIRECT = System::Int8(0x0);
-static const short EAXBUFFER_MINDIRECTHF = short(-10000);
-static const System::Int8 EAXBUFFER_MAXDIRECTHF = System::Int8(0x0);
-static const System::Int8 EAXBUFFER_DEFAULTDIRECTHF = System::Int8(0x0);
-static const short EAXBUFFER_MINROOM = short(-10000);
-static const System::Word EAXBUFFER_MAXROOM = System::Word(0x3e8);
-static const System::Int8 EAXBUFFER_DEFAULTROOM = System::Int8(0x0);
-static const short EAXBUFFER_MINROOMHF = short(-10000);
-static const System::Int8 EAXBUFFER_MAXROOMHF = System::Int8(0x0);
-static const System::Int8 EAXBUFFER_DEFAULTROOMHF = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXLISTENER_DEFAULTFLAGS = System::Int8(0x3f);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_NONE = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_ALLPARAMETERS = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_DIRECT = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_DIRECTHF = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_ROOM = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_ROOMHF = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_ROOMROLLOFFFACTOR = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_OBSTRUCTION = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_OBSTRUCTIONLFRATIO = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_OCCLUSION = System::Int8(0x9);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_OCCLUSIONLFRATIO = System::Int8(0xa);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_OCCLUSIONROOMRATIO = System::Int8(0xb);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_OUTSIDEVOLUMEHF = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_AIRABSORPTIONFACTOR = System::Int8(0xd);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_FLAG = System::Int8(0xe);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_IMMEDIATE = System::Int8(0x0);
+static _DELPHI_CONST unsigned DSPROPERTY_EAXBUFFER_DEFERRED = unsigned(0x80000000);
+static _DELPHI_CONST System::Int8 DSPROPERTY_EAXBUFFER_COMMITDEFERREDSETTINGS = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXBUFFERFLAGS_DIRECTHFAUTO = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 EAXBUFFERFLAGS_ROOMAUTO = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 EAXBUFFERFLAGS_ROOMHFAUTO = System::Int8(0x4);
+static _DELPHI_CONST unsigned EAXBUFFERFLAGS_RESERVED = unsigned(0xfffffff8);
+static _DELPHI_CONST short EAXBUFFER_MINDIRECT = short(-10000);
+static _DELPHI_CONST System::Word EAXBUFFER_MAXDIRECT = System::Word(0x3e8);
+static _DELPHI_CONST System::Int8 EAXBUFFER_DEFAULTDIRECT = System::Int8(0x0);
+static _DELPHI_CONST short EAXBUFFER_MINDIRECTHF = short(-10000);
+static _DELPHI_CONST System::Int8 EAXBUFFER_MAXDIRECTHF = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXBUFFER_DEFAULTDIRECTHF = System::Int8(0x0);
+static _DELPHI_CONST short EAXBUFFER_MINROOM = short(-10000);
+static _DELPHI_CONST System::Word EAXBUFFER_MAXROOM = System::Word(0x3e8);
+static _DELPHI_CONST System::Int8 EAXBUFFER_DEFAULTROOM = System::Int8(0x0);
+static _DELPHI_CONST short EAXBUFFER_MINROOMHF = short(-10000);
+static _DELPHI_CONST System::Int8 EAXBUFFER_MAXROOMHF = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXBUFFER_DEFAULTROOMHF = System::Int8(0x0);
 #define EAXBUFFER_MINROOMROLLOFFFACTOR  (0.000000E+00)
 #define EAXBUFFER_MAXROOMROLLOFFFACTOR  (1.000000E+01)
 #define EAXBUFFER_DEFAULTROOMROLLOFFFACTOR  (0.000000E+00)
-static const short EAXBUFFER_MINOBSTRUCTION = short(-10000);
-static const System::Int8 EAXBUFFER_MAXOBSTRUCTION = System::Int8(0x0);
-static const System::Int8 EAXBUFFER_DEFAULTOBSTRUCTION = System::Int8(0x0);
+static _DELPHI_CONST short EAXBUFFER_MINOBSTRUCTION = short(-10000);
+static _DELPHI_CONST System::Int8 EAXBUFFER_MAXOBSTRUCTION = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXBUFFER_DEFAULTOBSTRUCTION = System::Int8(0x0);
 #define EAXBUFFER_MINOBSTRUCTIONLFRATIO  (0.000000E+00)
 #define EAXBUFFER_MAXOBSTRUCTIONLFRATIO  (1.000000E+00)
 #define EAXBUFFER_DEFAULTOBSTRUCTIONLFRATIO  (0.000000E+00)
-static const short EAXBUFFER_MINOCCLUSION = short(-10000);
-static const System::Int8 EAXBUFFER_MAXOCCLUSION = System::Int8(0x0);
-static const System::Int8 EAXBUFFER_DEFAULTOCCLUSION = System::Int8(0x0);
+static _DELPHI_CONST short EAXBUFFER_MINOCCLUSION = short(-10000);
+static _DELPHI_CONST System::Int8 EAXBUFFER_MAXOCCLUSION = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXBUFFER_DEFAULTOCCLUSION = System::Int8(0x0);
 #define EAXBUFFER_MINOCCLUSIONLFRATIO  (0.000000E+00)
 #define EAXBUFFER_MAXOCCLUSIONLFRATIO  (1.000000E+00)
 #define EAXBUFFER_DEFAULTOCCLUSIONLFRATIO  (2.500000E-01)
 #define EAXBUFFER_MINOCCLUSIONROOMRATIO  (0.000000E+00)
 #define EAXBUFFER_MAXOCCLUSIONROOMRATIO  (1.000000E+01)
 #define EAXBUFFER_DEFAULTOCCLUSIONROOMRATIO  (5.000000E-01)
-static const short EAXBUFFER_MINOUTSIDEVOLUMEHF = short(-10000);
-static const System::Int8 EAXBUFFER_MAXOUTSIDEVOLUMEHF = System::Int8(0x0);
-static const System::Int8 EAXBUFFER_DEFAULTOUTSIDEVOLUMEHF = System::Int8(0x0);
+static _DELPHI_CONST short EAXBUFFER_MINOUTSIDEVOLUMEHF = short(-10000);
+static _DELPHI_CONST System::Int8 EAXBUFFER_MAXOUTSIDEVOLUMEHF = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 EAXBUFFER_DEFAULTOUTSIDEVOLUMEHF = System::Int8(0x0);
 #define EAXBUFFER_MINAIRABSORPTIONFACTOR  (0.000000E+00)
 #define EAXBUFFER_MAXAIRABSORPTIONFACTOR  (1.000000E+01)
 #define EAXBUFFER_DEFAULTAIRABSORPTIONFACTOR  (1.000000E+00)
-static const System::Int8 EAXBUFFER_DEFAULTFLAGS = System::Int8(0x7);
-static const short EAX_MATERIAL_SINGLEWINDOW = short(-2800);
+static _DELPHI_CONST System::Int8 EAXBUFFER_DEFAULTFLAGS = System::Int8(0x7);
+static _DELPHI_CONST short EAX_MATERIAL_SINGLEWINDOW = short(-2800);
 #define EAX_MATERIAL_SINGLEWINDOWLF  (7.100000E-01)
 #define EAX_MATERIAL_SINGLEWINDOWROOMRATIO  (4.300000E-01)
-static const short EAX_MATERIAL_DOUBLEWINDOW = short(-5000);
+static _DELPHI_CONST short EAX_MATERIAL_DOUBLEWINDOW = short(-5000);
 #define EAX_MATERIAL_DOUBLEWINDOWHF  (4.000000E-01)
 #define EAX_MATERIAL_DOUBLEWINDOWROOMRATIO  (2.400000E-01)
-static const short EAX_MATERIAL_THINDOOR = short(-1800);
+static _DELPHI_CONST short EAX_MATERIAL_THINDOOR = short(-1800);
 #define EAX_MATERIAL_THINDOORLF  (6.600000E-01)
 #define EAX_MATERIAL_THINDOORROOMRATIO  (6.600000E-01)
-static const short EAX_MATERIAL_THICKDOOR = short(-4400);
+static _DELPHI_CONST short EAX_MATERIAL_THICKDOOR = short(-4400);
 #define EAX_MATERIAL_THICKDOORLF  (6.400000E-01)
 #define EAX_MATERIAL_THICKDOORROOMRTATION  (2.700000E-01)
-static const short EAX_MATERIAL_WOODWALL = short(-4000);
+static _DELPHI_CONST short EAX_MATERIAL_WOODWALL = short(-4000);
 #define EAX_MATERIAL_WOODWALLLF  (5.000000E-01)
 #define EAX_MATERIAL_WOODWALLROOMRATIO  (3.000000E-01)
-static const short EAX_MATERIAL_BRICKWALL = short(-5000);
+static _DELPHI_CONST short EAX_MATERIAL_BRICKWALL = short(-5000);
 #define EAX_MATERIAL_BRICKWALLLF  (6.000000E-01)
 #define EAX_MATERIAL_BRICKWALLROOMRATIO  (2.400000E-01)
-static const short EAX_MATERIAL_STONEWALL = short(-6000);
+static _DELPHI_CONST short EAX_MATERIAL_STONEWALL = short(-6000);
 #define EAX_MATERIAL_STONEWALLLF  (6.800000E-01)
 #define EAX_MATERIAL_STONEWALLROOMRATIO  (2.000000E-01)
-static const short EAX_MATERIAL_CURTAIN = short(-1200);
+static _DELPHI_CONST short EAX_MATERIAL_CURTAIN = short(-1200);
 #define EAX_MATERIAL_CURTAINLF  (1.500000E-01)
 #define EAX_MATERIAL_CURTAINROOMRATIO  (1.000000E+00)
 extern DELPHI_PACKAGE void __cdecl (*alEnable)(TALenum capability);

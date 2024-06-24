@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLBlur.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glblur.pas' rev: 36.00 (Windows)
 
 #ifndef GlblurHPP
 #define GlblurHPP
@@ -15,27 +15,27 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <Vcl.Graphics.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLObjects.hpp>
-#include <GLBitmapFont.hpp>
-#include <GLTexture.hpp>
-#include <GLMaterial.hpp>
-#include <GLHUDObjects.hpp>
-#include <GLColor.hpp>
-#include <GLGraphics.hpp>
-#include <GLContext.hpp>
-#include <XOpenGL.hpp>
-#include <GLState.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <System.UITypes.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Globjects.hpp>
+#include <Glbitmapfont.hpp>
+#include <Gltexture.hpp>
+#include <Glmaterial.hpp>
+#include <Glhudobjects.hpp>
+#include <Glcolor.hpp>
+#include <Glgraphics.hpp>
+#include <Glcontext.hpp>
+#include <Xopengl.hpp>
+#include <Glstate.hpp>
+#include <Gltextureformat.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <System.Uitypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

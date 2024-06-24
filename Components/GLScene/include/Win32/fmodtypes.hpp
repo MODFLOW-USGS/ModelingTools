@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'fmodtypes.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Fmodtypes.pas' rev: 36.00 (Windows)
 
 #ifndef FmodtypesHPP
 #define FmodtypesHPP
@@ -15,7 +15,7 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 
 //-- user supplied -----------------------------------------------------------
@@ -160,92 +160,92 @@ public:
 
 //-- var, const, procedure ---------------------------------------------------
 extern DELPHI_PACKAGE float FMOD_VERSION;
-static const System::Int8 FSOUND_DSP_DEFAULTPRIORITY_CLEARUNIT = System::Int8(0x0);
-static const System::Int8 FSOUND_DSP_DEFAULTPRIORITY_SFXUNIT = System::Int8(0x64);
-static const System::Byte FSOUND_DSP_DEFAULTPRIORITY_MUSICUNIT = System::Byte(0xc8);
-static const System::Word FSOUND_DSP_DEFAULTPRIORITY_USER = System::Word(0x12c);
-static const System::Word FSOUND_DSP_DEFAULTPRIORITY_FFTUNIT = System::Word(0x384);
-static const System::Word FSOUND_DSP_DEFAULTPRIORITY_CLIPANDCOPYUNIT = System::Word(0x3e8);
-static const System::Int8 FSOUND_CAPS_HARDWARE = System::Int8(0x1);
-static const System::Int8 FSOUND_CAPS_EAX2 = System::Int8(0x2);
-static const System::Int8 FSOUND_CAPS_EAX3 = System::Int8(0x10);
-static const System::Int8 FSOUND_LOOP_OFF = System::Int8(0x1);
-static const System::Int8 FSOUND_LOOP_NORMAL = System::Int8(0x2);
-static const System::Int8 FSOUND_LOOP_BIDI = System::Int8(0x4);
-static const System::Int8 FSOUND_8BITS = System::Int8(0x8);
-static const System::Int8 FSOUND_16BITS = System::Int8(0x10);
-static const System::Int8 FSOUND_MONO = System::Int8(0x20);
-static const System::Int8 FSOUND_STEREO = System::Int8(0x40);
-static const System::Byte FSOUND_UNSIGNED = System::Byte(0x80);
-static const System::Word FSOUND_SIGNED = System::Word(0x100);
-static const System::Word FSOUND_DELTA = System::Word(0x200);
-static const System::Word FSOUND_IT214 = System::Word(0x400);
-static const System::Word FSOUND_IT215 = System::Word(0x800);
-static const System::Word FSOUND_HW3D = System::Word(0x1000);
-static const System::Word FSOUND_2D = System::Word(0x2000);
-static const System::Word FSOUND_STREAMABLE = System::Word(0x4000);
-static const System::Word FSOUND_LOADMEMORY = System::Word(0x8000);
-static const int FSOUND_LOADRAW = int(0x10000);
-static const int FSOUND_MPEGACCURATE = int(0x20000);
-static const int FSOUND_FORCEMONO = int(0x40000);
-static const int FSOUND_HW2D = int(0x80000);
-static const int FSOUND_ENABLEFX = int(0x100000);
-static const int FSOUND_MPEGHALFRATE = int(0x200000);
-static const int FSOUND_XADPCM = int(0x400000);
-static const int FSOUND_VAG = int(0x800000);
-static const int FSOUND_NONBLOCKING = int(0x1000000);
-static const int FSOUND_GCADPCM = int(0x2000000);
-static const int FSOUND_MULTICHANNEL = int(0x4000000);
-static const int FSOUND_USECORE0 = int(0x8000000);
-static const int FSOUND_USECORE1 = int(0x10000000);
-static const int FSOUND_LOADMEMORYIOP = int(0x20000000);
-static const System::Word FSOUND_NORMAL = System::Word(0x130);
-static const System::Int8 FSOUND_CD_PLAYCONTINUOUS = System::Int8(0x0);
-static const System::Int8 FSOUND_CD_PLAYONCE = System::Int8(0x1);
-static const System::Int8 FSOUND_CD_PLAYLOOPED = System::Int8(0x2);
-static const System::Int8 FSOUND_CD_PLAYRANDOM = System::Int8(0x3);
-static const System::Int8 FSOUND_FREE = System::Int8(-1);
-static const System::Int8 FSOUND_UNMANAGED = System::Int8(-2);
-static const System::Int8 FSOUND_ALL = System::Int8(-3);
-static const System::Int8 FSOUND_STEREOPAN = System::Int8(-1);
-static const short FSOUND_SYSTEMCHANNEL = short(-1000);
-static const short FSOUND_SYSTEMSAMPLE = short(-1000);
-static const System::Int8 FSOUND_REVERBFLAGS_DECAYTIMESCALE = System::Int8(0x1);
-static const System::Int8 FSOUND_REVERBFLAGS_REFLECTIONSSCALE = System::Int8(0x2);
-static const System::Int8 FSOUND_REVERBFLAGS_REFLECTIONSDELAYSCALE = System::Int8(0x4);
-static const System::Int8 FSOUND_REVERBFLAGS_REVERBSCALE = System::Int8(0x8);
-static const System::Int8 FSOUND_REVERBFLAGS_REVERBDELAYSCALE = System::Int8(0x10);
-static const System::Int8 FSOUND_REVERBFLAGS_DECAYHFLIMIT = System::Int8(0x20);
-static const System::Int8 FSOUND_REVERBFLAGS_ECHOTIMESCALE = System::Int8(0x40);
-static const System::Byte FSOUND_REVERBFLAGS_MODULATIONTIMESCALE = System::Byte(0x80);
-static const System::Word FSOUND_REVERB_FLAGS_CORE0 = System::Word(0x100);
-static const System::Word FSOUND_REVERB_FLAGS_CORE1 = System::Word(0x200);
-static const System::Word FSOUND_REVERBFLAGS_DEFAULT = System::Word(0x33f);
-static const System::Int8 FSOUND_REVERB_CHANNELFLAGS_DIRECTHFAUTO = System::Int8(0x1);
-static const System::Int8 FSOUND_REVERB_CHANNELFLAGS_ROOMAUTO = System::Int8(0x2);
-static const System::Int8 FSOUND_REVERB_CHANNELFLAGS_ROOMHFAUTO = System::Int8(0x4);
-static const System::Int8 FSOUND_REVERB_CHANNELFLAGS_DEFAULT = System::Int8(0x7);
-static const System::Int8 FSOUND_INIT_USEDEFAULTMIDISYNTH = System::Int8(0x1);
-static const System::Int8 FSOUND_INIT_GLOBALFOCUS = System::Int8(0x2);
-static const System::Int8 FSOUND_INIT_ENABLESYSTEMCHANNELFX = System::Int8(0x4);
-static const System::Int8 FSOUND_INIT_ACCURATEVULEVELS = System::Int8(0x8);
-static const System::Int8 FSOUND_INIT_PS2_DISABLECORE0REVERB = System::Int8(0x10);
-static const System::Int8 FSOUND_INIT_PS2_DISABLECORE1REVERB = System::Int8(0x20);
-static const System::Int8 FSOUND_INIT_PS2_SWAPDMACORES = System::Int8(0x40);
-static const System::Byte FSOUND_INIT_DONTLATENCYADJUST = System::Byte(0x80);
-static const System::Word FSOUND_INIT_GC_INITLIBS = System::Word(0x100);
-static const System::Word FSOUND_INIT_STREAM_FROM_MAIN_THREAD = System::Word(0x200);
-static const System::Word FSOUND_INIT_PS2_USEVOLUMERAMPING = System::Word(0x400);
-static const System::Word FSOUND_INIT_DSOUND_DEFERRED = System::Word(0x800);
-static const System::Word FSOUND_INIT_DSOUND_HRTF_LIGHT = System::Word(0x1000);
-static const System::Word FSOUND_INIT_DSOUND_HRTF_FULL = System::Word(0x2000);
-static const System::Word FSOUND_INIT_XBOX_REMOVEHEADROOM = System::Word(0x4000);
-static const System::Word FSOUND_INIT_PSP_SILENCEONUNDERRUN = System::Word(0x8000);
-static const System::Int8 FSOUND_PROTOCOL_SHOUTCAST = System::Int8(0x1);
-static const System::Int8 FSOUND_PROTOCOL_ICECAST = System::Int8(0x2);
-static const System::Int8 FSOUND_PROTOCOL_HTTP = System::Int8(0x4);
-static const int FSOUND_FORMAT_MPEG = int(0x10000);
-static const int FSOUND_FORMAT_OGGVORBIS = int(0x20000);
+static _DELPHI_CONST System::Int8 FSOUND_DSP_DEFAULTPRIORITY_CLEARUNIT = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 FSOUND_DSP_DEFAULTPRIORITY_SFXUNIT = System::Int8(0x64);
+static _DELPHI_CONST System::Byte FSOUND_DSP_DEFAULTPRIORITY_MUSICUNIT = System::Byte(0xc8);
+static _DELPHI_CONST System::Word FSOUND_DSP_DEFAULTPRIORITY_USER = System::Word(0x12c);
+static _DELPHI_CONST System::Word FSOUND_DSP_DEFAULTPRIORITY_FFTUNIT = System::Word(0x384);
+static _DELPHI_CONST System::Word FSOUND_DSP_DEFAULTPRIORITY_CLIPANDCOPYUNIT = System::Word(0x3e8);
+static _DELPHI_CONST System::Int8 FSOUND_CAPS_HARDWARE = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 FSOUND_CAPS_EAX2 = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 FSOUND_CAPS_EAX3 = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 FSOUND_LOOP_OFF = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 FSOUND_LOOP_NORMAL = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 FSOUND_LOOP_BIDI = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 FSOUND_8BITS = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 FSOUND_16BITS = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 FSOUND_MONO = System::Int8(0x20);
+static _DELPHI_CONST System::Int8 FSOUND_STEREO = System::Int8(0x40);
+static _DELPHI_CONST System::Byte FSOUND_UNSIGNED = System::Byte(0x80);
+static _DELPHI_CONST System::Word FSOUND_SIGNED = System::Word(0x100);
+static _DELPHI_CONST System::Word FSOUND_DELTA = System::Word(0x200);
+static _DELPHI_CONST System::Word FSOUND_IT214 = System::Word(0x400);
+static _DELPHI_CONST System::Word FSOUND_IT215 = System::Word(0x800);
+static _DELPHI_CONST System::Word FSOUND_HW3D = System::Word(0x1000);
+static _DELPHI_CONST System::Word FSOUND_2D = System::Word(0x2000);
+static _DELPHI_CONST System::Word FSOUND_STREAMABLE = System::Word(0x4000);
+static _DELPHI_CONST System::Word FSOUND_LOADMEMORY = System::Word(0x8000);
+static _DELPHI_CONST int FSOUND_LOADRAW = int(0x10000);
+static _DELPHI_CONST int FSOUND_MPEGACCURATE = int(0x20000);
+static _DELPHI_CONST int FSOUND_FORCEMONO = int(0x40000);
+static _DELPHI_CONST int FSOUND_HW2D = int(0x80000);
+static _DELPHI_CONST int FSOUND_ENABLEFX = int(0x100000);
+static _DELPHI_CONST int FSOUND_MPEGHALFRATE = int(0x200000);
+static _DELPHI_CONST int FSOUND_XADPCM = int(0x400000);
+static _DELPHI_CONST int FSOUND_VAG = int(0x800000);
+static _DELPHI_CONST int FSOUND_NONBLOCKING = int(0x1000000);
+static _DELPHI_CONST int FSOUND_GCADPCM = int(0x2000000);
+static _DELPHI_CONST int FSOUND_MULTICHANNEL = int(0x4000000);
+static _DELPHI_CONST int FSOUND_USECORE0 = int(0x8000000);
+static _DELPHI_CONST int FSOUND_USECORE1 = int(0x10000000);
+static _DELPHI_CONST int FSOUND_LOADMEMORYIOP = int(0x20000000);
+static _DELPHI_CONST System::Word FSOUND_NORMAL = System::Word(0x130);
+static _DELPHI_CONST System::Int8 FSOUND_CD_PLAYCONTINUOUS = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 FSOUND_CD_PLAYONCE = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 FSOUND_CD_PLAYLOOPED = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 FSOUND_CD_PLAYRANDOM = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 FSOUND_FREE = System::Int8(-1);
+static _DELPHI_CONST System::Int8 FSOUND_UNMANAGED = System::Int8(-2);
+static _DELPHI_CONST System::Int8 FSOUND_ALL = System::Int8(-3);
+static _DELPHI_CONST System::Int8 FSOUND_STEREOPAN = System::Int8(-1);
+static _DELPHI_CONST short FSOUND_SYSTEMCHANNEL = short(-1000);
+static _DELPHI_CONST short FSOUND_SYSTEMSAMPLE = short(-1000);
+static _DELPHI_CONST System::Int8 FSOUND_REVERBFLAGS_DECAYTIMESCALE = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 FSOUND_REVERBFLAGS_REFLECTIONSSCALE = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 FSOUND_REVERBFLAGS_REFLECTIONSDELAYSCALE = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 FSOUND_REVERBFLAGS_REVERBSCALE = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 FSOUND_REVERBFLAGS_REVERBDELAYSCALE = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 FSOUND_REVERBFLAGS_DECAYHFLIMIT = System::Int8(0x20);
+static _DELPHI_CONST System::Int8 FSOUND_REVERBFLAGS_ECHOTIMESCALE = System::Int8(0x40);
+static _DELPHI_CONST System::Byte FSOUND_REVERBFLAGS_MODULATIONTIMESCALE = System::Byte(0x80);
+static _DELPHI_CONST System::Word FSOUND_REVERB_FLAGS_CORE0 = System::Word(0x100);
+static _DELPHI_CONST System::Word FSOUND_REVERB_FLAGS_CORE1 = System::Word(0x200);
+static _DELPHI_CONST System::Word FSOUND_REVERBFLAGS_DEFAULT = System::Word(0x33f);
+static _DELPHI_CONST System::Int8 FSOUND_REVERB_CHANNELFLAGS_DIRECTHFAUTO = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 FSOUND_REVERB_CHANNELFLAGS_ROOMAUTO = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 FSOUND_REVERB_CHANNELFLAGS_ROOMHFAUTO = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 FSOUND_REVERB_CHANNELFLAGS_DEFAULT = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 FSOUND_INIT_USEDEFAULTMIDISYNTH = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 FSOUND_INIT_GLOBALFOCUS = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 FSOUND_INIT_ENABLESYSTEMCHANNELFX = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 FSOUND_INIT_ACCURATEVULEVELS = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 FSOUND_INIT_PS2_DISABLECORE0REVERB = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 FSOUND_INIT_PS2_DISABLECORE1REVERB = System::Int8(0x20);
+static _DELPHI_CONST System::Int8 FSOUND_INIT_PS2_SWAPDMACORES = System::Int8(0x40);
+static _DELPHI_CONST System::Byte FSOUND_INIT_DONTLATENCYADJUST = System::Byte(0x80);
+static _DELPHI_CONST System::Word FSOUND_INIT_GC_INITLIBS = System::Word(0x100);
+static _DELPHI_CONST System::Word FSOUND_INIT_STREAM_FROM_MAIN_THREAD = System::Word(0x200);
+static _DELPHI_CONST System::Word FSOUND_INIT_PS2_USEVOLUMERAMPING = System::Word(0x400);
+static _DELPHI_CONST System::Word FSOUND_INIT_DSOUND_DEFERRED = System::Word(0x800);
+static _DELPHI_CONST System::Word FSOUND_INIT_DSOUND_HRTF_LIGHT = System::Word(0x1000);
+static _DELPHI_CONST System::Word FSOUND_INIT_DSOUND_HRTF_FULL = System::Word(0x2000);
+static _DELPHI_CONST System::Word FSOUND_INIT_XBOX_REMOVEHEADROOM = System::Word(0x4000);
+static _DELPHI_CONST System::Word FSOUND_INIT_PSP_SILENCEONUNDERRUN = System::Word(0x8000);
+static _DELPHI_CONST System::Int8 FSOUND_PROTOCOL_SHOUTCAST = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 FSOUND_PROTOCOL_ICECAST = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 FSOUND_PROTOCOL_HTTP = System::Int8(0x4);
+static _DELPHI_CONST int FSOUND_FORMAT_MPEG = int(0x10000);
+static _DELPHI_CONST int FSOUND_FORMAT_OGGVORBIS = int(0x20000);
 }	/* namespace Fmodtypes */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_FMODTYPES)
 using namespace Fmodtypes;

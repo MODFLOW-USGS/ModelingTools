@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMultiPolygon.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLMultiPolygon.pas' rev: 35.00 (Windows)
 
 #ifndef GlmultipolygonHPP
 #define GlmultipolygonHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -117,7 +115,7 @@ public:
 	HIDESBASE TGLContour* __fastcall Add();
 	HIDESBASE TGLContour* __fastcall FindItemID(int ID);
 	__property TGLContour* Items[int index] = {read=GetItems, write=SetItems/*, default*/};
-	void __fastcall GetExtents(Glvectorgeometry::TAffineVector &min, Glvectorgeometry::TAffineVector &max);
+	void __fastcall GetExtents(Glvectortypes::TVector3f &min, Glvectortypes::TVector3f &max);
 public:
 	/* TCollection.Destroy */ inline __fastcall virtual ~TGLContours() { }
 	
@@ -155,13 +153,13 @@ class PASCALIMPLEMENTATION TMultiPolygonBase : public Glscene::TGLSceneObject
 private:
 	TGLContours* FContours;
 	TPolygonList* FOutline;
-	Glvectorgeometry::TAffineVector FContoursNormal;
-	Glvectorgeometry::TVector FAxisAlignedDimensionsCache;
+	Glvectortypes::TVector3f FContoursNormal;
+	Glvectortypes::TVector4f FAxisAlignedDimensionsCache;
 	void __fastcall SetContours(TGLContours* const Value);
 	TGLContourNodes* __fastcall GetPath(int i);
 	void __fastcall SetPath(int i, TGLContourNodes* const value);
 	TPolygonList* __fastcall GetOutline();
-	void __fastcall SetContoursNormal(const Glvectorgeometry::TAffineVector &Value);
+	void __fastcall SetContoursNormal(const Glvectortypes::TVector3f &Value);
 	
 protected:
 	void __fastcall RenderTesselatedPolygon(bool textured, Glvectorgeometry::PAffineVector normal, bool invertNormals);
@@ -172,14 +170,14 @@ public:
 	__fastcall virtual TMultiPolygonBase(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TMultiPolygonBase();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	void __fastcall AddNode(const int i, Glcoordinates::TGLCoordinates* const coords)/* overload */;
-	void __fastcall AddNode(const int i, const Opengltokens::TGLfloat X, const Opengltokens::TGLfloat Y, const Opengltokens::TGLfloat Z)/* overload */;
-	void __fastcall AddNode(const int i, const Glvectorgeometry::TVector &value)/* overload */;
-	void __fastcall AddNode(const int i, const Glvectorgeometry::TAffineVector &value)/* overload */;
+	void __fastcall AddNode(const int i, Glcoordinates::TGLCoordinates3* const coords)/* overload */;
+	void __fastcall AddNode(const int i, const float X, const float Y, const float Z)/* overload */;
+	void __fastcall AddNode(const int i, const Glvectortypes::TVector4f &value)/* overload */;
+	void __fastcall AddNode(const int i, const Glvectortypes::TVector3f &value)/* overload */;
 	__property TGLContourNodes* Path[int i] = {read=GetPath, write=SetPath};
 	__property TPolygonList* Outline = {read=GetOutline};
-	__property Glvectorgeometry::TAffineVector ContoursNormal = {read=FContoursNormal, write=SetContoursNormal};
-	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	__property Glvectortypes::TVector3f ContoursNormal = {read=FContoursNormal, write=SetContoursNormal};
+	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
 	virtual void __fastcall StructureChanged();
 	
 __published:
@@ -226,7 +224,7 @@ private:
 	int FPageSize;
 	int FArrSize;
 	int FUsedEntries;
-	Glvectorgeometry::PByteArray FAktArray;
+	Glvectorgeometry::TByteVector *FAktArray;
 	void __fastcall CreatePage();
 	
 public:

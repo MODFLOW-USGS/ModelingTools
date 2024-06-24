@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLPerlinPFX.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glperlinpfx.pas' rev: 36.00 (Windows)
 
 #ifndef GlperlinpfxHPP
 #define GlperlinpfxHPP
@@ -15,16 +15,16 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
 #include <System.Math.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLParticleFX.hpp>
-#include <GLGraphics.hpp>
-#include <GLPerlinNoise3D.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLCadencer.hpp>
-#include <GLColor.hpp>
+#include <Opengltokens.hpp>
+#include <Glparticlefx.hpp>
+#include <Glgraphics.hpp>
+#include <Glperlinnoise3d.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glcadencer.hpp>
+#include <Glcolor.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

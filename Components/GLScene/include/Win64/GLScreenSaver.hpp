@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScreenSaver.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glscreensaver.pas' rev: 36.00 (Windows)
 
 #ifndef GlscreensaverHPP
 #define GlscreensaverHPP
@@ -15,16 +15,16 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <Winapi.Messages.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Win.Registry.hpp>
 #include <Vcl.Dialogs.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.Forms.hpp>
-#include <Vcl.ExtCtrls.hpp>
+#include <Vcl.Extctrls.hpp>
 #include <System.Types.hpp>
 
 //-- user supplied -----------------------------------------------------------
@@ -55,7 +55,7 @@ private:
 	System::UnicodeString FAboutString;
 	bool FInPreviewMode;
 	Vcl::Extctrls::TTimer* mouseTimer;
-	System::Types::TPoint lastMousePosition;
+	Winapi::Windows::TPoint lastMousePosition;
 	Winapi::Windows::THandle FMutex;
 	
 protected:

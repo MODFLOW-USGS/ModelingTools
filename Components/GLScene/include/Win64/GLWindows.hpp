@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLWindows.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glwindows.pas' rev: 36.00 (Windows)
 
 #ifndef GlwindowsHPP
 #define GlwindowsHPP
@@ -15,36 +15,36 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Stdctrls.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.Graphics.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLStrings.hpp>
-#include <GLCoordinates.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLObjects.hpp>
-#include <GLState.hpp>
-#include <GLUtils.hpp>
-#include <GLScene.hpp>
-#include <GLHUDObjects.hpp>
-#include <GLMaterial.hpp>
-#include <GLContext.hpp>
-#include <GLBitmapFont.hpp>
-#include <GLWindowsFont.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLGui.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLColor.hpp>
-#include <GLTexture.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLBaseClasses.hpp>
-#include <System.UITypes.hpp>
+#include <Opengltokens.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glstrings.hpp>
+#include <Glcoordinates.hpp>
+#include <Glvectortypes.hpp>
+#include <Globjects.hpp>
+#include <Glstate.hpp>
+#include <Glutils.hpp>
+#include <Glscene.hpp>
+#include <Glhudobjects.hpp>
+#include <Glmaterial.hpp>
+#include <Glcontext.hpp>
+#include <Glbitmapfont.hpp>
+#include <Glwindowsfont.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glgui.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glcolor.hpp>
+#include <Gltexture.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glbaseclasses.hpp>
+#include <System.Uitypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

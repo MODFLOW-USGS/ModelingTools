@@ -1667,7 +1667,7 @@ var
   AScreenObject: TScreenObject;
   RiverIndex: integer;
   SegIndex: integer;
-  SegmentIndex: integer;
+  SegmentIndex: NativeInt;
   CellSegment: TCellElementSegment;
   PriorX, PriorY: double;
   SetDefaults: boolean;
@@ -1843,7 +1843,7 @@ procedure WriteWells(const Stream: TStringStream;
 var
   Index: integer;
   AScreenObject: TScreenObject;
-  SegmentIndex: integer;
+  SegmentIndex: NativeInt;
   CellSegment: TCellElementSegment;
   PumpingRate: double;
   Solution: integer;

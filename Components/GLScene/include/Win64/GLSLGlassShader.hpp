@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLGlassShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glslglassshader.pas' rev: 36.00 (Windows)
 
 #ifndef GlslglassshaderHPP
 #define GlslglassshaderHPP
@@ -15,24 +15,24 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <GLScene.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLState.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLContext.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLCoordinates.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLColor.hpp>
-#include <GLTexture.hpp>
-#include <GLMaterial.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLGraphics.hpp>
-#include <GLSLShader.hpp>
-#include <GLCustomShader.hpp>
+#include <Glscene.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glstate.hpp>
+#include <Opengltokens.hpp>
+#include <Glcontext.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glcoordinates.hpp>
+#include <Gltextureformat.hpp>
+#include <Glcolor.hpp>
+#include <Gltexture.hpp>
+#include <Glmaterial.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glgraphics.hpp>
+#include <Glslshader.hpp>
+#include <Glcustomshader.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

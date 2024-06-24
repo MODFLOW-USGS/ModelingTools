@@ -91,123 +91,129 @@ begin
   ModflowOptions := Model.ModflowOptions;
   WriteBeginOptions;
 
-  WriteSaveFlowsOption;
+  try
+    WriteSaveFlowsOption;
 
-  NpfPackage := Model.ModflowPackages.NpfPackage;
+    NpfPackage := Model.ModflowPackages.NpfPackage;
 
-  if (NpfPackage.CellAveraging <> caHarmonic) and not NpfPackage.UseXT3D then
-  begin
-    case NpfPackage.CellAveraging of
-      caHarmonic: ; // do nothing
-      caLogarithmic: WriteString('  ALTERNATIVE_CELL_AVERAGING LOGARITHMIC');
-      caArithLog: WriteString('  ALTERNATIVE_CELL_AVERAGING AMT-LMK');
-      caArithHarm: WriteString('  ALTERNATIVE_CELL_AVERAGING AMT-HMK');
-      else Assert(False);
-    end;
-    NewLine;
-  end;
-
-  if NpfPackage.UseSaturatedThickness and not NpfPackage.UseXT3D then
-  begin
-    WriteString('  THICKSTRT');
-    NewLine;
-  end;
-
-  if NpfPackage.TimeVaryingVerticalConductance and not NpfPackage.UseXT3D
-    and not ModflowOptions.NewtonMF6 then
-  begin
-    WriteString('  VARIABLECV');
-    if NpfPackage.Dewatered then
+    if (NpfPackage.CellAveraging <> caHarmonic) and not NpfPackage.UseXT3D then
     begin
-      WriteString(' DEWATERED');
-    end;
-    NewLine;
-  end;
-
-  if NpfPackage.Perched and not NpfPackage.UseXT3D
-    and not ModflowOptions.NewtonMF6 then
-  begin
-    WriteString('  PERCHED');
-    NewLine;
-  end;
-
-  Wetting := Model.ModflowWettingOptions;
-  if Wetting.WettingActive and not ModflowOptions.NewtonMF6 then
-  begin
-    WriteString('  REWET');
-//    NewLine;
-
-    WETFCT := Wetting.WettingFactor;
-    WriteString('  WETFCT ');
-    WriteFloat(WETFCT);
-
-    IWETIT := Wetting.WettingIterations;
-    WriteString('  IWETIT ');
-    WriteInteger(IWETIT);
-
-    IHDWET := Wetting.WettingEquation;
-    WriteString('  IHDWET ');
-    WriteInteger(IHDWET);
-    NewLine;
-  end;
-
-  if NpfPackage.UseXT3D then
-  begin
-    WriteString('  XT3D');
-    if NpfPackage.Xt3dOnRightHandSide then
-    begin
-      WriteString(' RHS');
-    end;
-    NewLine;
-  end;
-
-  if NpfPackage.SaveSpecificDischarge then
-  begin
-    WriteString('  SAVE_SPECIFIC_DISCHARGE');
-    NewLine;
-  end;
-
-  if NpfPackage.SaveSaturation then
-  begin
-    WriteString('  SAVE_SATURATION');
-    NewLine;
-  end;
-
-  if FNpfPackage.UseHorizontalAnisotropy then
-  begin
-    WriteString('  K22OVERK');
-    NewLine;
-  end;
-
-  if FNpfPackage.UseVerticalAnisotropy then
-  begin
-    WriteString('  K33OVERK');
-    NewLine;
-  end;
-
-  if Model.ModflowPackages.TvkPackage.IsSelected then
-  begin
-    TvkWriter := TModflowTvk_Writer.Create(Model, etExport);
-    try
-      TvkFileName := TvkWriter.WriteFile(FInputFileName);
-    finally
-      TvkWriter.Free;
-    end;
-    Model.DataArrayManager.CacheDataArrays;
-    Application.ProcessMessages;
-    if not frmProgressMM.ShouldContinue then
-    begin
-      Exit;
-    end;
-    if TvkFileName <> '' then
-    begin
-      WriteString('  TVK6 FILEIN ');
-      WriteString(ExtractFileName(TvkFileName));
+      case NpfPackage.CellAveraging of
+        caHarmonic: ; // do nothing
+        caLogarithmic: WriteString('  ALTERNATIVE_CELL_AVERAGING LOGARITHMIC');
+        caArithLog: WriteString('  ALTERNATIVE_CELL_AVERAGING AMT-LMK');
+        caArithHarm: WriteString('  ALTERNATIVE_CELL_AVERAGING AMT-HMK');
+        else Assert(False);
+      end;
       NewLine;
     end;
+
+    if NpfPackage.UseSaturatedThickness and not NpfPackage.UseXT3D then
+    begin
+      WriteString('  THICKSTRT');
+      NewLine;
+    end;
+
+    if NpfPackage.TimeVaryingVerticalConductance and not NpfPackage.UseXT3D
+      and not ModflowOptions.NewtonMF6 then
+    begin
+      WriteString('  VARIABLECV');
+      if NpfPackage.Dewatered then
+      begin
+        WriteString(' DEWATERED');
+      end;
+      NewLine;
+    end;
+
+    if NpfPackage.Perched and not NpfPackage.UseXT3D
+      and not ModflowOptions.NewtonMF6 then
+    begin
+      WriteString('  PERCHED');
+      NewLine;
+    end;
+
+    Wetting := Model.ModflowWettingOptions;
+    if Wetting.WettingActive and not ModflowOptions.NewtonMF6 then
+    begin
+      WriteString('  REWET');
+  //    NewLine;
+
+      WETFCT := Wetting.WettingFactor;
+      WriteString('  WETFCT ');
+      WriteFloat(WETFCT);
+
+      IWETIT := Wetting.WettingIterations;
+      WriteString('  IWETIT ');
+      WriteInteger(IWETIT);
+
+      IHDWET := Wetting.WettingEquation;
+      WriteString('  IHDWET ');
+      WriteInteger(IHDWET);
+      NewLine;
+    end;
+
+    if NpfPackage.UseXT3D then
+    begin
+      WriteString('  XT3D');
+      if NpfPackage.Xt3dOnRightHandSide then
+      begin
+        WriteString(' RHS');
+      end;
+      NewLine;
+    end;
+
+    if NpfPackage.SaveSpecificDischarge then
+    begin
+      WriteString('  SAVE_SPECIFIC_DISCHARGE');
+      NewLine;
+    end;
+
+    if NpfPackage.SaveSaturation then
+    begin
+      WriteString('  SAVE_SATURATION');
+      NewLine;
+    end;
+
+    if FNpfPackage.UseHorizontalAnisotropy then
+    begin
+      WriteString('  K22OVERK');
+      NewLine;
+    end;
+
+    if FNpfPackage.UseVerticalAnisotropy then
+    begin
+      WriteString('  K33OVERK');
+      NewLine;
+    end;
+
+    if Model.ModflowPackages.TvkPackage.IsSelected then
+    begin
+      TvkWriter := TModflowTvk_Writer.Create(Model, etExport);
+      try
+        TvkFileName := TvkWriter.WriteFile(FInputFileName);
+      finally
+        TvkWriter.Free;
+      end;
+      Model.DataArrayManager.CacheDataArrays;
+      Application.ProcessMessages;
+      if not frmProgressMM.ShouldContinue then
+      begin
+        Exit;
+      end;
+      if TvkFileName <> '' then
+      begin
+        WriteString('  TVK6 FILEIN ');
+        WriteString(ExtractFileName(TvkFileName));
+        NewLine;
+      end;
+    end;
+
+    WriteExportAsciiArray;
+  finally
+    WriteEndOptions;
   end;
 
-  WriteEndOptions;
+
 end;
 
 procedure TNpfWriter.WriteFile(const AFileName: string);

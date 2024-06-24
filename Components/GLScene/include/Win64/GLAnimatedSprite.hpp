@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLAnimatedSprite.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glanimatedsprite.pas' rev: 36.00 (Windows)
 
 #ifndef GlanimatedspriteHPP
 #define GlanimatedspriteHPP
@@ -15,22 +15,22 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLMaterial.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLXCollection.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLContext.hpp>
-#include <GLState.hpp>
-#include <GLCoordinates.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glmaterial.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glxcollection.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glcontext.hpp>
+#include <Glstate.hpp>
+#include <Glcoordinates.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

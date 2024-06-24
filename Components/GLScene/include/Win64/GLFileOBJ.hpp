@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileOBJ.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glfileobj.pas' rev: 36.00 (Windows)
 
 #ifndef GlfileobjHPP
 #define GlfileobjHPP
@@ -15,21 +15,21 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLScene.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLVectorLists.hpp>
-#include <GLTexture.hpp>
-#include <GLColor.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLMaterial.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLVectorTypes.hpp>
+#include <System.Sysutils.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glscene.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glvectorlists.hpp>
+#include <Gltexture.hpp>
+#include <Glcolor.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glmaterial.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -117,8 +117,8 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Word BufSize = System::Word(0x2800);
-static const System::Int8 LineLen = System::Int8(0x64);
+static _DELPHI_CONST System::Word BufSize = System::Word(0x2800);
+static _DELPHI_CONST System::Int8 LineLen = System::Int8(0x64);
 extern DELPHI_PACKAGE bool vGLFileOBJ_SplitMesh;
 }	/* namespace Glfileobj */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLFILEOBJ)

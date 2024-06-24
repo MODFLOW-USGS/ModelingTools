@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLParticleFX.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glparticlefx.pas' rev: 36.00 (Windows)
 
 #ifndef GlparticlefxHPP
 #define GlparticlefxHPP
@@ -15,31 +15,31 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Types.hpp>
 #include <System.Math.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLState.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLXCollection.hpp>
-#include <GLMaterial.hpp>
-#include <GLCadencer.hpp>
-#include <GLVectorLists.hpp>
-#include <GLGraphics.hpp>
-#include <GLContext.hpp>
-#include <GLColor.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLCoordinates.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLManager.hpp>
-#include <GLTextureFormat.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glstate.hpp>
+#include <Glvectortypes.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glxcollection.hpp>
+#include <Glmaterial.hpp>
+#include <Glcadencer.hpp>
+#include <Glvectorlists.hpp>
+#include <Glgraphics.hpp>
+#include <Glcontext.hpp>
+#include <Glcolor.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glcoordinates.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glmanager.hpp>
+#include <Gltextureformat.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -680,8 +680,8 @@ __published:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte cPFXNbRegions = System::Byte(0x80);
-static const System::Byte cPFXGranularity = System::Byte(0x80);
+static _DELPHI_CONST System::Byte cPFXNbRegions = System::Byte(0x80);
+static _DELPHI_CONST System::Byte cPFXGranularity = System::Byte(0x80);
 extern DELPHI_PACKAGE TGLSourcePFXEffect* __fastcall GetOrCreateSourcePFX(Glscene::TGLBaseSceneObject* obj, const System::UnicodeString name = System::UnicodeString());
 }	/* namespace Glparticlefx */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLPARTICLEFX)

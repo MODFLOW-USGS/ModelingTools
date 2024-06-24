@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGameMenu.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glgamemenu.pas' rev: 36.00 (Windows)
 
 #ifndef GlgamemenuHPP
 #define GlgamemenuHPP
@@ -15,20 +15,20 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGL1x.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLScene.hpp>
-#include <GLCoordinates.hpp>
-#include <GLMaterial.hpp>
-#include <GLBitmapFont.hpp>
-#include <GLColor.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLCanvas.hpp>
-#include <GLContext.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengl1x.hpp>
+#include <Glvectortypes.hpp>
+#include <Glscene.hpp>
+#include <Glcoordinates.hpp>
+#include <Glmaterial.hpp>
+#include <Glbitmapfont.hpp>
+#include <Glcolor.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glcanvas.hpp>
+#include <Glcontext.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTextureCombiners.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gltexturecombiners.pas' rev: 36.00 (Windows)
 
 #ifndef GltexturecombinersHPP
 #define GltexturecombinersHPP
@@ -15,11 +15,11 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <System.SysUtils.hpp>
+#include <Sysinit.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Classes.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLContext.hpp>
+#include <Opengltokens.hpp>
+#include <Glcontext.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

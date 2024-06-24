@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSpacePartition.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSpacePartition.pas' rev: 35.00 (Windows)
 
 #ifndef GlspacepartitionHPP
 #define GlspacepartitionHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -45,8 +43,8 @@ class DELPHICLASS TQuadtreeSpacePartition;
 struct DECLSPEC_DRECORD TSPCone
 {
 public:
-	Glvectorgeometry::TAffineVector Base;
-	Glvectorgeometry::TAffineVector Axis;
+	Glvectortypes::TVector3f Base;
+	Glvectortypes::TVector3f Axis;
 	float Angle;
 	float Length;
 };
@@ -137,7 +135,7 @@ public:
 	virtual int __fastcall QueryAABB(const Glgeometrybb::TAABB &AAABB);
 	virtual int __fastcall QueryBSphere(const Glgeometrybb::TBSphere &ABSphere);
 	virtual int __fastcall QueryLeaf(TSpacePartitionLeaf* const ALeaf);
-	virtual int __fastcall QueryPlane(const Glvectorgeometry::TAffineVector &Location, const Glvectorgeometry::TAffineVector &Normal);
+	virtual int __fastcall QueryPlane(const Glvectortypes::TVector3f &Location, const Glvectortypes::TVector3f &Normal);
 	virtual int __fastcall QueryFrustum(const Glvectorgeometry::TFrustum &Frustum);
 	virtual int __fastcall QueryFrustumEx(const TExtendedFrustum &ExtendedFrustum);
 	__property int QueryInterObjectTests = {read=FQueryInterObjectTests, nodefault};
@@ -167,7 +165,7 @@ public:
 	virtual void __fastcall RemoveLeaf(TSpacePartitionLeaf* ALeaf);
 	virtual int __fastcall QueryAABB(const Glgeometrybb::TAABB &AAABB);
 	virtual int __fastcall QueryBSphere(const Glgeometrybb::TBSphere &ABSphere);
-	virtual int __fastcall QueryPlane(const Glvectorgeometry::TAffineVector &FLocation, const Glvectorgeometry::TAffineVector &FNormal);
+	virtual int __fastcall QueryPlane(const Glvectortypes::TVector3f &FLocation, const Glvectortypes::TVector3f &FNormal);
 	__fastcall virtual TLeavedSpacePartition();
 	__fastcall virtual ~TLeavedSpacePartition();
 	
@@ -199,7 +197,7 @@ private:
 	Glgeometrybb::TBSphere FBSphere;
 	bool __fastcall GetNoChildren();
 	void __fastcall SetAABB(const Glgeometrybb::TAABB &Value);
-	Glvectorgeometry::TAffineVector __fastcall GetCenter();
+	Glvectortypes::TVector3f __fastcall GetCenter();
 	
 protected:
 	int __fastcall CalcRecursiveLeafCount();
@@ -211,7 +209,7 @@ public:
 	void __fastcall Clear();
 	__property Glgeometrybb::TAABB AABB = {read=FAABB, write=SetAABB};
 	__property Glgeometrybb::TBSphere BSphere = {read=FBSphere};
-	__property Glvectorgeometry::TAffineVector Center = {read=GetCenter};
+	__property Glvectortypes::TVector3f Center = {read=GetCenter};
 	__property bool NoChildren = {read=GetNoChildren, nodefault};
 	__property TSectorNodeArray Children = {read=FChildren};
 	__property int ChildCount = {read=FChildCount, nodefault};
@@ -233,7 +231,7 @@ public:
 	bool __fastcall RemoveLeaf(TSpacePartitionLeaf* ALeaf, bool OwnerByThis);
 	void __fastcall QueryAABB(const Glgeometrybb::TAABB &AAABB, TSpacePartitionLeafList* const QueryResult);
 	void __fastcall QueryBSphere(const Glgeometrybb::TBSphere &ABSphere, TSpacePartitionLeafList* const QueryResult);
-	void __fastcall QueryPlane(const Glvectorgeometry::TAffineVector &Location, const Glvectorgeometry::TAffineVector &Normal, TSpacePartitionLeafList* const QueryResult);
+	void __fastcall QueryPlane(const Glvectortypes::TVector3f &Location, const Glvectortypes::TVector3f &Normal, TSpacePartitionLeafList* const QueryResult);
 	void __fastcall QueryFrustum(const Glvectorgeometry::TFrustum &Frustum, TSpacePartitionLeafList* const QueryResult);
 	void __fastcall QueryFrustumEx(const TExtendedFrustum &ExtendedFrustum, TSpacePartitionLeafList* const QueryResult);
 	void __fastcall AddAllLeavesRecursive(TSpacePartitionLeafList* const QueryResult);
@@ -274,7 +272,7 @@ public:
 	virtual int __fastcall QueryAABB(const Glgeometrybb::TAABB &AAABB);
 	virtual int __fastcall QueryBSphere(const Glgeometrybb::TBSphere &ABSphere);
 	virtual int __fastcall QueryLeaf(TSpacePartitionLeaf* const ALeaf);
-	virtual int __fastcall QueryPlane(const Glvectorgeometry::TAffineVector &Location, const Glvectorgeometry::TAffineVector &Normal);
+	virtual int __fastcall QueryPlane(const Glvectortypes::TVector3f &Location, const Glvectortypes::TVector3f &Normal);
 	virtual int __fastcall QueryFrustum(const Glvectorgeometry::TFrustum &Frustum);
 	virtual int __fastcall QueryFrustumEx(const TExtendedFrustum &ExtendedFrustum);
 	__property int QueryNodeTests = {read=FQueryNodeTests, nodefault};
@@ -325,7 +323,7 @@ class PASCALIMPLEMENTATION TOctreeSpacePartition : public TSectoredSpacePartitio
 	typedef TSectoredSpacePartition inherited;
 	
 public:
-	void __fastcall SetSize(const Glvectorgeometry::TAffineVector &Min, const Glvectorgeometry::TAffineVector &Max);
+	void __fastcall SetSize(const Glvectortypes::TVector3f &Min, const Glvectortypes::TVector3f &Max);
 	virtual TSectorNode* __fastcall CreateNewNode(TSectorNode* AParent);
 public:
 	/* TSectoredSpacePartition.Create */ inline __fastcall virtual TOctreeSpacePartition() : TSectoredSpacePartition() { }
@@ -367,7 +365,7 @@ class PASCALIMPLEMENTATION TQuadtreeSpacePartition : public TSectoredSpacePartit
 	typedef TSectoredSpacePartition inherited;
 	
 public:
-	void __fastcall SetSize(const Glvectorgeometry::TAffineVector &Min, const Glvectorgeometry::TAffineVector &Max);
+	void __fastcall SetSize(const Glvectortypes::TVector3f &Min, const Glvectortypes::TVector3f &Max);
 	virtual TSectorNode* __fastcall CreateNewNode(TSectorNode* AParent);
 public:
 	/* TSectoredSpacePartition.Create */ inline __fastcall virtual TQuadtreeSpacePartition() : TSectoredSpacePartition() { }
@@ -386,7 +384,7 @@ static const System::Int8 COctree_MAX_TREE_DEPTH = System::Int8(0x8);
 #define COctree_GROW_GRAVY  (1.000000E-01)
 extern DELPHI_PACKAGE Glgeometrybb::TSpaceContains __fastcall ConeContainsBSphere(const TSPCone &Cone, const Glgeometrybb::TBSphere &BSphere);
 extern DELPHI_PACKAGE bool __fastcall ExtendedFrustumIntersectsBSphere(const TExtendedFrustum &AExtendedFrustum, const Glgeometrybb::TBSphere &ABSphere);
-extern DELPHI_PACKAGE TExtendedFrustum __fastcall ExtendedFrustumMake(const Glvectorgeometry::TFrustum &AFrustum, const float ANearDist, const float AFarDist, const float AFieldOfViewRadians, const Glvectorgeometry::TAffineVector &ACameraPosition, const Glvectorgeometry::TAffineVector &ALookVector);
+extern DELPHI_PACKAGE TExtendedFrustum __fastcall ExtendedFrustumMake(const Glvectorgeometry::TFrustum &AFrustum, const float ANearDist, const float AFarDist, const float AFieldOfViewRadians, const Glvectortypes::TVector3f &ACameraPosition, const Glvectortypes::TVector3f &ALookVector);
 }	/* namespace Glspacepartition */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLSPACEPARTITION)
 using namespace Glspacepartition;

@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_XPThemes.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_XPThemes.pas' rev: 35.00 (Windows)
 
 #ifndef Gr32_xpthemesHPP
 #define Gr32_xpthemesHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -26,9 +24,9 @@ namespace Gr32_xpthemes
 //-- forward type declarations -----------------------------------------------
 struct _MARGINS;
 //-- type declarations -------------------------------------------------------
-typedef Winapi::Windows::THandle HIMAGELIST;
+typedef NativeUInt HIMAGELIST;
 
-typedef Winapi::Windows::THandle HTHEME;
+typedef NativeUInt HTHEME;
 
 struct DECLSPEC_DRECORD _MARGINS
 {
@@ -48,8 +46,8 @@ typedef _MARGINS TMargins;
 
 //-- var, const, procedure ---------------------------------------------------
 extern DELPHI_PACKAGE bool USE_THEMES;
-extern DELPHI_PACKAGE Winapi::Windows::THandle SCROLLBAR_THEME;
-extern DELPHI_PACKAGE Winapi::Windows::THandle GLOBALS_THEME;
+extern DELPHI_PACKAGE NativeUInt SCROLLBAR_THEME;
+extern DELPHI_PACKAGE NativeUInt GLOBALS_THEME;
 static const System::Int8 THEMEMGR_VERSION = System::Int8(0x1);
 static const System::Word WM_THEMECHANGED = System::Word(0x31a);
 static const System::Int8 SBP_ARROWBTN = System::Int8(0x1);
@@ -84,13 +82,13 @@ static const System::Int8 SCRBS_PRESSED = System::Int8(0x3);
 static const System::Int8 SCRBS_DISABLED = System::Int8(0x4);
 static const System::Int8 SZB_RIGHTALIGN = System::Int8(0x1);
 static const System::Int8 SZB_LEFTALIGN = System::Int8(0x2);
-extern DELPHI_PACKAGE unsigned __stdcall (*OpenThemeData)(HWND hwnd, System::WideChar * pszClassList);
-extern DELPHI_PACKAGE HRESULT __stdcall (*CloseThemeData)(HTHEME hTheme);
-extern DELPHI_PACKAGE HRESULT __stdcall (*DrawThemeBackground)(HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const System::Types::TRect &Rect, System::Types::PRect pClipRect);
-extern DELPHI_PACKAGE HRESULT __stdcall (*DrawThemeEdge)(HTHEME hTheme, HDC hdc, int iPartId, int iStateId, const System::Types::TRect &pDestRect, unsigned uEdge, unsigned uFlags, System::Types::PRect pContentRect);
-extern DELPHI_PACKAGE HRESULT __stdcall (*GetThemeColor)(HTHEME hTheme, int iPartId, int iStateId, int iPropId, unsigned &pColor);
-extern DELPHI_PACKAGE HRESULT __stdcall (*GetThemeMetric)(HTHEME hTheme, HDC hdc, int iPartId, int iStateId, int iPropId, int &piVal);
-extern DELPHI_PACKAGE HRESULT __stdcall (*GetThemeMargins)(HTHEME hTheme, HDC hdc, int iPartId, int iStateId, int iPropId, System::Types::PRect prc, MARGINS &pMargins);
+extern DELPHI_PACKAGE NativeUInt __stdcall (*OpenThemeData)(HWND hwnd, System::WideChar * pszClassList);
+extern DELPHI_PACKAGE HRESULT __stdcall (*CloseThemeData)(NativeUInt hTheme);
+extern DELPHI_PACKAGE HRESULT __stdcall (*DrawThemeBackground)(NativeUInt hTheme, HDC hdc, int iPartId, int iStateId, const System::Types::TRect &Rect, System::Types::PRect pClipRect);
+extern DELPHI_PACKAGE HRESULT __stdcall (*DrawThemeEdge)(NativeUInt hTheme, HDC hdc, int iPartId, int iStateId, const System::Types::TRect &pDestRect, unsigned uEdge, unsigned uFlags, System::Types::PRect pContentRect);
+extern DELPHI_PACKAGE HRESULT __stdcall (*GetThemeColor)(NativeUInt hTheme, int iPartId, int iStateId, int iPropId, unsigned &pColor);
+extern DELPHI_PACKAGE HRESULT __stdcall (*GetThemeMetric)(NativeUInt hTheme, HDC hdc, int iPartId, int iStateId, int iPropId, int &piVal);
+extern DELPHI_PACKAGE HRESULT __stdcall (*GetThemeMargins)(NativeUInt hTheme, HDC hdc, int iPartId, int iStateId, int iPropId, System::Types::PRect prc, _MARGINS &pMargins);
 extern DELPHI_PACKAGE HRESULT __stdcall (*SetWindowTheme)(HWND hwnd, System::WideChar * pszSubAppName, System::WideChar * pszSubIdList);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*IsThemeActive)(void);
 extern DELPHI_PACKAGE System::LongBool __stdcall (*IsAppThemed)(void);

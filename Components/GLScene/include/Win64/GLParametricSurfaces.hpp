@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLParametricSurfaces.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glparametricsurfaces.pas' rev: 36.00 (Windows)
 
 #ifndef GlparametricsurfacesHPP
 #define GlparametricsurfacesHPP
@@ -15,19 +15,19 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <OpenGLTokens.hpp>
-#include <OpenGLAdapter.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLCurvesAndSurfaces.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorLists.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLTexture.hpp>
-#include <GLState.hpp>
-#include <GLContext.hpp>
-#include <GLRenderContextInfo.hpp>
+#include <Sysinit.hpp>
+#include <Opengltokens.hpp>
+#include <Opengladapter.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glcurvesandsurfaces.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectorlists.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Gltexture.hpp>
+#include <Glstate.hpp>
+#include <Glcontext.hpp>
+#include <Glrendercontextinfo.hpp>
 #include <System.Classes.hpp>
 
 //-- user supplied -----------------------------------------------------------

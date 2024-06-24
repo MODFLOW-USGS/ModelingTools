@@ -1,4 +1,7 @@
-# Initial Conditions Package file created on 11/21/2023 by ModelMuse version 5.1.1.45.
+# Initial Conditions Package file created on 6/24/2024 by ModelMuse version 5.2.0.18.
+BEGIN OPTIONS
+END OPTIONS
+
 BEGIN GRIDDATA
   STRT LAYERED IPRN    12
     CONSTANT   5.000000000000E+001  # STRT Layer1

@@ -2003,14 +2003,14 @@ var
   Raster: IRaster;
   ErrorMessage: string;
 //  ASegment: TSegment2D;
-  SegmentStart: Integer;
+  SegmentStart: NativeInt;
   SegmentEnd: Integer;
   Segments: TCellElementSegmentList;
   PriorSegment: TCellElementSegment;
   ASegmentObject: TCellElementSegment;
   ALine: TPolyLine2D;
   Grid: TCustomModelGrid;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   PointIndex: Integer;
   function NearlyTheSame(const A, B: real): boolean;
   begin
@@ -2333,7 +2333,7 @@ var
   Segments: TCellElementSegmentList;
   ASegment: TCellElementSegment;
   SegmentEnd: Integer;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   function NearlyTheSame(const A, B: real): boolean;
   begin
     result := A = B;
@@ -2535,10 +2535,10 @@ function GetVertexIndiciesInCurrentCell(var FirstVertex, LastVertex: Integer;
 var
   SegmentPosition: Integer;
   Segments: TCellElementSegmentList;
-  StartIndex: Integer;
-  SegmentIndex: Integer;
+  StartIndex: NativeInt;
+  SegmentIndex: NativeInt;
   ASegment: TCellElementSegment;
-  StopIndex: Integer;
+  StopIndex: NativeInt;
   VertexIndex: Integer;
   APoint2D: TPoint2D;
   LocalGrid: TCustomModelGrid;

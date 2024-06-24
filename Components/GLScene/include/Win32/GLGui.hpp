@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGui.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLGui.pas' rev: 35.00 (Windows)
 
 #ifndef GlguiHPP
 #define GlguiHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -55,10 +53,10 @@ private:
 protected:
 	virtual void __fastcall NotifyHide();
 	virtual void __fastcall NotifyShow();
-	void __fastcall SetLeft(const Opengltokens::TGLfloat Value);
-	Opengltokens::TGLfloat __fastcall GetLeft();
-	void __fastcall SetTop(const Opengltokens::TGLfloat Value);
-	Opengltokens::TGLfloat __fastcall GetTop();
+	void __fastcall SetLeft(const float Value);
+	float __fastcall GetLeft();
+	void __fastcall SetTop(const float Value);
+	float __fastcall GetTop();
 	void __fastcall SetWidth(const float val);
 	void __fastcall SetHeight(const float val);
 	virtual void __fastcall SetVisible(bool aValue);
@@ -69,8 +67,8 @@ public:
 	virtual void __fastcall Insert(int aIndex, Glscene::TGLBaseSceneObject* aChild);
 	__property float Width = {read=FWidth, write=SetWidth};
 	__property float Height = {read=FHeight, write=SetHeight};
-	__property Opengltokens::TGLfloat Left = {read=GetLeft, write=SetLeft};
-	__property Opengltokens::TGLfloat Top = {read=GetTop, write=SetTop};
+	__property float Left = {read=GetLeft, write=SetLeft};
+	__property float Top = {read=GetTop, write=SetTop};
 	__property bool RecursiveVisible = {read=FRecursiveVisible, nodefault};
 public:
 	/* TGLBaseSceneObject.CreateAsChild */ inline __fastcall TGLBaseGuiObject(Glscene::TGLBaseSceneObject* aParentOwner) : Glscene::TGLBaseSceneObject(aParentOwner) { }
@@ -84,12 +82,12 @@ enum DECLSPEC_DENUM TGUIAlignments : unsigned char { GLAlTopLeft, GLAlTop, GLAlT
 struct DECLSPEC_DRECORD TGUIRect
 {
 public:
-	Opengltokens::TGLfloat X1;
-	Opengltokens::TGLfloat Y1;
-	Opengltokens::TGLfloat X2;
-	Opengltokens::TGLfloat Y2;
-	Opengltokens::TGLfloat XTiles;
-	Opengltokens::TGLfloat YTiles;
+	float X1;
+	float Y1;
+	float X2;
+	float Y2;
+	float XTiles;
+	float YTiles;
 };
 
 
@@ -107,11 +105,11 @@ private:
 	Glcoordinates::TGLCoordinates2* FBottomRight;
 	Glcoordinates::TGLCoordinates2* FScale;
 	TGUIAlignments FAlign;
-	TGLGuiElementName FName;
+	System::UnicodeString FName;
 	
 protected:
 	virtual System::UnicodeString __fastcall GetDisplayName();
-	void __fastcall SetName(const TGLGuiElementName val);
+	void __fastcall SetName(const System::UnicodeString val);
 	
 public:
 	__fastcall virtual TGLGuiElement(System::Classes::TCollection* Collection);
@@ -123,7 +121,7 @@ __published:
 	__property Glcoordinates::TGLCoordinates2* BottomRight = {read=FBottomRight, write=FBottomRight};
 	__property Glcoordinates::TGLCoordinates2* Scale = {read=FScale, write=FScale};
 	__property TGUIAlignments Align = {read=FAlign, write=FAlign, nodefault};
-	__property TGLGuiElementName Name = {read=FName, write=SetName};
+	__property System::UnicodeString Name = {read=FName, write=SetName};
 };
 
 #pragma pack(pop)
@@ -165,23 +163,23 @@ class PASCALIMPLEMENTATION TGLGuiComponent : public System::Classes::TCollection
 	
 private:
 	TGLGuiElementList* FElements;
-	TGLGuiComponentName FName;
+	System::UnicodeString FName;
 	
 protected:
 	virtual System::UnicodeString __fastcall GetDisplayName();
-	void __fastcall SetName(const TGLGuiComponentName val);
+	void __fastcall SetName(const System::UnicodeString val);
 	
 public:
 	__fastcall virtual TGLGuiComponent(System::Classes::TCollection* Collection);
 	__fastcall virtual ~TGLGuiComponent();
 	virtual void __fastcall AssignTo(System::Classes::TPersistent* Dest);
-	void __fastcall RenderToArea(Opengltokens::TGLfloat X1, Opengltokens::TGLfloat Y1, Opengltokens::TGLfloat X2, Opengltokens::TGLfloat Y2, TGUIDrawResult &Res, bool Refresh = true, Opengltokens::TGLfloat Scale = 1.000000E+00f);
+	void __fastcall RenderToArea(float X1, float Y1, float X2, float Y2, TGUIDrawResult &Res, bool Refresh = true, float Scale = 1.000000E+00f);
 	TGLGuiComponentList* __fastcall GetOwnerList();
 	__property TGLGuiComponentList* Owner = {read=GetOwnerList};
 	
 __published:
 	__property TGLGuiElementList* Elements = {read=FElements, write=FElements};
-	__property TGLGuiComponentName Name = {read=FName, write=SetName};
+	__property System::UnicodeString Name = {read=FName, write=SetName};
 };
 
 #pragma pack(pop)
@@ -204,7 +202,7 @@ protected:
 public:
 	__fastcall TGLGuiComponentList(TGLGuiLayout* AOwner);
 	DYNAMIC System::Classes::TPersistent* __fastcall GetOwner();
-	TGLGuiComponent* __fastcall FindItem(TGLGuiComponentName name);
+	TGLGuiComponent* __fastcall FindItem(System::UnicodeString name);
 	__property TGLGuiComponent* Items[int index] = {read=GetItems, write=SetItems/*, default*/};
 public:
 	/* TCollection.Destroy */ inline __fastcall virtual ~TGLGuiComponentList() { }

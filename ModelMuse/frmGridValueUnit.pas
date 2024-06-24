@@ -963,7 +963,7 @@ var
   LocalModel: TCustomModel;
   temp: TFloat;
   Segments: TCellElementSegmentList;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   procedure GetDirectionVariables(var VarIndex, MaxCount: Integer;
     var VarLabel: string);
   var

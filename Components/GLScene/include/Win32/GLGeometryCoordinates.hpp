@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGeometryCoordinates.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLGeometryCoordinates.pas' rev: 35.00 (Windows)
 
 #ifndef GlgeometrycoordinatesHPP
 #define GlgeometrycoordinatesHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -37,7 +35,7 @@ extern DELPHI_PACKAGE void __fastcall Spherical_Cartesian(const double r, const 
 extern DELPHI_PACKAGE void __fastcall Spherical_Cartesian(const float r, const float theta, const float phi, float &x, float &y, float &z, int &ierr)/* overload */;
 extern DELPHI_PACKAGE void __fastcall Spherical_Cartesian(const double r, const double theta, const double phi, double &x, double &y, double &z, int &ierr)/* overload */;
 extern DELPHI_PACKAGE void __fastcall Cartesian_Spherical(const float x, const float y, const float z, float &r, float &theta, float &phi)/* overload */;
-extern DELPHI_PACKAGE void __fastcall Cartesian_Spherical(const Glvectorgeometry::TAffineVector &v, float &r, float &theta, float &phi)/* overload */;
+extern DELPHI_PACKAGE void __fastcall Cartesian_Spherical(const Glvectortypes::TVector3f &v, float &r, float &theta, float &phi)/* overload */;
 extern DELPHI_PACKAGE void __fastcall Cartesian_Spherical(const double x, const double y, const double z, double &r, double &theta, double &phi)/* overload */;
 extern DELPHI_PACKAGE void __fastcall ProlateSpheroidal_Cartesian(const float xi, const float eta, const float phi, const float a, float &x, float &y, float &z)/* overload */;
 extern DELPHI_PACKAGE void __fastcall ProlateSpheroidal_Cartesian(const double xi, const double eta, const double phi, const double a, double &x, double &y, double &z)/* overload */;

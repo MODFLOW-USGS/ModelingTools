@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLLinePFX.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gllinepfx.pas' rev: 36.00 (Windows)
 
 #ifndef GllinepfxHPP
 #define GllinepfxHPP
@@ -15,19 +15,19 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLParticleFX.hpp>
-#include <GLTexture.hpp>
-#include <GLColor.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLContext.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLCadencer.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glparticlefx.hpp>
+#include <Gltexture.hpp>
+#include <Glcolor.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glcontext.hpp>
+#include <Glvectortypes.hpp>
+#include <Glcadencer.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

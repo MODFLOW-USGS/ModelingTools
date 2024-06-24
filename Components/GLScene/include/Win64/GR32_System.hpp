@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_System.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gr32_system.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_systemHPP
 #define Gr32_systemHPP
@@ -15,9 +15,9 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSound.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glsound.pas' rev: 36.00 (Windows)
 
 #ifndef GlsoundHPP
 #define GlsoundHPP
@@ -15,18 +15,18 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Types.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLSoundFileObjects.hpp>
-#include <GLScene.hpp>
-#include <GLXCollection.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLCadencer.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLUtils.hpp>
+#include <Glvectortypes.hpp>
+#include <Glsoundfileobjects.hpp>
+#include <Glscene.hpp>
+#include <Glxcollection.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glcadencer.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glutils.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

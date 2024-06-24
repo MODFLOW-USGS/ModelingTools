@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSelection.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glselection.pas' rev: 36.00 (Windows)
 
 #ifndef GlselectionHPP
 #define GlselectionHPP
@@ -15,15 +15,15 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <System.SysUtils.hpp>
+#include <Sysinit.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Classes.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLContext.hpp>
-#include <GLVectorLists.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLPersistentClasses.hpp>
+#include <Opengltokens.hpp>
+#include <Glcontext.hpp>
+#include <Glvectorlists.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glpersistentclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -164,7 +164,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Word MAX_OBJECT_STACK_DEPTH = System::Word(0x200);
+static _DELPHI_CONST System::Word MAX_OBJECT_STACK_DEPTH = System::Word(0x200);
 extern DELPHI_PACKAGE TGLBaseSelectTechniqueClass __fastcall GetBestSelectorClass(void);
 }	/* namespace Glselection */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLSELECTION)

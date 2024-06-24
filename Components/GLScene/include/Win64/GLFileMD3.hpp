@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileMD3.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glfilemd3.pas' rev: 36.00 (Windows)
 
 #ifndef Glfilemd3HPP
 #define Glfilemd3HPP
@@ -15,16 +15,16 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLMaterial.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLVectorGeometry.hpp>
-#include <FileMD3.hpp>
-#include <GLTexture.hpp>
-#include <GLBaseClasses.hpp>
+#include <System.Sysutils.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glmaterial.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Filemd3.hpp>
+#include <Gltexture.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

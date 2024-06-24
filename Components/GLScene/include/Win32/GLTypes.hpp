@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTypes.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLTypes.pas' rev: 35.00 (Windows)
 
 #ifndef GltypesHPP
 #define GltypesHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -217,9 +215,9 @@ public:
 
 typedef float TxScalarValue;
 
-typedef TxScalarValue __fastcall (*TxScalarField)(float X, float Y, float Z);
+typedef float __fastcall (*TxScalarField)(float X, float Y, float Z);
 
-typedef TxScalarValue __fastcall (__closure *TxScalarFieldInt)(int iX, int iY, int iZ);
+typedef float __fastcall (__closure *TxScalarFieldInt)(int iX, int iY, int iZ);
 
 struct DECLSPEC_DRECORD TxVertex
 {
@@ -285,7 +283,7 @@ struct DECLSPEC_DRECORD TxVoxel
 {
 public:
 	Glvectortypes::TVector3f P;
-	TxScalarValue Density;
+	float Density;
 	TxVoxelStatus Status;
 };
 

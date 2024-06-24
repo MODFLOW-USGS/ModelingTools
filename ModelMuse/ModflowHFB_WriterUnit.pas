@@ -228,7 +228,7 @@ var
   ScreenObjectList: TParamList;
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
-  SegmentIndex: integer;
+  SegmentIndex: NativeInt;
   SegmentList: TList;
   PriorSection: integer;
   ASegment: TCellElementSegment;
@@ -602,7 +602,7 @@ var
   ScreenObjectList: TParamList;
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
-  SegmentIndex: integer;
+  SegmentIndex: NativeInt;
   SegmentList: TList;
   PriorSection: integer;
   ASegment: TCellElementSegment;

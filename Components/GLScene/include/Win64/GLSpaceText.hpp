@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSpaceText.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glspacetext.pas' rev: 36.00 (Windows)
 
 #ifndef GlspacetextHPP
 #define GlspacetextHPP
@@ -15,25 +15,25 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <Winapi.Messages.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <System.UITypes.hpp>
+#include <System.Sysutils.hpp>
+#include <System.Uitypes.hpp>
 #include <System.Types.hpp>
 #include <Vcl.Dialogs.hpp>
 #include <Vcl.Graphics.hpp>
 #include <Vcl.Controls.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLTexture.hpp>
-#include <GLContext.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLStrings.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLState.hpp>
-#include <GLVectorTypes.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Gltexture.hpp>
+#include <Glcontext.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glstrings.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glstate.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -325,6 +325,7 @@ end;
     procedure WritePestFormulaOrValue(const PestName, PestSeriesName: string;
       PestMethod: TPestParamMethod; Value: double);
     procedure WriteEndPackageData;
+    procedure WriteExportAsciiArray;
   public
     // @name converts a real number represented as a string to always use
     property ArrayWritingFormat: TArrayWritingFormat read FArrayWritingFormat;
@@ -10663,6 +10664,15 @@ begin
   begin
     WriteString('END PERIOD ');
     NewLine;
+    NewLine;
+  end;
+end;
+
+procedure TCustomModflowWriter.WriteExportAsciiArray;
+begin
+  if Model.ModflowOutputControl.ExportArrays then
+  begin
+    WriteString('  EXPORT_ARRAY_ASCII');
     NewLine;
   end;
 end;

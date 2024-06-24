@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLShadowPlane.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glshadowplane.pas' rev: 36.00 (Windows)
 
 #ifndef GlshadowplaneHPP
 #define GlshadowplaneHPP
@@ -15,22 +15,22 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
 #include <System.Types.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLScene.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLObjects.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLColor.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLState.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLContext.hpp>
+#include <Opengltokens.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glvectortypes.hpp>
+#include <Glscene.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Globjects.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glcolor.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glstate.hpp>
+#include <Gltextureformat.hpp>
+#include <Glcontext.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

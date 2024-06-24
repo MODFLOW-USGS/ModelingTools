@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLLensFlare.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gllensflare.pas' rev: 36.00 (Windows)
 
 #ifndef GllensflareHPP
 #define GllensflareHPP
@@ -15,25 +15,25 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLObjects.hpp>
-#include <GLContext.hpp>
-#include <GLColor.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLState.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLUtils.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLCoordinates.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Globjects.hpp>
+#include <Glcontext.hpp>
+#include <Glcolor.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glstate.hpp>
+#include <Glvectortypes.hpp>
+#include <Glutils.hpp>
+#include <Gltextureformat.hpp>
+#include <Glcoordinates.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

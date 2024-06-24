@@ -1,4 +1,4 @@
-# SSM: GWT Source and Sink Mixing Package file created on 8/21/2023 by ModelMuse version 5.1.1.35.
+# SSM: GWT Source and Sink Mixing Package file created on 6/21/2024 by ModelMuse version 5.2.0.18.
 BEGIN OPTIONS
     SAVE_FLOWS
 END OPTIONS
@@ -9,4 +9,5 @@ BEGIN SOURCES
   WEL-1 AUX Chem
   RIV-1 AUX Chem
   RCH-1 AUXMIXED Chem
+  EVT-1 AUXMIXED Chem
 END SOURCES

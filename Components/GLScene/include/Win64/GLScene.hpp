@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScene.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glscene.pas' rev: 36.00 (Windows)
 
 #ifndef GlsceneHPP
 #define GlsceneHPP
@@ -15,40 +15,40 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <System.UITypes.hpp>
+#include <System.Sysutils.hpp>
+#include <System.Uitypes.hpp>
 #include <System.Math.hpp>
 #include <Vcl.Graphics.hpp>
 #include <Vcl.Controls.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLStrings.hpp>
-#include <GLContext.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLXCollection.hpp>
-#include <GLSilhouette.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLState.hpp>
-#include <GLGraphics.hpp>
-#include <GLGeometryBB.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLVectorLists.hpp>
-#include <GLTexture.hpp>
-#include <GLColor.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLCoordinates.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLMaterial.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLSelection.hpp>
-#include <XOpenGL.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLUtils.hpp>
-#include <GLSLog.hpp>
+#include <Opengltokens.hpp>
+#include <Glstrings.hpp>
+#include <Glcontext.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glxcollection.hpp>
+#include <Glsilhouette.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glstate.hpp>
+#include <Glgraphics.hpp>
+#include <Glgeometrybb.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glvectorlists.hpp>
+#include <Gltexture.hpp>
+#include <Glcolor.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glcoordinates.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glmaterial.hpp>
+#include <Gltextureformat.hpp>
+#include <Glselection.hpp>
+#include <Xopengl.hpp>
+#include <Glvectortypes.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glutils.hpp>
+#include <Glslog.hpp>
 #include <System.Types.hpp>
 
 //-- user supplied -----------------------------------------------------------
@@ -1122,7 +1122,7 @@ protected:
 	void __fastcall SetGLFogEnvironment(TGLFogEnvironment* AValue);
 	bool __fastcall StoreFog();
 	void __fastcall SetAccumBufferBits(const int val);
-	void __fastcall PrepareRenderingMatrices(const Glvectorgeometry::TRectangle &aViewPort, int resolution, System::Types::PRect pickingRect = (System::Types::PRect)(0x0));
+	void __fastcall PrepareRenderingMatrices(const Glvectorgeometry::TRectangle &aViewPort, int resolution, Winapi::Windows::PRect pickingRect = (System::Types::PRect)(0x0));
 	void __fastcall DoBaseRender(const Glvectorgeometry::TRectangle &aViewPort, int resolution, Glrendercontextinfo::TDrawState drawState, TGLBaseSceneObject* baseObject);
 	void __fastcall SetupRenderingContext(Glcontext::TGLContext* context);
 	void __fastcall SetupRCOptions(Glcontext::TGLContext* context);
@@ -1143,8 +1143,8 @@ public:
 	void __fastcall Resize(int newLeft, int newTop, int newWidth, int newHeight);
 	Glcontext::TGLContextAcceleration __fastcall Acceleration();
 	__property Glvectorgeometry::TRectangle ViewPort = {read=FViewPort};
-	void __fastcall PickObjects(const System::Types::TRect &rect, Glselection::TGLPickList* pickList, int objectCountGuess);
-	Glselection::TGLPickList* __fastcall GetPickedObjects(const System::Types::TRect &rect, int objectCountGuess = 0x40);
+	void __fastcall PickObjects(const Winapi::Windows::TRect &rect, Glselection::TGLPickList* pickList, int objectCountGuess);
+	Glselection::TGLPickList* __fastcall GetPickedObjects(const Winapi::Windows::TRect &rect, int objectCountGuess = 0x40);
 	TGLBaseSceneObject* __fastcall GetPickedObject(int x, int y);
 	System::Uitypes::TColor __fastcall GetPixelColor(int x, int y);
 	float __fastcall GetPixelDepth(int x, int y);

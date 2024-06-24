@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMaterial.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLMaterial.pas' rev: 35.00 (Windows)
 
 #ifndef GlmaterialHPP
 #define GlmaterialHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -164,13 +162,13 @@ private:
 	bool FDepthWrite;
 	float FZNear;
 	float FZFar;
-	Glstate::TDepthFunction FCompareFunc;
+	Glstate::TComparisonFunction FCompareFunc;
 	bool FDepthClamp;
 	
 protected:
 	void __fastcall SetZNear(float Value);
 	void __fastcall SetZFar(float Value);
-	void __fastcall SetCompareFunc(Gltexture::TGLDepthCompareFunc Value);
+	void __fastcall SetCompareFunc(Glstate::TComparisonFunction Value);
 	void __fastcall SetDepthTest(bool Value);
 	void __fastcall SetDepthWrite(bool Value);
 	void __fastcall SetDepthClamp(bool Value);
@@ -185,7 +183,7 @@ public:
 __published:
 	__property float ZNear = {read=FZNear, write=SetZNear, stored=StoreZNear};
 	__property float ZFar = {read=FZFar, write=SetZFar, stored=StoreZFar};
-	__property Glstate::TDepthFunction DepthCompareFunction = {read=FCompareFunc, write=SetCompareFunc, default=3};
+	__property Glstate::TComparisonFunction DepthCompareFunction = {read=FCompareFunc, write=SetCompareFunc, default=3};
 	__property bool DepthTest = {read=FDepthTest, write=SetDepthTest, default=1};
 	__property bool DepthWrite = {read=FDepthWrite, write=SetDepthWrite, default=1};
 	__property bool DepthClamp = {read=FDepthClamp, write=SetDepthClamp, default=0};
@@ -207,7 +205,7 @@ private:
 	bool FUseAlphaFunc;
 	bool FUseBlendFunc;
 	bool FSeparateBlendFunc;
-	TGlAlphaFunc FAlphaFuncType;
+	Glstate::TComparisonFunction FAlphaFuncType;
 	float FAlphaFuncRef;
 	Glstate::TBlendFunction FBlendFuncSFactor;
 	Glstate::TBlendFunction FBlendFuncDFactor;
@@ -217,7 +215,7 @@ private:
 	void __fastcall SetUseBlendFunc(const bool Value);
 	void __fastcall SetSeparateBlendFunc(const bool Value);
 	void __fastcall SetAlphaFuncRef(const float Value);
-	void __fastcall SetAlphaFuncType(const TGlAlphaFunc Value);
+	void __fastcall SetAlphaFuncType(const Glstate::TComparisonFunction Value);
 	void __fastcall SetBlendFuncDFactor(const Glstate::TBlendFunction Value);
 	void __fastcall SetBlendFuncSFactor(const Glstate::TBlendFunction Value);
 	void __fastcall SetAlphaBlendFuncDFactor(const Glstate::TBlendFunction Value);
@@ -230,7 +228,7 @@ public:
 	
 __published:
 	__property bool UseAlphaFunc = {read=FUseAlphaFunc, write=SetUseAlphaFunc, default=0};
-	__property TGlAlphaFunc AlphaFunctType = {read=FAlphaFuncType, write=SetAlphaFuncType, default=5};
+	__property Glstate::TComparisonFunction AlphaFunctType = {read=FAlphaFuncType, write=SetAlphaFuncType, default=5};
 	__property float AlphaFuncRef = {read=FAlphaFuncRef, write=SetAlphaFuncRef, stored=StoreAlphaFuncRef};
 	__property bool UseBlendFunc = {read=FUseBlendFunc, write=SetUseBlendFunc, default=1};
 	__property bool SeparateBlendFunc = {read=FSeparateBlendFunc, write=SetSeparateBlendFunc, default=0};
@@ -265,7 +263,7 @@ private:
 	Gltexture::TGLTexture* FTexture;
 	Gltexture::TGLTextureEx* FTextureEx;
 	TGLAbstractMaterialLibrary* FMaterialLibrary;
-	TGLLibMaterialName FLibMaterialName;
+	System::UnicodeString FLibMaterialName;
 	TMaterialOptions FMaterialOptions;
 	TFaceCulling FFaceCulling;
 	Glstate::TPolygonMode FPolygonMode;
@@ -282,7 +280,7 @@ protected:
 	Gltexture::TGLTexture* __fastcall GetTexture();
 	void __fastcall SetTexture(Gltexture::TGLTexture* ATexture);
 	void __fastcall SetMaterialLibrary(TGLAbstractMaterialLibrary* const val);
-	void __fastcall SetLibMaterialName(const TGLLibMaterialName val);
+	void __fastcall SetLibMaterialName(const System::UnicodeString val);
 	void __fastcall SetFaceCulling(const TFaceCulling val);
 	void __fastcall SetPolygonMode(Glstate::TPolygonMode AValue);
 	Gltexture::TGLTextureEx* __fastcall GetTextureEx();
@@ -321,7 +319,7 @@ __published:
 	__property Gltexture::TGLTexture* Texture = {read=GetTexture, write=SetTexture, stored=StoreMaterialProps};
 	__property TFaceCulling FaceCulling = {read=FFaceCulling, write=SetFaceCulling, default=0};
 	__property TGLAbstractMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
-	__property TGLLibMaterialName LibMaterialName = {read=FLibMaterialName, write=SetLibMaterialName};
+	__property System::UnicodeString LibMaterialName = {read=FLibMaterialName, write=SetLibMaterialName};
 	__property Gltexture::TGLTextureEx* TextureEx = {read=GetTextureEx, write=SetTextureEx, stored=StoreTextureEx};
 	__property Glstate::TPolygonMode PolygonMode = {read=FPolygonMode, write=SetPolygonMode, default=0};
 private:
@@ -362,7 +360,7 @@ class PASCALIMPLEMENTATION TGLAbstractLibMaterial : public System::Classes::TCol
 	
 protected:
 	System::Classes::TList* FUserList;
-	TGLLibMaterialName FName;
+	System::UnicodeString FName;
 	int FNameHashKey;
 	int FTag;
 	bool FNotifying;
@@ -372,7 +370,7 @@ protected:
 	int __stdcall _Release();
 	virtual System::UnicodeString __fastcall GetDisplayName();
 	__classmethod int __fastcall ComputeNameHashKey(const System::UnicodeString name);
-	void __fastcall SetName(const TGLLibMaterialName val);
+	void __fastcall SetName(const System::UnicodeString val);
 	virtual void __fastcall Loaded();
 	
 public:
@@ -395,7 +393,7 @@ public:
 	__property TGLAbstractMaterialLibrary* MaterialLibrary = {read=GetMaterialLibrary};
 	
 __published:
-	__property TGLLibMaterialName Name = {read=FName, write=SetName};
+	__property System::UnicodeString Name = {read=FName, write=SetName};
 	__property int Tag = {read=FTag, write=FTag, nodefault};
 private:
 	void *__IGLNotifyAble;	// Glbaseclasses::IGLNotifyAble 
@@ -436,23 +434,23 @@ class PASCALIMPLEMENTATION TGLLibMaterial : public TGLAbstractLibMaterial
 	
 private:
 	TGLMaterial* FMaterial;
-	Glcoordinates::TGLCoordinates* FTextureOffset;
-	Glcoordinates::TGLCoordinates* FTextureScale;
+	Glcoordinates::TGLCoordinates3* FTextureOffset;
+	Glcoordinates::TGLCoordinates3* FTextureScale;
 	float FTextureRotate;
 	bool FTextureMatrixIsIdentity;
 	bool FTextureOverride;
-	Glvectorgeometry::TMatrix FTextureMatrix;
-	TGLLibMaterialName FTexture2Name;
+	Glvectortypes::TMatrix4f FTextureMatrix;
+	System::UnicodeString FTexture2Name;
 	TGLShader* FShader;
 	TGLLibMaterial* libMatTexture2;
 	
 protected:
 	virtual void __fastcall Loaded();
 	void __fastcall SetMaterial(TGLMaterial* const val);
-	void __fastcall SetTextureOffset(Glcoordinates::TGLCoordinates* const val);
-	void __fastcall SetTextureScale(Glcoordinates::TGLCoordinates* const val);
-	void __fastcall SetTextureMatrix(const Glvectorgeometry::TMatrix &Value);
-	void __fastcall SetTexture2Name(const TGLLibMaterialName val);
+	void __fastcall SetTextureOffset(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetTextureScale(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetTextureMatrix(const Glvectortypes::TMatrix4f &Value);
+	void __fastcall SetTexture2Name(const System::UnicodeString val);
 	void __fastcall SetShader(TGLShader* const val);
 	void __fastcall SetTextureRotate(float Value);
 	bool __fastcall StoreTextureRotate();
@@ -469,17 +467,17 @@ public:
 	virtual void __fastcall Apply(Glrendercontextinfo::TGLRenderContextInfo &ARci);
 	virtual bool __fastcall UnApply(Glrendercontextinfo::TGLRenderContextInfo &ARci);
 	void __fastcall NotifyUsersOfTexMapChange();
-	__property Glvectorgeometry::TMatrix TextureMatrix = {read=FTextureMatrix, write=SetTextureMatrix};
+	__property Glvectortypes::TMatrix4f TextureMatrix = {read=FTextureMatrix, write=SetTextureMatrix};
 	__property bool TextureMatrixIsIdentity = {read=FTextureMatrixIsIdentity, nodefault};
 	void __fastcall NotifyTexMapChange(System::TObject* Sender);
 	virtual bool __fastcall Blended();
 	
 __published:
 	__property TGLMaterial* Material = {read=FMaterial, write=SetMaterial};
-	__property Glcoordinates::TGLCoordinates* TextureOffset = {read=FTextureOffset, write=SetTextureOffset};
-	__property Glcoordinates::TGLCoordinates* TextureScale = {read=FTextureScale, write=SetTextureScale};
+	__property Glcoordinates::TGLCoordinates3* TextureOffset = {read=FTextureOffset, write=SetTextureOffset};
+	__property Glcoordinates::TGLCoordinates3* TextureScale = {read=FTextureScale, write=SetTextureScale};
 	__property float TextureRotate = {read=FTextureRotate, write=SetTextureRotate, stored=StoreTextureRotate};
-	__property TGLLibMaterialName Texture2Name = {read=FTexture2Name, write=SetTexture2Name};
+	__property System::UnicodeString Texture2Name = {read=FTexture2Name, write=SetTexture2Name};
 	__property TGLShader* Shader = {read=FShader, write=SetShader};
 private:
 	void *__IGLTextureNotifyAble;	// Gltexture::IGLTextureNotifyAble 
@@ -508,10 +506,10 @@ class PASCALIMPLEMENTATION TGLAbstractLibMaterials : public System::Classes::TOw
 	
 protected:
 	void __fastcall Loaded();
-	TGLAbstractLibMaterial* __fastcall GetMaterial(const TGLLibMaterialName AName);
+	TGLAbstractLibMaterial* __fastcall GetMaterial(const System::UnicodeString AName);
 	
 public:
-	TGLLibMaterialName __fastcall MakeUniqueName(const TGLLibMaterialName nameRoot);
+	System::UnicodeString __fastcall MakeUniqueName(const System::UnicodeString nameRoot);
 public:
 	/* TOwnedCollection.Create */ inline __fastcall TGLAbstractLibMaterials(System::Classes::TPersistent* AOwner, System::Classes::TCollectionItemClass ItemClass) : System::Classes::TOwnedCollection(AOwner, ItemClass) { }
 	
@@ -542,11 +540,11 @@ public:
 	HIDESBASE TGLLibMaterial* __fastcall Add();
 	HIDESBASE TGLLibMaterial* __fastcall FindItemID(int ID);
 	__property TGLLibMaterial* Items[int index] = {read=GetItems, write=SetItems/*, default*/};
-	TGLLibMaterial* __fastcall GetLibMaterialByName(const TGLLibMaterialName AName);
+	TGLLibMaterial* __fastcall GetLibMaterialByName(const System::UnicodeString AName);
 	int __fastcall GetTextureIndex(Gltexture::TGLTexture* const Texture);
 	int __fastcall GetMaterialIndex(TGLMaterial* const Material);
-	TGLLibMaterialName __fastcall GetNameOfTexture(Gltexture::TGLTexture* const Texture);
-	TGLLibMaterialName __fastcall GetNameOfLibMaterial(TGLLibMaterial* const Material);
+	System::UnicodeString __fastcall GetNameOfTexture(Gltexture::TGLTexture* const Texture);
+	System::UnicodeString __fastcall GetNameOfLibMaterial(TGLLibMaterial* const Material);
 	void __fastcall PrepareBuildList();
 	void __fastcall DeleteUnusedMaterials();
 public:
@@ -607,10 +605,10 @@ public:
 	void __fastcall AddMaterialsFromFile(const System::UnicodeString fileName);
 	TGLLibMaterial* __fastcall AddTextureMaterial(const System::UnicodeString materialName, const System::UnicodeString fileName, bool persistent = true)/* overload */;
 	TGLLibMaterial* __fastcall AddTextureMaterial(const System::UnicodeString materialName, Vcl::Graphics::TGraphic* graphic)/* overload */;
-	TGLLibMaterial* __fastcall LibMaterialByName(const TGLLibMaterialName AName);
-	Gltexture::TGLTexture* __fastcall TextureByName(const TGLLibMaterialName LibMatName);
-	TGLLibMaterialName __fastcall GetNameOfTexture(Gltexture::TGLTexture* const Texture);
-	TGLLibMaterialName __fastcall GetNameOfLibMaterial(TGLLibMaterial* const LibMat);
+	TGLLibMaterial* __fastcall LibMaterialByName(const System::UnicodeString AName);
+	Gltexture::TGLTexture* __fastcall TextureByName(const System::UnicodeString LibMatName);
+	System::UnicodeString __fastcall GetNameOfTexture(Gltexture::TGLTexture* const Texture);
+	System::UnicodeString __fastcall GetNameOfLibMaterial(TGLLibMaterial* const LibMat);
 	
 __published:
 	__property TGLLibMaterials* Materials = {read=GetMaterials, write=SetMaterials, stored=StoreMaterials};

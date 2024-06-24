@@ -484,7 +484,7 @@ var
   ColIndex: Integer;
   BoundaryIndex: Integer;
   LocalScreenObject: TScreenObject;
-  SegmentIndex: Integer;
+  SegmentIndex: NativeInt;
   Segment: TCellElementSegment;
   PriorCol, PriorRow, PriorLayer: integer;
   LocalModel: TCustomModel;

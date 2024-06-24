@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Utils3DS.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Utils3DS.pas' rev: 35.00 (Windows)
 
 #ifndef Utils3dsHPP
 #define Utils3dsHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -30,7 +28,7 @@ namespace Utils3ds
 //-- type declarations -------------------------------------------------------
 //-- var, const, procedure ---------------------------------------------------
 extern DELPHI_PACKAGE void __fastcall ShowError(const System::UnicodeString ErrorMessage);
-extern DELPHI_PACKAGE void __fastcall ShowErrorFormatted(const System::UnicodeString ErrorMessage, const System::TVarRec *Args, const System::NativeInt Args_High);
+extern DELPHI_PACKAGE void __fastcall ShowErrorFormatted(const System::UnicodeString ErrorMessage, const System::TVarRec *Args, const int Args_High);
 extern DELPHI_PACKAGE Types3ds::TMeshSet3DS __fastcall GetMeshSet(File3ds::TFile3DS* const Source, Types3ds::TDatabase3DS &DB);
 extern DELPHI_PACKAGE Types3ds::TAtmosphere3DS __fastcall GetAtmosphere(File3ds::TFile3DS* const Source, Types3ds::TDatabase3DS &DB);
 extern DELPHI_PACKAGE Types3ds::TBackground3DS __fastcall GetBackground(File3ds::TFile3DS* const Source, Types3ds::TDatabase3DS &DB);

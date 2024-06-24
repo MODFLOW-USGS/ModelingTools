@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Backends_Generic.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Backends_Generic.pas' rev: 35.00 (Windows)
 
 #ifndef Gr32_backends_genericHPP
 #define Gr32_backends_genericHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -50,9 +48,9 @@ class PASCALIMPLEMENTATION TMMFBackend : public TMemoryBackend
 	typedef TMemoryBackend inherited;
 	
 private:
-	Winapi::Windows::THandle FMapHandle;
+	NativeUInt FMapHandle;
 	bool FMapIsTemporary;
-	Winapi::Windows::THandle FMapFileHandle;
+	NativeUInt FMapFileHandle;
 	System::UnicodeString FMapFileName;
 	
 protected:
@@ -62,9 +60,9 @@ protected:
 public:
 	__fastcall virtual TMMFBackend(Gr32::TCustomBitmap32* Owner, bool IsTemporary, const System::UnicodeString MapFileName);
 	__fastcall virtual ~TMMFBackend();
-	__classmethod void __fastcall InitializeFileMapping(Winapi::Windows::THandle &MapHandle, Winapi::Windows::THandle &MapFileHandle, System::UnicodeString &MapFileName);
-	__classmethod void __fastcall DeinitializeFileMapping(Winapi::Windows::THandle MapHandle, Winapi::Windows::THandle MapFileHandle, const System::UnicodeString MapFileName);
-	__classmethod void __fastcall CreateFileMapping(Winapi::Windows::THandle &MapHandle, Winapi::Windows::THandle &MapFileHandle, System::UnicodeString &MapFileName, bool IsTemporary, int NewWidth, int NewHeight);
+	__classmethod void __fastcall InitializeFileMapping(NativeUInt &MapHandle, NativeUInt &MapFileHandle, System::UnicodeString &MapFileName);
+	__classmethod void __fastcall DeinitializeFileMapping(NativeUInt MapHandle, NativeUInt MapFileHandle, const System::UnicodeString MapFileName);
+	__classmethod void __fastcall CreateFileMapping(NativeUInt &MapHandle, NativeUInt &MapFileHandle, System::UnicodeString &MapFileName, bool IsTemporary, int NewWidth, int NewHeight);
 };
 
 

@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLVectorFileObjects.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLVectorFileObjects.pas' rev: 35.00 (Windows)
 
 #ifndef GlvectorfileobjectsHPP
 #define GlvectorfileobjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -106,7 +104,7 @@ private:
 protected:
 	void __fastcall SetVertices(Glvectorlists::TAffineVectorList* const val);
 	void __fastcall SetNormals(Glvectorlists::TAffineVectorList* const val);
-	virtual void __fastcall ContributeToBarycenter(Glvectorgeometry::TAffineVector &currentSum, int &nb);
+	virtual void __fastcall ContributeToBarycenter(Glvectortypes::TVector3f &currentSum, int &nb);
 	
 public:
 	__fastcall virtual TGLBaseMeshObject();
@@ -115,7 +113,7 @@ public:
 	DYNAMIC void __fastcall WriteToFiler(Glpersistentclasses::TVirtualWriter* writer);
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* reader);
 	virtual void __fastcall Clear();
-	virtual void __fastcall Translate(const Glvectorgeometry::TAffineVector &delta);
+	virtual void __fastcall Translate(const Glvectortypes::TVector3f &delta);
 	void __fastcall BuildNormals(Glvectorlists::TIntegerList* vertexIndices, TGLMeshObjectMode mode, Glvectorlists::TIntegerList* NormalIndices = (Glvectorlists::TIntegerList*)(0x0));
 	virtual Glvectorlists::TAffineVectorList* __fastcall ExtractTriangles(Glvectorlists::TAffineVectorList* texCoords = (Glvectorlists::TAffineVectorList*)(0x0), Glvectorlists::TAffineVectorList* Normals = (Glvectorlists::TAffineVectorList*)(0x0));
 	__property System::UnicodeString Name = {read=FName, write=FName};
@@ -142,7 +140,7 @@ private:
 	Glvectorlists::TAffineVectorList* FPosition;
 	Glvectorlists::TAffineVectorList* FRotation;
 	Glvectorlists::TQuaternionList* FQuaternion;
-	Glvectorgeometry::PMatrixArray FLocalMatrixList;
+	Glvectorgeometry::TMatrixArray *FLocalMatrixList;
 	TGLSkeletonFrameTransform FTransformMode;
 	
 protected:
@@ -218,7 +216,7 @@ private:
 	TGLSkeleton* FSkeleton;
 	
 protected:
-	Glvectorgeometry::TMatrix FGlobalMatrix;
+	Glvectortypes::TMatrix4f FGlobalMatrix;
 	TGLSkeletonBone* __fastcall GetSkeletonBone(int Index);
 	virtual void __fastcall AfterObjectCreatedByReader(System::TObject* Sender);
 	
@@ -251,7 +249,7 @@ public:
 	DYNAMIC void __fastcall WriteToFiler(Glpersistentclasses::TVirtualWriter* writer);
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* reader);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &mrci);
-	__property Glvectorgeometry::TMatrix GlobalMatrix = {read=FGlobalMatrix, write=FGlobalMatrix};
+	__property Glvectortypes::TMatrix4f GlobalMatrix = {read=FGlobalMatrix, write=FGlobalMatrix};
 public:
 	/* TGLSkeletonBoneList.CreateOwned */ inline __fastcall TGLSkeletonRootBoneList(TGLSkeleton* aOwner) : TGLSkeletonBoneList(aOwner) { }
 	/* TGLSkeletonBoneList.Create */ inline __fastcall virtual TGLSkeletonRootBoneList() : TGLSkeletonBoneList() { }
@@ -296,10 +294,10 @@ public:
 	__property TGLSkeletonBone* Items[int Index] = {read=GetSkeletonBone/*, default*/};
 	virtual TGLSkeletonBone* __fastcall BoneByID(int anID);
 	virtual TGLSkeletonBone* __fastcall BoneByName(const System::UnicodeString aName);
-	void __fastcall SetGlobalMatrix(const Glvectorgeometry::TMatrix &Matrix);
-	void __fastcall SetGlobalMatrixForRagDoll(const Glvectorgeometry::TMatrix &RagDollMatrix);
+	void __fastcall SetGlobalMatrix(const Glvectortypes::TMatrix4f &Matrix);
+	void __fastcall SetGlobalMatrixForRagDoll(const Glvectortypes::TMatrix4f &RagDollMatrix);
 	virtual void __fastcall PrepareGlobalMatrices();
-	__property Glvectorgeometry::TMatrix GlobalMatrix = {read=FGlobalMatrix};
+	__property Glvectortypes::TMatrix4f GlobalMatrix = {read=FGlobalMatrix};
 	virtual void __fastcall Clean();
 public:
 	/* TPersistentObject.CreateFromFiler */ inline __fastcall TGLSkeletonBone(Glpersistentclasses::TVirtualReader* reader) : TGLSkeletonBoneList(reader) { }
@@ -317,13 +315,13 @@ private:
 	TGLSkeletonColliderList* FOwner;
 	TGLSkeletonBone* FBone;
 	int FBoneID;
-	Glvectorgeometry::TMatrix FLocalMatrix;
-	Glvectorgeometry::TMatrix FGlobalMatrix;
+	Glvectortypes::TMatrix4f FLocalMatrix;
+	Glvectortypes::TMatrix4f FGlobalMatrix;
 	bool FAutoUpdate;
 	
 protected:
 	void __fastcall SetBone(TGLSkeletonBone* const val);
-	void __fastcall SetLocalMatrix(const Glvectorgeometry::TMatrix &val);
+	void __fastcall SetLocalMatrix(const Glvectortypes::TMatrix4f &val);
 	
 public:
 	__fastcall virtual TGLSkeletonCollider();
@@ -333,8 +331,8 @@ public:
 	virtual void __fastcall AlignCollider();
 	__property TGLSkeletonColliderList* Owner = {read=FOwner};
 	__property TGLSkeletonBone* Bone = {read=FBone, write=SetBone};
-	__property Glvectorgeometry::TMatrix LocalMatrix = {read=FLocalMatrix, write=SetLocalMatrix};
-	__property Glvectorgeometry::TMatrix GlobalMatrix = {read=FGlobalMatrix};
+	__property Glvectortypes::TMatrix4f LocalMatrix = {read=FLocalMatrix, write=SetLocalMatrix};
+	__property Glvectortypes::TMatrix4f GlobalMatrix = {read=FGlobalMatrix};
 	__property bool AutoUpdate = {read=FAutoUpdate, write=FAutoUpdate, nodefault};
 public:
 	/* TPersistentObject.CreateFromFiler */ inline __fastcall TGLSkeletonCollider(Glpersistentclasses::TVirtualReader* reader) : Glpersistentclasses::TPersistentObject(reader) { }
@@ -429,7 +427,7 @@ public:
 	void __fastcall MorphTo(int frameIndex)/* overload */;
 	void __fastcall MorphTo(TGLSkeletonFrame* frame)/* overload */;
 	void __fastcall Lerp(int frameIndex1, int frameIndex2, float lerpFactor);
-	void __fastcall BlendedLerps(const TGLBlendedLerpInfo *lerpInfos, const System::NativeInt lerpInfos_High);
+	void __fastcall BlendedLerps(const TGLBlendedLerpInfo *lerpInfos, const int lerpInfos_High);
 	void __fastcall MakeSkeletalTranslationStatic(int startFrame, int endFrame);
 	void __fastcall MakeSkeletalRotationDelta(int startFrame, int endFrame);
 	void __fastcall MorphMesh(bool normalize);
@@ -523,15 +521,15 @@ public:
 	void __fastcall DropMaterialLibraryCache();
 	virtual void __fastcall PrepareBuildList(Glrendercontextinfo::TGLRenderContextInfo &mrci);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &mrci);
-	virtual void __fastcall GetExtents(/* out */ Glvectorgeometry::TAffineVector &min, /* out */ Glvectorgeometry::TAffineVector &max)/* overload */;
+	virtual void __fastcall GetExtents(/* out */ Glvectortypes::TVector3f &min, /* out */ Glvectortypes::TVector3f &max)/* overload */;
 	virtual void __fastcall GetExtents(/* out */ Glgeometrybb::TAABB &aabb)/* overload */;
-	Glvectorgeometry::TVector __fastcall GetBarycenter();
+	Glvectortypes::TVector4f __fastcall GetBarycenter();
 	virtual void __fastcall Prepare();
-	virtual bool __fastcall PointInObject(const Glvectorgeometry::TAffineVector &aPoint);
-	void __fastcall GetTriangleData(int tri, Glvectorlists::TAffineVectorList* list, Glvectorgeometry::TAffineVector &v0, Glvectorgeometry::TAffineVector &v1, Glvectorgeometry::TAffineVector &v2)/* overload */;
-	void __fastcall GetTriangleData(int tri, Glvectorlists::TVectorList* list, Glvectorgeometry::TVector &v0, Glvectorgeometry::TVector &v1, Glvectorgeometry::TVector &v2)/* overload */;
-	void __fastcall SetTriangleData(int tri, Glvectorlists::TAffineVectorList* list, const Glvectorgeometry::TAffineVector &v0, const Glvectorgeometry::TAffineVector &v1, const Glvectorgeometry::TAffineVector &v2)/* overload */;
-	void __fastcall SetTriangleData(int tri, Glvectorlists::TVectorList* list, const Glvectorgeometry::TVector &v0, const Glvectorgeometry::TVector &v1, const Glvectorgeometry::TVector &v2)/* overload */;
+	virtual bool __fastcall PointInObject(const Glvectortypes::TVector3f &aPoint);
+	void __fastcall GetTriangleData(int tri, Glvectorlists::TAffineVectorList* list, Glvectortypes::TVector3f &v0, Glvectortypes::TVector3f &v1, Glvectortypes::TVector3f &v2)/* overload */;
+	void __fastcall GetTriangleData(int tri, Glvectorlists::TVectorList* list, Glvectortypes::TVector4f &v0, Glvectortypes::TVector4f &v1, Glvectortypes::TVector4f &v2)/* overload */;
+	void __fastcall SetTriangleData(int tri, Glvectorlists::TAffineVectorList* list, const Glvectortypes::TVector3f &v0, const Glvectortypes::TVector3f &v1, const Glvectortypes::TVector3f &v2)/* overload */;
+	void __fastcall SetTriangleData(int tri, Glvectorlists::TVectorList* list, const Glvectortypes::TVector4f &v0, const Glvectortypes::TVector4f &v1, const Glvectortypes::TVector4f &v2)/* overload */;
 	void __fastcall BuildTangentSpace(bool buildBinormals = true, bool buildTangents = true);
 	__property TGLMeshObjectList* Owner = {read=FOwner};
 	__property TGLMeshObjectMode Mode = {read=FMode, write=FMode, nodefault};
@@ -580,8 +578,8 @@ public:
 	void __fastcall MorphTo(int morphTargetIndex);
 	void __fastcall Lerp(int morphTargetIndex1, int morphTargetIndex2, float lerpFactor);
 	int __fastcall MorphTargetCount();
-	void __fastcall GetExtents(/* out */ Glvectorgeometry::TAffineVector &min, /* out */ Glvectorgeometry::TAffineVector &max);
-	void __fastcall Translate(const Glvectorgeometry::TAffineVector &delta);
+	void __fastcall GetExtents(/* out */ Glvectortypes::TVector3f &min, /* out */ Glvectortypes::TVector3f &max);
+	void __fastcall Translate(const Glvectortypes::TVector3f &delta);
 	Glvectorlists::TAffineVectorList* __fastcall ExtractTriangles(Glvectorlists::TAffineVectorList* texCoords = (Glvectorlists::TAffineVectorList*)(0x0), Glvectorlists::TAffineVectorList* normals = (Glvectorlists::TAffineVectorList*)(0x0));
 	int __fastcall TriangleCount();
 	float __fastcall Area();
@@ -647,7 +645,7 @@ public:
 	__fastcall TGLMeshMorphTargetList(System::Classes::TPersistent* AOwner);
 	__fastcall virtual ~TGLMeshMorphTargetList();
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* reader);
-	void __fastcall Translate(const Glvectorgeometry::TAffineVector &delta);
+	void __fastcall Translate(const Glvectortypes::TVector3f &delta);
 	__property System::Classes::TPersistent* Owner = {read=FOwner};
 	virtual void __fastcall Clear();
 	__property TGLMeshMorphTarget* Items[int Index] = {read=GeTGLMeshMorphTarget/*, default*/};
@@ -675,7 +673,7 @@ public:
 	DYNAMIC void __fastcall WriteToFiler(Glpersistentclasses::TVirtualWriter* writer);
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* reader);
 	virtual void __fastcall Clear();
-	virtual void __fastcall Translate(const Glvectorgeometry::TAffineVector &delta);
+	virtual void __fastcall Translate(const Glvectortypes::TVector3f &delta);
 	virtual void __fastcall MorphTo(int morphTargetIndex);
 	virtual void __fastcall Lerp(int morphTargetIndex1, int morphTargetIndex2, float lerpFactor);
 	__property TGLMeshMorphTargetList* MorphTargets = {read=FMorphTargets};
@@ -715,7 +713,7 @@ class PASCALIMPLEMENTATION TGLSkeletonMeshObject : public TGLMorphableMeshObject
 	typedef TGLMorphableMeshObject inherited;
 	
 private:
-	PVerticesBoneWeights FVerticesBonesWeights;
+	TVerticesBoneWeights *FVerticesBonesWeights;
 	int FVerticeBoneWeightCount;
 	int FVerticeBoneWeightCapacity;
 	int FBonesPerVertex;
@@ -742,8 +740,8 @@ public:
 	__property int VerticeBoneWeightCount = {read=FVerticeBoneWeightCount, write=SetVerticeBoneWeightCount, nodefault};
 	__property int VerticeBoneWeightCapacity = {read=FVerticeBoneWeightCapacity, write=SetVerticeBoneWeightCapacity, nodefault};
 	__property int BonesPerVertex = {read=FBonesPerVertex, write=SetBonesPerVertex, nodefault};
-	int __fastcall FindOrAdd(int BoneID, const Glvectorgeometry::TAffineVector &vertex, const Glvectorgeometry::TAffineVector &normal)/* overload */;
-	int __fastcall FindOrAdd(const TVertexBoneWeightDynArray boneIDs, const Glvectorgeometry::TAffineVector &vertex, const Glvectorgeometry::TAffineVector &normal)/* overload */;
+	int __fastcall FindOrAdd(int BoneID, const Glvectortypes::TVector3f &vertex, const Glvectortypes::TVector3f &normal)/* overload */;
+	int __fastcall FindOrAdd(const TVertexBoneWeightDynArray boneIDs, const Glvectortypes::TVector3f &vertex, const Glvectortypes::TVector3f &normal)/* overload */;
 	void __fastcall AddWeightedBone(int aBoneID, float aWeight);
 	void __fastcall AddWeightedBones(const TVertexBoneWeightDynArray boneIDs);
 	void __fastcall PrepareBoneMatrixInvertedMeshes();
@@ -826,9 +824,9 @@ public:
 	virtual int __fastcall TriangleCount();
 	virtual void __fastcall Reverse();
 	void __fastcall Add(int idx);
-	void __fastcall GetExtents(Glvectorgeometry::TAffineVector &min, Glvectorgeometry::TAffineVector &max);
+	void __fastcall GetExtents(Glvectortypes::TVector3f &min, Glvectortypes::TVector3f &max);
 	void __fastcall ConvertToList();
-	Glvectorgeometry::TAffineVector __fastcall GetNormal();
+	Glvectortypes::TVector3f __fastcall GetNormal();
 	__property TGLFaceGroupMeshMode Mode = {read=FMode, write=FMode, nodefault};
 	__property Glvectorlists::TIntegerList* VertexIndices = {read=FVertexIndices, write=SetVertexIndices};
 public:
@@ -892,7 +890,7 @@ public:
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* reader);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &mrci);
 	virtual void __fastcall AddToTriangles(Glvectorlists::TAffineVectorList* aList, Glvectorlists::TAffineVectorList* aTexCoords = (Glvectorlists::TAffineVectorList*)(0x0), Glvectorlists::TAffineVectorList* aNormals = (Glvectorlists::TAffineVectorList*)(0x0));
-	HIDESBASE void __fastcall Add(int idx, const Glvectorgeometry::TAffineVector &texCoord)/* overload */;
+	HIDESBASE void __fastcall Add(int idx, const Glvectortypes::TVector3f &texCoord)/* overload */;
 	HIDESBASE void __fastcall Add(int idx, const float s, const float t)/* overload */;
 	__property Glvectorlists::TAffineVectorList* TexCoords = {read=FTexCoords, write=SetTexCoords};
 public:
@@ -990,14 +988,14 @@ private:
 	TGLMeshNormalsOrientation FNormalsOrientation;
 	Glmaterial::TGLMaterialLibrary* FMaterialLibrary;
 	Glmaterial::TGLMaterialLibrary* FLightmapLibrary;
-	Glvectorgeometry::TVector FAxisAlignedDimensionsCache;
+	Glvectortypes::TVector4f FAxisAlignedDimensionsCache;
 	bool FBaryCenterOffsetChanged;
-	Glvectorgeometry::TVector FBaryCenterOffset;
+	Glvectortypes::TVector4f FBaryCenterOffset;
 	bool FUseMeshMaterials;
 	bool FOverlaySkeleton;
 	bool FIgnoreMissingTextures;
 	TGLMeshAutoCenterings FAutoCentering;
-	Glcoordinates::TGLCoordinates* FAutoScaling;
+	Glcoordinates::TGLCoordinates3* FAutoScaling;
 	bool FMaterialLibraryCachesPrepared;
 	System::TObject* FConnectivity;
 	System::UnicodeString FLastLoadedFilename;
@@ -1010,7 +1008,7 @@ protected:
 	void __fastcall SetLightmapLibrary(Glmaterial::TGLMaterialLibrary* const val);
 	void __fastcall SetNormalsOrientation(const TGLMeshNormalsOrientation val);
 	void __fastcall SetOverlaySkeleton(const bool val);
-	void __fastcall SetAutoScaling(Glcoordinates::TGLCoordinates* const Value);
+	void __fastcall SetAutoScaling(Glcoordinates::TGLCoordinates3* const Value);
 	virtual void __fastcall DestroyHandle();
 	virtual void __fastcall PrepareVectorFile(TGLVectorFile* aFile);
 	virtual void __fastcall PrepareMesh();
@@ -1023,21 +1021,21 @@ public:
 	__fastcall virtual ~TGLBaseMesh();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);
-	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
-	Glvectorgeometry::TVector __fastcall BarycenterOffset();
-	Glvectorgeometry::TVector __fastcall BarycenterPosition();
-	virtual Glvectorgeometry::TVector __fastcall BarycenterAbsolutePosition();
+	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	Glvectortypes::TVector4f __fastcall BarycenterOffset();
+	Glvectortypes::TVector4f __fastcall BarycenterPosition();
+	virtual Glvectortypes::TVector4f __fastcall BarycenterAbsolutePosition();
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall DoRender(Glrendercontextinfo::TGLRenderContextInfo &rci, bool renderSelf, bool renderChildren);
 	virtual void __fastcall StructureChanged();
 	void __fastcall StructureChangedNoPrepare();
-	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	virtual Glsilhouette::TGLSilhouette* __fastcall GenerateSilhouette(const Glsilhouette::TGLSilhouetteParameters &silhouetteParameters);
 	void __fastcall BuildSilhouetteConnectivityData();
 	__property TGLMeshObjectList* MeshObjects = {read=FMeshObjects};
 	__property TGLSkeleton* Skeleton = {read=FSkeleton};
-	void __fastcall GetExtents(/* out */ Glvectorgeometry::TAffineVector &min, /* out */ Glvectorgeometry::TAffineVector &max);
-	Glvectorgeometry::TAffineVector __fastcall GetBarycenter();
+	void __fastcall GetExtents(/* out */ Glvectortypes::TVector3f &min, /* out */ Glvectortypes::TVector3f &max);
+	Glvectortypes::TVector3f __fastcall GetBarycenter();
 	virtual void __fastcall PerformAutoCentering();
 	virtual void __fastcall PerformAutoScaling();
 	virtual void __fastcall LoadFromFile(const System::UnicodeString filename);
@@ -1048,7 +1046,7 @@ public:
 	virtual void __fastcall AddDataFromStream(const System::UnicodeString filename, System::Classes::TStream* aStream);
 	System::UnicodeString __fastcall LastLoadedFilename();
 	__property TGLMeshAutoCenterings AutoCentering = {read=FAutoCentering, write=FAutoCentering, default=0};
-	__property Glcoordinates::TGLCoordinates* AutoScaling = {read=FAutoScaling, write=FAutoScaling};
+	__property Glcoordinates::TGLCoordinates3* AutoScaling = {read=FAutoScaling, write=FAutoScaling};
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
 	__property bool UseMeshMaterials = {read=FUseMeshMaterials, write=SetUseMeshMaterials, default=1};
 	__property Glmaterial::TGLMaterialLibrary* LightmapLibrary = {read=FLightmapLibrary, write=SetLightmapLibrary};
@@ -1071,11 +1069,11 @@ private:
 public:
 	__fastcall virtual TGLFreeForm(System::Classes::TComponent* aOwner);
 	__fastcall virtual ~TGLFreeForm();
-	bool __fastcall OctreeRayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
-	bool __fastcall OctreeSphereSweepIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, const float velocity, const float radius, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
-	bool __fastcall OctreeTriangleIntersect(const Glvectorgeometry::TAffineVector &v1, const Glvectorgeometry::TAffineVector &v2, const Glvectorgeometry::TAffineVector &v3);
-	bool __fastcall OctreePointInMesh(const Glvectorgeometry::TVector &Point);
-	bool __fastcall OctreeAABBIntersect(const Glgeometrybb::TAABB &AABB, const Glvectorgeometry::TMatrix &objMatrix, const Glvectorgeometry::TMatrix &invObjMatrix, Glvectorlists::TAffineVectorList* triangles = (Glvectorlists::TAffineVectorList*)(0x0));
+	bool __fastcall OctreeRayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	bool __fastcall OctreeSphereSweepIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, const float velocity, const float radius, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	bool __fastcall OctreeTriangleIntersect(const Glvectortypes::TVector3f &v1, const Glvectortypes::TVector3f &v2, const Glvectortypes::TVector3f &v3);
+	bool __fastcall OctreePointInMesh(const Glvectortypes::TVector4f &Point);
+	bool __fastcall OctreeAABBIntersect(const Glgeometrybb::TAABB &AABB, const Glvectortypes::TMatrix4f &objMatrix, const Glvectortypes::TMatrix4f &invObjMatrix, Glvectorlists::TAffineVectorList* triangles = (Glvectorlists::TAffineVectorList*)(0x0));
 	__property Gloctree::TGLOctree* Octree = {read=FOctree};
 	void __fastcall BuildOctree(int TreeDepth = 0x3);
 	
@@ -1204,11 +1202,11 @@ class PASCALIMPLEMENTATION TGLAnimationControler : public TGLBaseAnimationContro
 	typedef TGLBaseAnimationControler inherited;
 	
 private:
-	TGLActorAnimationName FAnimationName;
+	System::UnicodeString FAnimationName;
 	float FRatio;
 	
 protected:
-	void __fastcall SetAnimationName(const TGLActorAnimationName val);
+	void __fastcall SetAnimationName(const System::UnicodeString val);
 	void __fastcall SetRatio(const float val);
 	virtual void __fastcall DoChange();
 	virtual bool __fastcall Apply(TGLBlendedLerpInfo &lerpInfo);
@@ -1355,17 +1353,17 @@ class PASCALIMPLEMENTATION EInvalidVectorFile : public System::Sysutils::Excepti
 	
 public:
 	/* Exception.Create */ inline __fastcall EInvalidVectorFile(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EInvalidVectorFile(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EInvalidVectorFile(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EInvalidVectorFile(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EInvalidVectorFile(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EInvalidVectorFile(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidVectorFile(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidVectorFile(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidVectorFile(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidVectorFile(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EInvalidVectorFile(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidVectorFile(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EInvalidVectorFile(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidVectorFile(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EInvalidVectorFile(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EInvalidVectorFile(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidVectorFile(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidVectorFile(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidVectorFile(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidVectorFile(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EInvalidVectorFile() { }
 	
 };

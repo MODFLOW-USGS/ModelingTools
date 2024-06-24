@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FileB3D.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Fileb3d.pas' rev: 36.00 (Windows)
 
 #ifndef Fileb3dHPP
 #define Fileb3dHPP
@@ -15,12 +15,12 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorLists.hpp>
+#include <System.Sysutils.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorlists.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

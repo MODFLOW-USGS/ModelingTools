@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFBO.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glfbo.pas' rev: 36.00 (Windows)
 
 #ifndef GlfboHPP
 #define GlfboHPP
@@ -15,20 +15,20 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLContext.hpp>
-#include <GLState.hpp>
-#include <GLTexture.hpp>
-#include <GLColor.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLMultisampleImage.hpp>
-#include <GLGraphics.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLSLog.hpp>
+#include <Sysinit.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glcontext.hpp>
+#include <Glstate.hpp>
+#include <Gltexture.hpp>
+#include <Glcolor.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glmultisampleimage.hpp>
+#include <Glgraphics.hpp>
+#include <Gltextureformat.hpp>
+#include <Glvectortypes.hpp>
+#include <Glslog.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -163,7 +163,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 MaxColorAttachments = System::Int8(0x20);
+static _DELPHI_CONST System::Int8 MaxColorAttachments = System::Int8(0x20);
 }	/* namespace Glfbo */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLFBO)
 using namespace Glfbo;

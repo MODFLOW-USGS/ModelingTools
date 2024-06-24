@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLProcTextures.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glproctextures.pas' rev: 36.00 (Windows)
 
 #ifndef GlproctexturesHPP
 #define GlproctexturesHPP
@@ -15,15 +15,15 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <GLTexture.hpp>
-#include <GLGraphics.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLBaseClasses.hpp>
+#include <Gltexture.hpp>
+#include <Glgraphics.hpp>
+#include <Gltextureformat.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -88,8 +88,8 @@ __published:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Word GRADIENT_TABLE_SIZE = System::Word(0x100);
-static const System::Int8 DAMP_SHIFT = System::Int8(0x14);
+static _DELPHI_CONST System::Word GRADIENT_TABLE_SIZE = System::Word(0x100);
+static _DELPHI_CONST System::Int8 DAMP_SHIFT = System::Int8(0x14);
 }	/* namespace Glproctextures */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLPROCTEXTURES)
 using namespace Glproctextures;

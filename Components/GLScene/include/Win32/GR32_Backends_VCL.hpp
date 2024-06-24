@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Backends_VCL.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Backends_VCL.pas' rev: 35.00 (Windows)
 
 #ifndef Gr32_backends_vclHPP
 #define Gr32_backends_vclHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -47,13 +45,13 @@ private:
 	void __fastcall FontChanged();
 	
 protected:
-	Winapi::Windows::TBitmapInfo FBitmapInfo;
+	tagBITMAPINFO FBitmapInfo;
 	HBITMAP FBitmapHandle;
 	HDC FHDC;
 	Vcl::Graphics::TFont* FFont;
 	Vcl::Graphics::TCanvas* FCanvas;
 	HFONT FFontHandle;
-	Winapi::Windows::THandle FMapHandle;
+	NativeUInt FMapHandle;
 	System::Classes::TNotifyEvent FOnFontChange;
 	System::Classes::TNotifyEvent FOnCanvasChange;
 	virtual void __fastcall InitializeSurface(int NewWidth, int NewHeight, bool ClearBuffer);
@@ -68,22 +66,22 @@ public:
 	void __fastcall ImageNeeded();
 	void __fastcall CheckPixmap();
 	void __fastcall DoPaint(Gr32::TBitmap32* ABuffer, Gr32_containers::TRectList* AInvalidRects, Vcl::Graphics::TCanvas* ACanvas, Gr32_image::TCustomPaintBox32* APaintBox);
-	Winapi::Windows::TBitmapInfo __fastcall GetBitmapInfo();
-	Winapi::Windows::THandle __fastcall GetBitmapHandle();
-	__property Winapi::Windows::TBitmapInfo BitmapInfo = {read=GetBitmapInfo};
-	__property Winapi::Windows::THandle BitmapHandle = {read=GetBitmapHandle, nodefault};
+	tagBITMAPINFO __fastcall GetBitmapInfo();
+	NativeUInt __fastcall GetBitmapHandle();
+	__property tagBITMAPINFO BitmapInfo = {read=GetBitmapInfo};
+	__property NativeUInt BitmapHandle = {read=GetBitmapHandle, nodefault};
 	HDC __fastcall GetHandle();
-	void __fastcall Draw(const Gr32::TRect &DstRect, const Gr32::TRect &SrcRect, HDC hSrc)/* overload */;
+	void __fastcall Draw(const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect, HDC hSrc)/* overload */;
 	void __fastcall DrawTo(HDC hDst, int DstX, int DstY)/* overload */;
-	void __fastcall DrawTo(HDC hDst, const Gr32::TRect &DstRect, const Gr32::TRect &SrcRect)/* overload */;
+	void __fastcall DrawTo(HDC hDst, const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect)/* overload */;
 	__property HDC Handle = {read=GetHandle, nodefault};
 	void __fastcall Textout(int X, int Y, const System::UnicodeString Text)/* overload */;
-	void __fastcall Textout(int X, int Y, const Gr32::TRect &ClipRect, const System::UnicodeString Text)/* overload */;
-	void __fastcall Textout(Gr32::TRect &DstRect, const unsigned Flags, const System::UnicodeString Text)/* overload */;
+	void __fastcall Textout(int X, int Y, const System::Types::TRect &ClipRect, const System::UnicodeString Text)/* overload */;
+	void __fastcall Textout(System::Types::TRect &DstRect, const unsigned Flags, const System::UnicodeString Text)/* overload */;
 	System::Types::TSize __fastcall TextExtent(const System::UnicodeString Text);
 	void __fastcall TextoutW(int X, int Y, const System::WideString Text)/* overload */;
-	void __fastcall TextoutW(int X, int Y, const Gr32::TRect &ClipRect, const System::WideString Text)/* overload */;
-	void __fastcall TextoutW(Gr32::TRect &DstRect, const unsigned Flags, const System::WideString Text)/* overload */;
+	void __fastcall TextoutW(int X, int Y, const System::Types::TRect &ClipRect, const System::WideString Text)/* overload */;
+	void __fastcall TextoutW(System::Types::TRect &DstRect, const unsigned Flags, const System::WideString Text)/* overload */;
 	System::Types::TSize __fastcall TextExtentW(const System::WideString Text);
 	System::Classes::TNotifyEvent __fastcall GetOnFontChange();
 	void __fastcall SetOnFontChange(System::Classes::TNotifyEvent Handler);
@@ -186,7 +184,7 @@ class PASCALIMPLEMENTATION TGDIMMFBackend : public TGDIBackend
 	typedef TGDIBackend inherited;
 	
 private:
-	Winapi::Windows::THandle FMapFileHandle;
+	NativeUInt FMapFileHandle;
 	bool FMapIsTemporary;
 	System::UnicodeString FMapFileName;
 	
@@ -204,11 +202,11 @@ class PASCALIMPLEMENTATION TGDIMemoryBackend : public Gr32_backends_generic::TMe
 	typedef Gr32_backends_generic::TMemoryBackend inherited;
 	
 private:
-	void __fastcall DoPaintRect(Gr32::TBitmap32* ABuffer, const Gr32::TRect &ARect, Vcl::Graphics::TCanvas* ACanvas);
+	void __fastcall DoPaintRect(Gr32::TBitmap32* ABuffer, const System::Types::TRect &ARect, Vcl::Graphics::TCanvas* ACanvas);
 	HDC __fastcall GetHandle();
 	
 protected:
-	Winapi::Windows::TBitmapInfo FBitmapInfo;
+	tagBITMAPINFO FBitmapInfo;
 	virtual void __fastcall InitializeSurface(int NewWidth, int NewHeight, bool ClearBuffer);
 	
 public:
@@ -216,9 +214,9 @@ public:
 	void __fastcall ImageNeeded();
 	void __fastcall CheckPixmap();
 	void __fastcall DoPaint(Gr32::TBitmap32* ABuffer, Gr32_containers::TRectList* AInvalidRects, Vcl::Graphics::TCanvas* ACanvas, Gr32_image::TCustomPaintBox32* APaintBox);
-	void __fastcall Draw(const Gr32::TRect &DstRect, const Gr32::TRect &SrcRect, HDC hSrc)/* overload */;
+	void __fastcall Draw(const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect, HDC hSrc)/* overload */;
 	void __fastcall DrawTo(HDC hDst, int DstX, int DstY)/* overload */;
-	void __fastcall DrawTo(HDC hDst, const Gr32::TRect &DstRect, const Gr32::TRect &SrcRect)/* overload */;
+	void __fastcall DrawTo(HDC hDst, const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect)/* overload */;
 public:
 	/* TCustomBackend.Create */ inline __fastcall virtual TGDIMemoryBackend(Gr32::TCustomBitmap32* Owner)/* overload */ : Gr32_backends_generic::TMemoryBackend(Owner) { }
 	/* TCustomBackend.Destroy */ inline __fastcall virtual ~TGDIMemoryBackend() { }

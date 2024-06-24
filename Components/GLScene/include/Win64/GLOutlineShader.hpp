@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLOutlineShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gloutlineshader.pas' rev: 36.00 (Windows)
 
 #ifndef GloutlineshaderHPP
 #define GloutlineshaderHPP
@@ -15,15 +15,15 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLMaterial.hpp>
-#include <GLContext.hpp>
-#include <GLColor.hpp>
-#include <GLState.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLBaseClasses.hpp>
+#include <Opengltokens.hpp>
+#include <Glmaterial.hpp>
+#include <Glcontext.hpp>
+#include <Glcolor.hpp>
+#include <Glstate.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

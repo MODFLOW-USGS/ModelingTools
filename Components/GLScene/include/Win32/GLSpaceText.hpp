@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSpaceText.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSpaceText.pas' rev: 35.00 (Windows)
 
 #ifndef GlspacetextHPP
 #define GlspacetextHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -126,7 +124,7 @@ private:
 	void __fastcall SetTextHeight(const float Value);
 	
 protected:
-	PFontEntry FTextFontEntry;
+	TFontEntry *FTextFontEntry;
 	bool FontChanged;
 	virtual void __fastcall DestroyHandle();
 	void __fastcall OnFontChange(System::TObject* sender);
@@ -146,8 +144,8 @@ public:
 	void __fastcall NotifyFontChanged();
 	virtual void __fastcall NotifyChange(System::TObject* sender);
 	virtual void __fastcall DefaultHandler(void *Message);
-	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
-	virtual Glvectorgeometry::TVector __fastcall BarycenterAbsolutePosition();
+	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectortypes::TVector4f __fastcall BarycenterAbsolutePosition();
 	
 __published:
 	__property float Extrusion = {read=FExtrusion, write=SetExtrusion};

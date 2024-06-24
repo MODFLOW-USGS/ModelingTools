@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLVertexDisplacementShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLVertexDisplacementShader.pas' rev: 35.00 (Windows)
 
 #ifndef GlslvertexdisplacementshaderHPP
 #define GlslvertexdisplacementshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -52,7 +50,7 @@ private:
 	float FSpecularFactor;
 	Glmaterial::TGLAbstractMaterialLibrary* FMaterialLibrary;
 	Gltexture::TGLTexture* FMainTexture;
-	Glmaterial::TGLLibMaterialName FMainTexName;
+	System::UnicodeString FMainTexName;
 	float FElapsedTime;
 	float FNoise;
 	float FDisplacementScale;
@@ -62,8 +60,8 @@ private:
 	float FTimeFactor;
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	void __fastcall SetMainTexTexture(Gltexture::TGLTexture* const Value);
-	Glmaterial::TGLLibMaterialName __fastcall GetMainTexName();
-	void __fastcall SetMainTexName(const Glmaterial::TGLLibMaterialName Value);
+	System::UnicodeString __fastcall GetMainTexName();
+	void __fastcall SetMainTexName(const System::UnicodeString Value);
 	void __fastcall SetAmbientColor(Glcolor::TGLColor* AValue);
 	void __fastcall SetSpecularColor(Glcolor::TGLColor* AValue);
 	
@@ -83,7 +81,7 @@ public:
 	__property float SpecularFactor = {read=FSpecularFactor, write=FSpecularFactor};
 	__property Glmaterial::TGLAbstractMaterialLibrary* MaterialLibrary = {read=GetMaterialLibrary, write=SetMaterialLibrary};
 	__property Gltexture::TGLTexture* MainTexture = {read=FMainTexture, write=SetMainTexTexture};
-	__property Glmaterial::TGLLibMaterialName MainTextureName = {read=GetMainTexName, write=SetMainTexName};
+	__property System::UnicodeString MainTextureName = {read=GetMainTexName, write=SetMainTexName};
 	__property float ElapsedTime = {read=FElapsedTime, write=FElapsedTime};
 	__property float NoiseFactor = {read=FNoise, write=FNoise};
 	__property float NoiseScale = {read=FNoiseScale, write=FNoiseScale};

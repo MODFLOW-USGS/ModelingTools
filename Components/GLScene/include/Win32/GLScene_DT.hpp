@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScene_DT.dpk' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLScene_DT.dpk' rev: 35.00 (Windows)
 
 #ifndef Glscene_dtHPP
 #define Glscene_dtHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>	// (rtl)
 #include <SysInit.hpp>
@@ -36,7 +34,7 @@
 #include <GLXCollectionRegister.hpp>
 #include <GLSceneRegister.hpp>
 #include <System.UITypes.hpp>	// (rtl)
-#include <Winapi.Windows.PkgHelper.hpp>	// (rtl)
+#include <Winapi.Windows.hpp>	// (rtl)
 #include <Winapi.PsAPI.hpp>	// (rtl)
 #include <System.Character.hpp>	// (rtl)
 #include <System.Internal.ExcUtils.hpp>	// (rtl)
@@ -46,23 +44,24 @@
 #include <System.TypInfo.hpp>	// (rtl)
 #include <System.Math.hpp>	// (rtl)
 #include <System.Generics.Defaults.hpp>	// (rtl)
-#include <System.TimeSpan.hpp>	// (rtl)
-#include <System.SyncObjs.hpp>	// (rtl)
 #include <System.Rtti.hpp>	// (rtl)
+#include <System.TimeSpan.hpp>	// (rtl)
 #include <System.Classes.hpp>	// (rtl)
 #include <System.Messaging.hpp>	// (rtl)
 #include <System.Actions.hpp>	// (rtl)
+#include <Winapi.ShellAPI.hpp>	// (rtl)
 #include <System.DateUtils.hpp>	// (rtl)
 #include <System.IOUtils.hpp>	// (rtl)
 #include <System.IniFiles.hpp>	// (rtl)
 #include <System.Win.Registry.hpp>	// (rtl)
 #include <System.UIConsts.hpp>	// (rtl)
 #include <Vcl.Graphics.hpp>	// (vcl)
+#include <System.SyncObjs.hpp>	// (rtl)
 #include <Winapi.UxTheme.hpp>	// (rtl)
 #include <Vcl.ActnList.hpp>	// (vcl)
-#include <Winapi.MsCTF.PkgHelper.hpp>	// (rtl)
 #include <System.AnsiStrings.hpp>	// (rtl)
 #include <System.Win.ComObj.hpp>	// (rtl)
+#include <Winapi.MsCTF.hpp>	// (rtl)
 #include <Vcl.GraphUtil.hpp>	// (vcl)
 #include <Vcl.Controls.hpp>	// (vcl)
 #include <Vcl.StdCtrls.hpp>	// (vcl)
@@ -76,54 +75,54 @@
 #include <Vcl.Menus.hpp>	// (vcl)
 #include <Winapi.FlatSB.hpp>	// (rtl)
 #include <Vcl.Forms.hpp>	// (vcl)
-#include <GLVectorGeometry.hpp>	// (GLScene_RT)
-#include <GLCrossPlatform.hpp>	// (GLScene_RT)
-#include <GLSLog.hpp>	// (GLScene_RT)
-#include <GLPersistentClasses.hpp>	// (GLScene_RT)
-#include <GLColor.hpp>	// (GLScene_RT)
+#include <GLVectorGeometry.hpp>
+#include <GLCrossPlatform.hpp>
+#include <GLSLog.hpp>
+#include <GLPersistentClasses.hpp>
+#include <GLColor.hpp>
 #include <Vcl.Imaging.jpeg.hpp>	// (vclimg)
 #include <Vcl.Imaging.pngimage.hpp>	// (vclimg)
-#include <GR32_System.hpp>	// (GLScene_RT)
-#include <GR32_Bindings.hpp>	// (GLScene_RT)
-#include <GR32_LowLevel.hpp>	// (GLScene_RT)
-#include <GR32_Blend.hpp>	// (GLScene_RT)
-#include <GR32_Filters.hpp>	// (GLScene_RT)
-#include <GR32_Rasterizers.hpp>	// (GLScene_RT)
-#include <GR32_Transforms.hpp>	// (GLScene_RT)
-#include <GR32_Resamplers.hpp>	// (GLScene_RT)
-#include <GR32_XPThemes.hpp>	// (GLScene_RT)
-#include <GR32_MicroTiles.hpp>	// (GLScene_RT)
-#include <GR32_Image.hpp>	// (GLScene_RT)
-#include <GR32_Backends_Generic.hpp>	// (GLScene_RT)
-#include <GR32_Backends_VCL.hpp>	// (GLScene_RT)
-#include <GR32.hpp>	// (GLScene_RT)
-#include <OpenGLAdapter.hpp>	// (GLScene_RT)
-#include <XOpenGL.hpp>	// (GLScene_RT)
-#include <GLContext.hpp>	// (GLScene_RT)
+#include <GR32_System.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Blend.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Filters.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Image.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS11_3)
+#include <GR32.hpp>	// (GR32_DSGN_RS11_3)
+#include <OpenGLAdapter.hpp>
+#include <XOpenGL.hpp>
+#include <GLContext.hpp>
 #include <Vcl.Buttons.hpp>	// (vcl)
 #include <Vcl.ExtDlgs.hpp>	// (vcl)
-#include <GLGraphics.hpp>	// (GLScene_RT)
-#include <GLCoordinates.hpp>	// (GLScene_RT)
-#include <GLXCollection.hpp>	// (GLScene_RT)
-#include <GLVectorLists.hpp>	// (GLScene_RT)
-#include <GLMaterial.hpp>	// (GLScene_RT)
-#include <GLScene.hpp>	// (GLScene_RT)
-#include <GLTexture.hpp>	// (GLScene_RT)
-#include <GLObjects.hpp>	// (GLScene_RT)
-#include <GLBitmapFont.hpp>	// (GLScene_RT)
-#include <GLHUDObjects.hpp>	// (GLScene_RT)
-#include <GLWin32Context.hpp>	// (GLScene_RT)
-#include <GLWin32Viewer.hpp>	// (GLScene_RT)
-#include <Winapi.OpenGL.PkgHelper.hpp>	// (rtl)
-#include <GLTeapot.hpp>	// (GLScene_RT)
-#include <GLGeomObjects.hpp>	// (GLScene_RT)
-#include <GLProcTextures.hpp>	// (GLScene_RT)
-#include <GLTextureImageEditors.hpp>	// (GLScene_RT)
+#include <GLGraphics.hpp>
+#include <GLCoordinates.hpp>
+#include <GLXCollection.hpp>
+#include <GLVectorLists.hpp>
+#include <GLMaterial.hpp>
+#include <GLScene.hpp>
+#include <GLTexture.hpp>
+#include <GLObjects.hpp>
+#include <GLBitmapFont.hpp>
+#include <GLHUDObjects.hpp>
+#include <GLWin32Context.hpp>
+#include <GLWin32Viewer.hpp>
+#include <Winapi.OpenGL.hpp>	// (rtl)
+#include <GLTeapot.hpp>
+#include <GLGeomObjects.hpp>
+#include <GLProcTextures.hpp>
+#include <GLTextureImageEditors.hpp>
 #include <Vcl.Grids.hpp>	// (vcl)
-#include <GLWindowsFont.hpp>	// (GLScene_RT)
-#include <GLWindows.hpp>	// (GLScene_RT)
-#include <GLSMemo.hpp>	// (GLScene_RT)
-#include <GLSLParameter.hpp>	// (GLScene_RT)
+#include <GLWindowsFont.hpp>
+#include <GLWindows.hpp>
+#include <GLSMemo.hpp>
+#include <GLSLParameter.hpp>
 #include <IDEMessages.hpp>	// (designide)
 #include <Vcl.CaptionedDockTree.hpp>	// (vcl)
 #include <Vcl.DockTabSet.hpp>	// (vcl)
@@ -132,7 +131,6 @@
 #include <Vcl.SysStyles.hpp>	// (vcl)
 #include <Winapi.D2D1.hpp>	// (rtl)
 #include <Vcl.Direct2D.hpp>	// (vcl)
-#include <Vcl.StyleAPI.hpp>	// (vcl)
 #include <Vcl.Styles.hpp>	// (vcl)
 #include <Vcl.ImageCollection.hpp>	// (vclwinx)
 #include <BrandingAPI.hpp>	// (designide)
@@ -165,128 +163,191 @@
 #include <ToolsAPI.hpp>	// (designide)
 #include <DesignEditors.hpp>	// (designide)
 #include <VCLEditors.hpp>	// (designide)
-#include <GLObjectManager.hpp>	// (GLScene_RT)
-#include <GLAnimatedSprite.hpp>	// (GLScene_RT)
-#include <GLCadencer.hpp>	// (GLScene_RT)
-#include <GLCustomShader.hpp>	// (GLScene_RT)
-#include <GLAsmShader.hpp>	// (GLScene_RT)
-#include <GLHeightData.hpp>	// (GLScene_RT)
-#include <GLAsyncHDS.hpp>	// (GLScene_RT)
-#include <GLAsyncTimer.hpp>	// (GLScene_RT)
-#include <GLAtmosphere.hpp>	// (GLScene_RT)
-#include <GLBlur.hpp>	// (GLScene_RT)
-#include <GLBumpmapHDS.hpp>	// (GLScene_RT)
-#include <GLScreen.hpp>	// (GLScene_RT)
-#include <GLSmoothNavigator.hpp>	// (GLScene_RT)
-#include <GLMesh.hpp>	// (GLScene_RT)
-#include <GLMeshUtils.hpp>	// (GLScene_RT)
-#include <GLVectorFileObjects.hpp>	// (GLScene_RT)
-#include <GLManager.hpp>	// (GLScene_RT)
-#include <GLCollision.hpp>	// (GLScene_RT)
-#include <GLCompositeImage.hpp>	// (GLScene_RT)
-#include <GLConsole.hpp>	// (GLScene_RT)
-#include <GLEllipseCollision.hpp>	// (GLScene_RT)
-#include <GLMultiPolygon.hpp>	// (GLScene_RT)
-#include <GLSpaceText.hpp>	// (GLScene_RT)
-#include <GLIsolines.hpp>	// (GLScene_RT)
-#include <GLROAMPatch.hpp>	// (GLScene_RT)
-#include <GLTerrainRenderer.hpp>	// (GLScene_RT)
-#include <GLProxyObjects.hpp>	// (GLScene_RT)
-#include <GLMultiProxy.hpp>	// (GLScene_RT)
-#include <GLDCE.hpp>	// (GLScene_RT)
-#include <GLDynamicTexture.hpp>	// (GLScene_RT)
-#include <GLParticleFX.hpp>	// (GLScene_RT)
-#include <GLExplosionFx.hpp>	// (GLScene_RT)
-#include <GLExtrusion.hpp>	// (GLScene_RT)
-#include <GLMultisampleImage.hpp>	// (GLScene_RT)
-#include <GLFBORenderer.hpp>	// (GLScene_RT)
-#include <GLFeedback.hpp>	// (GLScene_RT)
-#include <GLFireFX.hpp>	// (GLScene_RT)
-#include <GLFPSMovement.hpp>	// (GLScene_RT)
-#include <OpenGL1x.hpp>	// (GLScene_RT)
-#include <GLGameMenu.hpp>	// (GLScene_RT)
-#include <GLGraph.hpp>	// (GLScene_RT)
-#include <GLHeightTileFileHDS.hpp>	// (GLScene_RT)
-#include <GLImposter.hpp>	// (GLScene_RT)
-#include <GLLensFlare.hpp>	// (GLScene_RT)
-#include <GLLinePFX.hpp>	// (GLScene_RT)
-#include <GLTextureCombiners.hpp>	// (GLScene_RT)
-#include <GLMaterialEx.hpp>	// (GLScene_RT)
-#include <GLMaterialMultiProxy.hpp>	// (GLScene_RT)
-#include <GLMirror.hpp>	// (GLScene_RT)
-#include <GLParticles.hpp>	// (GLScene_RT)
-#include <GLPerlin.hpp>	// (GLScene_RT)
-#include <GLPerlinPFX.hpp>	// (GLScene_RT)
-#include <GLPhongShader.hpp>	// (GLScene_RT)
-#include <GLPolyhedron.hpp>	// (GLScene_RT)
-#include <GLPortal.hpp>	// (GLScene_RT)
-#include <GLPostEffects.hpp>	// (GLScene_RT)
-#include <GLProjectedTextures.hpp>	// (GLScene_RT)
-#include <GLSArchiveManager.hpp>	// (GLScene_RT)
-#include <GLScriptBase.hpp>	// (GLScene_RT)
-#include <GLShaderCombiner.hpp>	// (GLScene_RT)
-#include <GLShadowHDS.hpp>	// (GLScene_RT)
-#include <GLShadowPlane.hpp>	// (GLScene_RT)
-#include <GLShadowVolume.hpp>	// (GLScene_RT)
-#include <GLSceneForm.hpp>	// (GLScene_RT)
-#include <GLSkyBox.hpp>	// (GLScene_RT)
-#include <GLSkydome.hpp>	// (GLScene_RT)
-#include <GLSLanguage.hpp>	// (GLScene_RT)
-#include <GLSLShader.hpp>	// (GLScene_RT)
-#include <GLSLBumpShader.hpp>	// (GLScene_RT)
-#include <GLSLDiffuseSpecularShader.hpp>	// (GLScene_RT)
-#include <GLSLProjectedTextures.hpp>	// (GLScene_RT)
-#include <GLTexLensFlare.hpp>	// (GLScene_RT)
-#include <GLTexturedHDS.hpp>	// (GLScene_RT)
-#include <GLTextureSharingShader.hpp>	// (GLScene_RT)
-#include <GLThorFX.hpp>	// (GLScene_RT)
-#include <GLTilePlane.hpp>	// (GLScene_RT)
-#include <GLTrail.hpp>	// (GLScene_RT)
-#include <GLTree.hpp>	// (GLScene_RT)
-#include <GLFileTIN.hpp>	// (GLScene_RT)
-#include <GLWaterPlane.hpp>	// (GLScene_RT)
-#include <GLzBuffer.hpp>	// (GLScene_RT)
-#include <GLFileDDS.hpp>	// (GLScene_RT)
-#include <DDSImage.hpp>	// (GLScene_RT)
-#include <GLFileTGA.hpp>	// (GLScene_RT)
-#include <GLFile3DSSceneObjects.hpp>	// (GLScene_RT)
-#include <GLFile3DS.hpp>	// (GLScene_RT)
-#include <GLFileASE.hpp>	// (GLScene_RT)
-#include <GLFileB3D.hpp>	// (GLScene_RT)
-#include <GLFileGL2.hpp>	// (GLScene_RT)
-#include <GLFileGTS.hpp>	// (GLScene_RT)
-#include <GLFileLMTS.hpp>	// (GLScene_RT)
-#include <LWObjects.hpp>	// (GLScene_RT)
-#include <GLFileLWO.hpp>	// (GLScene_RT)
-#include <GLFileMD2.hpp>	// (GLScene_RT)
-#include <GLFileMD3.hpp>	// (GLScene_RT)
-#include <GLFileMD5.hpp>	// (GLScene_RT)
-#include <GLFileMDC.hpp>	// (GLScene_RT)
-#include <GLFileMS3D.hpp>	// (GLScene_RT)
-#include <GLFileNMF.hpp>	// (GLScene_RT)
-#include <GLFileNurbs.hpp>	// (GLScene_RT)
-#include <GLFileOBJ.hpp>	// (GLScene_RT)
-#include <GLFileOCT.hpp>	// (GLScene_RT)
-#include <GLFilePLY.hpp>	// (GLScene_RT)
-#include <GLBSP.hpp>	// (GLScene_RT)
-#include <GLFileQ3BSP.hpp>	// (GLScene_RT)
-#include <GLFileSMD.hpp>	// (GLScene_RT)
-#include <GLFileSTL.hpp>	// (GLScene_RT)
-#include <GLFileVRML.hpp>	// (GLScene_RT)
-#include <GLSoundFileObjects.hpp>	// (GLScene_RT)
-#include <GLFileWAV.hpp>	// (GLScene_RT)
-#include <GLFileMP3.hpp>	// (GLScene_RT)
-#include <GLFileO3TC.hpp>	// (GLScene_RT)
-#include <GLFileHDR.hpp>	// (GLScene_RT)
-#include <GLFileJPEG.hpp>	// (GLScene_RT)
-#include <GLFilePNG.hpp>	// (GLScene_RT)
-#include <GLFileBMP.hpp>	// (GLScene_RT)
-#include <FileTGA.hpp>	// (GLScene_RT)
-#include <GLSound.hpp>	// (GLScene_RT)
-#include <GLJoystick.hpp>	// (GLScene_RT)
-#include <GLScreenSaver.hpp>	// (GLScene_RT)
-#include <GLFullScreenViewer.hpp>	// (GLScene_RT)
-#include <GLBehaviours.hpp>	// (GLScene_RT)
+#include <GLObjectManager.hpp>
+#include <GLAnimatedSprite.hpp>
+#include <GLCadencer.hpp>
+#include <GLCustomShader.hpp>
+#include <GLAsmShader.hpp>
+#include <GLHeightData.hpp>
+#include <GLAsyncHDS.hpp>
+#include <GLAsyncTimer.hpp>
+#include <GLAtmosphere.hpp>
+#include <GLBlur.hpp>
+#include <GLBumpmapHDS.hpp>
+#include <GLScreen.hpp>
+#include <GLSmoothNavigator.hpp>
+#include <GLMesh.hpp>
+#include <GLMeshUtils.hpp>
+#include <GLVectorFileObjects.hpp>
+#include <GLManager.hpp>
+#include <GLCollision.hpp>
+#include <GLCompositeImage.hpp>
+#include <GLConsole.hpp>
+#include <GLEllipseCollision.hpp>
+#include <GLMultiPolygon.hpp>
+#include <GLSpaceText.hpp>
+#include <GLIsolines.hpp>
+#include <GLROAMPatch.hpp>
+#include <GLTerrainRenderer.hpp>
+#include <GLProxyObjects.hpp>
+#include <GLMultiProxy.hpp>
+#include <GLDCE.hpp>
+#include <GLDynamicTexture.hpp>
+#include <GLParticleFX.hpp>
+#include <GLExplosionFx.hpp>
+#include <GLExtrusion.hpp>
+#include <GLMultisampleImage.hpp>
+#include <GLFBORenderer.hpp>
+#include <GLFeedback.hpp>
+#include <GLFireFX.hpp>
+#include <GLFPSMovement.hpp>
+#include <OpenGL1x.hpp>
+#include <GLGameMenu.hpp>
+#include <GLGraph.hpp>
+#include <GLHeightTileFileHDS.hpp>
+#include <GLImposter.hpp>
+#include <GLLensFlare.hpp>
+#include <GLLinePFX.hpp>
+#include <GLTextureCombiners.hpp>
+#include <GLMaterialEx.hpp>
+#include <GLMaterialMultiProxy.hpp>
+#include <GLMirror.hpp>
+#include <GLParticles.hpp>
+#include <GLPerlin.hpp>
+#include <GLPerlinPFX.hpp>
+#include <GLPhongShader.hpp>
+#include <GLPolyhedron.hpp>
+#include <GLPortal.hpp>
+#include <GLPostEffects.hpp>
+#include <GLProjectedTextures.hpp>
+#include <GLSArchiveManager.hpp>
+#include <GLScriptBase.hpp>
+#include <GLShaderCombiner.hpp>
+#include <GLShadowHDS.hpp>
+#include <GLShadowPlane.hpp>
+#include <GLShadowVolume.hpp>
+#include <GLSceneForm.hpp>
+#include <GLSkyBox.hpp>
+#include <GLSkydome.hpp>
+#include <GLSLanguage.hpp>
+#include <GLSLShader.hpp>
+#include <GLSLBumpShader.hpp>
+#include <GLSLDiffuseSpecularShader.hpp>
+#include <GLSLProjectedTextures.hpp>
+#include <GLTexLensFlare.hpp>
+#include <GLTexturedHDS.hpp>
+#include <GLTextureSharingShader.hpp>
+#include <GLThorFX.hpp>
+#include <GLTilePlane.hpp>
+#include <GLTrail.hpp>
+#include <GLTree.hpp>
+#include <GLFileTIN.hpp>
+#include <GLWaterPlane.hpp>
+#include <GLzBuffer.hpp>
+#include <GLFileDDS.hpp>
+#include <DDSImage.hpp>
+#include <GLFileTGA.hpp>
+#include <GLFile3DSSceneObjects.hpp>
+#include <GLFile3DS.hpp>
+#include <GLFileASE.hpp>
+#include <GLFileB3D.hpp>
+#include <GLFileGL2.hpp>
+#include <GLFileGTS.hpp>
+#include <GLFileLMTS.hpp>
+#include <LWObjects.hpp>
+#include <GLFileLWO.hpp>
+#include <GLFileMD2.hpp>
+#include <GLFileMD3.hpp>
+#include <GLFileMD5.hpp>
+#include <GLFileMDC.hpp>
+#include <GLFileMS3D.hpp>
+#include <GLFileNMF.hpp>
+#include <GLFileNurbs.hpp>
+#include <GLFileOBJ.hpp>
+#include <GLFileOCT.hpp>
+#include <GLFilePLY.hpp>
+#include <GLBSP.hpp>
+#include <GLFileQ3BSP.hpp>
+#include <GLFileSMD.hpp>
+#include <GLFileSTL.hpp>
+#include <GLFileVRML.hpp>
+#include <GLSoundFileObjects.hpp>
+#include <GLFileWAV.hpp>
+#include <GLFileMP3.hpp>
+#include <GLFileO3TC.hpp>
+#include <GLFileHDR.hpp>
+#include <GLFileJPEG.hpp>
+#include <GLFilePNG.hpp>
+#include <GLFileBMP.hpp>
+#include <FileTGA.hpp>
+#include <GLSound.hpp>
+#include <GLJoystick.hpp>
+#include <GLScreenSaver.hpp>
+#include <GLFullScreenViewer.hpp>
+#include <GLBehaviours.hpp>
+#include <GLApplicationFileIO.hpp>
+#include <GLBaseClasses.hpp>
+#include <GLVectorTypes.hpp>
+#include <GLState.hpp>
+#include <OpenGLTokens.hpp>
+#include <GLTextureFormat.hpp>
+#include <GLPipelineTransformation.hpp>
+#include <GLUtils.hpp>
+#include <GLSelection.hpp>
+#include <GLImageUtils.hpp>
+#include <GLRenderContextInfo.hpp>
+#include <GLGeometryBB.hpp>
+#include <GLSilhouette.hpp>
+#include <DXTC.hpp>
+#include <VRMLParser.hpp>
+#include <GLBaseMeshSilhouette.hpp>
+#include <GLTypes.hpp>
+#include <GLOctree.hpp>
+#include <Q3BSP.hpp>
+#include <FileOCT.hpp>
+#include <GLParametricSurfaces.hpp>
+#include <GLCurvesAndSurfaces.hpp>
+#include <FileMD3.hpp>
+#include <FileMD2.hpp>
+#include <FileGL2.hpp>
+#include <FileB3D.hpp>
+#include <Types3DS.hpp>
+#include <File3DS.hpp>
+#include <GLSpline.hpp>
+#include <GLNodes.hpp>
+#include <GLGui.hpp>
+#include <GLVfsPAK.hpp>
+#include <GLUserShader.hpp>
+#include <GLTimeEventsMgr.hpp>
+#include <GLTexCombineShader.hpp>
+#include <GLPolynomials.hpp>
+#include <GLNavigator.hpp>
+#include <GLSLPostShaders.hpp>
+#include <GLSimpleNavigation.hpp>
+#include <GLPerlinNoise3D.hpp>
+#include <GLPerlinBase.hpp>
+#include <GLOutlineShader.hpp>
+#include <GLMultiMaterialShader.hpp>
+#include <GLMaterialScript.hpp>
+#include <GLHiddenLineShader.hpp>
+#include <GLHeightTileFile.hpp>
+#include <GLGizmo.hpp>
+#include <GLCanvas.hpp>
+#include <GLFBO.hpp>
+#include <GLEParticleMasksManager.hpp>
+#include <GLCelShader.hpp>
+#include <GLCameraController.hpp>
+#include <GLBumpShader.hpp>
+#include <GLAVIRecorder.hpp>
+#include <GLSVfw.hpp>
+#include <GLPlugInManager.hpp>
+#include <GLPlugInIntf.hpp>
+#include <GLStrings.hpp>
+#include <GLPictureRegisteredFormats.hpp>
+#include <Utils3DS.hpp>
+#include <Const3DS.hpp>
+#include <GLSRGBE.hpp>
+#include <GLDCEMisc.hpp>
 // PRG_EXT: .bpl
 // BPI_DIR: ..\..\lib\Win32
 // OBJ_DIR: ..\..\lib\Win32

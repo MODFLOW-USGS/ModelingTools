@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLTerrainRenderer.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glterrainrenderer.pas' rev: 36.00 (Windows)
 
 #ifndef GlterrainrendererHPP
 #define GlterrainrendererHPP
@@ -15,23 +15,23 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Types.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLCoordinates.hpp>
-#include <GLHeightData.hpp>
-#include <GLMaterial.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLContext.hpp>
-#include <GLROAMPatch.hpp>
-#include <GLVectorLists.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <XOpenGL.hpp>
-#include <GLUtils.hpp>
-#include <GLVectorTypes.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glcoordinates.hpp>
+#include <Glheightdata.hpp>
+#include <Glmaterial.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glcontext.hpp>
+#include <Glroampatch.hpp>
+#include <Glvectorlists.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Xopengl.hpp>
+#include <Glutils.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -138,7 +138,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte cTilesHashSize = System::Byte(0xff);
+static _DELPHI_CONST System::Byte cTilesHashSize = System::Byte(0xff);
 }	/* namespace Glterrainrenderer */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLTERRAINRENDERER)
 using namespace Glterrainrenderer;

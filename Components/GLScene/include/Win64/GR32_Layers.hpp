@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Layers.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gr32_layers.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_layersHPP
 #define Gr32_layersHPP
@@ -15,16 +15,16 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.Graphics.hpp>
 #include <Vcl.Forms.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Math.hpp>
-#include <GR32.hpp>
-#include <System.UITypes.hpp>
+#include <Gr32.hpp>
+#include <System.Uitypes.hpp>
 #include <System.Types.hpp>
 
 //-- user supplied -----------------------------------------------------------
@@ -346,15 +346,15 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const unsigned LOB_VISIBLE = unsigned(0x80000000);
-static const int LOB_GDI_OVERLAY = int(0x40000000);
-static const int LOB_MOUSE_EVENTS = int(0x20000000);
-static const int LOB_NO_UPDATE = int(0x10000000);
-static const int LOB_NO_CAPTURE = int(0x8000000);
-static const int LOB_INVALID = int(0x4000000);
-static const int LOB_FORCE_UPDATE = int(0x2000000);
-static const int LOB_RESERVED_24 = int(0x1000000);
-static const unsigned LOB_RESERVED_MASK = unsigned(0xff000000);
+static _DELPHI_CONST unsigned LOB_VISIBLE = unsigned(0x80000000);
+static _DELPHI_CONST int LOB_GDI_OVERLAY = int(0x40000000);
+static _DELPHI_CONST int LOB_MOUSE_EVENTS = int(0x20000000);
+static _DELPHI_CONST int LOB_NO_UPDATE = int(0x10000000);
+static _DELPHI_CONST int LOB_NO_CAPTURE = int(0x8000000);
+static _DELPHI_CONST int LOB_INVALID = int(0x4000000);
+static _DELPHI_CONST int LOB_FORCE_UPDATE = int(0x2000000);
+static _DELPHI_CONST int LOB_RESERVED_24 = int(0x1000000);
+static _DELPHI_CONST unsigned LOB_RESERVED_MASK = unsigned(0xff000000);
 }	/* namespace Gr32_layers */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GR32_LAYERS)
 using namespace Gr32_layers;

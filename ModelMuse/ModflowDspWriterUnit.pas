@@ -228,20 +228,25 @@ end;
 procedure TModflowDspWriter.WriteOptions;
 begin
   WriteBeginOptions;
-  if not FDspPackage.UseXt3d then
-  begin
-    WriteString('  XT3D_OFF');
-    NewLine;
-  end
-  else
-  begin
-    if FDspPackage.Xt3dRightHandSide then
+  try
+    if not FDspPackage.UseXt3d then
     begin
-    WriteString('  XT3D_RHS');
-    NewLine;
+      WriteString('  XT3D_OFF');
+      NewLine;
+    end
+    else
+    begin
+      if FDspPackage.Xt3dRightHandSide then
+      begin
+        WriteString('  XT3D_RHS');
+        NewLine;
+      end;
     end;
+    WriteExportAsciiArray;
+  finally
+    WriteEndOptions;
   end;
-  WriteEndOptions;
+
 end;
 
 end.

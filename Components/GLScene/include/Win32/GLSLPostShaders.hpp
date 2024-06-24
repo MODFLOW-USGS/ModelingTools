@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLPostShaders.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLPostShaders.pas' rev: 35.00 (Windows)
 
 #ifndef GlslpostshadersHPP
 #define GlslpostshadersHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -231,18 +229,18 @@ private:
 	int FUseMask;
 	Gltexture::TGLTexture* FNoiseTex;
 	Gltexture::TGLTexture* FMaskTex;
-	Glmaterial::TGLLibMaterialName FNoiseTexName;
-	Glmaterial::TGLLibMaterialName FMaskTexName;
+	System::UnicodeString FNoiseTexName;
+	System::UnicodeString FMaskTexName;
 	void __fastcall DoUseTempTexture(Glcontext::TGLTextureHandle* const TempTexture, Gltextureformat::TGLTextureTarget TextureTarget);
 	Gltextureformat::TGLTextureTarget __fastcall GetTextureTarget();
 	bool __fastcall StoreLuminanceThreshold();
 	bool __fastcall StoreColorAmplification();
 	void __fastcall SetMaskTexTexture(Gltexture::TGLTexture* const Value);
 	void __fastcall SetNoiseTexTexture(Gltexture::TGLTexture* const Value);
-	Glmaterial::TGLLibMaterialName __fastcall GetNoiseTexName();
-	void __fastcall SetNoiseTexName(const Glmaterial::TGLLibMaterialName Value);
-	Glmaterial::TGLLibMaterialName __fastcall GetMaskTexName();
-	void __fastcall SetMaskTexName(const Glmaterial::TGLLibMaterialName Value);
+	System::UnicodeString __fastcall GetNoiseTexName();
+	void __fastcall SetNoiseTexName(const System::UnicodeString Value);
+	System::UnicodeString __fastcall GetMaskTexName();
+	void __fastcall SetMaskTexName(const System::UnicodeString Value);
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	
 protected:
@@ -258,9 +256,9 @@ public:
 	__property float ElapsedTime = {read=FElapsedTime, write=FElapsedTime, stored=false};
 	__property Glmaterial::TGLAbstractMaterialLibrary* MaterialLibrary = {read=GetMaterialLibrary, write=SetMaterialLibrary};
 	__property Gltexture::TGLTexture* NoiseTex = {read=FNoiseTex, write=SetNoiseTexTexture};
-	__property Glmaterial::TGLLibMaterialName NoiseTexName = {read=GetNoiseTexName, write=SetNoiseTexName};
+	__property System::UnicodeString NoiseTexName = {read=GetNoiseTexName, write=SetNoiseTexName};
 	__property Gltexture::TGLTexture* MaskTex = {read=FMaskTex, write=SetMaskTexTexture};
-	__property Glmaterial::TGLLibMaterialName MaskTexName = {read=GetMaskTexName, write=SetMaskTexName};
+	__property System::UnicodeString MaskTexName = {read=GetMaskTexName, write=SetMaskTexName};
 	__property int UseMask = {read=FUseMask, write=FUseMask, nodefault};
 public:
 	/* TGLCustomGLSLShader.Destroy */ inline __fastcall virtual ~TGLCustomGLSLPostNightVisionShader() { }
@@ -489,12 +487,12 @@ private:
 	float FFreq;
 	Glmaterial::TGLAbstractMaterialLibrary* FMaterialLibrary;
 	Gltexture::TGLTexture* FNoiseTex;
-	Glmaterial::TGLLibMaterialName FNoiseTexName;
+	System::UnicodeString FNoiseTexName;
 	void __fastcall DoUseTempTexture(Glcontext::TGLTextureHandle* const TempTexture, Gltextureformat::TGLTextureTarget TextureTarget);
 	Gltextureformat::TGLTextureTarget __fastcall GetTextureTarget();
 	void __fastcall SetNoiseTexTexture(Gltexture::TGLTexture* const Value);
-	Glmaterial::TGLLibMaterialName __fastcall GetNoiseTexName();
-	void __fastcall SetNoiseTexName(const Glmaterial::TGLLibMaterialName Value);
+	System::UnicodeString __fastcall GetNoiseTexName();
+	void __fastcall SetNoiseTexName(const System::UnicodeString Value);
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	bool __fastcall StorePixelX();
 	bool __fastcall StorePixelY();
@@ -513,7 +511,7 @@ public:
 	__property float Freq = {read=FFreq, write=FFreq, stored=StoreFreq};
 	__property Glmaterial::TGLAbstractMaterialLibrary* MaterialLibrary = {read=GetMaterialLibrary, write=SetMaterialLibrary};
 	__property Gltexture::TGLTexture* NoiseTex = {read=FNoiseTex, write=SetNoiseTexTexture};
-	__property Glmaterial::TGLLibMaterialName NoiseTexName = {read=GetNoiseTexName, write=SetNoiseTexName};
+	__property System::UnicodeString NoiseTexName = {read=GetNoiseTexName, write=SetNoiseTexName};
 public:
 	/* TGLCustomGLSLShader.Destroy */ inline __fastcall virtual ~TGLCustomGLSLPostTroubleShader() { }
 	

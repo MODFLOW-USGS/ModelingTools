@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OpenGLAdapter.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Opengladapter.pas' rev: 36.00 (Windows)
 
 #ifndef OpengladapterHPP
 #define OpengladapterHPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
-#include <System.SysUtils.hpp>
-#include <GLStrings.hpp>
-#include <GLSLog.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLVectorTypes.hpp>
+#include <System.Sysutils.hpp>
+#include <Glstrings.hpp>
+#include <Glslog.hpp>
+#include <Opengltokens.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSoundFileObjects.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glsoundfileobjects.pas' rev: 36.00 (Windows)
 
 #ifndef GlsoundfileobjectsHPP
 #define GlsoundfileobjectsHPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
-#include <Winapi.MMSystem.hpp>
+#include <Sysinit.hpp>
+#include <Winapi.Mmsystem.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <Vcl.Consts.hpp>
-#include <GLApplicationFileIO.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLBaseClasses.hpp>
+#include <Glapplicationfileio.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

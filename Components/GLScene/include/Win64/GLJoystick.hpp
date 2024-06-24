@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLJoystick.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gljoystick.pas' rev: 36.00 (Windows)
 
 #ifndef GljoystickHPP
 #define GljoystickHPP
@@ -15,15 +15,15 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <Winapi.Messages.hpp>
-#include <Winapi.MMSystem.hpp>
-#include <System.SysUtils.hpp>
+#include <Winapi.Mmsystem.hpp>
+#include <System.Sysutils.hpp>
 #include <System.Classes.hpp>
 #include <Vcl.Forms.hpp>
 #include <Vcl.Controls.hpp>
-#include <GLStrings.hpp>
+#include <Glstrings.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

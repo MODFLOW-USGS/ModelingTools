@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Gr32.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32HPP
 #define Gr32HPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <Winapi.Messages.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.Graphics.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <GR32_System.hpp>
+#include <System.Sysutils.hpp>
+#include <Gr32_system.hpp>
 #include <System.Types.hpp>
 
 //-- user supplied -----------------------------------------------------------
@@ -194,7 +194,7 @@ typedef TArrayOfFloat *PArrayOfFloat;
 
 typedef System::Types::TPoint *PPoint;
 
-typedef System::Types::TPoint TPoint;
+using Winapi::Windows::TPoint;
 
 typedef System::StaticArray<System::Types::TPoint, 1> TPointArray;
 
@@ -252,9 +252,9 @@ typedef System::DynamicArray<TArrayOfFixedPoint> TArrayOfArrayOfFixedPoint;
 
 typedef TArrayOfArrayOfFixedPoint *PArrayOfArrayOfFixedPoint;
 
-using System::Types::PRect;
+using Winapi::Windows::PRect;
 
-typedef System::Types::TRect TRect;
+using Winapi::Windows::TRect;
 
 typedef TFloatRect *PFloatRect;
 
@@ -820,169 +820,169 @@ _DECLARE_METACLASS(System::TMetaClass, TCustomResamplerClass);
 
 //-- var, const, procedure ---------------------------------------------------
 #define Graphics32Version L"1.9.1"
-static const TColor32 clBlack32 = TColor32(0xff000000);
-static const TColor32 clDimGray32 = TColor32(0xff3f3f3f);
-static const TColor32 clGray32 = TColor32(0xff7f7f7f);
-static const TColor32 clLightGray32 = TColor32(0xffbfbfbf);
-static const TColor32 clWhite32 = TColor32(0xffffffff);
-static const TColor32 clMaroon32 = TColor32(0xff7f0000);
-static const TColor32 clGreen32 = TColor32(0xff007f00);
-static const TColor32 clOlive32 = TColor32(0xff7f7f00);
-static const TColor32 clNavy32 = TColor32(0xff00007f);
-static const TColor32 clPurple32 = TColor32(0xff7f007f);
-static const TColor32 clTeal32 = TColor32(0xff007f7f);
-static const TColor32 clRed32 = TColor32(0xffff0000);
-static const TColor32 clLime32 = TColor32(0xff00ff00);
-static const TColor32 clYellow32 = TColor32(0xffffff00);
-static const TColor32 clBlue32 = TColor32(0xff0000ff);
-static const TColor32 clFuchsia32 = TColor32(0xffff00ff);
-static const TColor32 clAqua32 = TColor32(0xff00ffff);
-static const TColor32 clAliceBlue32 = TColor32(0xfff0f8ff);
-static const TColor32 clAntiqueWhite32 = TColor32(0xfffaebd7);
-static const TColor32 clAquamarine32 = TColor32(0xff7fffd4);
-static const TColor32 clAzure32 = TColor32(0xfff0ffff);
-static const TColor32 clBeige32 = TColor32(0xfff5f5dc);
-static const TColor32 clBisque32 = TColor32(0xffffe4c4);
-static const TColor32 clBlancheDalmond32 = TColor32(0xffffebcd);
-static const TColor32 clBlueViolet32 = TColor32(0xff8a2be2);
-static const TColor32 clBrown32 = TColor32(0xffa52a2a);
-static const TColor32 clBurlyWood32 = TColor32(0xffdeb887);
-static const TColor32 clCadetblue32 = TColor32(0xff5f9ea0);
-static const TColor32 clChartReuse32 = TColor32(0xff7fff00);
-static const TColor32 clChocolate32 = TColor32(0xffd2691e);
-static const TColor32 clCoral32 = TColor32(0xffff7f50);
-static const TColor32 clCornFlowerBlue32 = TColor32(0xff6495ed);
-static const TColor32 clCornSilk32 = TColor32(0xfffff8dc);
-static const TColor32 clCrimson32 = TColor32(0xffdc143c);
-static const TColor32 clDarkBlue32 = TColor32(0xff00008b);
-static const TColor32 clDarkCyan32 = TColor32(0xff008b8b);
-static const TColor32 clDarkGoldenRod32 = TColor32(0xffb8860b);
-static const TColor32 clDarkGray32 = TColor32(0xffa9a9a9);
-static const TColor32 clDarkGreen32 = TColor32(0xff006400);
-static const TColor32 clDarkGrey32 = TColor32(0xffa9a9a9);
-static const TColor32 clDarkKhaki32 = TColor32(0xffbdb76b);
-static const TColor32 clDarkMagenta32 = TColor32(0xff8b008b);
-static const TColor32 clDarkOliveGreen32 = TColor32(0xff556b2f);
-static const TColor32 clDarkOrange32 = TColor32(0xffff8c00);
-static const TColor32 clDarkOrchid32 = TColor32(0xff9932cc);
-static const TColor32 clDarkRed32 = TColor32(0xff8b0000);
-static const TColor32 clDarkSalmon32 = TColor32(0xffe9967a);
-static const TColor32 clDarkSeaGreen32 = TColor32(0xff8fbc8f);
-static const TColor32 clDarkSlateBlue32 = TColor32(0xff483d8b);
-static const TColor32 clDarkSlateGray32 = TColor32(0xff2f4f4f);
-static const TColor32 clDarkSlateGrey32 = TColor32(0xff2f4f4f);
-static const TColor32 clDarkTurquoise32 = TColor32(0xff00ced1);
-static const TColor32 clDarkViolet32 = TColor32(0xff9400d3);
-static const TColor32 clDeepPink32 = TColor32(0xffff1493);
-static const TColor32 clDeepSkyBlue32 = TColor32(0xff00bfff);
-static const TColor32 clDodgerBlue32 = TColor32(0xff1e90ff);
-static const TColor32 clFireBrick32 = TColor32(0xffb22222);
-static const TColor32 clFloralWhite32 = TColor32(0xfffffaf0);
-static const TColor32 clGainsBoro32 = TColor32(0xffdcdcdc);
-static const TColor32 clGhostWhite32 = TColor32(0xfff8f8ff);
-static const TColor32 clGold32 = TColor32(0xffffd700);
-static const TColor32 clGoldenRod32 = TColor32(0xffdaa520);
-static const TColor32 clGreenYellow32 = TColor32(0xffadff2f);
-static const TColor32 clGrey32 = TColor32(0xff808080);
-static const TColor32 clHoneyDew32 = TColor32(0xfff0fff0);
-static const TColor32 clHotPink32 = TColor32(0xffff69b4);
-static const TColor32 clIndianRed32 = TColor32(0xffcd5c5c);
-static const TColor32 clIndigo32 = TColor32(0xff4b0082);
-static const TColor32 clIvory32 = TColor32(0xfffffff0);
-static const TColor32 clKhaki32 = TColor32(0xfff0e68c);
-static const TColor32 clLavender32 = TColor32(0xffe6e6fa);
-static const TColor32 clLavenderBlush32 = TColor32(0xfffff0f5);
-static const TColor32 clLawnGreen32 = TColor32(0xff7cfc00);
-static const TColor32 clLemonChiffon32 = TColor32(0xfffffacd);
-static const TColor32 clLightBlue32 = TColor32(0xffadd8e6);
-static const TColor32 clLightCoral32 = TColor32(0xfff08080);
-static const TColor32 clLightCyan32 = TColor32(0xffe0ffff);
-static const TColor32 clLightGoldenRodYellow32 = TColor32(0xfffafad2);
-static const TColor32 clLightGreen32 = TColor32(0xff90ee90);
-static const TColor32 clLightGrey32 = TColor32(0xffd3d3d3);
-static const TColor32 clLightPink32 = TColor32(0xffffb6c1);
-static const TColor32 clLightSalmon32 = TColor32(0xffffa07a);
-static const TColor32 clLightSeagreen32 = TColor32(0xff20b2aa);
-static const TColor32 clLightSkyblue32 = TColor32(0xff87cefa);
-static const TColor32 clLightSlategray32 = TColor32(0xff778899);
-static const TColor32 clLightSlategrey32 = TColor32(0xff778899);
-static const TColor32 clLightSteelblue32 = TColor32(0xffb0c4de);
-static const TColor32 clLightYellow32 = TColor32(0xffffffe0);
-static const TColor32 clLtGray32 = TColor32(0xffc0c0c0);
-static const TColor32 clMedGray32 = TColor32(0xffa0a0a4);
-static const TColor32 clDkGray32 = TColor32(0xff808080);
-static const TColor32 clMoneyGreen32 = TColor32(0xffc0dcc0);
-static const TColor32 clLegacySkyBlue32 = TColor32(0xffa6caf0);
-static const TColor32 clCream32 = TColor32(0xfffffbf0);
-static const TColor32 clLimeGreen32 = TColor32(0xff32cd32);
-static const TColor32 clLinen32 = TColor32(0xfffaf0e6);
-static const TColor32 clMediumAquamarine32 = TColor32(0xff66cdaa);
-static const TColor32 clMediumBlue32 = TColor32(0xff0000cd);
-static const TColor32 clMediumOrchid32 = TColor32(0xffba55d3);
-static const TColor32 clMediumPurple32 = TColor32(0xff9370db);
-static const TColor32 clMediumSeaGreen32 = TColor32(0xff3cb371);
-static const TColor32 clMediumSlateBlue32 = TColor32(0xff7b68ee);
-static const TColor32 clMediumSpringGreen32 = TColor32(0xff00fa9a);
-static const TColor32 clMediumTurquoise32 = TColor32(0xff48d1cc);
-static const TColor32 clMediumVioletRed32 = TColor32(0xffc71585);
-static const TColor32 clMidnightBlue32 = TColor32(0xff191970);
-static const TColor32 clMintCream32 = TColor32(0xfff5fffa);
-static const TColor32 clMistyRose32 = TColor32(0xffffe4e1);
-static const TColor32 clMoccasin32 = TColor32(0xffffe4b5);
-static const TColor32 clNavajoWhite32 = TColor32(0xffffdead);
-static const TColor32 clOldLace32 = TColor32(0xfffdf5e6);
-static const TColor32 clOliveDrab32 = TColor32(0xff6b8e23);
-static const TColor32 clOrange32 = TColor32(0xffffa500);
-static const TColor32 clOrangeRed32 = TColor32(0xffff4500);
-static const TColor32 clOrchid32 = TColor32(0xffda70d6);
-static const TColor32 clPaleGoldenRod32 = TColor32(0xffeee8aa);
-static const TColor32 clPaleGreen32 = TColor32(0xff98fb98);
-static const TColor32 clPaleTurquoise32 = TColor32(0xffafeeee);
-static const TColor32 clPaleVioletred32 = TColor32(0xffdb7093);
-static const TColor32 clPapayaWhip32 = TColor32(0xffffefd5);
-static const TColor32 clPeachPuff32 = TColor32(0xffffdab9);
-static const TColor32 clPeru32 = TColor32(0xffcd853f);
-static const TColor32 clPlum32 = TColor32(0xffdda0dd);
-static const TColor32 clPowderBlue32 = TColor32(0xffb0e0e6);
-static const TColor32 clRosyBrown32 = TColor32(0xffbc8f8f);
-static const TColor32 clRoyalBlue32 = TColor32(0xff4169e1);
-static const TColor32 clSaddleBrown32 = TColor32(0xff8b4513);
-static const TColor32 clSalmon32 = TColor32(0xfffa8072);
-static const TColor32 clSandyBrown32 = TColor32(0xfff4a460);
-static const TColor32 clSeaGreen32 = TColor32(0xff2e8b57);
-static const TColor32 clSeaShell32 = TColor32(0xfffff5ee);
-static const TColor32 clSienna32 = TColor32(0xffa0522d);
-static const TColor32 clSilver32 = TColor32(0xffc0c0c0);
-static const TColor32 clSkyblue32 = TColor32(0xff87ceeb);
-static const TColor32 clSlateBlue32 = TColor32(0xff6a5acd);
-static const TColor32 clSlateGray32 = TColor32(0xff708090);
-static const TColor32 clSlateGrey32 = TColor32(0xff708090);
-static const TColor32 clSnow32 = TColor32(0xfffffafa);
-static const TColor32 clSpringgreen32 = TColor32(0xff00ff7f);
-static const TColor32 clSteelblue32 = TColor32(0xff4682b4);
-static const TColor32 clTan32 = TColor32(0xffd2b48c);
-static const TColor32 clThistle32 = TColor32(0xffd8bfd8);
-static const TColor32 clTomato32 = TColor32(0xffff6347);
-static const TColor32 clTurquoise32 = TColor32(0xff40e0d0);
-static const TColor32 clViolet32 = TColor32(0xffee82ee);
-static const TColor32 clWheat32 = TColor32(0xfff5deb3);
-static const TColor32 clWhitesmoke32 = TColor32(0xfff5f5f5);
-static const TColor32 clYellowgreen32 = TColor32(0xff9acd32);
-static const TColor32 clTrWhite32 = TColor32(0x7fffffff);
-static const TColor32 clTrBlack32 = TColor32(0x7f000000);
-static const TColor32 clTrRed32 = TColor32(0x7fff0000);
-static const TColor32 clTrGreen32 = TColor32(0x7f00ff00);
-static const TColor32 clTrBlue32 = TColor32(0x7f0000ff);
-static const int FixedOne = int(0x10000);
-static const System::Word FixedHalf = System::Word(0x7fff);
-static const __int64 FixedPI = 0x000000000003243fLL;
+static _DELPHI_CONST TColor32 clBlack32 = TColor32(0xff000000);
+static _DELPHI_CONST TColor32 clDimGray32 = TColor32(0xff3f3f3f);
+static _DELPHI_CONST TColor32 clGray32 = TColor32(0xff7f7f7f);
+static _DELPHI_CONST TColor32 clLightGray32 = TColor32(0xffbfbfbf);
+static _DELPHI_CONST TColor32 clWhite32 = TColor32(0xffffffff);
+static _DELPHI_CONST TColor32 clMaroon32 = TColor32(0xff7f0000);
+static _DELPHI_CONST TColor32 clGreen32 = TColor32(0xff007f00);
+static _DELPHI_CONST TColor32 clOlive32 = TColor32(0xff7f7f00);
+static _DELPHI_CONST TColor32 clNavy32 = TColor32(0xff00007f);
+static _DELPHI_CONST TColor32 clPurple32 = TColor32(0xff7f007f);
+static _DELPHI_CONST TColor32 clTeal32 = TColor32(0xff007f7f);
+static _DELPHI_CONST TColor32 clRed32 = TColor32(0xffff0000);
+static _DELPHI_CONST TColor32 clLime32 = TColor32(0xff00ff00);
+static _DELPHI_CONST TColor32 clYellow32 = TColor32(0xffffff00);
+static _DELPHI_CONST TColor32 clBlue32 = TColor32(0xff0000ff);
+static _DELPHI_CONST TColor32 clFuchsia32 = TColor32(0xffff00ff);
+static _DELPHI_CONST TColor32 clAqua32 = TColor32(0xff00ffff);
+static _DELPHI_CONST TColor32 clAliceBlue32 = TColor32(0xfff0f8ff);
+static _DELPHI_CONST TColor32 clAntiqueWhite32 = TColor32(0xfffaebd7);
+static _DELPHI_CONST TColor32 clAquamarine32 = TColor32(0xff7fffd4);
+static _DELPHI_CONST TColor32 clAzure32 = TColor32(0xfff0ffff);
+static _DELPHI_CONST TColor32 clBeige32 = TColor32(0xfff5f5dc);
+static _DELPHI_CONST TColor32 clBisque32 = TColor32(0xffffe4c4);
+static _DELPHI_CONST TColor32 clBlancheDalmond32 = TColor32(0xffffebcd);
+static _DELPHI_CONST TColor32 clBlueViolet32 = TColor32(0xff8a2be2);
+static _DELPHI_CONST TColor32 clBrown32 = TColor32(0xffa52a2a);
+static _DELPHI_CONST TColor32 clBurlyWood32 = TColor32(0xffdeb887);
+static _DELPHI_CONST TColor32 clCadetblue32 = TColor32(0xff5f9ea0);
+static _DELPHI_CONST TColor32 clChartReuse32 = TColor32(0xff7fff00);
+static _DELPHI_CONST TColor32 clChocolate32 = TColor32(0xffd2691e);
+static _DELPHI_CONST TColor32 clCoral32 = TColor32(0xffff7f50);
+static _DELPHI_CONST TColor32 clCornFlowerBlue32 = TColor32(0xff6495ed);
+static _DELPHI_CONST TColor32 clCornSilk32 = TColor32(0xfffff8dc);
+static _DELPHI_CONST TColor32 clCrimson32 = TColor32(0xffdc143c);
+static _DELPHI_CONST TColor32 clDarkBlue32 = TColor32(0xff00008b);
+static _DELPHI_CONST TColor32 clDarkCyan32 = TColor32(0xff008b8b);
+static _DELPHI_CONST TColor32 clDarkGoldenRod32 = TColor32(0xffb8860b);
+static _DELPHI_CONST TColor32 clDarkGray32 = TColor32(0xffa9a9a9);
+static _DELPHI_CONST TColor32 clDarkGreen32 = TColor32(0xff006400);
+static _DELPHI_CONST TColor32 clDarkGrey32 = TColor32(0xffa9a9a9);
+static _DELPHI_CONST TColor32 clDarkKhaki32 = TColor32(0xffbdb76b);
+static _DELPHI_CONST TColor32 clDarkMagenta32 = TColor32(0xff8b008b);
+static _DELPHI_CONST TColor32 clDarkOliveGreen32 = TColor32(0xff556b2f);
+static _DELPHI_CONST TColor32 clDarkOrange32 = TColor32(0xffff8c00);
+static _DELPHI_CONST TColor32 clDarkOrchid32 = TColor32(0xff9932cc);
+static _DELPHI_CONST TColor32 clDarkRed32 = TColor32(0xff8b0000);
+static _DELPHI_CONST TColor32 clDarkSalmon32 = TColor32(0xffe9967a);
+static _DELPHI_CONST TColor32 clDarkSeaGreen32 = TColor32(0xff8fbc8f);
+static _DELPHI_CONST TColor32 clDarkSlateBlue32 = TColor32(0xff483d8b);
+static _DELPHI_CONST TColor32 clDarkSlateGray32 = TColor32(0xff2f4f4f);
+static _DELPHI_CONST TColor32 clDarkSlateGrey32 = TColor32(0xff2f4f4f);
+static _DELPHI_CONST TColor32 clDarkTurquoise32 = TColor32(0xff00ced1);
+static _DELPHI_CONST TColor32 clDarkViolet32 = TColor32(0xff9400d3);
+static _DELPHI_CONST TColor32 clDeepPink32 = TColor32(0xffff1493);
+static _DELPHI_CONST TColor32 clDeepSkyBlue32 = TColor32(0xff00bfff);
+static _DELPHI_CONST TColor32 clDodgerBlue32 = TColor32(0xff1e90ff);
+static _DELPHI_CONST TColor32 clFireBrick32 = TColor32(0xffb22222);
+static _DELPHI_CONST TColor32 clFloralWhite32 = TColor32(0xfffffaf0);
+static _DELPHI_CONST TColor32 clGainsBoro32 = TColor32(0xffdcdcdc);
+static _DELPHI_CONST TColor32 clGhostWhite32 = TColor32(0xfff8f8ff);
+static _DELPHI_CONST TColor32 clGold32 = TColor32(0xffffd700);
+static _DELPHI_CONST TColor32 clGoldenRod32 = TColor32(0xffdaa520);
+static _DELPHI_CONST TColor32 clGreenYellow32 = TColor32(0xffadff2f);
+static _DELPHI_CONST TColor32 clGrey32 = TColor32(0xff808080);
+static _DELPHI_CONST TColor32 clHoneyDew32 = TColor32(0xfff0fff0);
+static _DELPHI_CONST TColor32 clHotPink32 = TColor32(0xffff69b4);
+static _DELPHI_CONST TColor32 clIndianRed32 = TColor32(0xffcd5c5c);
+static _DELPHI_CONST TColor32 clIndigo32 = TColor32(0xff4b0082);
+static _DELPHI_CONST TColor32 clIvory32 = TColor32(0xfffffff0);
+static _DELPHI_CONST TColor32 clKhaki32 = TColor32(0xfff0e68c);
+static _DELPHI_CONST TColor32 clLavender32 = TColor32(0xffe6e6fa);
+static _DELPHI_CONST TColor32 clLavenderBlush32 = TColor32(0xfffff0f5);
+static _DELPHI_CONST TColor32 clLawnGreen32 = TColor32(0xff7cfc00);
+static _DELPHI_CONST TColor32 clLemonChiffon32 = TColor32(0xfffffacd);
+static _DELPHI_CONST TColor32 clLightBlue32 = TColor32(0xffadd8e6);
+static _DELPHI_CONST TColor32 clLightCoral32 = TColor32(0xfff08080);
+static _DELPHI_CONST TColor32 clLightCyan32 = TColor32(0xffe0ffff);
+static _DELPHI_CONST TColor32 clLightGoldenRodYellow32 = TColor32(0xfffafad2);
+static _DELPHI_CONST TColor32 clLightGreen32 = TColor32(0xff90ee90);
+static _DELPHI_CONST TColor32 clLightGrey32 = TColor32(0xffd3d3d3);
+static _DELPHI_CONST TColor32 clLightPink32 = TColor32(0xffffb6c1);
+static _DELPHI_CONST TColor32 clLightSalmon32 = TColor32(0xffffa07a);
+static _DELPHI_CONST TColor32 clLightSeagreen32 = TColor32(0xff20b2aa);
+static _DELPHI_CONST TColor32 clLightSkyblue32 = TColor32(0xff87cefa);
+static _DELPHI_CONST TColor32 clLightSlategray32 = TColor32(0xff778899);
+static _DELPHI_CONST TColor32 clLightSlategrey32 = TColor32(0xff778899);
+static _DELPHI_CONST TColor32 clLightSteelblue32 = TColor32(0xffb0c4de);
+static _DELPHI_CONST TColor32 clLightYellow32 = TColor32(0xffffffe0);
+static _DELPHI_CONST TColor32 clLtGray32 = TColor32(0xffc0c0c0);
+static _DELPHI_CONST TColor32 clMedGray32 = TColor32(0xffa0a0a4);
+static _DELPHI_CONST TColor32 clDkGray32 = TColor32(0xff808080);
+static _DELPHI_CONST TColor32 clMoneyGreen32 = TColor32(0xffc0dcc0);
+static _DELPHI_CONST TColor32 clLegacySkyBlue32 = TColor32(0xffa6caf0);
+static _DELPHI_CONST TColor32 clCream32 = TColor32(0xfffffbf0);
+static _DELPHI_CONST TColor32 clLimeGreen32 = TColor32(0xff32cd32);
+static _DELPHI_CONST TColor32 clLinen32 = TColor32(0xfffaf0e6);
+static _DELPHI_CONST TColor32 clMediumAquamarine32 = TColor32(0xff66cdaa);
+static _DELPHI_CONST TColor32 clMediumBlue32 = TColor32(0xff0000cd);
+static _DELPHI_CONST TColor32 clMediumOrchid32 = TColor32(0xffba55d3);
+static _DELPHI_CONST TColor32 clMediumPurple32 = TColor32(0xff9370db);
+static _DELPHI_CONST TColor32 clMediumSeaGreen32 = TColor32(0xff3cb371);
+static _DELPHI_CONST TColor32 clMediumSlateBlue32 = TColor32(0xff7b68ee);
+static _DELPHI_CONST TColor32 clMediumSpringGreen32 = TColor32(0xff00fa9a);
+static _DELPHI_CONST TColor32 clMediumTurquoise32 = TColor32(0xff48d1cc);
+static _DELPHI_CONST TColor32 clMediumVioletRed32 = TColor32(0xffc71585);
+static _DELPHI_CONST TColor32 clMidnightBlue32 = TColor32(0xff191970);
+static _DELPHI_CONST TColor32 clMintCream32 = TColor32(0xfff5fffa);
+static _DELPHI_CONST TColor32 clMistyRose32 = TColor32(0xffffe4e1);
+static _DELPHI_CONST TColor32 clMoccasin32 = TColor32(0xffffe4b5);
+static _DELPHI_CONST TColor32 clNavajoWhite32 = TColor32(0xffffdead);
+static _DELPHI_CONST TColor32 clOldLace32 = TColor32(0xfffdf5e6);
+static _DELPHI_CONST TColor32 clOliveDrab32 = TColor32(0xff6b8e23);
+static _DELPHI_CONST TColor32 clOrange32 = TColor32(0xffffa500);
+static _DELPHI_CONST TColor32 clOrangeRed32 = TColor32(0xffff4500);
+static _DELPHI_CONST TColor32 clOrchid32 = TColor32(0xffda70d6);
+static _DELPHI_CONST TColor32 clPaleGoldenRod32 = TColor32(0xffeee8aa);
+static _DELPHI_CONST TColor32 clPaleGreen32 = TColor32(0xff98fb98);
+static _DELPHI_CONST TColor32 clPaleTurquoise32 = TColor32(0xffafeeee);
+static _DELPHI_CONST TColor32 clPaleVioletred32 = TColor32(0xffdb7093);
+static _DELPHI_CONST TColor32 clPapayaWhip32 = TColor32(0xffffefd5);
+static _DELPHI_CONST TColor32 clPeachPuff32 = TColor32(0xffffdab9);
+static _DELPHI_CONST TColor32 clPeru32 = TColor32(0xffcd853f);
+static _DELPHI_CONST TColor32 clPlum32 = TColor32(0xffdda0dd);
+static _DELPHI_CONST TColor32 clPowderBlue32 = TColor32(0xffb0e0e6);
+static _DELPHI_CONST TColor32 clRosyBrown32 = TColor32(0xffbc8f8f);
+static _DELPHI_CONST TColor32 clRoyalBlue32 = TColor32(0xff4169e1);
+static _DELPHI_CONST TColor32 clSaddleBrown32 = TColor32(0xff8b4513);
+static _DELPHI_CONST TColor32 clSalmon32 = TColor32(0xfffa8072);
+static _DELPHI_CONST TColor32 clSandyBrown32 = TColor32(0xfff4a460);
+static _DELPHI_CONST TColor32 clSeaGreen32 = TColor32(0xff2e8b57);
+static _DELPHI_CONST TColor32 clSeaShell32 = TColor32(0xfffff5ee);
+static _DELPHI_CONST TColor32 clSienna32 = TColor32(0xffa0522d);
+static _DELPHI_CONST TColor32 clSilver32 = TColor32(0xffc0c0c0);
+static _DELPHI_CONST TColor32 clSkyblue32 = TColor32(0xff87ceeb);
+static _DELPHI_CONST TColor32 clSlateBlue32 = TColor32(0xff6a5acd);
+static _DELPHI_CONST TColor32 clSlateGray32 = TColor32(0xff708090);
+static _DELPHI_CONST TColor32 clSlateGrey32 = TColor32(0xff708090);
+static _DELPHI_CONST TColor32 clSnow32 = TColor32(0xfffffafa);
+static _DELPHI_CONST TColor32 clSpringgreen32 = TColor32(0xff00ff7f);
+static _DELPHI_CONST TColor32 clSteelblue32 = TColor32(0xff4682b4);
+static _DELPHI_CONST TColor32 clTan32 = TColor32(0xffd2b48c);
+static _DELPHI_CONST TColor32 clThistle32 = TColor32(0xffd8bfd8);
+static _DELPHI_CONST TColor32 clTomato32 = TColor32(0xffff6347);
+static _DELPHI_CONST TColor32 clTurquoise32 = TColor32(0xff40e0d0);
+static _DELPHI_CONST TColor32 clViolet32 = TColor32(0xffee82ee);
+static _DELPHI_CONST TColor32 clWheat32 = TColor32(0xfff5deb3);
+static _DELPHI_CONST TColor32 clWhitesmoke32 = TColor32(0xfff5f5f5);
+static _DELPHI_CONST TColor32 clYellowgreen32 = TColor32(0xff9acd32);
+static _DELPHI_CONST TColor32 clTrWhite32 = TColor32(0x7fffffff);
+static _DELPHI_CONST TColor32 clTrBlack32 = TColor32(0x7f000000);
+static _DELPHI_CONST TColor32 clTrRed32 = TColor32(0x7fff0000);
+static _DELPHI_CONST TColor32 clTrGreen32 = TColor32(0x7f00ff00);
+static _DELPHI_CONST TColor32 clTrBlue32 = TColor32(0x7f0000ff);
+static _DELPHI_CONST int FixedOne = int(0x10000);
+static _DELPHI_CONST System::Word FixedHalf = System::Word(0x7fff);
+static _DELPHI_CONST __int64 FixedPI = 0x000000000003243fLL;
 static const double FixedToFloat = 1.525879E-05;
 extern DELPHI_PACKAGE System::StaticArray<System::Byte, 256> GAMMA_TABLE;
-static const unsigned AREAINFO_RECT = unsigned(0x80000000);
-static const int AREAINFO_LINE = int(0x40000000);
-static const int AREAINFO_ELLIPSE = int(0x20000000);
-static const int AREAINFO_ABSOLUTE = int(0x10000000);
-static const unsigned AREAINFO_MASK = unsigned(0xff000000);
+static _DELPHI_CONST unsigned AREAINFO_RECT = unsigned(0x80000000);
+static _DELPHI_CONST int AREAINFO_LINE = int(0x40000000);
+static _DELPHI_CONST int AREAINFO_ELLIPSE = int(0x20000000);
+static _DELPHI_CONST int AREAINFO_ABSOLUTE = int(0x10000000);
+static _DELPHI_CONST unsigned AREAINFO_MASK = unsigned(0xff000000);
 extern DELPHI_PACKAGE Vcl::Graphics::TBitmap* StockBitmap;
 extern DELPHI_PACKAGE TColor32 __fastcall Color32(System::Uitypes::TColor WinColor)/* overload */;
 extern DELPHI_PACKAGE TColor32 __fastcall Color32(System::Byte R, System::Byte G, System::Byte B, System::Byte A = (System::Byte)(0xff))/* overload */;

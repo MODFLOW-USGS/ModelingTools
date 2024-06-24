@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLRandomHDS.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glrandomhds.pas' rev: 36.00 (Windows)
 
 #ifndef GlrandomhdsHPP
 #define GlrandomhdsHPP
@@ -15,28 +15,28 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <System.Classes.hpp>
 #include <System.Math.hpp>
-#include <System.SysUtils.hpp>
-#include <System.UITypes.hpp>
+#include <System.Sysutils.hpp>
+#include <System.Uitypes.hpp>
 #include <System.Contnrs.hpp>
 #include <Vcl.Graphics.hpp>
-#include <Vcl.Imaging.jpeg.hpp>
+#include <Vcl.Imaging.Jpeg.hpp>
 #include <Vcl.Forms.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLHeightData.hpp>
-#include <GLTerrainRenderer.hpp>
-#include <GLTexture.hpp>
-#include <GLColor.hpp>
-#include <GLCoordinates.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLMaterial.hpp>
-#include <GLContext.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glvectortypes.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Glheightdata.hpp>
+#include <Glterrainrenderer.hpp>
+#include <Gltexture.hpp>
+#include <Glcolor.hpp>
+#include <Glcoordinates.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glmaterial.hpp>
+#include <Glcontext.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -493,7 +493,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte VerticalScalingFactor = System::Byte(0x80);
+static _DELPHI_CONST System::Byte VerticalScalingFactor = System::Byte(0x80);
 extern DELPHI_PACKAGE Vcl::Graphics::TBitmap* __fastcall LoadJPGtexture(const System::UnicodeString JpgName);
 extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall NoisyColor(const System::Uitypes::TColor Color, const float Noise = 5.000000E-02f);
 extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureSand(const int x, const int y);

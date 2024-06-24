@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLHUDObjects.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glhudobjects.pas' rev: 36.00 (Windows)
 
 #ifndef GlhudobjectsHPP
 #define GlhudobjectsHPP
@@ -15,19 +15,19 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <Vcl.StdCtrls.hpp>
-#include <GLScene.hpp>
-#include <GLVectorTypes.hpp>
-#include <GLCoordinates.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLObjects.hpp>
-#include <GLBitmapFont.hpp>
-#include <GLCrossPlatform.hpp>
-#include <GLColor.hpp>
-#include <GLRenderContextInfo.hpp>
+#include <Vcl.Stdctrls.hpp>
+#include <Glscene.hpp>
+#include <Glvectortypes.hpp>
+#include <Glcoordinates.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Globjects.hpp>
+#include <Glbitmapfont.hpp>
+#include <Glcrossplatform.hpp>
+#include <Glcolor.hpp>
+#include <Glrendercontextinfo.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

@@ -47,9 +47,14 @@ type
    function FormHelp(Command: Word; Data:  Integer;
      var CallHelp: Boolean): Boolean;
 {$ELSE}
-// Use this version for Delphi XE2
+{$IF CompilerVersion < 35}
    function FormHelp(Command: Word; Data:  NativeInt;
      var CallHelp: Boolean): Boolean;
+{$ELSE}
+// Use this version for Delphi XE2
+    function FormHelp(Command: Word; Data: THelpEventData;
+      var CallHelp: Boolean): Boolean;
+{$IFEND}
 {$IFEND}
     procedure FormDestroy(Sender: TObject); virtual;
     procedure FormHide(Sender: TObject);
@@ -356,9 +361,14 @@ end;
 function TfrmCustomGoPhast.FormHelp(Command: Word; Data:  Integer;
   var CallHelp: Boolean): Boolean;
 {$ELSE}
+{$IF CompilerVersion < 36}
 // Delphi XE2
 function TfrmCustomGoPhast.FormHelp(Command: Word; Data:  NativeInt;
   var CallHelp: Boolean): Boolean;
+{$ELSE}
+function TfrmCustomGoPhast.FormHelp(Command: Word; Data: THelpEventData;
+  var CallHelp: Boolean): Boolean;
+{$IFEND}
 {$IFEND}
 begin
   if (Command in [HELP_CONTEXT, HELP_INDEX, HELP_FORCEFILE,
@@ -367,7 +377,6 @@ begin
   begin
     // 15 = help contents.
     result := False;
-
   end
   else
   begin
@@ -383,8 +392,8 @@ begin
       CallHelp := False;
       FCallingHelp := False;
     end;
-//    result := True;
   end;
+
 end;
 
 procedure TfrmCustomGoPhast.FormHide(Sender: TObject);

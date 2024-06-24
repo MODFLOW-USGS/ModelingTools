@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLScreen.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glscreen.pas' rev: 36.00 (Windows)
 
 #ifndef GlscreenHPP
 #define GlscreenHPP
@@ -15,12 +15,12 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <Winapi.Windows.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
+#include <System.Sysutils.hpp>
 #include <Vcl.Forms.hpp>
-#include <GLVectorGeometry.hpp>
+#include <Glvectorgeometry.hpp>
 
 //-- user supplied -----------------------------------------------------------
 
@@ -83,8 +83,8 @@ typedef TVideoMode *PVideoMode;
 typedef System::DynamicArray<TVideoMode> Glscreen__2;
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte MaxVideoModes = System::Byte(0xc8);
-static const System::Int8 lcl_release = System::Int8(0x0);
+static _DELPHI_CONST System::Byte MaxVideoModes = System::Byte(0xc8);
+static _DELPHI_CONST System::Int8 lcl_release = System::Int8(0x0);
 extern DELPHI_PACKAGE int vNumberVideoModes;
 extern DELPHI_PACKAGE int vCurrentVideoMode;
 extern DELPHI_PACKAGE Glscreen__2 vVideoModes;
@@ -95,7 +95,7 @@ extern DELPHI_PACKAGE void __fastcall ReadScreenImage(HDC Dest, int DestLeft, in
 extern DELPHI_PACKAGE void __fastcall RestoreDefaultMode(void);
 extern DELPHI_PACKAGE void __fastcall GLShowCursor(bool AShow);
 extern DELPHI_PACKAGE void __fastcall GLSetCursorPos(int AScreenX, int AScreenY);
-extern DELPHI_PACKAGE void __fastcall GLGetCursorPos(System::Types::TPoint &point);
+extern DELPHI_PACKAGE void __fastcall GLGetCursorPos(Winapi::Windows::TPoint &point);
 extern DELPHI_PACKAGE int __fastcall GLGetScreenWidth(void);
 extern DELPHI_PACKAGE int __fastcall GLGetScreenHeight(void);
 }	/* namespace Glscreen */

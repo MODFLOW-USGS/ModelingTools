@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLPersistentClasses.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLPersistentClasses.pas' rev: 35.00 (Windows)
 
 #ifndef GlpersistentclassesHPP
 #define GlpersistentclassesHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -55,7 +53,7 @@ public:
 	__fastcall virtual TVirtualReader(System::Classes::TStream* Stream);
 	__property System::Classes::TStream* Stream = {read=FStream};
 	void __fastcall ReadTypeError();
-	virtual void __fastcall Read(void *Buf, System::LongInt Count) = 0 ;
+	virtual void __fastcall Read(void *Buf, int Count) = 0 ;
 	virtual System::Classes::TValueType __fastcall NextValue() = 0 ;
 	virtual int __fastcall ReadInteger() = 0 ;
 	virtual bool __fastcall ReadBoolean() = 0 ;
@@ -83,7 +81,7 @@ private:
 public:
 	__fastcall virtual TVirtualWriter(System::Classes::TStream* Stream);
 	__property System::Classes::TStream* Stream = {read=FStream};
-	virtual void __fastcall Write(const void *Buf, System::LongInt Count) = 0 ;
+	virtual void __fastcall Write(const void *Buf, int Count) = 0 ;
 	virtual void __fastcall WriteInteger(int anInteger) = 0 ;
 	virtual void __fastcall WriteBoolean(bool aBoolean) = 0 ;
 	virtual void __fastcall WriteString(const System::UnicodeString aString) = 0 ;
@@ -173,7 +171,7 @@ public:
 	System::TObject* operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	PPointerObjectList FList;
+	TPointerObjectList *FList;
 	int FCount;
 	int FCapacity;
 	int FGrowthDelta;
@@ -246,7 +244,7 @@ protected:
 	System::WideString __fastcall ReadWideString(System::Classes::TValueType vType);
 	
 public:
-	virtual void __fastcall Read(void *Buf, System::LongInt Count);
+	virtual void __fastcall Read(void *Buf, int Count);
 	virtual System::Classes::TValueType __fastcall NextValue();
 	virtual int __fastcall ReadInteger();
 	virtual bool __fastcall ReadBoolean();
@@ -275,7 +273,7 @@ protected:
 	virtual void __fastcall WriteWideString(const System::WideString aString);
 	
 public:
-	virtual void __fastcall Write(const void *Buf, System::LongInt Count);
+	virtual void __fastcall Write(const void *Buf, int Count);
 	virtual void __fastcall WriteInteger(int anInteger);
 	virtual void __fastcall WriteBoolean(bool aBoolean);
 	virtual void __fastcall WriteString(const System::UnicodeString aString);
@@ -305,7 +303,7 @@ protected:
 	void __fastcall ReadLine(const System::UnicodeString requestedType = System::UnicodeString());
 	
 public:
-	virtual void __fastcall Read(void *Buf, System::LongInt Count);
+	virtual void __fastcall Read(void *Buf, int Count);
 	virtual System::Classes::TValueType __fastcall NextValue();
 	virtual int __fastcall ReadInteger();
 	virtual bool __fastcall ReadBoolean();
@@ -338,7 +336,7 @@ protected:
 public:
 	__fastcall virtual TGLTextWriter(System::Classes::TStream* aStream);
 	__fastcall virtual ~TGLTextWriter();
-	virtual void __fastcall Write(const void *Buf, System::LongInt Count);
+	virtual void __fastcall Write(const void *Buf, int Count);
 	virtual void __fastcall WriteInteger(int anInteger);
 	virtual void __fastcall WriteBoolean(bool aBoolean);
 	virtual void __fastcall WriteString(const System::UnicodeString aString);
@@ -444,17 +442,17 @@ class PASCALIMPLEMENTATION EInvalidFileSignature : public System::Sysutils::Exce
 	
 public:
 	/* Exception.Create */ inline __fastcall EInvalidFileSignature(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EInvalidFileSignature(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EInvalidFileSignature(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EInvalidFileSignature(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EInvalidFileSignature(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EInvalidFileSignature(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidFileSignature(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidFileSignature(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidFileSignature(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidFileSignature(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EInvalidFileSignature(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidFileSignature(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EInvalidFileSignature(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidFileSignature(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EInvalidFileSignature(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EInvalidFileSignature(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidFileSignature(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidFileSignature(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidFileSignature(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidFileSignature(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EInvalidFileSignature() { }
 	
 };
@@ -468,17 +466,17 @@ class PASCALIMPLEMENTATION EFilerException : public System::Sysutils::Exception
 	
 public:
 	/* Exception.Create */ inline __fastcall EFilerException(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EFilerException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EFilerException(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EFilerException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EFilerException(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EFilerException(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EFilerException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EFilerException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EFilerException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EFilerException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EFilerException(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EFilerException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EFilerException(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EFilerException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EFilerException(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EFilerException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EFilerException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EFilerException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EFilerException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EFilerException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EFilerException() { }
 	
 };

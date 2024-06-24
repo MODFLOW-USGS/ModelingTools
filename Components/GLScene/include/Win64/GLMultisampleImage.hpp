@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMultisampleImage.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glmultisampleimage.pas' rev: 36.00 (Windows)
 
 #ifndef GlmultisampleimageHPP
 #define GlmultisampleimageHPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLContext.hpp>
-#include <GLTexture.hpp>
-#include <GLGraphics.hpp>
-#include <GLTextureFormat.hpp>
-#include <GLBaseClasses.hpp>
+#include <Opengltokens.hpp>
+#include <Glcontext.hpp>
+#include <Gltexture.hpp>
+#include <Glgraphics.hpp>
+#include <Gltextureformat.hpp>
+#include <Glbaseclasses.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

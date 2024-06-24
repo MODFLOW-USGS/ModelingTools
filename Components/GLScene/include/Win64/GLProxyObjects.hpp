@@ -1,8 +1,8 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLProxyObjects.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'Glproxyobjects.pas' rev: 36.00 (Windows)
 
 #ifndef GlproxyobjectsHPP
 #define GlproxyobjectsHPP
@@ -15,23 +15,23 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <SysInit.hpp>
+#include <Sysinit.hpp>
 #include <System.Classes.hpp>
-#include <System.SysUtils.hpp>
-#include <OpenGLTokens.hpp>
-#include <GLScene.hpp>
-#include <GLXCollection.hpp>
-#include <GLPipelineTransformation.hpp>
-#include <GLVectorGeometry.hpp>
-#include <GLTexture.hpp>
-#include <GLVectorFileObjects.hpp>
-#include <GLStrings.hpp>
-#include <GLRenderContextInfo.hpp>
-#include <GLBaseClasses.hpp>
-#include <GLMaterial.hpp>
-#include <GLContext.hpp>
-#include <GLPersistentClasses.hpp>
-#include <GLVectorTypes.hpp>
+#include <System.Sysutils.hpp>
+#include <Opengltokens.hpp>
+#include <Glscene.hpp>
+#include <Glxcollection.hpp>
+#include <Glpipelinetransformation.hpp>
+#include <Glvectorgeometry.hpp>
+#include <Gltexture.hpp>
+#include <Glvectorfileobjects.hpp>
+#include <Glstrings.hpp>
+#include <Glrendercontextinfo.hpp>
+#include <Glbaseclasses.hpp>
+#include <Glmaterial.hpp>
+#include <Glcontext.hpp>
+#include <Glpersistentclasses.hpp>
+#include <Glvectortypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

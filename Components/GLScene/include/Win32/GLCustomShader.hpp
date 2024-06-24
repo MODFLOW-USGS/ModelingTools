@@ -2,17 +2,15 @@
 // Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLCustomShader.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLCustomShader.pas' rev: 35.00 (Windows)
 
 #ifndef GlcustomshaderHPP
 #define GlcustomshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
-#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
-#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -61,17 +59,17 @@ class PASCALIMPLEMENTATION EGLCustomShaderException : public Gltexture::EGLShade
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLCustomShaderException(const System::UnicodeString Msg) : Gltexture::EGLShaderException(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLCustomShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : Gltexture::EGLShaderException(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLCustomShaderException(System::NativeUInt Ident)/* overload */ : Gltexture::EGLShaderException(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLCustomShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : Gltexture::EGLShaderException(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLCustomShaderException(NativeUInt Ident)/* overload */ : Gltexture::EGLShaderException(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLCustomShaderException(System::PResStringRec ResStringRec)/* overload */ : Gltexture::EGLShaderException(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLCustomShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : Gltexture::EGLShaderException(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLCustomShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : Gltexture::EGLShaderException(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLCustomShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : Gltexture::EGLShaderException(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLCustomShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : Gltexture::EGLShaderException(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLCustomShaderException(const System::UnicodeString Msg, int AHelpContext) : Gltexture::EGLShaderException(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLCustomShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : Gltexture::EGLShaderException(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLCustomShaderException(System::NativeUInt Ident, int AHelpContext)/* overload */ : Gltexture::EGLShaderException(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLCustomShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : Gltexture::EGLShaderException(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLCustomShaderException(NativeUInt Ident, int AHelpContext)/* overload */ : Gltexture::EGLShaderException(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLCustomShaderException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : Gltexture::EGLShaderException(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLCustomShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : Gltexture::EGLShaderException(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLCustomShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : Gltexture::EGLShaderException(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLCustomShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : Gltexture::EGLShaderException(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLCustomShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : Gltexture::EGLShaderException(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLCustomShaderException() { }
 	
 };
@@ -88,8 +86,8 @@ typedef System::Set<TGLLightSourceEnum, 1, 8> TGLLightSourceSet;
 
 __interface  INTERFACE_UUID("{04089C64-60C2-43F5-AC9C-38ED46264812}") IGLShaderDescription  : public System::IInterface 
 {
-	virtual void __fastcall SetShaderTextures(Gltexture::TGLTexture* const *Textures, const System::NativeInt Textures_High) = 0 ;
-	virtual void __fastcall GetShaderTextures(Gltexture::TGLTexture* *Textures, const System::NativeInt Textures_High) = 0 ;
+	virtual void __fastcall SetShaderTextures(Gltexture::TGLTexture* const *Textures, const int Textures_High) = 0 ;
+	virtual void __fastcall GetShaderTextures(Gltexture::TGLTexture* *Textures, const int Textures_High) = 0 ;
 	virtual void __fastcall SetShaderColorParams(const Glvectortypes::TVector4f &AAmbientColor, const Glvectortypes::TVector4f &ADiffuseColor, const Glvectortypes::TVector4f &ASpecularcolor) = 0 ;
 	virtual void __fastcall GetShaderColorParams(Glvectortypes::TVector4f &AAmbientColor, Glvectortypes::TVector4f &ADiffuseColor, Glvectortypes::TVector4f &ASpecularcolor) = 0 ;
 	virtual void __fastcall SetShaderMiscParameters(Glcadencer::TGLCadencer* const ACadencer, Glmaterial::TGLMaterialLibrary* const AMatLib, const TGLLightSourceSet ALightSources) = 0 ;
@@ -208,10 +206,10 @@ class PASCALIMPLEMENTATION TGLGeometryProgram : public TGLShaderProgram
 private:
 	Glslparameter::TGLgsInTypes FInputPrimitiveType;
 	Glslparameter::TGLgsOutTypes FOutputPrimitiveType;
-	Opengltokens::TGLint FVerticesOut;
+	int FVerticesOut;
 	void __fastcall SetInputPrimitiveType(const Glslparameter::TGLgsInTypes Value);
 	void __fastcall SetOutputPrimitiveType(const Glslparameter::TGLgsOutTypes Value);
-	void __fastcall SetVerticesOut(const Opengltokens::TGLint Value);
+	void __fastcall SetVerticesOut(const int Value);
 	
 public:
 	__fastcall virtual TGLGeometryProgram(TGLCustomShader* const AParent);
@@ -221,7 +219,7 @@ __published:
 	__property Enabled = {default=0};
 	__property Glslparameter::TGLgsInTypes InputPrimitiveType = {read=FInputPrimitiveType, write=SetInputPrimitiveType, default=0};
 	__property Glslparameter::TGLgsOutTypes OutputPrimitiveType = {read=FOutputPrimitiveType, write=SetOutputPrimitiveType, default=0};
-	__property Opengltokens::TGLint VerticesOut = {read=FVerticesOut, write=SetVerticesOut, default=0};
+	__property int VerticesOut = {read=FVerticesOut, write=SetVerticesOut, default=0};
 public:
 	/* TGLShaderProgram.Destroy */ inline __fastcall virtual ~TGLGeometryProgram() { }
 	
@@ -238,7 +236,7 @@ protected:
 	virtual float __fastcall GetAsVector1f() = 0 ;
 	virtual Glvectortypes::TVector2f __fastcall GetAsVector2f() = 0 ;
 	virtual Glvectortypes::TVector3f __fastcall GetAsVector3f() = 0 ;
-	virtual Glvectorgeometry::TVector __fastcall GetAsVector4f() = 0 ;
+	virtual Glvectortypes::TVector4f __fastcall GetAsVector4f() = 0 ;
 	virtual int __fastcall GetAsVector1i() = 0 ;
 	virtual Glvectortypes::TVector2i __fastcall GetAsVector2i() = 0 ;
 	virtual Glvectortypes::TVector3i __fastcall GetAsVector3i() = 0 ;
@@ -277,12 +275,12 @@ protected:
 	virtual void __fastcall SetAsUniformBuffer(unsigned UBO) = 0 ;
 	
 public:
-	void __fastcall SetAsVectorF(const float *Values, const System::NativeInt Values_High)/* overload */;
-	void __fastcall SetAsVectorI(const int *Values, const System::NativeInt Values_High)/* overload */;
+	void __fastcall SetAsVectorF(const float *Values, const int Values_High)/* overload */;
+	void __fastcall SetAsVectorI(const int *Values, const int Values_High)/* overload */;
 	void __fastcall SetToTextureOf(Glmaterial::TGLLibMaterial* const LibMaterial, const int TextureIndex)/* overload */;
 	void __fastcall SetToTextureOf(Gltexture::TGLTexture* const Texture, const int TextureIndex)/* overload */;
-	__property Glvectorgeometry::TVector AsVector = {read=GetAsVector4f, write=SetAsVector4f};
-	__property Glvectorgeometry::TAffineVector AsAffineVector = {read=GetAsVector3f, write=SetAsVector3f};
+	__property Glvectortypes::TVector4f AsVector = {read=GetAsVector4f, write=SetAsVector4f};
+	__property Glvectortypes::TVector3f AsAffineVector = {read=GetAsVector3f, write=SetAsVector3f};
 	__property float AsFloat = {read=GetAsVector1f, write=SetAsVector1f};
 	__property int AsInteger = {read=GetAsVector1i, write=SetAsVector1i, nodefault};
 	__property float AsVector1f = {read=GetAsVector1f, write=SetAsVector1f};
