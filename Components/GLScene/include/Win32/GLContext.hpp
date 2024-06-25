@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLContext.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLContext.pas' rev: 36.00 (Windows)
 
 #ifndef GlcontextHPP
 #define GlcontextHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -246,7 +248,7 @@ class PASCALIMPLEMENTATION TGLContextHandle : public System::TObject
 	
 private:
 	System::Classes::TList* FHandles;
-	TGLRCHandle *FLastHandle;
+	PGLRCHandle FLastHandle;
 	TOnPrepareHandleData FOnPrepare;
 	unsigned __fastcall GetHandle();
 	TGLContext* __fastcall GetContext();
@@ -405,11 +407,11 @@ public:
 	void __fastcall EndQuery();
 	bool __fastcall IsResultAvailable();
 	int __fastcall CounterBits();
-	int __fastcall QueryResultInt();
+	Opengltokens::TGLint __fastcall QueryResultInt();
 	unsigned __fastcall QueryResultUInt();
-	__int64 __fastcall QueryResultInt64();
-	unsigned __int64 __fastcall QueryResultUInt64();
-	System::ByteBool __fastcall QueryResultBool();
+	Opengltokens::TGLint64EXT __fastcall QueryResultInt64();
+	Opengltokens::TGLuint64EXT __fastcall QueryResultUInt64();
+	Opengltokens::TGLboolean __fastcall QueryResultBool();
 	__property unsigned Target = {read=GetTarget, nodefault};
 	__property Glstate::TQueryType QueryType = {read=GetQueryType, nodefault};
 	__property bool Active = {read=FActive, nodefault};
@@ -513,15 +515,15 @@ public:
 	__fastcall TGLBufferObjectHandle(void * p, int size, unsigned bufferUsage);
 	virtual void __fastcall Bind() = 0 ;
 	virtual void __fastcall UnBind() = 0 ;
-	virtual void __fastcall BindRange(unsigned index, NativeInt offset, NativeInt size);
+	virtual void __fastcall BindRange(unsigned index, Opengltokens::TGLintptr offset, Opengltokens::TGLsizeiptr size);
 	virtual void __fastcall BindBase(unsigned index);
 	virtual void __fastcall UnBindBase(unsigned index);
 	void __fastcall BufferData(void * p, int size, unsigned bufferUsage);
 	void __fastcall BindBufferData(void * p, int size, unsigned bufferUsage);
 	void __fastcall BufferSubData(int offset, int size, void * p);
 	void * __fastcall MapBuffer(unsigned access);
-	void * __fastcall MapBufferRange(int offset, int len, unsigned access);
-	void __fastcall Flush(int offset, int len);
+	void * __fastcall MapBufferRange(Opengltokens::TGLint offset, Opengltokens::TGLsizei len, Opengltokens::TGLbitfield access);
+	void __fastcall Flush(Opengltokens::TGLint offset, Opengltokens::TGLsizei len);
 	bool __fastcall UnmapBuffer();
 	__classmethod virtual bool __fastcall IsSupported();
 	__property unsigned Target = {read=GetTarget, nodefault};
@@ -652,7 +654,7 @@ public:
 	virtual void __fastcall UnBind();
 	void __fastcall BeginTransformFeedback(unsigned primitiveMode);
 	void __fastcall EndTransformFeedback();
-	virtual void __fastcall BindRange(unsigned index, NativeInt offset, NativeInt size);
+	virtual void __fastcall BindRange(unsigned index, Opengltokens::TGLintptr offset, Opengltokens::TGLsizeiptr size);
 	virtual void __fastcall BindBase(unsigned index);
 	virtual void __fastcall UnBindBase(unsigned index);
 	__classmethod virtual bool __fastcall IsSupported();
@@ -699,7 +701,7 @@ protected:
 public:
 	virtual void __fastcall Bind();
 	virtual void __fastcall UnBind();
-	virtual void __fastcall BindRange(unsigned index, NativeInt offset, NativeInt size);
+	virtual void __fastcall BindRange(unsigned index, Opengltokens::TGLintptr offset, Opengltokens::TGLsizeiptr size);
 	virtual void __fastcall BindBase(unsigned index);
 	virtual void __fastcall UnBindBase(unsigned index);
 	__classmethod virtual bool __fastcall IsSupported();
@@ -755,17 +757,17 @@ public:
 	void __fastcall UnBind();
 	void __fastcall UnBindForDrawing();
 	void __fastcall UnBindForReading();
-	void __fastcall Attach1DTexture(unsigned Target, unsigned attachment, unsigned textarget, unsigned texture, int level);
-	void __fastcall Attach2DTexture(unsigned Target, unsigned attachment, unsigned textarget, unsigned texture, int level);
-	void __fastcall Attach3DTexture(unsigned Target, unsigned attachment, unsigned textarget, unsigned texture, int level, int Layer);
-	void __fastcall AttachLayer(unsigned Target, unsigned attachment, unsigned texture, int level, int Layer);
+	void __fastcall Attach1DTexture(unsigned Target, unsigned attachment, unsigned textarget, unsigned texture, Opengltokens::TGLint level);
+	void __fastcall Attach2DTexture(unsigned Target, unsigned attachment, unsigned textarget, unsigned texture, Opengltokens::TGLint level);
+	void __fastcall Attach3DTexture(unsigned Target, unsigned attachment, unsigned textarget, unsigned texture, Opengltokens::TGLint level, Opengltokens::TGLint Layer);
+	void __fastcall AttachLayer(unsigned Target, unsigned attachment, unsigned texture, Opengltokens::TGLint level, Opengltokens::TGLint Layer);
 	void __fastcall AttachRenderBuffer(unsigned Target, unsigned attachment, unsigned renderbuffertarget, unsigned renderbuffer);
-	void __fastcall AttachTexture(unsigned Target, unsigned attachment, unsigned texture, int level);
-	void __fastcall AttachTextureLayer(unsigned Target, unsigned attachment, unsigned texture, int level, int Layer);
-	void __fastcall Blit(int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, unsigned mask, unsigned filter);
-	int __fastcall GetAttachmentParameter(unsigned Target, unsigned attachment, unsigned pname);
-	int __fastcall GetAttachmentObjectType(unsigned Target, unsigned attachment);
-	int __fastcall GetAttachmentObjectName(unsigned Target, unsigned attachment);
+	void __fastcall AttachTexture(unsigned Target, unsigned attachment, unsigned texture, Opengltokens::TGLint level);
+	void __fastcall AttachTextureLayer(unsigned Target, unsigned attachment, unsigned texture, Opengltokens::TGLint level, Opengltokens::TGLint Layer);
+	void __fastcall Blit(Opengltokens::TGLint srcX0, Opengltokens::TGLint srcY0, Opengltokens::TGLint srcX1, Opengltokens::TGLint srcY1, Opengltokens::TGLint dstX0, Opengltokens::TGLint dstY0, Opengltokens::TGLint dstX1, Opengltokens::TGLint dstY1, Opengltokens::TGLbitfield mask, unsigned filter);
+	Opengltokens::TGLint __fastcall GetAttachmentParameter(unsigned Target, unsigned attachment, unsigned pname);
+	Opengltokens::TGLint __fastcall GetAttachmentObjectType(unsigned Target, unsigned attachment);
+	Opengltokens::TGLint __fastcall GetAttachmentObjectName(unsigned Target, unsigned attachment);
 	TGLFramebufferStatus __fastcall GetStatus();
 	TGLFramebufferStatus __fastcall GetStringStatus(/* out */ System::UnicodeString &clarification);
 	__classmethod virtual bool __fastcall IsSupported();
@@ -789,8 +791,8 @@ protected:
 public:
 	void __fastcall Bind();
 	void __fastcall UnBind();
-	void __fastcall SetStorage(unsigned internalformat, int width, int height);
-	void __fastcall SetStorageMultisample(unsigned internalformat, int samples, int width, int height);
+	void __fastcall SetStorage(unsigned internalformat, Opengltokens::TGLsizei width, Opengltokens::TGLsizei height);
+	void __fastcall SetStorageMultisample(unsigned internalformat, Opengltokens::TGLsizei samples, Opengltokens::TGLsizei width, Opengltokens::TGLsizei height);
 	__classmethod virtual bool __fastcall IsSupported();
 public:
 	/* TGLContextHandle.Create */ inline __fastcall virtual TGLRenderbufferHandle() : TGLContextHandle() { }
@@ -1014,16 +1016,16 @@ private:
 	void __fastcall SetUniform1f(const System::UnicodeString index, float val);
 	Glvectortypes::TVector2f __fastcall GetUniform2f(const System::UnicodeString index);
 	void __fastcall SetUniform2f(const System::UnicodeString index, const Glvectortypes::TVector2f &val);
-	Glvectortypes::TVector3f __fastcall GetUniform3f(const System::UnicodeString index);
-	void __fastcall SetUniform3f(const System::UnicodeString index, const Glvectortypes::TVector3f &val);
-	Glvectortypes::TVector4f __fastcall GetUniform4f(const System::UnicodeString index);
-	void __fastcall SetUniform4f(const System::UnicodeString index, const Glvectortypes::TVector4f &val);
+	Glvectorgeometry::TAffineVector __fastcall GetUniform3f(const System::UnicodeString index);
+	void __fastcall SetUniform3f(const System::UnicodeString index, const Glvectorgeometry::TAffineVector &val);
+	Glvectorgeometry::TVector __fastcall GetUniform4f(const System::UnicodeString index);
+	void __fastcall SetUniform4f(const System::UnicodeString index, const Glvectorgeometry::TVector &val);
 	Glvectortypes::TMatrix2f __fastcall GetUniformMatrix2fv(const System::UnicodeString index);
 	void __fastcall SetUniformMatrix2fv(const System::UnicodeString index, const Glvectortypes::TMatrix2f &val);
 	Glvectortypes::TMatrix3f __fastcall GetUniformMatrix3fv(const System::UnicodeString index);
 	void __fastcall SetUniformMatrix3fv(const System::UnicodeString index, const Glvectortypes::TMatrix3f &val);
-	Glvectortypes::TMatrix4f __fastcall GetUniformMatrix4fv(const System::UnicodeString index);
-	void __fastcall SetUniformMatrix4fv(const System::UnicodeString index, const Glvectortypes::TMatrix4f &val);
+	Glvectorgeometry::TMatrix __fastcall GetUniformMatrix4fv(const System::UnicodeString index);
+	void __fastcall SetUniformMatrix4fv(const System::UnicodeString index, const Glvectorgeometry::TMatrix &val);
 	unsigned __fastcall GetUniformTextureHandle(const System::UnicodeString index, const int TextureIndex, const Gltextureformat::TGLTextureTarget TextureTarget);
 	void __fastcall SetUniformTextureHandle(const System::UnicodeString index, const int TextureIndex, const Gltextureformat::TGLTextureTarget TextureTarget, const unsigned Value);
 	void __fastcall SetUniformBuffer(const System::UnicodeString index, TGLUniformBufferHandle* Value);
@@ -1043,7 +1045,7 @@ public:
 	bool __fastcall ValidateProgram();
 	int __fastcall GetAttribLocation(const System::UnicodeString aName);
 	int __fastcall GetUniformLocation(const System::UnicodeString aName);
-	System::PInteger __fastcall GetUniformOffset(const System::UnicodeString aName);
+	Opengltokens::PGLint __fastcall GetUniformOffset(const System::UnicodeString aName);
 	int __fastcall GetUniformBlockIndex(const System::UnicodeString aName);
 	int __fastcall GetVaryingLocation(const System::UnicodeString aName);
 	void __fastcall AddActiveVarying(const System::UnicodeString aName);
@@ -1064,11 +1066,11 @@ public:
 	__property Glvectortypes::TVector4i Uniform4i[const System::UnicodeString index] = {read=GetUniform4i, write=SetUniform4i};
 	__property float Uniform1f[const System::UnicodeString index] = {read=GetUniform1f, write=SetUniform1f};
 	__property Glvectortypes::TVector2f Uniform2f[const System::UnicodeString index] = {read=GetUniform2f, write=SetUniform2f};
-	__property Glvectortypes::TVector3f Uniform3f[const System::UnicodeString index] = {read=GetUniform3f, write=SetUniform3f};
-	__property Glvectortypes::TVector4f Uniform4f[const System::UnicodeString index] = {read=GetUniform4f, write=SetUniform4f};
+	__property Glvectorgeometry::TAffineVector Uniform3f[const System::UnicodeString index] = {read=GetUniform3f, write=SetUniform3f};
+	__property Glvectorgeometry::TVector Uniform4f[const System::UnicodeString index] = {read=GetUniform4f, write=SetUniform4f};
 	__property Glvectortypes::TMatrix2f UniformMatrix2fv[const System::UnicodeString index] = {read=GetUniformMatrix2fv, write=SetUniformMatrix2fv};
 	__property Glvectortypes::TMatrix3f UniformMatrix3fv[const System::UnicodeString index] = {read=GetUniformMatrix3fv, write=SetUniformMatrix3fv};
-	__property Glvectortypes::TMatrix4f UniformMatrix4fv[const System::UnicodeString index] = {read=GetUniformMatrix4fv, write=SetUniformMatrix4fv};
+	__property Glvectorgeometry::TMatrix UniformMatrix4fv[const System::UnicodeString index] = {read=GetUniformMatrix4fv, write=SetUniformMatrix4fv};
 	__property unsigned UniformTextureHandle[const System::UnicodeString index][const int TextureIndex][const Gltextureformat::TGLTextureTarget TextureTarget] = {read=GetUniformTextureHandle, write=SetUniformTextureHandle};
 	__property TGLUniformBufferHandle* UniformBuffer[const System::UnicodeString index] = {write=SetUniformBuffer};
 public:
@@ -1134,17 +1136,17 @@ class PASCALIMPLEMENTATION EGLContext : public System::Sysutils::Exception
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLContext(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLContext(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLContext(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLContext(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLContext(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLContext(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLContext(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLContext(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLContext(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLContext(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLContext(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLContext(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLContext(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLContext(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLContext(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLContext(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLContext(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLContext(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLContext(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLContext(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLContext() { }
 	
 };
@@ -1158,17 +1160,17 @@ class PASCALIMPLEMENTATION EPBuffer : public System::Sysutils::Exception
 	
 public:
 	/* Exception.Create */ inline __fastcall EPBuffer(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EPBuffer(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EPBuffer(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EPBuffer(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EPBuffer(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EPBuffer(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EPBuffer(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EPBuffer(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EPBuffer(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EPBuffer(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EPBuffer(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EPBuffer(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EPBuffer(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EPBuffer(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EPBuffer(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EPBuffer(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EPBuffer(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EPBuffer(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EPBuffer(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EPBuffer(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EPBuffer() { }
 	
 };
@@ -1182,17 +1184,17 @@ class PASCALIMPLEMENTATION EGLShader : public EGLContext
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLShader(const System::UnicodeString Msg) : EGLContext(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLShader(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : EGLContext(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLShader(NativeUInt Ident)/* overload */ : EGLContext(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLShader(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : EGLContext(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLShader(System::NativeUInt Ident)/* overload */ : EGLContext(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLShader(System::PResStringRec ResStringRec)/* overload */ : EGLContext(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLShader(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : EGLContext(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLShader(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : EGLContext(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLShader(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : EGLContext(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLShader(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : EGLContext(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLShader(const System::UnicodeString Msg, int AHelpContext) : EGLContext(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLShader(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : EGLContext(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLShader(NativeUInt Ident, int AHelpContext)/* overload */ : EGLContext(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLShader(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : EGLContext(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLShader(System::NativeUInt Ident, int AHelpContext)/* overload */ : EGLContext(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLShader(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : EGLContext(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLShader(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : EGLContext(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLShader(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : EGLContext(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLShader(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : EGLContext(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLShader(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : EGLContext(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLShader() { }
 	
 };

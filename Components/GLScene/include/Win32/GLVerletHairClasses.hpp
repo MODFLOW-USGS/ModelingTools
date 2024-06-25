@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLVerletHairClasses.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLVerletHairClasses.pas' rev: 36.00 (Windows)
 
 #ifndef GlverlethairclassesHPP
 #define GlverlethairclassesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -53,11 +55,11 @@ private:
 	void __fastcall SetStiffness(const TVHStiffnessSet Value);
 	
 public:
-	void __fastcall BuildHair(const Glvectortypes::TVector3f &AAnchorPosition, const Glvectortypes::TVector3f &AHairDirection);
+	void __fastcall BuildHair(const Glvectorgeometry::TAffineVector &AAnchorPosition, const Glvectorgeometry::TAffineVector &AHairDirection);
 	void __fastcall BuildStiffness();
 	void __fastcall ClearStiffness();
 	void __fastcall Clear();
-	__fastcall TGLVerletHair(Glverlettypes::TGLVerletWorld* const AVerletWorld, const float ARootDepth, const float AHairLength, int ALinkCount, const Glvectortypes::TVector3f &AAnchorPosition, const Glvectortypes::TVector3f &AHairDirection, const TVHStiffnessSet AStiffness);
+	__fastcall TGLVerletHair(Glverlettypes::TGLVerletWorld* const AVerletWorld, const float ARootDepth, const float AHairLength, int ALinkCount, const Glvectorgeometry::TAffineVector &AAnchorPosition, const Glvectorgeometry::TAffineVector &AHairDirection, const TVHStiffnessSet AStiffness);
 	__fastcall virtual ~TGLVerletHair();
 	__property Glverlettypes::TVerletNodeList* NodeList = {read=FNodeList};
 	__property Glverlettypes::TGLVerletWorld* VerletWorld = {read=FVerletWorld};

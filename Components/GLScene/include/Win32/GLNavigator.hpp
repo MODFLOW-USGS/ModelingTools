@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLNavigator.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLNavigator.pas' rev: 36.00 (Windows)
 
 #ifndef GlnavigatorHPP
 #define GlnavigatorHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -39,8 +41,8 @@ class PASCALIMPLEMENTATION TGLNavigator : public System::Classes::TComponent
 	
 private:
 	Glscene::TGLBaseSceneObject* FObject;
-	Glvectortypes::TVector4f FVirtualRight;
-	Glcoordinates::TGLCoordinates3* FVirtualUp;
+	Glvectorgeometry::TVector FVirtualRight;
+	Glcoordinates::TGLCoordinates* FVirtualUp;
 	bool FUseVirtualUp;
 	bool FAutoUpdateObject;
 	float FMaxAngle;
@@ -55,8 +57,8 @@ protected:
 	virtual void __fastcall Notification(System::Classes::TComponent* AComponent, System::Classes::TOperation Operation);
 	virtual void __fastcall SetObject(Glscene::TGLBaseSceneObject* NewObject);
 	void __fastcall SetUseVirtualUp(bool UseIt);
-	void __fastcall SetVirtualUp(Glcoordinates::TGLCoordinates3* Up);
-	Glvectortypes::TVector4f __fastcall CalcRight();
+	void __fastcall SetVirtualUp(Glcoordinates::TGLCoordinates* Up);
+	Glvectorgeometry::TVector __fastcall CalcRight();
 	
 public:
 	__fastcall virtual TGLNavigator(System::Classes::TComponent* AOwner);
@@ -76,7 +78,7 @@ public:
 __published:
 	__property bool MoveUpWhenMovingForward = {read=FMoveUpWhenMovingForward, write=FMoveUpWhenMovingForward, default=0};
 	__property bool InvertHorizontalSteeringWhenUpsideDown = {read=FInvertHorizontalSteeringWhenUpsideDown, write=FInvertHorizontalSteeringWhenUpsideDown, default=0};
-	__property Glcoordinates::TGLCoordinates3* VirtualUp = {read=FVirtualUp, write=SetVirtualUp};
+	__property Glcoordinates::TGLCoordinates* VirtualUp = {read=FVirtualUp, write=SetVirtualUp};
 	__property Glscene::TGLBaseSceneObject* MovingObject = {read=FObject, write=SetObject};
 	__property bool UseVirtualUp = {read=FUseVirtualUp, write=SetUseVirtualUp, default=0};
 	__property bool AutoUpdateObject = {read=FAutoUpdateObject, write=FAutoUpdateObject, default=0};

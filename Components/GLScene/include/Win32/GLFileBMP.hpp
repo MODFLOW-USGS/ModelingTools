@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFileBMP.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFileBMP.pas' rev: 36.00 (Windows)
 
 #ifndef GlfilebmpHPP
 #define GlfilebmpHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -36,19 +38,19 @@ class PASCALIMPLEMENTATION TGLBMPImage : public Glgraphics::TGLBaseImage
 	
 private:
 	bool FTopDown;
-	unsigned RedMask;
-	unsigned GreenMask;
-	unsigned BlueMask;
+	System::LongWord RedMask;
+	System::LongWord GreenMask;
+	System::LongWord BlueMask;
 	System::Int8 RedShift;
 	System::Int8 GreenShift;
 	System::Int8 BlueShift;
-	System::Sysutils::TByteArray *FLineBuffer;
+	System::Sysutils::PByteArray FLineBuffer;
 	int FReadSize;
 	int FDeltaX;
 	int FDeltaY;
 	System::Int8 __fastcall CountBits(System::Byte Value);
-	System::Int8 __fastcall ShiftCount(unsigned Mask);
-	Glgraphics::TPixel32 __fastcall ExpandColor(unsigned Value);
+	System::Int8 __fastcall ShiftCount(System::LongWord Mask);
+	Glgraphics::TPixel32 __fastcall ExpandColor(System::LongWord Value);
 	void __fastcall ExpandRLE4ScanLine(int Row, System::Classes::TStream* Stream);
 	void __fastcall ExpandRLE8ScanLine(int Row, System::Classes::TStream* Stream);
 	int __fastcall Monochrome(int N);

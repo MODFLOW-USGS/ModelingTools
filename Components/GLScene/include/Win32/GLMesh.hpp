@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLMesh.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLMesh.pas' rev: 36.00 (Windows)
 
 #ifndef GlmeshHPP
 #define GlmeshHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -47,9 +49,9 @@ struct DECLSPEC_DRECORD TGLVertexData
 {
 public:
 	Glvectorgeometry::TTexPoint textCoord;
-	Glvectortypes::TVector4f color;
-	Glvectortypes::TVector3f normal;
-	Glvectortypes::TVector3f coord;
+	Glvectorgeometry::TVector color;
+	Glvectorgeometry::TAffineVector normal;
+	Glvectorgeometry::TVertex coord;
 };
 #pragma pack(pop)
 
@@ -68,11 +70,11 @@ public:
 	TGLVertexData operator[](int index) { return this->Vertices[index]; }
 	
 private:
-	TGLVertexDataArray *FValues;
+	PGLVertexDataArray FValues;
 	int FCount;
 	int FCapacity;
 	int FGrowth;
-	TGLVertexDataArray *FLockedOldValues;
+	PGLVertexDataArray FLockedOldValues;
 	
 protected:
 	void __fastcall SetCapacity(const int val);
@@ -80,19 +82,19 @@ protected:
 	void __fastcall Grow();
 	void __fastcall SetVertices(int index, const TGLVertexData &val);
 	TGLVertexData __fastcall GetVertices(int index);
-	void __fastcall SetVertexCoord(int index, const Glvectortypes::TVector3f &val);
-	Glvectortypes::TVector3f __fastcall GetVertexCoord(int index);
-	void __fastcall SetVertexNormal(int index, const Glvectortypes::TVector3f &val);
-	Glvectortypes::TVector3f __fastcall GetVertexNormal(int index);
+	void __fastcall SetVertexCoord(int index, const Glvectorgeometry::TAffineVector &val);
+	Glvectorgeometry::TAffineVector __fastcall GetVertexCoord(int index);
+	void __fastcall SetVertexNormal(int index, const Glvectorgeometry::TAffineVector &val);
+	Glvectorgeometry::TAffineVector __fastcall GetVertexNormal(int index);
 	void __fastcall SetVertexTexCoord(int index, const Glvectorgeometry::TTexPoint &val);
 	Glvectorgeometry::TTexPoint __fastcall GetVertexTexCoord(int index);
 	void __fastcall SetVertexColor(int index, const Glvectortypes::TVector4f &val);
 	Glvectortypes::TVector4f __fastcall GetVertexColor(int index);
-	System::PSingle __fastcall GetFirstEntry();
-	System::PSingle __fastcall GetFirstColor();
-	System::PSingle __fastcall GetFirstNormal();
-	System::PSingle __fastcall GetFirstVertex();
-	System::PSingle __fastcall GetFirstTexPoint();
+	Opengltokens::PGLfloat __fastcall GetFirstEntry();
+	Opengltokens::PGLfloat __fastcall GetFirstColor();
+	Opengltokens::PGLfloat __fastcall GetFirstNormal();
+	Opengltokens::PGLfloat __fastcall GetFirstVertex();
+	Opengltokens::PGLfloat __fastcall GetFirstTexPoint();
 	bool __fastcall GetLocked();
 	void __fastcall SetLocked(bool val);
 	
@@ -102,30 +104,30 @@ public:
 	TGLVertexList* __fastcall CreateInterpolatedCoords(TGLVertexList* list2, float lerpFactor);
 	void __fastcall AddVertex(const TGLVertexData &vertexData)/* overload */;
 	void __fastcall AddVertex3(const TGLVertexData &vd1, const TGLVertexData &vd2, const TGLVertexData &vd3)/* overload */;
-	void __fastcall AddVertex(const Glvectortypes::TVector3f &aVertex, const Glvectortypes::TVector3f &aNormal, const Glvectortypes::TVector4f &aColor, const Glvectorgeometry::TTexPoint &aTexPoint)/* overload */;
-	void __fastcall AddVertex(const Glvectortypes::TVector3f &vertex, const Glvectortypes::TVector3f &normal, const Glvectortypes::TVector4f &color)/* overload */;
-	void __fastcall AddVertex(const Glvectortypes::TVector3f &vertex, const Glvectortypes::TVector3f &normal)/* overload */;
+	void __fastcall AddVertex(const Glvectorgeometry::TVertex &aVertex, const Glvectorgeometry::TAffineVector &aNormal, const Glcolor::TColorVector &aColor, const Glvectorgeometry::TTexPoint &aTexPoint)/* overload */;
+	void __fastcall AddVertex(const Glvectorgeometry::TVertex &vertex, const Glvectorgeometry::TAffineVector &normal, const Glcolor::TColorVector &color)/* overload */;
+	void __fastcall AddVertex(const Glvectorgeometry::TVertex &vertex, const Glvectorgeometry::TAffineVector &normal)/* overload */;
 	void __fastcall DuplicateVertex(int index);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	void __fastcall Clear();
 	__property TGLVertexData Vertices[int index] = {read=GetVertices, write=SetVertices/*, default*/};
-	__property Glvectortypes::TVector3f VertexCoord[int index] = {read=GetVertexCoord, write=SetVertexCoord};
-	__property Glvectortypes::TVector3f VertexNormal[int index] = {read=GetVertexNormal, write=SetVertexNormal};
+	__property Glvectorgeometry::TAffineVector VertexCoord[int index] = {read=GetVertexCoord, write=SetVertexCoord};
+	__property Glvectorgeometry::TAffineVector VertexNormal[int index] = {read=GetVertexNormal, write=SetVertexNormal};
 	__property Glvectorgeometry::TTexPoint VertexTexCoord[int index] = {read=GetVertexTexCoord, write=SetVertexTexCoord};
 	__property Glvectortypes::TVector4f VertexColor[int index] = {read=GetVertexColor, write=SetVertexColor};
 	__property int Count = {read=FCount, nodefault};
 	__property int Capacity = {read=FCapacity, write=SetCapacity, nodefault};
 	__property int Growth = {read=FGrowth, write=SetGrowth, nodefault};
-	Glvectortypes::TVector3f __fastcall SumVertexCoords();
-	void __fastcall GetExtents(Glvectortypes::TVector3f &min, Glvectortypes::TVector3f &max);
+	Glvectorgeometry::TAffineVector __fastcall SumVertexCoords();
+	void __fastcall GetExtents(Glvectorgeometry::TAffineVector &min, Glvectorgeometry::TAffineVector &max);
 	void __fastcall NormalizeNormals();
-	void __fastcall Translate(const Glvectortypes::TVector3f &v);
+	void __fastcall Translate(const Glvectorgeometry::TAffineVector &v);
 	void __fastcall DefineOpenGLArrays();
-	__property System::PSingle FirstColor = {read=GetFirstColor};
-	__property System::PSingle FirstEntry = {read=GetFirstEntry};
-	__property System::PSingle FirstNormal = {read=GetFirstNormal};
-	__property System::PSingle FirstVertex = {read=GetFirstVertex};
-	__property System::PSingle FirstTexPoint = {read=GetFirstTexPoint};
+	__property Opengltokens::PGLfloat FirstColor = {read=GetFirstColor};
+	__property Opengltokens::PGLfloat FirstEntry = {read=GetFirstEntry};
+	__property Opengltokens::PGLfloat FirstNormal = {read=GetFirstNormal};
+	__property Opengltokens::PGLfloat FirstVertex = {read=GetFirstVertex};
+	__property Opengltokens::PGLfloat FirstTexPoint = {read=GetFirstTexPoint};
 	__property bool Locked = {read=GetLocked, write=SetLocked, nodefault};
 	void __fastcall EnterLockSection();
 	void __fastcall LeaveLockSection();
@@ -140,7 +142,7 @@ private:
 	TGLVertexList* FVertices;
 	TGLMeshMode FMode;
 	TGLVertexMode FVertexMode;
-	Glvectortypes::TVector4f FAxisAlignedDimensionsCache;
+	Glvectorgeometry::TVector FAxisAlignedDimensionsCache;
 	
 protected:
 	void __fastcall SetMode(TGLMeshMode AValue);
@@ -155,7 +157,7 @@ public:
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	void __fastcall CalcNormals(Glstate::TFaceWinding Frontface);
 	__property TGLVertexList* Vertices = {read=FVertices, write=SetVertices};
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
 	virtual void __fastcall StructureChanged();
 	float __fastcall Length();
 	float __fastcall Area();

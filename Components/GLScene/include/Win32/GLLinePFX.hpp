@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLLinePFX.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLLinePFX.pas' rev: 36.00 (Windows)
 
 #ifndef GllinepfxHPP
 #define GllinepfxHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -40,13 +42,13 @@ class PASCALIMPLEMENTATION TGLLineParticle : public Glparticlefx::TGLParticle
 	typedef Glparticlefx::TGLParticle inherited;
 	
 private:
-	Glvectortypes::TVector3f FDirection;
+	Glvectorgeometry::TAffineVector FDirection;
 	float FLength;
 	
 public:
 	DYNAMIC void __fastcall WriteToFiler(Glpersistentclasses::TVirtualWriter* writer);
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* reader);
-	__property Glvectortypes::TVector3f Direction = {read=FDirection, write=FDirection};
+	__property Glvectorgeometry::TAffineVector Direction = {read=FDirection, write=FDirection};
 	__property float Length = {read=FLength, write=FLength};
 public:
 	/* TGLParticle.Create */ inline __fastcall virtual TGLLineParticle() : Glparticlefx::TGLParticle() { }
@@ -63,10 +65,10 @@ class PASCALIMPLEMENTATION TGLLinePFXManager : public Glparticlefx::TGLLifeColor
 	typedef Glparticlefx::TGLLifeColoredPFXManager inherited;
 	
 private:
-	Glvectortypes::TVector3f Fvx;
-	Glvectortypes::TVector3f Fvy;
-	Glvectortypes::TVector3f FNvx;
-	Glvectortypes::TVector3f FNvy;
+	Glvectorgeometry::TAffineVector Fvx;
+	Glvectorgeometry::TAffineVector Fvy;
+	Glvectorgeometry::TAffineVector FNvx;
+	Glvectorgeometry::TAffineVector FNvy;
 	float FDefaultLength;
 	
 protected:

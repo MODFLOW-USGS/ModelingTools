@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Math.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Math.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_mathHPP
 #define Gr32_mathHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -33,13 +35,13 @@ extern DELPHI_PACKAGE Gr32::TFixed __fastcall FixedSqr(Gr32::TFixed Value);
 extern DELPHI_PACKAGE Gr32::TFixed __fastcall FixedSqrtLP(Gr32::TFixed Value);
 extern DELPHI_PACKAGE Gr32::TFixed __fastcall FixedSqrtHP(Gr32::TFixed Value);
 extern DELPHI_PACKAGE Gr32::TFixed __fastcall FixedCombine(Gr32::TFixed W, Gr32::TFixed X, Gr32::TFixed Y);
-extern DELPHI_PACKAGE void __fastcall SinCos(const float Theta, /* out */ float &Sin, /* out */ float &Cos)/* overload */;
+extern DELPHI_PACKAGE void __fastcall SinCos(const Gr32::TFloat Theta, /* out */ Gr32::TFloat &Sin, /* out */ Gr32::TFloat &Cos)/* overload */;
 extern DELPHI_PACKAGE void __fastcall SinCos(const float Theta, const float Radius, /* out */ float &Sin, /* out */ float &Cos)/* overload */;
-extern DELPHI_PACKAGE float __fastcall Hypot(const float X, const float Y)/* overload */;
+extern DELPHI_PACKAGE Gr32::TFloat __fastcall Hypot(const Gr32::TFloat X, const Gr32::TFloat Y)/* overload */;
 extern DELPHI_PACKAGE int __fastcall Hypot(const int X, const int Y)/* overload */;
-extern DELPHI_PACKAGE float __fastcall FastSqrt(const float Value);
-extern DELPHI_PACKAGE float __fastcall FastSqrtBab1(const float Value);
-extern DELPHI_PACKAGE float __fastcall FastSqrtBab2(const float Value);
+extern DELPHI_PACKAGE Gr32::TFloat __fastcall FastSqrt(const Gr32::TFloat Value);
+extern DELPHI_PACKAGE Gr32::TFloat __fastcall FastSqrtBab1(const Gr32::TFloat Value);
+extern DELPHI_PACKAGE Gr32::TFloat __fastcall FastSqrtBab2(const Gr32::TFloat Value);
 extern DELPHI_PACKAGE float __fastcall FastInvSqrt(const float Value)/* overload */;
 extern DELPHI_PACKAGE int __fastcall MulDiv(int Multiplicand, int Multiplier, int Divisor);
 extern DELPHI_PACKAGE bool __fastcall IsPowerOf2(int Value);

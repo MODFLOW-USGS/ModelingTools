@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLParticleFX.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLParticleFX.pas' rev: 36.00 (Windows)
 
 #ifndef GlparticlefxHPP
 #define GlparticlefxHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -70,8 +72,8 @@ private:
 	int FID;
 	int FTag;
 	TGLParticleFXManager* FManager;
-	Glvectortypes::TVector3f FPosition;
-	Glvectortypes::TVector3f FVelocity;
+	Glvectorgeometry::TAffineVector FPosition;
+	Glvectorgeometry::TAffineVector FVelocity;
 	float FRotation;
 	double FCreationTime;
 	float FEffectScale;
@@ -87,8 +89,8 @@ public:
 	DYNAMIC void __fastcall ReadFromFiler(Glpersistentclasses::TVirtualReader* reader);
 	__property TGLParticleFXManager* Manager = {read=FManager, write=FManager};
 	__property int ID = {read=FID, nodefault};
-	__property Glvectortypes::TVector3f Position = {read=FPosition, write=FPosition};
-	__property Glvectortypes::TVector3f Velocity = {read=FVelocity, write=FVelocity};
+	__property Glvectorgeometry::TAffineVector Position = {read=FPosition, write=FPosition};
+	__property Glvectorgeometry::TAffineVector Velocity = {read=FVelocity, write=FVelocity};
 	__property double CreationTime = {read=FCreationTime, write=FCreationTime};
 	__property float PosX = {read=GetPosition, write=WritePosition, index=0};
 	__property float PosY = {read=GetPosition, write=WritePosition, index=1};
@@ -120,7 +122,7 @@ public:
 private:
 	TGLParticleFXManager* FOwner;
 	Glpersistentclasses::TPersistentObjectList* FItemList;
-	TGLParticleArray *FDirectList;
+	PGLParticleArray FDirectList;
 	
 protected:
 	TGLParticle* __fastcall GetItems(int index);
@@ -251,8 +253,8 @@ struct DECLSPEC_DRECORD TPFXRegion
 public:
 	int count;
 	int capacity;
-	TParticleReferenceArray *particleRef;
-	TFXPointerList *particleOrder;
+	PParticleReferenceArray particleRef;
+	PFXPointerList particleOrder;
 };
 
 
@@ -314,9 +316,9 @@ class PASCALIMPLEMENTATION TGLSourcePFXEffect : public TGLParticleFXEffect
 	typedef TGLParticleFXEffect inherited;
 	
 private:
-	Glcoordinates::TGLCoordinates3* FInitialVelocity;
-	Glcoordinates::TGLCoordinates3* FInitialPosition;
-	Glcoordinates::TGLCoordinates3* FPositionDispersionRange;
+	Glcoordinates::TGLCoordinates* FInitialVelocity;
+	Glcoordinates::TGLCoordinates* FInitialPosition;
+	Glcoordinates::TGLCoordinates* FPositionDispersionRange;
 	float FVelocityDispersion;
 	float FPositionDispersion;
 	float FParticleInterval;
@@ -329,13 +331,13 @@ private:
 	float FRotationDispersion;
 	
 protected:
-	void __fastcall SetInitialVelocity(Glcoordinates::TGLCoordinates3* const val);
-	void __fastcall SetInitialPosition(Glcoordinates::TGLCoordinates3* const val);
-	void __fastcall SetPositionDispersionRange(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetInitialVelocity(Glcoordinates::TGLCoordinates* const val);
+	void __fastcall SetInitialPosition(Glcoordinates::TGLCoordinates* const val);
+	void __fastcall SetPositionDispersionRange(Glcoordinates::TGLCoordinates* const val);
 	void __fastcall SetParticleInterval(const float val);
 	virtual void __fastcall WriteToFiler(System::Classes::TWriter* writer);
 	virtual void __fastcall ReadFromFiler(System::Classes::TReader* reader);
-	Glvectortypes::TVector3f __fastcall ParticleAbsoluteInitialPos();
+	Glvectorgeometry::TAffineVector __fastcall ParticleAbsoluteInitialPos();
 	
 public:
 	__fastcall virtual TGLSourcePFXEffect(Glxcollection::TXCollection* aOwner);
@@ -347,11 +349,11 @@ public:
 	void __fastcall RingExplosion(double time, float minInitialSpeed, float maxInitialSpeed, int nbParticles);
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* InitialVelocity = {read=FInitialVelocity, write=SetInitialVelocity};
+	__property Glcoordinates::TGLCoordinates* InitialVelocity = {read=FInitialVelocity, write=SetInitialVelocity};
 	__property float VelocityDispersion = {read=FVelocityDispersion, write=FVelocityDispersion};
-	__property Glcoordinates::TGLCoordinates3* InitialPosition = {read=FInitialPosition, write=SetInitialPosition};
+	__property Glcoordinates::TGLCoordinates* InitialPosition = {read=FInitialPosition, write=SetInitialPosition};
 	__property float PositionDispersion = {read=FPositionDispersion, write=FPositionDispersion};
-	__property Glcoordinates::TGLCoordinates3* PositionDispersionRange = {read=FPositionDispersionRange, write=SetPositionDispersionRange};
+	__property Glcoordinates::TGLCoordinates* PositionDispersionRange = {read=FPositionDispersionRange, write=SetPositionDispersionRange};
 	__property float ParticleInterval = {read=FParticleInterval, write=SetParticleInterval};
 	__property TGLSourcePFXVelocityMode VelocityMode = {read=FVelocityMode, write=FVelocityMode, default=0};
 	__property TGLSourcePFXPositionMode PositionMode = {read=FPositionMode, write=FPositionMode, default=0};
@@ -367,12 +369,12 @@ class PASCALIMPLEMENTATION TGLDynamicPFXManager : public TGLParticleFXManager
 	typedef TGLParticleFXManager inherited;
 	
 private:
-	Glcoordinates::TGLCoordinates3* FAcceleration;
+	Glcoordinates::TGLCoordinates* FAcceleration;
 	float FFriction;
 	double FCurrentTime;
 	
 protected:
-	void __fastcall SetAcceleration(Glcoordinates::TGLCoordinates3* const val);
+	void __fastcall SetAcceleration(Glcoordinates::TGLCoordinates* const val);
 	virtual float __fastcall MaxParticleAge() = 0 ;
 	__property double CurrentTime = {read=FCurrentTime};
 	
@@ -382,7 +384,7 @@ public:
 	virtual void __fastcall DoProgress(const Glbaseclasses::TGLProgressTimes &progressTime);
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* Acceleration = {read=FAcceleration, write=SetAcceleration};
+	__property Glcoordinates::TGLCoordinates* Acceleration = {read=FAcceleration, write=SetAcceleration};
 	__property float Friction = {read=FFriction, write=FFriction};
 };
 
@@ -476,12 +478,12 @@ protected:
 	virtual void __fastcall InitializeRendering(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall FinalizeRendering(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual float __fastcall MaxParticleAge();
-	void __fastcall ComputeColors(float &lifeTime, Glvectortypes::TVector4f &inner, Glvectortypes::TVector4f &outer);
-	void __fastcall ComputeInnerColor(float &lifeTime, Glvectortypes::TVector4f &inner);
-	void __fastcall ComputeOuterColor(float &lifeTime, Glvectortypes::TVector4f &outer);
+	void __fastcall ComputeColors(float &lifeTime, Glcolor::TColorVector &inner, Glcolor::TColorVector &outer);
+	void __fastcall ComputeInnerColor(float &lifeTime, Glcolor::TColorVector &inner);
+	void __fastcall ComputeOuterColor(float &lifeTime, Glcolor::TColorVector &outer);
 	bool __fastcall ComputeSizeScale(float &lifeTime, float &sizeScale);
 	bool __fastcall ComputeRotateAngle(float &lifeTime, float &rotateAngle);
-	void __fastcall RotateVertexBuf(Glvectorlists::TAffineVectorList* buf, float lifeTime, const Glvectortypes::TVector3f &axis, float offsetAngle);
+	void __fastcall RotateVertexBuf(Glvectorlists::TAffineVectorList* buf, float lifeTime, const Glvectorgeometry::TAffineVector &axis, float offsetAngle);
 	
 public:
 	__fastcall virtual TGLLifeColoredPFXManager(System::Classes::TComponent* aOwner);
@@ -556,8 +558,8 @@ class PASCALIMPLEMENTATION TGLPolygonPFXManager : public TGLLifeColoredPFXManage
 	
 private:
 	int FNbSides;
-	Glvectortypes::TVector3f Fvx;
-	Glvectortypes::TVector3f Fvy;
+	Glvectorgeometry::TAffineVector Fvx;
+	Glvectorgeometry::TAffineVector Fvy;
 	Glvectorlists::TAffineVectorList* FVertices;
 	Glvectorlists::TAffineVectorList* FVertBuf;
 	
@@ -593,9 +595,9 @@ class PASCALIMPLEMENTATION TGLBaseSpritePFXManager : public TGLLifeColoredPFXMan
 	
 private:
 	Glcontext::TGLTextureHandle* FTexHandle;
-	Glvectortypes::TVector3f Fvx;
-	Glvectortypes::TVector3f Fvy;
-	Glvectortypes::TVector3f Fvz;
+	Glvectorgeometry::TAffineVector Fvx;
+	Glvectorgeometry::TAffineVector Fvy;
+	Glvectorgeometry::TAffineVector Fvz;
 	Glvectorlists::TAffineVectorList* FVertices;
 	Glvectorlists::TAffineVectorList* FVertBuf;
 	float FAspectRatio;
@@ -605,7 +607,7 @@ private:
 	TSpriteColorMode FColorMode;
 	
 protected:
-	virtual void __fastcall PrepareImage(Glgraphics::TGLImage* bmp32, int &texFormat) = 0 ;
+	virtual void __fastcall PrepareImage(Glgraphics::TGLBitmap32* bmp32, int &texFormat) = 0 ;
 	void __fastcall BindTexture(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall SetSpritesPerTexture(const TSpritesPerTexture val);
 	void __fastcall SetColorMode(const TSpriteColorMode val);
@@ -633,7 +635,7 @@ __published:
 };
 
 
-typedef void __fastcall (__closure *TPFXPrepareTextureImageEvent)(System::TObject* Sender, Glgraphics::TGLImage* destBmp32, int &texFormat);
+typedef void __fastcall (__closure *TPFXPrepareTextureImageEvent)(System::TObject* Sender, Glgraphics::TGLBitmap32* destBmp32, int &texFormat);
 
 class PASCALIMPLEMENTATION TGLCustomSpritePFXManager : public TGLBaseSpritePFXManager
 {
@@ -643,7 +645,7 @@ private:
 	TPFXPrepareTextureImageEvent FOnPrepareTextureImage;
 	
 protected:
-	virtual void __fastcall PrepareImage(Glgraphics::TGLImage* bmp32, int &texFormat);
+	virtual void __fastcall PrepareImage(Glgraphics::TGLBitmap32* bmp32, int &texFormat);
 	
 public:
 	__fastcall virtual TGLCustomSpritePFXManager(System::Classes::TComponent* aOwner);
@@ -668,7 +670,7 @@ private:
 	int FTexMapSize;
 	
 protected:
-	virtual void __fastcall PrepareImage(Glgraphics::TGLImage* bmp32, int &texFormat);
+	virtual void __fastcall PrepareImage(Glgraphics::TGLBitmap32* bmp32, int &texFormat);
 	void __fastcall SetTexMapSize(const int val);
 	
 public:

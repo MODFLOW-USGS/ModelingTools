@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Containers.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Containers.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_containersHPP
 #define Gr32_containersHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -50,8 +52,8 @@ typedef TPointerBucketItem *PPointerBucketItem;
 struct DECLSPEC_DRECORD TPointerBucketItem
 {
 public:
-	void *Item;
-	void *Data;
+	PItem Item;
+	PData Data;
 };
 
 
@@ -73,29 +75,29 @@ class PASCALIMPLEMENTATION TPointerMap : public System::TObject
 	typedef System::TObject inherited;
 	
 public:
-	void * operator[](void * Item) { return this->Data[Item]; }
+	PData operator[](PItem Item) { return this->Data[Item]; }
 	
 private:
 	TPointerBucketArray FBuckets;
 	int FCount;
 	
 protected:
-	void * __fastcall GetData(void * Item);
-	void __fastcall SetData(void * Item, const void * Data);
+	PData __fastcall GetData(PItem Item);
+	void __fastcall SetData(PItem Item, const PData Data);
 	bool __fastcall Exists(void * Item, /* out */ int &BucketIndex, /* out */ int &ItemIndex);
-	virtual void * __fastcall Delete(int BucketIndex, int ItemIndex);
+	virtual PData __fastcall Delete(int BucketIndex, int ItemIndex);
 	
 public:
 	__fastcall virtual ~TPointerMap();
-	PPData __fastcall Add(void * NewItem)/* overload */;
-	PPData __fastcall Add(void * NewItem, /* out */ bool &IsNew)/* overload */;
-	PPData __fastcall Add(void * NewItem, void * NewData)/* overload */;
-	PPData __fastcall Add(void * NewItem, void * NewData, /* out */ bool &IsNew)/* overload */;
-	void * __fastcall Remove(void * Item);
+	PPData __fastcall Add(PItem NewItem)/* overload */;
+	PPData __fastcall Add(PItem NewItem, /* out */ bool &IsNew)/* overload */;
+	PPData __fastcall Add(PItem NewItem, PData NewData)/* overload */;
+	PPData __fastcall Add(PItem NewItem, PData NewData, /* out */ bool &IsNew)/* overload */;
+	PData __fastcall Remove(PItem Item);
 	void __fastcall Clear();
-	bool __fastcall Contains(void * Item);
-	bool __fastcall Find(void * Item, /* out */ PPData &Data);
-	__property void * Data[void * Item] = {read=GetData, write=SetData/*, default*/};
+	bool __fastcall Contains(PItem Item);
+	bool __fastcall Find(PItem Item, /* out */ PPData &Data);
+	__property PData Data[PItem Item] = {read=GetData, write=SetData/*, default*/};
 	__property int Count = {read=FCount, nodefault};
 public:
 	/* TObject.Create */ inline __fastcall TPointerMap() : System::TObject() { }
@@ -111,16 +113,16 @@ class PASCALIMPLEMENTATION TPointerMapIterator : public System::TObject
 	
 private:
 	TPointerMap* FSrcPointerMap;
-	void *FItem;
-	void *FData;
+	PItem FItem;
+	PData FData;
 	int FCurBucketIndex;
 	int FCurItemIndex;
 	
 public:
 	__fastcall TPointerMapIterator(TPointerMap* SrcPointerMap);
 	bool __fastcall Next();
-	__property void * Item = {read=FItem};
-	__property void * Data = {read=FData};
+	__property PItem Item = {read=FItem};
+	__property PData Data = {read=FData};
 public:
 	/* TObject.Destroy */ inline __fastcall virtual ~TPointerMapIterator() { }
 	
@@ -138,33 +140,33 @@ class PASCALIMPLEMENTATION TRectList : public System::TObject
 	typedef System::TObject inherited;
 	
 public:
-	System::Types::PRect operator[](int Index) { return this->Items[Index]; }
+	Gr32::PRect operator[](int Index) { return this->Items[Index]; }
 	
 private:
-	TPolyRects *FList;
+	PPolyRects FList;
 	int FCount;
 	int FCapacity;
 	
 protected:
-	System::Types::PRect __fastcall Get(int Index);
+	Gr32::PRect __fastcall Get(int Index);
 	virtual void __fastcall Grow();
 	void __fastcall SetCapacity(int NewCapacity);
 	void __fastcall SetCount(int NewCount);
 	
 public:
 	__fastcall virtual ~TRectList();
-	int __fastcall Add(const System::Types::TRect &Rect);
+	int __fastcall Add(const Gr32::TRect &Rect);
 	virtual void __fastcall Clear();
 	void __fastcall Delete(int Index);
 	void __fastcall Exchange(int Index1, int Index2);
-	int __fastcall IndexOf(const System::Types::TRect &Rect);
-	void __fastcall Insert(int Index, const System::Types::TRect &Rect);
+	int __fastcall IndexOf(const Gr32::TRect &Rect);
+	void __fastcall Insert(int Index, const Gr32::TRect &Rect);
 	void __fastcall Move(int CurIndex, int NewIndex);
-	int __fastcall Remove(const System::Types::TRect &Rect);
+	int __fastcall Remove(const Gr32::TRect &Rect);
 	void __fastcall Pack();
 	__property int Capacity = {read=FCapacity, write=SetCapacity, nodefault};
 	__property int Count = {read=FCount, write=SetCount, nodefault};
-	__property System::Types::PRect Items[int Index] = {read=Get/*, default*/};
+	__property Gr32::PRect Items[int Index] = {read=Get/*, default*/};
 	__property PPolyRects List = {read=FList};
 public:
 	/* TObject.Create */ inline __fastcall TRectList() : System::TObject() { }
@@ -211,8 +213,8 @@ typedef TLinkedNode *PLinkedNode;
 struct DECLSPEC_DRECORD TLinkedNode
 {
 public:
-	TLinkedNode *Prev;
-	TLinkedNode *Next;
+	PLinkedNode Prev;
+	PLinkedNode Next;
 	void *Data;
 };
 
@@ -227,8 +229,8 @@ class PASCALIMPLEMENTATION TLinkedList : public System::TObject
 	
 private:
 	int FCount;
-	TLinkedNode *FHead;
-	TLinkedNode *FTail;
+	PLinkedNode FHead;
+	PLinkedNode FTail;
 	TFreeDataEvent FOnFreeData;
 	
 protected:

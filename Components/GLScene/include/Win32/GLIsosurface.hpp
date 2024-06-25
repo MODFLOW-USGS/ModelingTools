@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLIsosurface.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLIsosurface.pas' rev: 36.00 (Windows)
 
 #ifndef GlisosurfaceHPP
 #define GlisosurfaceHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -45,19 +47,19 @@ class PASCALIMPLEMENTATION TGLMarchingCube : public System::TObject
 	typedef System::TObject inherited;
 	
 private:
-	float FIsoValue;
-	Glvectorgeometry::TIntegerVector *PVertsX;
-	Glvectorgeometry::TIntegerVector *PVertsY;
-	Glvectorgeometry::TIntegerVector *PVertsZ;
+	Gltypes::TxScalarValue FIsoValue;
+	Glvectorgeometry::PIntegerArray PVertsX;
+	Glvectorgeometry::PIntegerArray PVertsY;
+	Glvectorgeometry::PIntegerArray PVertsZ;
 	int _Nverts;
 	int _Ntrigs;
 	int _Sverts;
 	int _Strigs;
-	Gltypes::TxVertexArray *PVertices;
-	Gltypes::TxTriangleArray *PTriangles;
-	unsigned _i;
-	unsigned _j;
-	unsigned _k;
+	Gltypes::PxVertexArray PVertices;
+	Gltypes::PxTriangleArray PTriangles;
+	System::LongWord _i;
+	System::LongWord _j;
+	System::LongWord _k;
 	System::StaticArray<Gltypes::TxVoxel, 8> _Cube;
 	System::Byte _lut_entry;
 	void __fastcall Init_temps();
@@ -82,10 +84,10 @@ protected:
 	float FStepX;
 	float FStepY;
 	float FStepZ;
-	Gltypes::TxVoxelData *VoxelData;
+	Gltypes::PxVoxelData VoxelData;
 	void __fastcall Process_cube();
 	void __fastcall Compute_Intersection_Points();
-	void __fastcall Add_Triangle(int *trig, const int trig_High, System::Byte N, int v12 = 0xffffffff);
+	void __fastcall Add_Triangle(int *trig, const System::NativeInt trig_High, System::Byte N, int v12 = 0xffffffff);
 	int __fastcall Add_x_vertex();
 	int __fastcall Add_y_vertex();
 	int __fastcall Add_z_vertex();
@@ -99,8 +101,8 @@ protected:
 	void __fastcall Set_x_vert(int a_val, int i, int j, int k);
 	void __fastcall Set_y_vert(int a_val, int i, int j, int k);
 	void __fastcall Set_z_vert(int a_val, int i, int j, int k);
-	float __fastcall GetVoxelValue(int i, int j, int k);
-	void __fastcall SetVoxelValue(int i, int j, int k, float HfValue);
+	Gltypes::TxScalarValue __fastcall GetVoxelValue(int i, int j, int k);
+	void __fastcall SetVoxelValue(int i, int j, int k, Gltypes::TxScalarValue HfValue);
 	Gltypes::TxVoxel __fastcall GetVoxelData(int i, int j, int k);
 	Gltypes::PxVoxel __fastcall Voxel(int i, int j, int k);
 	virtual float __fastcall calc_u(float v1, float v2);
@@ -108,18 +110,18 @@ protected:
 public:
 	Gltypes::TxScalarField ScalarField;
 	__fastcall virtual TGLMarchingCube()/* overload */;
-	__fastcall virtual TGLMarchingCube(int SizeX, int SizeY, int SizeZ, float AIsoValue, float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)/* overload */;
+	__fastcall virtual TGLMarchingCube(int SizeX, int SizeY, int SizeZ, Gltypes::TxScalarValue AIsoValue, float xMin, float xMax, float yMin, float yMax, float zMin, float zMax)/* overload */;
 	virtual void __fastcall ReDim(int ASizeX, int ASizeY, int ASizeZ, float xMin, float xMax, float yMin, float yMax, float zMin, float zMax);
 	__fastcall virtual ~TGLMarchingCube();
 	void __fastcall Run()/* overload */;
-	void __fastcall Run(float IsoValue)/* overload */;
-	virtual bool __fastcall Internal(float AValue);
+	void __fastcall Run(Gltypes::TxScalarValue IsoValue)/* overload */;
+	virtual bool __fastcall Internal(Gltypes::TxScalarValue AValue);
 	virtual void __fastcall FillVoxelData()/* overload */;
-	virtual void __fastcall FillVoxelData(float AIsoValue, Gltypes::TxScalarField AScalarField = 0x0)/* overload */;
-	virtual void __fastcall FillVoxelData(float AIsoValue, Gltypes::TxScalarFieldInt AScalarField)/* overload */;
+	virtual void __fastcall FillVoxelData(Gltypes::TxScalarValue AIsoValue, Gltypes::TxScalarField AScalarField = 0x0)/* overload */;
+	virtual void __fastcall FillVoxelData(Gltypes::TxScalarValue AIsoValue, Gltypes::TxScalarFieldInt AScalarField)/* overload */;
 	void __fastcall CalcVertices(Glmesh::TGLVertexList* Vertices, float Alpha = 1.000000E+00f);
 	void __fastcall CalcMeshObject(Glvectorfileobjects::TMeshObject* AMeshObject, float Alpha = 1.000000E+00f);
-	__property float IsoValue = {read=FIsoValue, write=FIsoValue};
+	__property Gltypes::TxScalarValue IsoValue = {read=FIsoValue, write=FIsoValue};
 };
 
 #pragma pack(pop)
@@ -132,8 +134,8 @@ class PASCALIMPLEMENTATION TIsoSurfaceExtractor : public System::TObject
 private:
 	TSingle3DArray Data;
 	System::StaticArray<int, 3> Dimensions;
-	System::Word __fastcall BuildIndex(float *ADatavals, const int ADatavals_High, float Isovalue);
-	Glvectortypes::TVector3f __fastcall Interpolate(const Glvectortypes::TVector3f &V0, const Glvectortypes::TVector3f &V1, float &Val0, float &Val1, float &Isovalue, bool isPolished);
+	System::Word __fastcall BuildIndex(float *ADatavals, const System::NativeInt ADatavals_High, float Isovalue);
+	Glvectorgeometry::TVertex __fastcall Interpolate(const Glvectorgeometry::TAffineVector &V0, const Glvectorgeometry::TAffineVector &V1, float &Val0, float &Val1, float &Isovalue, bool isPolished);
 	
 public:
 	__fastcall TIsoSurfaceExtractor()/* overload */;
@@ -150,20 +152,20 @@ struct DECLSPEC_DRECORD Glisosurface__5
 {
 public:
 	Gltypes::TxScalarField ScalarField;
-	float IsoValue;
+	Gltypes::TxScalarValue IsoValue;
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
 static const int ALLOC_SIZE = int(0x10000);
 extern DELPHI_PACKAGE System::StaticArray<Glisosurface__5, 7> DemoScalarField;
-extern DELPHI_PACKAGE float __fastcall SFSphere(float X, float Y, float Z);
-extern DELPHI_PACKAGE float __fastcall SFToroidal(float X, float Y, float Z);
-extern DELPHI_PACKAGE float __fastcall SFDoubleTorus(float X, float Y, float Z);
-extern DELPHI_PACKAGE float __fastcall SFChmutov1(float X, float Y, float Z);
-extern DELPHI_PACKAGE float __fastcall SFChmutov2(float X, float Y, float Z);
-extern DELPHI_PACKAGE float __fastcall SFKleinBottle(float X, float Y, float Z);
-extern DELPHI_PACKAGE float __fastcall SFMinkowski(float X, float Y, float Z);
+extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFSphere(float X, float Y, float Z);
+extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFToroidal(float X, float Y, float Z);
+extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFDoubleTorus(float X, float Y, float Z);
+extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFChmutov1(float X, float Y, float Z);
+extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFChmutov2(float X, float Y, float Z);
+extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFKleinBottle(float X, float Y, float Z);
+extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFMinkowski(float X, float Y, float Z);
 }	/* namespace Glisosurface */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLISOSURFACE)
 using namespace Glisosurface;

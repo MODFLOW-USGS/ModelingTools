@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLNodes.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLNodes.pas' rev: 36.00 (Windows)
 
 #ifndef GlnodesHPP
 #define GlnodesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -42,13 +44,13 @@ class PASCALIMPLEMENTATION TGLNode : public System::Classes::TCollectionItem
 	typedef System::Classes::TCollectionItem inherited;
 	
 private:
-	Glvectortypes::TVector4f FCoords;
+	Glvectorgeometry::TVector FCoords;
 	System::TObject* FTagObject;
-	void __fastcall SetAsVector(const Glvectortypes::TVector4f &Value);
-	void __fastcall SetAsAffineVector(const Glvectortypes::TVector3f &Value);
-	Glvectortypes::TVector3f __fastcall GetAsAffineVector();
-	void __fastcall SetCoordinate(int AIndex, float AValue);
-	float __fastcall GetCoordinate(const int Index);
+	void __fastcall SetAsVector(const Glvectorgeometry::TVector &Value);
+	void __fastcall SetAsAffineVector(const Glvectorgeometry::TAffineVector &Value);
+	Glvectorgeometry::TAffineVector __fastcall GetAsAffineVector();
+	void __fastcall SetCoordinate(int AIndex, Opengltokens::TGLfloat AValue);
+	Opengltokens::TGLfloat __fastcall GetCoordinate(const int Index);
 	
 protected:
 	bool __fastcall StoreCoordinate(int AIndex);
@@ -58,16 +60,16 @@ public:
 	__fastcall virtual TGLNode(System::Classes::TCollection* ACollection);
 	__fastcall virtual ~TGLNode();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	System::PSingle __fastcall AsAddress();
-	__property Glvectortypes::TVector4f AsVector = {read=FCoords, write=SetAsVector};
-	__property Glvectortypes::TVector3f AsAffineVector = {read=GetAsAffineVector, write=SetAsAffineVector};
-	__property float W = {read=GetCoordinate, write=SetCoordinate, stored=StoreCoordinate, index=3};
+	Opengltokens::PGLfloat __fastcall AsAddress();
+	__property Glvectorgeometry::TVector AsVector = {read=FCoords, write=SetAsVector};
+	__property Glvectorgeometry::TAffineVector AsAffineVector = {read=GetAsAffineVector, write=SetAsAffineVector};
+	__property Opengltokens::TGLfloat W = {read=GetCoordinate, write=SetCoordinate, stored=StoreCoordinate, index=3};
 	__property System::TObject* TagObject = {read=FTagObject, write=FTagObject};
 	
 __published:
-	__property float X = {read=GetCoordinate, write=SetCoordinate, stored=StoreCoordinate, index=0};
-	__property float Y = {read=GetCoordinate, write=SetCoordinate, stored=StoreCoordinate, index=1};
-	__property float Z = {read=GetCoordinate, write=SetCoordinate, stored=StoreCoordinate, index=2};
+	__property Opengltokens::TGLfloat X = {read=GetCoordinate, write=SetCoordinate, stored=StoreCoordinate, index=0};
+	__property Opengltokens::TGLfloat Y = {read=GetCoordinate, write=SetCoordinate, stored=StoreCoordinate, index=1};
+	__property Opengltokens::TGLfloat Z = {read=GetCoordinate, write=SetCoordinate, stored=StoreCoordinate, index=2};
 };
 
 #pragma pack(pop)
@@ -96,16 +98,16 @@ public:
 	virtual void __fastcall NotifyChange();
 	virtual void __fastcall EndUpdate();
 	void __fastcall AddNode(Glcoordinates::TGLCustomCoordinates* const Coords)/* overload */;
-	void __fastcall AddNode(const float X, const float Y, const float Z)/* overload */;
-	void __fastcall AddNode(const Glvectortypes::TVector4f &Value)/* overload */;
-	void __fastcall AddNode(const Glvectortypes::TVector3f &Value)/* overload */;
-	void __fastcall AddXYArc(float XRadius, float YRadius, float StartAngle, float StopAngle, int NbSegments, const Glvectortypes::TVector3f &Center);
-	Glvectortypes::TVector3f __fastcall Barycenter();
-	Glvectortypes::TVector3f __fastcall Normal();
-	Glvectortypes::TVector3f __fastcall Vector(int I);
-	void __fastcall GetExtents(Glvectortypes::TVector3f &Min, Glvectortypes::TVector3f &Max);
-	void __fastcall Translate(const Glvectortypes::TVector3f &Tv);
-	void __fastcall Scale(const Glvectortypes::TVector3f &Fv)/* overload */;
+	void __fastcall AddNode(const Opengltokens::TGLfloat X, const Opengltokens::TGLfloat Y, const Opengltokens::TGLfloat Z)/* overload */;
+	void __fastcall AddNode(const Glvectorgeometry::TVector &Value)/* overload */;
+	void __fastcall AddNode(const Glvectorgeometry::TAffineVector &Value)/* overload */;
+	void __fastcall AddXYArc(float XRadius, float YRadius, float StartAngle, float StopAngle, int NbSegments, const Glvectorgeometry::TAffineVector &Center);
+	Glvectorgeometry::TAffineVector __fastcall Barycenter();
+	Glvectorgeometry::TAffineVector __fastcall Normal();
+	Glvectorgeometry::TAffineVector __fastcall Vector(int I);
+	void __fastcall GetExtents(Glvectorgeometry::TAffineVector &Min, Glvectorgeometry::TAffineVector &Max);
+	void __fastcall Translate(const Glvectorgeometry::TAffineVector &Tv);
+	void __fastcall Scale(const Glvectorgeometry::TAffineVector &Fv)/* overload */;
 	void __fastcall Scale(float F)/* overload */;
 	void __fastcall RotateAroundX(float Angle);
 	void __fastcall RotateAroundY(float Angle);

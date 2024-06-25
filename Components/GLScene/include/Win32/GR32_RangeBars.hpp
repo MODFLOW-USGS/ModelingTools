@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_RangeBars.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_RangeBars.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_rangebarsHPP
 #define Gr32_rangebarsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -57,7 +59,7 @@ class PASCALIMPLEMENTATION TArrowBar : public Vcl::Controls::TCustomControl
 	
 private:
 	TRBBackgnd FBackgnd;
-	Vcl::Forms::TFormBorderStyle FBorderStyle;
+	Vcl::Forms::TBorderStyle FBorderStyle;
 	int FButtonSize;
 	System::Uitypes::TColor FHandleColor;
 	System::Uitypes::TColor FButtoncolor;
@@ -98,16 +100,16 @@ protected:
 	int StoredY;
 	float PosBeforeDrag;
 	virtual void __fastcall DoChange();
-	virtual void __fastcall DoDrawButton(const System::Types::TRect &R, TRBDirection Direction, bool Pushed, bool Enabled, bool Hot);
-	virtual void __fastcall DoDrawHandle(const System::Types::TRect &R, bool Horz, bool Pushed, bool Hot);
-	virtual void __fastcall DoDrawTrack(const System::Types::TRect &R, TRBDirection Direction, bool Pushed, bool Enabled, bool Hot);
+	virtual void __fastcall DoDrawButton(const Gr32::TRect &R, TRBDirection Direction, bool Pushed, bool Enabled, bool Hot);
+	virtual void __fastcall DoDrawHandle(const Gr32::TRect &R, bool Horz, bool Pushed, bool Hot);
+	virtual void __fastcall DoDrawTrack(const Gr32::TRect &R, TRBDirection Direction, bool Pushed, bool Enabled, bool Hot);
 	virtual bool __fastcall DrawEnabled();
 	int __fastcall GetBorderSize();
-	virtual System::Types::TRect __fastcall GetHandleRect();
+	virtual Gr32::TRect __fastcall GetHandleRect();
 	int __fastcall GetButtonSize();
-	System::Types::TRect __fastcall GetTrackBoundary();
+	Gr32::TRect __fastcall GetTrackBoundary();
 	TRBZone __fastcall GetZone(int X, int Y);
-	System::Types::TRect __fastcall GetZoneRect(TRBZone Zone);
+	Gr32::TRect __fastcall GetZoneRect(TRBZone Zone);
 	virtual void __fastcall MouseLeft();
 	DYNAMIC void __fastcall MouseDown(System::Uitypes::TMouseButton Button, System::Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(System::Classes::TShiftState Shift, int X, int Y);
@@ -165,9 +167,9 @@ private:
 	
 protected:
 	void __fastcall AdjustPosition();
-	DYNAMIC bool __fastcall DoMouseWheel(System::Classes::TShiftState Shift, int WheelDelta, const System::Types::TPoint &MousePos);
+	DYNAMIC bool __fastcall DoMouseWheel(System::Classes::TShiftState Shift, int WheelDelta, const Gr32::TPoint &MousePos);
 	virtual bool __fastcall DrawEnabled();
-	virtual System::Types::TRect __fastcall GetHandleRect();
+	virtual Gr32::TRect __fastcall GetHandleRect();
 	DYNAMIC void __fastcall MouseDown(System::Uitypes::TMouseButton Button, System::Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(System::Classes::TShiftState Shift, int X, int Y);
 	virtual void __fastcall TimerHandler(System::TObject* Sender);
@@ -262,8 +264,8 @@ private:
 	
 protected:
 	void __fastcall AdjustPosition();
-	DYNAMIC bool __fastcall DoMouseWheel(System::Classes::TShiftState Shift, int WheelDelta, const System::Types::TPoint &MousePos);
-	virtual System::Types::TRect __fastcall GetHandleRect();
+	DYNAMIC bool __fastcall DoMouseWheel(System::Classes::TShiftState Shift, int WheelDelta, const Gr32::TPoint &MousePos);
+	virtual Gr32::TRect __fastcall GetHandleRect();
 	int __fastcall GetHandleSize();
 	DYNAMIC void __fastcall MouseDown(System::Uitypes::TMouseButton Button, System::Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(System::Classes::TShiftState Shift, int X, int Y);

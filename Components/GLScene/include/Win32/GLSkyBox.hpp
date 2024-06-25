@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSkyBox.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSkyBox.pas' rev: 36.00 (Windows)
 
 #ifndef GlskyboxHPP
 #define GlskyboxHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -72,13 +74,13 @@ public:
 	
 __published:
 	__property Glmaterial::TGLMaterialLibrary* MaterialLibrary = {read=FMaterialLibrary, write=SetMaterialLibrary};
-	__property System::UnicodeString MatNameTop = {read=FMatNameTop, write=SetMatNameTop};
-	__property System::UnicodeString MatNameBottom = {read=FMatNameBottom, write=SetMatNameBottom};
-	__property System::UnicodeString MatNameLeft = {read=FMatNameLeft, write=SetMatNameLeft};
-	__property System::UnicodeString MatNameRight = {read=FMatNameRight, write=SetMatNameRight};
-	__property System::UnicodeString MatNameFront = {read=FMatNameFront, write=SetMatNameFront};
-	__property System::UnicodeString MatNameBack = {read=FMatNameBack, write=SetMatNameBack};
-	__property System::UnicodeString MatNameClouds = {read=FMatNameClouds, write=SetMatNameClouds};
+	__property Glmaterial::TGLLibMaterialName MatNameTop = {read=FMatNameTop, write=SetMatNameTop};
+	__property Glmaterial::TGLLibMaterialName MatNameBottom = {read=FMatNameBottom, write=SetMatNameBottom};
+	__property Glmaterial::TGLLibMaterialName MatNameLeft = {read=FMatNameLeft, write=SetMatNameLeft};
+	__property Glmaterial::TGLLibMaterialName MatNameRight = {read=FMatNameRight, write=SetMatNameRight};
+	__property Glmaterial::TGLLibMaterialName MatNameFront = {read=FMatNameFront, write=SetMatNameFront};
+	__property Glmaterial::TGLLibMaterialName MatNameBack = {read=FMatNameBack, write=SetMatNameBack};
+	__property Glmaterial::TGLLibMaterialName MatNameClouds = {read=FMatNameClouds, write=SetMatNameClouds};
 	__property float CloudsPlaneOffset = {read=FCloudsPlaneOffset, write=SetCloudsPlaneOffset};
 	__property float CloudsPlaneSize = {read=FCloudsPlaneSize, write=SetCloudsPlaneSize};
 	__property TGLSkyBoxStyle Style = {read=FStyle, write=FStyle, default=0};

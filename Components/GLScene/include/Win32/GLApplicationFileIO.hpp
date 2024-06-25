@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLApplicationFileIO.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLApplicationFileIO.pas' rev: 36.00 (Windows)
 
 #ifndef GlapplicationfileioHPP
 #define GlapplicationfileioHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -100,7 +102,7 @@ extern DELPHI_PACKAGE TAFIOFileStreamExists vAFIOFileStreamExists;
 extern DELPHI_PACKAGE bool __fastcall ApplicationFileIODefined(void);
 extern DELPHI_PACKAGE System::Classes::TStream* __fastcall CreateFileStream(const System::UnicodeString fileName, System::Word mode = (System::Word)(0x40));
 extern DELPHI_PACKAGE bool __fastcall FileStreamExists(const System::UnicodeString fileName);
-extern DELPHI_PACKAGE System::Classes::TResourceStream* __fastcall CreateResourceStream(const System::UnicodeString ResName, System::WideChar * ResType);
+extern DELPHI_PACKAGE TGLResourceStream* __fastcall CreateResourceStream(const System::UnicodeString ResName, System::WideChar * ResType);
 extern DELPHI_PACKAGE TGLApplicationResource __fastcall StrToGLSResType(const System::UnicodeString AStrRes);
 }	/* namespace Glapplicationfileio */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLAPPLICATIONFILEIO)

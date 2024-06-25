@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLCoordinates.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLCoordinates.pas' rev: 36.00 (Windows)
 
 #ifndef GlcoordinatesHPP
 #define GlcoordinatesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -41,78 +43,78 @@ class PASCALIMPLEMENTATION TGLCustomCoordinates : public Glbaseclasses::TGLUpdat
 	typedef Glbaseclasses::TGLUpdateAbleObject inherited;
 	
 public:
-	float operator[](const int AIndex) { return this->Coordinate[AIndex]; }
+	Opengltokens::TGLfloat operator[](const int AIndex) { return this->Coordinate[AIndex]; }
 	
 private:
-	Glvectortypes::TVector4f FCoords;
+	Glvectorgeometry::TVector FCoords;
 	TGLCoordinatesStyle FStyle;
-	Glvectortypes::TVector4f *FPDefaultCoords;
+	Glvectorgeometry::PVector FPDefaultCoords;
 	void __fastcall SetAsPoint2D(const Glvectortypes::TVector2f &Value);
-	void __fastcall SetAsVector(const Glvectortypes::TVector4f &Value);
-	void __fastcall SetAsAffineVector(const Glvectortypes::TVector3f &Value);
-	Glvectortypes::TVector3f __fastcall GetAsAffineVector();
+	void __fastcall SetAsVector(const Glvectorgeometry::TVector &Value);
+	void __fastcall SetAsAffineVector(const Glvectorgeometry::TAffineVector &Value);
+	Glvectorgeometry::TAffineVector __fastcall GetAsAffineVector();
 	Glvectortypes::TVector2f __fastcall GetAsPoint2D();
 	System::UnicodeString __fastcall GetAsString();
-	float __fastcall GetCoordinate(const int AIndex);
-	void __fastcall SetCoordinate(const int AIndex, const float AValue);
-	float __fastcall GetDirectCoordinate(const int Index);
-	void __fastcall SetDirectCoordinate(const int Index, const float AValue);
+	Opengltokens::TGLfloat __fastcall GetCoordinate(const int AIndex);
+	void __fastcall SetCoordinate(const int AIndex, const Opengltokens::TGLfloat AValue);
+	Opengltokens::TGLfloat __fastcall GetDirectCoordinate(const int Index);
+	void __fastcall SetDirectCoordinate(const int Index, const Opengltokens::TGLfloat AValue);
 	
 protected:
-	void __fastcall SetDirectVector(const Glvectortypes::TVector4f &V);
+	void __fastcall SetDirectVector(const Glvectorgeometry::TVector &V);
 	virtual void __fastcall DefineProperties(System::Classes::TFiler* Filer);
 	void __fastcall ReadData(System::Classes::TStream* Stream);
 	void __fastcall WriteData(System::Classes::TStream* Stream);
 	
 public:
-	__fastcall TGLCustomCoordinates(System::Classes::TPersistent* AOwner, const Glvectortypes::TVector4f &AValue, const TGLCoordinatesStyle AStyle);
+	__fastcall TGLCustomCoordinates(System::Classes::TPersistent* AOwner, const Glvectorgeometry::TVector &AValue, const TGLCoordinatesStyle AStyle);
 	__fastcall virtual ~TGLCustomCoordinates();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	void __fastcall WriteToFiler(System::Classes::TWriter* Writer);
 	void __fastcall ReadFromFiler(System::Classes::TReader* Reader);
-	void __fastcall Initialize(const Glvectortypes::TVector4f &Value);
+	void __fastcall Initialize(const Glvectorgeometry::TVector &Value);
 	virtual void __fastcall NotifyChange(System::TObject* Sender);
 	__property TGLCoordinatesStyle Style = {read=FStyle, write=FStyle, nodefault};
-	void __fastcall Translate(const Glvectortypes::TVector4f &TranslationVector)/* overload */;
-	void __fastcall Translate(const Glvectortypes::TVector3f &TranslationVector)/* overload */;
-	void __fastcall AddScaledVector(const float Factor, const Glvectortypes::TVector4f &TranslationVector)/* overload */;
-	void __fastcall AddScaledVector(const float Factor, const Glvectortypes::TVector3f &TranslationVector)/* overload */;
-	void __fastcall Rotate(const Glvectortypes::TVector3f &AnAxis, float AnAngle)/* overload */;
-	void __fastcall Rotate(const Glvectortypes::TVector4f &AnAxis, float AnAngle)/* overload */;
+	void __fastcall Translate(const Glvectorgeometry::TVector &TranslationVector)/* overload */;
+	void __fastcall Translate(const Glvectorgeometry::TAffineVector &TranslationVector)/* overload */;
+	void __fastcall AddScaledVector(const float Factor, const Glvectorgeometry::TVector &TranslationVector)/* overload */;
+	void __fastcall AddScaledVector(const float Factor, const Glvectorgeometry::TAffineVector &TranslationVector)/* overload */;
+	void __fastcall Rotate(const Glvectorgeometry::TAffineVector &AnAxis, float AnAngle)/* overload */;
+	void __fastcall Rotate(const Glvectorgeometry::TVector &AnAxis, float AnAngle)/* overload */;
 	void __fastcall Normalize();
 	void __fastcall Invert();
 	void __fastcall Scale(float Factor);
-	float __fastcall VectorLength();
-	float __fastcall VectorNorm();
+	Opengltokens::TGLfloat __fastcall VectorLength();
+	Opengltokens::TGLfloat __fastcall VectorNorm();
 	float __fastcall MaxXYZ();
-	HIDESBASE bool __fastcall Equals(const Glvectortypes::TVector4f &AVector);
+	HIDESBASE bool __fastcall Equals(const Glvectorgeometry::TVector &AVector);
 	void __fastcall SetVector(const float X, const float Y, float Z = 0.000000E+00f)/* overload */;
 	void __fastcall SetVector(const float X, const float Y, const float Z, const float W)/* overload */;
-	void __fastcall SetVector(const Glvectortypes::TVector3f &V)/* overload */;
-	void __fastcall SetVector(const Glvectortypes::TVector4f &V)/* overload */;
+	void __fastcall SetVector(const Glvectorgeometry::TAffineVector &V)/* overload */;
+	void __fastcall SetVector(const Glvectorgeometry::TVector &V)/* overload */;
 	void __fastcall SetPoint(const float X, const float Y, const float Z)/* overload */;
-	void __fastcall SetPoint(const Glvectortypes::TVector3f &V)/* overload */;
-	void __fastcall SetPoint(const Glvectortypes::TVector4f &V)/* overload */;
+	void __fastcall SetPoint(const Glvectorgeometry::TAffineVector &V)/* overload */;
+	void __fastcall SetPoint(const Glvectorgeometry::TVector &V)/* overload */;
 	void __fastcall SetPoint2D(const float X, const float Y)/* overload */;
-	void __fastcall SetPoint2D(const Glvectortypes::TVector3f &Vector)/* overload */;
-	void __fastcall SetPoint2D(const Glvectortypes::TVector4f &Vector)/* overload */;
+	void __fastcall SetPoint2D(const Glvectorgeometry::TAffineVector &Vector)/* overload */;
+	void __fastcall SetPoint2D(const Glvectorgeometry::TVector &Vector)/* overload */;
 	void __fastcall SetPoint2D(const Glvectortypes::TVector2f &Vector)/* overload */;
 	void __fastcall SetToZero();
-	System::PSingle __fastcall AsAddress();
-	__property Glvectortypes::TVector4f AsVector = {read=FCoords, write=SetAsVector};
-	__property Glvectortypes::TVector3f AsAffineVector = {read=GetAsAffineVector, write=SetAsAffineVector};
+	Opengltokens::PGLfloat __fastcall AsAddress();
+	__property Glvectorgeometry::TVector AsVector = {read=FCoords, write=SetAsVector};
+	__property Glvectorgeometry::TAffineVector AsAffineVector = {read=GetAsAffineVector, write=SetAsAffineVector};
 	__property Glvectortypes::TVector2f AsPoint2D = {read=GetAsPoint2D, write=SetAsPoint2D};
-	__property float X = {read=GetCoordinate, write=SetCoordinate, index=0};
-	__property float Y = {read=GetCoordinate, write=SetCoordinate, index=1};
-	__property float Z = {read=GetCoordinate, write=SetCoordinate, index=2};
-	__property float W = {read=GetCoordinate, write=SetCoordinate, index=3};
-	__property float Coordinate[const int AIndex] = {read=GetCoordinate, write=SetCoordinate/*, default*/};
+	__property Opengltokens::TGLfloat X = {read=GetCoordinate, write=SetCoordinate, index=0};
+	__property Opengltokens::TGLfloat Y = {read=GetCoordinate, write=SetCoordinate, index=1};
+	__property Opengltokens::TGLfloat Z = {read=GetCoordinate, write=SetCoordinate, index=2};
+	__property Opengltokens::TGLfloat W = {read=GetCoordinate, write=SetCoordinate, index=3};
+	__property Opengltokens::TGLfloat Coordinate[const int AIndex] = {read=GetCoordinate, write=SetCoordinate/*, default*/};
 	__property System::UnicodeString AsString = {read=GetAsString};
-	__property Glvectortypes::TVector4f DirectVector = {read=FCoords, write=SetDirectVector};
-	__property float DirectX = {read=GetDirectCoordinate, write=SetDirectCoordinate, index=0};
-	__property float DirectY = {read=GetDirectCoordinate, write=SetDirectCoordinate, index=1};
-	__property float DirectZ = {read=GetDirectCoordinate, write=SetDirectCoordinate, index=2};
-	__property float DirectW = {read=GetDirectCoordinate, write=SetDirectCoordinate, index=3};
+	__property Glvectorgeometry::TVector DirectVector = {read=FCoords, write=SetDirectVector};
+	__property Opengltokens::TGLfloat DirectX = {read=GetDirectCoordinate, write=SetDirectCoordinate, index=0};
+	__property Opengltokens::TGLfloat DirectY = {read=GetDirectCoordinate, write=SetDirectCoordinate, index=1};
+	__property Opengltokens::TGLfloat DirectZ = {read=GetDirectCoordinate, write=SetDirectCoordinate, index=2};
+	__property Opengltokens::TGLfloat DirectW = {read=GetDirectCoordinate, write=SetDirectCoordinate, index=3};
 public:
 	/* TGLUpdateAbleObject.Create */ inline __fastcall virtual TGLCustomCoordinates(System::Classes::TPersistent* AOwner) : Glbaseclasses::TGLUpdateAbleObject(AOwner) { }
 	
@@ -127,7 +129,7 @@ __published:
 	__property X = {stored=false, index=0, default=0};
 	__property Y = {stored=false, index=1, default=0};
 public:
-	/* TGLCustomCoordinates.CreateInitialized */ inline __fastcall TGLCoordinates2(System::Classes::TPersistent* AOwner, const Glvectortypes::TVector4f &AValue, const TGLCoordinatesStyle AStyle) : TGLCustomCoordinates(AOwner, AValue, AStyle) { }
+	/* TGLCustomCoordinates.CreateInitialized */ inline __fastcall TGLCoordinates2(System::Classes::TPersistent* AOwner, const Glvectorgeometry::TVector &AValue, const TGLCoordinatesStyle AStyle) : TGLCustomCoordinates(AOwner, AValue, AStyle) { }
 	/* TGLCustomCoordinates.Destroy */ inline __fastcall virtual ~TGLCoordinates2() { }
 	
 public:
@@ -145,7 +147,7 @@ __published:
 	__property Y = {stored=false, index=1, default=0};
 	__property Z = {stored=false, index=2, default=0};
 public:
-	/* TGLCustomCoordinates.CreateInitialized */ inline __fastcall TGLCoordinates3(System::Classes::TPersistent* AOwner, const Glvectortypes::TVector4f &AValue, const TGLCoordinatesStyle AStyle) : TGLCustomCoordinates(AOwner, AValue, AStyle) { }
+	/* TGLCustomCoordinates.CreateInitialized */ inline __fastcall TGLCoordinates3(System::Classes::TPersistent* AOwner, const Glvectorgeometry::TVector &AValue, const TGLCoordinatesStyle AStyle) : TGLCustomCoordinates(AOwner, AValue, AStyle) { }
 	/* TGLCustomCoordinates.Destroy */ inline __fastcall virtual ~TGLCoordinates3() { }
 	
 public:
@@ -164,7 +166,7 @@ __published:
 	__property Z = {stored=false, index=2, default=0};
 	__property W = {stored=false, index=3, default=0};
 public:
-	/* TGLCustomCoordinates.CreateInitialized */ inline __fastcall TGLCoordinates4(System::Classes::TPersistent* AOwner, const Glvectortypes::TVector4f &AValue, const TGLCoordinatesStyle AStyle) : TGLCustomCoordinates(AOwner, AValue, AStyle) { }
+	/* TGLCustomCoordinates.CreateInitialized */ inline __fastcall TGLCoordinates4(System::Classes::TPersistent* AOwner, const Glvectorgeometry::TVector &AValue, const TGLCoordinatesStyle AStyle) : TGLCustomCoordinates(AOwner, AValue, AStyle) { }
 	/* TGLCustomCoordinates.Destroy */ inline __fastcall virtual ~TGLCoordinates4() { }
 	
 public:

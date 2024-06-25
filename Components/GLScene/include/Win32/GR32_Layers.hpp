@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Layers.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Layers.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_layersHPP
 #define Gr32_layersHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -46,9 +48,9 @@ enum DECLSPEC_DENUM TLayerListNotification : unsigned char { lnLayerAdded, lnLay
 
 typedef void __fastcall (__closure *TLayerListNotifyEvent)(TLayerCollection* Sender, TLayerListNotification Action, TCustomLayer* Layer, int Index);
 
-typedef void __fastcall (__closure *TGetScaleEvent)(System::TObject* Sender, /* out */ float &ScaleX, /* out */ float &ScaleY);
+typedef void __fastcall (__closure *TGetScaleEvent)(System::TObject* Sender, /* out */ Gr32::TFloat &ScaleX, /* out */ Gr32::TFloat &ScaleY);
 
-typedef void __fastcall (__closure *TGetShiftEvent)(System::TObject* Sender, /* out */ float &ShiftX, /* out */ float &ShiftY);
+typedef void __fastcall (__closure *TGetShiftEvent)(System::TObject* Sender, /* out */ Gr32::TFloat &ShiftX, /* out */ Gr32::TFloat &ShiftY);
 
 class PASCALIMPLEMENTATION TLayerCollection : public System::Classes::TPersistent
 {
@@ -68,7 +70,7 @@ private:
 	System::Classes::TNotifyEvent FOnGDIUpdate;
 	TLayerListNotifyEvent FOnListNotify;
 	TLayerUpdateEvent FOnLayerUpdated;
-	Gr32::TAreaChangedEvent FOnAreaUpdated;
+	TAreaUpdateEvent FOnAreaUpdated;
 	TGetScaleEvent FOnGetViewportScale;
 	TGetShiftEvent FOnGetViewportShift;
 	int __fastcall GetCount();
@@ -87,7 +89,7 @@ protected:
 	DYNAMIC System::Classes::TPersistent* __fastcall GetOwner();
 	void __fastcall GDIUpdate();
 	void __fastcall DoUpdateLayer(TCustomLayer* Layer);
-	void __fastcall DoUpdateArea(const System::Types::TRect &Rect);
+	void __fastcall DoUpdateArea(const Gr32::TRect &Rect);
 	void __fastcall Notify(TLayerListNotification Action, TCustomLayer* Layer, int Index);
 	void __fastcall SetItem(int Index, TCustomLayer* Value);
 	TCustomLayer* __fastcall MouseDown(System::Uitypes::TMouseButton Button, System::Classes::TShiftState Shift, int X, int Y);
@@ -98,7 +100,7 @@ protected:
 	__property TLayerListNotifyEvent OnListNotify = {read=FOnListNotify, write=FOnListNotify};
 	__property System::Classes::TNotifyEvent OnGDIUpdate = {read=FOnGDIUpdate, write=FOnGDIUpdate};
 	__property TLayerUpdateEvent OnLayerUpdated = {read=FOnLayerUpdated, write=FOnLayerUpdated};
-	__property Gr32::TAreaChangedEvent OnAreaUpdated = {read=FOnAreaUpdated, write=FOnAreaUpdated};
+	__property TAreaUpdateEvent OnAreaUpdated = {read=FOnAreaUpdated, write=FOnAreaUpdated};
 	__property TGetScaleEvent OnGetViewportScale = {read=FOnGetViewportScale, write=FOnGetViewportScale};
 	__property TGetShiftEvent OnGetViewportShift = {read=FOnGetViewportShift, write=FOnGetViewportShift};
 	
@@ -112,8 +114,8 @@ public:
 	TCustomLayer* __fastcall Insert(int Index, TLayerClass ItemClass);
 	Gr32::TFloatPoint __fastcall LocalToViewport(const Gr32::TFloatPoint &APoint, bool AScaled);
 	Gr32::TFloatPoint __fastcall ViewportToLocal(const Gr32::TFloatPoint &APoint, bool AScaled);
-	virtual void __fastcall GetViewportScale(/* out */ float &ScaleX, /* out */ float &ScaleY);
-	virtual void __fastcall GetViewportShift(/* out */ float &ShiftX, /* out */ float &ShiftY);
+	virtual void __fastcall GetViewportScale(/* out */ Gr32::TFloat &ScaleX, /* out */ Gr32::TFloat &ScaleY);
+	virtual void __fastcall GetViewportShift(/* out */ Gr32::TFloat &ShiftX, /* out */ Gr32::TFloat &ShiftY);
 	__property int Count = {read=GetCount, nodefault};
 	__property System::Classes::TPersistent* Owner = {read=FOwner};
 	__property TCustomLayer* Items[int Index] = {read=GetItem, write=SetItem/*, default*/};
@@ -183,9 +185,9 @@ public:
 	virtual void __fastcall BeforeDestruction();
 	void __fastcall BringToFront();
 	virtual void __fastcall Changed()/* overload */;
-	HIDESBASE void __fastcall Changed(const System::Types::TRect &Rect)/* overload */;
+	HIDESBASE void __fastcall Changed(const Gr32::TRect &Rect)/* overload */;
 	void __fastcall Update()/* overload */;
-	void __fastcall Update(const System::Types::TRect &Rect)/* overload */;
+	void __fastcall Update(const Gr32::TRect &Rect)/* overload */;
 	bool __fastcall HitTest(int X, int Y);
 	void __fastcall SendToBack();
 	void __fastcall SetAsMouseListener();
@@ -240,7 +242,7 @@ private:
 	Gr32::TBitmap32* FBitmap;
 	bool FAlphaHit;
 	bool FCropped;
-	void __fastcall BitmapAreaChanged(System::TObject* Sender, const System::Types::TRect &Area, const unsigned Info);
+	void __fastcall BitmapAreaChanged(System::TObject* Sender, const Gr32::TRect &Area, const unsigned Info);
 	void __fastcall SetBitmap(Gr32::TBitmap32* Value);
 	void __fastcall SetCropped(bool Value);
 	
@@ -278,22 +280,22 @@ class PASCALIMPLEMENTATION TRubberbandLayer : public TPositionedLayer
 private:
 	TPositionedLayer* FChildLayer;
 	Gr32::TArrayOfColor32 FFrameStipplePattern;
-	float FFrameStippleStep;
-	float FFrameStippleCounter;
+	Gr32::TFloat FFrameStippleStep;
+	Gr32::TFloat FFrameStippleCounter;
 	Gr32::TColor32 FHandleFrame;
 	Gr32::TColor32 FHandleFill;
 	TRBHandles FHandles;
 	int FHandleSize;
-	float FMinWidth;
-	float FMaxHeight;
-	float FMinHeight;
-	float FMaxWidth;
+	Gr32::TFloat FMinWidth;
+	Gr32::TFloat FMaxHeight;
+	Gr32::TFloat FMinHeight;
+	Gr32::TFloat FMaxWidth;
 	System::Classes::TNotifyEvent FOnUserChange;
 	TRBResizingEvent FOnResizing;
-	TRBResizingEvent FOnConstrain;
+	TRBConstrainEvent FOnConstrain;
 	TRBOptions FOptions;
-	void __fastcall SetFrameStippleStep(const float Value);
-	void __fastcall SetFrameStippleCounter(const float Value);
+	void __fastcall SetFrameStippleStep(const Gr32::TFloat Value);
+	void __fastcall SetFrameStippleCounter(const Gr32::TFloat Value);
 	void __fastcall SetChildLayer(TPositionedLayer* Value);
 	void __fastcall SetHandleFill(Gr32::TColor32 Value);
 	void __fastcall SetHandleFrame(Gr32::TColor32 Value);
@@ -321,21 +323,21 @@ protected:
 	
 public:
 	__fastcall virtual TRubberbandLayer(TLayerCollection* ALayerCollection);
-	void __fastcall SetFrameStipple(const Gr32::TColor32 *Value, const int Value_High);
+	void __fastcall SetFrameStipple(const Gr32::TColor32 *Value, const System::NativeInt Value_High);
 	__property TPositionedLayer* ChildLayer = {read=FChildLayer, write=SetChildLayer};
 	__property TRBOptions Options = {read=FOptions, write=SetOptions, nodefault};
 	__property TRBHandles Handles = {read=FHandles, write=SetHandles, nodefault};
 	__property int HandleSize = {read=FHandleSize, write=SetHandleSize, nodefault};
 	__property Gr32::TColor32 HandleFill = {read=FHandleFill, write=SetHandleFill, nodefault};
 	__property Gr32::TColor32 HandleFrame = {read=FHandleFrame, write=SetHandleFrame, nodefault};
-	__property float FrameStippleStep = {read=FFrameStippleStep, write=SetFrameStippleStep};
-	__property float FrameStippleCounter = {read=FFrameStippleCounter, write=SetFrameStippleCounter};
-	__property float MaxHeight = {read=FMaxHeight, write=FMaxHeight};
-	__property float MaxWidth = {read=FMaxWidth, write=FMaxWidth};
-	__property float MinHeight = {read=FMinHeight, write=FMinHeight};
-	__property float MinWidth = {read=FMinWidth, write=FMinWidth};
+	__property Gr32::TFloat FrameStippleStep = {read=FFrameStippleStep, write=SetFrameStippleStep};
+	__property Gr32::TFloat FrameStippleCounter = {read=FFrameStippleCounter, write=SetFrameStippleCounter};
+	__property Gr32::TFloat MaxHeight = {read=FMaxHeight, write=FMaxHeight};
+	__property Gr32::TFloat MaxWidth = {read=FMaxWidth, write=FMaxWidth};
+	__property Gr32::TFloat MinHeight = {read=FMinHeight, write=FMinHeight};
+	__property Gr32::TFloat MinWidth = {read=FMinWidth, write=FMinWidth};
 	__property System::Classes::TNotifyEvent OnUserChange = {read=FOnUserChange, write=FOnUserChange};
-	__property TRBResizingEvent OnConstrain = {read=FOnConstrain, write=FOnConstrain};
+	__property TRBConstrainEvent OnConstrain = {read=FOnConstrain, write=FOnConstrain};
 	__property TRBResizingEvent OnResizing = {read=FOnResizing, write=FOnResizing};
 public:
 	/* TCustomLayer.Destroy */ inline __fastcall virtual ~TRubberbandLayer() { }

@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DXTC.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'DXTC.pas' rev: 36.00 (Windows)
 
 #ifndef DxtcHPP
 #define DxtcHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -313,10 +315,10 @@ extern DELPHI_PACKAGE System::StaticArray<TGLImageDataFormat, 7> cImageDataForma
 extern DELPHI_PACKAGE void __fastcall DecodeDXT1toBitmap32(System::Sysutils::PByteArray encData, System::Sysutils::PByteArray decData, int w, int h, bool &trans);
 extern DELPHI_PACKAGE void __fastcall DecodeDXT3toBitmap32(System::Sysutils::PByteArray encData, System::Sysutils::PByteArray decData, int w, int h);
 extern DELPHI_PACKAGE void __fastcall DecodeDXT5toBitmap32(System::Sysutils::PByteArray encData, System::Sysutils::PByteArray decData, int w, int h);
-extern DELPHI_PACKAGE void __fastcall flip_blocks_dxtc1(System::PByte data, int numBlocks);
-extern DELPHI_PACKAGE void __fastcall flip_blocks_dxtc3(System::PByte data, int numBlocks);
+extern DELPHI_PACKAGE void __fastcall flip_blocks_dxtc1(Opengltokens::PGLubyte data, int numBlocks);
+extern DELPHI_PACKAGE void __fastcall flip_blocks_dxtc3(Opengltokens::PGLubyte data, int numBlocks);
 extern DELPHI_PACKAGE void __fastcall flip_dxt5_alpha(PDXT5AlphaBlock block);
-extern DELPHI_PACKAGE void __fastcall flip_blocks_dxtc5(System::PByte data, int numBlocks);
+extern DELPHI_PACKAGE void __fastcall flip_blocks_dxtc5(Opengltokens::PGLubyte data, int numBlocks);
 extern DELPHI_PACKAGE bool __fastcall DDSHeaderToGLEnum(const TDDSHeader &DX9header, const TDDS_HEADER_DXT10 &DX11header, const bool useDX11, /* out */ Gltextureformat::TGLInternalFormat &iFormat, /* out */ unsigned &colorFormat, /* out */ unsigned &dataType, /* out */ int &bpe);
 extern DELPHI_PACKAGE bool __fastcall GLEnumToDDSHeader(TDDSHeader &DX9header, TDDS_HEADER_DXT10 &DX11header, const bool useDX11, const Gltextureformat::TGLInternalFormat iFormat, const unsigned colorFormat, const unsigned dataType, const int bpe);
 extern DELPHI_PACKAGE bool __fastcall FindDDSCompatibleDataFormat(const Gltextureformat::TGLInternalFormat iFormat, /* out */ unsigned &colorFormat, /* out */ unsigned &dataType);

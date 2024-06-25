@@ -61,7 +61,7 @@
         <DCC_ObjOutput>..\lib\</DCC_ObjOutput>
         <DCC_BpiOutput>..\lib\</DCC_BpiOutput>
         <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
-        <DCC_UsePackage>rtl;vcl;vclimg;VclSmp;GLScene_RT;GR32_DSGN_RS11_3;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>rtl;vcl;vclimg;VclSmp;GLScene_RT;GR32_DSGN_RS11_3;GR32_DSGN_RS11_1;GR32_DSGN_RS12_1;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_Keys>CompanyName=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName);ProductName=$(MSBuildProjectName)</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -110,7 +110,7 @@
         <DCCReference Include="vclimg.dcp"/>
         <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="VclSmp.dcp"/>
-        <DCCReference Include="GR32_DSGN_RS11_3.dcp"/>
+        <DCCReference Include="GR32_DSGN_RS12_1.dcp"/>
         <DCCReference Include="..\..\Source\DesignTime\FRFaceEditor.pas">
             <Form>RFaceEditor</Form>
             <DesignClass>TFrame</DesignClass>
@@ -198,7 +198,7 @@
             </Platforms>
             <Deployment Version="4">
                 <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\GLScene_DT.bpl" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl\GLScene_DT.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\23.0\Bpl\GLScene_DT.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>GLScene_DT.bpl</RemoteName>
                         <Overwrite>true</Overwrite>

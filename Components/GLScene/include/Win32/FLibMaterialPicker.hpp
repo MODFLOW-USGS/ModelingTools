@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FLibMaterialPicker.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FLibMaterialPicker.pas' rev: 36.00 (Windows)
 
 #ifndef FlibmaterialpickerHPP
 #define FlibmaterialpickerHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -46,10 +48,11 @@ __published:
 	void __fastcall LBMaterialsDblClick(System::TObject* Sender);
 	
 public:
-	bool __fastcall Execute(System::UnicodeString &materialName, Glmaterial::TGLAbstractMaterialLibrary* materialLibrary);
+	bool __fastcall Execute(Glmaterial::TGLLibMaterialName &materialName, Glmaterial::TGLAbstractMaterialLibrary* materialLibrary);
 public:
 	/* TCustomForm.Create */ inline __fastcall virtual TGLLibMaterialPicker(System::Classes::TComponent* AOwner) : Vcl::Forms::TForm(AOwner) { }
 	/* TCustomForm.CreateNew */ inline __fastcall virtual TGLLibMaterialPicker(System::Classes::TComponent* AOwner, int Dummy) : Vcl::Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateScaledNew */ inline __fastcall virtual TGLLibMaterialPicker(System::Classes::TComponent* AOwner, int ADPI, int Dummy) : Vcl::Forms::TForm(AOwner, ADPI, Dummy) { }
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TGLLibMaterialPicker() { }
 	
 public:

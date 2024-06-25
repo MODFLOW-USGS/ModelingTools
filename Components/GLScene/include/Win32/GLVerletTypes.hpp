@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLVerletTypes.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLVerletTypes.pas' rev: 36.00 (Windows)
 
 #ifndef GlverlettypesHPP
 #define GlverlettypesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -84,7 +86,7 @@ class PASCALIMPLEMENTATION TVerletNode : public Glspacepartition::TSpacePartitio
 	typedef Glspacepartition::TSpacePartitionLeaf inherited;
 	
 private:
-	Glvectortypes::TVector3f FForce;
+	Glvectorgeometry::TAffineVector FForce;
 	TGLVerletWorld* FOwner;
 	float FWeight;
 	float FInvWeight;
@@ -92,34 +94,34 @@ private:
 	bool FNailedDown;
 	float FFriction;
 	int FChangedOnStep;
-	Glvectortypes::TVector3f __fastcall GetSpeed();
+	Glvectorgeometry::TAffineVector __fastcall GetSpeed();
 	
 protected:
-	Glvectortypes::TVector3f FLocation;
-	Glvectortypes::TVector3f FOldLocation;
-	virtual void __fastcall SetLocation(const Glvectortypes::TVector3f &Value);
+	Glvectorgeometry::TAffineVector FLocation;
+	Glvectorgeometry::TAffineVector FOldLocation;
+	virtual void __fastcall SetLocation(const Glvectorgeometry::TAffineVector &Value);
 	void __fastcall SetWeight(const float Value);
 	virtual void __fastcall AfterProgress();
 	
 public:
 	__fastcall virtual TVerletNode(TGLVerletWorld* const aOwner);
 	__fastcall virtual ~TVerletNode();
-	void __fastcall ApplyFriction(const float friction, const float penetrationDepth, const Glvectortypes::TVector3f &surfaceNormal);
+	void __fastcall ApplyFriction(const float friction, const float penetrationDepth, const Glvectorgeometry::TAffineVector &surfaceNormal);
 	void __fastcall OldApplyFriction(const float friction, const float penetrationDepth);
 	virtual void __fastcall Verlet(const TVerletProgressTimes &vpt);
 	DYNAMIC void __fastcall Initialize();
 	float __fastcall DistanceToNode(TVerletNode* const node);
-	Glvectortypes::TVector3f __fastcall GetMovement();
+	Glvectorgeometry::TAffineVector __fastcall GetMovement();
 	virtual void __fastcall UpdateCachedAABBAndBSphere();
 	__property TGLVerletWorld* Owner = {read=FOwner};
-	__property Glvectortypes::TVector3f Location = {read=FLocation, write=SetLocation};
-	__property Glvectortypes::TVector3f OldLocation = {read=FOldLocation, write=FOldLocation};
+	__property Glvectorgeometry::TAffineVector Location = {read=FLocation, write=SetLocation};
+	__property Glvectorgeometry::TAffineVector OldLocation = {read=FOldLocation, write=FOldLocation};
 	__property float Radius = {read=FRadius, write=FRadius};
-	__property Glvectortypes::TVector3f Force = {read=FForce, write=FForce};
+	__property Glvectorgeometry::TAffineVector Force = {read=FForce, write=FForce};
 	__property bool NailedDown = {read=FNailedDown, write=FNailedDown, nodefault};
 	__property float Weight = {read=FWeight, write=SetWeight};
 	__property float InvWeight = {read=FInvWeight};
-	__property Glvectortypes::TVector3f Speed = {read=GetSpeed};
+	__property Glvectorgeometry::TAffineVector Speed = {read=GetSpeed};
 	__property float friction = {read=FFriction, write=FFriction};
 	__property int ChangedOnStep = {read=FChangedOnStep, nodefault};
 public:
@@ -273,10 +275,10 @@ class PASCALIMPLEMENTATION TGLVerletGlobalConstraint : public TVerletConstraint
 	typedef TVerletConstraint inherited;
 	
 private:
-	Glvectortypes::TVector3f FKickbackForce;
-	Glvectortypes::TVector3f FKickbackTorque;
-	Glvectortypes::TVector3f FLocation;
-	virtual void __fastcall SetLocation(const Glvectortypes::TVector3f &Value);
+	Glvectorgeometry::TAffineVector FKickbackForce;
+	Glvectorgeometry::TAffineVector FKickbackTorque;
+	Glvectorgeometry::TAffineVector FLocation;
+	virtual void __fastcall SetLocation(const Glvectorgeometry::TAffineVector &Value);
 	
 public:
 	__fastcall virtual TGLVerletGlobalConstraint(TGLVerletWorld* const aOwner);
@@ -286,11 +288,11 @@ public:
 	virtual void __fastcall SatisfyConstraint(const int iteration, const int maxIterations);
 	virtual void __fastcall SatisfyConstraintForNode(TVerletNode* const aNode, const int iteration, const int maxIterations) = 0 ;
 	virtual void __fastcall SatisfyConstraintForEdge(TGLVerletEdge* const aEdge, const int iteration, const int maxIterations);
-	__property Glvectortypes::TVector3f Location = {read=FLocation, write=SetLocation};
-	__property Glvectortypes::TVector3f KickbackForce = {read=FKickbackForce, write=FKickbackForce};
-	__property Glvectortypes::TVector3f KickbackTorque = {read=FKickbackTorque, write=FKickbackTorque};
-	void __fastcall AddKickbackForceAt(const Glvectortypes::TVector3f &Pos, const Glvectortypes::TVector3f &Force);
-	Glvectortypes::TVector3f __fastcall TranslateKickbackTorque(const Glvectortypes::TVector3f &TorqueCenter);
+	__property Glvectorgeometry::TAffineVector Location = {read=FLocation, write=SetLocation};
+	__property Glvectorgeometry::TAffineVector KickbackForce = {read=FKickbackForce, write=FKickbackForce};
+	__property Glvectorgeometry::TAffineVector KickbackTorque = {read=FKickbackTorque, write=FKickbackTorque};
+	void __fastcall AddKickbackForceAt(const Glvectorgeometry::TAffineVector &Pos, const Glvectorgeometry::TAffineVector &Force);
+	Glvectorgeometry::TAffineVector __fastcall TranslateKickbackTorque(const Glvectorgeometry::TAffineVector &TorqueCenter);
 };
 
 #pragma pack(pop)
@@ -338,7 +340,7 @@ class PASCALIMPLEMENTATION TGLVerletGlobalFrictionConstraintSphere : public TGLV
 	
 private:
 	Glgeometrybb::TBSphere FCachedBSphere;
-	virtual void __fastcall SetLocation(const Glvectortypes::TVector3f &Value);
+	virtual void __fastcall SetLocation(const Glvectorgeometry::TAffineVector &Value);
 	
 public:
 	void __fastcall UpdateCachedBSphere();
@@ -362,7 +364,7 @@ class PASCALIMPLEMENTATION TGLVerletGlobalFrictionConstraintBox : public TGLVerl
 	
 private:
 	Glgeometrybb::TAABB FCachedAABB;
-	virtual void __fastcall SetLocation(const Glvectortypes::TVector3f &Value);
+	virtual void __fastcall SetLocation(const Glvectorgeometry::TAffineVector &Value);
 	
 public:
 	void __fastcall UpdateCachedAABB();
@@ -548,12 +550,12 @@ public:
 	void __fastcall RemoveForce(TGLVerletForce* const aForce);
 	void __fastcall AddSolidEdge(TVerletNode* const aNodeA, TVerletNode* const aNodeB);
 	void __fastcall PauseInertia(const int IterationSteps);
-	TVerletNode* __fastcall CreateOwnedNode(const Glvectortypes::TVector3f &Location, const float aRadius = 0.000000E+00f, const float aWeight = 1.000000E+00f);
+	TVerletNode* __fastcall CreateOwnedNode(const Glvectorgeometry::TAffineVector &Location, const float aRadius = 0.000000E+00f, const float aWeight = 1.000000E+00f);
 	TVCStick* __fastcall CreateStick(TVerletNode* const aNodeA, TVerletNode* const aNodeB, const float Slack = 0.000000E+00f);
 	TVFSpring* __fastcall CreateSpring(TVerletNode* const aNodeA, TVerletNode* const aNodeB, const float aStrength, const float aDamping, const float aSlack = 0.000000E+00f);
-	TVCSlider* __fastcall CreateSlider(TVerletNode* const aNodeA, TVerletNode* const aNodeB, const Glvectortypes::TVector3f &aSlideDirection);
+	TVCSlider* __fastcall CreateSlider(TVerletNode* const aNodeA, TVerletNode* const aNodeB, const Glvectorgeometry::TAffineVector &aSlideDirection);
 	virtual void __fastcall Initialize();
-	void __fastcall CreateOctree(const Glvectortypes::TVector3f &OctreeMin, const Glvectortypes::TVector3f &OctreeMax, const int LeafThreshold, const int MaxTreeDepth);
+	void __fastcall CreateOctree(const Glvectorgeometry::TAffineVector &OctreeMin, const Glvectorgeometry::TAffineVector &OctreeMax, const int LeafThreshold, const int MaxTreeDepth);
 	virtual int __fastcall Progress(const double deltaTime, const double newTime);
 	TVerletNode* __fastcall FirstNode();
 	TVerletNode* __fastcall LastNode();
@@ -582,12 +584,12 @@ class PASCALIMPLEMENTATION TVFGravity : public TGLVerletGlobalForce
 	typedef TGLVerletGlobalForce inherited;
 	
 private:
-	Glvectortypes::TVector3f FGravity;
+	Glvectorgeometry::TAffineVector FGravity;
 	
 public:
 	__fastcall virtual TVFGravity(TGLVerletWorld* const aOwner);
 	virtual void __fastcall AddForceToNode(TVerletNode* const aNode);
-	__property Glvectortypes::TVector3f Gravity = {read=FGravity, write=FGravity};
+	__property Glvectorgeometry::TAffineVector Gravity = {read=FGravity, write=FGravity};
 public:
 	/* TGLVerletForce.Destroy */ inline __fastcall virtual ~TVFGravity() { }
 	
@@ -602,16 +604,16 @@ class PASCALIMPLEMENTATION TVFAirResistance : public TGLVerletGlobalForce
 	
 private:
 	float FDragCoeff;
-	Glvectortypes::TVector3f FWindDirection;
+	Glvectorgeometry::TAffineVector FWindDirection;
 	float FWindMagnitude;
 	float FWindChaos;
-	void __fastcall SetWindDirection(const Glvectortypes::TVector3f &Value);
+	void __fastcall SetWindDirection(const Glvectorgeometry::TAffineVector &Value);
 	
 public:
 	__fastcall virtual TVFAirResistance(TGLVerletWorld* const aOwner);
 	virtual void __fastcall AddForceToNode(TVerletNode* const aNode);
 	__property float DragCoeff = {read=FDragCoeff, write=FDragCoeff};
-	__property Glvectortypes::TVector3f WindDirection = {read=FWindDirection, write=SetWindDirection};
+	__property Glvectorgeometry::TAffineVector WindDirection = {read=FWindDirection, write=SetWindDirection};
 	__property float WindMagnitude = {read=FWindMagnitude, write=FWindMagnitude};
 	__property float WindChaos = {read=FWindChaos, write=FWindChaos};
 public:
@@ -658,10 +660,10 @@ class PASCALIMPLEMENTATION TVCFloor : public TGLVerletGlobalFrictionConstraintSP
 private:
 	float FBounceRatio;
 	float FFloorLevel;
-	Glvectortypes::TVector3f FNormal;
+	Glvectorgeometry::TAffineVector FNormal;
 	
 protected:
-	void __fastcall SetNormal(const Glvectortypes::TVector3f &Value);
+	void __fastcall SetNormal(const Glvectorgeometry::TAffineVector &Value);
 	
 public:
 	__fastcall virtual TVCFloor(TGLVerletWorld* const aOwner);
@@ -669,7 +671,7 @@ public:
 	virtual void __fastcall SatisfyConstraintForNode(TVerletNode* const aNode, const int iteration, const int maxIterations);
 	__property float BounceRatio = {read=FBounceRatio, write=FBounceRatio};
 	__property float FloorLevel = {read=FFloorLevel, write=FFloorLevel};
-	__property Glvectortypes::TVector3f Normal = {read=FNormal, write=SetNormal};
+	__property Glvectorgeometry::TAffineVector Normal = {read=FNormal, write=SetNormal};
 public:
 	/* TGLVerletGlobalConstraint.Destroy */ inline __fastcall virtual ~TVCFloor() { }
 	
@@ -735,12 +737,12 @@ private:
 private:
 	_TVCRigidBody__1 FNodeParams;
 	_TVCRigidBody__2 FNodeCoords;
-	Glvectortypes::TMatrix3f FNatMatrix;
-	Glvectortypes::TMatrix3f FInvNatMatrix;
+	Glvectorgeometry::TAffineMatrix FNatMatrix;
+	Glvectorgeometry::TAffineMatrix FInvNatMatrix;
 	
 protected:
-	void __fastcall ComputeBarycenter(Glvectortypes::TVector3f &barycenter);
-	void __fastcall ComputeNaturals(const Glvectortypes::TVector3f &barycenter, Glvectortypes::TVector3f &natX, Glvectortypes::TVector3f &natY, Glvectortypes::TVector3f &natZ);
+	void __fastcall ComputeBarycenter(Glvectorgeometry::TAffineVector &barycenter);
+	void __fastcall ComputeNaturals(const Glvectorgeometry::TAffineVector &barycenter, Glvectorgeometry::TAffineVector &natX, Glvectorgeometry::TAffineVector &natY, Glvectorgeometry::TAffineVector &natZ);
 	
 public:
 	void __fastcall ComputeRigidityParameters();
@@ -759,15 +761,15 @@ class PASCALIMPLEMENTATION TVCSlider : public TGLVerletDualConstraint
 	typedef TGLVerletDualConstraint inherited;
 	
 private:
-	Glvectortypes::TVector3f FSlideDirection;
+	Glvectorgeometry::TAffineVector FSlideDirection;
 	bool FConstrained;
 	
 protected:
-	void __fastcall SetSlideDirection(const Glvectortypes::TVector3f &Value);
+	void __fastcall SetSlideDirection(const Glvectorgeometry::TAffineVector &Value);
 	
 public:
 	virtual void __fastcall SatisfyConstraint(const int iteration, const int maxIterations);
-	__property Glvectortypes::TVector3f SlideDirection = {read=FSlideDirection, write=SetSlideDirection};
+	__property Glvectorgeometry::TAffineVector SlideDirection = {read=FSlideDirection, write=SetSlideDirection};
 	__property bool Constrained = {read=FConstrained, write=FConstrained, nodefault};
 public:
 	/* TVerletConstraint.Create */ inline __fastcall virtual TVCSlider(TGLVerletWorld* const aOwner) : TGLVerletDualConstraint(aOwner) { }
@@ -806,7 +808,7 @@ class PASCALIMPLEMENTATION TVCCylinder : public TGLVerletGlobalFrictionConstrain
 	typedef TGLVerletGlobalFrictionConstraint inherited;
 	
 private:
-	Glvectortypes::TVector3f FAxis;
+	Glvectorgeometry::TAffineVector FAxis;
 	float FRadius;
 	float FRadius2;
 	
@@ -815,7 +817,7 @@ protected:
 	
 public:
 	virtual void __fastcall SatisfyConstraintForNode(TVerletNode* const aNode, const int iteration, const int maxIterations);
-	__property Glvectortypes::TVector3f Axis = {read=FAxis, write=FAxis};
+	__property Glvectorgeometry::TAffineVector Axis = {read=FAxis, write=FAxis};
 	__property float Radius = {read=FRadius, write=SetRadius};
 public:
 	/* TGLVerletGlobalFrictionConstraint.Create */ inline __fastcall virtual TVCCylinder(TGLVerletWorld* const aOwner) : TGLVerletGlobalFrictionConstraint(aOwner) { }
@@ -833,17 +835,17 @@ class PASCALIMPLEMENTATION TVCCube : public TGLVerletGlobalFrictionConstraintBox
 	typedef TGLVerletGlobalFrictionConstraintBox inherited;
 	
 private:
-	Glvectortypes::TVector3f FHalfSides;
-	Glvectortypes::TVector3f FSides;
-	Glvectortypes::TVector3f FDirection;
-	void __fastcall SetSides(const Glvectortypes::TVector3f &Value);
+	Glvectorgeometry::TAffineVector FHalfSides;
+	Glvectorgeometry::TAffineVector FSides;
+	Glvectorgeometry::TAffineVector FDirection;
+	void __fastcall SetSides(const Glvectorgeometry::TAffineVector &Value);
 	
 public:
 	virtual Glgeometrybb::TAABB __fastcall GetAABB();
 	virtual void __fastcall SatisfyConstraintForNode(TVerletNode* const aNode, const int iteration, const int maxIterations);
 	virtual void __fastcall SatisfyConstraintForEdge(TGLVerletEdge* const aEdge, const int iteration, const int maxIterations);
-	__property Glvectortypes::TVector3f Direction = {read=FDirection, write=FDirection};
-	__property Glvectortypes::TVector3f Sides = {read=FSides, write=SetSides};
+	__property Glvectorgeometry::TAffineVector Direction = {read=FDirection, write=FDirection};
+	__property Glvectorgeometry::TAffineVector Sides = {read=FSides, write=SetSides};
 public:
 	/* TGLVerletGlobalFrictionConstraint.Create */ inline __fastcall virtual TVCCube(TGLVerletWorld* const aOwner) : TGLVerletGlobalFrictionConstraintBox(aOwner) { }
 	
@@ -860,14 +862,14 @@ class PASCALIMPLEMENTATION TVCCapsule : public TGLVerletGlobalFrictionConstraint
 	typedef TGLVerletGlobalFrictionConstraintSphere inherited;
 	
 private:
-	Glvectortypes::TVector3f FAxis;
+	Glvectorgeometry::TAffineVector FAxis;
 	float FRadius;
 	float FRadius2;
 	float FLength;
 	float FLengthDiv2;
 	
 protected:
-	void __fastcall SetAxis(const Glvectortypes::TVector3f &val);
+	void __fastcall SetAxis(const Glvectorgeometry::TAffineVector &val);
 	void __fastcall SetRadius(const float val);
 	void __fastcall SetLength(const float val);
 	
@@ -875,7 +877,7 @@ public:
 	virtual Glgeometrybb::TBSphere __fastcall GetBSphere();
 	virtual void __fastcall SatisfyConstraintForNode(TVerletNode* const aNode, const int iteration, const int maxIterations);
 	virtual void __fastcall SatisfyConstraintForEdge(TGLVerletEdge* const aEdge, const int iteration, const int maxIterations);
-	__property Glvectortypes::TVector3f Axis = {read=FAxis, write=SetAxis};
+	__property Glvectorgeometry::TAffineVector Axis = {read=FAxis, write=SetAxis};
 	__property float Radius = {read=FRadius, write=SetRadius};
 	__property float Length = {read=FLength, write=SetLength};
 public:
@@ -894,17 +896,17 @@ class PASCALIMPLEMENTATION TGLVerletNode : public TVerletNode
 	typedef TVerletNode inherited;
 	
 private:
-	Glvectortypes::TVector3f FRelativePosition;
+	Glvectorgeometry::TAffineVector FRelativePosition;
 	Glscene::TGLBaseSceneObject* FGLBaseSceneObject;
 	void __fastcall SetGLBaseSceneObject(Glscene::TGLBaseSceneObject* const Value);
 	
 protected:
-	virtual void __fastcall SetLocation(const Glvectortypes::TVector3f &Value);
+	virtual void __fastcall SetLocation(const Glvectorgeometry::TAffineVector &Value);
 	
 public:
 	virtual void __fastcall Verlet(const TVerletProgressTimes &vpt);
 	__property Glscene::TGLBaseSceneObject* GLBaseSceneObject = {read=FGLBaseSceneObject, write=SetGLBaseSceneObject};
-	__property Glvectortypes::TVector3f RelativePosition = {read=FRelativePosition, write=FRelativePosition};
+	__property Glvectorgeometry::TAffineVector RelativePosition = {read=FRelativePosition, write=FRelativePosition};
 public:
 	/* TVerletNode.CreateOwned */ inline __fastcall virtual TGLVerletNode(TGLVerletWorld* const aOwner) : TVerletNode(aOwner) { }
 	/* TVerletNode.Destroy */ inline __fastcall virtual ~TGLVerletNode() { }

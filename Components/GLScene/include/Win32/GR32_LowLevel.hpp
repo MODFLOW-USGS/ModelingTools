@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_LowLevel.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_LowLevel.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_lowlevelHPP
 #define Gr32_lowlevelHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -27,11 +29,11 @@ namespace Gr32_lowlevel
 //-- forward type declarations -----------------------------------------------
 //-- type declarations -------------------------------------------------------
 //-- var, const, procedure ---------------------------------------------------
-extern DELPHI_PACKAGE void __fastcall (*FillLongword)(void *X, unsigned Count, unsigned Value);
+extern DELPHI_PACKAGE void __fastcall (*FillLongword)(void *X, unsigned Count, System::LongWord Value);
 extern DELPHI_PACKAGE System::StaticArray<Gr32::TWrapProc, 3> WRAP_PROCS;
 extern DELPHI_PACKAGE System::StaticArray<Gr32::TWrapProcEx, 3> WRAP_PROCS_EX;
 extern DELPHI_PACKAGE int __fastcall Clamp(const int Value)/* overload */;
-extern DELPHI_PACKAGE void __fastcall FillWord(void *X, unsigned Count, unsigned Value);
+extern DELPHI_PACKAGE void __fastcall FillWord(void *X, unsigned Count, System::LongWord Value);
 extern DELPHI_PACKAGE void __fastcall MoveLongword(const void *Source, void *Dest, int Count);
 extern DELPHI_PACKAGE void __fastcall MoveWord(const void *Source, void *Dest, int Count);
 extern DELPHI_PACKAGE void __fastcall Swap(void * &A, void * &B)/* overload */;

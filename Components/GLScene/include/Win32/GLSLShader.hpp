@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLShader.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLShader.pas' rev: 36.00 (Windows)
 
 #ifndef GlslshaderHPP
 #define GlslshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -48,17 +50,17 @@ class PASCALIMPLEMENTATION EGLSLShaderException : public Glcustomshader::EGLCust
 	
 public:
 	/* Exception.Create */ inline __fastcall EGLSLShaderException(const System::UnicodeString Msg) : Glcustomshader::EGLCustomShaderException(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EGLSLShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : Glcustomshader::EGLCustomShaderException(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EGLSLShaderException(NativeUInt Ident)/* overload */ : Glcustomshader::EGLCustomShaderException(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EGLSLShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : Glcustomshader::EGLCustomShaderException(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EGLSLShaderException(System::NativeUInt Ident)/* overload */ : Glcustomshader::EGLCustomShaderException(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EGLSLShaderException(System::PResStringRec ResStringRec)/* overload */ : Glcustomshader::EGLCustomShaderException(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLSLShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : Glcustomshader::EGLCustomShaderException(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EGLSLShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : Glcustomshader::EGLCustomShaderException(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLSLShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : Glcustomshader::EGLCustomShaderException(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EGLSLShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : Glcustomshader::EGLCustomShaderException(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EGLSLShaderException(const System::UnicodeString Msg, int AHelpContext) : Glcustomshader::EGLCustomShaderException(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EGLSLShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : Glcustomshader::EGLCustomShaderException(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EGLSLShaderException(NativeUInt Ident, int AHelpContext)/* overload */ : Glcustomshader::EGLCustomShaderException(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EGLSLShaderException(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : Glcustomshader::EGLCustomShaderException(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EGLSLShaderException(System::NativeUInt Ident, int AHelpContext)/* overload */ : Glcustomshader::EGLCustomShaderException(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EGLSLShaderException(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : Glcustomshader::EGLCustomShaderException(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : Glcustomshader::EGLCustomShaderException(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLShaderException(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : Glcustomshader::EGLCustomShaderException(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLShaderException(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : Glcustomshader::EGLCustomShaderException(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EGLSLShaderException(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : Glcustomshader::EGLCustomShaderException(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EGLSLShaderException() { }
 	
 };
@@ -147,7 +149,7 @@ protected:
 	virtual float __fastcall GetAsVector1f();
 	virtual Glvectortypes::TVector2f __fastcall GetAsVector2f();
 	virtual Glvectortypes::TVector3f __fastcall GetAsVector3f();
-	virtual Glvectortypes::TVector4f __fastcall GetAsVector4f();
+	virtual Glvectorgeometry::TVector __fastcall GetAsVector4f();
 	virtual int __fastcall GetAsVector1i();
 	virtual Glvectortypes::TVector2i __fastcall GetAsVector2i();
 	virtual Glvectortypes::TVector3i __fastcall GetAsVector3i();

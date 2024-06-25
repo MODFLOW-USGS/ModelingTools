@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FileB3D.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'FileB3D.pas' rev: 36.00 (Windows)
 
 #ifndef Fileb3dHPP
 #define Fileb3dHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -112,7 +114,7 @@ private:
 	
 	
 public:
-	TVertexData *next;
+	PVertexData next;
 	float x;
 	float y;
 	float z;
@@ -135,7 +137,7 @@ public:
 	int flags;
 	int tex_coord_sets;
 	int tex_coord_set_size;
-	TVertexData *vertices;
+	PVertexData vertices;
 };
 
 
@@ -149,7 +151,7 @@ private:
 	
 	
 public:
-	TTRISChunk *next;
+	PTRISChunk next;
 	int brush_id;
 	_TTRISChunk__1 vertex_id;
 };
@@ -162,7 +164,7 @@ struct DECLSPEC_DRECORD TMESHChunk
 public:
 	int brush_id;
 	TVRTSChunk vertices;
-	TTRISChunk *triangles;
+	PTRISChunk triangles;
 };
 
 
@@ -181,12 +183,12 @@ typedef TKEYSChunk *PKEYSChunk;
 struct DECLSPEC_DRECORD TKEYSChunk
 {
 public:
-	TKEYSChunk *next;
+	PKEYSChunk next;
 	int flags;
 	int frame;
-	Glvectortypes::TVector3f position;
-	Glvectortypes::TVector3f scale;
-	Glvectortypes::TVector4f rotation;
+	Glvectorgeometry::TAffineVector position;
+	Glvectorgeometry::TAffineVector scale;
+	Glvectorgeometry::TVector rotation;
 };
 
 
@@ -207,14 +209,14 @@ struct DECLSPEC_DRECORD TNODEChunk
 {
 public:
 	System::StaticArray<System::WideChar, 256> name;
-	Glvectortypes::TVector3f position;
-	Glvectortypes::TVector3f scale;
-	Glvectortypes::TVector4f rotation;
-	TMESHChunk *meshes;
-	TKEYSChunk *keys;
-	TNODEChunk *nodes;
+	Glvectorgeometry::TAffineVector position;
+	Glvectorgeometry::TAffineVector scale;
+	Glvectorgeometry::TVector rotation;
+	PMESHChunk meshes;
+	PKEYSChunk keys;
+	PNODEChunk nodes;
 	TANIMChunk animation;
-	TNODEChunk *next;
+	PNODEChunk next;
 	int level;
 };
 
@@ -253,7 +255,7 @@ class PASCALIMPLEMENTATION TB3DNode : public System::TObject
 	typedef System::TObject inherited;
 	
 public:
-	TNODEChunk *NodeData;
+	PNODEChunk NodeData;
 	__fastcall TB3DNode();
 	__fastcall virtual ~TB3DNode();
 	System::UnicodeString __fastcall GetNodeName();

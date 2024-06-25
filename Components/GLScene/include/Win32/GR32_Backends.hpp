@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GR32_Backends.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GR32_Backends.pas' rev: 36.00 (Windows)
 
 #ifndef Gr32_backendsHPP
 #define Gr32_backendsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -45,12 +47,12 @@ typedef System::DelphiInterface<IPaintSupport> _di_IPaintSupport;
 __interface  INTERFACE_UUID("{225997CC-958A-423E-8B60-9EDE0D3B53B5}") ITextSupport  : public System::IInterface 
 {
 	virtual void __fastcall Textout(int X, int Y, const System::UnicodeString Text) = 0 /* overload */;
-	virtual void __fastcall Textout(int X, int Y, const System::Types::TRect &ClipRect, const System::UnicodeString Text) = 0 /* overload */;
-	virtual void __fastcall Textout(System::Types::TRect &DstRect, const unsigned Flags, const System::UnicodeString Text) = 0 /* overload */;
+	virtual void __fastcall Textout(int X, int Y, const Gr32::TRect &ClipRect, const System::UnicodeString Text) = 0 /* overload */;
+	virtual void __fastcall Textout(Gr32::TRect &DstRect, const unsigned Flags, const System::UnicodeString Text) = 0 /* overload */;
 	virtual System::Types::TSize __fastcall TextExtent(const System::UnicodeString Text) = 0 ;
 	virtual void __fastcall TextoutW(int X, int Y, const System::WideString Text) = 0 /* overload */;
-	virtual void __fastcall TextoutW(int X, int Y, const System::Types::TRect &ClipRect, const System::WideString Text) = 0 /* overload */;
-	virtual void __fastcall TextoutW(System::Types::TRect &DstRect, const unsigned Flags, const System::WideString Text) = 0 /* overload */;
+	virtual void __fastcall TextoutW(int X, int Y, const Gr32::TRect &ClipRect, const System::WideString Text) = 0 /* overload */;
+	virtual void __fastcall TextoutW(Gr32::TRect &DstRect, const unsigned Flags, const System::WideString Text) = 0 /* overload */;
 	virtual System::Types::TSize __fastcall TextExtentW(const System::WideString Text) = 0 ;
 };
 
@@ -79,18 +81,18 @@ __interface  INTERFACE_UUID("{5ACFEEC7-0123-4AD8-8AE6-145718438E01}") ICanvasSup
 __interface  INTERFACE_UUID("{DD1109DA-4019-4A5C-A450-3631A73CF288}") IDeviceContextSupport  : public System::IInterface 
 {
 	virtual HDC __fastcall GetHandle() = 0 ;
-	virtual void __fastcall Draw(const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect, HDC hSrc) = 0 ;
+	virtual void __fastcall Draw(const Gr32::TRect &DstRect, const Gr32::TRect &SrcRect, HDC hSrc) = 0 ;
 	virtual void __fastcall DrawTo(HDC hDst, int DstX, int DstY) = 0 /* overload */;
-	virtual void __fastcall DrawTo(HDC hDst, const System::Types::TRect &DstRect, const System::Types::TRect &SrcRect) = 0 /* overload */;
+	virtual void __fastcall DrawTo(HDC hDst, const Gr32::TRect &DstRect, const Gr32::TRect &SrcRect) = 0 /* overload */;
 	__property HDC Handle = {read=GetHandle};
 };
 
 __interface  INTERFACE_UUID("{DF0F9475-BA13-4C6B-81C3-D138624C4D08}") IBitmapContextSupport  : public System::IInterface 
 {
-	virtual tagBITMAPINFO __fastcall GetBitmapInfo() = 0 ;
-	virtual NativeUInt __fastcall GetBitmapHandle() = 0 ;
-	__property tagBITMAPINFO BitmapInfo = {read=GetBitmapInfo};
-	__property NativeUInt BitmapHandle = {read=GetBitmapHandle};
+	virtual Winapi::Windows::TBitmapInfo __fastcall GetBitmapInfo() = 0 ;
+	virtual Winapi::Windows::THandle __fastcall GetBitmapHandle() = 0 ;
+	__property Winapi::Windows::TBitmapInfo BitmapInfo = {read=GetBitmapInfo};
+	__property Winapi::Windows::THandle BitmapHandle = {read=GetBitmapHandle};
 };
 
 __interface  INTERFACE_UUID("{CE64DBEE-C4A9-4E8E-ABCA-1B1FD6F45924}") IPaintSupport  : public System::IInterface 
@@ -109,7 +111,7 @@ extern DELPHI_PACKAGE System::ResourceString _RCStrCannotCreateCompatibleDC;
 #define Gr32_backends_RCStrCannotCreateCompatibleDC System::LoadResourceString(&Gr32_backends::_RCStrCannotCreateCompatibleDC)
 extern DELPHI_PACKAGE System::ResourceString _RCStrCannotSelectAnObjectIntoDC;
 #define Gr32_backends_RCStrCannotSelectAnObjectIntoDC System::LoadResourceString(&Gr32_backends::_RCStrCannotSelectAnObjectIntoDC)
-extern DELPHI_PACKAGE void __fastcall RequireBackendSupport(Gr32::TCustomBitmap32* TargetBitmap, GUID *RequiredInterfaces, const int RequiredInterfaces_High, TRequireOperatorMode Mode, bool UseOptimizedDestructiveSwitchMethod, /* out */ Gr32::TCustomBackend* &ReleasedBackend);
+extern DELPHI_PACKAGE void __fastcall RequireBackendSupport(Gr32::TCustomBitmap32* TargetBitmap, GUID *RequiredInterfaces, const System::NativeInt RequiredInterfaces_High, TRequireOperatorMode Mode, bool UseOptimizedDestructiveSwitchMethod, /* out */ Gr32::TCustomBackend* &ReleasedBackend);
 extern DELPHI_PACKAGE void __fastcall RestoreBackend(Gr32::TCustomBitmap32* TargetBitmap, Gr32::TCustomBackend* const SavedBackend);
 }	/* namespace Gr32_backends */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GR32_BACKENDS)

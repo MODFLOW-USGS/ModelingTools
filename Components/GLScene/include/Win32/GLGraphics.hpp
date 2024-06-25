@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGraphics.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLGraphics.pas' rev: 36.00 (Windows)
 
 #ifndef GlgraphicsHPP
 #define GlgraphicsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -94,9 +96,9 @@ public:
 	int Depth;
 	Glcontext::TGLUnpackPBOHandle* PBO;
 	void *MapAddress;
-	unsigned Offset;
-	unsigned StreamOffset;
-	unsigned Size;
+	System::LongWord Offset;
+	System::LongWord StreamOffset;
+	System::LongWord Size;
 	TGLLODStreamingState State;
 };
 
@@ -115,7 +117,7 @@ private:
 	Glcontext::TFinishTaskEvent* FFinishEvent;
 	
 protected:
-	TPixel32Array *fData;
+	PPixel32Array fData;
 	TGLImagePiramid FLOD;
 	TGLImageLODRange fLevelCount;
 	unsigned fColorFormat;
@@ -237,7 +239,7 @@ public:
 	void __fastcall BrightnessCorrection(const float factor);
 	void __fastcall GammaCorrection(const float gamma);
 	void __fastcall DownSampleByFactor2();
-	void __fastcall ReadPixels(const System::Types::TRect &area);
+	void __fastcall ReadPixels(const Gr32::TRect &area);
 	void __fastcall DrawPixels(const float x, const float y);
 	void __fastcall GrayScaleToNormalMap(const float scale, bool wrapX = true, bool wrapY = true);
 	void __fastcall NormalizeNormalMap();
@@ -298,17 +300,17 @@ class PASCALIMPLEMENTATION EInvalidRasterFile : public System::Sysutils::Excepti
 	
 public:
 	/* Exception.Create */ inline __fastcall EInvalidRasterFile(const System::UnicodeString Msg) : System::Sysutils::Exception(Msg) { }
-	/* Exception.CreateFmt */ inline __fastcall EInvalidRasterFile(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
-	/* Exception.CreateRes */ inline __fastcall EInvalidRasterFile(NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
+	/* Exception.CreateFmt */ inline __fastcall EInvalidRasterFile(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High) : System::Sysutils::Exception(Msg, Args, Args_High) { }
+	/* Exception.CreateRes */ inline __fastcall EInvalidRasterFile(System::NativeUInt Ident)/* overload */ : System::Sysutils::Exception(Ident) { }
 	/* Exception.CreateRes */ inline __fastcall EInvalidRasterFile(System::PResStringRec ResStringRec)/* overload */ : System::Sysutils::Exception(ResStringRec) { }
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidRasterFile(NativeUInt Ident, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidRasterFile(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidRasterFile(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidRasterFile(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High) { }
 	/* Exception.CreateHelp */ inline __fastcall EInvalidRasterFile(const System::UnicodeString Msg, int AHelpContext) : System::Sysutils::Exception(Msg, AHelpContext) { }
-	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidRasterFile(const System::UnicodeString Msg, const System::TVarRec *Args, const int Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResHelp */ inline __fastcall EInvalidRasterFile(NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidRasterFile(const System::UnicodeString Msg, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext) : System::Sysutils::Exception(Msg, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EInvalidRasterFile(System::NativeUInt Ident, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, AHelpContext) { }
 	/* Exception.CreateResHelp */ inline __fastcall EInvalidRasterFile(System::PResStringRec ResStringRec, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidRasterFile(System::PResStringRec ResStringRec, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidRasterFile(NativeUInt Ident, const System::TVarRec *Args, const int Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidRasterFile(System::PResStringRec ResStringRec, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(ResStringRec, Args, Args_High, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidRasterFile(System::NativeUInt Ident, const System::TVarRec *Args, const System::NativeInt Args_High, int AHelpContext)/* overload */ : System::Sysutils::Exception(Ident, Args, Args_High, AHelpContext) { }
 	/* Exception.Destroy */ inline __fastcall virtual ~EInvalidRasterFile() { }
 	
 };

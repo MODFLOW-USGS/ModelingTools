@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLHeightData.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLHeightData.pas' rev: 36.00 (Windows)
 
 #ifndef GlheightdataHPP
 #define GlheightdataHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -142,12 +144,12 @@ private:
 	int FUseCounter;
 	TGLHeightDataType FDataType;
 	int FDataSize;
-	Glvectorgeometry::TByteVector *FByteData;
-	TByteRaster *FByteRaster;
-	TSmallintArray *FSmallIntData;
-	TSmallIntRaster *FSmallIntRaster;
-	Glvectorgeometry::TFloatVector *FSingleData;
-	TSingleRaster *FSingleRaster;
+	Glvectorgeometry::PByteArray FByteData;
+	PByteRaster FByteRaster;
+	PSmallIntArray FSmallIntData;
+	PSmallIntRaster FSmallIntRaster;
+	Glvectorgeometry::PSingleArray FSingleData;
+	PSingleRaster FSingleRaster;
 	THDTextureCoordinatesMode FTextureCoordinatesMode;
 	Glvectorgeometry::TTexPoint FTCOffset;
 	Glvectorgeometry::TTexPoint FTCScale;
@@ -198,11 +200,11 @@ public:
 	__property int Size = {read=FSize, nodefault};
 	__property bool Dirty = {read=FDirty, write=FDirty, nodefault};
 	__property int DataSize = {read=FDataSize, nodefault};
-	__property Glvectorgeometry::PByteVector ByteData = {read=FByteData};
+	__property Glvectorgeometry::PByteArray ByteData = {read=FByteData};
 	__property PByteRaster ByteRaster = {read=FByteRaster};
 	__property PSmallIntArray SmallIntData = {read=FSmallIntData};
 	__property PSmallIntRaster SmallIntRaster = {read=FSmallIntRaster};
-	__property Glvectorgeometry::PFloatVector SingleData = {read=FSingleData};
+	__property Glvectorgeometry::PSingleArray SingleData = {read=FSingleData};
 	__property PSingleRaster SingleRaster = {read=FSingleRaster};
 	__property System::UnicodeString MaterialName = {read=FMaterialName, write=SetMaterialName};
 	__property Glmaterial::TGLLibMaterial* LibMaterial = {read=FLibMaterial, write=SetLibMaterial};
@@ -216,8 +218,8 @@ public:
 	__property float HeightMin = {read=GetHeightMin, write=FHeightMin};
 	__property float HeightMax = {read=GetHeightMax, write=FHeightMax};
 	float __fastcall Height(int x, int y);
-	Glvectortypes::TVector3f __fastcall Normal(int x, int y, const Glvectortypes::TVector3f &scale);
-	Glvectortypes::TVector3f __fastcall NormalAtNode(int x, int y, const Glvectortypes::TVector3f &scale);
+	Glvectorgeometry::TAffineVector __fastcall Normal(int x, int y, const Glvectorgeometry::TAffineVector &scale);
+	Glvectorgeometry::TAffineVector __fastcall NormalAtNode(int x, int y, const Glvectorgeometry::TAffineVector &scale);
 	bool __fastcall OverlapsArea(const System::Types::TRect &Area);
 	__property System::TObject* ObjectTag = {read=FObjectTag, write=FObjectTag};
 	__property int Tag = {read=FTag, write=FTag, nodefault};
@@ -239,7 +241,7 @@ public:
 public:
 	/* TThread.Create */ inline __fastcall TGLHeightDataThread()/* overload */ : System::Classes::TThread() { }
 	/* TThread.Create */ inline __fastcall TGLHeightDataThread(bool CreateSuspended)/* overload */ : System::Classes::TThread(CreateSuspended) { }
-	/* TThread.Create */ inline __fastcall TGLHeightDataThread(bool CreateSuspended, NativeUInt ReservedStackSize)/* overload */ : System::Classes::TThread(CreateSuspended, ReservedStackSize) { }
+	/* TThread.Create */ inline __fastcall TGLHeightDataThread(bool CreateSuspended, System::NativeUInt ReservedStackSize)/* overload */ : System::Classes::TThread(CreateSuspended, ReservedStackSize) { }
 	
 };
 
@@ -267,7 +269,7 @@ protected:
 	void __fastcall SetInverted(bool Val);
 	void __fastcall CreateMonochromeBitmap(int size);
 	void __fastcall FreeMonochromeBitmap();
-	Glvectorgeometry::PByteVector __fastcall GetScanLine(int y);
+	Glvectorgeometry::PByteArray __fastcall GetScanLine(int y);
 	
 public:
 	__fastcall virtual TGLBitmapHDS(System::Classes::TComponent* AOwner);

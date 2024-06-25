@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLFile3DSSceneObjects.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLFile3DSSceneObjects.pas' rev: 36.00 (Windows)
 
 #ifndef Glfile3dssceneobjectsHPP
 #define Glfile3dssceneobjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -44,7 +46,7 @@ class PASCALIMPLEMENTATION TGLFile3DSLight : public Glscene::TGLLightSource
 	typedef Glscene::TGLLightSource inherited;
 	
 private:
-	Glcoordinates::TGLCoordinates3* FTargetPos;
+	Glcoordinates::TGLCoordinates* FTargetPos;
 	float FHotSpot;
 	float FMultipler;
 	
@@ -55,7 +57,7 @@ public:
 	__fastcall virtual ~TGLFile3DSLight();
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* SpotTargetPos = {read=FTargetPos};
+	__property Glcoordinates::TGLCoordinates* SpotTargetPos = {read=FTargetPos};
 	__property float HotSpot = {read=FHotSpot, write=FHotSpot};
 	__property float Multipler = {read=FMultipler, write=FMultipler};
 public:
@@ -69,7 +71,7 @@ class PASCALIMPLEMENTATION TGLFile3DSCamera : public Glscene::TGLCamera
 	typedef Glscene::TGLCamera inherited;
 	
 private:
-	Glcoordinates::TGLCoordinates3* FTargetPos;
+	Glcoordinates::TGLCoordinates* FTargetPos;
 	System::StaticArray<Opengltokens::PGLUQuadric, 2> FQuadCyl;
 	System::StaticArray<Opengltokens::PGLUQuadric, 2> FQuadDisk;
 	
@@ -80,7 +82,7 @@ public:
 	__fastcall virtual ~TGLFile3DSCamera();
 	
 __published:
-	__property Glcoordinates::TGLCoordinates3* CameraTargetPos = {read=FTargetPos};
+	__property Glcoordinates::TGLCoordinates* CameraTargetPos = {read=FTargetPos};
 	__property RollAngle = {default=0};
 public:
 	/* TGLBaseSceneObject.CreateAsChild */ inline __fastcall TGLFile3DSCamera(Glscene::TGLBaseSceneObject* aParentOwner) : Glscene::TGLCamera(aParentOwner) { }
@@ -113,9 +115,9 @@ class PASCALIMPLEMENTATION TGLFile3DSFreeForm : public Glvectorfileobjects::TGLF
 	typedef Glvectorfileobjects::TGLFreeForm inherited;
 	
 private:
-	Glvectortypes::TMatrix4f FTransfMat;
-	Glvectortypes::TMatrix4f FScaleMat;
-	Glvectortypes::TMatrix4f ParentMatrix;
+	Glvectorgeometry::TMatrix FTransfMat;
+	Glvectorgeometry::TMatrix FScaleMat;
+	Glvectorgeometry::TMatrix ParentMatrix;
 	Glcoordinates::TGLCoordinates4* FS_Rot3DS;
 	Glcoordinates::TGLCoordinates4* FRot3DS;
 	Glcoordinates::TGLCoordinates4* FScale3DS;
@@ -126,13 +128,13 @@ protected:
 	virtual void __fastcall DefineProperties(System::Classes::TFiler* Filer);
 	
 public:
-	Glvectortypes::TMatrix4f FRefMat;
+	Glvectorgeometry::TMatrix FRefMat;
 	__fastcall virtual TGLFile3DSFreeForm(System::Classes::TComponent* AOWner);
 	__fastcall virtual ~TGLFile3DSFreeForm();
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall CoordinateChanged(Glcoordinates::TGLCustomCoordinates* Sender);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual Glvectortypes::TVector4f __fastcall BarycenterAbsolutePosition();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectorgeometry::TVector __fastcall BarycenterAbsolutePosition();
 	
 __published:
 	__property Glcoordinates::TGLCoordinates4* S_Rot3DS = {read=FS_Rot3DS};

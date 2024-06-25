@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'File3DS.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'File3DS.pas' rev: 36.00 (Windows)
 
 #ifndef File3dsHPP
 #define File3dsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -28,7 +30,7 @@ class DELPHICLASS TObjectList;
 class DELPHICLASS TKeyFramer;
 class DELPHICLASS TFile3DS;
 //-- type declarations -------------------------------------------------------
-typedef void __fastcall (__closure *TLoadProgress)(int StreamPos, int StreamMax);
+typedef void __fastcall (__closure *TLoadProgress)(System::LongInt StreamPos, System::LongInt StreamMax);
 
 #pragma pack(push,4)
 class PASCALIMPLEMENTATION TMaterialList : public System::TObject
@@ -106,7 +108,7 @@ private:
 	System::Classes::TList* FOmniMotionList;
 	System::Classes::TList* FSpotMotionList;
 	System::Classes::TList* FCameraMotionList;
-	Types3ds::TKFAmbient3DS *FAmbientMotion;
+	Types3ds::PKFAmbient3DS FAmbientMotion;
 	Types3ds::PKFAmbient3DS __fastcall GetAmbientMotion();
 	Types3ds::PKFCamera3DS __fastcall GetCameraMotion(int Index);
 	int __fastcall GetCamMotionCount();
@@ -141,7 +143,7 @@ class PASCALIMPLEMENTATION TFile3DS : public System::TObject
 	typedef System::TObject inherited;
 	
 private:
-	Types3ds::TNodeList *FNodeList;
+	Types3ds::PNodeList FNodeList;
 	Types3ds::TDatabase3DS FDatabase;
 	System::Classes::TStream* FStream;
 	bool FOwnStream;
@@ -167,7 +169,7 @@ protected:
 	short __fastcall GetChunkNodeID(Types3ds::PChunk3DS Chunk);
 	void __fastcall InitDatabase();
 	bool __fastcall IsNode(System::Word Tag);
-	void __fastcall KFAddParentName(Types3ds::PChunk3DS Chunk, const System::UTF8String Name);
+	void __fastcall KFAddParentName(Types3ds::PChunk3DS Chunk, const Types3ds::String3DS Name);
 	void __fastcall MakeNode(Types3ds::PNodeList &Node);
 	void __fastcall ParseDatabase();
 	void __fastcall ReadChildren(Types3ds::PChunk3DS Parent);
@@ -196,7 +198,7 @@ public:
 	Types3ds::TPoint3DS __fastcall ReadPoint();
 	short __fastcall ReadShort();
 	float __fastcall ReadSingle();
-	char * __fastcall ReadString();
+	Types3ds::PChar3DS __fastcall ReadString();
 	Types3ds::TTexVert3DS __fastcall ReadTexVert();
 	Types3ds::TTrackHeader3DS __fastcall ReadTrackHeader();
 	System::Word __fastcall ReadWord();
@@ -209,14 +211,14 @@ public:
 	void __fastcall WriteData(int Size, void * Data);
 	void __fastcall WriteDouble(double AValue);
 	void __fastcall WriteFace(const Types3ds::TFace3DS &F);
-	void __fastcall WriteFixedString(const System::UTF8String AValue, int Len);
+	void __fastcall WriteFixedString(const Types3ds::String3DS AValue, int Len);
 	void __fastcall WriteHeader(System::Word ChunkType, unsigned ChunkSize);
 	void __fastcall WriteInteger(int AValue);
 	void __fastcall WriteKeyHeader(const Types3ds::TKeyHeader3DS &K);
 	void __fastcall WritePoint(const Types3ds::TPoint3DS &P);
 	void __fastcall WriteShort(short AValue);
 	void __fastcall WriteSingle(float AValue);
-	void __fastcall WriteString(const System::UTF8String AValue);
+	void __fastcall WriteString(const Types3ds::String3DS AValue);
 	void __fastcall WriteTexVertex(const Types3ds::TTexVert3DS &T);
 	void __fastcall WriteTrackHeader(const Types3ds::TTrackHeader3DS &T);
 	void __fastcall WriteWord(System::Word AValue);

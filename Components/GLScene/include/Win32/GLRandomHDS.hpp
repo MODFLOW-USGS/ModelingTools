@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLRandomHDS.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLRandomHDS.pas' rev: 36.00 (Windows)
 
 #ifndef GlrandomhdsHPP
 #define GlrandomhdsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -112,7 +114,7 @@ typedef System::DynamicArray<Glvectortypes::TVector4f> Glrandomhds__2;
 
 typedef System::DynamicArray<System::DynamicArray<Glvectortypes::TVector4f> > TMapOfVector;
 
-typedef Glvectortypes::TVector4f __fastcall (__closure *TOnDrawTexture)(TGLBaseRandomHDS* const Sender, int x, int y, double z, const Glvectortypes::TVector4f &Normal);
+typedef Glcolor::TColorVector __fastcall (__closure *TOnDrawTexture)(TGLBaseRandomHDS* const Sender, int x, int y, double z, const Glvectorgeometry::TVector &Normal);
 
 typedef void __fastcall (__closure *TSingleClamp)(float &x, float &y);
 
@@ -134,9 +136,9 @@ protected:
 	int FSize;
 	System::UnicodeString FMaterialName;
 	bool FLighting;
-	Glvectortypes::TVector4f FLightDirection;
+	Glvectorgeometry::TVector FLightDirection;
 	Glterrainrenderer::TGLTerrainRenderer* FTerrainRenderer;
-	Glvectortypes::TVector4f FLightColor;
+	Glcolor::TColorVector FLightColor;
 	bool FShadows;
 	bool FSea;
 	float FSeaLevel;
@@ -150,13 +152,13 @@ protected:
 	bool FPrimerLandscape;
 	TLandTileInfo FLandTileInfo;
 	TOnDrawTexture FOnDrawTexture;
-	Glvectortypes::TVector4f __fastcall OnDrawTextureDefault(TGLBaseRandomHDS* const Sender, int x, int y, double z, const Glvectortypes::TVector4f &Normal);
+	Glcolor::TColorVector __fastcall OnDrawTextureDefault(TGLBaseRandomHDS* const Sender, int x, int y, double z, const Glvectorgeometry::TVector &Normal);
 	void __fastcall SetSeed(const int Value);
 	void __fastcall SetMaterialName(const System::UnicodeString Value);
 	void __fastcall SetLighting(const bool Value);
-	void __fastcall SetLightDirection(const Glvectortypes::TVector4f &Value);
+	void __fastcall SetLightDirection(const Glvectorgeometry::TVector &Value);
 	virtual void __fastcall SetTerrainRenderer(Glterrainrenderer::TGLTerrainRenderer* const Value) = 0 ;
-	void __fastcall SetLightColor(const Glvectortypes::TVector4f &Value);
+	void __fastcall SetLightColor(const Glcolor::TColorVector &Value);
 	void __fastcall SetShadows(const bool Value);
 	void __fastcall SetSea(const bool Value);
 	void __fastcall SetSeaLevel(const float Value);
@@ -182,8 +184,8 @@ public:
 	TLifeErosion FErosionByLife;
 	__fastcall virtual TGLBaseRandomHDS(System::Classes::TComponent* AOwner);
 	__fastcall virtual ~TGLBaseRandomHDS();
-	__property Glvectortypes::TVector4f LightColor = {read=FLightColor, write=SetLightColor};
-	__property Glvectortypes::TVector4f LightDirection = {read=FLightDirection, write=SetLightDirection};
+	__property Glcolor::TColorVector LightColor = {read=FLightColor, write=SetLightColor};
+	__property Glvectorgeometry::TVector LightDirection = {read=FLightDirection, write=SetLightDirection};
 	__property TOnDrawTexture OnDrawTexture = {read=FOnDrawTexture, write=SetOnDrawTexture};
 	
 __published:
@@ -253,7 +255,7 @@ public:
 	virtual void __fastcall BuildHeightField() = 0 /* overload */;
 	void __fastcall BuildLandscape();
 	void __fastcall BuildLightMap()/* overload */;
-	void __fastcall BuildLightMap(const Glvectortypes::TVector4f &aLightDirection)/* overload */;
+	void __fastcall BuildLightMap(const Glvectorgeometry::TVector &aLightDirection)/* overload */;
 	void __fastcall BuildNormals();
 	void __fastcall BuildTexture();
 	void __fastcall ClearHeightField();
@@ -277,9 +279,9 @@ public:
 	bool __fastcall PointInMap(const int x, const int y)/* overload */;
 	__property float MaxHeight = {read=FMaxHeight};
 	__property float MinHeight = {read=FMinHeight};
-	Glvectortypes::TVector4f __fastcall Normal(const Glvectortypes::TVector4f &Position);
+	Glvectorgeometry::TVector __fastcall Normal(const Glvectorgeometry::TVector &Position);
 	__property float RangeHeight = {read=FRangeHeight};
-	Glcoordinates::TGLCoordinates3* __fastcall Scale();
+	Glcoordinates::TGLCoordinates* __fastcall Scale();
 	__property int Size = {read=FSize, nodefault};
 	float __fastcall StandardisedHeight(const int x, const int y);
 	__property System::UnicodeString Task = {read=FTask};
@@ -330,7 +332,7 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TOnCreateLandTile)(int x, int z, int Seed, TGLCustomRandomHDS* &aLandscape);
+typedef void __fastcall (__closure *TOnCreateLandTile)(int x, int z, int Seed, TGLLandTile* &aLandscape);
 
 typedef bool __fastcall (__closure *TIsDefaultTile)(int X, int Z);
 
@@ -359,7 +361,7 @@ private:
 	TIsDefaultTile FIsDefaultTile;
 	int FSeed;
 	int fBaseSeed;
-	TGLCustomRandomHDS* fComputedLandTile;
+	TGLLandTile* fComputedLandTile;
 	int FLandTileCapacity;
 	int FGenerationRadius;
 	float FLandTileDensity;
@@ -386,7 +388,7 @@ protected:
 	System::Contnrs::TComponentList* FLandTiles;
 	void __fastcall BoundaryClamp(float &x, float &z)/* overload */;
 	void __fastcall BoundaryClamp(int &x, int &z)/* overload */;
-	virtual void __fastcall ComputeLandTile(const int aX, const int aZ, TGLCustomRandomHDS* &NewLandTile);
+	virtual void __fastcall ComputeLandTile(const int aX, const int aZ, TGLLandTile* &NewLandTile);
 	void __fastcall CyclicClamp(float &x, float &z)/* overload */;
 	void __fastcall CyclicClamp(int &x, int &z)/* overload */;
 	void __fastcall GetTerrainBounds(float &l, float &t, float &r, float &b);
@@ -398,9 +400,9 @@ protected:
 	virtual void __fastcall SetTerrainRenderer(Glterrainrenderer::TGLTerrainRenderer* const Value);
 	
 public:
-	void __fastcall ApplyLighting(TGLCustomRandomHDS* &aLandTile);
-	void __fastcall ApplyTexture(TGLCustomRandomHDS* &aLandTile);
-	void __fastcall ApplyTopography(TGLCustomRandomHDS* &aLandTile);
+	void __fastcall ApplyLighting(TGLLandTile* &aLandTile);
+	void __fastcall ApplyTexture(TGLLandTile* &aLandTile);
+	void __fastcall ApplyTopography(TGLLandTile* &aLandTile);
 	void __fastcall CameraPosition(int &TileX, int &TileZ);
 	HIDESBASE void __fastcall CleanUp();
 	void __fastcall ConstrainCoordinates(float &x, float &z)/* overload */;
@@ -466,11 +468,11 @@ private:
 	
 protected:
 	virtual void __fastcall SetTerrainRenderer(Glterrainrenderer::TGLTerrainRenderer* const Value);
-	HIDESBASE void __fastcall fOnCreateLandTile(int aX, int aZ, int aSeed, TGLCustomRandomHDS* &aLandscape);
+	HIDESBASE void __fastcall fOnCreateLandTile(int aX, int aZ, int aSeed, TGLLandTile* &aLandscape);
 	HIDESBASE void __fastcall fOnCreateDefaultTile(Glheightdata::TGLHeightData* heightData);
 	
 public:
-	virtual void __fastcall ComputeLandTile(const int aX, const int aZ, TGLCustomRandomHDS* &NewLandTile);
+	virtual void __fastcall ComputeLandTile(const int aX, const int aZ, TGLLandTile* &NewLandTile);
 	__fastcall virtual TGLFractalArchipelago(System::Classes::TComponent* AOwner);
 	
 __published:
@@ -493,14 +495,14 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 static const System::Byte VerticalScalingFactor = System::Byte(0x80);
 extern DELPHI_PACKAGE Vcl::Graphics::TBitmap* __fastcall LoadJPGtexture(const System::UnicodeString JpgName);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall NoisyColor(const System::Uitypes::TColor Color, const float Noise = 5.000000E-02f);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall TextureSand(const int x, const int y);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall TextureBrownSoil(const int x, const int y);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall TextureDarkGreen(const int x, const int y);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall TextureDarkGray(const int x, const int y);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall TextureWhite(const int x, const int y);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall TextureBlue(const int x, const int y);
-extern DELPHI_PACKAGE Glvectortypes::TVector4f __fastcall TextureGreen(const int x, const int y);
+extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall NoisyColor(const System::Uitypes::TColor Color, const float Noise = 5.000000E-02f);
+extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureSand(const int x, const int y);
+extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureBrownSoil(const int x, const int y);
+extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureDarkGreen(const int x, const int y);
+extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureDarkGray(const int x, const int y);
+extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureWhite(const int x, const int y);
+extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureBlue(const int x, const int y);
+extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureGreen(const int x, const int y);
 extern DELPHI_PACKAGE void __fastcall InitializeRandomGenerator(const int Seed);
 extern DELPHI_PACKAGE void __fastcall FractalMiddlePointHDS(const int aDepth, const int aSeed, const int aAmplitude, const float aRoughness, bool aCyclic, TMapOfSingle &z, float &MinZ, float &MaxZ);
 extern DELPHI_PACKAGE void __fastcall PrimerNull(TMapOfSingle &z);

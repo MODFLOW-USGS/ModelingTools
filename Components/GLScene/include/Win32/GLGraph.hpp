@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGraph.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLGraph.pas' rev: 36.00 (Windows)
 
 #ifndef GlgraphHPP
 #define GlgraphHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -72,9 +74,9 @@ __published:
 };
 
 
-typedef void __fastcall (__closure *TGLHeightFieldGetHeightEvent)(const float x, const float y, float &z, Glvectortypes::TVector4f &Color, Glvectorgeometry::TTexPoint &TexPoint);
+typedef void __fastcall (__closure *TGLHeightFieldGetHeightEvent)(const float x, const float y, float &z, Glcolor::TColorVector &Color, Glvectorgeometry::TTexPoint &TexPoint);
 
-typedef void __fastcall (__closure *TGLHeightFieldGetHeight2Event)(System::TObject* Sender, const float x, const float y, float &z, Glvectortypes::TVector4f &Color, Glvectorgeometry::TTexPoint &TexPoint);
+typedef void __fastcall (__closure *TGLHeightFieldGetHeight2Event)(System::TObject* Sender, const float x, const float y, float &z, Glcolor::TColorVector &Color, Glvectorgeometry::TTexPoint &TexPoint);
 
 enum DECLSPEC_DENUM TGLHeightFieldOption : unsigned char { hfoTextureCoordinates, hfoTwoSided };
 
@@ -102,8 +104,8 @@ protected:
 	void __fastcall SetOnGetHeight(const TGLHeightFieldGetHeightEvent val);
 	void __fastcall SetOnGetHeight2(const TGLHeightFieldGetHeight2Event val);
 	void __fastcall SetColorMode(const TGLHeightFieldColorMode val);
-	void __fastcall DefaultHeightField(const float x, const float y, float &z, Glvectortypes::TVector4f &Color, Glvectorgeometry::TTexPoint &TexPoint);
-	void __fastcall Height2Field(const float x, const float y, float &z, Glvectortypes::TVector4f &Color, Glvectorgeometry::TTexPoint &texPoint);
+	void __fastcall DefaultHeightField(const float x, const float y, float &z, Glcolor::TColorVector &Color, Glvectorgeometry::TTexPoint &TexPoint);
+	void __fastcall Height2Field(const float x, const float y, float &z, Glcolor::TColorVector &Color, Glvectorgeometry::TTexPoint &texPoint);
 	
 public:
 	__fastcall virtual TGLHeightField(System::Classes::TComponent* AOwner);

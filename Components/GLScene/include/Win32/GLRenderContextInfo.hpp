@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLRenderContextInfo.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLRenderContextInfo.pas' rev: 36.00 (Windows)
 
 #ifndef GlrendercontextinfoHPP
 #define GlrendercontextinfoHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -35,8 +37,8 @@ enum DECLSPEC_DENUM TDrawState : unsigned char { dsRendering, dsPicking, dsPrint
 struct DECLSPEC_DRECORD TGLSize
 {
 public:
-	int cx;
-	int cy;
+	System::LongInt cx;
+	System::LongInt cy;
 };
 
 
@@ -47,8 +49,8 @@ enum DECLSPEC_DENUM TGLVisibilityCulling : unsigned char { vcInherited, vcNone, 
 struct DECLSPEC_DRECORD TRenderContextClippingInfo
 {
 public:
-	Glvectortypes::TVector4f origin;
-	Glvectortypes::TVector4f clippingDirection;
+	Glvectorgeometry::TVector origin;
+	Glvectorgeometry::TVector clippingDirection;
 	float viewPortRadius;
 	float nearClippingDistance;
 	float farClippingDistance;
@@ -61,9 +63,9 @@ struct DECLSPEC_DRECORD TGLRenderContextInfo
 public:
 	System::TObject* scene;
 	System::TObject* buffer;
-	Glvectortypes::TVector4f cameraPosition;
-	Glvectortypes::TVector4f cameraDirection;
-	Glvectortypes::TVector4f cameraUp;
+	Glvectorgeometry::TVector cameraPosition;
+	Glvectorgeometry::TVector cameraDirection;
+	Glvectorgeometry::TVector cameraUp;
 	TGLSize viewPortSize;
 	int renderDPI;
 	System::TObject* materialLibrary;
@@ -75,7 +77,7 @@ public:
 	Glstate::TGLStateCache* GLStates;
 	Glpipelinetransformation::TGLTransformation* PipelineTransformation;
 	TRenderContextClippingInfo rcci;
-	Glvectortypes::TVector4f sceneAmbientColor;
+	Glcolor::TColorVector sceneAmbientColor;
 	bool bufferFaceCull;
 	bool bufferLighting;
 	bool bufferFog;

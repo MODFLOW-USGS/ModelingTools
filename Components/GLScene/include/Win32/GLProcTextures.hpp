@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLProcTextures.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLProcTextures.pas' rev: 36.00 (Windows)
 
 #ifndef GlproctexturesHPP
 #define GlproctexturesHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -35,14 +37,14 @@ class PASCALIMPLEMENTATION TGLProcTextureNoise : public Gltexture::TGLTextureIma
 	typedef Gltexture::TGLTextureImage inherited;
 	
 private:
-	Glgraphics::TGLImage* FNoiseMap;
+	Glgraphics::TGLBitmap32* FNoiseMap;
 	int FWidth;
 	int FHeight;
 	System::Byte FMinCut;
 	float FNoiseSharpness;
 	float FNoiseAnimate;
 	bool FSeamless;
-	int FNoiseRandSeed;
+	System::LongInt FNoiseRandSeed;
 	
 protected:
 	System::StaticArray<float, 768> FGradients;
@@ -57,7 +59,7 @@ protected:
 	void __fastcall SetWidth(const int val);
 	void __fastcall SetHeight(const int val);
 	void __fastcall SetNoiseSharpness(const float val);
-	void __fastcall SetNoiseRandSeed(const int val);
+	void __fastcall SetNoiseRandSeed(const System::LongInt val);
 	void __fastcall UpdateNoise();
 	
 public:
@@ -66,12 +68,12 @@ public:
 	__classmethod virtual System::UnicodeString __fastcall FriendlyName();
 	__classmethod virtual System::UnicodeString __fastcall FriendlyDescription();
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	virtual Glgraphics::TGLImage* __fastcall GetBitmap32();
+	virtual Glgraphics::TGLBitmap32* __fastcall GetBitmap32();
 	virtual void __fastcall ReleaseBitmap32();
 	virtual void __fastcall SaveToFile(const System::UnicodeString fileName);
 	virtual void __fastcall LoadFromFile(const System::UnicodeString fileName);
 	void __fastcall NoiseAnimate(float speed);
-	void __fastcall SetPermFromData(const System::Byte *inPERM, const int inPERM_High);
+	void __fastcall SetPermFromData(const System::Byte *inPERM, const System::NativeInt inPERM_High);
 	void __fastcall SetPermToDefault();
 	
 __published:
@@ -81,7 +83,7 @@ __published:
 	__property System::Byte MinCut = {read=FMinCut, write=SetMinCut, nodefault};
 	__property float NoiseSharpness = {read=FNoiseSharpness, write=SetNoiseSharpness};
 	__property bool Seamless = {read=FSeamless, write=SetSeamless, nodefault};
-	__property int NoiseRandSeed = {read=FNoiseRandSeed, write=SetNoiseRandSeed, nodefault};
+	__property System::LongInt NoiseRandSeed = {read=FNoiseRandSeed, write=SetNoiseRandSeed, nodefault};
 };
 
 

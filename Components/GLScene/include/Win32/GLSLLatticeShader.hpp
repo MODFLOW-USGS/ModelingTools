@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLLatticeShader.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLLatticeShader.pas' rev: 36.00 (Windows)
 
 #ifndef GlsllatticeshaderHPP
 #define GlsllatticeshaderHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -72,13 +74,13 @@ private:
 	Glcolor::TGLColor* FSpecularColor;
 	Glmaterial::TGLAbstractMaterialLibrary* FMaterialLibrary;
 	Gltexture::TGLTexture* FMainTexture;
-	System::UnicodeString FMainTexName;
+	Glmaterial::TGLLibMaterialName FMainTexName;
 	float FSpecularPower;
 	float FLightPower;
 	Glmaterial::TGLAbstractMaterialLibrary* __fastcall GetMaterialLibrary();
 	void __fastcall SetMainTexTexture(Gltexture::TGLTexture* const Value);
-	System::UnicodeString __fastcall GetMainTexName();
-	void __fastcall SetMainTexName(const System::UnicodeString Value);
+	Glmaterial::TGLLibMaterialName __fastcall GetMainTexName();
+	void __fastcall SetMainTexName(const Glmaterial::TGLLibMaterialName Value);
 	void __fastcall SetDiffuseColor(Glcolor::TGLColor* AValue);
 	void __fastcall SetAmbientColor(Glcolor::TGLColor* AValue);
 	void __fastcall SetSpecularColor(Glcolor::TGLColor* AValue);
@@ -97,7 +99,7 @@ public:
 	__property Glcolor::TGLColor* AmbientColor = {read=FAmbientColor, write=SetAmbientColor};
 	__property Glmaterial::TGLAbstractMaterialLibrary* MaterialLibrary = {read=GetMaterialLibrary, write=SetMaterialLibrary};
 	__property Gltexture::TGLTexture* MainTexture = {read=FMainTexture, write=SetMainTexTexture};
-	__property System::UnicodeString MainTextureName = {read=GetMainTexName, write=SetMainTexName};
+	__property Glmaterial::TGLLibMaterialName MainTextureName = {read=GetMainTexName, write=SetMainTexName};
 	__property float SpecularPower = {read=FSpecularPower, write=FSpecularPower};
 	__property float LightPower = {read=FLightPower, write=FLightPower};
 };

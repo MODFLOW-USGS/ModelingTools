@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSLog.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSLog.pas' rev: 36.00 (Windows)
 
 #ifndef GlslogHPP
 #define GlslogHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -147,8 +149,8 @@ public:
 	__fastcall virtual TGLLogSession(const System::UnicodeString AFileName, const TLogTimeFormat ATimeFormat, const TLogLevels ALevels, const bool ALogThreadId, const bool ABuffered, const int AMaxSize, const bool ABackUpOldLogs, const bool AClearOldLogs, const bool AWriteInternalMessages);
 	__fastcall virtual ~TGLLogSession();
 	void __fastcall Log(const System::UnicodeString Desc, const TLogLevel Level = (TLogLevel)(0x1));
-	void __fastcall LogAdv(const System::TVarRec *args, const int args_High, const TLogLevel ALevel = (TLogLevel)(0x4));
-	void __fastcall LogException(System::Sysutils::Exception* const E, const System::UnicodeString aFunctionName, const System::TVarRec *args, const int args_High, const TLogLevel ALevel = (TLogLevel)(0x4));
+	void __fastcall LogAdv(const System::TVarRec *args, const System::NativeInt args_High, const TLogLevel ALevel = (TLogLevel)(0x4));
+	void __fastcall LogException(System::Sysutils::Exception* const E, const System::UnicodeString aFunctionName, const System::TVarRec *args, const System::NativeInt args_High, const TLogLevel ALevel = (TLogLevel)(0x4));
 	void __fastcall LogDebug(const System::UnicodeString Desc);
 	void __fastcall LogInfo(const System::UnicodeString Desc);
 	void __fastcall LogNotice(const System::UnicodeString Desc);
@@ -156,12 +158,12 @@ public:
 	void __fastcall LogError(const System::UnicodeString Desc);
 	void __fastcall LogFatalError(const System::UnicodeString Desc);
 	void __fastcall LogEmtryLine();
-	void __fastcall LogDebugFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const int Args_High);
-	void __fastcall LogInfoFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const int Args_High);
-	void __fastcall LogNoticeFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const int Args_High);
-	void __fastcall LogWarningFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const int Args_High);
-	void __fastcall LogErrorFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const int Args_High);
-	void __fastcall LogFatalErrorFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const int Args_High);
+	void __fastcall LogDebugFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const System::NativeInt Args_High);
+	void __fastcall LogInfoFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const System::NativeInt Args_High);
+	void __fastcall LogNoticeFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const System::NativeInt Args_High);
+	void __fastcall LogWarningFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const System::NativeInt Args_High);
+	void __fastcall LogErrorFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const System::NativeInt Args_High);
+	void __fastcall LogFatalErrorFmt(const System::UnicodeString Desc, const System::TVarRec *Args, const System::NativeInt Args_High);
 	void __fastcall DisplayLog();
 	void __fastcall FlushBuffer();
 	__property TLogLevels LogLevels = {read=FLogLevels, write=SetMode, default=63};
@@ -215,7 +217,7 @@ extern DELPHI_PACKAGE TLogLevels llMin;
 extern DELPHI_PACKAGE TIDELogProc vIDELogProc;
 extern DELPHI_PACKAGE TGLLogSession* __fastcall GLSLogger(void);
 extern DELPHI_PACKAGE void __fastcall UseCustomGLSLogger(TGLLogSession* const ALogger);
-extern DELPHI_PACKAGE System::UnicodeString __fastcall ConstArrayToString(const System::TVarRec *Elements, const int Elements_High);
+extern DELPHI_PACKAGE System::UnicodeString __fastcall ConstArrayToString(const System::TVarRec *Elements, const System::NativeInt Elements_High);
 extern DELPHI_PACKAGE TGLLogSession* __fastcall UserLog(void);
 extern DELPHI_PACKAGE bool __fastcall SkipBeforeSTR(System::TextFile &TextFile, const System::UnicodeString SkipSTR);
 extern DELPHI_PACKAGE System::UnicodeString __fastcall ReadLine(System::TextFile &TextFile);

@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLSound.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSound.pas' rev: 36.00 (Windows)
 
 #ifndef GlsoundHPP
 #define GlsoundHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -255,7 +257,7 @@ private:
 	bool FPause;
 	float FMasterVolume;
 	Glscene::TGLBaseSceneObject* FListener;
-	Glvectortypes::TVector4f FLastListenerPosition;
+	Glvectorgeometry::TVector FLastListenerPosition;
 	TGLSoundSources* FSources;
 	int FMaxChannels;
 	int FOutputFrequency;
@@ -291,7 +293,7 @@ protected:
 	void __fastcall SetSoundEnvironment(const TGLSoundEnvironment val);
 	virtual void __fastcall Loaded();
 	virtual void __fastcall DefineProperties(System::Classes::TFiler* Filer);
-	void __fastcall ListenerCoordinates(Glvectortypes::TVector4f &position, Glvectortypes::TVector4f &velocity, Glvectortypes::TVector4f &direction, Glvectortypes::TVector4f &up);
+	void __fastcall ListenerCoordinates(Glvectorgeometry::TVector &position, Glvectorgeometry::TVector &velocity, Glvectorgeometry::TVector &direction, Glvectorgeometry::TVector &up);
 	virtual bool __fastcall DoActivate();
 	virtual void __fastcall DoDeActivate();
 	virtual bool __fastcall DoMute();

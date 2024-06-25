@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLBitmapFont.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLBitmapFont.pas' rev: 36.00 (Windows)
 
 #ifndef GlbitmapfontHPP
 #define GlbitmapfontHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -204,8 +206,8 @@ public:
 	__fastcall virtual ~TGLCustomBitmapFont();
 	virtual void __fastcall RegisterUser(Glscene::TGLBaseSceneObject* anObject);
 	virtual void __fastcall UnRegisterUser(Glscene::TGLBaseSceneObject* anObject);
-	virtual void __fastcall RenderString(Glrendercontextinfo::TGLRenderContextInfo &ARci, const System::UnicodeString aText, System::Classes::TAlignment aAlignment, Vcl::Stdctrls::TTextLayout aLayout, const Glvectortypes::TVector4f &aColor, Glvectorgeometry::PVector aPosition = (Glvectorgeometry::PVector)(0x0), bool aReverseY = false)/* overload */;
-	void __fastcall TextOut(Glrendercontextinfo::TGLRenderContextInfo &rci, float X, float Y, const System::UnicodeString Text, const Glvectortypes::TVector4f &Color)/* overload */;
+	virtual void __fastcall RenderString(Glrendercontextinfo::TGLRenderContextInfo &ARci, const System::UnicodeString aText, System::Classes::TAlignment aAlignment, Vcl::Stdctrls::TTextLayout aLayout, const Glcolor::TColorVector &aColor, Glvectorgeometry::PVector aPosition = (Glvectorgeometry::PVector)(0x0), bool aReverseY = false)/* overload */;
+	void __fastcall TextOut(Glrendercontextinfo::TGLRenderContextInfo &rci, float X, float Y, const System::UnicodeString Text, const Glcolor::TColorVector &Color)/* overload */;
 	void __fastcall TextOut(Glrendercontextinfo::TGLRenderContextInfo &rci, float X, float Y, const System::UnicodeString Text, const System::Uitypes::TColor Color)/* overload */;
 	int __fastcall TextWidth(const System::UnicodeString Text);
 	virtual int __fastcall CharacterToTileIndex(System::WideChar aChar);

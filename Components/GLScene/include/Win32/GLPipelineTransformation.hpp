@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLPipelineTransformation.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLPipelineTransformation.pas' rev: 36.00 (Windows)
 
 #ifndef GlpipelinetransformationHPP
 #define GlpipelinetransformationHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -38,14 +40,14 @@ struct DECLSPEC_DRECORD TTransformationRec
 {
 public:
 	TGLPipelineTransformationStates FStates;
-	Glvectortypes::TMatrix4f FModelMatrix;
-	Glvectortypes::TMatrix4f FViewMatrix;
-	Glvectortypes::TMatrix4f FProjectionMatrix;
-	Glvectortypes::TMatrix4f FInvModelMatrix;
-	Glvectortypes::TMatrix3f FNormalModelMatrix;
-	Glvectortypes::TMatrix4f FModelViewMatrix;
-	Glvectortypes::TMatrix4f FInvModelViewMatrix;
-	Glvectortypes::TMatrix4f FViewProjectionMatrix;
+	Glvectorgeometry::TMatrix FModelMatrix;
+	Glvectorgeometry::TMatrix FViewMatrix;
+	Glvectorgeometry::TMatrix FProjectionMatrix;
+	Glvectorgeometry::TMatrix FInvModelMatrix;
+	Glvectorgeometry::TAffineMatrix FNormalModelMatrix;
+	Glvectorgeometry::TMatrix FModelViewMatrix;
+	Glvectorgeometry::TMatrix FInvModelViewMatrix;
+	Glvectorgeometry::TMatrix FViewProjectionMatrix;
 	Glvectorgeometry::TFrustum FFrustum;
 };
 
@@ -84,9 +86,9 @@ protected:
 	
 public:
 	__fastcall TGLTransformation();
-	void __fastcall SetModelMatrix(const Glvectortypes::TMatrix4f &AMatrix);
-	void __fastcall SetViewMatrix(const Glvectortypes::TMatrix4f &AMatrix);
-	void __fastcall SetProjectionMatrix(const Glvectortypes::TMatrix4f &AMatrix);
+	void __fastcall SetModelMatrix(const Glvectorgeometry::TMatrix &AMatrix);
+	void __fastcall SetViewMatrix(const Glvectorgeometry::TMatrix &AMatrix);
+	void __fastcall SetProjectionMatrix(const Glvectorgeometry::TMatrix &AMatrix);
 	void __fastcall IdentityAll();
 	void __fastcall Push(PTransformationRec AValue)/* overload */;
 	void __fastcall Push()/* overload */;

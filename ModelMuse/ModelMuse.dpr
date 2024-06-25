@@ -27,11 +27,6 @@ program ModelMuse;
 
 uses
   FastMM4 in 'FastMM4.pas',
-  madExcept,
-  madLinkDisAsm,
-  madListHardware,
-  madListProcesses,
-  madListModules,
   TempFiles in 'TempFiles.pas',
   Forms,
   HTMLHelpViewer,

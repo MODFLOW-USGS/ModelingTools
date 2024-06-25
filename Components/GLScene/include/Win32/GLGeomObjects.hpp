@@ -1,16 +1,18 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GLGeomObjects.pas' rev: 35.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLGeomObjects.pas' rev: 36.00 (Windows)
 
 #ifndef GlgeomobjectsHPP
 #define GlgeomobjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
+#if defined(__BORLANDC__) && !defined(__clang__)
 #pragma option -w-      // All warnings off
 #pragma option -Vx      // Zero-length empty class member 
+#endif
 #pragma pack(push,8)
 #include <System.hpp>
 #include <SysInit.hpp>
@@ -70,8 +72,8 @@ public:
 	__fastcall virtual TGLDisk(System::Classes::TComponent* AOwner);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	
 __published:
 	__property float InnerRadius = {read=FInnerRadius, write=SetInnerRadius};
@@ -147,8 +149,8 @@ public:
 	__fastcall virtual TGLCone(System::Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	
 __published:
 	__property TConeParts Parts = {read=FParts, write=SetParts, default=3};
@@ -186,11 +188,11 @@ public:
 	__fastcall virtual TGLCylinder(System::Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
-	void __fastcall Align(const Glvectortypes::TVector4f &startPoint, const Glvectortypes::TVector4f &endPoint)/* overload */;
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	void __fastcall Align(const Glvectorgeometry::TVector &startPoint, const Glvectorgeometry::TVector &endPoint)/* overload */;
 	void __fastcall Align(Glscene::TGLBaseSceneObject* const startObj, Glscene::TGLBaseSceneObject* const endObj)/* overload */;
-	void __fastcall Align(const Glvectortypes::TVector3f &startPoint, const Glvectortypes::TVector3f &endPoint)/* overload */;
+	void __fastcall Align(const Glvectorgeometry::TAffineVector &startPoint, const Glvectorgeometry::TAffineVector &endPoint)/* overload */;
 	
 __published:
 	__property float TopRadius = {read=FTopRadius, write=SetTopRadius};
@@ -229,11 +231,11 @@ public:
 	__fastcall virtual TGLCapsule(System::Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
-	void __fastcall Align(const Glvectortypes::TVector4f &startPoint, const Glvectortypes::TVector4f &endPoint)/* overload */;
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	void __fastcall Align(const Glvectorgeometry::TVector &startPoint, const Glvectorgeometry::TVector &endPoint)/* overload */;
 	void __fastcall Align(Glscene::TGLBaseSceneObject* const startObj, Glscene::TGLBaseSceneObject* const endObj)/* overload */;
-	void __fastcall Align(const Glvectortypes::TVector3f &startPoint, const Glvectortypes::TVector3f &endPoint)/* overload */;
+	void __fastcall Align(const Glvectorgeometry::TAffineVector &startPoint, const Glvectorgeometry::TAffineVector &endPoint)/* overload */;
 	
 __published:
 	__property float Height = {read=FHeight, write=SetHeight};
@@ -275,8 +277,8 @@ public:
 	__fastcall virtual TGLAnnulus(System::Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(System::Classes::TPersistent* Source);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	
 __published:
 	__property float BottomInnerRadius = {read=FBottomInnerRadius, write=SetBottomInnerRadius};
@@ -329,8 +331,8 @@ protected:
 public:
 	__fastcall virtual TGLTorus(System::Classes::TComponent* AOwner);
 	virtual void __fastcall BuildList(Glrendercontextinfo::TGLRenderContextInfo &rci);
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
-	virtual bool __fastcall RayCastIntersect(const Glvectortypes::TVector4f &rayStart, const Glvectortypes::TVector4f &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
+	virtual bool __fastcall RayCastIntersect(const Glvectorgeometry::TVector &rayStart, const Glvectorgeometry::TVector &rayVector, Glvectorgeometry::PVector intersectPoint = (Glvectorgeometry::PVector)(0x0), Glvectorgeometry::PVector intersectNormal = (Glvectorgeometry::PVector)(0x0));
 	
 __published:
 	__property float MajorRadius = {read=FMajorRadius, write=SetMajorRadius};
@@ -526,7 +528,7 @@ public:
 	float __fastcall TopDepth();
 	float __fastcall TopWidth();
 	HIDESBASE Glgeometrybb::TAABB __fastcall AxisAlignedBoundingBoxUnscaled();
-	virtual Glvectortypes::TVector4f __fastcall AxisAlignedDimensionsUnscaled();
+	virtual Glvectorgeometry::TVector __fastcall AxisAlignedDimensionsUnscaled();
 	
 __published:
 	__property float ApexHeight = {read=FApexHeight, write=SetApexHeight, stored=false};
