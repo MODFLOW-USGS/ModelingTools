@@ -1167,20 +1167,20 @@ type
     FOptionalArguments: integer;
     // @name is the address of the function used to evaluate the
     // TExpression.
-    FunctionAddr: Pointer;
+    FFunctionAddr: Pointer;
     // @name is the argument passed to the function used
     // to evaluate the @classname.
-    VariablesForFunction: array of Pointer;
+    FVariablesForFunction: array of Pointer;
     // See @link(AllowConversionToConstant).
     FAllowConversionToConstant: boolean;
     // See @link(Tag)
     FTag: integer;
     // StringVariableIndicies indicates which members of
     // @link(VariablesForFunction) refer to strings.
-    StringVariableIndicies: array of integer;
+    FStringVariableIndicies: array of integer;
     // StringVariableCount is the number of strings in
     // @link(VariablesForFunction).
-    StringVariableCount: integer;
+    FStringVariableCount: integer;
     // FVariablesUsed is used to hold the result of @link(VariablesUsed).
     FVariablesUsed: TStringList;
     // FTopLevel is used in @link(Decompile) to determine whether or not to include
@@ -1643,12 +1643,12 @@ type
   TRbwParser = class(TComponent)
   private
     // @name contains the names of the single character operators.
-    Operators: TStringList;
+    FOperators: TStringList;
     // name contains the names of the operators that have
     // two or more characters in their names.
-    WordOperators: TStringList;
+    FWordOperators: TStringList;
     // @name contains the names of the sign operators.
-    Signs: set of AnsiChar;
+    FSigns: set of AnsiChar;
     // See @link(TSpecialImplementorList) and @link(SpecialImplementorList).
     FSpecialImplementorList: TSpecialImplementorList;
     // @name: @link(TExpression);
@@ -2986,9 +2986,9 @@ begin
             // See if the current character is the beginning of an operator.
             // If so, add the prior token and the operator to the list of tokens.
 
-            for OperatorIndex := 0 to WordOperators.Count - 1 do
+            for OperatorIndex := 0 to FWordOperators.Count - 1 do
             begin
-              AnOperator := WordOperators[OperatorIndex];
+              AnOperator := FWordOperators[OperatorIndex];
               TestString := Copy(ALine, Index, Length(AnOperator));
               if AnOperator = TestString then
               begin
@@ -3019,9 +3019,9 @@ begin
             begin
               Continue;
             end;
-            for OperatorIndex := 0 to Operators.Count - 1 do
+            for OperatorIndex := 0 to FOperators.Count - 1 do
             begin
-              AnOperator := Operators[OperatorIndex];
+              AnOperator := FOperators[OperatorIndex];
               TestString := Copy(ALine, Index, Length(AnOperator));
               if AnOperator = TestString then
               begin
@@ -3188,8 +3188,8 @@ begin
   FSpecialImplementorList := TSpecialImplementorList.Create;
 
   FOpereratorDefinitions := TObjectList.Create;
-  Operators := TStringList.Create;
-  WordOperators := TStringList.Create;
+  FOperators := TStringList.Create;
+  FWordOperators := TStringList.Create;
 
   DefineNotOperator;
   DefinePowerOperator;
@@ -3229,8 +3229,8 @@ begin
   FOwnedVariables.Free;
   FSpecialImplementorList.Free;
   FOpereratorDefinitions.Free;
-  Operators.Free;
-  WordOperators.Free;
+  FOperators.Free;
+  FWordOperators.Free;
   inherited;
 end;
 
@@ -4171,7 +4171,7 @@ begin
           if Constant <> nil then
           begin
             SetResultFromConstant(Constant, Result);
-            result.FunctionAddr := nil;
+            result.FFunctionAddr := nil;
             result.ShouldEvaluate := False;
             result.FUserName := Constant.Decompile;
             Constant.Free;
@@ -4432,7 +4432,7 @@ begin
         if FunctionClass.OptionalArguments <> 0 then
         begin
           SetLength(AnExpression.Data, Arguments.Count);
-          SetLength(AnExpression.VariablesForFunction, Arguments.Count);
+          SetLength(AnExpression.FVariablesForFunction, Arguments.Count);
 
         end;
 
@@ -4875,16 +4875,16 @@ begin
   begin
     if OpDef.SignOperator then
     begin
-      Include(Signs, OpDef.OperatorName[1]);
+      Include(FSigns, OpDef.OperatorName[1]);
     end
     else
     begin
-      Operators.Add(string(OpDef.OperatorName));
+      FOperators.Add(string(OpDef.OperatorName));
     end;
   end
   else
   begin
-    WordOperators.Add(string(OpDef.OperatorName));
+    FWordOperators.Add(string(OpDef.OperatorName));
   end;
 end;
 
@@ -4910,23 +4910,23 @@ begin
       begin
         if OpDef.SignOperator then
         begin
-          Exclude(Signs, OpDef.OperatorName[1]);
+          Exclude(FSigns, OpDef.OperatorName[1]);
         end
         else
         begin
-          Position := Operators.IndexOf(string(OpDef.OperatorName));
+          Position := FOperators.IndexOf(string(OpDef.OperatorName));
           if Position >= 0 then
           begin
-            Operators.Delete(Position);
+            FOperators.Delete(Position);
           end;
         end;
       end
       else
       begin
-          Position := WordOperators.IndexOf(string(OpDef.OperatorName));
+          Position := FWordOperators.IndexOf(string(OpDef.OperatorName));
           if Position >= 0 then
           begin
-            WordOperators.Delete(Position);
+            FWordOperators.Delete(Position);
           end;
       end;
 
@@ -5788,7 +5788,7 @@ begin
         if FunctionClass.OptionalArguments <> 0 then
         begin
           SetLength(AnExpression.Data, Arguments.Count);
-          SetLength(AnExpression.VariablesForFunction, Arguments.Count);
+          SetLength(AnExpression.FVariablesForFunction, Arguments.Count);
         end;
 
         Objects[Index] := AnExpression;
@@ -5955,10 +5955,10 @@ procedure TExpression.Initalize(const FunctionAddress: Pointer;
 var
   Index: Integer;
 begin
-  FunctionAddr := FunctionAddress;
-  ShouldEvaluate := Assigned(FunctionAddr);
+  FFunctionAddr := FunctionAddress;
+  ShouldEvaluate := Assigned(FFunctionAddr);
   SetLength(Data, Length(DataTypes));
-  SetLength(VariablesForFunction, Length(DataTypes));
+  SetLength(FVariablesForFunction, Length(DataTypes));
   for Index := 0 to Length(DataTypes) - 1 do
   begin
     with Data[Index] do
@@ -5989,7 +5989,7 @@ begin
       Datum := nil;
     end;
   end;
-  SetLength(VariablesForFunction, Count);
+  SetLength(FVariablesForFunction, Count);
 end;
 
 procedure TExpression.Evaluate;
@@ -6011,11 +6011,11 @@ begin
         end;
       end;
     end;
-    for Index := 0 to StringVariableCount - 1 do
+    for Index := 0 to FStringVariableCount - 1 do
     begin
-      I := StringVariableIndicies[Index];
+      I := FStringVariableIndicies[Index];
       AVariable := TConstant(Data[I].Datum);
-      VariablesForFunction[I] := AVariable.FResult;
+      FVariablesForFunction[I] := AVariable.FResult;
     end;
     SetResultFromFunction;
   end;
@@ -6115,7 +6115,7 @@ var
   NewConstant: TConstant;
   CanConvert: boolean;
 begin
-  ShouldEvaluate := Assigned(FunctionAddr);
+  ShouldEvaluate := Assigned(FFunctionAddr);
   result := nil;
   if not AllowConversionToConstant then
     Exit;
@@ -6169,7 +6169,7 @@ begin
       Assert(False);
     end;
   end;
-  ShouldEvaluate := Assigned(FunctionAddr);
+  ShouldEvaluate := Assigned(FFunctionAddr);
 end;
 
 {$WARNINGS OFF}
@@ -7238,7 +7238,7 @@ constructor TExpression.Create(const VariableName: string;
   SpecialImplementorList: TSpecialImplementorList);
 begin
   Create(VariableName, DataType, SpecialImplementorList);
-  FunctionAddr := nil;
+  FFunctionAddr := nil;
   ShouldEvaluate := False;
   AllowConversionToConstant := CanConvertToConstant;
 end;
@@ -7349,7 +7349,7 @@ begin
   if not result then
   begin
     ArrayLength := Length(Data);
-    if (ArrayLength > 0) and Assigned(FunctionAddr) then
+    if (ArrayLength > 0) and Assigned(FFunctionAddr) then
     begin
       for Index := 0 to ArrayLength - 1 do
       begin
@@ -7376,19 +7376,19 @@ begin
   case ResultType of
     rdtDouble:
       begin
-        PDouble(FResult)^ := TRbwRealFunction(FunctionAddr)(VariablesForFunction);
+        PDouble(FResult)^ := TRbwRealFunction(FFunctionAddr)(FVariablesForFunction);
       end;
     rdtInteger:
       begin
-        PInteger(FResult)^ := TRbwIntegerFunction(FunctionAddr)(VariablesForFunction);
+        PInteger(FResult)^ := TRbwIntegerFunction(FFunctionAddr)(FVariablesForFunction);
       end;
     rdtBoolean:
       begin
-        PBoolean(FResult)^ := TRbwBooleanFunction(FunctionAddr)(VariablesForFunction);
+        PBoolean(FResult)^ := TRbwBooleanFunction(FFunctionAddr)(FVariablesForFunction);
       end;
     rdtString:
       begin
-        ResultString := TRbwStringFunction(FunctionAddr)(VariablesForFunction);
+        ResultString := TRbwStringFunction(FFunctionAddr)(FVariablesForFunction);
       end;
   else
     Assert(False);
@@ -7412,7 +7412,7 @@ var
 begin
   result := FUserName;
   ArrayLength := Length(Data);
-  if (ArrayLength > 0) and Assigned(FunctionAddr) then
+  if (ArrayLength > 0) and Assigned(FFunctionAddr) then
   begin
     DecompileList := TStringList.Create;
     try
@@ -7535,25 +7535,25 @@ var
   Index: integer;
   AVariable: TConstant;
 begin
-  StringVariableCount := 0;
-  Assert(Length(VariablesForFunction) = Length(Data));
-  SetLength(StringVariableIndicies, Length(Data));
+  FStringVariableCount := 0;
+  Assert(Length(FVariablesForFunction) = Length(Data));
+  SetLength(FStringVariableIndicies, Length(Data));
 
   for Index := 0 to Length(Data) - 1 do
   begin
     if Data[Index].Datum = nil then
     begin
-      VariablesForFunction[Index] := nil;
+      FVariablesForFunction[Index] := nil;
     end
     else
     begin
       AVariable := TConstant(Data[Index].Datum);
-      VariablesForFunction[Index] := AVariable.FResult;
+      FVariablesForFunction[Index] := AVariable.FResult;
       if (AVariable.FResultType = rdtString)
         and (AVariable is TCustomValue) then
       begin
-        StringVariableIndicies[StringVariableCount] := Index;
-        Inc(StringVariableCount);
+        FStringVariableIndicies[FStringVariableCount] := Index;
+        Inc(FStringVariableCount);
       end;
       if AVariable is TExpression then
       begin
@@ -7561,7 +7561,7 @@ begin
       end;
     end;
   end;
-  SetLength(StringVariableIndicies, StringVariableCount);
+  SetLength(FStringVariableIndicies, FStringVariableCount);
 end;
 
 function TExpression.GetVariablesUsed: TStringList;
@@ -8863,7 +8863,7 @@ var
   AVariable: TConstant;
   Paren: string;
 begin
-  if Assigned(FunctionAddr) then
+  if Assigned(FFunctionAddr) then
   begin
     result := Name;
     ArrayLength := Length(Data);
@@ -8942,7 +8942,7 @@ var
   ArrayLength: integer;
   AVariable: TConstant;
 begin
-  if Assigned(FunctionAddr) then
+  if Assigned(FFunctionAddr) then
   begin
     result := Name;
     ArrayLength := Length(Data);

@@ -166,6 +166,7 @@ type
     procedure TestOperatorParenthesisSkipped;
     procedure FarmProcessTest;
     procedure TestAddedOperatorOverload;
+    procedure TestVariablesUsed;
   end;
 
 implementation
@@ -533,12 +534,13 @@ procedure TestTRbwParser.TestClearExpressions;
 var
   Expression: string;
 begin
+  Check(FRbwParser.ExpressionCount = 0, 'Error in setting up RbwParser');
   if FRbwParser.ExpressionCount = 0 then
   begin
     Expression := '1+2';
     FRbwParser.Compile(Expression);
   end;
-  Check(FRbwParser.ExpressionCount > 0, 'Error in counting expressions');
+  Check(FRbwParser.ExpressionCount = 1, 'Error in counting expressions');
 
   FRbwParser.ClearExpressions;
   Check(FRbwParser.ExpressionCount = 0, 'Error in clearing expressions');
@@ -643,7 +645,29 @@ begin
       TestValue := True;
     end;
   end;
-  Check(TestValue, 'Error attempting to create a duplicating variable');
+  Check(TestValue, 'Error attempting to create a duplicate variable');
+
+  TestValue := False;
+  try
+    FRbwParser.CreateVariable('x_real', '', 0.1, '');
+
+  except on ERbwParserError do
+    begin
+      TestValue := True;
+    end;
+  end;
+  Check(TestValue, 'Error attempting to create a duplicate variable');
+
+  TestValue := False;
+  try
+    FRbwParser.CreateVariable('X_REAL', '', 0.1, '');
+
+  except on ERbwParserError do
+    begin
+      TestValue := True;
+    end;
+  end;
+  Check(TestValue, 'Error attempting to create a duplicate variable');
 end;
 
 procedure TestTRbwParser.TestCreateVariable3;
@@ -1078,7 +1102,32 @@ begin
   Check(FRbwParser.VariableCount = 2, 'Error counting variables');
 end;
 
+procedure TestTRbwParser.TestVariablesUsed;
+var
+  Expression: string;
+  Position: Integer;
+  Exp: TExpression;
+  UsedVariables: TStringList;
+begin
+  FRbwParser.CreateVariable('Y', '', 1.0, '');
+  FRbwParser.CreateVariable('x', '', 2.0, '');
+  FRbwParser.CreateVariable('z', '', 3, '');
 
+  Expression := '(Z+Y)/X+Z';
+  Position := FRbwParser.Compile(Expression);
+  Check(Expression = '((z + Y) / x) + z', 'Error compiling expression');
+  Check(Position >= 0, 'Error compiling');
+  Exp := FRbwParser.CurrentExpression;
+  Check(Exp = FRbwParser.Expressions[Position], 'Error accessing expression');
+  Check(Exp.ResultType = rdtDouble, 'Error compiling: wrong result type');
+  Exp.Evaluate;
+  Check(Exp.DoubleResult = 5.0, 'Error evaluating expression');
+  UsedVariables := Exp.VariablesUsed;
+  Check(UsedVariables.Count = 3, 'Error getting VariablesUsed');
+  Check(UsedVariables[0] = 'x', 'Error getting first variable');
+  Check(UsedVariables[1] = 'Y', 'Error getting second variable');
+  Check(UsedVariables[2] = 'z', 'Error getting third variable');
+end;
 
 procedure TestTRbwParser.Test_UpperCase;
 const
