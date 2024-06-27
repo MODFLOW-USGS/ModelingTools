@@ -7732,21 +7732,21 @@ begin
     result := inherited UsesVariable(Variable);
     if not result then
     begin
-    if (frmGoPhast.PhastModel <> nil)
-      and (frmGoPhast.PhastModel.SutraLayerStructure <> nil) then
-    begin
-      SutraLayerStructure := frmGoPhast.PhastModel.SutraLayerStructure;
-      for LayerIndex := 0 to SutraLayerStructure.Count - 1 do
+      if (frmGoPhast.PhastModel <> nil)
+        and (frmGoPhast.PhastModel.SutraLayerStructure <> nil) then
       begin
-        LayerGroup := SutraLayerStructure[LayerIndex];
-
-        result := (Variable.Name = UpperCase(LayerGroup.DataArrayName));
-        if result then
+        SutraLayerStructure := frmGoPhast.PhastModel.SutraLayerStructure;
+        for LayerIndex := 0 to SutraLayerStructure.Count - 1 do
         begin
-          exit;
+          LayerGroup := SutraLayerStructure[LayerIndex];
+
+          result := (Variable.Name = UpperCase(LayerGroup.DataArrayName));
+          if result then
+          begin
+            exit;
+          end;
         end;
       end;
-    end;
     end;
   end;
 end;
@@ -8596,17 +8596,6 @@ initialization
   RowWidthFunction.CanConvertToConstant := False;
   RowWidthFunction.Name := 'RowWidth';
   RowWidthFunction.Prototype := StrGridOrMesh+'RowWidth({Row})';
-
-//  LayerHeightFunction.ResultType := rdtDouble;
-//  LayerHeightFunction.RFunctionAddr := _LayerHeight;
-//  SetLength(LayerHeightFunction.InputDataTypes, 3);
-//  LayerHeightFunction.InputDataTypes[0] := rdtInteger;
-//  LayerHeightFunction.InputDataTypes[1] := rdtInteger;
-//  LayerHeightFunction.InputDataTypes[2] := rdtInteger;
-//  LayerHeightFunction.OptionalArguments := 3;
-//  LayerHeightFunction.CanConvertToConstant := False;
-//  LayerHeightFunction.Name := StrLayerHeight;
-//  LayerHeightFunction.Prototype := StrGridOrMesh+''+StrLayerHeight+'({{Col, Row,} Layer})';
 
   BlockAreaTopFunction.ResultType := rdtDouble;
   BlockAreaTopFunction.RFunctionAddr := _BlockAreaTop;

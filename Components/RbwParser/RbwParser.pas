@@ -344,7 +344,7 @@ type
     FunctionRecord: TFunctionRecord;
     // @Name: string;
     // See @link(Prototype).
-    FPrototype: string;
+//    FPrototype: string;
     FSquareBracketsUsed: Boolean;
     // See @link(AllowConversionToConstant).
     function GetAllowConversionToConstant: boolean;
@@ -477,7 +477,7 @@ type
       Thus, the portions before the "|" could be used to populate a
       tree control.
     }
-    property Prototype: string read FPrototype write FPrototype;
+    property Prototype: string read FunctionRecord.Prototype write FunctionRecord.Prototype;
     {
       If @Name is greater than 0, up to that number of nil
       pointers may be passed to the function when it is evaluated.  All
@@ -1401,6 +1401,9 @@ type
     TRbwParser.SpecialImplementorList)
     to create a descendant of @Link(TExpression)
     in TExpression.@Link(TExpression.New).)
+
+    A reason to use @name would be, for example, if the function needs
+    to access data beyond that which is passed to it as arguments.
   }
   TSpecialImplementor = class
   public
@@ -6024,10 +6027,10 @@ end;
 
 constructor TExpression.Create(const FunctionClass: TFunctionClass; SpecialImplementorList: TSpecialImplementorList);
 begin
-  if FunctionClass.FunctionRecord.Prototype = '' then
-  begin
-    FunctionClass.FunctionRecord.Prototype := FunctionClass.Prototype;
-  end;
+//  if FunctionClass.FunctionRecord.Prototype = '' then
+//  begin
+//    FunctionClass.FunctionRecord.Prototype := FunctionClass.Prototype;
+//  end;
   Create(FunctionClass.FunctionRecord, SpecialImplementorList);
 end;
 
@@ -7802,20 +7805,21 @@ begin
       AFunctionClass.FunctionRecord.InputDataTypes[IIndex] :=
         FunctionRecord.InputDataTypes[IIndex];
     end;
-    AFunctionClass.FunctionRecord.Synonyms := FunctionRecord.Synonyms;
-    SetLength(AFunctionClass.FunctionRecord.Synonyms,
-      Length(AFunctionClass.FunctionRecord.Synonyms));
-    AFunctionClass.Hidden := FunctionRecord.Hidden;
+//    AFunctionClass.FunctionRecord.Synonyms := FunctionRecord.Synonyms;
+//    SetLength(AFunctionClass.FunctionRecord.Synonyms,
+//      Length(AFunctionClass.FunctionRecord.Synonyms));
+//    AFunctionClass.Hidden := FunctionRecord.Hidden;
     AFunctionClass.SquareBracketsUsed := FunctionRecord.SquareBracketsUsed;
-    AFunctionClass.Prototype := FunctionRecord.Prototype;
-    AFunctionClass.FunctionRecord.ResultType := FunctionRecord.ResultType;
-    AFunctionClass.FunctionRecord.Name := FunctionRecord.Name;
-    AFunctionClass.FunctionRecord.Prototype := FunctionRecord.Prototype;
-    AFunctionClass.FunctionRecord.OptionalArguments :=
-      FunctionRecord.OptionalArguments;
-    AFunctionClass.FunctionRecord.CanConvertToConstant :=
-      FunctionRecord.CanConvertToConstant;
-    AFunctionClass.FunctionRecord.RFunctionAddr := FunctionRecord.RFunctionAddr;
+//    AFunctionClass.Prototype := FunctionRecord.Prototype;
+    AFunctionClass.FunctionRecord := FunctionRecord;
+//    AFunctionClass.FunctionRecord.ResultType := FunctionRecord.ResultType;
+//    AFunctionClass.FunctionRecord.Name := FunctionRecord.Name;
+//    AFunctionClass.FunctionRecord.Prototype := FunctionRecord.Prototype;
+//    AFunctionClass.FunctionRecord.OptionalArguments :=
+//      FunctionRecord.OptionalArguments;
+//    AFunctionClass.FunctionRecord.CanConvertToConstant :=
+//      FunctionRecord.CanConvertToConstant;
+//    AFunctionClass.FunctionRecord.RFunctionAddr := FunctionRecord.RFunctionAddr;
     for AlternateNameIndex := 0 to Length(FunctionRecord.Synonyms) -1 do
     begin
       AFunctionClass.Synonyms.Add(FunctionRecord.
