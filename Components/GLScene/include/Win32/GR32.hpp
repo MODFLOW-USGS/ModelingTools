@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2023 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32.pas' rev: 36.00 (Windows)
@@ -194,7 +194,7 @@ typedef TArrayOfFloat *PArrayOfFloat;
 
 typedef System::Types::TPoint *PPoint;
 
-using System::Types::TPoint;
+typedef System::Types::TPoint TPoint;
 
 typedef System::StaticArray<System::Types::TPoint, 1> TPointArray;
 
@@ -254,7 +254,7 @@ typedef TArrayOfArrayOfFixedPoint *PArrayOfArrayOfFixedPoint;
 
 using System::Types::PRect;
 
-using System::Types::TRect;
+typedef System::Types::TRect TRect;
 
 typedef TFloatRect *PFloatRect;
 

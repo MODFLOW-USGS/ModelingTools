@@ -11073,26 +11073,13 @@ function TfrmGoPhast.Mf6UpToDate: boolean;
 var
   WarningMessage: string;
 begin
-//  if PhastModel.GwtUsed then
-//  begin
-//    result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6WithGwtDate);
-//    if not result then
-//    begin
-//      Beep;
-//      WarningMessage := StrToFunctionProperly;
-//      result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
-//    end;
-//  end
-//  else
-//  begin
-    result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6Date);
-    if not result then
-    begin
-      Beep;
-      WarningMessage := Format(StrTheCurrentVersion, [StrMODFLOW6]);
-      result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
-    end;
-//  end;
+  result := ModelUpToDate(PhastModel.ProgramLocations.Modflow6Location, Mf6Date);
+  if not result then
+  begin
+    Beep;
+    WarningMessage := Format(StrTheCurrentVersion, [StrMODFLOW6]);
+    result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
+  end;
 end;
 
 function TfrmGoPhast.FootprintUpToDate: boolean;
@@ -11106,20 +11093,6 @@ begin
   end;
 
 end;
-
-//function TfrmGoPhast.ModelMateUpToDate: boolean;
-//var
-//  WarningMessage: string;
-//begin
-//  result := ModelUpToDate(PhastModel.ProgramLocations.ModelMateLocation, ModelMateDate);
-//  if not result then
-//  begin
-//    Beep;
-//    WarningMessage := Format(StrTheCurrentVersion, [StrMODFLOW2005]);
-//    result := (MessageDlg(WarningMessage, mtWarning, [mbYes, mbNo], 0) = mrYes);
-//  end;
-//end;
-
 
 function TfrmGoPhast.MfCfpUpToDate: boolean;
 var

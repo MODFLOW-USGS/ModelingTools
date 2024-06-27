@@ -14904,6 +14904,53 @@ var
     end;
     result.IFACE := TIface(IFACE+2);
   end;
+  procedure SplitReachListWithNonZeroBoundaryValues(var AReachList: TSfrReachInfoList;
+    BoundaryValues: TMf6BoundaryValueArray);
+  var
+    SplitIndex: Integer;
+    NewReachList: TSfrReachInfoList;
+    FirstReachList: TSfrReachInfoList;
+  begin
+    SplitIndex := -1;
+    for var Index := 1 to AReachList.Count - 1 do
+    begin
+      if BoundaryValues[Index].ValueType = vtString then
+      begin
+        SplitIndex := Index;
+        break;
+      end
+      else
+      begin
+        if BoundaryValues[Index].NumericValue <> 0 then
+        begin
+          SplitIndex := Index;
+          break;
+        end;
+      end;
+    end;
+    if SplitIndex <> -1 then
+    begin
+      NewReachList := TSfrReachInfoList.Create;
+      FirstReachList := NewReachList;
+      NewReachList.Add(AReachList[0]);
+      for var Index := 1 to AReachList.Count - 1 do
+      begin
+        if BoundaryValues[Index].ValueType = vtString then
+        begin
+          NewReachList := TSfrReachInfoList.Create;
+          SfrReachInfoLists.Add(NewReachList);
+        end
+        else if BoundaryValues[Index].NumericValue <> 0 then
+        begin
+          NewReachList := TSfrReachInfoList.Create;
+          SfrReachInfoLists.Add(NewReachList);
+        end;
+        NewReachList.Add(AReachList[Index])
+      end;
+      SfrReachInfoLists[ObjectIndex] := FirstReachList;
+      AReachList := FirstReachList;
+    end;
+  end;
   procedure SplitReachListWithBoundaryValues(var AReachList: TSfrReachInfoList;
     BoundaryValues: TMf6BoundaryValueArray);
   var
@@ -15879,6 +15926,8 @@ begin
                 begin
                   SplitReachListWithBoundaryValues(AReachList, InflowBoundaryValues);
                 end;
+                // ModelMuse only exports the inflow for the first reach in a segment.
+                SplitReachListWithNonZeroBoundaryValues(AReachList, InflowBoundaryValues);
 
                 SetLength(RainfallBoundaryValues, AReachList.Count);
                 if PeriodIndex = 0 then
@@ -15954,7 +16003,6 @@ begin
                   begin
                     SpcPeriod :=  SfrMvrLinkArray[PeriodIndex].SpcPeriods[TransportIndex];
                     SpcMap := SpcMaps[TransportIndex];
-
                   end
                   else
                   begin

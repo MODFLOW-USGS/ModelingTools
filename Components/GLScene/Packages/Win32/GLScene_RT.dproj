@@ -132,7 +132,7 @@
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vclimg.dcp"/>
         <DCCReference Include="xmlrtl.dcp"/>
-        <DCCReference Include="GR32_DSGN_RS11_1.dcp"/>
+        <DCCReference Include="GR32_DSGN_RS12_1.dcp"/>
         <DCCReference Include="..\..\Source\FileFormats\Const3DS.pas"/>
         <DCCReference Include="..\..\Source\FileFormats\DDSImage.pas"/>
         <DCCReference Include="..\..\Source\FileFormats\DXTC.pas"/>

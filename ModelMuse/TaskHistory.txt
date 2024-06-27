@@ -33240,6 +33240,8 @@ object TTaskHistory
     end
     item
       Date = 45464.000000000000000000
+      Categories.Strings = (
+        'MF-2015')
     end
     item
       Date = 45465.000000000000000000
@@ -33249,10 +33251,18 @@ object TTaskHistory
     end
     item
       Date = 45467.000000000000000000
+      Categories.Strings = (
+        'Testing')
     end
     item
       Date = 45468.000000000000000000
       Categories.Strings = (
         'Refactoring')
+    end
+    item
+      Date = 45469.000000000000000000
+      Categories.Strings = (
+        'Import'
+        'MF-2015')
     end>
 end
