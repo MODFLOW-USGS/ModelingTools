@@ -1404,6 +1404,8 @@ type
 
     A reason to use @name would be, for example, if the function needs
     to access data beyond that which is passed to it as arguments.
+
+    @name is used in @link(TExpression.New).
   }
   TSpecialImplementor = class
   public
