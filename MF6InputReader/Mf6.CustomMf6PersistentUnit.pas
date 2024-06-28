@@ -147,10 +147,13 @@ type
     FExternalFileName: string;
     FBinary: Boolean;
     FConstantValue: DataType;
+    FConstant: Boolean;
     function StrToDataType(AValue: string; var DataValue: DataType): Boolean; virtual; abstract;
     procedure ReadControlLine(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property Constant: Boolean read FConstant;
   end;
 
   T1DArrayReader<DataType: record> = class(TCustomArrayReader<DataType>)
@@ -203,7 +206,8 @@ type
     FDimensions: TDimensions;
   public
     FData: TArray<TArray<DataType>>;
-    constructor Create(Dimensions: TDimensions; PackageType: string); reintroduce;
+    constructor Create(Dimensions: TDimensions; PackageType: string);
+      reintroduce;
   end;
 
   TInteger2DArrayReader = class(T2DArrayReader<Longint>)
@@ -544,6 +548,7 @@ begin
 
     if FSplitter[0] = 'CONSTANT' then
     begin
+      FConstant := True;
       ArrayType := atConstant;
     end
     else if FSplitter[0] = 'INTERNAL' then

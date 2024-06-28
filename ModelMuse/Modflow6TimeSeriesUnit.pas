@@ -29,10 +29,6 @@ type
     function GetParamMethod: TPestParamMethod;
     function GetDeleted: Boolean;
     procedure SetDeleted(const Value: Boolean);
-//    function _AddRef: Integer; stdcall;
-//    function _Release: Integer; stdcall;
-//    function QueryInterface(const IID: TGUID; out Obj): HRESULT;
-//      virtual; stdcall;
   public
     constructor Create(InvalidateModelEvent: TNotifyEvent); overload; override;
     destructor Destroy; override;

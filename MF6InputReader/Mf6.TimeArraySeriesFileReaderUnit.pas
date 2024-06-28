@@ -9,21 +9,30 @@ uses
 type
   TTasAttributes = class(TCustomMf6Persistent)
   private
-    Name: string;
-    Method: TTsMethod;
-    SFAC: TRealOption;
+    FName: string;
+    FMethod: TTsMethod;
+    FSFAC: TRealOption;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
+  public
+    property Name: string read FName;
+    property Method: TTsMethod read FMethod;
+    property SFAC: TRealOption read FSFAC;
   end;
 
   TTasTime = class(TCustomMf6Persistent)
   private
-    Time: Extended;
-    Values: TDArray2D;
+    FTime: Extended;
+    FValues: TDArray2D;
+    FConstant: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
+    property Constant: Boolean read FConstant;
     procedure Initialize; override;
+  public
+    property Time: Extended read FTime;
+    property Values: TDArray2D read FValues;
   end;
 
   TTasTimeList = TObjectList<TTasTime>;
@@ -32,11 +41,17 @@ type
   private
     FAttributes: TTasAttributes;
     FTimes: TTasTimeList;
+    FConstant: Boolean;
   public
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; const NPER: Integer); override;
     constructor Create(PackageType: string); override;
     destructor Destroy; override;
+    property Constant: Boolean read FConstant;
+    property Attributes: TTasAttributes read FAttributes;
+    property Times: TTasTimeList read FTimes;
   end;
+
+
 
 
 implementation
@@ -48,9 +63,9 @@ uses
 
 procedure TTasAttributes.Initialize;
 begin
-  Name := '';
-  Method := tsUndefined;
-  SFAC.Initialize;
+  FName := '';
+  FMethod := tsUndefined;
+  FSFAC.Initialize;
   inherited;
 
 end;
@@ -95,25 +110,25 @@ begin
       if (Tag = 'NAME') then
       begin
         FSplitter.DelimitedText := CaseSensitiveLine;
-        NAME := FSplitter[1];
+        FName := FSplitter[1];
       end
       else if (Tag = 'METHOD') then
       begin
         ItemIndex := ValidMethods.IndexOf(FSplitter[1]);
         if ItemIndex >= 0 then
         begin
-          Method := TTsMethod(ItemIndex);
+          FMethod := TTsMethod(ItemIndex);
         end
         else
         begin
-          Method := tsUndefined;
+          FMethod := tsUndefined;
         end;
       end
       else if (Tag = 'SFAC') then
       begin
-        if TryFortranStrToFloat(FSplitter[1], SFAC.Value) then
+        if TryFortranStrToFloat(FSplitter[1], FSFAC.Value) then
         begin
-          SFAC.Used := True;
+          FSFAC.Used := True;
         end;
       end
       else
@@ -131,8 +146,8 @@ end;
 
 procedure TTasTime.Initialize;
 begin
-  Time := 01E30;
-  Values := nil;
+  FTime := 01E30;
+  FValues := nil;
   inherited;
 
 end;
@@ -149,10 +164,19 @@ begin
   Dimensions.NLay := 1;
   while not Stream.EndOfStream do
   begin
-    StreamPosition := Stream.BaseStream.Position;
+    Assert(FValues = nil);
+
+    Double2DDReader := TDouble2DArrayReader.Create(Dimensions, FPackageType);
+    try
+      Double2DDReader.Read(Stream, Unhandled);
+      FValues := Double2DDReader.FData;
+      FConstant := Double2DDReader.Constant;
+    finally
+      Double2DDReader.Free;
+    end;
+
     ALine := Stream.ReadLine;
     ErrorLine := ALine;
-    ALine := StripFollowingComments(ALine);
     if ALine = '' then
     begin
       Continue;
@@ -160,18 +184,12 @@ begin
     if ReadEndOfSection(ALine, ErrorLine, 'TIME', Unhandled) then
     begin
       Exit
+    end
+    else
+    begin
+      Assert(False);
     end;
 
-    Stream.BaseStream.Position := StreamPosition;
-    Assert(Values = nil);
-
-    Double2DDReader := TDouble2DArrayReader.Create(Dimensions, FPackageType);
-    try
-      Double2DDReader.Read(Stream, Unhandled);
-      Values := Double2DDReader.FData;
-    finally
-      Double2DDReader.Free;
-    end;
   end
 end;
 
@@ -199,7 +217,9 @@ var
   ErrorLine: string;
   ATime: Extended;
   TasTime: TTasTime;
+  FirstTime: Boolean;
 begin
+  FirstTime := True;
   if Assigned(OnUpdataStatusBar) then
   begin
     OnUpdataStatusBar(self, 'reading time-array-file');
@@ -227,9 +247,18 @@ begin
         if (FSplitter.Count >= 3) and TryFortranStrToFloat(FSplitter[2], ATime) then
         begin
           TasTime := TTasTime.Create(FPackageType);
-          TasTime.Time := ATime;
+          TasTime.FTime := ATime;
           FTimes.Add(TasTime);
           TasTime.Read(Stream, Unhandled, FDimensions);
+          if FirstTime then
+          begin
+            FConstant := TasTime.Constant;
+            FirstTime := False;
+          end
+          else
+          begin
+            FConstant := FConstant and TasTime.Constant;
+          end;
         end
         else
         begin

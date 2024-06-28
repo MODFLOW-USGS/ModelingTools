@@ -105,6 +105,7 @@ type
     FImportGeoRef: TImportGeoRef;
     FFlowModelOptions: TFlowNameFileOptions;
     FNewScreenObjects: TScreenObjectList;
+    FIDOMAIN: TIArray3D;
     procedure ImportFlowModelTiming;
     procedure ImportTransportModelTiming;
     procedure ImportSimulationOptions;
@@ -147,6 +148,7 @@ type
     procedure ImportNpf(Package: TPackage);
     procedure ImportTvk(Package: TPackage);
     procedure ImportTimeSeries(Package: TPackage; Map: TimeSeriesMap);
+    procedure ImportTimeArraySeries(Package: TPackage; Map: TimeSeriesMap);
     procedure ImportHfb(Package: TPackage);
     procedure ImportSto(Package: TPackage);
     procedure ImportTvs(Package: TPackage);
@@ -227,7 +229,7 @@ uses
   Mf6.SftFileReaderUnit, GwtStatusUnit, Mf6.LktFileReaderUnit, Mt3dmsChemUnit,
   Mf6.MwtFileReaderUnit, Mf6.UztFileReaderUnit, Mf6.MvtFileReaderUnit,
   ModelMuseUtilities, GeoRefUnit, SparseDataSets, SparseArrayUnit,
-  QuadTreeClass, MeshRenumberingTypes;
+  QuadTreeClass, MeshRenumberingTypes, Mf6.TimeArraySeriesFileReaderUnit;
 
 resourcestring
   StrTheNameFileSDoe = 'The name file %s does not exist.';
@@ -13671,6 +13673,7 @@ var
   FirstBoolValue: Boolean;
 begin
   Model := frmGoPhast.PhastModel;
+  FIDOMAIN := IDOMAIN;
   if IDOMAIN = nil then
   begin
     DataArray := Model.DataArrayManager.GetDataSetByName(K_IDOMAIN);
@@ -17002,26 +17005,23 @@ begin
   end;
 end;
 
-procedure TModflow6Importer.ImportTimeSeries(Package: TPackage; Map: TimeSeriesMap);
+procedure TModflow6Importer.ImportTimeArraySeries(Package: TPackage;
+  Map: TimeSeriesMap);
 var
-  TsReader: TTimeSeries;
   Model: TPhastModel;
   Mf6TimesSeries: TTimesSeriesCollections;
-  Attributes: TTsAttributes;
   GroupName: string;
   NewGroup: TTimesSeriesCollection;
-  Index: Integer;
+  TasReader: TTimeArraySeries;
+  Attributes: TTasAttributes;
+  TimeArrayList: TTasTimeList;
   TSName: string;
-  NewName: string;
+  ActiveCell: Boolean;
   TimeSeries: TMf6TimeSeries;
-  Method: TTsMethod;
-  ImportedTs: TTsTimeSeries;
-  TimeIndex: Integer;
-  ImportedValues: TDoubleList;
 begin
   if Assigned(OnUpdateStatusBar) then
   begin
-    OnUpdateStatusBar(self, 'importing TIME SERIES file');
+    OnUpdateStatusBar(self, 'importing TIME ARRAY SERIES file');
   end;
   Model := frmGoPhast.PhastModel;
   Mf6TimesSeries := Model.Mf6TimesSeries;
@@ -17030,43 +17030,20 @@ begin
   NewGroup := Mf6TimesSeries.Add.TimesSeriesCollection;
   NewGroup.GroupName := AnsiString(GroupName);
 
-  TsReader := Package.Package as TTimeSeries;
-  Attributes := TsReader.Attributes;
-  ImportedTs := TsReader.TimeSeries;
-
-  NewGroup.Times.Capacity := ImportedTs.TimeCount;
-  for TimeIndex := 0 to ImportedTs.TimeCount - 1 do
+  TasReader := Package.Package as TTimeArraySeries;
+  Attributes := TasReader.Attributes;
+  TimeArrayList := TasReader.Times;
+  for var TimeIndex := 0 to TimeArrayList.Count - 1 do
   begin
-    NewGroup.Times.Add.Value := ImportedTs.Times[TimeIndex];
+    NewGroup.Times.Add.Value := TimeArrayList[TimeIndex].Time;
   end;
 
-  for Index := 0 to Attributes.NameCount - 1 do
+  if TasReader.Constant then
   begin
-    TSName := Attributes.Names[Index];
-
-    if Mf6TimesSeries.GetTimeSeriesByName(UpperCase(TSName)) = nil then
-    begin
-      NewName := TSName;
-    end
-    else
-    begin
-      Inc(TSIndex);
-      NewName := 'ImportedTS_' + TSName + '_' + IntToStr(TSIndex);
-      while Mf6TimesSeries.GetTimeSeriesByName(NewName) <> nil do
-      begin
-        Inc(TSIndex);
-        NewName := 'ImportedTS_' + TSName + '_' + IntToStr(TSIndex);
-      end;
-    end;
-
-    Map.Add(UpperCase(TSName), NewName);
-
+    TSName := Attributes.Name;
     TimeSeries := NewGroup.Add.TimeSeries;
-    TimeSeries.SeriesName := AnsiString(NewName);
-
-    Method := Attributes.Methods[Index];
-    Assert(Method <> tsUndefined);
-    case Method of
+    TimeSeries.SeriesName := AnsiString(TSName);
+    case Attributes.Method of
       tmStepWise:
         begin
           TimeSeries.InterpolationMethod := mimStepwise;
@@ -17084,20 +17061,214 @@ begin
           assert(False)
         end;
     end;
-    if Attributes.SfacCount > Index then
+    if Attributes.SFAC.Used then
     begin
-      TimeSeries.ScaleFactor := Attributes.SFacs[Index];
-    end
-    else
-    begin
-      TimeSeries.ScaleFactor := 1;
+      TimeSeries.ScaleFactor := Attributes.SFAC.Value;
     end;
-    ImportedValues := ImportedTs.TimeSeriesValues[Index];
-    TimeSeries.Capacity := ImportedValues.Count;
-    for TimeIndex := 0 to ImportedValues.Count - 1 do
+
+    TimeSeries.Capacity := TimeArrayList.Count;
+    for var TimeIndex := 0 to TimeArrayList.Count - 1 do
     begin
-      TimeSeries.Add.Value := ImportedValues[TimeIndex];
+      TimeSeries.Add.Value := TimeArrayList[TimeIndex].Values[0,0];
     end;
+    for var RowIndex := 0 to Model.RowCount - 1 do
+    begin
+      for var ColIndex := 0 to Model.ColumnCount - 1 do
+      begin
+        ActiveCell := False;
+        for var LayerIndex := 0 to Model.LayerCount - 1 do
+        begin
+          if FIDomain[LayerIndex, RowIndex, ColIndex] > 0 then
+          begin
+            ActiveCell := True;
+            break;
+          end;
+        end;
+        if ActiveCell then
+        begin
+          if Model.DisvUsed then
+          begin
+            TSName := Format('%s_%d', [Attributes.Name, ColIndex+ 1]);
+          end
+          else
+          begin
+            TSName := Format('%s_%d_%d', [Attributes.Name, RowIndex+1, ColIndex+ 1]);
+          end;
+
+          Map.Add(TSName, Attributes.Name);
+        end;
+      end;
+    end;
+  end
+  else
+  begin
+    for var RowIndex := 0 to Model.RowCount - 1 do
+    begin
+      for var ColIndex := 0 to Model.ColumnCount - 1 do
+      begin
+        ActiveCell := False;
+        for var LayerIndex := 0 to Model.LayerCount - 1 do
+        begin
+          if FIDomain[LayerIndex, RowIndex, ColIndex] > 0 then
+          begin
+            ActiveCell := True;
+            break;
+          end;
+        end;
+        if ActiveCell then
+        begin
+          if Model.DisvUsed then
+          begin
+            TSName := Format('%s_%d', [Attributes.Name, ColIndex+ 1]);
+          end
+          else
+          begin
+            TSName := Format('%s_%d_%d', [Attributes.Name, RowIndex+1, ColIndex+ 1]);
+          end;
+
+          Map.Add(UpperCase(TSName), TSName);
+
+          TimeSeries := NewGroup.Add.TimeSeries;
+          TimeSeries.SeriesName := AnsiString(TSName);
+          case Attributes.Method of
+            tmStepWise:
+              begin
+                TimeSeries.InterpolationMethod := mimStepwise;
+              end;
+            tmLinear:
+              begin
+                TimeSeries.InterpolationMethod := mimLinear;
+              end;
+            tmLinearEnd:
+              begin
+                TimeSeries.InterpolationMethod := mimLinearEnd;
+              end;
+            else
+              begin
+                assert(False)
+              end;
+          end;
+          if Attributes.SFAC.Used then
+          begin
+            TimeSeries.ScaleFactor := Attributes.SFAC.Value;
+          end;
+
+          TimeSeries.Capacity := TimeArrayList.Count;
+          for var TimeIndex := 0 to TimeArrayList.Count - 1 do
+          begin
+            TimeSeries.Add.Value := TimeArrayList[TimeIndex].Values[RowIndex,ColIndex];
+          end;
+
+        end;
+      end;
+    end;
+  end;
+
+end;
+
+procedure TModflow6Importer.ImportTimeSeries(Package: TPackage; Map: TimeSeriesMap);
+var
+  TsReader: TTimeSeries;
+  Model: TPhastModel;
+  Mf6TimesSeries: TTimesSeriesCollections;
+  Attributes: TTsAttributes;
+  GroupName: string;
+  NewGroup: TTimesSeriesCollection;
+  Index: Integer;
+  TSName: string;
+  NewName: string;
+  TimeSeries: TMf6TimeSeries;
+  Method: TTsMethod;
+  ImportedTs: TTsTimeSeries;
+  TimeIndex: Integer;
+  ImportedValues: TDoubleList;
+begin
+  if Package.Package is TTimeSeries then
+  begin
+    if Assigned(OnUpdateStatusBar) then
+    begin
+      OnUpdateStatusBar(self, 'importing TIME SERIES file');
+    end;
+    Model := frmGoPhast.PhastModel;
+    Mf6TimesSeries := Model.Mf6TimesSeries;
+
+    GroupName := ExtractFileName(Package.FileName);
+    NewGroup := Mf6TimesSeries.Add.TimesSeriesCollection;
+    NewGroup.GroupName := AnsiString(GroupName);
+
+    TsReader := TTimeSeries(Package.Package);
+    Attributes := TsReader.Attributes;
+    ImportedTs := TsReader.TimeSeries;
+
+    NewGroup.Times.Capacity := ImportedTs.TimeCount;
+    for TimeIndex := 0 to ImportedTs.TimeCount - 1 do
+    begin
+      NewGroup.Times.Add.Value := ImportedTs.Times[TimeIndex];
+    end;
+
+    for Index := 0 to Attributes.NameCount - 1 do
+    begin
+      TSName := Attributes.Names[Index];
+
+      if Mf6TimesSeries.GetTimeSeriesByName(UpperCase(TSName)) = nil then
+      begin
+        NewName := TSName;
+      end
+      else
+      begin
+        Inc(TSIndex);
+        NewName := 'ImportedTS_' + TSName + '_' + IntToStr(TSIndex);
+        while Mf6TimesSeries.GetTimeSeriesByName(NewName) <> nil do
+        begin
+          Inc(TSIndex);
+          NewName := 'ImportedTS_' + TSName + '_' + IntToStr(TSIndex);
+        end;
+      end;
+
+      Map.Add(UpperCase(TSName), NewName);
+
+      TimeSeries := NewGroup.Add.TimeSeries;
+      TimeSeries.SeriesName := AnsiString(NewName);
+
+      Method := Attributes.Methods[Index];
+      Assert(Method <> tsUndefined);
+      case Method of
+        tmStepWise:
+          begin
+            TimeSeries.InterpolationMethod := mimStepwise;
+          end;
+        tmLinear:
+          begin
+            TimeSeries.InterpolationMethod := mimLinear;
+          end;
+        tmLinearEnd:
+          begin
+            TimeSeries.InterpolationMethod := mimLinearEnd;
+          end;
+        else
+          begin
+            assert(False)
+          end;
+      end;
+      if Attributes.SfacCount > Index then
+      begin
+        TimeSeries.ScaleFactor := Attributes.SFacs[Index];
+      end
+      else
+      begin
+        TimeSeries.ScaleFactor := 1;
+      end;
+      ImportedValues := ImportedTs.TimeSeriesValues[Index];
+      TimeSeries.Capacity := ImportedValues.Count;
+      for TimeIndex := 0 to ImportedValues.Count - 1 do
+      begin
+        TimeSeries.Add.Value := ImportedValues[TimeIndex];
+      end;
+    end;
+  end
+  else
+  begin
+    ImportTimeArraySeries(Package, Map);
   end;
 end;
 
