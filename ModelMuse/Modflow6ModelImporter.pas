@@ -17078,7 +17078,7 @@ begin
         ActiveCell := False;
         for var LayerIndex := 0 to Model.LayerCount - 1 do
         begin
-          if FIDomain[LayerIndex, RowIndex, ColIndex] > 0 then
+          if (FIDomain = nil) or (FIDomain[LayerIndex, RowIndex, ColIndex] > 0) then
           begin
             ActiveCell := True;
             break;
@@ -17095,7 +17095,7 @@ begin
             TSName := Format('%s_%d_%d', [Attributes.Name, RowIndex+1, ColIndex+ 1]);
           end;
 
-          Map.Add(TSName, Attributes.Name);
+          Map.Add(UpperCase(TSName), Attributes.Name);
         end;
       end;
     end;
@@ -17109,7 +17109,7 @@ begin
         ActiveCell := False;
         for var LayerIndex := 0 to Model.LayerCount - 1 do
         begin
-          if FIDomain[LayerIndex, RowIndex, ColIndex] > 0 then
+          if (FIDomain = nil) or (FIDomain[LayerIndex, RowIndex, ColIndex] > 0) then
           begin
             ActiveCell := True;
             break;

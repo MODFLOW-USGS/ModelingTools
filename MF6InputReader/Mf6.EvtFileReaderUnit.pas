@@ -1116,6 +1116,7 @@ begin
     TasPackage.PackageName := '';
 
     TasReader := TTimeArraySeries.Create(FPackageType);
+    TasReader.Dimensions := FDimensions;
     TasPackage.Package := TasReader;
     TasPackage.ReadPackage(Unhandled, NPER);
   end;
