@@ -8,6 +8,7 @@ uses
 
 type
   TOnUpdataStatusBar = procedure(AnObject: TObject; Text: string) of object;
+  TimeSeriesMap = TDictionary<string, string>;
 
    TRealOption = record
      Value: Extended;

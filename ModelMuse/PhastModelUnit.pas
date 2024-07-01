@@ -10278,6 +10278,8 @@ const
 
 //               Enhancement: ModelMuse now checks that PEST Observation Group
 //                names and Prior Information Group names are assigned.
+//               bug fix: Fixed bug in exporting groundwater allotments in
+//                MODFLOW-owhm version 2.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 

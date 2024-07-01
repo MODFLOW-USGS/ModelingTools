@@ -149,11 +149,17 @@ begin
 end;
 
 procedure TModflowETS_Writer.Evaluate;
+const
+  OneSecond = 1/24/3600;
 var
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
   Boundary: TEtsBoundary;
+  CurrentTime: TDateTime;
+  FoundFirst: Boolean;
 begin
+  CurrentTime:= Now;
+  FoundFirst := False;
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrEvapotranspirationD_ETS);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrEvaporationDepthFr);
   frmErrorsAndWarnings.BeginUpdate;
@@ -173,6 +179,17 @@ begin
       Boundary := ScreenObject.ModflowEtsBoundary;
       if Boundary <> nil then
       begin
+        frmProgressMM.AddMessage(Format(StrEvaluatingS,
+          [ScreenObject.Name]));
+        if (Now - CurrentTime >  OneSecond) or not FoundFirst then
+        begin
+          frmProgressMM.EndUpdate;
+          Application.ProcessMessages;
+          frmProgressMM.BeginUpdate;
+          CurrentTime := Now;
+          FoundFirst := True;
+        end;
+
   //      if PhastModel.ModflowPackages.EtsPackage.TimeVaryingLayers then
         begin
           Boundary.GetEvapotranspirationLayerCells(FLayers, Model);

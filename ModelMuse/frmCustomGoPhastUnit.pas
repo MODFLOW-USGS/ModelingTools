@@ -47,9 +47,9 @@ type
    function FormHelp(Command: Word; Data:  Integer;
      var CallHelp: Boolean): Boolean;
 {$ELSE}
-{$IF CompilerVersion < 35}
-   function FormHelp(Command: Word; Data:  NativeInt;
-     var CallHelp: Boolean): Boolean;
+{$IF CompilerVersion < 36}
+    function FormHelp(Command: Word; Data: NativeInt; var CallHelp: Boolean):
+        Boolean;
 {$ELSE}
 // Use this version for Delphi XE2
     function FormHelp(Command: Word; Data: THelpEventData;
@@ -1237,6 +1237,7 @@ begin
     end;
   end;
 end;
+
 
 initialization
 

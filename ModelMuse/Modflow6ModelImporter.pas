@@ -34,7 +34,6 @@ type
     procedure Initialize;
   end;
 
-  TimeSeriesMap = TDictionary<string, string>;
   TimeSeriesMaps = TObjectList<TimeSeriesMap>;
   TBoundNameDictionary = TDictionary<string, TObservationList>;
   TCellIdObsDictionary = TDictionary<TMfCellId, TObservationList>;
@@ -3754,6 +3753,7 @@ var
   ImportedPxdp: TValueArrayItem;
   ImportedPetm: TValueArrayItem;
   CellListIndex: Integer;
+  TSName: string;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TEvtTimeItem; Period: Integer);
   var
     EvtItem: TEtsItem;
@@ -4197,7 +4197,7 @@ begin
               Assert(AuxIFACE.ValueType = vtNumeric);
               IFACE := Round(AuxIFACE.NumericValue);
             end;
-            KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+            KeyString := KeyString + ACell.Keystring(Map) + ' IFACE:' + IntToStr(IFACE);
 
             if MultIndex >= 0 then
             begin
@@ -4208,7 +4208,15 @@ begin
               end
               else
               begin
-                KeyString := KeyString + ' ' + Aux.StringValue;
+                if Map.TryGetValue(Aux.StringValue, TSName) then
+                begin
+                  KeyString := KeyString + ' ' + TSName;
+                end
+                else
+                begin
+                  KeyString := KeyString + ' ' + Aux.StringValue;
+                end;
+
               end;
             end;
 
@@ -11711,6 +11719,7 @@ var
   NextRchPeriod: TRchPeriod;
   EndPeriod: Integer;
   AuxMultIndex: Integer;
+  TSName: string;
   procedure AddItem(AScreenObject: TScreenObject; ACell: TRchTimeItem; Period: Integer);
   var
     RchItem: TRchItem;
@@ -12199,7 +12208,7 @@ begin
               Assert(AuxIFACE.ValueType = vtNumeric);
               IFACE := Round(AuxIFACE.NumericValue);
             end;
-            KeyString := KeyString + ACell.Keystring + ' IFACE:' + IntToStr(IFACE);
+            KeyString := KeyString + ACell.Keystring(Map) + ' IFACE:' + IntToStr(IFACE);
 
             if AuxMultIndex >= 0 then
             begin
@@ -12210,7 +12219,14 @@ begin
               end
               else
               begin
-                KeyString := KeyString + AuxMult.StringValue;
+                if Map.TryGetValue(AuxMult.StringValue, TSName) then
+                begin
+                  KeyString := KeyString + TSName;
+                end
+                else
+                begin
+                  KeyString := KeyString + AuxMult.StringValue;
+                end;
               end;
             end;
 
@@ -12227,7 +12243,15 @@ begin
                     end;
                   vtString:
                     begin
-                      KeyString := KeyString + SpcCell.spcsetting.StringValue;
+                      if Map.TryGetValue(SpcCell.spcsetting.StringValue, TSName) then
+                      begin
+                        KeyString := KeyString + TSName;
+                      end
+                      else
+                      begin
+                        KeyString := KeyString + SpcCell.spcsetting.StringValue;
+                      end;
+
                     end;
                 end;
               end
@@ -17026,7 +17050,7 @@ begin
   Model := frmGoPhast.PhastModel;
   Mf6TimesSeries := Model.Mf6TimesSeries;
 
-  GroupName := ExtractFileName(Package.FileName);
+  GroupName := ChangeFileExt(ExtractFileName(Package.FileName), '');
   NewGroup := Mf6TimesSeries.Add.TimesSeriesCollection;
   NewGroup.GroupName := AnsiString(GroupName);
 
@@ -17183,16 +17207,16 @@ var
   TimeIndex: Integer;
   ImportedValues: TDoubleList;
 begin
+  Model := frmGoPhast.PhastModel;
+  Mf6TimesSeries := Model.Mf6TimesSeries;
   if Package.Package is TTimeSeries then
   begin
     if Assigned(OnUpdateStatusBar) then
     begin
       OnUpdateStatusBar(self, 'importing TIME SERIES file');
     end;
-    Model := frmGoPhast.PhastModel;
-    Mf6TimesSeries := Model.Mf6TimesSeries;
 
-    GroupName := ExtractFileName(Package.FileName);
+    GroupName := ChangeFileExt(ExtractFileName(Package.FileName), '');
     NewGroup := Mf6TimesSeries.Add.TimesSeriesCollection;
     NewGroup.GroupName := AnsiString(GroupName);
 
@@ -17270,6 +17294,7 @@ begin
   begin
     ImportTimeArraySeries(Package, Map);
   end;
+  Mf6TimesSeries.ResetDictionaries;
 end;
 
 procedure TModflow6Importer.ImportTransportIC(NameFile: TTransportNameFile;

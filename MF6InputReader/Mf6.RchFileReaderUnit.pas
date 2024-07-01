@@ -55,7 +55,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Keystring: string;
+    function Keystring(Map: TimeSeriesMap): string;
     property CellId: TMfCellId read Fcellid;
     property Recharge: TMf6BoundaryValue read Frecharge;
     property Count: integer read GetCount;
@@ -315,10 +315,11 @@ begin
   result := Faux.Count;
 end;
 
-function TRchTimeItem.Keystring: string;
+function TRchTimeItem.Keystring(Map: TimeSeriesMap): string;
 var
   AuxIndex: Integer;
   AnAux: TMf6BoundaryValue;
+  TSName: string;
 begin
   result := '';
   if FRecharge.ValueType = vtNumeric then
@@ -327,7 +328,14 @@ begin
   end
   else
   begin
-    result := result + UpperCase(FRecharge.StringValue);
+    if Map.TryGetValue(UpperCase(FRecharge.StringValue), TSName) then
+    begin
+      result := result + TSName;
+    end
+    else
+    begin
+      result := result + UpperCase(FRecharge.StringValue);
+    end;
   end;
 
   for AuxIndex := 0 to Faux.Count - 1 do
@@ -339,7 +347,15 @@ begin
     end
     else
     begin
-      result := result + UpperCase(AnAux.StringValue);
+      if Map.TryGetValue(UpperCase(AnAux.StringValue), TSName) then
+      begin
+        result := result + TSName;
+      end
+      else
+      begin
+        result := result + UpperCase(AnAux.StringValue);
+      end;
+
     end;
   end;
 end;

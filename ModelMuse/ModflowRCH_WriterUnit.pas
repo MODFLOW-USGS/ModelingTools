@@ -92,12 +92,18 @@ begin
 end;
 
 procedure TModflowRCH_Writer.Evaluate;
+const
+  OneSecond = 1/24/3600;
 var
   ScreenObjectIndex: Integer;
   ScreenObject: TScreenObject;
   Boundary: TRchBoundary;
+  CurrentTime: TDateTime;
+  FoundFirst: Boolean;
 begin
   inherited Evaluate;
+  CurrentTime := Now;
+  FoundFirst := False;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheRechargeRatesA);
   for ScreenObjectIndex := 0 to Model.ScreenObjectCount - 1 do
   begin
@@ -113,6 +119,16 @@ begin
     Boundary := ScreenObject.ModflowRchBoundary;
     if Boundary <> nil then
     begin
+      frmProgressMM.AddMessage(Format(StrEvaluatingS,
+        [ScreenObject.Name]));
+      if (Now - CurrentTime >  OneSecond) or not FoundFirst then
+      begin
+        frmProgressMM.EndUpdate;
+        Application.ProcessMessages;
+        frmProgressMM.BeginUpdate;
+        CurrentTime := Now;
+        FoundFirst := True;
+      end;
       Boundary.GetRechargeLayerCells(FLayers, Model);
       Boundary.RechargeLayers.ClearBoundaries(Model);
     end;

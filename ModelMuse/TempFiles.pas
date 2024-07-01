@@ -8,7 +8,7 @@ unit TempFiles;
 
 interface
 
-uses Windows, SysUtils, Classes;
+uses Windows, SysUtils, Classes, System.IOUtils;
 
 {@name generates a name for a new temporary file in an application-specific
 temporary directory.  When the program
@@ -338,6 +338,11 @@ begin
       for DirIndex := 0 to Directories.Count - 1 do
       begin
         TempPath := Directories[DirIndex];
+        TDirectory.Delete(TempPath, True);
+        if TDirectory.Exists(TempPath) then
+        begin
+          Beep;
+        end;
         FoundFile := FindFirst(TempPath + '*.*', 0, F) = 0;
         try
           if FoundFile then

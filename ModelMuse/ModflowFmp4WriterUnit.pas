@@ -9275,9 +9275,9 @@ begin
   RequiredValues.DataType := rdtDouble;
   RequiredValues.DataTypeIndex := 0;
   RequiredValues.MaxDataTypeIndex := 0;
-  RequiredValues.Comment := 'FMP ALLOTMENTS: GwAllotment';
-  RequiredValues.ErrorID := 'FMP ALLOTMENTS: GwAllotment';
-  RequiredValues.ID := 'GwAllotment';
+  RequiredValues.Comment := 'FMP ALLOTMENTS: GROUNDWATER';
+  RequiredValues.ErrorID := 'FMP ALLOTMENTS: GROUNDWATER';
+  RequiredValues.ID := 'GROUNDWATER';
   RequiredValues.StaticDataName := '';
   RequiredValues.WriteTransientData :=
     (FAllotments.GroundWater.FarmOption = foTransient);

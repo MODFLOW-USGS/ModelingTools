@@ -66,7 +66,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Keystring: string;
+    function Keystring(Map: TimeSeriesMap): string;
     property CellId: TMfCellId read Fcellid;
     property Surf: TMf6BoundaryValue read Fsurf;
     property Rate: TMf6BoundaryValue read Frate;
@@ -354,22 +354,14 @@ begin
   result := Fpxdp[Index];
 end;
 
-function TEvtTimeItem.Keystring: string;
+function TEvtTimeItem.Keystring(Map: TimeSeriesMap): string;
 var
   AuxIndex: Integer;
   AnAux: TMf6BoundaryValue;
   Index: Integer;
   BoundValue: TMf6BoundaryValue;
+  TsName: string;
 begin
-{
-    Fsurf: TMf6BoundaryValue;
-    Frate: TMf6BoundaryValue;
-    Fdepth: TMf6BoundaryValue;
-    Fpxdp: TBoundaryValueList;
-    Fpetm: TBoundaryValueList;
-    Fpetm0: TMf6BoundaryValue;
-    Faux: TList<TMf6BoundaryValue>;
-}
   result := '';
   if Fsurf.ValueType = vtNumeric then
   begin
@@ -377,7 +369,15 @@ begin
   end
   else
   begin
-    result := result + UpperCase(Fsurf.StringValue);
+    if Map.TryGetValue(UpperCase(Fsurf.StringValue), TsName) then
+    begin
+      result := result + TsName;
+    end
+    else
+    begin
+      result := result + UpperCase(Fsurf.StringValue);
+    end;
+
   end;
 
   if Frate.ValueType = vtNumeric then
@@ -386,7 +386,14 @@ begin
   end
   else
   begin
-    result := result + UpperCase(Frate.StringValue);
+    if Map.TryGetValue(UpperCase(Frate.StringValue), TsName) then
+    begin
+      result := result + TsName;
+    end
+    else
+    begin
+      result := result + UpperCase(Frate.StringValue);
+    end;
   end;
 
   if Fdepth.ValueType = vtNumeric then
@@ -395,7 +402,14 @@ begin
   end
   else
   begin
-    result := result + UpperCase(Fdepth.StringValue);
+    if Map.TryGetValue(UpperCase(Fdepth.StringValue), TsName) then
+    begin
+      result := result + TsName;
+    end
+    else
+    begin
+      result := result + UpperCase(Fdepth.StringValue);
+    end;
   end;
 
   for Index := 0 to Fpxdp.Count - 1 do
@@ -407,7 +421,14 @@ begin
     end
     else
     begin
-      result := result + UpperCase(BoundValue.StringValue);
+      if Map.TryGetValue(UpperCase(BoundValue.StringValue), TsName) then
+      begin
+        result := result + TsName;
+      end
+      else
+      begin
+        result := result + UpperCase(BoundValue.StringValue);
+      end;
     end;
   end;
 
@@ -420,7 +441,14 @@ begin
     end
     else
     begin
-      result := result + UpperCase(BoundValue.StringValue);
+      if Map.TryGetValue(UpperCase(BoundValue.StringValue), TsName) then
+      begin
+        result := result + TsName;
+      end
+      else
+      begin
+        result := result + UpperCase(BoundValue.StringValue);
+      end;
     end;
   end;
 
@@ -433,7 +461,14 @@ begin
     end
     else
     begin
-      result := result + UpperCase(AnAux.StringValue);
+      if Map.TryGetValue(UpperCase(AnAux.StringValue), TsName) then
+      begin
+        result := result + TsName;
+      end
+      else
+      begin
+        result := result + UpperCase(AnAux.StringValue);
+      end;
     end;
   end;
 end;
