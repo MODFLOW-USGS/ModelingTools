@@ -98,6 +98,7 @@ type
     // or a template file being created for PEST.
     FInputFileName: string;
     FTimeSeriesNames: TStringList;
+    FGwtTimeSeriesNames: TObjectList<TStringList>;
     // @name closes the file that is being exported.
     // @seealso(OpenFile)
     procedure CloseFile;
@@ -236,6 +237,7 @@ type
     }
     function DataArrayUsesPestParameters(const DataArray: TDataArray): boolean;
     property TimeSeriesNames: TStringList read FTimeSeriesNames;
+    property GwtTimeSeriesNames: TObjectList<TStringList> read FGwtTimeSeriesNames;
 end;
 
   { @name is an abstract base class used as an ancestor for classes that
@@ -417,6 +419,7 @@ end;
     procedure SetMvrWriter(const Value: TObject);
   protected
     FTimeSeriesFileNames: TStringList;
+    FGwtTimeSeriesFileNames: TObjectList<TStringList>;
     procedure SetTimeListUpToDate(List: TModflowBoundaryDisplayTimeList);
     procedure SetTimeListsUpToDate(TimeLists: TModflowBoundListOfTimeLists); overload;
     procedure SetTimeListsUpToDate(TimeLists: TList<TModflowBoundListOfTimeLists>); overload;
@@ -482,7 +485,7 @@ end;
     procedure WriteBeginConnectionData;
     procedure WriteEndConnectionData;
     procedure WriteBoundNamesOption;
-    procedure WriteTimeSeriesFiles(InputFileName: string);
+    procedure WriteTimeSeriesFiles(InputFileName: string; GwtSpecies: Integer = -1);
     procedure PrintConcentrationOption;
 //    procedure WriteGwtlAuxVariables;
   public
@@ -3289,6 +3292,7 @@ begin
   FPestDataArrays := TDictionary<string, TDataArray>.Create;
   FEvaluationType := EvaluationType;
   FModel := AModel;
+  FGwtTimeSeriesNames := TObjectList<TStringList>.Create;
 end;
 
 destructor TCustomFileWriter.Destroy;
@@ -3296,6 +3300,7 @@ begin
   FPestDataArrays.Free;
   FFileStreamList.Free;
   FTimeSeriesNames.Free;
+  FGwtTimeSeriesNames.Free;
   inherited;
 end;
 
@@ -5063,6 +5068,7 @@ var
   AParam: TModflowTransientListParameter;
   CurrentTime: TDateTime;
   FoundFirst: Boolean;
+  AStringList: TStringList;
   procedure AssignMf6ObsNames(ValueCellList: TValueCellList);
   var
     CellIndex: Integer;
@@ -5153,6 +5159,18 @@ begin
 
         Boundary.GetCellValues(FValues, FParamValues, Model, self);
         FTimeSeriesNames.AddStrings(Boundary.Mf6TimeSeriesNames);
+        while FGwtTimeSeriesNames.Count < Boundary.GwtTimeSeriesNames.Count do
+        begin
+          AStringList := TStringList.Create;
+          FGwtTimeSeriesNames.Add(AStringList);
+          AStringList.Sorted := True;
+          AStringList.Duplicates := dupIgnore;
+        end;
+        for var SpeciesIndex := 0 to Boundary.GwtTimeSeriesNames.Count - 1 do
+        begin
+          AStringList := FGwtTimeSeriesNames[SpeciesIndex];
+          AStringList.AddStrings(Boundary.GwtTimeSeriesNames[SpeciesIndex]);
+        end;
 
         if Mf6ObservationsUsed then
         begin
@@ -5441,6 +5459,7 @@ constructor TCustomPackageWriter.Create(AModel: TCustomModel;
 begin
   inherited;
   FTimeSeriesFileNames := TStringList.Create;
+  FGwtTimeSeriesFileNames := TObjectList<TStringList>.Create;
   FMvrWriter := nil;
 end;
 
@@ -7863,6 +7882,7 @@ destructor TCustomPackageWriter.Destroy;
 begin
   DSiTrimWorkingSet;
   FTimeSeriesFileNames.Free;
+  FGwtTimeSeriesFileNames.Free;
   inherited;
 end;
 
@@ -10434,7 +10454,7 @@ begin
   end;
 end;
 
-procedure TCustomPackageWriter.WriteTimeSeriesFiles(InputFileName: string);
+procedure TCustomPackageWriter.WriteTimeSeriesFiles(InputFileName: string; GwtSpecies: Integer = -1);
 var
   Groups: TTimesSeriesGroups;
   GroupIndex: Integer;
@@ -10443,20 +10463,44 @@ var
   TimeSeriesWriter: TMf6TimeSeriesWriter;
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
+  TimeSeriesNames: TStringList;
+  TimeSeriesFileNames: TStringList;
 begin
-  if FTimeSeriesNames.Count > 0 then
+  if GwtSpecies >= 0 then
+  begin
+    if FGwtTimeSeriesNames.Count > GwtSpecies then
+    begin
+      TimeSeriesNames := FGwtTimeSeriesNames[GwtSpecies];
+      while FGwtTimeSeriesFileNames.Count <= GwtSpecies do
+      begin
+        FGwtTimeSeriesFileNames.Add(TStringList.Create);
+      end;
+      TimeSeriesFileNames := FGwtTimeSeriesFileNames[GwtSpecies]
+    end
+    else
+    begin
+      TimeSeriesNames := nil;
+      TimeSeriesFileNames := nil;
+    end;
+  end
+  else
+  begin
+    TimeSeriesNames := FTimeSeriesNames;
+    TimeSeriesFileNames := FTimeSeriesFileNames;
+  end;
+  if (TimeSeriesNames <> nil) and (TimeSeriesNames.Count > 0) then
   begin
     if not WritingTemplate then
     begin
       Groups := TTimesSeriesGroups.Create;
       try
-        Model.Mf6TimesSeries.GetTimesSeriesGroups(FTimeSeriesNames, Groups);
+        Model.Mf6TimesSeries.GetTimesSeriesGroups(TimeSeriesNames, Groups);
         for GroupIndex := 0 to Groups.Count - 1 do
         begin
           AGroup := Groups[GroupIndex];
           TimeSeriesWriter := TMf6TimeSeriesWriter.Create(Model, etExport);
           try
-            FTimeSeriesFileNames.Add(TimeSeriesWriter.
+            TimeSeriesFileNames.Add(TimeSeriesWriter.
               WriteFile(FInputFileName, AGroup));
           finally
             TimeSeriesWriter.Free;
@@ -10470,15 +10514,15 @@ begin
       finally
         Groups.Free;
       end;
-      Model.ModelInputFiles.AddStrings(FTimeSeriesFileNames);
+      Model.ModelInputFiles.AddStrings(TimeSeriesFileNames);
     end;
-    for FileIndex := 0 to FTimeSeriesFileNames.Count - 1 do
+    for FileIndex := 0 to TimeSeriesFileNames.Count - 1 do
     begin
       WriteString('    TS6 FILEIN ');
-      WriteString(ExtractFileName(FTimeSeriesFileNames[FileIndex]));
+      WriteString(ExtractFileName(TimeSeriesFileNames[FileIndex]));
       NewLine;
     end;
-//    FTimeSeriesFileNames.Clear;
+//    TimeSeriesFileNames.Clear;
   end;
 end;
 

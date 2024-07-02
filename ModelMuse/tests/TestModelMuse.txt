@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5686
+5717
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5686,3 +5686,34 @@ MP7 Test1.gpt
 	Archive\MP7_Test1.wel
 	Archive\usgs.MP7_Test1.reference
 	Archive\usgs.MP7_Test1_Modpath.reference
+UztTimeSeriesTest.gpt
+	Archive\UztTimeSeriesTest.axml
+	Archive\UztTimeSeriesTest.chd
+	Archive\UztTimeSeriesTest.Chem.adv
+	Archive\UztTimeSeriesTest.Chem.dis
+	Archive\UztTimeSeriesTest.Chem.dsp
+	Archive\UztTimeSeriesTest.Chem.gwfgwt
+	Archive\UztTimeSeriesTest.Chem.Gwt_nam
+	Archive\UztTimeSeriesTest.Chem.ic
+	Archive\UztTimeSeriesTest.Chem.ims
+	Archive\UztTimeSeriesTest.Chem.mst
+	Archive\UztTimeSeriesTest.Chem.oc
+	Archive\UztTimeSeriesTest.Chem.ssm
+	Archive\UztTimeSeriesTest.Chem.uzt
+	Archive\UztTimeSeriesTest.Chem.uzt.UzfTimeSeries.ts
+	Archive\UztTimeSeriesTest.dis
+	Archive\UztTimeSeriesTest.gsf
+	Archive\UztTimeSeriesTest.ic
+	Archive\UztTimeSeriesTest.ims
+	Archive\UztTimeSeriesTest.mfsim.nam
+	Archive\UztTimeSeriesTest.nam
+	Archive\UztTimeSeriesTest.nam.archive
+	Archive\UztTimeSeriesTest.npf
+	Archive\UztTimeSeriesTest.oc
+	Archive\UztTimeSeriesTest.RunModel.Bat
+	Archive\UztTimeSeriesTest.RunModflow.Bat
+	Archive\UztTimeSeriesTest.sto
+	Archive\UztTimeSeriesTest.tdis
+	Archive\UztTimeSeriesTest.uzf
+	Archive\UztTimeSeriesTest.uzf.UzfTimeSeries.ts
+	Archive\usgs.UztTimeSeriesTest.reference

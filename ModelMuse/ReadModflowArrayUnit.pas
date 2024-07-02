@@ -184,6 +184,13 @@ procedure ReadModflowDoublePrecFluxList(AFile: TFileStream;
 
 function CheckMt3dmsArrayPrecision(AFile: TFileStream): TModflowPrecision;
 
+// Use this function to check whether the files is a
+// a binary head or drawdown file or other similar files.
+// AFile should be at the beginning of the file when this
+// function is called.  It will still be at the beginning
+// when the function returns.
+function IsMf6ArrayFile(AFile: TFileStream): Boolean;
+
 // Use this function to check the precision of
 // a binary head or drawdown file or other similar files.
 // AFile should be at the beginning of the file when this
@@ -234,6 +241,99 @@ resourcestring
 
 //var
 //  Dummy: TModflowDouble;
+function ValidDescription(const Description: AnsiString): Boolean;
+begin
+    // If these values are changed, update the
+    // MODFLOW Online Guide with the new values.
+  result := (Description = '            HEAD')
+         or (Description = '        DRAWDOWN')
+         or (Description = '      SUBSIDENCE')
+         or (Description = '      COMPACTION')
+         or (Description = '   CRITICAL HEAD')
+         or (Description = '     HEAD IN HGU')
+         or (Description = 'NDSYS COMPACTION')
+         or (Description = '  Z DISPLACEMENT')
+         or (Description = ' D CRITICAL HEAD')
+         or (Description = 'LAYER COMPACTION')
+         or (Description = ' DSYS COMPACTION')
+         or (Description = 'ND CRITICAL HEAD')
+         or (Description = 'LAYER COMPACTION')
+         or (Description = 'SYSTM COMPACTION')
+         or (Description = 'PRECONSOL STRESS')
+         or (Description = 'CHANGE IN PCSTRS')
+         or (Description = 'EFFECTIVE STRESS')
+         or (Description = 'CHANGE IN EFF-ST')
+         or (Description = '      VOID RATIO')
+         or (Description = '       THICKNESS')
+         or (Description = 'CENTER ELEVATION')
+         or (Description = 'GEOSTATIC STRESS')
+         or (Description = 'CHANGE IN G-STRS')
+         or (Description = 'CONCENTRATION   ')
+         or (Description = '   EL LAYER CMPT')
+         or (Description = ' INEL LAYER CMPT')
+         or (Description = '   NDSYS EL CMPT')
+         or (Description = '    DSYS EL CMPT')
+         or (Description = ' NDSYS INEL CMPT')
+         or (Description = '  DSYS INEL CMPT')
+         or (Description = 'HEAD            ')
+         or (Description = '         DENSITY')
+         or (Description = '         VISCOSI')
+         or (Description = '       VISCOSITY')
+end;
+
+function IsMf6ArrayFile(AFile: TFileStream): Boolean;
+var
+  KSTP, KPER: Integer;
+  PERTIM, TOTIM: TModflowFloat;
+  DESC: TModflowDesc;
+  Description : AnsiString;
+  PERTIM_Double: TModflowDouble;
+  TOTIM_Double: TModflowDouble;
+  precision: TModflowPrecision;
+begin
+  Assert(AFile.Position = 0);
+  AFile.Read(KSTP, SizeOf(KSTP));
+  AFile.Read(KPER, SizeOf(KPER));
+  AFile.Read(PERTIM, SizeOf(PERTIM));
+  AFile.Read(TOTIM, SizeOf(TOTIM));
+  AFile.Read(DESC, SizeOf(DESC));
+  Description := DESC;
+  Result := False;
+  if ValidDescription(Description) then
+  begin
+    precision := mpSingle;
+    Result := True;
+  end
+  else
+  begin
+    precision := mpDouble;
+    Result := True;
+  end;
+  AFile.Position := 0;
+  AFile.Read(KSTP, SizeOf(KSTP));
+  AFile.Read(KPER, SizeOf(KPER));
+  AFile.Read(PERTIM_Double, SizeOf(PERTIM_Double));
+  AFile.Read(TOTIM_Double, SizeOf(TOTIM_Double));
+  AFile.Read(DESC, SizeOf(DESC));
+  Description := DESC;
+  case precision of
+    mpSingle:
+      begin
+        if ValidDescription(Description) then
+        begin
+          Result := False;
+        end;
+      end;
+    mpDouble:
+      begin
+        if not ValidDescription(Description) then
+        begin
+          Result := False;
+        end;
+      end;
+  end;
+  AFile.Position := 0;
+end;
 
 function CheckArrayPrecision(AFile: TFileStream): TModflowPrecision;
 var
@@ -243,45 +343,6 @@ var
   Description : AnsiString;
   PERTIM_Double: TModflowDouble;
   TOTIM_Double: TModflowDouble;
-  function ValidDescription: boolean;
-  begin
-    // If these values are changed, update the
-    // MODFLOW Online Guide with the new values.
-    result := (Description = '            HEAD')
-           or (Description = '        DRAWDOWN')
-           or (Description = '      SUBSIDENCE')
-           or (Description = '      COMPACTION')
-           or (Description = '   CRITICAL HEAD')
-           or (Description = '     HEAD IN HGU')
-           or (Description = 'NDSYS COMPACTION')
-           or (Description = '  Z DISPLACEMENT')
-           or (Description = ' D CRITICAL HEAD')
-           or (Description = 'LAYER COMPACTION')
-           or (Description = ' DSYS COMPACTION')
-           or (Description = 'ND CRITICAL HEAD')
-           or (Description = 'LAYER COMPACTION')
-           or (Description = 'SYSTM COMPACTION')
-           or (Description = 'PRECONSOL STRESS')
-           or (Description = 'CHANGE IN PCSTRS')
-           or (Description = 'EFFECTIVE STRESS')
-           or (Description = 'CHANGE IN EFF-ST')
-           or (Description = '      VOID RATIO')
-           or (Description = '       THICKNESS')
-           or (Description = 'CENTER ELEVATION')
-           or (Description = 'GEOSTATIC STRESS')
-           or (Description = 'CHANGE IN G-STRS')
-           or (Description = 'CONCENTRATION   ')
-           or (Description = '   EL LAYER CMPT')
-           or (Description = ' INEL LAYER CMPT')
-           or (Description = '   NDSYS EL CMPT')
-           or (Description = '    DSYS EL CMPT')
-           or (Description = ' NDSYS INEL CMPT')
-           or (Description = '  DSYS INEL CMPT')
-           or (Description = 'HEAD            ')
-           or (Description = '         DENSITY')
-           or (Description = '         VISCOSI')
-           or (Description = '       VISCOSITY')
-  end;
 begin
   Assert(AFile.Position = 0);
   AFile.Read(KSTP, SizeOf(KSTP));
@@ -290,7 +351,7 @@ begin
   AFile.Read(TOTIM, SizeOf(TOTIM));
   AFile.Read(DESC, SizeOf(DESC));
   Description := DESC;
-  if ValidDescription then
+  if ValidDescription(Description) then
   begin
     result := mpSingle;
   end
@@ -308,14 +369,14 @@ begin
   case result of
     mpSingle:
       begin
-        if ValidDescription then
+        if ValidDescription(Description) then
         begin
           raise EPrecisionReadError.Create(StrUnableToReadFile);
         end;
       end;
     mpDouble:
       begin
-        if not ValidDescription then
+        if not ValidDescription(Description) then
         begin
           raise EPrecisionReadError.Create(StrUnableToReadFile);
         end;

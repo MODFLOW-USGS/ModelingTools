@@ -1970,8 +1970,8 @@
           <topicref type="topic" id="393932668002513" build="ALL" modified="2022-10-06T17:03:53.734Z" icon="0" href="Head_and_Drawdown_Panes">
             <caption translate="true">Head, Drawdown, and GWT Panes</caption>
           </topicref>
-          <topicref type="topic" id="393936109263935" build="ALL" modified="2022-01-24T16:38:42.843Z" icon="0" href="Budget_Pane">
-            <caption translate="true">Budget Pane</caption>
+          <topicref type="topic" id="393936109263935" build="ALL" modified="2024-07-02T08:49:19.827Z" icon="0" href="Budget_Pane">
+            <caption translate="true">MODFLOW Budget Pane</caption>
           </topicref>
           <topicref type="topic" id="409316580833310" build="ALL" modified="2020-02-03T11:24:19.456Z" icon="0" href="MT3DMS_Pane">
             <caption translate="true">MT3D Pane</caption>

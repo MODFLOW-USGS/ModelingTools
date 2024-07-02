@@ -307,6 +307,7 @@ type
     // Buoyancy
     procedure InvalidateDensity(Sender: TObject);
     procedure InvalidateViscosity(Sender: TObject);
+    function FunctionIndexToSpeciesIndex(FunctionIndex: Integer): Integer;
   protected
     class function GetTimeListLinkClass: TTimeListsModelLinkClass; override;
     function AdjustedFormula(FormulaIndex, ItemIndex: integer): string; override;
@@ -5443,6 +5444,8 @@ var
   PestSeriesMethod: TPestParamMethod;
   TimeSeriesName: string;
   DynamicTimeSeries: IDynamicTimeSeries;
+  AStringList: TStringList;
+  SpeciesIndex: Integer;
 begin
   Expression := CellAssignmentData.Expression;
   ACellList := CellAssignmentData.ACellList;
@@ -5458,9 +5461,27 @@ begin
   TimeSeriesName := CellAssignmentData.TimeSeriesName;
   DynamicTimeSeries := CellAssignmentData.DynamicTimeSeries;
 
-  BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
-//  Assert(BoundaryFunctionIndex in
-//    [MawFlowingWellElevationPosition..MawFlowingWellReductionLengthPosition]);
+  if TimeSeriesName <> '' then
+  begin
+    SpeciesIndex := FunctionIndexToSpeciesIndex(BoundaryFunctionIndex);
+    if SpeciesIndex < 0 then
+    begin
+      BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
+    end
+    else
+    begin
+      While SpeciesIndex >= BoundaryGroup.GwtTimeSeriesNames.Count do
+      begin
+        AStringList := TStringList.Create;
+        BoundaryGroup.GwtTimeSeriesNames.Add(AStringList);
+        AStringList.Sorted := True;
+        AStringList.Duplicates := dupIgnore;
+      end;
+      AStringList := BoundaryGroup.GwtTimeSeriesNames[SpeciesIndex];
+      AStringList.Add(TimeSeriesName);
+    end;
+  end;
+
   Assert(Expression <> nil);
 
   MawStorage := BoundaryStorage as TMawTransientStorage;
@@ -5691,6 +5712,20 @@ begin
       Cell.Column := ACell.Column;
       Cell.Section := ACell.Section;
     end;
+  end;
+end;
+
+function TMawWellCollection.FunctionIndexToSpeciesIndex(
+  FunctionIndex: Integer): Integer;
+var
+  GwtStart: Integer;
+begin
+  result := -1;
+  GwtStart := MawGwtStart;
+  if FunctionIndex >= GwtStart then
+  begin
+    Dec(FunctionIndex, (GwtStart));
+    result := FunctionIndex div MawGwtConcCount;
   end;
 end;
 

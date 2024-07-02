@@ -1969,7 +1969,7 @@ begin
     WriteString('    BOUNDNAMES');
     NewLine;
 
-    WriteTimeSeriesFiles(FInputFileName);
+    WriteTimeSeriesFiles(FInputFileName, FSpeciesIndex);
 
     PrintListInputOption;
     PrintConcentrationOption;

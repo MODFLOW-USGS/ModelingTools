@@ -1,0 +1,18 @@
+# Output Control file created on 7/2/2024 by ModelMuse version 5.2.0.18.
+BEGIN OPTIONS
+  BUDGET FILEOUT 'UztTimeSeriesTest.cbc'
+  HEAD FILEOUT 'UztTimeSeriesTest.bhd'
+END OPTIONS
+
+BEGIN PERIOD      1
+  SAVE HEAD ALL
+  PRINT BUDGET ALL
+  SAVE BUDGET ALL
+END PERIOD 
+
+BEGIN PERIOD      2
+  SAVE HEAD ALL
+  PRINT BUDGET ALL
+  SAVE BUDGET ALL
+END PERIOD 
+

@@ -415,7 +415,7 @@ type
     procedure AssignBoundaryFormula(AModel: TBaseModel;
       const SeriesName: string; SeriesMethod: TPestParamMethod;
       PestItems, TimeSeriesItems: TStringList; const ItemFormula: string; Writer: TObject;
-      var BoundaryValue: TBoundaryValue);
+      var BoundaryValue: TBoundaryValue; GwtSpecies: integer = -1);
     procedure CreateGwtTimeLists(AModel: TBaseModel); virtual;
   public
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -882,6 +882,7 @@ type
   private
     FBoundaryObserver: TObserver;
     FMf6TimeSeriesNames: TStringList;
+    FGwtTimeSeriesNames: TObjectList<TStringList>;
   protected
     procedure GetPropertyObserver(Sender: TObject; List: TList); virtual;
     procedure RemoveSubscription(Sender: TObject; const AName: string);
@@ -920,6 +921,7 @@ type
     property PestBoundaryMethod[FormulaIndex: integer]: TPestParamMethod
       read GetPestBoundaryMethod write SetPestBoundaryMethod;
     property Mf6TimeSeriesNames: TStringList read FMf6TimeSeriesNames;
+    property GwtTimeSeriesNames: TObjectList<TStringList> read FGwtTimeSeriesNames;
   end;
 
   TMultiHeadItem = class(TOrderedItem)
@@ -3063,6 +3065,7 @@ var
   LocalScreenObject: TScreenObject;
   PhastModel: TPhastModel;
 begin
+  FGwtTimeSeriesNames.Free;
   FMf6TimeSeriesNames.Free;
   LocalScreenObject := ScreenObject as TScreenObject;
   if (LocalScreenObject <> nil) then
@@ -4533,6 +4536,7 @@ begin
   FMf6TimeSeriesNames:= TStringList.Create;
   FMf6TimeSeriesNames.Sorted := True;
   FMf6TimeSeriesNames.Duplicates := dupIgnore;
+  FGwtTimeSeriesNames := TObjectList<TStringList>.Create;
 end;
 
 procedure TModflowScreenObjectProperty.CreateBoundaryObserver;
@@ -5021,7 +5025,7 @@ end;
 procedure TCustomMF_BoundColl.AssignBoundaryFormula(AModel: TBaseModel;
   const SeriesName: string; SeriesMethod: TPestParamMethod;
   PestItems, TimeSeriesItems: TStringList; const ItemFormula: string; Writer: TObject;
-  var BoundaryValue: TBoundaryValue);
+  var BoundaryValue: TBoundaryValue; GwtSpecies: integer = -1);
 var
   LocalModel: TCustomModel;
   PestParam: TModflowSteadyParameter;
@@ -5033,6 +5037,7 @@ var
   LocalScreenObject: IScreenObjectForDynamicTimeSeries;
   DynamicTimeSeries: IDynamicTimeSeries;
   OldDecimalSeparator: Char;
+  AStringList: TStringList;
 begin
   CustomWriter := nil;
   LocalModel := AModel as TCustomModel;
@@ -5133,7 +5138,23 @@ begin
     if CustomWriter = nil then
     begin
       CustomWriter := Writer as TCustomFileWriter;
-      CustomWriter.TimeSeriesNames.Add(string(TimeSeries.SeriesName));
+      if GwtSpecies < 0 then
+      begin
+        CustomWriter.TimeSeriesNames.Add(string(TimeSeries.SeriesName));
+      end
+      else
+      begin
+        while CustomWriter.GwtTimeSeriesNames.Count <= GwtSpecies do
+        begin
+          AStringList := TStringList.Create;
+          CustomWriter.GwtTimeSeriesNames.Add(AStringList);
+          AStringList.Sorted := True;
+          AStringList.Duplicates := dupIgnore;
+        end;
+        AStringList := CustomWriter.GwtTimeSeriesNames[GwtSpecies];
+        AStringList.Add(string(TimeSeries.SeriesName));
+      end;
+      // add to GwtTimeSeriesNames
     end;
     PestItems.Add('');
     TimeSeriesItems.Add(string(TimeSeries.SeriesName));
@@ -5143,7 +5164,22 @@ begin
   begin
     Assert(DynamicTimeSeries <> nil);
     PestItems.Add('');
-    TimeSeriesItems.Add(string(DynamicTimeSeries.SeriesName));
+    if GwtSpecies < 0 then
+    begin
+      TimeSeriesItems.Add(string(DynamicTimeSeries.SeriesName));
+    end
+    else
+    begin
+      while CustomWriter.GwtTimeSeriesNames.Count <= GwtSpecies do
+      begin
+        AStringList := TStringList.Create;
+        CustomWriter.GwtTimeSeriesNames.Add(AStringList);
+        AStringList.Sorted := True;
+        AStringList.Duplicates := dupIgnore;
+      end;
+      AStringList := CustomWriter.GwtTimeSeriesNames[GwtSpecies];
+      AStringList.Add(string(DynamicTimeSeries.SeriesName));
+    end;
     Formula := '1';
   end;
   BoundaryValue.Formula := Formula;

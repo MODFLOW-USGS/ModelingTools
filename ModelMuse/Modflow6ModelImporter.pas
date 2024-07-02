@@ -14270,6 +14270,8 @@ var
     SftBoundNameDictionary: TBoundNameDictionary;
     SftNumberDictionary: TNumberDictionary;
     Comment: string;
+    PriorSfrItem: TSfrMf6Item;
+    EndTime: double;
     procedure ReadCrossSection(ACrossSection: TSfr6CrossSection; CrossSection: TCrossSection);
     var
       RowIndex: Integer;
@@ -14550,6 +14552,8 @@ var
     end;
     SfrBoundary.HydraulicConductivity := RealValuesToFormula(Values, 'ReachK', result);
 
+    EndTime := Model.ModflowStressPeriods.Last.EndTime;
+
     for var TransportIndex := 0 to TransportAuxNames.Count - 1 do
     begin
       if TransportAuxNames[TransportIndex] <> '' then
@@ -14570,7 +14574,7 @@ var
         begin
           SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
           SfrItem.StartTime := Model.ModflowStressPeriods.First.StartTime;
-          SfrItem.EndTime := Model.ModflowStressPeriods.Last.EndTime;
+          SfrItem.EndTime := EndTime;
         end;
         SfrItem.SpecifiedConcentrations[TransportIndex].Value :=
           BoundaryValuesToFormula(TransportAuxValues,
@@ -14588,7 +14592,7 @@ var
         begin
           SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
           SfrItem.StartTime := Model.ModflowStressPeriods.First.StartTime;
-          SfrItem.EndTime := Model.ModflowStressPeriods.Last.EndTime;
+          SfrItem.EndTime := EndTime;
         end;
         SfrItem.GwtStatus[TransportIndex].GwtBoundaryStatus := gbsActive;
       end;
@@ -14621,7 +14625,7 @@ var
 
       CSItem := SfrBoundary.CrossSections.Add as TimeVaryingSfr6CrossSectionItem;
       CSItem.StartTime := frmGoPhast.PhastModel.ModflowStressPeriods.First.StartTime;
-      CSItem.EndTime := frmGoPhast.PhastModel.ModflowStressPeriods.Last.EndTime;
+      CSItem.EndTime := EndTime;
       ACrossSection := CSItem.CrossSection;
 
       ReadCrossSection(ACrossSection, CrossSection);
@@ -14674,6 +14678,7 @@ var
       RunoffBoundaryValues[CellIndex].NumericValue := 0;
     end;
 
+//    EndTime := Model.ModflowStressPeriods.Last.EndTime;
     for PeriodIndex := 0 to SfrMvrLinkList.Count - 1 do
     begin
       SfrMvrLink := SfrMvrLinkList[PeriodIndex];
@@ -14682,7 +14687,19 @@ var
 
       if PeriodIndex >= SfrBoundary.Values.Count then
       begin
+        if SfrBoundary.Values.Count > 0 then
+        begin
+          PriorSfrItem := SfrBoundary.Values.Last as TSfrMf6Item;
+        end
+        else
+        begin
+          PriorSfrItem := nil;
+        end;
         SfrItem := SfrBoundary.Values.Add as TSfrMf6Item;
+        if PriorSfrItem <> nil then
+        begin
+          SfrItem.Assign(PriorSfrItem);
+        end;
       end
       else
       begin
@@ -14691,16 +14708,21 @@ var
 
       StartTime := Model.ModflowStressPeriods[SfrMvrLink.Period-1].StartTime;
       SfrItem.StartTime := StartTime;
-      if PeriodIndex < SfrMvrLinkList.Count - 1 then
+      if SfrBoundary.Values.Count > 1 then
       begin
-        SfrItem.EndTime := Model.ModflowStressPeriods[SfrMvrLink.Period].StartTime;
-      end
-      else
-      begin
-        SfrItem.EndTime := Model.ModflowStressPeriods.Last.EndTime;
+        PriorSfrItem := SfrBoundary.Values[SfrBoundary.Values.Count-2] as TSfrMf6Item;
+        PriorSfrItem.EndTime := StartTime
       end;
+//      if PeriodIndex < SfrMvrLinkList.Count - 1 then
+//      begin
+//        SfrItem.EndTime := Model.ModflowStressPeriods[SfrMvrLink.Period].StartTime;
+//      end
+//      else
+//      begin
+        SfrItem.EndTime := EndTime;
+//      end;
 
-      SfrItem.StreamStatus := ssActive;
+//      SfrItem.StreamStatus := ssActive;
       AReachSettingsList := ASettingList[AReachList[0].PackageData.rno-1];
       for SettingIndex := 0 to AReachSettingsList.Count - 1 do
       begin

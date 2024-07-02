@@ -1802,7 +1802,7 @@ begin
   WriteBoundNamesOption;
   //[BOUNDNAMES]
 
-  WriteTimeSeriesFiles(FInputFileName);
+  WriteTimeSeriesFiles(FInputFileName, FSpeciesIndex);
 
   PrintListInputOption;
   PrintConcentrationOption;

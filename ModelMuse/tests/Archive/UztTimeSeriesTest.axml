@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="UztTimeSeriesTest" FileType="bin">
+    <FileName Model_Name="UztTimeSeriesTest" FileType="bin">..\..\..\WRDAPP\mf6.5.0_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="UztTimeSeriesTest" FileType="ancillary">
+    <FileName Model_Name="UztTimeSeriesTest" FileType="ancillary">UztTimeSeriesTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="UztTimeSeriesTest" FileType="Model Input">
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">usgs.UztTimeSeriesTest.reference</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.chd</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.adv</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.dis</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.dsp</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.ic</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.ims</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.mst</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.oc</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.ssm</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.uzt</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.Chem.uzt.UzfTimeSeries.ts</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.dis</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.gsf</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.ic</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.ims</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.nam.archive</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.npf</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.oc</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.sto</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.tdis</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.uzf</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Input">UztTimeSeriesTest.uzf.UzfTimeSeries.ts</FileName>
+  </model>
+  <output Model_Name="UztTimeSeriesTest" FileType="Model Output">
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">mfsim.lst</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.bhd</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.cbc</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.Chem.cbc</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.Chem.InnerSolution.CSV</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.Chem.lst</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.Chem.OuterSolution.CSV</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.Chem.uzt_budget</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.Chem.uzt_conc</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.dis.grb</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.InnerSolution.CSV</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.lst</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.OuterSolution.CSV</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.uzf_budget</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.UzfConvergence.CSV</FileName>
+    <FileName Model_Name="UztTimeSeriesTest" FileType="Model Output">UztTimeSeriesTest.water_content</FileName>
+  </output>
+</Model_Archive_List>

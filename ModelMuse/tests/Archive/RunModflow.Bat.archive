@@ -1,9 +1,4 @@
 if not exist "..\..\output\NUL" mkdir "..\..\output"
-if not exist "..\..\output\output.MwtTimeSeries\NUL" mkdir "..\..\output\output.MwtTimeSeries"
-Copy /Y /A "MwtTimeSeries.mfsim.nam" "mfsim.nam"
+if not exist "..\..\output\output.UztTimeSeriesTest\NUL" mkdir "..\..\output\output.UztTimeSeriesTest"
 ..\..\bin\mf6.exe
-Copy /Y /A "mfsim.lst" "MwtTimeSeries.mfsim.lst"
-Copy /Y /A "MwtTimeSeries.Chem.mfsim.nam" "mfsim.nam"
-..\..\bin\mf6.exe
-Copy /Y /A "mfsim.lst" "MwtTimeSeries.Chem.mfsim.lst"
 pause

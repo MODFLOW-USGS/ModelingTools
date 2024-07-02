@@ -895,6 +895,7 @@ var
   Item1: TSfrMf6Item;
   Item2: TSfrMf6Item;
   SpeciesIndex: Integer;
+  AStringList: TStringList;
 begin
   FReachCount := 0;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, NoSegmentsWarning);
@@ -1089,7 +1090,17 @@ begin
           NoSegmentsWarning, ScreenObject.Name, ScreenObject);
       end;
       FTimeSeriesNames.AddStrings(Boundary.Mf6TimeSeriesNames);
-
+      while FGwtTimeSeriesNames.Count < Boundary.GwtTimeSeriesNames.Count do
+      begin
+        AStringList := TStringList.Create;
+        AStringList.Sorted := True;
+        AStringList.Duplicates := dupIgnore;
+        FGwtTimeSeriesNames.Add(AStringList);
+      end;
+      for var GwtIndex := 0 to Boundary.GwtTimeSeriesNames.Count - 1 do
+      begin
+        FGwtTimeSeriesNames[GwtIndex].AddStrings(Boundary.GwtTimeSeriesNames[GwtIndex]);
+      end;
     finally
       Dummy.Free;
     end;
@@ -2509,7 +2520,7 @@ begin
     WriteString('    BOUNDNAMES');
     NewLine;
 
-    WriteTimeSeriesFiles(FInputFileName);
+    WriteTimeSeriesFiles(FInputFileName, FSpeciesIndex);
 
     PrintListInputOption;
     PrintConcentrationOption;

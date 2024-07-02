@@ -2701,7 +2701,7 @@ begin
 
         ItemFormula := Item.SpecifiedConcentrations[SpeciesIndex].Value;
         AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index], SpeciesIndex);
       end;
       TimeList := ALink.FSpecifiedConcList[SpeciesIndex];
       TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
@@ -2729,7 +2729,7 @@ begin
 
         ItemFormula := Item.InfiltrationConcentrations[SpeciesIndex].Value;
         AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index], SpeciesIndex);
       end;
       TimeList := ALink.FInfiltrationConcList[SpeciesIndex];
       TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);
@@ -2757,7 +2757,7 @@ begin
 
         ItemFormula := Item.EvapConcentrations[SpeciesIndex].Value;
         AssignBoundaryFormula(AModel, SeriesName, SeriesMethod,
-          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index]);
+          PestItems, TimeSeriesItems, ItemFormula, Writer, BoundaryValues[Index], SpeciesIndex);
       end;
       TimeList := ALink.FEvapConcList[SpeciesIndex];
       TimeList.Initialize(BoundaryValues, ScreenObject, lctUse);

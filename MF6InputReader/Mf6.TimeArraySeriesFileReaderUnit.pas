@@ -51,9 +51,6 @@ type
     property Times: TTasTimeList read FTimes;
   end;
 
-
-
-
 implementation
 
 uses
@@ -247,9 +244,9 @@ begin
         if (FSplitter.Count >= 3) and TryFortranStrToFloat(FSplitter[2], ATime) then
         begin
           TasTime := TTasTime.Create(FPackageType);
-          TasTime.FTime := ATime;
           FTimes.Add(TasTime);
           TasTime.Read(Stream, Unhandled, FDimensions);
+          TasTime.FTime := ATime;
           if FirstTime then
           begin
             FConstant := TasTime.Constant;

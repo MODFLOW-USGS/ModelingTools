@@ -10280,6 +10280,9 @@ const
 //                names and Prior Information Group names are assigned.
 //               bug fix: Fixed bug in exporting groundwater allotments in
 //                MODFLOW-owhm version 2.
+//               bug fix: fixed export of SFR, SFT, MAW, MWT, UZF, and UZT
+//                packages when both the flow package and the associated
+//                transport package used time-series files.
 
 //               Enhancement: Added the ability to import MODFLOW 6 models.
 
