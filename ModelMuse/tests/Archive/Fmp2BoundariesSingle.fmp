@@ -1,4 +1,4 @@
-# FMP: Farm Process V4 file created on 6/13/2023 by ModelMuse version 5.1.1.29.
+# FMP: Farm Process V4 file created on 7/3/2024 by ModelMuse version 5.2.0.18.
 BEGIN GLOBAL DIMENSION
   NWBS     1
   NCROP     1
@@ -58,7 +58,7 @@ END SURFACE_WATER
 
 BEGIN ALLOTMENTS
   SURFACE_WATER RATE  TRANSIENT LIST DATAFILE Fmp2BoundariesSingle.surface_water_allotment
-  GwAllotment RATE  TRANSIENT LIST DATAFILE Fmp2BoundariesSingle.groundwater_allotment
+  GROUNDWATER RATE  TRANSIENT LIST DATAFILE Fmp2BoundariesSingle.groundwater_allotment
 END ALLOTMENTS
 
 BEGIN LAND_USE

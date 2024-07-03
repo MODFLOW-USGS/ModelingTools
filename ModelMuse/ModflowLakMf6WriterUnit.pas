@@ -1560,7 +1560,8 @@ var
   LakeSetting: TLakeSetting;
   SpeciesIndex: Integer;
   SpeciesCount: Integer;
-  procedure AssignValue(DataSetIdentifier: Integer; const FormatString: string);
+  procedure AssignValue(DataSetIdentifier: Integer; const FormatString: string;
+    SpeciesIndex: integer = -1);
   var
     Formula: string;
     Param: TModflowSteadyParameter;
@@ -1571,6 +1572,7 @@ var
     DynamicTimeSeries: IDynamicTimeSeries;
     TimeSeriesLocation: TTimeSeriesLocation;
     StaticTimeSeries: IMf6TimeSeries;
+    AStringList: TStringList;
   begin
     Formula := LakeItem.BoundaryFormula[DataSetIdentifier];
     TimeSeries := Model.Mf6TimesSeries.GetTimeSeriesByName(Formula);
@@ -1635,7 +1637,21 @@ var
         LakeSetting.PestSeries[DataSetIdentifier] := '';
         LakeSetting.Value[DataSetIdentifier] := 0;
         LakeSetting.TimeSeriesName[DataSetIdentifier] := String(StaticTimeSeries.SeriesName);
-        FTimeSeriesNames.Add(String(StaticTimeSeries.SeriesName));
+        if SpeciesIndex < 0 then
+        begin
+          FTimeSeriesNames.Add(String(StaticTimeSeries.SeriesName));
+        end
+        else
+        begin
+          while FGwtTimeSeriesNames.Count <= SpeciesIndex do
+          begin
+            AStringList := TStringList.Create;
+            AStringList.Sorted := True;
+            AStringList.Duplicates := dupIgnore;
+            FGwtTimeSeriesNames.Add(AStringList);
+          end;
+          FGwtTimeSeriesNames[SpeciesIndex].Add(String(StaticTimeSeries.SeriesName));
+        end;
       end;
     end
     else
@@ -1644,7 +1660,21 @@ var
       LakeSetting.PestSeries[DataSetIdentifier] := '';
       LakeSetting.Value[DataSetIdentifier] := 0;
       LakeSetting.TimeSeriesName[DataSetIdentifier] := String(TimeSeries.SeriesName);
-      FTimeSeriesNames.Add(String(TimeSeries.SeriesName));
+      if SpeciesIndex < 0 then
+      begin
+        FTimeSeriesNames.Add(String(TimeSeries.SeriesName));
+      end
+      else
+      begin
+        while FGwtTimeSeriesNames.Count <= SpeciesIndex do
+        begin
+          AStringList := TStringList.Create;
+          AStringList.Sorted := True;
+          AStringList.Duplicates := dupIgnore;
+          FGwtTimeSeriesNames.Add(AStringList);
+        end;
+        FGwtTimeSeriesNames[SpeciesIndex].Add(String(TimeSeries.SeriesName));
+      end;
     end;
   end;
 begin
@@ -1707,27 +1737,27 @@ begin
         for SpeciesIndex := 0 to SpeciesCount - 1 do
         begin
           AssignValue(Lak6GwtPestStartPosition + SpeciesIndex,
-            Format('Specified concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+            Format('Specified concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g', SpeciesIndex);
         end;
         for SpeciesIndex := 0 to SpeciesCount - 1 do
         begin
           AssignValue(Lak6GwtPestStartPosition + SpeciesCount + SpeciesIndex,
-            Format('rainfall concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+            Format('rainfall concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g', SpeciesIndex);
         end;
         for SpeciesIndex := 0 to SpeciesCount - 1 do
         begin
           AssignValue(Lak6GwtPestStartPosition + SpeciesCount*2 + SpeciesIndex,
-            Format('evaporation concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+            Format('evaporation concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g', SpeciesIndex);
         end;
         for SpeciesIndex := 0 to SpeciesCount - 1 do
         begin
           AssignValue(Lak6GwtPestStartPosition + SpeciesCount*3 + SpeciesIndex,
-            Format('runoff concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+            Format('runoff concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g', SpeciesIndex);
         end;
         for SpeciesIndex := 0 to SpeciesCount - 1 do
         begin
           AssignValue(Lak6GwtPestStartPosition + SpeciesCount*4 + SpeciesIndex,
-            Format('inflow concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g');
+            Format('inflow concentration ' +StrLakeChemSpeciesD, [SpeciesIndex+1]) + ' at %0:g', SpeciesIndex);
         end;
       end;
     end;

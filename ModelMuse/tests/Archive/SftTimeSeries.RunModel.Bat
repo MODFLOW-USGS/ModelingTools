@@ -5,10 +5,10 @@ for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (
 )
 @echo on
 Copy /Y /A "SftTimeSeries.mfsim.nam" "mfsim.nam"
-C:\WRDAPP\mf6.4.4_win64\bin\mf6.exe
+C:\WRDAPP\mf6.5.0_win64\bin\mf6.exe
 Copy /Y /A "mfsim.lst" "SftTimeSeries.mfsim.lst"
 Copy /Y /A "SftTimeSeries.Chem.mfsim.nam" "mfsim.nam"
-C:\WRDAPP\mf6.4.4_win64\bin\mf6.exe
+C:\WRDAPP\mf6.5.0_win64\bin\mf6.exe
 Copy /Y /A "mfsim.lst" "SftTimeSeries.Chem.mfsim.lst"
 @echo off
 rem Get end time:

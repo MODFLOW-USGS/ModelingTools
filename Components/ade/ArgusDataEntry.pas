@@ -49,6 +49,8 @@ unit ArgusDataEntry;
 
 interface
 
+{#BACKUP *.bmp}
+
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, AppEvnts;

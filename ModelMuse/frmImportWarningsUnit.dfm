@@ -1,22 +1,25 @@
 inherited frmImportWarnings: TfrmImportWarnings
   Caption = 'MODFLOW 6 Import Warnings'
-  ClientWidth = 434
+  ClientHeight = 191
+  ClientWidth = 788
   OnClose = FormClose
-  ExplicitWidth = 450
+  ExplicitWidth = 800
+  ExplicitHeight = 229
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 161
-    Width = 434
+    Top = 150
+    Width = 788
     Height = 41
     Align = alBottom
     TabOrder = 0
-    ExplicitWidth = 768
+    ExplicitTop = 159
+    ExplicitWidth = 430
     DesignSize = (
-      434
+      788
       41)
     object btnClose: TBitBtn
-      Left = 342
+      Left = 692
       Top = 6
       Width = 75
       Height = 25
@@ -24,18 +27,19 @@ inherited frmImportWarnings: TfrmImportWarnings
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 0
-      ExplicitLeft = 545
+      ExplicitLeft = 334
     end
   end
   object memoWarnings: TMemo
     Left = 0
     Top = 0
-    Width = 434
-    Height = 161
+    Width = 788
+    Height = 150
     Align = alClient
     ScrollBars = ssVertical
     TabOrder = 1
-    ExplicitWidth = 768
+    ExplicitWidth = 430
+    ExplicitHeight = 159
   end
   object tmr1: TTimer
     Enabled = False

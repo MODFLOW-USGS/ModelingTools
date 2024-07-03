@@ -57,6 +57,50 @@ uses System.UITypes,
   ModelCellInterfaceUnit, ModflowParameterInterfaceUnit,
   InputDataObservationsUnit;
 
+{#BACKUP Documentation5\ModelMuse.hmxp}
+{#BACKUP Documentation5\*.gif}
+{#BACKUP Documentation5\MODFLOW 6 Supported Features.docx}
+{#BACKUP Documentation5\Maps\*.*}
+{#BACKUP Documentation5\ScreenShots\*.*}
+{#BACKUP Documentation5\Topics\*.*}
+{#BACKUP Documentation5\Topics\Invisible\*.*}
+{#BACKUP Documentation5\Used Images\*.*}
+{#BACKUP Documentation5\ModflowGuide\ModflowGuide.hmxp}
+{#BACKUP Documentation5\ModflowGuide\*.gif}
+{#BACKUP Documentation5\ModflowGuide\Baggage\*.*}
+{#BACKUP Documentation5\ModflowGuide\Figures\*.*}
+{#BACKUP Documentation5\ModflowGuide\Maps\*.*}
+{#BACKUP Documentation5\ModflowGuide\Topics\*.*}
+{#BACKUP Documentation5\ModpathGuide\ModPathGuide.hmxp}
+{#BACKUP Documentation5\ModpathGuide\*.gif}
+{#BACKUP Documentation5\ModpathGuide\images\*.*}
+{#BACKUP Documentation5\ModpathGuide\Maps\*.*}
+{#BACKUP Documentation5\ModpathGuide\Topics\*.*}
+{#BACKUP Documentation5\ZoneBudgetGuide\ZoneBudgetGuide.hmxp}
+{#BACKUP Documentation5\ZoneBudgetGuide\*.gif}
+{#BACKUP Documentation5\ZoneBudgetGuide\Maps\*.*}
+{#BACKUP Documentation5\ZoneBudgetGuide\Topics\*.*}
+{#BACKUP Documentation5\Release\Release.hmxp}
+{#BACKUP Documentation5\Release\*.gif}
+{#BACKUP Documentation5\Release\Maps\*.*}
+{#BACKUP Documentation5\Release\Topics\*.*}
+{#BACKUP MF2005_Importer\*.f}
+{#BACKUP MF2005_Importer\MF2005_Importer\MF2005_Importer.*}
+{#BACKUP ..\Components\GraphicEX\*.pas}
+{#BACKUP ..\Components\GraphicEX\*.OBJ}
+{#BACKUP ..\Components\GraphicEX\*.chm}
+{#BACKUP ..\Components\GraphicEX\*.inc}
+{#BACKUP ..\Components\xyGraph\*.pas}
+{#BACKUP ..\Components\xyGraph\*.dfm}
+{#BACKUP ..\Components\xyGraph\*.dpr}
+{#BACKUP ..\Components\xyGraph\*.dproj}
+{#BACKUP ..\Components\xyGraph\*.hlp}
+{#BACKUP ..\Components\xyGraph\*.cnt}
+{#BACKUP ..\Components\xyGraph\*.ico}
+{#BACKUP ..\Components\xyGraph\README.TXT}
+{#BACKUP ..\Components\xyGraph\xygrph23.zip}
+
+
 resourcestring
   NoSegmentsWarning = 'One or more objects do not define segments '
     + 'in the SFR package because they do not intersect the grid.';
@@ -10275,20 +10319,18 @@ const
 //                and GWT SRC boundaries when multiplier are not used.
 //    '5.2.0.18' bug fix: fixed export of SFR package for MODFLOW 6 after
 //                disabling solute transport.
-
-//               Enhancement: ModelMuse now checks that PEST Observation Group
+//    '5.2.0.19' Enhancement: ModelMuse now checks that PEST Observation Group
 //                names and Prior Information Group names are assigned.
 //               bug fix: Fixed bug in exporting groundwater allotments in
 //                MODFLOW-owhm version 2.
-//               bug fix: fixed export of SFR, SFT, MAW, MWT, UZF, and UZT
+//               bug fix: fixed export of SFR, SFT, MAW, MWT, LAK, LKT, UZF, and UZT
 //                packages when both the flow package and the associated
 //                transport package used time-series files.
-
-//               Enhancement: Added the ability to import MODFLOW 6 models.
+//    '5.3.0.0'  Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.18';
+  IIModelVersion = '5.3.0.0';
 
 function IModelVersion: string;
 begin

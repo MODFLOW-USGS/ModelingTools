@@ -6,6 +6,7 @@ program SwiObsExtractor;
 
 {#BACKUP SwiObsExtractor.lpr}
 {#BACKUP SwiObsExtractor.lp1}
+{#BACKUP SwiObsExtractor.res}
 {#BACKUP SimpleTextWriter.pas}
 
 uses

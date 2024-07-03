@@ -58,7 +58,7 @@ END SURFACE_WATER
 
 BEGIN ALLOTMENTS
   SURFACE_WATER RATE  TRANSIENT LIST DATAFILE Fmp2BoundariesMultiple.surface_water_allotment
-  GwAllotment RATE  TRANSIENT LIST DATAFILE Fmp2BoundariesMultiple.groundwater_allotment
+  GROUNDWATER RATE  TRANSIENT LIST DATAFILE Fmp2BoundariesMultiple.groundwater_allotment
 END ALLOTMENTS
 
 BEGIN LAND_USE

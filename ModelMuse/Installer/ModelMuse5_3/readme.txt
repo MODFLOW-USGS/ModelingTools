@@ -1,4 +1,4 @@
-ModelMuse – Version 5.2.1.0
+ModelMuse – Version 5.3.0.0
 
 NOTE: Any use of trade, product or firm names is for descriptive purposes 
       only and does not imply endorsement by the U.S. Government.
@@ -36,11 +36,11 @@ Either version may be used for installing ModelMuse.  Both contain
 the same version of ModelMuse for use on personal computers:
 
 For 32 or 64-bit operating systems:
-         ModelMuseSetup32_5_2_1.exe
-         ModelMuse32_5_2_1.zip
+         ModelMuseSetup32_5_3_0.exe
+         ModelMuse32_5_3_0.zip
 For 64-bit operating systems:
-         ModelMuseSetup64_5_2_1.exe
-         ModelMuse64_5_2_1.zip
+         ModelMuseSetup64_5_3_0.exe
+         ModelMuse64_5_3_0.zip
 
 Both distribution files contain:
 
@@ -52,7 +52,7 @@ Both distribution files contain:
           Example models
           Supplementary materials
 
-The file ModelMuseSource5_2_1.zip contains the source code for ModelMuse, 
+The file ModelMuseSource5_3_0.zip contains the source code for ModelMuse, 
          ModelMonitor, and MF2005_Importer.exe.
 
 B. INSTALLING
@@ -97,7 +97,7 @@ site:
       http://www.adobe.com/
 
 The zip files contain the same files in the same directory structure except
-that the top level directory is ModelMuse5_2_1. 
+that the top level directory is ModelMuse5_3. 
 To install it, unzip the file retaining the directory structure of the zip
 file. Unlike the installer, unzipping the files from a zip file will not 
 associate ModelMuse project files with extensions .gpt, .gpb, or .mmZLib 
@@ -188,7 +188,7 @@ Add the following JCL directories to the Library path if they are not added
 automatically when installing the JCL.
 source\common
 source\windows
-JVCL Version 2022.02 was used in compiling ModelMuse. 
+JVCL Version 2023.11 was used in compiling ModelMuse. 
 When installed from the GetIt Package Manager, both the JCL and JVCL create
 installer programs. The installer programs, when run will install the JCL 
 and JVCL in the account of the user from which the installer programs were 
@@ -246,7 +246,7 @@ and
 C:\Users\Public\Documents\Embarcadero\Studio\22.0\Bpl
 
 Then you may need to edit the "requires" section of the GLScene packages to 
-add a requirement for the Graphics32 design-time package. To add a 
+add or update a requirement for the Graphics32 design-time package. To add a 
 requirement, right-click on the "requires" section of the package in the 
 Projects window and select reference. Then navigate to the DCP directory
 and a the .dcp file for the Graphics32 design-time package.
@@ -315,7 +315,7 @@ http://www.jam-software.com/virtual-treeview/
 https://github.com/TurboPack/VirtualTreeView
 It can also be installed via the Delphi Get It package manager (VirturalTree for VCL)
 
-MadExcept version 5.1.2 or later must be installed.  It can be obtained from 
+MadExcept version 5.1.4 or later must be installed.  It can be obtained from 
 http://www.madshi.net/
 
 Abbrevia

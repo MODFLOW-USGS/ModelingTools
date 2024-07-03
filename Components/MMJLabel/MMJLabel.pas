@@ -2,11 +2,14 @@ unit MMJLabel;
 
 {TMMJLable is 3D label with Angle poperty.
 
+
  Happy programming
 Happy Programming
 
 Mihaela Mihaljevic Jakic
 mickj@hi.hinet.hr}
+
+{#BACKUP *.dcr}
 
 interface
 

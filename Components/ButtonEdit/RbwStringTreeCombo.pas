@@ -14,6 +14,9 @@ unit RbwStringTreeCombo;
 
 interface
 
+{#BACKUP buttoned.zip}
+{#BACKUP TreeComboDemo\*.*}
+
 uses
   SysUtils, Classes, Controls, StdCtrls, SsButtonEd, VirtualTrees, frmTreeUnit;
 

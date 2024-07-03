@@ -12,6 +12,7 @@
 4b. If relevant, update About box with new citation.
 5. Build help - chm and html
 5a. Check that help works for new things.
+5b. Update "MODFLOW 6 Supported Features"
 6. Insert google analytics code for help and revision history.
 6a. Replace http:\\ with https:\\ in help and revision history.
 6b. Create and fill folders for release - ModelMuse, ModelMonitor, ModflowImporter, utility programs, Help, and Release.chm

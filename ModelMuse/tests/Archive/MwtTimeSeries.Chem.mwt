@@ -1,9 +1,8 @@
-# MAW: Multi-Aquifer Well package file created on 12/8/2023 by ModelMuse version 5.1.1.46.
+# MAW: Multi-Aquifer Well package file created on 7/2/2024 by ModelMuse version 5.2.0.18.
 BEGIN OPTIONS
     FLOW_PACKAGE_NAME MAW-1
     FLOW_PACKAGE_AUXILIARY_NAME  Chem
     BOUNDNAMES
-    TS6 FILEIN MwtTimeSeries.maw6.MyGroup.ts
     TS6 FILEIN MwtTimeSeries.Chem.mwt.MyGroup.ts
     PRINT_INPUT
     SAVE_FLOWS
