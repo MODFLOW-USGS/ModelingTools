@@ -119,10 +119,10 @@
     </styleclasses>
     <config-group name="project">
       <config-value name="title" translate="true">ModelMuse Release History</config-value>
-      <config-value name="author" translate="true">U.S. Geological Survey</config-value>
+      <config-value name="author" translate="true">Richard B. Winston, U.S. Geological Survey</config-value>
       <config-value name="copyright" translate="true">Public Domain &lt;%YEAR%&gt; &lt;%AUTHOR%&gt;</config-value>
       <config-value name="versionmajor">5</config-value>
-      <config-value name="versionminor">0</config-value>
+      <config-value name="versionminor">3</config-value>
       <config-value name="versionbuild">0</config-value>
       <config-value name="lcid">en-us</config-value>
       <config-value name="charset">ANSI_CHARSET</config-value>
@@ -144,6 +144,7 @@
       <config-value name="make0status">*</config-value>
       <config-value name="make4include">PDF</config-value>
       <config-value name="make4status">*</config-value>
+      <config-value name="contents">Vertsion-5_2_1</config-value>
     </config-group>
     <config-group name="user">
       <config-group name="rbwinst-pr">
@@ -266,8 +267,24 @@ document.write('</frameset>');
       <config-value name="highlighthotspots">0</config-value>
       <config-value name="exportcomments">0</config-value>
       <config-value name="exportcommentsdate">36526</config-value>
+      <config-value name="pdfa">0</config-value>
+      <config-value name="compression">1</config-value>
+      <config-value name="jpegquality">0</config-value>
+      <config-value name="openmode">1</config-value>
+      <config-value name="zoommode">0</config-value>
+      <config-value name="pagelayout">0</config-value>
+      <config-value name="userprint">1</config-value>
+      <config-value name="usercopy">1</config-value>
+      <config-value name="userchange">1</config-value>
+      <config-value name="encrypt128bit">0</config-value>
+      <config-value name="copyright" translate="true">&lt;%COPYRIGHT%&gt;</config-value>
+      <config-value name="copyrightpublicdomain">0</config-value>
+      <config-value name="title" translate="true">&lt;%MYTITLE%&gt;</config-value>
+      <config-value name="author" translate="true">Richard B. Winston</config-value>
     </config-group>
-    <variables/>
+    <variables>
+      <variable id="MYTITLE" type="text" translate="true">ModelMuse Release History</variable>
+    </variables>
     <helpcontext-numbers/>
   </config>
   <xi:include parse="xml" href="Maps/table_of_contents.xml"/>

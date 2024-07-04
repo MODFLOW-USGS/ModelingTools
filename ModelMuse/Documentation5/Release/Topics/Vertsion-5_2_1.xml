@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2024-07-03T13:05:47.364-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-07-04T07:25:53.054-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Vertsion 5.3</title>
   <body>
     <header>
@@ -15,7 +15,7 @@
             <tr style="vertical-align:top">
               <td>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to import MODFLOW 6 models.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a new &quot;Active Specified Head&quot; field that allows the user to make some cells active or inactive based on a formula.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a new &quot;Active Specified Head&quot; field that allows the user to make some specified head boundaries active or inactive based on a formula.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The scale factor for a dynamic time series can now be a formula.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now checks that PEST Observation Group names and Prior Information Group names are assigned.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now supports the AUXMULTNAME option in MODFLOW 6.</text></para>
@@ -38,7 +38,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause an access violation when shutting down ModelMuse while the Show or Hide Objects dialog box is displayed.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug that could cause access violations when editing objects while the Show or Hide Objects dialog box is displayed and Calibration data sets have been defined.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that can cause an access violation when shutting down ModelMuse.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed a bug in the display of objects with one elevation formula in the front and side views.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in the display of objects with one elevation formula in the front and side views.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug opening MODFLOW 6 model with ETS package.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in the MVR package, in which the FACTOR was divided among UZF reciver cells even that option was not selected.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in MVR package in which the flow could be directed to the wrong SFR receiver if more than one SFR receiver was used with the same MVR source.</text></para>
@@ -46,10 +46,10 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in the display of data from the TVK and TVS packages so that the data is now displayed on the correct layer.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting the DIS input file for MODFLOW-OWHM version 2 when the Farm package is not selected.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in assigning properties to SUTRA nodes with objects that should intersect the cell around nodes.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">using lake tables with lakes didn&apos;t work if PEST was active.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Using lake tables with lakes didn&apos;t work if PEST was active.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">With MODPATH 7, extra values were previously included with the particle locations.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of budget CSV file with the UZT package.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed bug in exporting MAW and UZF package input files in MODFLOW 6 when observations have been defined but the observation utility is not active.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting MAW and UZF package input files in MODFLOW 6 when observations have been defined but the observation utility is not active.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of RCH package in MODFLOW 6 when objects are to be summed.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of h0 in CSUB package data.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of MVR when the source doesn&apos;t change over time.</text></para>
@@ -57,10 +57,9 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed reading some ModelMuse files on systems that us comma as the decimal separator.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of GWT DSP file that would cause an assertion failure.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The EVT package is now included in the MODFLOW 6 grounddwater transport source and sink mixing package as an AUXMIXED source.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed export of SFR package for MODFLOW 6 after disabling solute transport.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SFR package for MODFLOW 6 after disabling solute transport.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug in exporting groundwater allotments in MODFLOW-owhm version 2.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed export of SFR, SFT, MAW, MWT, LAK, LKT, UZF, and UZT packages when both the flow package and the associated transport package used time-series files.</text></para>
-                <para styleclass="Normal"></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of SFR, SFT, MAW, MWT, LAK, LKT, UZF, and UZT packages when both the flow package and the associated transport package used time-series files.</text></para>
               </td>
             </tr>
           </table></para>
