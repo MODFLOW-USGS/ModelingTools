@@ -3150,11 +3150,16 @@ begin
   end
   else if (Sender = frameFarmWell.rdgModflowBoundary)
     or (Sender = frameCSUB.rdgModflowBoundary)
-    or (Sender = frameGwtCnc.rdgModflowBoundary)
-    or (Sender = frameGwtSrc.rdgModflowBoundary)
     then
   begin
     PestParameterColumns := [2];
+  end
+  else if
+    (Sender = frameGwtCnc.rdgModflowBoundary)
+    or (Sender = frameGwtSrc.rdgModflowBoundary)
+    then
+  begin
+    PestParameterColumns := [3];
   end
   else if (Sender = frameEtsParam.rdgModflowBoundary) then
   begin
@@ -20320,8 +20325,8 @@ begin
     or (DataGrid = frameRivParam.rdgModflowBoundary)
     or ((DataGrid = frameScreenObjectSfr6.rdgModflowBoundary) and (ACol < 9)) // all but upstream fraction and diversions.
     or (DataGrid = frameScreenObjectUzfMf6.rdgModflowBoundary)
-    or (DataGrid = frameGwtCnc.rdgModflowBoundary)
-    or (DataGrid = frameGwtSrc.rdgModflowBoundary)
+    or ((DataGrid = frameGwtCnc.rdgModflowBoundary) and (ACol in [3,4]))
+    or ((DataGrid = frameGwtSrc.rdgModflowBoundary) and (ACol in [3,4]))
     or (DataGrid = frameScreenObjectTvk.rdgModflowBoundary)
     or (DataGrid = frameScreenObjectTvs.rdgModflowBoundary)
     or (DataGrid.Parent is TframeLakeOutlet)
@@ -23949,6 +23954,14 @@ begin
   if DataGrid.Parent is TframeModflow6DynamicTimeSeries then
   begin
     ResultType := rdtDouble;
+  end
+  else if (DataGrid = frameGwtCnc.rdgModflowBoundary) and (ACol = 2) then
+  begin
+    ResultType := rdtBoolean;
+  end
+  else if (DataGrid = frameGwtSRC.rdgModflowBoundary) and (ACol = 2) then
+  begin
+    ResultType := rdtBoolean;
   end
   else if (DataGrid = dgSpecifiedHead) or (DataGrid = dgBoundaryFlux) or
     (DataGrid = dgBoundaryLeaky) then
@@ -30375,8 +30388,8 @@ begin
     or ((DataGrid = frameSutraSpecTempConc.rdgSutraFeature) and (ACol in [2]))
     or ((DataGrid = frameSutraGeneralizedFlowBoundary.rdgSutraFeature) and (ACol in [2..5, 8, 10]))
     or ((DataGrid = frameSutraGeneralizeTransBoundary.rdgSutraFeature) and (ACol in [2..5]))
-    or (DataGrid = frameGwtCnc.rdgModflowBoundary)
-    or (DataGrid = frameGwtSrc.rdgModflowBoundary)
+    or ((DataGrid = frameGwtCnc.rdgModflowBoundary) and (ACol in [3,4]))
+    or ((DataGrid = frameGwtSrc.rdgModflowBoundary) and (ACol in [3,4]))
 
     or (DataGrid = frameFarmRefEvap.rdgModflowBoundary)
     or (DataGrid = frameFarmPrecip.rdgModflowBoundary)

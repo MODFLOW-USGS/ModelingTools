@@ -15,9 +15,11 @@ type
   }
   TCncRecord = record
     Cell: TCellLocation;
+    Active: Boolean;
     Concentration: double;
     StartingTime: double;
     EndingTime: double;
+    ActiveAnnotation: string;
     ConcentrationAnnotation: string;
     ConcentrationPest: string;
     ConcentrationPestSeriesName: string;
@@ -59,11 +61,14 @@ type
     // See @link(Concentration).
     FConcentration: IFormulaObject;
     FMultiplier: IFormulaObject;
+    FActive: IFormulaObject;
     // See @link(Concentration).
     procedure SetConcentration(const Value: string);
     function GetConcentration: string;
     procedure SetMultiplier(const Value: string);
     function GetMultiplier: string;
+    procedure SetActive(const Value: string);
+    function GetActive: string;
   protected
     procedure AssignObserverEvents(Collection: TCollection); override;
     procedure CreateFormulaObjects; override;
@@ -85,6 +90,7 @@ type
   published
     // @name is the formula used to set the pumping rate
     // or the pumping rate multiplier of this boundary.
+    property Active: string read GetActive write SetActive;
     property Concentration: string read GetConcentration write SetConcentration;
     property Multiplier: string read GetMultiplier write SetMultiplier;
   end;
@@ -94,17 +100,19 @@ type
     // @name is used to compute the specified concentration
     // or mass flux for a series of
     // boundaries over a series of time intervals.
+    FActiveData: TModflowTimeList;
     FConcentrationData: TModflowTimeList;
     FMultiplierData: TModflowTimeList;
     FInvalidateEvent: TNotifyEvent;
+    FActiveList: TModflowTimeLists;
     FConcList: TModflowTimeLists;
     FMultiplierList: TModflowTimeLists;
-
   protected
     procedure CreateTimeLists; override;
     function Description: string; virtual;
     procedure AssignInvalidateEvent; virtual;
     procedure AssignMultInvalidateEvent; virtual;
+    procedure AssignActiveInvalidateEvent; virtual;
     property InvalidateEvent: TNotifyEvent read FInvalidateEvent write FInvalidateEvent;
     procedure UpdateGwtTimeLists; override;
     procedure AddGwtTimeLists(SpeciesIndex: Integer);
@@ -118,6 +126,7 @@ type
   // for a series of time intervals.
   TCncCollection = class(TCustomMF_ListBoundColl)
   private
+    procedure InvalidateGwtConcentrationsActive(Sender: TObject);
     procedure InvalidateGwtConcentrations(Sender: TObject);
     procedure InvalidateGwtMultipliers(Sender: TObject);
   protected
@@ -139,6 +148,7 @@ type
     procedure AssignListCellLocation(BoundaryStorage: TCustomBoundaryStorage;
       ACellList: TObject); override;
     procedure AssignCellList(CellAssignmentData: TCellAssignmentData); override;
+    function OkListDataTypes(BoundaryIndex: Integer): TRbwDataTypes; override;
   end;
 
   TCnc_Cell = class(TValueCell)
@@ -159,6 +169,8 @@ type
     function GetMultiplierPestSeriesName: string;
     function GetMultiplierTimeSeriesName: string;
     procedure SetMultiplierTimeSeriesName(const Value: string);
+    function GetActive: Boolean;
+    function GetActiveAnnotation: String;
   protected
     property Values: TCncRecord read FValues;
     function GetColumn: integer; override;
@@ -167,10 +179,12 @@ type
     procedure SetColumn(const Value: integer); override;
     procedure SetLayer(const Value: integer); override;
     procedure SetRow(const Value: integer); override;
+    function GetBooleanValue(Index: integer; AModel: TBaseModel): Boolean; override;
     function GetIntegerValue(Index: integer; AModel: TBaseModel): integer; override;
     function GetRealValue(Index: integer; AModel: TBaseModel): double; override;
     function GetRealAnnotation(Index: integer; AModel: TBaseModel): string; override;
     function GetIntegerAnnotation(Index: integer; AModel: TBaseModel): string; override;
+    function GetBooleanAnnotation(Index: integer; AModel: TBaseModel): string; override;
     procedure Cache(Comp: TCompressionStream; Strings: TStringList); override;
     procedure Restore(Decomp: TDecompressionStream; Annotations: TStringList); override;
     function GetSection: integer; override;
@@ -191,6 +205,8 @@ type
       write SetMultiplierTimeSeriesName;
   public
     function IsIdentical(AnotherCell: TValueCell): boolean; override;
+    property Active: Boolean read GetActive;
+    property ActiveAnnotation: String read GetActiveAnnotation;
     property Concentration: double read GetConcentration;
     property ConcentrationAnnotation: string read GetConcentrationAnnotation;
     // PEST parameters
@@ -225,6 +241,7 @@ type
     function GetChemSpecies: string;
     procedure SetChemSpecies(const Value: string);
   protected
+    procedure InvalidateActiveData(Sender: TObject); virtual;
     procedure InvalidateConcentrationData(Sender: TObject); virtual;
     procedure InvalidateMultiplierData(Sender: TObject); virtual;
     // @name fills ValueTimeList with a series of TObjectLists - one for
@@ -292,6 +309,7 @@ type
     function Description: string; override;
     procedure AssignInvalidateEvent; override;
     procedure AssignMultInvalidateEvent; override;
+    procedure AssignActiveInvalidateEvent; override;
   end;
 
   TSrcBoundary = class(TCncBoundary)
@@ -301,12 +319,14 @@ type
     function UserObserverPrefix: string; override;
     procedure InvalidateConcentrationData(Sender: TObject); override;
     procedure InvalidateMultiplierData(Sender: TObject); override;
+    procedure InvalidateActiveData(Sender: TObject); override;
     class function BoundaryCollectionClass: TMF_BoundCollClass; override;
   end;
 
 const
-  CncConcentrationPosition = 0;
-  CncMultiplierPosition = 1;
+  CncActivePosition = 0;
+  CncConcentrationPosition = 1;
+  CncMultiplierPosition = 2;
 
 implementation
 
@@ -318,15 +338,18 @@ resourcestring
   StrConcentrationSetTo = 'Concentration set to zero because of a math error';
   StrSRCMassSource = 'SRC: Mass Source';
   StrMultiplierSetTo = 'Multiplier set to one because of a math error';
+  StrActiveSetTo = 'Active set to False because of a math error';
 
 { TCncRecord }
 
 procedure TCncRecord.Cache(Comp: TCompressionStream; Strings: TStringList);
 begin
   WriteCompCell(Comp, Cell);
+  WriteCompBoolean(Comp, Active);
   WriteCompReal(Comp, Concentration);
   WriteCompReal(Comp, StartingTime);
   WriteCompReal(Comp, EndingTime);
+  WriteCompInt(Comp, Strings.IndexOf(ActiveAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ConcentrationAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(ConcentrationPest));
   WriteCompInt(Comp, Strings.IndexOf(ConcentrationPestSeriesName));
@@ -343,6 +366,7 @@ end;
 
 procedure TCncRecord.RecordStrings(Strings: TStringList);
 begin
+  Strings.Add(ActiveAnnotation);
   Strings.Add(ConcentrationAnnotation);
   Strings.Add(ConcentrationPest);
   Strings.Add(ConcentrationPestSeriesName);
@@ -358,9 +382,11 @@ procedure TCncRecord.Restore(Decomp: TDecompressionStream;
   Annotations: TStringList);
 begin
   Cell := ReadCompCell(Decomp);
+  Active := ReadCompBoolean(Decomp);
   Concentration := ReadCompReal(Decomp);
   StartingTime := ReadCompReal(Decomp);
   EndingTime := ReadCompReal(Decomp);
+  ActiveAnnotation := Annotations[ReadCompInt(Decomp)];
   ConcentrationAnnotation := Annotations[ReadCompInt(Decomp)];
   ConcentrationPest := Annotations[ReadCompInt(Decomp)];
   ConcentrationPestSeriesName := Annotations[ReadCompInt(Decomp)];
@@ -448,6 +474,7 @@ begin
   if Source is TCncItem then
   begin
     CncSource := TCncItem(Source);
+    Active := CncSource.Active;
     Concentration := CncSource.Concentration;
     Multiplier := CncSource.Multiplier;
   end;
@@ -459,9 +486,12 @@ var
   ParentCollection: TCncCollection;
   ConcentrationObserver: TObserver;
   MultiplierObserver: TObserver;
+  ActiveObserver: TObserver;
 //  ConcIndex: Integer;
 begin
   ParentCollection := Collection as TCncCollection;
+  ActiveObserver := FObserverList[CncActivePosition];
+  ActiveObserver.OnUpToDateSet := ParentCollection.InvalidateGwtConcentrationsActive;
   ConcentrationObserver := FObserverList[CncConcentrationPosition];
   ConcentrationObserver.OnUpToDateSet := ParentCollection.InvalidateGwtConcentrations;
   MultiplierObserver := FObserverList[CncMultiplierPosition];
@@ -470,17 +500,19 @@ end;
 
 function TCncItem.BoundaryFormulaCount: integer;
 begin
-  result := 2;
+  result := 3;
 end;
 
 constructor TCncItem.Create(Collection: TCollection);
 begin
   inherited;
-  Multiplier := '1'
+  Multiplier := '1';
+  Active := 'True';
 end;
 
 procedure TCncItem.CreateFormulaObjects;
 begin
+  FActive := CreateFormulaObject(dso3D);
   FConcentration := CreateFormulaObject(dso3D);
   FMultiplier := CreateFormulaObject(dso3D);
 end;
@@ -489,12 +521,20 @@ destructor TCncItem.Destroy;
 begin
   Concentration := '0';
   Multiplier := '0';
+  Active := 'False';
   inherited;
+end;
+
+function TCncItem.GetActive: string;
+begin
+  Result := FActive.Formula;
+  ResetItemObserver(CncActivePosition);
 end;
 
 function TCncItem.GetBoundaryFormula(Index: integer): string;
 begin
   case Index of
+    CncActivePosition: result := Active;
     CncConcentrationPosition: result := Concentration;
     CncMultiplierPosition: result := Multiplier;
     else
@@ -516,6 +556,10 @@ end;
 
 procedure TCncItem.GetPropertyObserver(Sender: TObject; List: TList);
 begin
+  if Sender = FActive as TObject then
+  begin
+    List.Add(FObserverList[CncActivePosition]);
+  end;
   if Sender = FConcentration as TObject then
   begin
     List.Add(FObserverList[CncConcentrationPosition]);
@@ -539,11 +583,13 @@ begin
   begin
     if Collection is TSrcCollection then
     begin
+      PhastModel.InvalidateMassSrcActive(self);
       PhastModel.InvalidateMassSrc(self);
       PhastModel.InvalidateMassSrcMultiplier(self);
     end
     else
     begin
+      PhastModel.InvalidateCncActive(self);
       PhastModel.InvalidateCncConcentration(self);
       PhastModel.InvalidateCncMultiplier(self);
     end;
@@ -560,11 +606,15 @@ begin
     Item := TCncItem(AnotherItem);
     result := (Item.Concentration = Concentration)
       and (Item.Multiplier = Multiplier)
+      and (Item.Active = Active)
   end;
 end;
 
 procedure TCncItem.RemoveFormulaObjects;
 begin
+  frmGoPhast.PhastModel.FormulaManager.Remove(FActive,
+    GlobalRemoveModflowBoundaryItemSubscription,
+    GlobalRestoreModflowBoundaryItemSubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FConcentration,
     GlobalRemoveModflowBoundaryItemSubscription,
     GlobalRestoreModflowBoundaryItemSubscription, self);
@@ -573,10 +623,16 @@ begin
     GlobalRestoreModflowBoundaryItemSubscription, self);
 end;
 
+procedure TCncItem.SetActive(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, CncActivePosition, FActive);
+end;
+
 procedure TCncItem.SetBoundaryFormula(Index: integer; const Value: string);
 begin
   inherited;
   case Index of
+    CncActivePosition: Active := Value;
     CncConcentrationPosition: Concentration := Value;
     CncMultiplierPosition: Multiplier := Value;
     else
@@ -598,12 +654,33 @@ end;
 
 procedure TCncTimeListLink.AddGwtTimeLists(SpeciesIndex: Integer);
 var
+  ConcActiveTimeList: TModflowTimeList;
   ConcTimeList: TModflowTimeList;
   MultiplierTimeList: TModflowTimeList;
   LocalModel: TCustomModel;
   PhastModel: TPhastModel;
 begin
   PhastModel := frmGoPhast.PhastModel;
+
+  ConcActiveTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  ConcActiveTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name + ' Active';
+  ConcActiveTimeList.ParamDescription := ConcActiveTimeList.NonParamDescription;
+  if Model <> nil then
+  begin
+    LocalModel := Model as TCustomModel;
+    if self is TSrcTimeListLink then
+    begin
+      ConcActiveTimeList.OnInvalidate := LocalModel.InvalidateMassSrcActive;
+    end
+    else
+    begin
+      ConcActiveTimeList.OnInvalidate := LocalModel.InvalidateCncActive;
+    end;
+  end;
+  AddTimeList(ConcActiveTimeList);
+  FActiveList.Add(ConcActiveTimeList);
+
+
   ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
   ConcTimeList.ParamDescription := ConcTimeList.NonParamDescription;
@@ -643,6 +720,11 @@ begin
 
 end;
 
+procedure TCncTimeListLink.AssignActiveInvalidateEvent;
+begin
+  InvalidateEvent := (Model as TCustomModel).InvalidateCncActive;
+end;
+
 procedure TCncTimeListLink.AssignInvalidateEvent;
 begin
   InvalidateEvent := (Model as TCustomModel).InvalidateCncConcentration;
@@ -656,6 +738,7 @@ end;
 constructor TCncTimeListLink.Create(AModel: TBaseModel;
   ABoundary: TCustomMF_BoundColl);
 begin
+  FActiveList := TModflowTimeLists.Create;
   FConcList := TModflowTimeLists.Create;
   FMultiplierList := TModflowTimeLists.Create;
   AssignInvalidateEvent;
@@ -668,14 +751,21 @@ var
   SpeciesIndex: Integer;
 begin
   inherited;
+  FActiveData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
+  FActiveData.NonParamDescription := Description + ' Active';
+  FActiveData.ParamDescription := ' ' + Description + ' Active';
+
   FConcentrationData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FConcentrationData.NonParamDescription := Description;
   FConcentrationData.ParamDescription := Description;
+
   FMultiplierData := TModflowTimeList.Create(Model, Boundary.ScreenObject);
   FMultiplierData.NonParamDescription := Description + ' Multiplier';
   FMultiplierData.ParamDescription := ' ' + Description + ' Multiplier';
+
   if Model <> nil then
   begin
+    FActiveData.OnInvalidate := InvalidateEvent;
     FConcentrationData.OnInvalidate := InvalidateEvent;
     FMultiplierData.OnInvalidate := InvalidateEvent;
   end;
@@ -696,8 +786,10 @@ end;
 
 destructor TCncTimeListLink.Destroy;
 begin
+  FActiveData.Free;
   FConcentrationData.Free;
   FMultiplierData.Free;
+  FActiveList.Free;
   FMultiplierList.Free;
   FConcList.Free;
   inherited;
@@ -705,9 +797,14 @@ end;
 
 procedure TCncTimeListLink.RemoveGwtTimeLists(SpeciesIndex: Integer);
 var
+  ActiveTimeList: TModflowTimeList;
   ConcTimeList: TModflowTimeList;
   MultiplierTimeList: TModflowTimeList;
 begin
+  ActiveTimeList := FActiveList[SpeciesIndex];
+  RemoveTimeList(ActiveTimeList);
+  FActiveList.Delete(SpeciesIndex);
+
   ConcTimeList := FConcList[SpeciesIndex];
   RemoveTimeList(ConcTimeList);
   FConcList.Delete(SpeciesIndex);
@@ -791,7 +888,7 @@ begin
   DynamicTimeSeries := CellAssignmentData.DynamicTimeSeries;
 
   BoundaryGroup.Mf6TimeSeriesNames.Add(TimeSeriesName);
-  AllowedIndicies := [0,1];
+  AllowedIndicies := [CncActivePosition,CncConcentrationPosition,CncMultiplierPosition];
 
   Assert(BoundaryFunctionIndex in AllowedIndicies);
   Assert(Expression <> nil);
@@ -810,6 +907,18 @@ begin
     try
       Expression.Evaluate;
       case BoundaryFunctionIndex of
+        CncActivePosition:
+          begin
+            with CncStorage.CncArray[Index] do
+            begin
+              Active := Expression.BooleanResult;
+              ActiveAnnotation := ACell.Annotation;
+              ConcentrationPest := '';
+              ConcentrationPestSeriesName := '';
+              ConcentrationPestSeriesMethod := ppmMultiply;
+              ConcentrationTimeSeriesName := '';
+            end;
+          end;
         CncConcentrationPosition:
           begin
             with CncStorage.CncArray[Index] do
@@ -841,6 +950,19 @@ begin
       on E: EMathError do
       begin
         case BoundaryFunctionIndex of
+          CncActivePosition:
+            begin
+              with CncStorage.CncArray[Index] do
+              begin
+                ErrorMessage := StrActiveSetTo;
+                Active := False;
+                ActiveAnnotation := ErrorMessage;
+                ConcentrationPest := '';
+                ConcentrationPestSeriesName := '';
+                ConcentrationPestSeriesMethod := ppmMultiply;
+                ConcentrationTimeSeriesName := '';
+              end;
+            end;
           CncConcentrationPosition:
             begin
               with CncStorage.CncArray[Index] do
@@ -880,6 +1002,19 @@ begin
       on E: ERbwParserError do
       begin
         case BoundaryFunctionIndex of
+          CncActivePosition:
+            begin
+              with CncStorage.CncArray[Index] do
+              begin
+                ErrorMessage := StrActiveSetTo;
+                Active := False;
+                ActiveAnnotation := ErrorMessage;
+                ConcentrationPest := '';
+                ConcentrationPestSeriesName := '';
+                ConcentrationPestSeriesMethod := ppmMultiply;
+                ConcentrationTimeSeriesName := '';
+              end;
+            end;
           CncConcentrationPosition:
             begin
               with CncStorage.CncArray[Index] do
@@ -986,6 +1121,44 @@ begin
   end;
 end;
 
+procedure TCncCollection.InvalidateGwtConcentrationsActive(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  Link: TCncTimeListLink;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+  Index: Integer;
+  TimeList: TModflowTimeList;
+begin
+  if not (Sender as TObserver).UpToDate then
+  begin
+    PhastModel := frmGoPhast.PhastModel;
+    if PhastModel.Clearing then
+    begin
+      Exit;
+    end;
+    Link := TimeListLink.GetLink(PhastModel) as TCncTimeListLink;
+    for Index := 0 to Link.FActiveList.Count - 1 do
+    begin
+      TimeList := Link.FActiveList[Index];
+      TimeList.Invalidate;
+    end;
+    for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+    begin
+      ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+      if ChildModel <> nil then
+      begin
+        Link := TimeListLink.GetLink(ChildModel) as TCncTimeListLink;
+        for Index := 0 to Link.FActiveList.Count - 1 do
+        begin
+          TimeList := Link.FActiveList[Index];
+          TimeList.Invalidate;
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TCncCollection.InvalidateGwtMultipliers(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -1039,11 +1212,13 @@ begin
     begin
       PhastModel.InvalidateMassSrc(self);
       PhastModel.InvalidateMassSrcMultiplier(self);
+      PhastModel.InvalidateMassSrcActive(self);
     end
     else
     begin
       PhastModel.InvalidateCncConcentration(self);
       PhastModel.InvalidateCncMultiplier(self);
+      PhastModel.InvalidateCncActive(self);
     end;
   end;
 end;
@@ -1051,6 +1226,20 @@ end;
 class function TCncCollection.ItemClass: TBoundaryItemClass;
 begin
   result := TCncItem;
+end;
+
+function TCncCollection.OkListDataTypes(BoundaryIndex: Integer): TRbwDataTypes;
+begin
+  case BoundaryIndex of
+    CncActivePosition:
+      begin
+        result := [rdtBoolean];
+      end;
+    CncConcentrationPosition,CncMultiplierPosition:
+      begin
+        result := inherited;
+      end;
+  end;
 end;
 
 procedure TCncCollection.SetBoundaryStartAndEndTime(BoundaryCount: Integer;
@@ -1067,6 +1256,38 @@ begin
   inherited;
   Values.Cache(Comp, Strings);
   WriteCompInt(Comp, StressPeriod);
+end;
+
+function TCnc_Cell.GetActive: Boolean;
+begin
+  result := Values.Active;
+end;
+
+function TCnc_Cell.GetActiveAnnotation: String;
+begin
+  result := Values.ActiveAnnotation;
+end;
+
+function TCnc_Cell.GetBooleanAnnotation(Index: integer;
+  AModel: TBaseModel): string;
+begin
+  case Index of
+    CncActivePosition: result := ActiveAnnotation;
+    else
+      Assert(False);
+  end;
+end;
+
+function TCnc_Cell.GetBooleanValue(Index: integer; AModel: TBaseModel): Boolean;
+begin
+  case Index of
+    CncActivePosition: result := Active;
+    else
+      begin
+        Result := False;
+        Assert(False);
+      end;
+  end;
 end;
 
 function TCnc_Cell.GetColumn: integer;
@@ -1125,6 +1346,7 @@ end;
 function TCnc_Cell.GetMf6TimeSeriesName(Index: Integer): string;
 begin
   case Index of
+    CncActivePosition: result := '';
     CncConcentrationPosition: result := ConcentrationTimeSeriesName;
     CncMultiplierPosition: result := MultiplierTimeSeriesName;
     else
@@ -1165,6 +1387,7 @@ end;
 function TCnc_Cell.GetPestName(Index: Integer): string;
 begin
   case Index of
+    CncActivePosition: result := '';
     CncConcentrationPosition: result := ConcentrationPest;
     CncMultiplierPosition: result := MultiplierPest;
     else
@@ -1175,6 +1398,7 @@ end;
 function TCnc_Cell.GetPestSeriesMethod(Index: Integer): TPestParamMethod;
 begin
   case Index of
+    CncActivePosition: result := ppmMultiply;
     CncConcentrationPosition: result := ConcentrationPestSeriesMethod;
     CncMultiplierPosition: result := MultiplierPestSeriesMethod;
     else
@@ -1186,6 +1410,7 @@ end;
 function TCnc_Cell.GetPestSeriesName(Index: Integer): string;
 begin
   case Index of
+    CncActivePosition: result := '';
     CncConcentrationPosition: result := ConcentrationPestSeries;
     CncMultiplierPosition: result := MultiplierPestSeries;
     else
@@ -1197,7 +1422,8 @@ function TCnc_Cell.GetRealAnnotation(Index: integer;
   AModel: TBaseModel): string;
 begin
   case Index of
-    CncConcentrationPosition: result := ConcentrationAnnotation;
+    CncConcentrationPosition: result := ActiveAnnotation;
+    CncActivePosition: result := ConcentrationAnnotation;
     CncMultiplierPosition: result := MultiplierAnnotation;
     else
       Assert(False);
@@ -1207,6 +1433,11 @@ end;
 function TCnc_Cell.GetRealValue(Index: integer; AModel: TBaseModel): double;
 begin
   case Index of
+    CncActivePosition:
+      begin
+        Result := 0.0;
+        Assert(False);
+      end;
     CncConcentrationPosition: result := Concentration;
     CncMultiplierPosition: result := Multiplier;
     else
@@ -1237,9 +1468,10 @@ begin
     Cnc_Cell := TCnc_Cell(AnotherCell);
     result :=
       (Concentration = Cnc_Cell.Concentration)
-       and (Multiplier = Cnc_Cell.Multiplier)
-      and (IFace = Cnc_Cell.IFace)
-      and (Values.Cell = Cnc_Cell.Values.Cell);
+        and (Multiplier = Cnc_Cell.Multiplier)
+        and (Active = Cnc_Cell.Active)
+        and (IFace = Cnc_Cell.IFace)
+        and (Values.Cell = Cnc_Cell.Values.Cell);
   end;
 end;
 
@@ -1275,6 +1507,10 @@ end;
 procedure TCnc_Cell.SetMf6TimeSeriesName(Index: Integer; const Value: string);
 begin
   case Index of
+    CncActivePosition:
+      begin
+        // do nothing
+      end;
     CncConcentrationPosition:
       ConcentrationTimeSeriesName := Value;
     CncMultiplierPosition:
@@ -1407,6 +1643,7 @@ procedure TCncBoundary.CreateObservers;
 begin
   if ScreenObject <> nil then
   begin
+    FObserverList.Add(nil);
     FObserverList.Add(PestConcentrationObserver);
     FObserverList.Add(PestMultiplierObserver);
   end;
@@ -1416,6 +1653,10 @@ class function TCncBoundary.DefaultBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
+    CncActivePosition:
+      begin
+        result := ppmMultiply;
+      end;
     CncConcentrationPosition:
       begin
         result := ppmMultiply;
@@ -1475,6 +1716,10 @@ function TCncBoundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
 begin
   result := '';
   case FormulaIndex of
+    CncActivePosition:
+      begin
+        result := '';
+      end;
     CncConcentrationPosition:
       begin
         result := PestConcentrationFormula;
@@ -1492,6 +1737,10 @@ function TCncBoundary.GetPestBoundaryMethod(
   FormulaIndex: integer): TPestParamMethod;
 begin
   case FormulaIndex of
+    CncActivePosition:
+      begin
+        result := ppmMultiply;
+      end;
     CncConcentrationPosition:
       begin
         result := PestConcentrationMethod;
@@ -1576,6 +1825,29 @@ begin
   InvalidateDisplay;
 end;
 
+procedure TCncBoundary.InvalidateActiveData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateCncActive(self);
+
+  for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+  begin
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    if ChildModel <> nil then
+    begin
+      ChildModel.InvalidateCncActive(self);
+    end;
+  end;
+end;
+
 procedure TCncBoundary.InvalidateConcentrationData(Sender: TObject);
 var
   PhastModel: TPhastModel;
@@ -1604,6 +1876,7 @@ begin
   inherited;
   if Used and (ParentModel <> nil) then
   begin
+    InvalidateActiveData(self);
     InvalidateConcentrationData(self);
     InvalidateMultiplierData(self);
   end;
@@ -1658,6 +1931,10 @@ procedure TCncBoundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
 begin
   case FormulaIndex of
+    CncActivePosition:
+      begin
+        // do nothing
+      end;
     CncConcentrationPosition:
       begin
         PestConcentrationFormula := Value;
@@ -1675,6 +1952,10 @@ procedure TCncBoundary.SetPestBoundaryMethod(FormulaIndex: integer;
   const Value: TPestParamMethod);
 begin
   case FormulaIndex of
+    CncActivePosition:
+      begin
+        // do nothing
+      end;
     CncConcentrationPosition:
       begin
         PestConcentrationMethod := Value;
@@ -1724,6 +2005,11 @@ end;
 procedure TSrcTimeListLink.AssignMultInvalidateEvent;
 begin
   InvalidateEvent := (Model as TCustomModel).InvalidateMassSrcMultiplier;
+end;
+
+procedure TSrcTimeListLink.AssignActiveInvalidateEvent;
+begin
+  InvalidateEvent := (Model as TCustomModel).InvalidateMassSrcActive;
 end;
 
 function TSrcTimeListLink.Description: string;
@@ -1785,6 +2071,29 @@ begin
     if ChildModel <> nil then
     begin
       ChildModel.InvalidateMassSrcMultiplier(self);
+    end;
+  end;
+end;
+
+procedure TSrcBoundary.InvalidateActiveData(Sender: TObject);
+var
+  PhastModel: TPhastModel;
+  ChildIndex: Integer;
+  ChildModel: TChildModel;
+begin
+  PhastModel := frmGoPhast.PhastModel;
+  if PhastModel.Clearing then
+  begin
+    Exit;
+  end;
+  PhastModel.InvalidateMassSrcActive(self);
+
+  for ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+  begin
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    if ChildModel <> nil then
+    begin
+      ChildModel.InvalidateMassSrcActive(self);
     end;
   end;
 end;

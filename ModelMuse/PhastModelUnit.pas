@@ -2918,8 +2918,10 @@ that affects the model output should also have a comment. }
 
     procedure InvalidateCSubStressOffset(Sender: TObject);
 
+    procedure InvalidateCncActive(Sender: TObject);
     procedure InvalidateCncConcentration(Sender: TObject);
     procedure InvalidateCncMultiplier(Sender: TObject);
+    procedure InvalidateMassSrcActive(Sender: TObject);
     procedure InvalidateMassSrc(Sender: TObject);
     procedure InvalidateMassSrcMultiplier(Sender: TObject);
 
@@ -10326,6 +10328,11 @@ const
 //               bug fix: fixed export of SFR, SFT, MAW, MWT, LAK, LKT, UZF, and UZT
 //                packages when both the flow package and the associated
 //                transport package used time-series files.
+//    '5.2.0.20' Enhancement: Added a new
+//                "Specified Concentration Active"  and "Mass Loading Active"
+//                fields that allows the user to make some Constant
+//                Concentration and Mass Loading cells active or inactive based
+//                on a formula.
 //    '5.3.0.0'  Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
@@ -26883,6 +26890,11 @@ begin
   Mf6TimesSeries.ResetDictionaries;
 end;
 
+procedure TCustomModel.InvalidateCncActive(Sender: TObject);
+begin
+  ModflowPackages.GwtCncPackage.InvalidateActives;
+end;
+
 procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
 begin
   ModflowPackages.GwtCncPackage.InvalidateConcentrations;
@@ -26949,6 +26961,11 @@ end;
 procedure TCustomModel.InvalidateMassSrc(Sender: TObject);
 begin
   ModflowPackages.GwtSrcPackage.InvalidateConcentrations;
+end;
+
+procedure TCustomModel.InvalidateMassSrcActive(Sender: TObject);
+begin
+  ModflowPackages.GwtSrcPackage.InvalidateActives;
 end;
 
 procedure TCustomModel.InvalidateMassSrcMultiplier(Sender: TObject);

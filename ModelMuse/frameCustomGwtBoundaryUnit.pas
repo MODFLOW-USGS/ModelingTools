@@ -19,7 +19,7 @@ uses
   JvSpin, Vcl.ExtCtrls;
 
 type
-  TCncColumns = (ccStartTime, ccEndTime, ccConcentration, ccMultiplier);
+  TCncColumns = (ccStartTime, ccEndTime, ccActive, ccConcentration, ccMultiplier);
 
   TframeCustomGwtBoundary = class abstract(TframeScreenObjectNoParam)
     comboChemSpecies: TComboBox;
@@ -27,6 +27,7 @@ type
   protected
     function GetVariableName: string; virtual; abstract;
     function GetMultiplierName: string; virtual; abstract;
+    function GetActiveName: string; virtual; abstract;
     function GetBoundary(ScreenObject: TScreenObject): TCncBoundary;
       virtual; abstract;
     procedure CreateNewBoundary(ScreenObject: TScreenObject); virtual; abstract;
@@ -71,6 +72,7 @@ begin
   end;
   rdgModflowBoundary.Columns[Ord(ccStartTime)].AutoAdjustColWidths := False;
   rdgModflowBoundary.Columns[Ord(ccEndTime)].AutoAdjustColWidths := False;
+  rdgModflowBoundary.Columns[Ord(ccActive)].AutoAdjustColWidths := False;
   rdgModflowBoundary.Columns[Ord(ccConcentration)].AutoAdjustColWidths := False;
   rdgModflowBoundary.Columns[Ord(ccMultiplier)].AutoAdjustColWidths := False;
 
@@ -78,16 +80,19 @@ begin
   seNumberOfTimes.OnChange(nil);
   rdgModflowBoundary.Cells[Ord(ccStartTime), 1] := '';
   rdgModflowBoundary.Cells[Ord(ccEndTime), 1] := '';
+  rdgModflowBoundary.Cells[Ord(ccActive), 1] := '';
   rdgModflowBoundary.Cells[Ord(ccConcentration), 1] := '';
   rdgModflowBoundary.Cells[Ord(ccMultiplier), 1] := '';
 
   rdgModflowBoundary.Columns[Ord(ccStartTime)].AutoAdjustColWidths := True;
   rdgModflowBoundary.Columns[Ord(ccEndTime)].AutoAdjustColWidths := True;
+  rdgModflowBoundary.Columns[Ord(ccActive)].AutoAdjustColWidths := True;
   rdgModflowBoundary.Columns[Ord(ccConcentration)].AutoAdjustColWidths := True;
   rdgModflowBoundary.Columns[Ord(ccMultiplier)].AutoAdjustColWidths := True;
 
   rdgModflowBoundary.Cells[Ord(ccStartTime), 0] := StrStartingTime;
   rdgModflowBoundary.Cells[Ord(ccEndTime), 0] := StrEndingTime;
+  rdgModflowBoundary.Cells[Ord(ccActive), 0] := GetActiveName;
   rdgModflowBoundary.Cells[Ord(ccConcentration), 0] := GetVariableName;
   rdgModflowBoundary.Cells[Ord(ccMultiplier), 0] := GetMultiplierName;
 
@@ -122,6 +127,8 @@ begin
       FloatToStr(AnItem.StartTime);
     rdgModflowBoundary.Cells[Ord(ccEndTime), ItemIndex + PestRowOffset + 1] :=
       FloatToStr(AnItem.EndTime);
+    rdgModflowBoundary.Cells[Ord(ccActive), ItemIndex + PestRowOffset +
+      1] := AnItem.Active;
     rdgModflowBoundary.Cells[Ord(ccConcentration), ItemIndex + PestRowOffset +
       1] := AnItem.Concentration;
     rdgModflowBoundary.Cells[Ord(ccMultiplier), ItemIndex + PestRowOffset +
@@ -212,6 +219,8 @@ begin
               FloatToStr(AnItem.StartTime)) or
               (rdgModflowBoundary.Cells[Ord(ccEndTime), ItemIndex + 1] <>
               FloatToStr(AnItem.EndTime)) or
+              (rdgModflowBoundary.Cells[Ord(ccActive), ItemIndex + 1] <>
+              AnItem.Active) or
               (rdgModflowBoundary.Cells[Ord(ccConcentration), ItemIndex + 1] <>
               AnItem.Concentration) or
               (rdgModflowBoundary.Cells[Ord(ccMultiplier), ItemIndex + 1] <>
@@ -256,10 +265,9 @@ begin
       NewBoundary := TCncBoundary.Create(nil, nil);
       for RowIndex := 1 to rdgModflowBoundary.RowCount - 1 do
       begin
-        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(ccStartTime), RowIndex],
-          StartTime) and TryStrToFloat(rdgModflowBoundary.Cells[Ord(ccEndTime),
-          RowIndex], EndTime) and
-          (rdgModflowBoundary.Cells[Ord(ccConcentration), RowIndex] <> '') then
+        if TryStrToFloat(rdgModflowBoundary.Cells[Ord(ccStartTime), RowIndex], StartTime)
+          and TryStrToFloat(rdgModflowBoundary.Cells[Ord(ccEndTime), RowIndex], EndTime)
+          and (rdgModflowBoundary.Cells[Ord(ccConcentration), RowIndex] <> '') then
         begin
           CncItem := NewBoundary.Values.Add as TCncItem;
           CncItem.StartTime := StartTime;
@@ -274,6 +282,11 @@ begin
           else
           begin
             CncItem.Multiplier := '1';
+          end;
+          if rdgModflowBoundary.Cells[Ord(ccActive), RowIndex] <> '' then
+          begin
+            CncItem.Active := rdgModflowBoundary.Cells
+              [Ord(ccActive), RowIndex];
           end;
         end;
       end;

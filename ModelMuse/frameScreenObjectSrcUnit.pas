@@ -17,6 +17,7 @@ type
   protected
     function GetVariableName: string; override;
     function GetMultiplierName: string; override;
+    function GetActiveName: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TCncBoundary;
       override;
     procedure CreateNewBoundary(ScreenObject: TScreenObject); override;
@@ -44,6 +45,11 @@ begin
   ScreenObject.CreateGwtSrcBoundary;
 end;
 
+function TframeScreenObjectSrc.GetActiveName: string;
+begin
+  result := StrMassLoading + ' Active';
+end;
+
 function TframeScreenObjectSrc.GetBoundary(
   ScreenObject: TScreenObject): TCncBoundary;
 begin
@@ -64,7 +70,7 @@ procedure TframeScreenObjectSrc.rdgModflowBoundarySelectCell(Sender: TObject;
   ACol, ARow: Integer; var CanSelect: Boolean);
 begin
   inherited;
-  if CanSelect  and (ACol = 3) then
+  if CanSelect  and (ACol = 4) then
   begin
     CanSelect := frmGoPhast.PhastModel.ModflowPackages.GwtSrcPackage.UseMultiplier;
   end;

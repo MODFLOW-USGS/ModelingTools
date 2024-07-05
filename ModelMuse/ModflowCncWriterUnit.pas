@@ -289,6 +289,10 @@ begin
   // handle multiply or add
   Inc(FBoundaryIndex);
   Cnc_Cell := Cell as TCnc_Cell;
+  if not Cnc_Cell.Active then
+  begin
+    Exit;
+  end;
   LocalLayer := Model.DataSetLayerToModflowLayer(Cnc_Cell.Layer);
   WriteInteger(LocalLayer);
   if not Model.DisvUsed then
@@ -511,15 +515,11 @@ var
   DataSets: TList;
   UsedIndicies: TByteSet;
   TimeIndex: Integer;
-//  DataTypeIndex: Integer;
-//  TimeListIndex: Integer;
-//  TimeList: TModflowBoundaryDisplayTimeList;
   DataArray: TModflowBoundaryDisplayDataArray;
   DataSetIndex: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
   CellList: TValueCellList;
   DataIndex: Integer;
-//  SpeciesIndex: Integer;
 begin
   if not Package.IsSelected then
   begin

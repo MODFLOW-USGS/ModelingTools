@@ -55,7 +55,7 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
     inherited rdgModflowBoundary: TRbwDataGrid4
       Width = 375
       Height = 171
-      ColCount = 4
+      ColCount = 5
       RowCount = 4
       Columns = <
         item
@@ -153,8 +153,31 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
           CaseSensitivePicklist = False
           CheckStyle = csCheck
           AutoAdjustColWidths = True
+        end
+        item
+          AutoAdjustRowHeights = True
+          AutoAdjustCaptionRowHeights = False
+          ButtonCaption = '...'
+          ButtonFont.Charset = DEFAULT_CHARSET
+          ButtonFont.Color = clWindowText
+          ButtonFont.Height = -11
+          ButtonFont.Name = 'Tahoma'
+          ButtonFont.Style = []
+          ButtonUsed = True
+          ButtonWidth = 35
+          CheckMax = False
+          CheckMin = False
+          ComboUsed = False
+          Format = rcf4String
+          LimitToList = False
+          MaxLength = 0
+          ParentButtonFont = False
+          WordWrapCaptions = True
+          WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
+          AutoAdjustColWidths = True
         end>
-      ExplicitTop = 52
       ExplicitWidth = 375
       ExplicitHeight = 171
     end

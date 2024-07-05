@@ -7242,19 +7242,24 @@ Type
   TGwtCncPackage = class(TMultiplierPackage)
   private
     FCncConc: TMfBoundDispObjectList;
-    FMultcConc: TMfBoundDispObjectList;
+    FMultConc: TMfBoundDispObjectList;
+    FActiveConc: TMfBoundDispObjectList;
     procedure InitializeCncDisplay(Sender: TObject);
     procedure InitializeMultipliercDisplay(Sender: TObject);
+    procedure InitializeActiveDisplay(Sender: TObject);
     procedure GetCncConcUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMultiplierUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetActiveUseList(Sender: TObject; NewUseList: TStringList);
     procedure InitializeDisplay(TimeListIndex: Integer);
   public
     constructor Create(Model: TBaseModel); override;
     destructor Destroy; override;
     procedure InvalidateConcentrations;
     procedure InvalidateMultipliers;
+    procedure InvalidateActives;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
     procedure AddRemoveRenameGwtMultiplierTimeLists;
+    procedure AddRemoveRenameGwtActiveTimeLists;
   published
     property UseMultiplier;
   end;
@@ -7262,19 +7267,24 @@ Type
   TGwtSrcPackage = class(TMultiplierPackage)
   private
     FSrcConc: TMfBoundDispObjectList;
-    FMultcConc: TMfBoundDispObjectList;
+    FMultConc: TMfBoundDispObjectList;
+    FActiveConc: TMfBoundDispObjectList;
     procedure InitializeSrcDisplay(Sender: TObject);
     procedure InitializeMultiplierDisplay(Sender: TObject);
+    procedure InitializeActiveDisplay(Sender: TObject);
     procedure GetSrcConcUseList(Sender: TObject; NewUseList: TStringList);
     procedure GetMultilplierUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetActiveUseList(Sender: TObject; NewUseList: TStringList);
     procedure InitializeDisplay(TimeListIndex: Integer);
   public
     constructor Create(Model: TBaseModel); override;
     destructor Destroy; override;
     procedure InvalidateConcentrations;
     procedure InvalidateMultipliers;
+    procedure InvalidateActives;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
     procedure AddRemoveRenameGwtMultiplierTimeLists;
+    procedure AddRemoveRenameGwtActiveTimeLists;
   published
     property UseMultiplier;
   end;
@@ -25713,6 +25723,12 @@ end;
 
 { TGwtCncPackage }
 
+procedure TGwtCncPackage.AddRemoveRenameGwtActiveTimeLists;
+begin
+  UpdateConcentrationLists(FActiveConc, InitializeActiveDisplay,
+    GetActiveUseList, 'CNC Conc Active %s');
+end;
+
 procedure TGwtCncPackage.AddRemoveRenameGwtConcentrationTimeLists;
 begin
   UpdateConcentrationLists(FCncConc, InitializeCnCDisplay,
@@ -25721,7 +25737,7 @@ end;
 
 procedure TGwtCncPackage.AddRemoveRenameGwtMultiplierTimeLists;
 begin
-  UpdateConcentrationLists(FMultcConc, InitializeMultipliercDisplay,
+  UpdateConcentrationLists(FMultConc, InitializeMultipliercDisplay,
     GetMultiplierUseList, 'CNC Conc Multiplier %s');
 end;
 
@@ -25732,10 +25748,12 @@ var
 begin
   List := TModflowBoundListOfTimeLists.Create;
   try
+    FActiveConc[TimeListIndex].CreateDataSets;
+    List.Add(FActiveConc[TimeListIndex]);
     FCncConc[TimeListIndex].CreateDataSets;
     List.Add(FCncConc[TimeListIndex]);
-    FMultcConc[TimeListIndex].CreateDataSets;
-    List.Add(FMultcConc[TimeListIndex]);
+    FMultConc[TimeListIndex].CreateDataSets;
+    List.Add(FMultConc[TimeListIndex]);
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
     CnCWriter := TModflowCncWriter.Create(FModel as TCustomModel, etDisplay);
     try
@@ -25751,18 +25769,20 @@ end;
 constructor TGwtCncPackage.Create(Model: TBaseModel);
 begin
   inherited;
+  FActiveConc := TMfBoundDispObjectList.Create;
   FCncConc := TMfBoundDispObjectList.Create;
-  FMultcConc := TMfBoundDispObjectList.Create;
+  FMultConc := TMfBoundDispObjectList.Create;
 end;
 
 destructor TGwtCncPackage.Destroy;
 begin
   inherited;
+  FActiveConc.Free;
   FCncConc.Free;
-  FMultcConc.Free;
+  FMultConc.Free;
 end;
 
-procedure TGwtCncPackage.GetCncConcUseList(Sender: TObject;
+procedure TGwtCncPackage.GetActiveUseList(Sender: TObject;
   NewUseList: TStringList);
 var
   ScreenObjectIndex: Integer;
@@ -25771,8 +25791,6 @@ var
   ValueIndex: Integer;
   LocalModel: TCustomModel;
   GwtIndex: Integer;
-//  DataIndex: Integer;
-//  SpeciesIndex: Integer;
   ABoundary: TCncBoundary;
 begin
   LocalModel := FModel as TCustomModel;
@@ -25786,8 +25804,39 @@ begin
     ABoundary := ScreenObject.GwtCncBoundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
-      GwtIndex := 0
-        {+ LocalModel.MobileComponents.Count * 2};
+      GwtIndex := 0;
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(GwtIndex, NewUseList, Item, 'Undefined');
+      end;
+    end;
+  end;
+end;
+
+procedure TGwtCncPackage.GetCncConcUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+  ABoundary: TCncBoundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.GwtCncBoundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := 1;
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
         Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
@@ -25821,8 +25870,7 @@ begin
     ABoundary := ScreenObject.GwtCncBoundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
-      GwtIndex := 1
-        {+ LocalModel.MobileComponents.Count * 2};
+      GwtIndex := 2;
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
         Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
@@ -25830,6 +25878,17 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TGwtCncPackage.InitializeActiveDisplay(Sender: TObject);
+var
+  TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
+begin
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FActiveConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+  InitializeDisplay(TimeListIndex);
 end;
 
 procedure TGwtCncPackage.InitializeCncDisplay(Sender: TObject);
@@ -25849,9 +25908,21 @@ var
   TimeListIndex: Integer;
 begin
   TimeList := Sender as TModflowBoundaryDisplayTimeList;
-  TimeListIndex := FMultcConc.IndexOf(TimeList);
+  TimeListIndex := FMultConc.IndexOf(TimeList);
   Assert(TimeListIndex >= 0);
   InitializeDisplay(TimeListIndex);
+end;
+
+procedure TGwtCncPackage.InvalidateActives;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FActiveConc.Count - 1 do
+  begin
+    TimeList := FActiveConc[Index];
+    TimeList.Invalidate;
+  end;
 end;
 
 procedure TGwtCncPackage.InvalidateConcentrations;
@@ -25871,19 +25942,36 @@ var
   Index: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
 begin
-  for Index := 0 to FMultcConc.Count - 1 do
+  for Index := 0 to FMultConc.Count - 1 do
   begin
-    TimeList := FMultcConc[Index];
+    TimeList := FMultConc[Index];
     TimeList.Invalidate;
   end;
 end;
 
 { TGwtSrcPackage }
 
+procedure TGwtSrcPackage.AddRemoveRenameGwtActiveTimeLists;
+begin
+  UpdateConcentrationLists(FActiveConc, InitializeActiveDisplay,
+    GetActiveUseList, 'SRC Active %s');
+end;
+
 procedure TGwtSrcPackage.AddRemoveRenameGwtConcentrationTimeLists;
 begin
   UpdateConcentrationLists(FSrcConc, InitializeSrcDisplay,
     GetSrcConcUseList, 'SRC Conc %s');
+end;
+
+procedure TGwtSrcPackage.InitializeActiveDisplay(Sender: TObject);
+var
+  TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
+begin
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FActiveConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+  InitializeDisplay(TimeListIndex);
 end;
 
 procedure TGwtSrcPackage.InitializeDisplay(TimeListIndex: Integer);
@@ -25893,10 +25981,12 @@ var
 begin
   List := TModflowBoundListOfTimeLists.Create;
   try
+    FActiveConc[TimeListIndex].CreateDataSets;
+    List.Add(FActiveConc[TimeListIndex]);
     FSrcConc[TimeListIndex].CreateDataSets;
     List.Add(FSrcConc[TimeListIndex]);
-    FMultcConc[TimeListIndex].CreateDataSets;
-    List.Add(FMultcConc[TimeListIndex]);
+    FMultConc[TimeListIndex].CreateDataSets;
+    List.Add(FMultConc[TimeListIndex]);
     { TODO -cRefactor : Consider replacing FModel with a TNotifyEvent or interface. }
     SrcWriter := TModflowSrcWriter.Create(FModel as TCustomModel, etDisplay);
     try
@@ -25911,7 +26001,7 @@ end;
 
 procedure TGwtSrcPackage.AddRemoveRenameGwtMultiplierTimeLists;
 begin
-  UpdateConcentrationLists(FMultcConc, InitializeMultiplierDisplay,
+  UpdateConcentrationLists(FMultConc, InitializeMultiplierDisplay,
     GetMultilplierUseList, 'SRC Conc Multiplier %s');
 end;
 
@@ -25921,7 +26011,7 @@ var
   TimeListIndex: Integer;
 begin
   TimeList := Sender as TModflowBoundaryDisplayTimeList;
-  TimeListIndex := FMultcConc.IndexOf(TimeList);
+  TimeListIndex := FMultConc.IndexOf(TimeList);
   Assert(TimeListIndex >= 0);
   InitializeDisplay(TimeListIndex);
 end;
@@ -25929,15 +26019,49 @@ end;
 constructor TGwtSrcPackage.Create(Model: TBaseModel);
 begin
   inherited;
+  FActiveConc := TMfBoundDispObjectList.Create;
   FSrcConc := TMfBoundDispObjectList.Create;
-  FMultcConc := TMfBoundDispObjectList.Create;
+  FMultConc := TMfBoundDispObjectList.Create;
 end;
 
 destructor TGwtSrcPackage.Destroy;
 begin
   inherited;
   FSrcConc.Free;
-  FMultcConc.Free;
+  FMultConc.Free;
+  FActiveConc.Free;
+end;
+
+procedure TGwtSrcPackage.GetActiveUseList(Sender: TObject;
+  NewUseList: TStringList);
+var
+  ScreenObjectIndex: Integer;
+  ScreenObject: TScreenObject;
+  Item: TCustomModflowBoundaryItem;
+  ValueIndex: Integer;
+  LocalModel: TCustomModel;
+  GwtIndex: Integer;
+  ABoundary: TSrcBoundary;
+begin
+  LocalModel := FModel as TCustomModel;
+  for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
+  begin
+    ScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
+    if ScreenObject.Deleted then
+    begin
+      Continue;
+    end;
+    ABoundary := ScreenObject.GwtSrcBoundary;
+    if (ABoundary <> nil) and ABoundary.Used then
+    begin
+      GwtIndex := 0;
+      for ValueIndex := 0 to ABoundary.Values.Count -1 do
+      begin
+        Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
+        UpdateUseList(GwtIndex, NewUseList, Item, 'Undefined');
+      end;
+    end;
+  end;
 end;
 
 procedure TGwtSrcPackage.GetMultilplierUseList(Sender: TObject;
@@ -25962,8 +26086,7 @@ begin
     ABoundary := ScreenObject.GwtSrcBoundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
-      GwtIndex := 1
-        {+ LocalModel.MobileComponents.Count * 2};
+      GwtIndex := 2;
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
         Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
@@ -25995,8 +26118,7 @@ begin
     ABoundary := ScreenObject.GwtSrcBoundary;
     if (ABoundary <> nil) and ABoundary.Used then
     begin
-      GwtIndex := 0
-        {+ LocalModel.MobileComponents.Count * 2};
+      GwtIndex := 1;
       for ValueIndex := 0 to ABoundary.Values.Count -1 do
       begin
         Item := ABoundary.Values[ValueIndex] as TCustomModflowBoundaryItem;
@@ -26017,6 +26139,18 @@ begin
   InitializeDisplay(TimeListIndex);
 end;
 
+procedure TGwtSrcPackage.InvalidateActives;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FActiveConc.Count - 1 do
+  begin
+    TimeList := FActiveConc[Index];
+    TimeList.Invalidate;
+  end;
+end;
+
 procedure TGwtSrcPackage.InvalidateConcentrations;
 var
   Index: Integer;
@@ -26034,9 +26168,9 @@ var
   Index: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
 begin
-  for Index := 0 to FMultcConc.Count - 1 do
+  for Index := 0 to FMultConc.Count - 1 do
   begin
-    TimeList := FMultcConc[Index];
+    TimeList := FMultConc[Index];
     TimeList.Invalidate;
   end;
 end;

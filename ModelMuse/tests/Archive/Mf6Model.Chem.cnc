@@ -1,4 +1,4 @@
-# CNC: GWT Constant Concentration Package file created on 6/10/2024 by ModelMuse version 5.2.0.15.
+# CNC: GWT Constant Concentration Package file created on 7/5/2024 by ModelMuse version 5.3.0.0.
 BEGIN OPTIONS
     AUXILIARY IFACE
     BOUNDNAMES
@@ -7,7 +7,7 @@ BEGIN OPTIONS
 END OPTIONS
 
 BEGIN DIMENSIONS
-  MAXBOUND     1
+  MAXBOUND     2
 END DIMENSIONS
 
 BEGIN PERIOD      1

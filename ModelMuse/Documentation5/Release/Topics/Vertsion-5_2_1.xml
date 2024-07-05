@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2024-07-04T07:25:53.054-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-07-05T12:33:23.458-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Vertsion 5.3</title>
   <body>
     <header>
@@ -16,6 +16,7 @@
               <td>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to import MODFLOW 6 models.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a new &quot;Active Specified Head&quot; field that allows the user to make some specified head boundaries active or inactive based on a formula.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Added a new &quot;Specified Concentration Active&quot; &#160;and &quot;Mass Loading Active&quot; fields that allows the user to make some Constant Concentration and Mass Loading cells active or inactive based on a formula.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The scale factor for a dynamic time series can now be a formula.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now checks that PEST Observation Group names and Prior Information Group names are assigned.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse now supports the AUXMULTNAME option in MODFLOW 6.</text></para>

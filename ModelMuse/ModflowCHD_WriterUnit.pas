@@ -42,7 +42,6 @@ type
       ScreenObject: TScreenObject; ObsFactor: TObservationFactor); override;
     function ObsNameWarningString: string; override;
     procedure Evaluate; override;
-//    function ObsTypeMF6: string; override;
     procedure CheckCell(ValueCell: TValueCell;
       const PackageName: string); override;
     function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
