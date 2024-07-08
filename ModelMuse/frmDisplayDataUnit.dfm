@@ -20,7 +20,7 @@ inherited frmDisplayData: TfrmDisplayData
     Top = 0
     Width = 572
     Height = 492
-    ActivePage = jvspSfrStreamLinks
+    ActivePage = jvspCrossSection
     PropagateEnable = False
     Align = alClient
     OnChange = pglstMainChange
@@ -66,20 +66,26 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited pbColorScheme: TPaintBox
+              Top = 172
               Width = 517
-              ExplicitWidth = 553
+              ExplicitTop = 172
+              ExplicitWidth = 517
             end
             inherited lblColorAdjustment: TLabel
+              Top = 216
               Width = 117
               Height = 18
+              ExplicitTop = 216
               ExplicitWidth = 117
               ExplicitHeight = 18
             end
             inherited lblCycles: TLabel
               Left = 422
+              Top = 222
               Width = 47
               Height = 18
-              ExplicitLeft = 458
+              ExplicitLeft = 422
+              ExplicitTop = 222
               ExplicitWidth = 47
               ExplicitHeight = 18
             end
@@ -90,8 +96,10 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblModelSelection: TLabel
+              Top = 278
               Width = 109
               Height = 18
+              ExplicitTop = 278
               ExplicitWidth = 109
               ExplicitHeight = 18
             end
@@ -107,28 +115,37 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitWidth = 371
               ExplicitHeight = 26
             end
+            inherited jsColorExponent: TJvxSlider
+              Top = 232
+            end
             inherited seColorExponent: TJvSpinEdit
+              Top = 246
               Height = 26
+              ExplicitTop = 246
               ExplicitHeight = 26
             end
             inherited seCycles: TJvSpinEdit
               Left = 422
+              Top = 246
               Height = 26
               ExplicitLeft = 422
+              ExplicitTop = 246
               ExplicitHeight = 26
             end
             inherited comboModelSelection: TComboBox
+              Top = 297
               Height = 26
+              ExplicitTop = 297
               ExplicitHeight = 26
             end
             inherited btnColorSchemes: TButton
               Left = 385
-              Top = 113
+              Top = 120
               Width = 140
               Anchors = [akTop, akRight]
               OnClick = frameModpathDisplaybtnColorSchemesClick
               ExplicitLeft = 385
-              ExplicitTop = 113
+              ExplicitTop = 120
               ExplicitWidth = 140
             end
           end
@@ -561,10 +578,10 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblCycles: TLabel
-              Left = 339
+              Left = 317
               Width = 47
               Height = 18
-              ExplicitLeft = 347
+              ExplicitLeft = 317
               ExplicitWidth = 47
               ExplicitHeight = 18
             end
@@ -575,10 +592,10 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lbltimeSeriesSize: TLabel
-              Left = 275
+              Left = 317
               Width = 167
               Height = 18
-              ExplicitLeft = 283
+              ExplicitLeft = 317
               ExplicitWidth = 167
               ExplicitHeight = 18
             end
@@ -619,9 +636,9 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 26
             end
             inherited setimeSeriesSize: TJvSpinEdit
-              Left = 334
+              Left = 317
               Height = 26
-              ExplicitLeft = 334
+              ExplicitLeft = 317
               ExplicitHeight = 26
             end
             inherited btnColorSchemes: TButton
@@ -719,10 +736,10 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblCycles: TLabel
-              Left = 352
+              Left = 349
               Width = 47
               Height = 18
-              ExplicitLeft = 360
+              ExplicitLeft = 349
               ExplicitWidth = 47
               ExplicitHeight = 18
             end
@@ -733,10 +750,10 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblEndPointSize: TLabel
-              Left = 332
+              Left = 349
               Width = 148
               Height = 18
-              ExplicitLeft = 340
+              ExplicitLeft = 349
               ExplicitWidth = 148
               ExplicitHeight = 18
             end
@@ -781,9 +798,11 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited seEndPointSize: TJvSpinEdit
               Left = 349
+              Top = 297
               Height = 26
               TabOrder = 7
               ExplicitLeft = 349
+              ExplicitTop = 297
               ExplicitHeight = 26
             end
             inherited btnColorSchemes: TButton
@@ -989,23 +1008,23 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 26
             end
             inherited jsColorExponent: TJvxSlider
-              Left = 8
-              Top = 394
+              Left = 2
+              Top = 386
             end
             inherited seColorExponent: TJvSpinEdit
-              Left = 164
-              Top = 381
+              Left = 158
+              Top = 389
               Height = 26
-              ExplicitLeft = 164
-              ExplicitTop = 381
+              ExplicitLeft = 158
+              ExplicitTop = 389
               ExplicitHeight = 26
             end
             inherited cbLogTransform: TCheckBox
-              Left = 263
-              Top = 381
+              Left = 257
+              Top = 392
               Height = 20
-              ExplicitLeft = 263
-              ExplicitTop = 381
+              ExplicitLeft = 257
+              ExplicitTop = 392
               ExplicitHeight = 20
             end
             inherited udDataSets: TJvUpDown
@@ -1222,14 +1241,16 @@ inherited frmDisplayData: TfrmDisplayData
         inherited pcChoices: TPageControl
           Width = 572
           Height = 492
+          ActivePage = frameContourData.tabSelection
           ExplicitWidth = 572
           ExplicitHeight = 492
           inherited tabSelection: TTabSheet
             ExplicitTop = 29
-            ExplicitHeight = 468
+            ExplicitWidth = 564
+            ExplicitHeight = 459
             DesignSize = (
-              570
-              468)
+              564
+              459)
             inherited lblDataSet: TLabel
               Width = 59
               Height = 18
@@ -1238,26 +1259,35 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblColorScheme: TLabel
-              Width = 97
+              Top = 318
+              Width = 110
               Height = 18
-              ExplicitWidth = 97
+              ExplicitTop = 318
+              ExplicitWidth = 110
               ExplicitHeight = 18
             end
             inherited lblCycles: TLabel
+              Left = 434
+              Top = 341
               Width = 47
               Height = 18
+              ExplicitLeft = 434
+              ExplicitTop = 341
               ExplicitWidth = 47
               ExplicitHeight = 18
             end
             inherited pbColorScheme: TPaintBox
-              Width = 426
+              Top = 365
+              Width = 420
               ExplicitTop = 371
               ExplicitWidth = 426
             end
             inherited lblColorAdjustment: TLabel
-              Width = 117
+              Top = 404
+              Width = 169
               Height = 18
-              ExplicitWidth = 117
+              ExplicitTop = 404
+              ExplicitWidth = 169
               ExplicitHeight = 18
             end
             inherited lblComment: TLabel
@@ -1267,6 +1297,7 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblAlgorithm: TLabel
+              Top = 182
               Width = 52
               Height = 18
               Anchors = [akLeft, akBottom]
@@ -1274,6 +1305,7 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblContourInterval: TLabel
+              Left = 438
               Width = 107
               Height = 18
               Anchors = [akTop, akRight]
@@ -1281,7 +1313,8 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblSpacing: TLabel
-              Top = 244
+              Left = 341
+              Top = 235
               Width = 152
               Height = 18
               Anchors = [akRight, akBottom]
@@ -1290,32 +1323,46 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited comboColorScheme: TComboBox
+              Top = 335
+              Width = 417
               Height = 26
+              ExplicitTop = 335
+              ExplicitWidth = 417
               ExplicitHeight = 26
             end
             inherited seCycles: TJvSpinEdit
-              Left = 485
+              Left = 434
+              Top = 365
               Height = 26
               Anchors = [akRight, akBottom]
-              ExplicitLeft = 485
+              ExplicitLeft = 434
+              ExplicitTop = 365
               ExplicitHeight = 26
             end
             inherited jsColorExponent: TJvxSlider
               Left = 2
+              Top = 419
             end
             inherited seColorExponent: TJvSpinEdit
+              Top = 419
               Height = 26
               ExplicitHeight = 26
             end
             inherited cbLogTransform: TCheckBox
+              Top = 423
               Height = 26
               ExplicitHeight = 26
             end
             inherited udDataSets: TJvUpDown
-              Left = 312
+              Left = 306
               ExplicitLeft = 312
             end
+            inherited rgUpdateLimitChoice: TRadioGroup
+              Top = 239
+              Width = 325
+            end
             inherited virttreecomboDataSets: TRbwStringTreeCombo
+              Width = 299
               Height = 26
               Tree.DefaultNodeHeight = 20
               Anchors = [akLeft, akTop, akRight]
@@ -1323,41 +1370,57 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 26
             end
             inherited reComment: TRichEdit
+              Width = 553
+              Height = 96
               ParentFont = True
             end
             inherited btnColorSchemes: TButton
+              Left = 341
+              Top = 288
               Width = 121
               Height = 40
               ExplicitWidth = 121
               ExplicitHeight = 40
             end
+            inherited btnEditContours: TButton
+              Left = 438
+            end
             inherited cbSpecifyContours: TJvCheckBox
+              Left = 341
               HotTrackFont.Charset = ANSI_CHARSET
               HotTrackFont.Height = -16
               HotTrackFont.Name = 'Arial'
               HotTrackFont.Pitch = fpVariable
             end
             inherited cbLabelContours: TCheckBox
+              Left = 341
+              Top = 182
               Height = 16
               Anchors = [akRight, akBottom]
               ExplicitHeight = 16
             end
             inherited btnContourFont: TButton
+              Left = 341
+              Top = 205
               Height = 24
               Anchors = [akRight, akBottom]
               ExplicitHeight = 24
             end
             inherited comboAlgorithm: TComboBox
+              Top = 201
               Height = 26
               Anchors = [akLeft, akBottom]
               ExplicitHeight = 26
             end
             inherited rdeContourInterval: TRbwDataEntry
+              Left = 338
               Width = 79
               Anchors = [akTop, akRight]
               ExplicitWidth = 79
             end
             inherited seLabelSpacing: TJvSpinEdit
+              Left = 341
+              Top = 255
               Height = 26
               Anchors = [akRight, akBottom]
               ExplicitHeight = 26
@@ -1766,14 +1829,14 @@ inherited frmDisplayData: TfrmDisplayData
           ExplicitWidth = 276
           ExplicitHeight = 492
           inherited spl1: TSplitter
-            Top = 358
+            Top = 291
             Width = 276
             ExplicitTop = 318
             ExplicitWidth = 276
           end
           inherited pnlTop: TPanel
             Width = 276
-            Height = 358
+            Height = 291
             ExplicitWidth = 276
             ExplicitHeight = 358
             inherited lblDataSets: TLabel
@@ -1784,16 +1847,18 @@ inherited frmDisplayData: TfrmDisplayData
             end
             inherited lstSelectedDataSets: TListBox
               Width = 270
-              Height = 325
+              Height = 258
               ExplicitWidth = 270
               ExplicitHeight = 325
             end
           end
           inherited pnlBottom: TPanel
-            Top = 363
+            Top = 296
             Width = 276
-            ExplicitTop = 363
+            Height = 196
+            ExplicitTop = 296
             ExplicitWidth = 276
+            ExplicitHeight = 196
             inherited lblLayers: TLabel
               Width = 93
               Height = 18
@@ -1801,18 +1866,25 @@ inherited frmDisplayData: TfrmDisplayData
               ExplicitHeight = 18
             end
             inherited lblLineThickness: TLabel
+              Top = 173
               Width = 99
               Height = 18
+              Anchors = [akLeft, akBottom]
+              ExplicitTop = 173
               ExplicitWidth = 99
               ExplicitHeight = 18
             end
             inherited clbLayers: TJvCheckListBox
               Width = 270
+              Height = 136
               ItemHeight = 18
               ExplicitWidth = 270
             end
             inherited seLineThickness: TJvSpinEdit
+              Top = 170
               Height = 26
+              Anchors = [akLeft, akBottom]
+              ExplicitTop = 170
               ExplicitHeight = 26
             end
           end
