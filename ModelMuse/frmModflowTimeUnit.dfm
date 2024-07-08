@@ -4,8 +4,8 @@ inherited frmModflowTime: TfrmModflowTime
   Caption = 'MODFLOW Time'
   ClientHeight = 542
   ClientWidth = 754
-  ExplicitWidth = 766
-  ExplicitHeight = 580
+  ExplicitWidth = 770
+  ExplicitHeight = 581
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -14,8 +14,6 @@ inherited frmModflowTime: TfrmModflowTime
     Height = 35
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 506
-    ExplicitWidth = 750
     DesignSize = (
       754
       35)
@@ -28,7 +26,6 @@ inherited frmModflowTime: TfrmModflowTime
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 646
     end
     object btnOK: TBitBtn
       Left = 562
@@ -40,7 +37,6 @@ inherited frmModflowTime: TfrmModflowTime
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 558
     end
     object btnHelp: TBitBtn
       Left = 474
@@ -52,7 +48,6 @@ inherited frmModflowTime: TfrmModflowTime
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 470
     end
     object btnConvertTimeUnits: TButton
       Left = 12
@@ -82,8 +77,6 @@ inherited frmModflowTime: TfrmModflowTime
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange
-    ExplicitWidth = 750
-    ExplicitHeight = 506
     object tabModflow: TTabSheet
       Caption = 'MODFLOW'
       object pnlTop: TPanel
@@ -93,7 +86,6 @@ inherited frmModflowTime: TfrmModflowTime
         Height = 81
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 742
         object lblPeriodLength: TLabel
           Left = 183
           Top = 8
@@ -461,8 +453,6 @@ inherited frmModflowTime: TfrmModflowTime
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 742
-        ExplicitHeight = 351
         ColWidths = (
           64
           64
@@ -481,14 +471,12 @@ inherited frmModflowTime: TfrmModflowTime
         Height = 41
         Align = alBottom
         TabOrder = 2
-        ExplicitTop = 432
-        ExplicitWidth = 742
         DesignSize = (
           746
           41)
         object lblNumPeriods: TLabel
-          Left = 67
-          Top = 10
+          Left = 99
+          Top = 9
           Width = 175
           Height = 18
           Caption = 'Number of stress periods'
@@ -503,7 +491,7 @@ inherited frmModflowTime: TfrmModflowTime
         object seNumPeriods: TJvSpinEdit
           Left = 4
           Top = 6
-          Width = 57
+          Width = 89
           Height = 26
           CheckMaxValue = False
           ButtonKind = bkClassic
@@ -513,9 +501,9 @@ inherited frmModflowTime: TfrmModflowTime
           OnChange = seNumPeriodsChange
         end
         object comboTimeUnit: TJvComboBox
-          Left = 252
+          Left = 280
           Top = 6
-          Width = 145
+          Width = 117
           Height = 26
           Style = csDropDownList
           TabOrder = 1
@@ -539,7 +527,6 @@ inherited frmModflowTime: TfrmModflowTime
           Caption = 'Delete'
           TabOrder = 2
           OnClick = btnDeleteClick
-          ExplicitLeft = 554
         end
         object btnInsert: TButton
           Left = 646
@@ -550,7 +537,6 @@ inherited frmModflowTime: TfrmModflowTime
           Caption = 'Insert'
           TabOrder = 3
           OnClick = btnInsertClick
-          ExplicitLeft = 642
         end
       end
     end
@@ -560,7 +546,7 @@ inherited frmModflowTime: TfrmModflowTime
       inline frameGrid: TframeGrid
         Left = 0
         Top = 0
-        Width = 750
+        Width = 746
         Height = 474
         Align = alClient
         TabOrder = 0
@@ -568,7 +554,7 @@ inherited frmModflowTime: TfrmModflowTime
         ExplicitHeight = 474
         inherited Panel: TPanel
           Top = 433
-          Width = 750
+          Width = 746
           ExplicitTop = 433
           ExplicitWidth = 746
           inherited lbNumber: TLabel
@@ -598,7 +584,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 750
+          Width = 746
           Height = 433
           ColCount = 8
           FixedCols = 1

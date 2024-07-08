@@ -21,7 +21,7 @@ inherited framePkgSms: TframePkgSms
     Top = 103
     Width = 495
     Height = 414
-    ActivePage = tabLinear
+    ActivePage = tabBasic
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 1
@@ -75,7 +75,7 @@ inherited framePkgSms: TframePkgSms
         Caption = 'Print contents of memory ([MEMORY_PRINT_OPTION) '
       end
       object lblAtsMaxFrac: TLabel
-        Left = 144
+        Left = 176
         Top = 342
         Width = 201
         Height = 30
@@ -277,7 +277,7 @@ inherited framePkgSms: TframePkgSms
       object rdeAtsMaxFrac: TRbwDataEntry
         Left = 17
         Top = 344
-        Width = 121
+        Width = 153
         Height = 22
         TabOrder = 12
         Text = '0'
@@ -388,8 +388,6 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 489
-        ExplicitHeight = 390
         ColWidths = (
           84
           64
@@ -496,8 +494,6 @@ inherited framePkgSms: TframePkgSms
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 489
-        ExplicitHeight = 390
         ColWidths = (
           84
           64
