@@ -1,17 +1,14 @@
 inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
-  Width = 586
   Height = 489
-  ExplicitWidth = 586
   ExplicitHeight = 489
   inherited pnlBottom: TPanel
     Top = 368
-    Width = 586
     Height = 121
     ExplicitTop = 368
     ExplicitWidth = 586
     ExplicitHeight = 121
     DesignSize = (
-      586
+      565
       121)
     inherited lblNumTimes: TLabel
       Left = 63
@@ -38,13 +35,13 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
       ExplicitTop = 79
     end
     inherited btnDelete: TBitBtn
-      Left = 497
+      Left = 476
       Top = 78
       ExplicitLeft = 497
       ExplicitTop = 78
     end
     inherited btnInsert: TBitBtn
-      Left = 413
+      Left = 392
       Top = 78
       ExplicitLeft = 413
       ExplicitTop = 78
@@ -90,13 +87,11 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
   end
   inherited pnlGrid: TPanel
     Top = 131
-    Width = 586
     Height = 237
     ExplicitTop = 131
     ExplicitWidth = 586
     ExplicitHeight = 237
     inherited rdgSutraFeature: TRbwDataGrid4
-      Width = 584
       Height = 235
       ColCount = 6
       OnMouseUp = rdgSutraFeatureMouseUp
@@ -254,12 +249,11 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
     end
   end
   inherited pnlTop: TPanel
-    Width = 586
     Height = 81
     ExplicitWidth = 586
     ExplicitHeight = 81
     DesignSize = (
-      586
+      565
       81)
     inherited lblSchedule: TLabel
       Left = 8
@@ -268,13 +262,11 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
       ExplicitTop = 30
     end
     inherited pnlCaption: TPanel
-      Width = 584
       ExplicitWidth = 584
     end
     inherited comboSchedule: TComboBox
       Left = 8
       Top = 49
-      Width = 572
       ExplicitLeft = 8
       ExplicitTop = 49
       ExplicitWidth = 572
@@ -283,11 +275,12 @@ inherited frameSutraGeneralizeTransBoundary: TframeSutraGeneralizeTransBoundary
   object pnlEditGrid: TPanel
     Left = 0
     Top = 81
-    Width = 586
+    Width = 565
     Height = 50
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 3
+    ExplicitWidth = 586
     object lblFormula: TLabel
       Left = 136
       Top = 5

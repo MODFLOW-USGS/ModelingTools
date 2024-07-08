@@ -26,7 +26,7 @@ inherited frmSoilProperties: TfrmSoilProperties
     ParentColor = True
     TabOrder = 2
     object btnCancel: TBitBtn
-      Left = 586
+      Left = 682
       Top = 6
       Width = 91
       Height = 33
@@ -35,7 +35,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       TabOrder = 2
     end
     object btnOK: TBitBtn
-      Left = 489
+      Left = 585
       Top = 6
       Width = 91
       Height = 33
@@ -45,7 +45,7 @@ inherited frmSoilProperties: TfrmSoilProperties
       OnClick = btnOKClick
     end
     object btnHelp: TBitBtn
-      Left = 392
+      Left = 488
       Top = 6
       Width = 91
       Height = 33

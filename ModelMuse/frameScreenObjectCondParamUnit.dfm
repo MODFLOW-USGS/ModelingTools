@@ -5,7 +5,7 @@ inherited frameScreenObjectCondParam: TframeScreenObjectCondParam
     ExplicitTop = 235
     ExplicitHeight = 81
     DesignSize = (
-      320
+      541
       81)
     object lblConductanceInterpretation: TLabel [1]
       Left = 8

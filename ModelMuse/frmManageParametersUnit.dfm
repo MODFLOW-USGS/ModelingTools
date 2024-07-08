@@ -19,7 +19,7 @@ inherited frmManageParameters: TfrmManageParameters
       768
       44)
     object btnOK: TBitBtn
-      Left = 570
+      Left = 586
       Top = 6
       Width = 82
       Height = 33
@@ -29,10 +29,9 @@ inherited frmManageParameters: TfrmManageParameters
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 574
     end
     object btnCancel: TBitBtn
-      Left = 658
+      Left = 674
       Top = 6
       Width = 82
       Height = 33
@@ -41,10 +40,9 @@ inherited frmManageParameters: TfrmManageParameters
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 662
     end
     object btnHelp: TBitBtn
-      Left = 482
+      Left = 498
       Top = 6
       Width = 82
       Height = 33
@@ -53,7 +51,6 @@ inherited frmManageParameters: TfrmManageParameters
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 486
     end
     object btnImportPval: TButton
       Left = 12
@@ -70,20 +67,19 @@ inherited frmManageParameters: TfrmManageParameters
     Top = 0
     Width = 768
     Height = 513
-    ActivePage = tabParameterGroups
+    ActivePage = tabParameters
     Align = alClient
     TabOrder = 1
     object tabParameters: TTabSheet
       Caption = 'Parameters'
       object pnlParameters: TPanel
         Left = 0
-        Top = 440
-        Width = 768
+        Top = 439
+        Width = 760
         Height = 41
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 764
         DesignSize = (
           760
           41)
@@ -131,7 +127,6 @@ inherited frmManageParameters: TfrmManageParameters
             FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
           TabOrder = 0
           OnClick = btnDeleteClick
-          ExplicitLeft = 666
         end
         object seNumberOfParameters: TJvSpinEdit
           Left = 8
@@ -563,8 +558,6 @@ inherited frmManageParameters: TfrmManageParameters
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 764
-        ExplicitHeight = 440
       end
     end
     object tabParameterGroups: TTabSheet
@@ -573,15 +566,15 @@ inherited frmManageParameters: TfrmManageParameters
       inline frameParameterGroups: TframeGrid
         Left = 0
         Top = 0
-        Width = 768
-        Height = 481
+        Width = 760
+        Height = 480
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 760
         ExplicitHeight = 480
         inherited Panel: TPanel
-          Top = 440
-          Width = 768
+          Top = 439
+          Width = 760
           ExplicitTop = 439
           ExplicitWidth = 760
           inherited lbNumber: TLabel
@@ -612,8 +605,8 @@ inherited frmManageParameters: TfrmManageParameters
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 768
-          Height = 440
+          Width = 760
+          Height = 439
           ColCount = 12
           OnSelectCell = frameParameterGroupsGridSelectCell
           OnSetEditText = frameParameterGroupsGridSetEditText
@@ -939,15 +932,15 @@ inherited frmManageParameters: TfrmManageParameters
       inline frameParGroupAssignments: TframeParentChild
         Left = 0
         Top = 0
-        Width = 768
-        Height = 481
+        Width = 760
+        Height = 480
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 616
-        ExplicitHeight = 364
+        ExplicitWidth = 760
+        ExplicitHeight = 480
         inherited tvTree: TTreeView
-          Width = 768
-          Height = 481
+          Width = 760
+          Height = 480
           ExplicitWidth = 760
           ExplicitHeight = 480
         end
@@ -959,8 +952,8 @@ inherited frmManageParameters: TfrmManageParameters
       object tvTiedParameters: TTreeView
         Left = 0
         Top = 0
-        Width = 768
-        Height = 481
+        Width = 760
+        Height = 480
         Align = alClient
         DragMode = dmAutomatic
         Indent = 19

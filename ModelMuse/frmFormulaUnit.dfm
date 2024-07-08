@@ -9,8 +9,8 @@ inherited frmFormula: TfrmFormula
   ClientWidth = 765
   Font.Height = 16
   Position = poOwnerFormCenter
-  ExplicitWidth = 777
-  ExplicitHeight = 516
+  ExplicitWidth = 781
+  ExplicitHeight = 517
   TextHeight = 16
   object Splitter: TSplitter
     Left = 539
@@ -29,7 +29,6 @@ inherited frmFormula: TfrmFormula
     Align = alLeft
     ParentColor = True
     TabOrder = 0
-    ExplicitHeight = 436
     object JvNetscapeSplitter1: TJvNetscapeSplitter
       Left = 1
       Top = 98
@@ -55,7 +54,6 @@ inherited frmFormula: TfrmFormula
       Align = alBottom
       ParentColor = True
       TabOrder = 2
-      ExplicitTop = 190
       object gbLogicalOperators: TGroupBox
         Left = 8
         Top = 6
@@ -524,7 +522,6 @@ inherited frmFormula: TfrmFormula
       OnDblClick = jreFormulaDblClick
       OnMouseUp = jreFormulaMouseUp
       OnSelectionChange = jreFormulaSelectionChange
-      ExplicitHeight = 82
     end
   end
   object pnlBottom: TPanel
@@ -535,25 +532,22 @@ inherited frmFormula: TfrmFormula
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 436
-    ExplicitWidth = 761
     DesignSize = (
       765
       41)
     object btnCancel: TBitBtn
-      Left = 625
-      Top = 6
+      Left = 673
+      Top = 4
       Width = 91
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 3
-      ExplicitLeft = 621
     end
     object btnOK: TBitBtn
-      Left = 528
-      Top = 6
+      Left = 576
+      Top = 4
       Width = 91
       Height = 33
       Anchors = [akTop, akRight]
@@ -561,10 +555,9 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 524
     end
     object btnHelp: TBitBtn
-      Left = 433
+      Left = 481
       Top = 4
       Width = 91
       Height = 33
@@ -573,10 +566,9 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 429
     end
     object btnFunctionHelp: TBitBtn
-      Left = 263
+      Left = 311
       Top = 4
       Width = 163
       Height = 33
@@ -605,7 +597,6 @@ inherited frmFormula: TfrmFormula
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnFunctionHelpClick
-      ExplicitLeft = 259
     end
   end
   object pnlRight: TPanel
@@ -617,8 +608,6 @@ inherited frmFormula: TfrmFormula
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitWidth = 217
-    ExplicitHeight = 436
     object pnlLabelItemTree: TPanel
       Left = 0
       Top = 0
@@ -627,7 +616,6 @@ inherited frmFormula: TfrmFormula
       Align = alTop
       ParentColor = True
       TabOrder = 0
-      ExplicitWidth = 217
       object lbltems: TLabel
         AlignWithMargins = True
         Left = 4
@@ -659,8 +647,6 @@ inherited frmFormula: TfrmFormula
       OnChange = tvItemsChange
       OnDblClick = tvItemsDblClick
       OnMouseDown = tvItemsMouseDown
-      ExplicitWidth = 217
-      ExplicitHeight = 395
     end
   end
   object Timer: TTimer

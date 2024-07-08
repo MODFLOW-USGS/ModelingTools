@@ -6,7 +6,6 @@ inherited frmImportDistributedData: TfrmImportDistributedData
   Caption = 'Import Distributed Data by Zone'
   ClientHeight = 355
   ClientWidth = 464
-  OnResize = FormResize
   ExplicitWidth = 480
   ExplicitHeight = 394
   PixelsPerInch = 120
@@ -168,8 +167,8 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       464
       41)
     object btnOK: TBitBtn
-      Left = 253
-      Top = 4
+      Left = 277
+      Top = 6
       Width = 89
       Height = 33
       Anchors = [akTop, akRight]
@@ -197,22 +196,20 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 257
     end
     object btnCancel: TBitBtn
-      Left = 349
-      Top = 4
+      Left = 373
+      Top = 6
       Width = 91
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 353
     end
     object btnHelp: TBitBtn
-      Left = 157
-      Top = 4
+      Left = 181
+      Top = 6
       Width = 89
       Height = 33
       Anchors = [akTop, akRight]
@@ -220,7 +217,6 @@ inherited frmImportDistributedData: TfrmImportDistributedData
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 161
     end
   end
   object dgDataSets: TRbwDataGrid4

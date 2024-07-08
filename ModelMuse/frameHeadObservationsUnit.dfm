@@ -54,11 +54,11 @@ inherited frameHeadObservations: TframeHeadObservations
         end
       end
       inherited Panel2: TPanel
-        Top = 110
+        Top = 147
         ExplicitTop = 110
       end
       inherited rdgObservations: TRbwDataGrid4
-        Height = 75
+        Height = 112
         OnBeforeDrawCell = rdgObservationsBeforeDrawCell
         Columns = <
           item
@@ -193,7 +193,7 @@ inherited frameHeadObservations: TframeHeadObservations
     inherited tabLayers: TTabSheet
       ExplicitHeight = 186
       inherited Panel4: TPanel
-        Top = 110
+        Top = 147
         ExplicitTop = 110
         inherited seLayers: TJvSpinEdit
           Left = 9
@@ -201,7 +201,7 @@ inherited frameHeadObservations: TframeHeadObservations
         end
       end
       inherited rdgLayers: TRbwDataGrid4
-        Height = 75
+        Height = 112
         ExplicitHeight = 75
       end
     end

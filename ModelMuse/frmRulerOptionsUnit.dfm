@@ -5,31 +5,27 @@ inherited frmRulerOptions: TfrmRulerOptions
   HelpKeyword = 'Ruler_Format_Dialog_Box'
   ActiveControl = pcMain
   Caption = 'Ruler Format'
-  ExplicitWidth = 412
-  ExplicitHeight = 258
   TextHeight = 18
   object pcMain: TPageControl
     Left = 0
     Top = 0
-    Width = 400
-    Height = 174
+    Width = 764
+    Height = 155
     ActivePage = tabTopY
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 396
-    ExplicitHeight = 173
     object tabTopX: TTabSheet
       Caption = 'Top X'
       inline frameTopX: TframeRulerOptions
         Left = 0
         Top = 0
-        Width = 392
-        Height = 141
+        Width = 756
+        Height = 122
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 388
-        ExplicitHeight = 140
+        ExplicitWidth = 756
+        ExplicitHeight = 122
         inherited lblPreview: TLabel
           Width = 9
           Height = 18
@@ -90,13 +86,13 @@ inherited frmRulerOptions: TfrmRulerOptions
       inline frameTopY: TframeRulerOptions
         Left = 0
         Top = 0
-        Width = 392
-        Height = 141
+        Width = 756
+        Height = 122
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 392
-        ExplicitHeight = 141
+        ExplicitWidth = 756
+        ExplicitHeight = 122
         inherited lblPreview: TLabel
           Width = 9
           Height = 18
@@ -157,13 +153,13 @@ inherited frmRulerOptions: TfrmRulerOptions
       inline frameFrontX: TframeRulerOptions
         Left = 0
         Top = 0
-        Width = 392
-        Height = 141
+        Width = 756
+        Height = 122
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 392
-        ExplicitHeight = 141
+        ExplicitWidth = 756
+        ExplicitHeight = 122
         inherited lblPreview: TLabel
           Width = 9
           Height = 18
@@ -224,13 +220,13 @@ inherited frmRulerOptions: TfrmRulerOptions
       inline frameFrontZ: TframeRulerOptions
         Left = 0
         Top = 0
-        Width = 392
-        Height = 141
+        Width = 756
+        Height = 122
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 392
-        ExplicitHeight = 141
+        ExplicitWidth = 756
+        ExplicitHeight = 122
         inherited lblPreview: TLabel
           Width = 9
           Height = 18
@@ -291,13 +287,13 @@ inherited frmRulerOptions: TfrmRulerOptions
       inline frameSideY: TframeRulerOptions
         Left = 0
         Top = 0
-        Width = 392
-        Height = 141
+        Width = 756
+        Height = 122
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 392
-        ExplicitHeight = 141
+        ExplicitWidth = 756
+        ExplicitHeight = 122
         inherited lblPreview: TLabel
           Width = 9
           Height = 18
@@ -358,13 +354,13 @@ inherited frmRulerOptions: TfrmRulerOptions
       inline frameSideZ: TframeRulerOptions
         Left = 0
         Top = 0
-        Width = 392
-        Height = 141
+        Width = 756
+        Height = 122
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitWidth = 392
-        ExplicitHeight = 141
+        ExplicitWidth = 756
+        ExplicitHeight = 122
         inherited lblPreview: TLabel
           Width = 9
           Height = 18
@@ -422,16 +418,14 @@ inherited frmRulerOptions: TfrmRulerOptions
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 174
-    Width = 400
+    Top = 155
+    Width = 764
     Height = 46
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 173
-    ExplicitWidth = 396
     object btnCancel: TBitBtn
-      Left = 279
+      Left = 673
       Top = 6
       Width = 91
       Height = 33
@@ -440,7 +434,7 @@ inherited frmRulerOptions: TfrmRulerOptions
       TabOrder = 2
     end
     object btnOK: TBitBtn
-      Left = 182
+      Left = 576
       Top = 6
       Width = 91
       Height = 33
@@ -450,7 +444,7 @@ inherited frmRulerOptions: TfrmRulerOptions
       OnClick = btnOKClick
     end
     object btnHelp: TBitBtn
-      Left = 85
+      Left = 479
       Top = 6
       Width = 91
       Height = 33

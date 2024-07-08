@@ -5,14 +5,14 @@ inherited frmPixelPoint: TfrmPixelPoint
   HelpKeyword = 'Import_Shapefile_Dialog_Box'
   Caption = 'Coordinates'
   ClientHeight = 126
-  ClientWidth = 495
-  ExplicitWidth = 507
-  ExplicitHeight = 164
+  ClientWidth = 492
+  ExplicitWidth = 508
+  ExplicitHeight = 165
   PixelsPerInch = 120
   TextHeight = 18
   object btnOK: TBitBtn
-    Left = 104
-    Top = 84
+    Left = 296
+    Top = 85
     Width = 91
     Height = 33
     Caption = 'OK'
@@ -40,8 +40,8 @@ inherited frmPixelPoint: TfrmPixelPoint
     OnClick = btnOKClick
   end
   object btnCancel: TBitBtn
-    Left = 199
-    Top = 84
+    Left = 393
+    Top = 85
     Width = 91
     Height = 33
     Kind = bkCancel
@@ -49,8 +49,8 @@ inherited frmPixelPoint: TfrmPixelPoint
     TabOrder = 1
   end
   object btnHelp: TBitBtn
-    Left = 8
-    Top = 84
+    Left = 200
+    Top = 85
     Width = 91
     Height = 33
     Kind = bkHelp

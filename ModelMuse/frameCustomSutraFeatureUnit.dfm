@@ -2,13 +2,14 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
   object pnlBottom: TPanel
     Left = 0
     Top = 194
-    Width = 320
+    Width = 565
     Height = 46
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 320
     DesignSize = (
-      320
+      565
       46)
     object lblNumTimes: TLabel
       Left = 64
@@ -28,7 +29,7 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
       OnChange = seNumberOfTimesChange
     end
     object btnDelete: TBitBtn
-      Left = 236
+      Left = 481
       Top = 6
       Width = 82
       Height = 33
@@ -64,9 +65,10 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       TabOrder = 2
       OnClick = btnDeleteClick
+      ExplicitLeft = 236
     end
     object btnInsert: TBitBtn
-      Left = 148
+      Left = 393
       Top = 5
       Width = 82
       Height = 33
@@ -84,19 +86,21 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
         FF0FFFFF0FFFFFFFFF0FFFFF00000000000FFFFFFFFFFFFFFFFF}
       TabOrder = 1
       OnClick = btnInsertClick
+      ExplicitLeft = 148
     end
   end
   object pnlGrid: TPanel
     Left = 0
     Top = 145
-    Width = 320
+    Width = 565
     Height = 49
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 320
     object rdgSutraFeature: TRbwDataGrid4
       Left = 1
       Top = 1
-      Width = 318
+      Width = 563
       Height = 47
       Align = alClient
       ColCount = 4
@@ -211,17 +215,19 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
+      ExplicitWidth = 318
     end
   end
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 320
+    Width = 565
     Height = 145
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 320
     DesignSize = (
-      320
+      565
       145)
     object lblSchedule: TLabel
       Left = 5
@@ -233,21 +239,23 @@ inherited frameCustomSutraTimeVaryingFeature: TframeCustomSutraTimeVaryingFeatur
     object pnlCaption: TPanel
       Left = 1
       Top = 1
-      Width = 318
+      Width = 563
       Height = 23
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 318
     end
     object comboSchedule: TComboBox
       Left = 5
       Top = 101
-      Width = 306
+      Width = 551
       Height = 23
       Style = csDropDownList
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
       OnChange = comboScheduleChange
+      ExplicitWidth = 306
     end
   end
 end

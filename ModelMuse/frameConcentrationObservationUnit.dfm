@@ -2,7 +2,6 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
   inherited pcData: TJvPageControl
     Top = 99
     Height = 251
-    ActivePage = tabTimes
     ExplicitTop = 99
     ExplicitHeight = 251
     inherited tabTimes: TTabSheet
@@ -29,8 +28,8 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
         end
       end
       inherited Panel2: TPanel
-        Top = 145
-        ExplicitTop = 145
+        Top = 182
+        ExplicitTop = 182
         inherited lblNumberOfTimes: TLabel
           Left = 95
           ExplicitLeft = 95
@@ -41,7 +40,7 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
         end
       end
       inherited rdgObservations: TRbwDataGrid4
-        Height = 110
+        Height = 147
         ColCount = 6
         DefaultColWidth = 40
         Columns = <
@@ -211,12 +210,13 @@ inherited frameConcentrationObservation: TframeConcentrationObservation
     inherited tabLayers: TTabSheet
       ExplicitHeight = 221
       inherited Panel4: TPanel
-        Top = 145
-        ExplicitTop = 147
+        Top = 182
+        ExplicitTop = 145
       end
       inherited rdgLayers: TRbwDataGrid4
-        Height = 110
-        ExplicitHeight = 110
+        Height = 147
+        ExplicitWidth = 533
+        ExplicitHeight = 147
       end
     end
   end

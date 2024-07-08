@@ -4,8 +4,8 @@ inherited frmFarm: TfrmFarm
   Caption = 'Water Balance Subregions (formerly Farms)'
   ClientHeight = 462
   ClientWidth = 788
-  ExplicitWidth = 800
-  ExplicitHeight = 500
+  ExplicitWidth = 804
+  ExplicitHeight = 501
   TextHeight = 18
   object Splitter1: TSplitter
     Left = 145
@@ -37,13 +37,13 @@ inherited frmFarm: TfrmFarm
         ExplicitHeight = 361
         inherited pnlTop: TPanel
           Width = 630
-          ExplicitWidth = 626
+          ExplicitWidth = 630
           inherited seFarmId: TJvSpinEdit
             OnChange = frameFarmseFarmIdChange
           end
           inherited pnlCaption: TPanel
             Width = 630
-            ExplicitWidth = 626
+            ExplicitWidth = 630
           end
           inherited edFarmName: TLabeledEdit
             OnChange = frameFarmedFarmNameChange
@@ -52,8 +52,8 @@ inherited frmFarm: TfrmFarm
         inherited PanelOwhm2: TPanel
           Width = 630
           Height = 296
-          ExplicitWidth = 626
-          ExplicitHeight = 295
+          ExplicitWidth = 630
+          ExplicitHeight = 296
           inherited lblPumpSpread: TLabel
             Width = 217
             ExplicitWidth = 217
@@ -657,7 +657,6 @@ inherited frmFarm: TfrmFarm
     Height = 421
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 420
     object vstFarms: TVirtualStringTree
       Left = 1
       Top = 1
@@ -701,7 +700,6 @@ inherited frmFarm: TfrmFarm
       Height = 84
       Align = alBottom
       TabOrder = 1
-      ExplicitTop = 335
       object sbAddUnit: TSpeedButton
         Left = 11
         Top = 6
@@ -802,14 +800,12 @@ inherited frmFarm: TfrmFarm
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 420
-    ExplicitWidth = 784
     DesignSize = (
       788
       41)
     object btnHelp: TBitBtn
-      Left = 337
-      Top = 4
+      Left = 448
+      Top = 6
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -817,11 +813,10 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 333
     end
     object btnOK: TBitBtn
-      Left = 451
-      Top = 4
+      Left = 562
+      Top = 6
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -829,18 +824,16 @@ inherited frmFarm: TfrmFarm
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnOKClick
-      ExplicitLeft = 447
     end
     object btnCancel: TBitBtn
-      Left = 565
-      Top = 4
+      Left = 676
+      Top = 6
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 561
     end
   end
 end

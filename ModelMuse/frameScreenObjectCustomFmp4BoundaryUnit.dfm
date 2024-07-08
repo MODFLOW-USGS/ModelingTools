@@ -1,44 +1,34 @@
 inherited frameScreenObjectCustomFmp4Boundary: TframeScreenObjectCustomFmp4Boundary
-  Width = 410
   Height = 308
-  ExplicitWidth = 410
   ExplicitHeight = 308
   inherited pnlBottom: TPanel
     Top = 262
-    Width = 410
     ExplicitTop = 262
     ExplicitWidth = 410
     DesignSize = (
-      410
+      541
       46)
     inherited btnDelete: TBitBtn
-      Left = 322
       ExplicitLeft = 322
     end
     inherited btnInsert: TBitBtn
-      Left = 238
       ExplicitLeft = 238
     end
   end
   inherited pnlTop: TPanel
-    Width = 410
     ExplicitWidth = 410
     inherited pnlCaption: TPanel
-      Width = 408
-      ExplicitWidth = 409
+      ExplicitWidth = 408
     end
   end
   inherited pnlGrid: TPanel
-    Width = 410
     Height = 237
     ExplicitWidth = 410
     ExplicitHeight = 237
     inherited pnlEditGrid: TPanel
-      Width = 408
       ExplicitWidth = 408
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 408
       Height = 185
       Columns = <
         item

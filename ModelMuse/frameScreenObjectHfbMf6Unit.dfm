@@ -1,15 +1,12 @@
 inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
-  Width = 459
-  ExplicitWidth = 459
   inherited pnlBottom: TPanel
     Top = 144
-    Width = 459
     Height = 172
     ExplicitTop = 144
     ExplicitWidth = 459
     ExplicitHeight = 172
     DesignSize = (
-      459
+      541
       172)
     object lblParameterName: TLabel [1]
       Left = 8
@@ -21,11 +18,9 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
       Enabled = False
     end
     inherited btnDelete: TBitBtn
-      Left = 371
       ExplicitLeft = 371
     end
     inherited btnInsert: TBitBtn
-      Left = 287
       ExplicitLeft = 287
     end
     object rgAngleAdjustment: TRadioGroup
@@ -47,7 +42,7 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
       TabOrder = 3
     end
     object comboHfbParameters: TJvImageComboBox
-      Left = 283
+      Left = 365
       Top = 45
       Width = 170
       Height = 25
@@ -65,27 +60,23 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
       TabOrder = 4
       OnChange = comboHfbParametersChange
       Items = <>
+      ExplicitLeft = 283
     end
   end
   inherited pnlTop: TPanel
-    Width = 459
     ExplicitWidth = 459
     inherited pnlCaption: TPanel
-      Width = 457
       ExplicitWidth = 457
     end
   end
   inherited pnlGrid: TPanel
-    Width = 459
     Height = 119
     ExplicitWidth = 459
     ExplicitHeight = 119
     inherited pnlEditGrid: TPanel
-      Width = 457
       ExplicitWidth = 457
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 457
       Height = 67
       ColCount = 4
       Columns = <

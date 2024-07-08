@@ -1,37 +1,37 @@
 inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
-  Width = 609
   Height = 476
   Font.Charset = ANSI_CHARSET
   Font.Height = -16
   Font.Name = 'Arial'
   ParentFont = False
   TabStop = True
-  ExplicitWidth = 609
   ExplicitHeight = 476
   object pnlCaption: TPanel
     Left = 0
     Top = 0
-    Width = 609
+    Width = 541
     Height = 22
     Align = alTop
     BevelOuter = bvNone
     Caption = 'pnlCaption'
     TabOrder = 0
+    ExplicitWidth = 609
   end
   object pcMnw2: TPageControl
     Left = 0
     Top = 22
-    Width = 609
+    Width = 541
     Height = 454
     ActivePage = tabWellScreens
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 609
     object tabBasic: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'MNW2_Basic_Tab'
       Caption = 'Basic'
       DesignSize = (
-        601
+        533
         421)
       object lblWellId: TLabel
         Left = 3
@@ -181,7 +181,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       inline framePumpLocationMethod: TframeLocationMethod
         Left = -4
         Top = 121
-        Width = 605
+        Width = 537
         Height = 62
         Anchors = [akLeft, akTop, akRight]
         Enabled = False
@@ -195,7 +195,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         TabStop = True
         ExplicitLeft = -4
         ExplicitTop = 121
-        ExplicitWidth = 605
+        ExplicitWidth = 537
         ExplicitHeight = 62
         inherited lblLocationMethod: TLabel
           Left = 7
@@ -205,13 +205,13 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           ExplicitWidth = 161
         end
         inherited pcLocationChoice: TJvPageControl
-          Width = 268
+          Width = 200
           Height = 62
           ActivePage = framePumpLocationMethod.tabNone
-          ExplicitWidth = 268
+          ExplicitWidth = 200
           ExplicitHeight = 62
           inherited tabNone: TTabSheet
-            ExplicitWidth = 268
+            ExplicitWidth = 200
             ExplicitHeight = 60
           end
           inherited tabObject: TTabSheet
@@ -223,7 +223,6 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
         end
         inherited comboLocationChoice: TJvImageComboBox
           Left = 173
-          ItemIndex = -1
           OnChange = framePumpLocationMethodcomboLocationChoiceChange
           ExplicitLeft = 173
         end
@@ -551,7 +550,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       Caption = 'Discharge Adjustment'
       ImageIndex = 2
       DesignSize = (
-        601
+        533
         421)
       object lblReferenceHead: TLabel
         Left = 8
@@ -646,7 +645,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       object rdgLiftTable: TRbwDataGrid4
         Left = 232
         Top = 155
-        Width = 334
+        Width = 266
         Height = 254
         Anchors = [akLeft, akTop, akRight, akBottom]
         ColCount = 2
@@ -754,7 +753,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       object rdgTimeTable: TRbwDataGrid4
         Left = 0
         Top = 65
-        Width = 601
+        Width = 533
         Height = 315
         Align = alClient
         ColCount = 8
@@ -987,7 +986,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       object Panel1: TPanel
         Left = 0
         Top = 380
-        Width = 601
+        Width = 533
         Height = 41
         Align = alBottom
         BevelOuter = bvNone
@@ -1033,7 +1032,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 601
+        Width = 533
         Height = 65
         Align = alTop
         BevelOuter = bvNone
@@ -1094,11 +1093,12 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       object Panel3: TPanel
         Left = 0
         Top = 380
-        Width = 601
+        Width = 533
         Height = 41
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 2
+        ExplicitWidth = 601
         object Label1: TLabel
           Left = 79
           Top = 9
@@ -1117,7 +1117,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           OnChange = seVerticalScreensChange
         end
         object btnInsertVertialScreen: TButton
-          Left = 246
+          Left = 374
           Top = 7
           Width = 75
           Height = 25
@@ -1126,8 +1126,8 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
           OnClick = btnInsertVertialScreenClick
         end
         object btnDeleteVertialScreen: TButton
-          Left = 327
-          Top = 6
+          Left = 455
+          Top = 7
           Width = 75
           Height = 25
           Caption = 'Delete'
@@ -1138,7 +1138,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       object rdgVerticalScreens: TRbwDataGrid4
         Left = 0
         Top = 97
-        Width = 601
+        Width = 533
         Height = 283
         Align = alClient
         ColCount = 9
@@ -1378,20 +1378,22 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 601
       end
       object Panel4: TPanel
         Left = 0
         Top = 0
-        Width = 601
+        Width = 533
         Height = 97
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 601
         object Label2: TLabel
           AlignWithMargins = True
           Left = 3
           Top = 3
-          Width = 595
+          Width = 527
           Height = 36
           Align = alTop
           Caption = 
@@ -1430,40 +1432,49 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
       inline framePestObsMnw2: TframePestObs
         Left = 0
         Top = 0
-        Width = 601
+        Width = 533
         Height = 421
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 601
+        ExplicitWidth = 533
         ExplicitHeight = 421
         inherited splObservations: TSplitter
           Top = 244
-          Width = 601
+          Width = 533
           ExplicitTop = 243
           ExplicitWidth = 601
         end
         inherited grpDirectObs: TGroupBox
-          Width = 601
+          Width = 533
           Height = 244
-          ExplicitWidth = 601
+          ExplicitWidth = 533
           ExplicitHeight = 244
           inherited frameObservations: TframeGrid
             Top = 20
-            Width = 597
+            Width = 529
             Height = 222
             ExplicitTop = 20
-            ExplicitWidth = 597
+            ExplicitWidth = 529
             ExplicitHeight = 222
             inherited Panel: TPanel
               Top = 190
-              Width = 597
+              Width = 529
               ExplicitTop = 190
-              ExplicitWidth = 597
+              ExplicitWidth = 529
               inherited lbNumber: TLabel
                 Width = 208
                 Height = 18
                 ExplicitWidth = 208
                 ExplicitHeight = 18
+              end
+              inherited sbAdd: TSpeedButton
+                Left = 325
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 351
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 376
               end
               inherited seNumber: TJvSpinEdit
                 Height = 26
@@ -1471,7 +1482,7 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
               end
             end
             inherited Grid: TRbwDataGrid4
-              Width = 597
+              Width = 529
               Height = 190
               Columns = <
                 item
@@ -1648,33 +1659,42 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
                   CheckStyle = csCheck
                   AutoAdjustColWidths = True
                 end>
-              ExplicitWidth = 597
+              ExplicitWidth = 529
               ExplicitHeight = 190
             end
           end
         end
         inherited grpObsComparisons: TGroupBox
           Top = 249
-          Width = 601
+          Width = 533
           ExplicitTop = 249
-          ExplicitWidth = 601
+          ExplicitWidth = 533
           inherited frameObsComparisons: TframeGrid
             Top = 20
-            Width = 597
+            Width = 529
             Height = 150
             ExplicitTop = 20
-            ExplicitWidth = 597
+            ExplicitWidth = 529
             ExplicitHeight = 150
             inherited Panel: TPanel
               Top = 115
-              Width = 597
+              Width = 529
               ExplicitTop = 115
-              ExplicitWidth = 597
+              ExplicitWidth = 529
               inherited lbNumber: TLabel
                 Width = 251
                 Height = 18
                 ExplicitWidth = 251
                 ExplicitHeight = 18
+              end
+              inherited sbAdd: TSpeedButton
+                Left = 325
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 351
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 376
               end
               inherited seNumber: TJvSpinEdit
                 Height = 26
@@ -1682,9 +1702,9 @@ inherited frameScreenObjectMNW2: TframeScreenObjectMNW2
               end
             end
             inherited Grid: TRbwDataGrid4
-              Width = 597
+              Width = 529
               Height = 115
-              ExplicitWidth = 597
+              ExplicitWidth = 529
               ExplicitHeight = 115
             end
           end

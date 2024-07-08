@@ -4,24 +4,42 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
   inherited pnlBottom: TPanel
     Top = 318
     ExplicitTop = 318
+    ExplicitWidth = 541
+    inherited btnDelete: TBitBtn
+      ExplicitLeft = 453
+    end
+    inherited btnInsert: TBitBtn
+      ExplicitLeft = 369
+    end
+  end
+  inherited pnlTop: TPanel
+    ExplicitWidth = 541
+    inherited pnlCaption: TPanel
+      ExplicitWidth = 539
+    end
   end
   inherited pnlGrid: TPanel
     Top = 176
     Height = 142
     Align = alBottom
     ExplicitTop = 176
+    ExplicitWidth = 541
     ExplicitHeight = 142
+    inherited pnlEditGrid: TPanel
+      ExplicitWidth = 539
+    end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Height = 90
+      ExplicitWidth = 539
       ExplicitHeight = 90
     end
   end
   object pcLkt: TPageControl
     Left = 0
     Top = 25
-    Width = 320
+    Width = 541
     Height = 151
-    ActivePage = tabInitialConc
+    ActivePage = tabRunoffConc
     Align = alClient
     TabOrder = 3
     object tabInitialConc: TTabSheet
@@ -37,7 +55,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
         AlignWithMargins = True
         Left = 3
         Top = 30
-        Width = 306
+        Width = 527
         Height = 88
         Margins.Top = 30
         Align = alClient
@@ -115,13 +133,13 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
       object pnlButtonsRunoff: TPanel
         Left = 0
         Top = 75
-        Width = 312
+        Width = 533
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
         DesignSize = (
-          312
+          533
           46)
         object lbl1: TLabel
           Left = 64
@@ -141,7 +159,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
           OnChange = seRunoffTimesChange
         end
         object btnDeleteRunoff: TBitBtn
-          Left = 236
+          Left = 441
           Top = 6
           Width = 82
           Height = 33
@@ -179,7 +197,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
           OnClick = btnDeleteRunoffClick
         end
         object btnInsertRunoff: TBitBtn
-          Left = 148
+          Left = 353
           Top = 5
           Width = 82
           Height = 33
@@ -202,14 +220,14 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
       object pnlGridRunoff: TPanel
         Left = 0
         Top = 0
-        Width = 312
+        Width = 533
         Height = 75
         Align = alClient
         TabOrder = 1
         object pnl3: TPanel
           Left = 1
           Top = 1
-          Width = 310
+          Width = 531
           Height = 50
           Align = alTop
           BevelOuter = bvNone
@@ -238,7 +256,7 @@ inherited frameScreenObjectLkt: TframeScreenObjectLkt
         object rdgRunoffConc: TRbwDataGrid4
           Left = 1
           Top = 51
-          Width = 310
+          Width = 531
           Height = 23
           Align = alClient
           ColCount = 3

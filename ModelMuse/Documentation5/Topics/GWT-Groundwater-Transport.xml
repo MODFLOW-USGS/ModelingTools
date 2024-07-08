@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2023-09-06T10:31:18.822-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-07-08T10:01:02.865-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">GWT: Groundwater Transport</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">GWT: Groundwater Transport</text></para>
     </header>
-    <para styleclass="Normal"><text styleclass="Normal" translate="true">The panes used for the Groundwater Transport process are organized under GWT: Groundwater Transport. The following panes are present</text></para>
-    <list id="0" type="ul" listtype="bullet" formatstring="·" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The panes used for the Groundwater Transport process are organized under GWT: Groundwater Transport. The following panes are present:</text></para>
+    <list id="0" type="ul" listtype="bullet" formatstring="&#183;" format-charset="SYMBOL_CHARSET" levelreset="true" legalstyle="false" startfrom="1" styleclass="Normal" style="font-family:Symbol; font-size:12pt; color:#000000;">
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="GWTGroundwater-Transport-Proce" styleclass="Normal" translate="true">GWT:Groundwater Transport Process</link></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="ADV-GWT-Advection-Package" styleclass="Normal" translate="true">ADV: GWT Advection Package</link></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="Dispersion-Package" styleclass="Normal" translate="true">DSP: GWT Dispersion Package</link></li>
@@ -18,5 +18,6 @@
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="IST-Immobile-Storage-and-Trasf" styleclass="Normal" translate="true">IST: Immobile Storage and Trasfer Package</link><text styleclass="Normal" translate="true"> (one copy for each chemical species)</text></li>
       <li styleclass="Normal"><link displaytype="text" defaultstyle="true" type="topiclink" href="IST-Immobile-Storage-and-Trasf" styleclass="Normal" translate="true">IST: Immobile Storage and Trasfer Package</link><text styleclass="Normal" translate="true"> (one copy for each chemical species)</text></li>
     </list>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The </text><link displaytype="text" defaultstyle="true" type="topiclink" href="CSUB_Skeletal_Storage__Compact" styleclass="Normal" translate="true">CSUB</link><text styleclass="Normal" translate="true"> package can not be used with Groundwater Transport.</text></para>
   </body>
 </topic>

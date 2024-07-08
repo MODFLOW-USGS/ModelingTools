@@ -1,24 +1,25 @@
 object frameCustomCellObservation: TframeCustomCellObservation
   Left = 0
   Top = 0
-  Width = 568
+  Width = 541
   Height = 350
   TabOrder = 0
   OnResize = FrameResize
   object pcData: TJvPageControl
     Left = 0
     Top = 81
-    Width = 568
+    Width = 541
     Height = 269
     ActivePage = tabLayers
     Align = alClient
     TabOrder = 2
+    ExplicitWidth = 568
     object tabTimes: TTabSheet
       Caption = 'Observation times'
       object Panel5: TPanel
         Left = 0
         Top = 0
-        Width = 560
+        Width = 533
         Height = 35
         Align = alTop
         TabOrder = 0
@@ -36,12 +37,14 @@ object frameCustomCellObservation: TframeCustomCellObservation
       end
       object Panel2: TPanel
         Left = 0
-        Top = 163
-        Width = 560
-        Height = 76
+        Top = 200
+        Width = 533
+        Height = 39
         Align = alBottom
         TabOrder = 2
-        ExplicitTop = 165
+        DesignSize = (
+          533
+          39)
         object lblNumberOfTimes: TLabel
           Left = 63
           Top = 9
@@ -60,19 +63,21 @@ object frameCustomCellObservation: TframeCustomCellObservation
           OnChange = seTimesChange
         end
         object btnDeleteValue: TButton
-          Left = 8
-          Top = 41
+          Left = 472
+          Top = 6
           Width = 57
           Height = 25
+          Anchors = [akTop, akRight]
           Caption = 'Delete'
           TabOrder = 1
           OnClick = btnDeleteValueClick
         end
         object btnInsertValue: TButton
-          Left = 71
-          Top = 41
+          Left = 409
+          Top = 6
           Width = 57
           Height = 25
+          Anchors = [akTop, akRight]
           Caption = 'Insert'
           TabOrder = 2
           OnClick = btnInsertValueClick
@@ -81,8 +86,8 @@ object frameCustomCellObservation: TframeCustomCellObservation
       object rdgObservations: TRbwDataGrid4
         Left = 0
         Top = 35
-        Width = 560
-        Height = 128
+        Width = 533
+        Height = 165
         Align = alClient
         FixedCols = 0
         RowCount = 2
@@ -229,6 +234,7 @@ object frameCustomCellObservation: TframeCustomCellObservation
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitHeight = 128
         ColWidths = (
           64
           64
@@ -242,12 +248,14 @@ object frameCustomCellObservation: TframeCustomCellObservation
       ImageIndex = 1
       object Panel4: TPanel
         Left = 0
-        Top = 163
-        Width = 560
-        Height = 76
+        Top = 200
+        Width = 533
+        Height = 39
         Align = alBottom
         TabOrder = 2
-        ExplicitTop = 165
+        DesignSize = (
+          533
+          39)
         object lblNumberOfLayers: TLabel
           Left = 64
           Top = 9
@@ -266,19 +274,21 @@ object frameCustomCellObservation: TframeCustomCellObservation
           OnChange = seLayersChange
         end
         object btnDeleteLayer: TButton
-          Left = 8
-          Top = 41
+          Left = 472
+          Top = 6
           Width = 57
           Height = 25
+          Anchors = [akTop, akRight]
           Caption = 'Delete'
           TabOrder = 1
           OnClick = btnDeleteLayerClick
         end
         object btnInsertLayer: TButton
-          Left = 71
-          Top = 41
+          Left = 409
+          Top = 6
           Width = 57
           Height = 25
+          Anchors = [akTop, akRight]
           Caption = 'Insert'
           TabOrder = 2
           OnClick = btnInsertLayerClick
@@ -287,10 +297,11 @@ object frameCustomCellObservation: TframeCustomCellObservation
       object Panel6: TPanel
         Left = 0
         Top = 0
-        Width = 560
+        Width = 533
         Height = 35
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 560
         object rdeMultiLayerEdit: TRbwDataEntry
           Left = 3
           Top = 7
@@ -307,8 +318,8 @@ object frameCustomCellObservation: TframeCustomCellObservation
       object rdgLayers: TRbwDataGrid4
         Left = 0
         Top = 35
-        Width = 560
-        Height = 128
+        Width = 533
+        Height = 165
         Align = alClient
         ColCount = 2
         FixedCols = 0
@@ -378,25 +389,29 @@ object frameCustomCellObservation: TframeCustomCellObservation
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 560
+        ExplicitHeight = 128
       end
     end
   end
   object pnlCaption: TPanel
     Left = 0
     Top = 0
-    Width = 568
+    Width = 541
     Height = 25
     Align = alTop
     Caption = 'pnlCaption'
     TabOrder = 0
+    ExplicitWidth = 568
   end
   object pnlName: TPanel
     Left = 0
     Top = 25
-    Width = 568
+    Width = 541
     Height = 56
     Align = alTop
     TabOrder = 1
+    ExplicitWidth = 568
     object lblTreatment: TLabel
       Left = 200
       Top = 6

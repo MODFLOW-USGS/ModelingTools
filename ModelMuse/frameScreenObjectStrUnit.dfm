@@ -32,10 +32,11 @@ inherited frameScreenObjectStr: TframeScreenObjectStr
     object pnlNumber: TPanel
       Left = 1
       Top = 25
-      Width = 318
+      Width = 539
       Height = 41
       Align = alTop
       TabOrder = 1
+      ExplicitWidth = 318
       object lblSegmentNumber: TLabel
         Left = 134
         Top = 17

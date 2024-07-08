@@ -31,7 +31,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       581
       49)
     object btnCancel: TBitBtn
-      Left = 430
+      Left = 486
       Top = 6
       Width = 83
       Height = 33
@@ -41,7 +41,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       TabOrder = 2
     end
     object btnOK: TBitBtn
-      Left = 341
+      Left = 397
       Top = 6
       Width = 83
       Height = 33
@@ -52,7 +52,7 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       OnClick = btnOKClick
     end
     object btnHelp: TBitBtn
-      Left = 252
+      Left = 308
       Top = 6
       Width = 83
       Height = 33
@@ -93,8 +93,6 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
       Width = 466
       Height = 382
       Caption = 'jvspIrrigationTypes'
-      ExplicitWidth = 380
-      ExplicitHeight = 383
       inline frameIrrigationTypes: TframeFormulaGrid
         Left = 0
         Top = 0
@@ -102,13 +100,13 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
         Height = 382
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 380
-        ExplicitHeight = 383
+        ExplicitWidth = 466
+        ExplicitHeight = 382
         inherited Panel: TPanel
           Top = 341
           Width = 466
-          ExplicitTop = 342
-          ExplicitWidth = 380
+          ExplicitTop = 341
+          ExplicitWidth = 466
           inherited lbNumber: TLabel
             Width = 179
             Height = 18
@@ -190,12 +188,12 @@ inherited frmIrrigationTypes: TfrmIrrigationTypes
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 380
-          ExplicitHeight = 285
+          ExplicitWidth = 466
+          ExplicitHeight = 284
         end
         inherited pnlTop: TPanel
           Width = 466
-          ExplicitWidth = 509
+          ExplicitWidth = 466
           inherited edFormula: TLabeledEdit
             Height = 26
             EditLabel.Width = 57

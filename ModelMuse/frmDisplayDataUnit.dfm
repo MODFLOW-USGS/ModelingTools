@@ -4,8 +4,8 @@ inherited frmDisplayData: TfrmDisplayData
   Caption = 'Data Visualization'
   ClientHeight = 533
   ClientWidth = 778
-  ExplicitWidth = 790
-  ExplicitHeight = 571
+  ExplicitWidth = 794
+  ExplicitHeight = 572
   TextHeight = 18
   object splSplit: TSplitter
     Left = 201
@@ -908,8 +908,8 @@ inherited frmDisplayData: TfrmDisplayData
         inherited pcChoices: TPageControl
           Width = 572
           Height = 492
-          ExplicitWidth = 568
-          ExplicitHeight = 491
+          ExplicitWidth = 572
+          ExplicitHeight = 492
           inherited tabSelection: TTabSheet
             ExplicitTop = 29
             ExplicitWidth = 564
@@ -976,16 +976,16 @@ inherited frmDisplayData: TfrmDisplayData
               Width = 273
               Height = 26
               ExplicitLeft = 8
-              ExplicitTop = 278
-              ExplicitWidth = 269
+              ExplicitTop = 279
+              ExplicitWidth = 273
               ExplicitHeight = 26
             end
             inherited seCycles: TJvSpinEdit
               Left = 431
               Top = 330
               Height = 26
-              ExplicitLeft = 427
-              ExplicitTop = 329
+              ExplicitLeft = 431
+              ExplicitTop = 330
               ExplicitHeight = 26
             end
             inherited jsColorExponent: TJvxSlider
@@ -997,7 +997,7 @@ inherited frmDisplayData: TfrmDisplayData
               Top = 381
               Height = 26
               ExplicitLeft = 164
-              ExplicitTop = 380
+              ExplicitTop = 381
               ExplicitHeight = 26
             end
             inherited cbLogTransform: TCheckBox
@@ -1005,20 +1005,20 @@ inherited frmDisplayData: TfrmDisplayData
               Top = 381
               Height = 20
               ExplicitLeft = 263
-              ExplicitTop = 380
+              ExplicitTop = 381
               ExplicitHeight = 20
             end
             inherited udDataSets: TJvUpDown
               Left = 401
               Height = 26
-              ExplicitLeft = 397
+              ExplicitLeft = 401
               ExplicitHeight = 26
             end
             inherited rgUpdateLimitChoice: TRadioGroup
               Top = 171
               Width = 354
-              ExplicitTop = 170
-              ExplicitWidth = 350
+              ExplicitTop = 171
+              ExplicitWidth = 354
             end
             inherited virttreecomboDataSets: TRbwStringTreeCombo
               Left = 7
@@ -1026,36 +1026,36 @@ inherited frmDisplayData: TfrmDisplayData
               Height = 26
               Tree.DefaultNodeHeight = 20
               ExplicitLeft = 7
-              ExplicitWidth = 406
+              ExplicitWidth = 410
               ExplicitHeight = 26
             end
             inherited reComment: TRichEdit
               Width = 521
               Height = 82
               ParentFont = True
-              ExplicitWidth = 517
-              ExplicitHeight = 81
+              ExplicitWidth = 521
+              ExplicitHeight = 82
             end
             inherited btnColorSchemes: TButton
               Left = 304
               Top = 272
               Width = 120
-              ExplicitLeft = 300
-              ExplicitTop = 271
+              ExplicitLeft = 304
+              ExplicitTop = 272
               ExplicitWidth = 120
             end
             inherited udTime: TJvUpDown
               Left = 520
               Top = 26
               Height = 26
-              ExplicitLeft = 516
+              ExplicitLeft = 520
               ExplicitTop = 26
               ExplicitHeight = 26
             end
             inherited comboTime3D: TJvComboBox
               Left = 429
               Height = 26
-              ExplicitLeft = 425
+              ExplicitLeft = 429
               ExplicitHeight = 26
             end
           end
@@ -2210,7 +2210,6 @@ inherited frmDisplayData: TfrmDisplayData
       00650061006D0020004C0069006E006B007300}
     Items.Links = {
       0700000005000000060000000000000004000000030000000200000001000000}
-    ExplicitHeight = 491
   end
   object pnlBottom: TPanel
     Left = 0
@@ -2219,13 +2218,11 @@ inherited frmDisplayData: TfrmDisplayData
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 491
-    ExplicitWidth = 774
     DesignSize = (
       778
       41)
     object btnHelp: TBitBtn
-      Left = 412
+      Left = 452
       Top = 6
       Width = 101
       Height = 33
@@ -2234,10 +2231,9 @@ inherited frmDisplayData: TfrmDisplayData
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 408
     end
     object btnApply: TBitBtn
-      Left = 519
+      Left = 559
       Top = 6
       Width = 101
       Height = 33
@@ -2264,10 +2260,9 @@ inherited frmDisplayData: TfrmDisplayData
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnApplyClick
-      ExplicitLeft = 515
     end
     object btnClose: TBitBtn
-      Left = 626
+      Left = 666
       Top = 6
       Width = 101
       Height = 33
@@ -2275,7 +2270,6 @@ inherited frmDisplayData: TfrmDisplayData
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 622
     end
   end
 end

@@ -5,7 +5,7 @@ inherited frameScreenObjectFhbFlow: TframeScreenObjectFhbFlow
     ExplicitTop = 240
     ExplicitHeight = 76
     DesignSize = (
-      320
+      541
       76)
     object lblConductanceInterpretation: TLabel [1]
       Left = 8

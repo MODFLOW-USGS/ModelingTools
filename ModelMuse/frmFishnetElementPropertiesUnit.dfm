@@ -4,11 +4,11 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
   Caption = 'Fishnet Quadrilateral Properties'
   ClientHeight = 442
   ClientWidth = 480
-  ExplicitWidth = 492
-  ExplicitHeight = 480
+  ExplicitWidth = 496
+  ExplicitHeight = 481
   TextHeight = 18
   object btnHelp: TBitBtn
-    Left = 84
+    Left = 191
     Top = 404
     Width = 89
     Height = 33
@@ -18,10 +18,9 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
     NumGlyphs = 2
     TabOrder = 1
     OnClick = btnHelpClick
-    ExplicitTop = 403
   end
   object btnOK: TBitBtn
-    Left = 179
+    Left = 286
     Top = 404
     Width = 89
     Height = 33
@@ -30,10 +29,9 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
     NumGlyphs = 2
     TabOrder = 2
     OnClick = btnOKClick
-    ExplicitTop = 403
   end
   object btnCancel: TBitBtn
-    Left = 274
+    Left = 381
     Top = 404
     Width = 91
     Height = 33
@@ -41,7 +39,6 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 3
-    ExplicitTop = 403
   end
   object pc1: TPageControl
     Left = 0
@@ -52,8 +49,6 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
-    ExplicitWidth = 476
-    ExplicitHeight = 397
     object tabCornerCoordinates: TTabSheet
       Caption = 'Corner Coordinates'
       ImageIndex = 2
@@ -171,10 +166,10 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
           end
           inherited pnl1: TPanel
             Width = 220
-            ExplicitWidth = 224
+            ExplicitWidth = 220
             inherited lbl3: TLabel
-              Width = 142
-              Height = 36
+              Width = 220
+              Height = 41
               Caption = 'Discretization within quadrilateral'
               ExplicitWidth = 142
               ExplicitHeight = 36
@@ -183,7 +178,7 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
           inherited pnlPaintboxParent: TPanel
             Left = 135
             Height = 322
-            ExplicitLeft = 139
+            ExplicitLeft = 135
             ExplicitHeight = 322
             inherited pbSubLayers: TPaintBox
               Height = 287
@@ -226,8 +221,8 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
         Height = 365
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 468
-        ExplicitHeight = 364
+        ExplicitWidth = 472
+        ExplicitHeight = 365
         inherited lbl1: TLabel
           Width = 95
           Height = 18
@@ -245,8 +240,8 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
         inherited pnlDiscritization: TPanel
           Width = 220
           Height = 363
-          ExplicitWidth = 216
-          ExplicitHeight = 362
+          ExplicitWidth = 220
+          ExplicitHeight = 363
           inherited spl1: TSplitter
             Left = 132
             Height = 322
@@ -256,12 +251,12 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
           inherited rdgSubLayerBoundaries: TRbwDataGrid4
             Width = 132
             Height = 322
-            ExplicitWidth = 128
-            ExplicitHeight = 321
+            ExplicitWidth = 132
+            ExplicitHeight = 322
           end
           inherited pnl1: TPanel
             Width = 220
-            ExplicitWidth = 216
+            ExplicitWidth = 220
             inherited lbl3: TLabel
               Width = 220
               Height = 41
@@ -273,8 +268,8 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
           inherited pnlPaintboxParent: TPanel
             Left = 135
             Height = 322
-            ExplicitLeft = 131
-            ExplicitHeight = 321
+            ExplicitLeft = 135
+            ExplicitHeight = 322
             inherited pbSubLayers: TPaintBox
               Height = 287
               ExplicitHeight = 287
@@ -302,7 +297,7 @@ inherited frmFishnetElementProperties: TfrmFishnetElementProperties
             'Increase toward middle'
             'Increase toward edges'
             'Custom')
-          ExplicitHeight = 246
+          ExplicitHeight = 247
         end
       end
     end

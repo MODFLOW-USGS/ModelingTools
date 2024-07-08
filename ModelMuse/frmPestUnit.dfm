@@ -3353,7 +3353,7 @@ inherited frmPEST: TfrmPEST
     Align = alBottom
     TabOrder = 2
     object btnHelp: TBitBtn
-      Left = 446
+      Left = 494
       Top = 6
       Width = 83
       Height = 33
@@ -3363,7 +3363,7 @@ inherited frmPEST: TfrmPEST
       OnClick = btnHelpClick
     end
     object btnOK: TBitBtn
-      Left = 535
+      Left = 583
       Top = 6
       Width = 83
       Height = 33
@@ -3373,7 +3373,7 @@ inherited frmPEST: TfrmPEST
       OnClick = btnOKClick
     end
     object btnCancel: TBitBtn
-      Left = 624
+      Left = 672
       Top = 6
       Width = 83
       Height = 33

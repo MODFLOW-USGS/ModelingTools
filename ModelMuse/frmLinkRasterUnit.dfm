@@ -1,35 +1,32 @@
 inherited frmLinkRaster: TfrmLinkRaster
   Caption = 'Links to Rasters'
   ClientWidth = 583
-  ExplicitWidth = 595
+  ExplicitWidth = 599
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 173
+    Top = 151
     Width = 583
     Height = 50
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 172
-    ExplicitWidth = 579
     DesignSize = (
       583
       50)
     object btnCancel: TBitBtn
-      Left = 465
-      Top = 7
+      Left = 481
+      Top = 6
       Width = 91
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 461
     end
     object btnOK: TBitBtn
-      Left = 368
-      Top = 6
+      Left = 384
+      Top = 5
       Width = 91
       Height = 33
       Anchors = [akTop, akRight]
@@ -37,35 +34,33 @@ inherited frmLinkRaster: TfrmLinkRaster
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnOKClick
-      ExplicitLeft = 364
     end
     object btnHelp: TBitBtn
-      Left = 271
-      Top = 7
+      Left = 287
+      Top = 6
       Width = 91
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkHelp
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 267
     end
   end
   inline frameRasters: TframeGrid
     Left = 0
     Top = 0
     Width = 583
-    Height = 173
+    Height = 151
     Align = alClient
     AutoScroll = True
     TabOrder = 0
-    ExplicitWidth = 579
-    ExplicitHeight = 172
+    ExplicitWidth = 583
+    ExplicitHeight = 151
     inherited Panel: TPanel
-      Top = 132
+      Top = 110
       Width = 583
-      ExplicitTop = 131
-      ExplicitWidth = 579
+      ExplicitTop = 110
+      ExplicitWidth = 583
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -91,7 +86,7 @@ inherited frmLinkRaster: TfrmLinkRaster
     end
     inherited Grid: TRbwDataGrid4
       Width = 583
-      Height = 132
+      Height = 110
       ColCount = 3
       OnBeforeDrawCell = frameRastersGridBeforeDrawCell
       OnButtonClick = frameRastersGridButtonClick
@@ -171,8 +166,8 @@ inherited frmLinkRaster: TfrmLinkRaster
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 579
-      ExplicitHeight = 131
+      ExplicitWidth = 583
+      ExplicitHeight = 110
       ColWidths = (
         64
         64

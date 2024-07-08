@@ -1,48 +1,39 @@
 inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
-  Width = 482
   Height = 399
-  ExplicitWidth = 482
   ExplicitHeight = 399
   inherited pnlBottom: TPanel
     Top = 353
-    Width = 482
     ExplicitTop = 353
     ExplicitWidth = 482
     DesignSize = (
-      482
+      541
       46)
     inherited seNumberOfTimes: TJvSpinEdit
       Top = 12
       ExplicitTop = 12
     end
     inherited btnDelete: TBitBtn
-      Left = 394
       ExplicitLeft = 394
     end
     inherited btnInsert: TBitBtn
-      Left = 306
+      Left = 365
       ExplicitLeft = 306
     end
   end
   inherited pnlTop: TPanel
-    Width = 482
     ExplicitWidth = 482
     inherited pnlCaption: TPanel
-      Width = 480
       ExplicitWidth = 480
     end
   end
   inherited pnlGrid: TPanel
-    Width = 482
     Height = 135
     ExplicitWidth = 482
     ExplicitHeight = 135
     inherited pnlEditGrid: TPanel
-      Width = 480
       ExplicitWidth = 480
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 480
       Height = 83
       RowCount = 4
       ExplicitWidth = 480
@@ -52,11 +43,12 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
   object pgcSft: TPageControl
     Left = 0
     Top = 160
-    Width = 482
+    Width = 541
     Height = 193
     ActivePage = tsHeadWaters
     Align = alBottom
     TabOrder = 3
+    ExplicitWidth = 482
     object tsSteady: TTabSheet
       Caption = 'Steady'
       object lblObsLocation: TLabel
@@ -70,7 +62,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         AlignWithMargins = True
         Left = 0
         Top = 35
-        Width = 474
+        Width = 533
         Height = 128
         Margins.Left = 0
         Margins.Top = 35
@@ -163,6 +155,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
             AutoAdjustColWidths = False
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 474
       end
       object comboObsLocation: TComboBox
         Left = 16
@@ -190,13 +183,13 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object pnlBottomPrecip: TPanel
         Left = 0
         Top = 117
-        Width = 474
+        Width = 533
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
         DesignSize = (
-          474
+          533
           46)
         object lblNumberOfTimesPrecip: TLabel
           Left = 64
@@ -216,7 +209,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           OnChange = seNumberOfTimesPrecipChange
         end
         object btnDeletePrecip: TBitBtn
-          Left = 390
+          Left = 449
           Top = 6
           Width = 82
           Height = 33
@@ -254,7 +247,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           OnClick = btnDeletePrecipClick
         end
         object btnInsertPrecip: TBitBtn
-          Left = 306
+          Left = 365
           Top = 6
           Width = 82
           Height = 33
@@ -277,14 +270,14 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object pnlPrecip: TPanel
         Left = 0
         Top = 0
-        Width = 474
+        Width = 533
         Height = 117
         Align = alClient
         TabOrder = 1
         object pnlPrecipFormula: TPanel
           Left = 1
           Top = 1
-          Width = 472
+          Width = 531
           Height = 50
           Align = alTop
           BevelOuter = bvNone
@@ -314,7 +307,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         object rdgPrecip: TRbwDataGrid4
           Left = 1
           Top = 51
-          Width = 472
+          Width = 531
           Height = 65
           Align = alClient
           ColCount = 3
@@ -419,13 +412,13 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object pnlBottomRunoff: TPanel
         Left = 0
         Top = 117
-        Width = 474
+        Width = 533
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
         DesignSize = (
-          474
+          533
           46)
         object lblNumberOfTimesRunoff: TLabel
           Left = 64
@@ -445,7 +438,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           OnChange = seNumberOfTimesRunoffChange
         end
         object btnDeleteRunoff: TBitBtn
-          Left = 390
+          Left = 449
           Top = 6
           Width = 82
           Height = 33
@@ -483,7 +476,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           OnClick = btnDeleteRunoffClick
         end
         object btnInsertRunoff: TBitBtn
-          Left = 306
+          Left = 365
           Top = 6
           Width = 82
           Height = 33
@@ -506,14 +499,14 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object pnlRunoff: TPanel
         Left = 0
         Top = 0
-        Width = 474
+        Width = 533
         Height = 117
         Align = alClient
         TabOrder = 1
         object pnlFormulaRunoff: TPanel
           Left = 1
           Top = 1
-          Width = 472
+          Width = 531
           Height = 50
           Align = alTop
           BevelOuter = bvNone
@@ -543,7 +536,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         object rdgRunoff: TRbwDataGrid4
           Left = 1
           Top = 51
-          Width = 472
+          Width = 531
           Height = 65
           Align = alClient
           ColCount = 3
@@ -648,13 +641,13 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object pnlBottomConstConc: TPanel
         Left = 0
         Top = 117
-        Width = 474
+        Width = 533
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
         DesignSize = (
-          474
+          533
           46)
         object lblNumberOfTimesConstConc: TLabel
           Left = 64
@@ -674,7 +667,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           OnChange = seNumberOfTimesConstConcChange
         end
         object btnDeleteConstConc: TBitBtn
-          Left = 390
+          Left = 449
           Top = 6
           Width = 82
           Height = 33
@@ -712,7 +705,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
           OnClick = btnDeleteConstConcClick
         end
         object btnInsertConstConc: TBitBtn
-          Left = 306
+          Left = 365
           Top = 6
           Width = 82
           Height = 33
@@ -735,14 +728,14 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
       object pnlGridConstConc: TPanel
         Left = 0
         Top = 0
-        Width = 474
+        Width = 533
         Height = 117
         Align = alClient
         TabOrder = 1
         object pnlFormulaConstConc: TPanel
           Left = 1
           Top = 1
-          Width = 472
+          Width = 531
           Height = 50
           Align = alTop
           BevelOuter = bvNone
@@ -772,7 +765,7 @@ inherited frameScreenObjectMt3dSft: TframeScreenObjectMt3dSft
         object rdgConstConc: TRbwDataGrid4
           Left = 1
           Top = 51
-          Width = 472
+          Width = 531
           Height = 65
           Align = alClient
           ColCount = 3

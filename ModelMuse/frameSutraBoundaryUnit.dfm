@@ -7,7 +7,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
     ExplicitTop = 224
     ExplicitHeight = 128
     DesignSize = (
-      320
+      565
       128)
     inherited lblNumTimes: TLabel
       Left = 65
@@ -30,14 +30,14 @@ inherited frameSutraBoundary: TframeSutraBoundary
       ExplicitTop = 88
     end
     inherited btnDelete: TBitBtn
-      Left = 237
+      Left = 482
       Top = 88
       TabOrder = 1
       ExplicitLeft = 237
       ExplicitTop = 88
     end
     inherited btnInsert: TBitBtn
-      Left = 149
+      Left = 394
       Top = 88
       TabOrder = 0
       ExplicitLeft = 149
@@ -187,11 +187,12 @@ inherited frameSutraBoundary: TframeSutraBoundary
     object pnlEditGrid: TPanel
       Left = 1
       Top = 1
-      Width = 318
+      Width = 563
       Height = 50
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 318
       object lblFormula: TLabel
         Left = 136
         Top = 5
@@ -219,7 +220,7 @@ inherited frameSutraBoundary: TframeSutraBoundary
     Height = 81
     ExplicitHeight = 81
     DesignSize = (
-      320
+      565
       81)
     inherited lblSchedule: TLabel
       Left = 1

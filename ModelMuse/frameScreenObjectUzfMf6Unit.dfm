@@ -1,45 +1,36 @@
 inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
-  Width = 454
   Height = 435
-  ExplicitWidth = 454
   ExplicitHeight = 435
   inherited pnlBottom: TPanel
     Top = 389
-    Width = 454
     ExplicitTop = 389
     ExplicitWidth = 454
     DesignSize = (
-      454
+      541
       46)
     inherited btnDelete: TBitBtn
-      Left = 370
+      Left = 457
       ExplicitLeft = 370
     end
     inherited btnInsert: TBitBtn
-      Left = 282
       ExplicitLeft = 282
     end
   end
   inherited pnlTop: TPanel
-    Width = 454
     ExplicitWidth = 454
     inherited pnlCaption: TPanel
-      Width = 452
       ExplicitWidth = 452
     end
   end
   inherited pnlGrid: TPanel
-    Width = 454
     Height = 152
     Align = alTop
     ExplicitWidth = 454
     ExplicitHeight = 152
     inherited pnlEditGrid: TPanel
-      Width = 452
       ExplicitWidth = 452
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 452
       Height = 100
       ColCount = 10
       Columns = <
@@ -301,11 +292,12 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
   object pcUzf: TPageControl
     Left = 0
     Top = 177
-    Width = 454
+    Width = 541
     Height = 212
     ActivePage = tabTime
     Align = alClient
     TabOrder = 3
+    ExplicitWidth = 454
     object tabSteadyProperties: TTabSheet
       Caption = 'Steady properties'
       object lblSurfaceDepressionDepth: TLabel
@@ -562,10 +554,11 @@ inherited frameScreenObjectUzfMf6: TframeScreenObjectUzfMf6
       object jplGwt: TJvPageList
         Left = 126
         Top = 0
-        Width = 320
+        Width = 407
         Height = 182
         PropagateEnable = False
         Align = alClient
+        ExplicitWidth = 320
       end
     end
   end

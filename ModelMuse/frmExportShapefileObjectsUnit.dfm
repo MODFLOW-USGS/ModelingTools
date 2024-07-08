@@ -4,7 +4,6 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
   Caption = 'Export Objects as Shapefile'
   ClientHeight = 480
   ClientWidth = 605
-  OnResize = FormResize
   ExplicitWidth = 621
   ExplicitHeight = 519
   TextHeight = 18
@@ -32,8 +31,8 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Width = 605
     Height = 211
     TabOrder = 4
-    ExplicitTop = 270
-    ExplicitWidth = 609
+    ExplicitTop = 269
+    ExplicitWidth = 605
     ExplicitHeight = 211
     DesignSize = (
       605
@@ -46,25 +45,25 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Caption = 'Missing data value'
     end
     inherited btnClose: TBitBtn
-      Left = 381
+      Left = 409
       Top = 166
       Caption = '&OK'
       Kind = bkOK
       TabOrder = 6
       OnClick = btnCloseClick
-      ExplicitLeft = 393
+      ExplicitLeft = 409
       ExplicitTop = 166
     end
     inherited btnHelp: TBitBtn
-      Left = 286
+      Left = 314
       Top = 166
       TabOrder = 5
       OnClick = btnHelpClick
-      ExplicitLeft = 298
+      ExplicitLeft = 314
       ExplicitTop = 166
     end
     object BitBtn1: TBitBtn
-      Left = 476
+      Left = 504
       Top = 166
       Width = 89
       Height = 33
@@ -72,7 +71,6 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 7
-      ExplicitLeft = 488
     end
     object rdeMissingData: TRbwDataEntry
       Left = 8
@@ -197,8 +195,8 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     OnChecked = vstObjectsChecked
     ExplicitLeft = 260
     ExplicitTop = 41
-    ExplicitWidth = 229
-    ExplicitHeight = 230
+    ExplicitWidth = 221
+    ExplicitHeight = 228
   end
   object pnlTop: TPanel
     Left = 0
@@ -207,7 +205,6 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     Height = 41
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 609
     object lblObjects: TLabel
       Left = 314
       Top = 11
@@ -264,7 +261,6 @@ inherited frmExportShapefileObjects: TfrmExportShapefileObjects
     OnGetText = vstDataSetsGetText
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-    ExplicitHeight = 230
     Columns = <>
   end
   object chklstTimes: TCheckListBox

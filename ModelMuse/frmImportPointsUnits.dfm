@@ -20,25 +20,22 @@ inherited frmImportPoints: TfrmImportPoints
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 465
-    ExplicitWidth = 569
     DesignSize = (
       573
       49)
     object btnCancel: TBitBtn
-      Left = 432
-      Top = 6
+      Left = 480
+      Top = 2
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 428
     end
     object btnOK: TBitBtn
-      Left = 343
-      Top = 6
+      Left = 391
+      Top = 2
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
@@ -46,11 +43,10 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 339
     end
     object btnHelp: TBitBtn
-      Left = 254
-      Top = 6
+      Left = 302
+      Top = 2
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
@@ -58,7 +54,6 @@ inherited frmImportPoints: TfrmImportPoints
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 250
     end
   end
   object pcImportPoints: TPageControl
@@ -69,8 +64,6 @@ inherited frmImportPoints: TfrmImportPoints
     ActivePage = tabData
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 569
-    ExplicitHeight = 465
     object tabControls: TTabSheet
       Caption = 'Controls'
       object pnlRadioGroups: TPanel
@@ -289,8 +282,6 @@ inherited frmImportPoints: TfrmImportPoints
         Align = alBottom
         ParentColor = True
         TabOrder = 1
-        ExplicitTop = 383
-        ExplicitWidth = 561
         object lblRows: TLabel
           Left = 115
           Top = 13
@@ -406,8 +397,6 @@ inherited frmImportPoints: TfrmImportPoints
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 561
-        ExplicitHeight = 310
         ColWidths = (
           64
           64)
@@ -423,7 +412,6 @@ inherited frmImportPoints: TfrmImportPoints
         Align = alTop
         TabOrder = 2
         Visible = False
-        ExplicitWidth = 561
         object lblTimePeriods: TLabel
           Left = 271
           Top = 17

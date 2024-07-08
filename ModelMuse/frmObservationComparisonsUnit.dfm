@@ -14,8 +14,6 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Height = 35
     Align = alBottom
     TabOrder = 0
-    ExplicitTop = 277
-    ExplicitWidth = 784
     DesignSize = (
       780
       35)
@@ -28,7 +26,6 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 688
     end
     object btnOK: TBitBtn
       Left = 592
@@ -40,11 +37,10 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 600
     end
     object btnHelp: TBitBtn
       Left = 504
-      Top = 6
+      Top = 2
       Width = 82
       Height = 27
       Anchors = [akTop, akRight]
@@ -52,7 +48,6 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 512
     end
   end
   object treecomboInPlaceEditor: TRbwStringTreeCombo
@@ -128,13 +123,13 @@ inherited frmObservationComparisons: TfrmObservationComparisons
     Height = 276
     Align = alClient
     TabOrder = 2
-    ExplicitWidth = 784
-    ExplicitHeight = 277
+    ExplicitWidth = 780
+    ExplicitHeight = 276
     inherited Panel: TPanel
-      Top = 236
-      Width = 788
-      ExplicitTop = 236
-      ExplicitWidth = 784
+      Top = 235
+      Width = 780
+      ExplicitTop = 235
+      ExplicitWidth = 780
       inherited lbNumber: TLabel
         Width = 55
         Height = 18
@@ -159,8 +154,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
       end
     end
     inherited Grid: TRbwDataGrid4
-      Width = 788
-      Height = 236
+      Width = 780
+      Height = 235
       ColCount = 7
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
       OnExit = frameObsComparisonsGridExit
@@ -336,8 +331,8 @@ inherited frmObservationComparisons: TfrmObservationComparisons
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 784
-      ExplicitHeight = 236
+      ExplicitWidth = 780
+      ExplicitHeight = 235
     end
   end
 end

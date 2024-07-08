@@ -17,8 +17,8 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       408
       41)
     object btnClose: TBitBtn
-      Left = 242
-      Top = 4
+      Left = 306
+      Top = 6
       Width = 89
       Height = 33
       Anchors = [akTop, akRight]
@@ -27,8 +27,8 @@ inherited frmCustomSelectObjects: TfrmCustomSelectObjects
       TabOrder = 1
     end
     object btnHelp: TBitBtn
-      Left = 149
-      Top = 4
+      Left = 213
+      Top = 6
       Width = 89
       Height = 33
       Anchors = [akTop, akRight]

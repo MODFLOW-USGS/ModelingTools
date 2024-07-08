@@ -7,7 +7,7 @@ inherited frameScreenObjectWel: TframeScreenObjectWel
     ExplicitTop = 208
     ExplicitHeight = 106
     DesignSize = (
-      320
+      541
       106)
     object lblTabfile: TLabel [2]
       Left = 255

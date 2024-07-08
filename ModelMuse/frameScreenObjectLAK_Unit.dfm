@@ -1,17 +1,14 @@
 inherited frameScreenObjectLAK: TframeScreenObjectLAK
-  Width = 463
   Height = 567
-  ExplicitWidth = 463
   ExplicitHeight = 567
   inherited pnlBottom: TPanel
     Top = 448
-    Width = 463
     Height = 119
     ExplicitTop = 448
     ExplicitWidth = 463
     ExplicitHeight = 119
     DesignSize = (
-      463
+      541
       119)
     object lblInitialStage: TLabel [1]
       Left = 79
@@ -42,11 +39,10 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
       Caption = 'Lake ID'
     end
     inherited btnDelete: TBitBtn
-      Left = 375
       ExplicitLeft = 375
     end
     inherited btnInsert: TBitBtn
-      Left = 287
+      Left = 365
       ExplicitLeft = 287
     end
     object rdeInitialStage: TRbwDataEntry
@@ -101,25 +97,20 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
     end
   end
   inherited pnlTop: TPanel
-    Width = 463
     ExplicitWidth = 463
     inherited pnlCaption: TPanel
-      Width = 461
       ExplicitWidth = 461
     end
   end
   inherited pnlGrid: TPanel
-    Width = 463
     Height = 96
     Align = alTop
     ExplicitWidth = 463
     ExplicitHeight = 96
     inherited pnlEditGrid: TPanel
-      Width = 461
       ExplicitWidth = 461
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 461
       Height = 44
       ColCount = 8
       Columns = <
@@ -331,11 +322,12 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
   object pcLake: TPageControl
     Left = 0
     Top = 121
-    Width = 463
+    Width = 541
     Height = 327
     ActivePage = tabObservations
     Align = alClient
     TabOrder = 3
+    ExplicitWidth = 463
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
     end
@@ -343,18 +335,19 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
       Caption = 'Gage'
       ImageIndex = 3
       DesignSize = (
-        455
+        533
         297)
       object gbGage: TGroupBox
         Left = 3
         Top = 17
-        Width = 449
+        Width = 527
         Height = 160
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Gage output'
         TabOrder = 0
+        ExplicitWidth = 449
         DesignSize = (
-          449
+          527
           160)
         object cbGagStandard: TCheckBox
           Left = 3
@@ -391,7 +384,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         object cbGage4: TCheckBox
           Left = 3
           Top = 93
-          Width = 443
+          Width = 521
           Height = 56
           AllowGrayed = True
           Anchors = [akLeft, akTop, akRight]
@@ -403,6 +396,7 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
           TabOrder = 3
           WordWrap = True
           OnClick = cbGage4Click
+          ExplicitWidth = 443
         end
       end
     end
@@ -544,37 +538,46 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
       inline framePestObsLak: TframePestObs
         Left = 0
         Top = 0
-        Width = 455
+        Width = 533
         Height = 297
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 455
-        ExplicitHeight = 292
+        ExplicitHeight = 297
         inherited splObservations: TSplitter
           Top = 120
-          Width = 455
+          Width = 533
           ExplicitTop = -17
           ExplicitWidth = 455
         end
         inherited grpDirectObs: TGroupBox
-          Width = 455
+          Width = 533
           Height = 120
           ExplicitWidth = 455
-          ExplicitHeight = 115
+          ExplicitHeight = 120
           inherited frameObservations: TframeGrid
-            Width = 451
+            Width = 529
             Height = 101
             ExplicitTop = 17
             ExplicitWidth = 451
-            ExplicitHeight = 96
+            ExplicitHeight = 101
             inherited Panel: TPanel
               Top = 69
-              Width = 451
-              ExplicitTop = 64
+              Width = 529
+              ExplicitTop = 69
               ExplicitWidth = 451
+              inherited sbAdd: TSpeedButton
+                Left = 434
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 468
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 502
+              end
             end
             inherited Grid: TRbwDataGrid4
-              Width = 451
+              Width = 529
               Height = 69
               ExplicitWidth = 451
               ExplicitHeight = 69
@@ -583,21 +586,30 @@ inherited frameScreenObjectLAK: TframeScreenObjectLAK
         end
         inherited grpObsComparisons: TGroupBox
           Top = 125
-          Width = 455
-          ExplicitTop = 120
+          Width = 533
+          ExplicitTop = 125
           ExplicitWidth = 455
           inherited frameObsComparisons: TframeGrid
-            Width = 451
+            Width = 529
             ExplicitTop = 17
             ExplicitWidth = 451
             ExplicitHeight = 153
             inherited Panel: TPanel
-              Width = 451
+              Width = 529
               ExplicitTop = 118
               ExplicitWidth = 451
+              inherited sbAdd: TSpeedButton
+                Left = 434
+              end
+              inherited sbInsert: TSpeedButton
+                Left = 468
+              end
+              inherited sbDelete: TSpeedButton
+                Left = 502
+              end
             end
             inherited Grid: TRbwDataGrid4
-              Width = 451
+              Width = 529
               ExplicitWidth = 451
             end
           end

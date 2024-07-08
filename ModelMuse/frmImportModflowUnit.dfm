@@ -4,10 +4,8 @@ inherited frmImportModflow: TfrmImportModflow
   Caption = 'Import MODFLOW-2005 or -NWT Model'
   ClientHeight = 444
   ClientWidth = 487
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 499
-  ExplicitHeight = 482
+  ExplicitWidth = 503
+  ExplicitHeight = 483
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -16,14 +14,12 @@ inherited frmImportModflow: TfrmImportModflow
     Height = 105
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 338
-    ExplicitWidth = 483
     DesignSize = (
       487
       105)
     object btnHelp: TBitBtn
-      Left = 202
-      Top = 4
+      Left = 215
+      Top = 2
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
@@ -31,11 +27,10 @@ inherited frmImportModflow: TfrmImportModflow
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 198
     end
     object btnOK: TBitBtn
-      Left = 291
-      Top = 4
+      Left = 304
+      Top = 2
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
@@ -44,18 +39,16 @@ inherited frmImportModflow: TfrmImportModflow
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 287
     end
     object btnCancel: TBitBtn
-      Left = 380
-      Top = 4
+      Left = 393
+      Top = 2
       Width = 83
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 376
     end
     object pbProgress: TProgressBar
       Left = 1
@@ -65,7 +58,6 @@ inherited frmImportModflow: TfrmImportModflow
       Margins.Bottom = 0
       Align = alBottom
       TabOrder = 4
-      ExplicitWidth = 481
     end
     object sbStatusBar: TStatusBar
       Left = 1
@@ -76,7 +68,6 @@ inherited frmImportModflow: TfrmImportModflow
       ParentFont = True
       SimplePanel = True
       UseSystemFont = False
-      ExplicitWidth = 481
     end
   end
   object pgcMain: TPageControl
@@ -87,8 +78,6 @@ inherited frmImportModflow: TfrmImportModflow
     ActivePage = tabSubmodel
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 483
-    ExplicitHeight = 338
     object tabModel: TTabSheet
       Caption = 'Model'
       DesignSize = (
@@ -240,7 +229,6 @@ inherited frmImportModflow: TfrmImportModflow
         TabOrder = 0
         WordWrap = True
         OnClick = rgSubmodelChoiceClick
-        ExplicitWidth = 475
       end
       object pglstBoundaySpecification: TJvPageList
         Left = 0
@@ -250,8 +238,6 @@ inherited frmImportModflow: TfrmImportModflow
         ActivePage = jvspPolygon
         PropagateEnable = False
         Align = alClient
-        ExplicitWidth = 475
-        ExplicitHeight = 66
         object jvspNone: TJvStandardPage
           Left = 0
           Top = 0
@@ -265,8 +251,6 @@ inherited frmImportModflow: TfrmImportModflow
           Width = 479
           Height = 67
           Caption = 'jvspPolygon'
-          ExplicitWidth = 475
-          ExplicitHeight = 66
           DesignSize = (
             479
             67)
@@ -286,7 +270,6 @@ inherited frmImportModflow: TfrmImportModflow
             Anchors = [akLeft, akTop, akRight]
             TabOrder = 0
             Text = ''
-            ExplicitWidth = 460
           end
         end
         object jvspColRow: TJvStandardPage
@@ -385,8 +368,6 @@ inherited frmImportModflow: TfrmImportModflow
         Align = alBottom
         Caption = 'Submodel boundary conditions (optional)'
         TabOrder = 2
-        ExplicitTop = 171
-        ExplicitWidth = 475
         DesignSize = (
           479
           134)
@@ -417,7 +398,6 @@ inherited frmImportModflow: TfrmImportModflow
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 0
           Text = ''
-          ExplicitWidth = 444
         end
         object fedFlow: TJvFilenameEdit
           Left = 8
@@ -430,7 +410,6 @@ inherited frmImportModflow: TfrmImportModflow
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 1
           Text = ''
-          ExplicitWidth = 444
         end
       end
     end

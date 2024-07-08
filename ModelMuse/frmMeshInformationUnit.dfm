@@ -4,8 +4,8 @@ inherited frmMeshInformation: TfrmMeshInformation
   Caption = 'Mesh Information'
   ClientHeight = 405
   ClientWidth = 524
-  ExplicitWidth = 536
-  ExplicitHeight = 443
+  ExplicitWidth = 540
+  ExplicitHeight = 444
   TextHeight = 18
   object pnl1: TPanel
     Left = 0
@@ -14,12 +14,10 @@ inherited frmMeshInformation: TfrmMeshInformation
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 363
-    ExplicitWidth = 520
     object btnHelp: TBitBtn
       AlignWithMargins = True
-      Left = 264
-      Top = 6
+      Left = 336
+      Top = 2
       Width = 89
       Height = 33
       Kind = bkHelp
@@ -28,8 +26,8 @@ inherited frmMeshInformation: TfrmMeshInformation
       OnClick = btnHelpClick
     end
     object btnOK: TBitBtn
-      Left = 359
-      Top = 6
+      Left = 431
+      Top = 2
       Width = 89
       Height = 33
       Kind = bkClose
@@ -44,7 +42,6 @@ inherited frmMeshInformation: TfrmMeshInformation
     Height = 81
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 520
     object lblBandwidth: TLabel
       Left = 8
       Top = 8
@@ -75,12 +72,10 @@ inherited frmMeshInformation: TfrmMeshInformation
     ActivePage = tabElementCounts
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 520
-    ExplicitHeight = 282
     object tabElementAngles: TTabSheet
       Caption = 'Element Angles'
       object splitterVertical: TSplitter
-        Left = 303
+        Left = 299
         Top = 41
         Width = 5
         Height = 209
@@ -92,22 +87,20 @@ inherited frmMeshInformation: TfrmMeshInformation
       object pbHistogram: TPaintBox
         Left = 0
         Top = 41
-        Width = 303
+        Width = 299
         Height = 209
         Align = alClient
         OnPaint = pbHistogramPaint
         ExplicitLeft = -1
         ExplicitTop = 39
-        ExplicitWidth = 299
       end
       object pnl3: TPanel
         Left = 0
         Top = 0
-        Width = 520
+        Width = 516
         Height = 41
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 516
         object lblBinSize: TLabel
           Left = 137
           Top = 8
@@ -128,14 +121,13 @@ inherited frmMeshInformation: TfrmMeshInformation
         end
       end
       object pnl4: TPanel
-        Left = 308
+        Left = 304
         Top = 41
         Width = 212
         Height = 209
         Align = alRight
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitLeft = 304
         object splHorizontal: TSplitter
           Left = 0
           Top = 104
@@ -272,7 +264,7 @@ inherited frmMeshInformation: TfrmMeshInformation
       Caption = 'Aspect Ratios'
       ImageIndex = 2
       object splAspectRatio: TSplitter
-        Left = 515
+        Left = 511
         Top = 41
         Width = 5
         Height = 209
@@ -284,7 +276,7 @@ inherited frmMeshInformation: TfrmMeshInformation
       object pbAspectRatio: TPaintBox
         Left = 0
         Top = 41
-        Width = 311
+        Width = 307
         Height = 209
         Align = alClient
         OnPaint = pbAspectRatioPaint
@@ -293,7 +285,7 @@ inherited frmMeshInformation: TfrmMeshInformation
         ExplicitWidth = 157
       end
       object rdgAspectRatio: TRbwDataGrid4
-        Left = 311
+        Left = 307
         Top = 41
         Width = 204
         Height = 209
@@ -362,7 +354,6 @@ inherited frmMeshInformation: TfrmMeshInformation
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitLeft = 307
         ColWidths = (
           74
           95)
@@ -370,11 +361,10 @@ inherited frmMeshInformation: TfrmMeshInformation
       object pnlAspectRatio: TPanel
         Left = 0
         Top = 0
-        Width = 520
+        Width = 516
         Height = 41
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 516
         object lblAspectRatioBinSize: TLabel
           Left = 137
           Top = 8
@@ -400,7 +390,7 @@ inherited frmMeshInformation: TfrmMeshInformation
       Caption = 'Elements per Node'
       ImageIndex = 1
       object splNodes: TSplitter
-        Left = 311
+        Left = 307
         Top = 0
         Width = 5
         Height = 250
@@ -411,7 +401,7 @@ inherited frmMeshInformation: TfrmMeshInformation
       object pbElementPerNode: TPaintBox
         Left = 0
         Top = 0
-        Width = 311
+        Width = 307
         Height = 250
         Align = alClient
         OnPaint = pbElementPerNodePaint
@@ -420,7 +410,7 @@ inherited frmMeshInformation: TfrmMeshInformation
         ExplicitWidth = 157
       end
       object rdgNodes: TRbwDataGrid4
-        Left = 316
+        Left = 312
         Top = 0
         Width = 204
         Height = 250
@@ -489,8 +479,6 @@ inherited frmMeshInformation: TfrmMeshInformation
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitLeft = 308
-        ExplicitHeight = 249
         ColWidths = (
           74
           95)

@@ -30,7 +30,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       600
       41)
     object btnHelp: TBitBtn
-      Left = 320
+      Left = 329
       Top = 6
       Width = 82
       Height = 27
@@ -41,7 +41,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       OnClick = btnHelpClick
     end
     object btnOK: TBitBtn
-      Left = 408
+      Left = 417
       Top = 6
       Width = 82
       Height = 27
@@ -52,7 +52,7 @@ inherited frmModflowOutputControl: TfrmModflowOutputControl
       OnClick = btnOKClick
     end
     object btnCancel: TBitBtn
-      Left = 496
+      Left = 505
       Top = 6
       Width = 83
       Height = 27

@@ -56,8 +56,8 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     TabOrder = 2
   end
   object btnHelp: TBitBtn
-    Left = 138
-    Top = 188
+    Left = 150
+    Top = 191
     Width = 82
     Height = 30
     Anchors = [akTop, akRight]
@@ -65,11 +65,10 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     NumGlyphs = 2
     TabOrder = 3
     OnClick = btnHelpClick
-    ExplicitLeft = 142
   end
   object btnOK: TBitBtn
-    Left = 226
-    Top = 188
+    Left = 238
+    Top = 191
     Width = 82
     Height = 30
     Anchors = [akTop, akRight]
@@ -77,18 +76,16 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
     NumGlyphs = 2
     TabOrder = 4
     OnClick = btnOKClick
-    ExplicitLeft = 230
   end
   object btnCancel: TBitBtn
-    Left = 314
-    Top = 188
+    Left = 326
+    Top = 191
     Width = 83
     Height = 30
     Anchors = [akTop, akRight]
     Kind = bkCancel
     NumGlyphs = 2
     TabOrder = 5
-    ExplicitLeft = 318
   end
   object dlgOpenFootprintFile: TJvOpenDialog
     DefaultExt = '.nod'

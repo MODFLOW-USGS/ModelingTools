@@ -1,53 +1,43 @@
 inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
-  Width = 485
   Height = 552
-  ExplicitWidth = 485
   ExplicitHeight = 552
   inherited pnlBottom: TPanel
     Top = 504
-    Width = 485
     Height = 48
     ExplicitTop = 504
     ExplicitWidth = 485
     ExplicitHeight = 48
     DesignSize = (
-      485
+      541
       48)
     inherited lblNumTimes: TLabel
       Top = 8
       ExplicitTop = 8
     end
     inherited btnDelete: TBitBtn
-      Left = 385
-      ExplicitLeft = 385
+      ExplicitLeft = 453
     end
     inherited btnInsert: TBitBtn
-      Left = 297
-      ExplicitLeft = 297
+      ExplicitLeft = 369
     end
   end
   inherited pnlTop: TPanel
-    Width = 485
     ExplicitWidth = 485
     inherited pnlCaption: TPanel
-      Width = 483
       ExplicitWidth = 483
     end
   end
   inherited pnlGrid: TPanel
     Top = 360
-    Width = 485
     Height = 144
     Align = alBottom
     ExplicitTop = 360
     ExplicitWidth = 485
     ExplicitHeight = 144
     inherited pnlEditGrid: TPanel
-      Width = 483
       ExplicitWidth = 483
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 483
       Height = 92
       ColCount = 9
       Columns = <
@@ -288,11 +278,12 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
   object pcLake: TPageControl
     Left = 0
     Top = 25
-    Width = 485
+    Width = 541
     Height = 335
     ActivePage = tabLakeTable
     Align = alClient
     TabOrder = 3
+    ExplicitWidth = 485
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
       ImageIndex = 2
@@ -578,16 +569,16 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
       inline frameLakeTable: TframeFormulaGrid
         Left = 0
         Top = 0
-        Width = 477
+        Width = 533
         Height = 305
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 477
-        ExplicitHeight = 300
+        ExplicitHeight = 305
         inherited Panel: TPanel
           Top = 264
-          Width = 477
-          ExplicitTop = 259
+          Width = 533
+          ExplicitTop = 264
           ExplicitWidth = 477
           inherited lbNumber: TLabel
             Width = 152
@@ -595,25 +586,25 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
             ExplicitWidth = 152
           end
           inherited sbAdd: TSpeedButton
-            Left = 388
+            Left = 444
             Anchors = [akTop, akRight]
             ExplicitLeft = 389
           end
           inherited sbInsert: TSpeedButton
-            Left = 417
+            Left = 473
             Width = 24
             Anchors = [akTop, akRight]
             ExplicitLeft = 418
             ExplicitWidth = 24
           end
           inherited sbDelete: TSpeedButton
-            Left = 448
+            Left = 504
             Anchors = [akTop, akRight]
             ExplicitLeft = 449
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 477
+          Width = 533
           Height = 207
           ColCount = 4
           OnSetEditText = frameLakeTableGridSetEditText
@@ -718,7 +709,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
           ExplicitHeight = 207
         end
         inherited pnlTop: TPanel
-          Width = 477
+          Width = 533
           ExplicitWidth = 477
         end
       end
@@ -749,7 +740,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
       object jplGwt: TJvPageList
         Left = 126
         Top = 0
-        Width = 351
+        Width = 407
         Height = 305
         PropagateEnable = False
         Align = alClient

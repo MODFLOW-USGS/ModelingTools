@@ -1,26 +1,20 @@
 inherited frameScreenObjectMvr: TframeScreenObjectMvr
-  Width = 412
   Height = 439
-  ExplicitWidth = 412
   ExplicitHeight = 439
   inherited pnlTop: TPanel [0]
-    Width = 412
     ExplicitWidth = 412
     inherited pnlCaption: TPanel
-      Width = 410
       ExplicitWidth = 410
     end
   end
   inherited pnlGrid: TPanel [1]
     Top = 304
-    Width = 412
     Height = 135
     Align = alBottom
     ExplicitTop = 304
     ExplicitWidth = 412
     ExplicitHeight = 135
     inherited pnlEditGrid: TPanel
-      Width = 410
       ExplicitWidth = 410
       object lblMvrType: TLabel [1]
         Left = 199
@@ -47,7 +41,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       end
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 410
       Height = 83
       ColCount = 4
       Columns = <
@@ -164,11 +157,12 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
   object pcMain: TPageControl [2]
     Left = 0
     Top = 25
-    Width = 412
+    Width = 541
     Height = 239
     ActivePage = tabMvrMap
     Align = alClient
     TabOrder = 2
+    ExplicitWidth = 412
     object tabConnections: TTabSheet
       Caption = 'Connections'
       ImageIndex = 1
@@ -202,7 +196,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         AlignWithMargins = True
         Left = 0
         Top = 64
-        Width = 404
+        Width = 533
         Height = 145
         Margins.Left = 0
         Margins.Top = 64
@@ -492,8 +486,6 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitLeft = 4
-          ExplicitTop = -1
           ExplicitWidth = 110
           ExplicitHeight = 120
         end
@@ -501,15 +493,16 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
       object pnl1: TPanel
         Left = 120
         Top = 0
-        Width = 284
+        Width = 413
         Height = 209
         Align = alClient
         Caption = 'pnl1'
         TabOrder = 1
+        ExplicitWidth = 284
         object rdgMap: TRbwDataGrid4
           Left = 1
           Top = 1
-          Width = 282
+          Width = 411
           Height = 166
           Align = alClient
           ColCount = 3
@@ -603,7 +596,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
               AutoAdjustColWidths = False
             end>
           WordWrapRowCaptions = False
-          ExplicitLeft = 6
+          ExplicitWidth = 282
           RowHeights = (
             24
             24
@@ -614,10 +607,11 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         object pnl2: TPanel
           Left = 1
           Top = 167
-          Width = 282
+          Width = 411
           Height = 41
           Align = alBottom
           TabOrder = 1
+          ExplicitWidth = 282
           object lblReceiverNumber: TLabel
             Left = 76
             Top = 11
@@ -641,21 +635,18 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
   end
   inherited pnlBottom: TPanel [3]
     Top = 264
-    Width = 412
     Height = 40
     TabOrder = 3
     ExplicitTop = 264
     ExplicitWidth = 412
     ExplicitHeight = 40
     DesignSize = (
-      412
+      541
       40)
     inherited btnDelete: TBitBtn
-      Left = 324
       ExplicitLeft = 324
     end
     inherited btnInsert: TBitBtn
-      Left = 240
       ExplicitLeft = 240
     end
   end

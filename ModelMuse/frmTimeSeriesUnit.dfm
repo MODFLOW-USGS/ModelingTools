@@ -4,8 +4,8 @@ inherited frmTimeSeries: TfrmTimeSeries
   Caption = 'Time Series'
   ClientHeight = 560
   ClientWidth = 624
-  ExplicitWidth = 636
-  ExplicitHeight = 598
+  ExplicitWidth = 640
+  ExplicitHeight = 599
   TextHeight = 18
   object spl1: TSplitter
     Left = 121
@@ -26,7 +26,6 @@ inherited frmTimeSeries: TfrmTimeSeries
     TabOrder = 0
     OnChange = tvTimeSeriesChange
     Items.Links = {00000000}
-    ExplicitHeight = 518
   end
   object plTimeSeries: TJvPageList
     Left = 126
@@ -35,8 +34,6 @@ inherited frmTimeSeries: TfrmTimeSeries
     Height = 519
     PropagateEnable = False
     Align = alClient
-    ExplicitWidth = 494
-    ExplicitHeight = 518
   end
   object pnlBottom: TPanel
     Left = 0
@@ -45,13 +42,11 @@ inherited frmTimeSeries: TfrmTimeSeries
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 518
-    ExplicitWidth = 620
     DesignSize = (
       624
       41)
     object btnHelp: TBitBtn
-      Left = 275
+      Left = 331
       Top = 6
       Width = 91
       Height = 33
@@ -60,10 +55,9 @@ inherited frmTimeSeries: TfrmTimeSeries
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 271
     end
     object btnOK: TBitBtn
-      Left = 372
+      Left = 428
       Top = 6
       Width = 91
       Height = 33
@@ -91,10 +85,9 @@ inherited frmTimeSeries: TfrmTimeSeries
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 368
     end
     object btnCancel: TBitBtn
-      Left = 468
+      Left = 524
       Top = 6
       Width = 91
       Height = 33
@@ -102,7 +95,6 @@ inherited frmTimeSeries: TfrmTimeSeries
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 464
     end
     object btnAddGroup: TButton
       Left = 9

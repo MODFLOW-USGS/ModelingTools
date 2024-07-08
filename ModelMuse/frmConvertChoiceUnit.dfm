@@ -7,13 +7,13 @@ inherited frmConvertChoice: TfrmConvertChoice
   Caption = 'Data Type Problem'
   ClientHeight = 235
   Position = poDesigned
-  ExplicitWidth = 438
+  ExplicitHeight = 274
   PixelsPerInch = 120
   TextHeight = 18
   object rgChoice: TRadioGroup
     Left = 0
     Top = 113
-    Width = 426
+    Width = 764
     Height = 81
     Align = alClient
     Caption = 'What do you want to do?'
@@ -22,22 +22,18 @@ inherited frmConvertChoice: TfrmConvertChoice
       'Change the data type of the data set.'
       'Automatically adjust the formula')
     TabOrder = 0
-    ExplicitWidth = 422
-    ExplicitHeight = 80
   end
   object pnlButton: TPanel
     Left = 0
     Top = 194
-    Width = 426
+    Width = 764
     Height = 41
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 193
-    ExplicitWidth = 422
     object btnCancel: TBitBtn
-      Left = 264
-      Top = 4
+      Left = 664
+      Top = 6
       Width = 91
       Height = 33
       Kind = bkCancel
@@ -45,8 +41,8 @@ inherited frmConvertChoice: TfrmConvertChoice
       TabOrder = 2
     end
     object btnOK: TBitBtn
-      Left = 168
-      Top = 4
+      Left = 568
+      Top = 6
       Width = 91
       Height = 33
       Kind = bkOK
@@ -54,7 +50,7 @@ inherited frmConvertChoice: TfrmConvertChoice
       TabOrder = 1
     end
     object btnHelp: TBitBtn
-      Left = 71
+      Left = 471
       Top = 6
       Width = 91
       Height = 33
@@ -68,12 +64,11 @@ inherited frmConvertChoice: TfrmConvertChoice
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 426
+    Width = 764
     Height = 113
     Align = alTop
     ParentColor = True
     TabOrder = 2
-    ExplicitWidth = 422
     object Label1: TLabel
       Left = 16
       Top = 8

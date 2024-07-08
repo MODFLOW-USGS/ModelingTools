@@ -8,8 +8,8 @@ inherited frmStartUp: TfrmStartUp
   ClientHeight = 403
   ClientWidth = 739
   OnClose = FormClose
-  ExplicitWidth = 751
-  ExplicitHeight = 441
+  ExplicitWidth = 755
+  ExplicitHeight = 442
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -20,13 +20,11 @@ inherited frmStartUp: TfrmStartUp
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 355
-    ExplicitWidth = 735
     DesignSize = (
       739
       47)
     object btnNext: TBitBtn
-      Left = 595
+      Left = 647
       Top = 6
       Width = 86
       Height = 33
@@ -49,10 +47,9 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
-      ExplicitLeft = 591
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 408
+      Left = 460
       Top = 6
       Width = 100
       Height = 33
@@ -63,10 +60,9 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
-      ExplicitLeft = 404
     end
     object btnHelp: TBitBtn
-      Left = 514
+      Left = 566
       Top = 6
       Width = 75
       Height = 33
@@ -76,7 +72,6 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
-      ExplicitLeft = 510
     end
   end
   object pcStartup: TPageControl
@@ -86,12 +81,10 @@ inherited frmStartUp: TfrmStartUp
     Height = 356
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
-    ActivePage = tabInitialModflowGrid
+    ActivePage = tabModelChoice
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
-    ExplicitWidth = 735
-    ExplicitHeight = 355
     object tabModelChoice: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Start_Up_Dialog_Box'
@@ -440,8 +433,6 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
-        ExplicitWidth = 727
-        ExplicitHeight = 281
         object Label8: TLabel
           Left = 344
           Top = 68
@@ -617,8 +608,6 @@ inherited frmStartUp: TfrmStartUp
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitWidth = 222
-          ExplicitHeight = 259
           ColWidths = (
             64
             64)
@@ -637,10 +626,9 @@ inherited frmStartUp: TfrmStartUp
         Height = 41
         Align = alTop
         TabOrder = 1
-        ExplicitWidth = 727
         object lblModflowSelection: TLabel
           Left = 195
-          Top = 10
+          Top = 13
           Width = 140
           Height = 18
           Caption = 'MODFLOW Version'

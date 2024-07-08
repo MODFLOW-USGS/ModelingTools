@@ -9,8 +9,8 @@ inherited frmFormulaErrors: TfrmFormulaErrors
   ClientWidth = 534
   Font.Height = 19
   FormStyle = fsStayOnTop
-  ExplicitWidth = 546
-  ExplicitHeight = 256
+  ExplicitWidth = 550
+  ExplicitHeight = 257
   PixelsPerInch = 120
   TextHeight = 19
   object pnlBottom: TPanel
@@ -21,13 +21,11 @@ inherited frmFormulaErrors: TfrmFormulaErrors
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 172
-    ExplicitWidth = 530
     DesignSize = (
       534
       45)
     object btnClose: TBitBtn
-      Left = 385
+      Left = 441
       Top = 6
       Width = 83
       Height = 33
@@ -35,7 +33,6 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 4
-      ExplicitLeft = 381
     end
     object btnCopy: TButton
       Left = 8
@@ -50,7 +47,7 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       OnClick = btnCopyClick
     end
     object btnHelp: TBitBtn
-      Left = 296
+      Left = 352
       Top = 6
       Width = 83
       Height = 33
@@ -59,7 +56,6 @@ inherited frmFormulaErrors: TfrmFormulaErrors
       NumGlyphs = 2
       TabOrder = 3
       OnClick = btnHelpClick
-      ExplicitLeft = 292
     end
     object btnClear: TButton
       Left = 182
@@ -91,7 +87,6 @@ inherited frmFormulaErrors: TfrmFormulaErrors
     Align = alTop
     ParentColor = True
     TabOrder = 0
-    ExplicitWidth = 530
     object Label1: TLabel
       Left = 1
       Top = 1
@@ -222,8 +217,6 @@ inherited frmFormulaErrors: TfrmFormulaErrors
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 530
-    ExplicitHeight = 107
     ColWidths = (
       100
       100

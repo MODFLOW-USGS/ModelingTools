@@ -5,7 +5,7 @@ inherited frameScreenObjectMnw1: TframeScreenObjectMnw1
     ExplicitTop = 232
     ExplicitHeight = 84
     DesignSize = (
-      320
+      541
       84)
     inherited lblNumTimes: TLabel
       Top = 55

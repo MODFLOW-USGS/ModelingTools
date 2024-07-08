@@ -3,7 +3,7 @@ inherited frmColorSchemes: TfrmColorSchemes
   HelpKeyword = 'Custom_Color_Schemes_Dialog_Bo'
   Caption = 'Custom Color Schemes'
   ClientHeight = 307
-  ExplicitHeight = 345
+  ExplicitHeight = 346
   TextHeight = 18
   object spl1: TSplitter
     Left = 137
@@ -14,18 +14,16 @@ inherited frmColorSchemes: TfrmColorSchemes
   object pnlBottom: TPanel
     Left = 0
     Top = 266
-    Width = 426
+    Width = 764
     Height = 41
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 265
-    ExplicitWidth = 422
     DesignSize = (
-      426
+      764
       41)
     object btnHelp: TBitBtn
-      Left = 75
-      Top = 4
+      Left = 419
+      Top = 5
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -35,8 +33,8 @@ inherited frmColorSchemes: TfrmColorSchemes
       OnClick = btnHelpClick
     end
     object btnOK: TBitBtn
-      Left = 189
-      Top = 4
+      Left = 533
+      Top = 5
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -46,8 +44,8 @@ inherited frmColorSchemes: TfrmColorSchemes
       OnClick = btnOKClick
     end
     object btnCancel: TBitBtn
-      Left = 303
-      Top = 4
+      Left = 647
+      Top = 5
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -63,7 +61,6 @@ inherited frmColorSchemes: TfrmColorSchemes
     Height = 266
     Align = alLeft
     TabOrder = 0
-    ExplicitHeight = 265
     object grdpnl1: TGridPanel
       Left = 1
       Top = 233
@@ -101,7 +98,6 @@ inherited frmColorSchemes: TfrmColorSchemes
           Value = 100.000000000000000000
         end>
       TabOrder = 1
-      ExplicitTop = 232
       DesignSize = (
         135
         32)
@@ -207,22 +203,19 @@ inherited frmColorSchemes: TfrmColorSchemes
       ReadOnly = True
       TabOrder = 0
       OnChange = tvColorSchemesChange
-      ExplicitHeight = 231
     end
   end
   object pnlColorScheme: TPanel
     Left = 142
     Top = 0
-    Width = 284
+    Width = 622
     Height = 266
     HelpType = htKeyword
     HelpKeyword = 'Custom_Color_Schemes_Dialog_Bo'
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 280
-    ExplicitHeight = 265
     DesignSize = (
-      284
+      622
       266)
     object edName: TLabeledEdit
       Left = 6
@@ -241,20 +234,20 @@ inherited frmColorSchemes: TfrmColorSchemes
     inline frameColorScheme: TframeGrid
       Left = 1
       Top = 40
-      Width = 282
+      Width = 620
       Height = 225
       Align = alBottom
       Anchors = [akLeft, akTop, akRight, akBottom]
       TabOrder = 1
       ExplicitLeft = 1
       ExplicitTop = 40
-      ExplicitWidth = 278
-      ExplicitHeight = 224
+      ExplicitWidth = 620
+      ExplicitHeight = 225
       inherited Panel: TPanel
         Top = 184
-        Width = 282
-        ExplicitTop = 183
-        ExplicitWidth = 278
+        Width = 620
+        ExplicitTop = 184
+        ExplicitWidth = 620
         inherited lbNumber: TLabel
           Width = 55
           Height = 18
@@ -262,21 +255,21 @@ inherited frmColorSchemes: TfrmColorSchemes
           ExplicitHeight = 18
         end
         inherited sbAdd: TSpeedButton
-          Left = 142
+          Left = 325
           Hint = 
             'Add a new color and fraction|Add a new color and fraction after ' +
             'the last one.'
           ExplicitLeft = 141
         end
         inherited sbInsert: TSpeedButton
-          Left = 170
+          Left = 387
           Hint = 
             'Insert a new color and fraction|Insert a new color and fraction ' +
             'above the selected one.'
           ExplicitLeft = 168
         end
         inherited sbDelete: TSpeedButton
-          Left = 197
+          Left = 446
           Hint = 
             'Delete selected color and fraction|Delete the selected color and' +
             ' fraction.'
@@ -288,7 +281,7 @@ inherited frmColorSchemes: TfrmColorSchemes
         end
       end
       inherited Grid: TRbwDataGrid4
-        Width = 282
+        Width = 620
         Height = 184
         ColCount = 2
         DefaultColWidth = 90
@@ -344,8 +337,8 @@ inherited frmColorSchemes: TfrmColorSchemes
             CheckStyle = csCheck
             AutoAdjustColWidths = True
           end>
-        ExplicitWidth = 278
-        ExplicitHeight = 183
+        ExplicitWidth = 620
+        ExplicitHeight = 184
       end
     end
   end

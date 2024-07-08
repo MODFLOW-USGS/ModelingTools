@@ -14,8 +14,6 @@ inherited frmExportCSV: TfrmExportCSV
     Height = 376
     Align = alClient
     TabOrder = 1
-    ExplicitWidth = 566
-    ExplicitHeight = 385
     DesignSize = (
       560
       376)
@@ -59,8 +57,6 @@ inherited frmExportCSV: TfrmExportCSV
       OnGetNodeDataSize = vstDataSetsGetNodeDataSize
       Touch.InteractiveGestures = [igPan, igPressAndTap]
       Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
-      ExplicitWidth = 566
-      ExplicitHeight = 273
       Columns = <>
     end
     object rgOrientation: TRadioGroup
@@ -76,7 +72,6 @@ inherited frmExportCSV: TfrmExportCSV
         '3D')
       TabOrder = 1
       OnClick = rgOrientationClick
-      ExplicitTop = 314
     end
     object rgEvaluatedAt: TRadioGroup
       Left = 127
@@ -91,10 +86,9 @@ inherited frmExportCSV: TfrmExportCSV
         'Nodes')
       TabOrder = 2
       OnClick = rgEvaluatedAtClick
-      ExplicitTop = 314
     end
     object btnHelp: TBitBtn
-      Left = 414
+      Left = 455
       Top = 303
       Width = 104
       Height = 27
@@ -103,11 +97,9 @@ inherited frmExportCSV: TfrmExportCSV
       NumGlyphs = 2
       TabOrder = 4
       OnClick = btnHelpClick
-      ExplicitLeft = 450
-      ExplicitTop = 314
     end
     object btnSave: TBitBtn
-      Left = 414
+      Left = 455
       Top = 341
       Width = 104
       Height = 27
@@ -129,8 +121,6 @@ inherited frmExportCSV: TfrmExportCSV
       NumGlyphs = 2
       TabOrder = 5
       OnClick = btnSaveClick
-      ExplicitLeft = 450
-      ExplicitTop = 352
     end
     object clIncluded: TJvCheckListBox
       Left = 263
@@ -145,7 +135,7 @@ inherited frmExportCSV: TfrmExportCSV
         'Cell, element, or node'
         'Data set values')
       ParentDoubleBuffered = False
-      ScrollWidth = 180
+      ScrollWidth = 176
       TabOrder = 3
     end
   end
@@ -156,7 +146,6 @@ inherited frmExportCSV: TfrmExportCSV
     Height = 64
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 566
     DesignSize = (
       560
       64)

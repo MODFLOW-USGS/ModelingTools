@@ -27358,17 +27358,6 @@ begin
   end;
 end;
 
-//procedure TfrmScreenObjectProperties.frameScreenObjectFarmpcMainChange(
-//  Sender: TObject);
-//begin
-//  inherited;
-//  if IsLoaded then
-//  begin
-//    HelpKeyword := frameScreenObjectFarm.pcMain.ActivePage.HelpKeyword;
-//    btnHelp.HelpKeyword := HelpKeyword;
-//  end;
-//end;
-
 procedure TfrmScreenObjectProperties.frameScreenObjectSFRdgFlowTimesSetEditText(
   Sender: TObject; ACol, ARow: Integer; const Value: string);
 begin

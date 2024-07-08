@@ -3,10 +3,8 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
   Caption = 'Import Surfer Grid File'
   ClientHeight = 471
   ClientWidth = 586
-  ExplicitLeft = 3
-  ExplicitTop = 3
-  ExplicitWidth = 598
-  ExplicitHeight = 509
+  ExplicitWidth = 602
+  ExplicitHeight = 510
   TextHeight = 18
   inherited lblDataSet: TLabel
     Top = 156
@@ -31,7 +29,7 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
     Caption = 'Convert X and Y coordinates from'
   end
   object lblTo: TLabel [4]
-    Left = 422
+    Left = 414
     Top = 403
     Width = 13
     Height = 18
@@ -39,11 +37,11 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
   end
   inherited comboDataSets: TComboBox
     Top = 178
-    Width = 550
+    Width = 570
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
     ExplicitTop = 178
-    ExplicitWidth = 546
+    ExplicitWidth = 570
   end
   inherited comboInterpolators: TComboBox
     Top = 245
@@ -80,31 +78,31 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
     ExplicitTop = 345
   end
   inherited btnOK: TBitBtn
-    Left = 398
-    Top = 432
+    Left = 390
+    Top = 430
     TabOrder = 11
     OnClick = btnOKClick
-    ExplicitLeft = 398
-    ExplicitTop = 432
+    ExplicitLeft = 390
+    ExplicitTop = 430
   end
   inherited btnCancel: TBitBtn
-    Left = 495
-    Top = 432
+    Left = 487
+    Top = 430
     TabOrder = 12
-    ExplicitLeft = 495
-    ExplicitTop = 432
+    ExplicitLeft = 487
+    ExplicitTop = 430
   end
   inherited btnHelp: TBitBtn
-    Left = 301
-    Top = 432
+    Left = 293
+    Top = 430
     TabOrder = 10
-    ExplicitLeft = 301
-    ExplicitTop = 432
+    ExplicitLeft = 293
+    ExplicitTop = 430
   end
   object rdgLimits: TRbwDataGrid4 [14]
     Left = 8
     Top = 29
-    Width = 550
+    Width = 570
     Height = 121
     Anchors = [akLeft, akTop, akRight]
     ColCount = 4
@@ -234,10 +232,9 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
       'Point closest to cell center'
       'None')
     TabOrder = 2
-    ExplicitWidth = 211
   end
   object comboFromUnits: TComboBox [16]
-    Left = 271
+    Left = 263
     Top = 400
     Width = 145
     Height = 26
@@ -254,7 +251,7 @@ inherited frmImportSurferGrdFile: TfrmImportSurferGrdFile
       'miles')
   end
   object comboToUnits: TComboBox [17]
-    Left = 441
+    Left = 433
     Top = 400
     Width = 145
     Height = 26

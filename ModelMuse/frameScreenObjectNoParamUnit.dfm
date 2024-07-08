@@ -1,18 +1,21 @@
 inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
+  Width = 541
   Height = 316
   TabStop = True
   OnResize = FrameResize
+  ExplicitWidth = 541
   ExplicitHeight = 316
   object pnlBottom: TPanel
     Left = 0
     Top = 270
-    Width = 320
+    Width = 541
     Height = 46
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 320
     DesignSize = (
-      320
+      541
       46)
     object lblNumTimes: TLabel
       Left = 79
@@ -32,7 +35,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
       OnChange = seNumberOfTimesChange
     end
     object btnDelete: TBitBtn
-      Left = 232
+      Left = 453
       Top = 6
       Width = 82
       Height = 33
@@ -68,9 +71,10 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
       TabOrder = 2
       OnClick = btnDeleteClick
+      ExplicitLeft = 232
     end
     object btnInsert: TBitBtn
-      Left = 148
+      Left = 369
       Top = 6
       Width = 82
       Height = 33
@@ -88,40 +92,45 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
         FF0FFFFF0FFFFFFFFF0FFFFF00000000000FFFFFFFFFFFFFFFFF}
       TabOrder = 1
       OnClick = btnInsertClick
+      ExplicitLeft = 148
     end
   end
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 320
+    Width = 541
     Height = 25
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 320
     object pnlCaption: TPanel
       Left = 1
       Top = 1
-      Width = 318
+      Width = 539
       Height = 23
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 318
     end
   end
   object pnlGrid: TPanel
     Left = 0
     Top = 25
-    Width = 320
+    Width = 541
     Height = 245
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 320
     object pnlEditGrid: TPanel
       Left = 1
       Top = 1
-      Width = 318
+      Width = 539
       Height = 50
       Align = alTop
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 318
       object lblFormula: TLabel
         Left = 136
         Top = 5
@@ -147,7 +156,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
     object rdgModflowBoundary: TRbwDataGrid4
       Left = 1
       Top = 51
-      Width = 318
+      Width = 539
       Height = 193
       Align = alClient
       ColCount = 3
@@ -243,6 +252,7 @@ inherited frameScreenObjectNoParam: TframeScreenObjectNoParam
           AutoAdjustColWidths = True
         end>
       WordWrapRowCaptions = False
+      ExplicitWidth = 318
     end
   end
 end

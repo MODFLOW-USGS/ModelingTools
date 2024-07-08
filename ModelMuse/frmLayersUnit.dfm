@@ -266,6 +266,7 @@ inherited frmLayers: TfrmLayers
             ExplicitWidth = 165
             inherited lbl3: TLabel
               Width = 165
+              Height = 41
               ExplicitWidth = 142
               ExplicitHeight = 36
             end
@@ -857,8 +858,8 @@ inherited frmLayers: TfrmLayers
       579
       41)
     object btnHelp: TBitBtn
-      Left = 214
-      Top = 4
+      Left = 239
+      Top = 5
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -868,8 +869,8 @@ inherited frmLayers: TfrmLayers
       OnClick = btnHelpClick
     end
     object btnOK: TBitBtn
-      Left = 328
-      Top = 5
+      Left = 353
+      Top = 6
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]
@@ -879,8 +880,8 @@ inherited frmLayers: TfrmLayers
       OnClick = btnOKClick
     end
     object btnCancel: TBitBtn
-      Left = 442
-      Top = 5
+      Left = 467
+      Top = 6
       Width = 108
       Height = 33
       Anchors = [akTop, akRight]

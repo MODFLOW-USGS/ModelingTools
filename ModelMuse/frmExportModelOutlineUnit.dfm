@@ -4,8 +4,8 @@ inherited frmExportModelOutline: TfrmExportModelOutline
   Caption = 'Export Model Outline'
   ClientHeight = 310
   ClientWidth = 342
-  ExplicitWidth = 354
-  ExplicitHeight = 348
+  ExplicitWidth = 358
+  ExplicitHeight = 349
   TextHeight = 18
   object lblModel: TLabel
     Left = 8
@@ -39,7 +39,6 @@ inherited frmExportModelOutline: TfrmExportModelOutline
       'Active area grid lines')
     TabOrder = 1
     OnClick = rgExportChoiceClick
-    ExplicitWidth = 310
   end
   object pnlBottom: TPanel
     Left = 0
@@ -49,10 +48,8 @@ inherited frmExportModelOutline: TfrmExportModelOutline
     Align = alBottom
     ParentColor = True
     TabOrder = 3
-    ExplicitTop = 263
-    ExplicitWidth = 338
     object btnCancel: TBitBtn
-      Left = 207
+      Left = 247
       Top = 6
       Width = 91
       Height = 33
@@ -61,7 +58,7 @@ inherited frmExportModelOutline: TfrmExportModelOutline
       TabOrder = 2
     end
     object btnOK: TBitBtn
-      Left = 110
+      Left = 150
       Top = 6
       Width = 91
       Height = 33
@@ -71,7 +68,7 @@ inherited frmExportModelOutline: TfrmExportModelOutline
       OnClick = btnOKClick
     end
     object btnHelp: TBitBtn
-      Left = 13
+      Left = 53
       Top = 6
       Width = 91
       Height = 33

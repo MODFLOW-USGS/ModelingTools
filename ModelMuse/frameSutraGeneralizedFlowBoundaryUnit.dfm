@@ -1,18 +1,15 @@
 inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
-  Width = 587
   Height = 423
-  ExplicitWidth = 587
   ExplicitHeight = 423
   inherited pnlBottom: TPanel
     Top = 296
-    Width = 587
     Height = 127
     TabOrder = 3
     ExplicitTop = 296
     ExplicitWidth = 587
     ExplicitHeight = 127
     DesignSize = (
-      587
+      565
       127)
     inherited lblNumTimes: TLabel
       Left = 61
@@ -42,14 +39,14 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       ExplicitTop = 93
     end
     inherited btnDelete: TBitBtn
-      Left = 500
+      Left = 478
       Top = 92
       TabOrder = 0
       ExplicitLeft = 500
       ExplicitTop = 92
     end
     inherited btnInsert: TBitBtn
-      Left = 412
+      Left = 390
       Top = 92
       TabOrder = 2
       ExplicitLeft = 412
@@ -94,14 +91,12 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
   end
   inherited pnlGrid: TPanel
     Top = 136
-    Width = 587
     Height = 160
     TabOrder = 2
     ExplicitTop = 136
     ExplicitWidth = 587
     ExplicitHeight = 160
     inherited rdgSutraFeature: TRbwDataGrid4
-      Width = 585
       Height = 158
       ColCount = 11
       OnMouseUp = rdgSutraFeatureMouseUp
@@ -379,12 +374,11 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
     end
   end
   inherited pnlTop: TPanel
-    Width = 587
     Height = 86
     ExplicitWidth = 587
     ExplicitHeight = 86
     DesignSize = (
-      587
+      565
       86)
     inherited lblSchedule: TLabel
       Left = 14
@@ -393,13 +387,12 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
       ExplicitTop = 24
     end
     inherited pnlCaption: TPanel
-      Width = 585
       ExplicitWidth = 585
     end
     inherited comboSchedule: TComboBox
       Left = 8
       Top = 46
-      Width = 558
+      Width = 536
       ExplicitLeft = 8
       ExplicitTop = 46
       ExplicitWidth = 558
@@ -408,11 +401,12 @@ inherited frameSutraGeneralizedFlowBoundary: TframeSutraGeneralizedFlowBoundary
   object pnlEditGrid: TPanel
     Left = 0
     Top = 86
-    Width = 587
+    Width = 565
     Height = 50
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitWidth = 587
     object lblFormula: TLabel
       Left = 136
       Top = 5

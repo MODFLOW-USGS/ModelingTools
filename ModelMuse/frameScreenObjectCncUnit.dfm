@@ -128,7 +128,6 @@ inherited frameScreenObjectCnc: TframeScreenObjectCnc
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitTop = 52
     end
   end
 end

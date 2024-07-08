@@ -1,15 +1,12 @@
 inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
-  Width = 377
-  ExplicitWidth = 377
   inherited pnlBottom: TPanel
     Top = 248
-    Width = 377
     Height = 68
     ExplicitTop = 248
     ExplicitWidth = 377
     ExplicitHeight = 68
     DesignSize = (
-      377
+      541
       68)
     object lblChemSpecies: TLabel [1]
       Left = 165
@@ -19,11 +16,9 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
       Caption = 'Chemical species'
     end
     inherited btnDelete: TBitBtn
-      Left = 289
       ExplicitLeft = 289
     end
     inherited btnInsert: TBitBtn
-      Left = 205
       ExplicitLeft = 205
     end
     object comboChemSpecies: TComboBox
@@ -36,24 +31,19 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
     end
   end
   inherited pnlTop: TPanel
-    Width = 377
     ExplicitWidth = 377
     inherited pnlCaption: TPanel
-      Width = 375
       ExplicitWidth = 375
     end
   end
   inherited pnlGrid: TPanel
-    Width = 377
     Height = 223
     ExplicitWidth = 377
     ExplicitHeight = 223
     inherited pnlEditGrid: TPanel
-      Width = 375
       ExplicitWidth = 375
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
-      Width = 375
       Height = 171
       ColCount = 5
       RowCount = 4

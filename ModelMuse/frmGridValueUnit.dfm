@@ -13,7 +13,7 @@ inherited frmGridValue: TfrmGridValue
     509)
   TextHeight = 18
   object btnHelp: TBitBtn
-    Left = 402
+    Left = 448
     Top = 469
     Width = 89
     Height = 33
@@ -22,10 +22,9 @@ inherited frmGridValue: TfrmGridValue
     NumGlyphs = 2
     TabOrder = 1
     OnClick = btnHelpClick
-    ExplicitLeft = 404
   end
   object btnClose: TBitBtn
-    Left = 499
+    Left = 545
     Top = 469
     Width = 89
     Height = 33
@@ -33,7 +32,6 @@ inherited frmGridValue: TfrmGridValue
     Kind = bkClose
     NumGlyphs = 2
     TabOrder = 2
-    ExplicitLeft = 501
   end
   object pnlTabs: TPanel
     Left = 0
@@ -43,46 +41,45 @@ inherited frmGridValue: TfrmGridValue
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
-    ExplicitWidth = 632
     object splAllDataSets: TSplitter
       Left = 441
       Top = 1
-      Height = 462
+      Height = 461
       ExplicitLeft = 50
       ExplicitHeight = 465
     end
     object splPathline: TSplitter
       Left = 471
       Top = 1
-      Height = 462
+      Height = 461
       ExplicitLeft = 58
       ExplicitHeight = 465
     end
     object splEndPoint: TSplitter
       Left = 501
       Top = 1
-      Height = 462
+      Height = 461
       ExplicitLeft = 88
       ExplicitHeight = 465
     end
     object splSWR: TSplitter
       Left = 531
       Top = 1
-      Height = 462
+      Height = 461
       ExplicitLeft = 118
       ExplicitHeight = 465
     end
     object splGNC: TSplitter
       Left = 561
       Top = 1
-      Height = 462
+      Height = 461
       ExplicitLeft = 148
       ExplicitHeight = 465
     end
     object splXt3d: TSplitter
       Left = 591
       Top = 1
-      Height = 462
+      Height = 461
       ExplicitLeft = 178
       ExplicitHeight = 465
     end
@@ -90,7 +87,7 @@ inherited frmGridValue: TfrmGridValue
       Left = 1
       Top = 1
       Width = 440
-      Height = 462
+      Height = 461
       Align = alLeft
       Caption = 'rrlcurrentData'
       Font.Charset = ANSI_CHARSET
@@ -105,7 +102,6 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Current Data'
       LabelWidth = 27
       ExpandedWidth = 413
-      ExplicitHeight = 461
       DesignSize = (
         440
         461)
@@ -422,17 +418,16 @@ inherited frmGridValue: TfrmGridValue
         Left = 28
         Top = 1
         Width = 397
-        Height = 460
+        Height = 459
         Align = alClient
         Caption = 'pnlPathline'
         ShowCaption = False
         TabOrder = 1
-        ExplicitHeight = 459
         object rdgPathline: TRbwDataGrid4
           Left = 1
           Top = 1
           Width = 395
-          Height = 422
+          Height = 421
           Align = alClient
           ColCount = 4
           FixedCols = 1
@@ -545,16 +540,14 @@ inherited frmGridValue: TfrmGridValue
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitHeight = 421
         end
         object pnlPathLength: TPanel
           Left = 1
-          Top = 423
+          Top = 422
           Width = 395
           Height = 36
           Align = alBottom
           TabOrder = 1
-          ExplicitTop = 422
           object lblLength: TLabel
             Left = 7
             Top = 6
@@ -595,20 +588,18 @@ inherited frmGridValue: TfrmGridValue
         Left = 28
         Top = 1
         Width = 397
-        Height = 460
+        Height = 459
         Align = alClient
         Caption = 'pnlEndpoint'
         ShowCaption = False
         TabOrder = 1
-        ExplicitHeight = 459
         object pnlEndPoints: TPanel
           Left = 1
-          Top = 353
+          Top = 352
           Width = 395
           Height = 106
           Align = alBottom
           TabOrder = 1
-          ExplicitTop = 352
           object lbledtReleaseTime: TLabeledEdit
             Left = 136
             Top = 6
@@ -653,7 +644,7 @@ inherited frmGridValue: TfrmGridValue
           Left = 1
           Top = 1
           Width = 395
-          Height = 352
+          Height = 351
           Align = alClient
           ColCount = 3
           FixedCols = 1
@@ -742,7 +733,6 @@ inherited frmGridValue: TfrmGridValue
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitHeight = 351
         end
       end
     end
@@ -769,12 +759,11 @@ inherited frmGridValue: TfrmGridValue
         Left = 28
         Top = 1
         Width = 381
-        Height = 460
+        Height = 459
         Align = alClient
         Caption = 'pnlSWR'
         ShowCaption = False
         TabOrder = 1
-        ExplicitHeight = 459
         object pnlSwrReaches: TPanel
           Left = 1
           Top = 1
@@ -788,10 +777,11 @@ inherited frmGridValue: TfrmGridValue
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 103
+            Width = 371
             Height = 18
             Align = alTop
             Caption = 'SWR Reaches'
+            ExplicitWidth = 103
           end
           object rdgSwrReaches: TRbwDataGrid4
             Left = 1
@@ -915,24 +905,24 @@ inherited frmGridValue: TfrmGridValue
           Left = 1
           Top = 201
           Width = 379
-          Height = 258
+          Height = 257
           Align = alClient
           TabOrder = 1
-          ExplicitHeight = 257
           object lblSwrStructures: TLabel
             AlignWithMargins = True
             Left = 4
             Top = 4
-            Width = 111
+            Width = 371
             Height = 18
             Align = alTop
             Caption = 'SWR Structures'
+            ExplicitWidth = 111
           end
           object rdgSwrStructures: TRbwDataGrid4
             Left = 1
             Top = 25
             Width = 377
-            Height = 232
+            Height = 231
             Align = alClient
             ColCount = 3
             FixedCols = 0
@@ -1020,7 +1010,6 @@ inherited frmGridValue: TfrmGridValue
                 AutoAdjustColWidths = False
               end>
             WordWrapRowCaptions = False
-            ExplicitHeight = 231
             ColWidths = (
               64
               64
@@ -1048,7 +1037,6 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'Ghost Node Correction'
       LabelWidth = 27
       ExpandedWidth = 412
-      ExplicitHeight = 462
       DesignSize = (
         27
         461)
@@ -1170,8 +1158,6 @@ inherited frmGridValue: TfrmGridValue
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 393
-        ExplicitHeight = 446
       end
     end
     object rrlXt3d: TRbwRollupPanel

@@ -7,8 +7,8 @@ inherited frmImportShapeFile: TfrmImportShapeFile
   Caption = 'Import Shapefile'
   ClientHeight = 591
   ClientWidth = 755
-  ExplicitWidth = 767
-  ExplicitHeight = 629
+  ExplicitWidth = 771
+  ExplicitHeight = 630
   TextHeight = 18
   object pnlButton: TPanel
     Left = 0
@@ -18,8 +18,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 549
-    ExplicitWidth = 751
     DesignSize = (
       755
       41)
@@ -31,19 +29,18 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       Caption = 'Number of shapes ='
     end
     object btnCancel: TBitBtn
-      Left = 575
-      Top = 2
+      Left = 635
+      Top = 1
       Width = 115
       Height = 33
       Anchors = [akTop, akRight]
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 571
     end
     object btnOK: TBitBtn
-      Left = 454
-      Top = 2
+      Left = 514
+      Top = 1
       Width = 115
       Height = 33
       Anchors = [akTop, akRight]
@@ -69,11 +66,10 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 450
     end
     object btnHelp: TBitBtn
-      Left = 333
-      Top = 2
+      Left = 393
+      Top = 1
       Width = 115
       Height = 33
       Anchors = [akTop, akRight]
@@ -81,7 +77,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 329
     end
   end
   object pcImportShape: TPageControl
@@ -93,8 +88,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
     Align = alClient
     TabOrder = 0
     OnChange = pcImportShapeChange
-    ExplicitWidth = 751
-    ExplicitHeight = 549
     object tabOptions: TTabSheet
       Caption = 'Options 1'
       ImageIndex = 3
@@ -828,8 +821,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
         Height = 517
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 743
-        ExplicitHeight = 516
         object splitterBoundary: TSplitter
           Left = 1
           Top = 246
@@ -847,7 +838,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           Height = 41
           Align = alTop
           TabOrder = 0
-          ExplicitWidth = 741
           object lblBoundaryTimeCount: TLabel
             Left = 602
             Top = 11
@@ -1009,8 +999,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
-          ExplicitWidth = 741
-          ExplicitHeight = 203
           ColWidths = (
             64
             64
@@ -1028,8 +1016,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
           ActivePage = jvspModflow6Obs
           PropagateEnable = False
           Align = alBottom
-          ExplicitTop = 250
-          ExplicitWidth = 741
           object jvspNone: TJvStandardPage
             Left = 0
             Top = 0
@@ -1937,7 +1923,6 @@ inherited frmImportShapeFile: TfrmImportShapeFile
             Width = 745
             Height = 265
             Caption = 'jvspModflowHOB'
-            ExplicitWidth = 741
             object lblHeadObservationNames: TLabel
               Left = 13
               Top = 9

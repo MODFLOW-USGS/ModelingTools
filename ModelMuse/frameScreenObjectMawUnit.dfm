@@ -1,35 +1,36 @@
 inherited frameScreenObjectMAW: TframeScreenObjectMAW
-  Width = 549
   Height = 293
   OnResize = FrameResize
-  ExplicitWidth = 549
   ExplicitHeight = 293
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 549
+    Width = 541
     Height = 33
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 549
     object pnlCaption: TPanel
       AlignWithMargins = True
       Left = 4
       Top = 4
-      Width = 541
+      Width = 533
       Height = 25
       Align = alClient
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 541
     end
   end
   object pgcMain: TPageControl
     Left = 0
     Top = 33
-    Width = 549
+    Width = 541
     Height = 260
-    ActivePage = tabGwt
+    ActivePage = tabTransient
     Align = alClient
     TabOrder = 1
+    ExplicitWidth = 549
     object tabWell: TTabSheet
       Caption = 'Well definition'
       object lblRadius: TLabel
@@ -198,37 +199,37 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
       inline frameWellScreens: TframeGrid
         Left = 0
         Top = 0
-        Width = 541
+        Width = 533
         Height = 230
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 541
-        ExplicitHeight = 225
+        ExplicitWidth = 533
+        ExplicitHeight = 230
         inherited Panel: TPanel
           Top = 189
-          Width = 541
-          ExplicitTop = 184
-          ExplicitWidth = 541
+          Width = 533
+          ExplicitTop = 189
+          ExplicitWidth = 533
           inherited lbNumber: TLabel
             Width = 124
             Caption = 'Number of well screens'
             ExplicitWidth = 124
           end
           inherited sbAdd: TSpeedButton
-            Left = 382
+            Left = 376
             ExplicitLeft = 382
           end
           inherited sbInsert: TSpeedButton
-            Left = 436
+            Left = 429
             ExplicitLeft = 436
           end
           inherited sbDelete: TSpeedButton
-            Left = 488
+            Left = 481
             ExplicitLeft = 488
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 541
+          Width = 533
           Height = 189
           ColCount = 4
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
@@ -330,7 +331,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 541
+          ExplicitWidth = 533
           ExplicitHeight = 189
         end
       end
@@ -341,13 +342,13 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
       object pnlBottom: TPanel
         Left = 0
         Top = 184
-        Width = 541
+        Width = 533
         Height = 46
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
         DesignSize = (
-          541
+          533
           46)
         object lblNumTimes: TLabel
           Left = 64
@@ -367,7 +368,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           OnChange = seNumberOfTimesChange
         end
         object btnDelete: TBitBtn
-          Left = 453
+          Left = 445
           Top = 6
           Width = 83
           Height = 33
@@ -405,7 +406,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
           OnClick = btnDeleteClick
         end
         object btnInsert: TBitBtn
-          Left = 365
+          Left = 357
           Top = 6
           Width = 83
           Height = 33
@@ -428,18 +429,20 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
       object pnlGrid: TPanel
         Left = 0
         Top = 0
-        Width = 541
+        Width = 533
         Height = 184
         Align = alClient
         TabOrder = 0
+        ExplicitWidth = 312
         object pnlEditGrid: TPanel
           Left = 1
           Top = 1
-          Width = 539
+          Width = 531
           Height = 56
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
+          ExplicitWidth = 310
           object lblFormula: TLabel
             Left = 232
             Top = 5
@@ -535,7 +538,7 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
         object rdgModflowBoundary: TRbwDataGrid4
           Left = 1
           Top = 57
-          Width = 539
+          Width = 531
           Height = 126
           Align = alClient
           ColCount = 16
@@ -998,10 +1001,11 @@ inherited frameScreenObjectMAW: TframeScreenObjectMAW
       object jplGwt: TJvPageList
         Left = 126
         Top = 0
-        Width = 415
+        Width = 407
         Height = 230
         PropagateEnable = False
         Align = alClient
+        ExplicitWidth = 415
       end
     end
   end
