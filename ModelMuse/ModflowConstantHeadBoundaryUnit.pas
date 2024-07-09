@@ -871,6 +871,7 @@ begin
               MultiplierPest := PestName;
               MultiplierPestSeriesName := PestSeriesName;
               MultiplierPestSeriesMethod := PestSeriesMethod;
+              MultiplierTimeSeriesName := TimeSeriesName;
             end;
           else
             begin

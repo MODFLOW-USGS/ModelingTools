@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5717
+5749
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5717,3 +5717,35 @@ UztTimeSeriesTest.gpt
 	Archive\UztTimeSeriesTest.uzf
 	Archive\UztTimeSeriesTest.uzf.UzfTimeSeries.ts
 	Archive\usgs.UztTimeSeriesTest.reference
+ChdMult.gpt
+	Archive\ChdMult.axml
+	Archive\ChdMult.chd
+	Archive\ChdMult.chd.ChdMult.ts
+	Archive\ChdMult.dis
+	Archive\ChdMult.drn
+	Archive\ChdMult.drn.ChdMult.ts
+	Archive\ChdMult.evt
+	Archive\ChdMult.evt.ChdMult.ts
+	Archive\ChdMult.ghb
+	Archive\ChdMult.ghb.ChdMult.ts
+	Archive\ChdMult.gsf
+	Archive\ChdMult.ic
+	Archive\ChdMult.ims
+	Archive\ChdMult.jtf
+	Archive\ChdMult.mfsim.nam
+	Archive\ChdMult.nam
+	Archive\ChdMult.nam.archive
+	Archive\ChdMult.npf
+	Archive\ChdMult.oc
+	Archive\ChdMult.pval
+	Archive\ChdMult.rch
+	Archive\ChdMult.rch.ChdMult.ts
+	Archive\ChdMult.riv
+	Archive\ChdMult.riv.ChdMult.ts
+	Archive\ChdMult.RunModel.Bat
+	Archive\ChdMult.RunModflow.Bat
+	Archive\ChdMult.sto
+	Archive\ChdMult.tdis
+	Archive\ChdMult.wel
+	Archive\ChdMult.wel.ChdMult.ts
+	Archive\usgs.ChdMult.reference

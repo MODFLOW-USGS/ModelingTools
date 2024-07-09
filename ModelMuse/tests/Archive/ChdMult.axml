@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="ChdMult" FileType="bin">
+    <FileName Model_Name="ChdMult" FileType="bin">..\..\..\WRDAPP\mf6.5.0_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="ChdMult" FileType="ancillary">
+    <FileName Model_Name="ChdMult" FileType="ancillary">ChdMult.gpt</FileName>
+  </ancillary>
+  <model Model_Name="ChdMult" FileType="Model Input">
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.chd</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.chd.ChdMult.ts</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.dis</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.drn</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.drn.ChdMult.ts</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.evt</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.evt.ChdMult.ts</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.ghb</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.ghb.ChdMult.ts</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.gsf</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.ic</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.ims</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.jtf</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.nam.archive</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.npf</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.oc</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.pval</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.rch</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.rch.ChdMult.ts</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.riv</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.riv.ChdMult.ts</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.sto</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.tdis</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.wel</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">ChdMult.wel.ChdMult.ts</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Input">usgs.ChdMult.reference</FileName>
+  </model>
+  <output Model_Name="ChdMult" FileType="Model Output">
+    <FileName Model_Name="ChdMult" FileType="Model Output">ChdMult.bhd</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Output">ChdMult.cbc</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Output">ChdMult.dis.grb</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Output">ChdMult.InnerSolution.CSV</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Output">ChdMult.lst</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Output">ChdMult.OuterSolution.CSV</FileName>
+    <FileName Model_Name="ChdMult" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

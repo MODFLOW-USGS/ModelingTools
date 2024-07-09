@@ -204,6 +204,8 @@ Type
     procedure InvalidateAllTimeLists; override;
     procedure InvalidateConcentrations;
     procedure AddRemoveRenameGwtConcentrationTimeLists;
+  published
+    property UseMultiplier;
   end;
 
   TDrnPackage = class(TMultiplierPackage)

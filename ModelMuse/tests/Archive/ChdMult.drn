@@ -1,0 +1,25 @@
+# DRN: Drain package file created on 7/9/2024 by ModelMuse version 5.3.0.0.
+BEGIN OPTIONS
+    AUXILIARY IFACE DDRN multiplier
+    BOUNDNAMES
+    PRINT_INPUT
+    SAVE_FLOWS
+    TS6 FILEIN ChdMult.drn.ChdMult.ts
+    AUXDEPTHNAME DDRN
+  AUXMULTNAME multiplier
+END OPTIONS
+
+BEGIN DIMENSIONS
+  MAXBOUND     1
+END DIMENSIONS
+
+BEGIN PERIOD      1
+     1     3     3 -1.000000000000E+000   1.000000000000E-005      0  0.000000000000E+000  MyMult 'Object2'  # Data Set 6: Layer Row Column Elevation Cond IFACE DDRN multiplier boundname
+END PERIOD 
+
+BEGIN PERIOD      2
+END PERIOD 
+
+BEGIN PERIOD      3
+END PERIOD 
+

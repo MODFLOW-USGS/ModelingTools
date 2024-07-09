@@ -1,0 +1,19 @@
+# CHD: Time-Variant Specified-Head package file created on 7/9/2024 by ModelMuse version 5.3.0.0.
+BEGIN OPTIONS
+    AUXILIARY IFACE multiplier
+    BOUNDNAMES
+    PRINT_INPUT
+    SAVE_FLOWS
+    TS6 FILEIN ChdMult.chd.ChdMult.ts
+  AUXMULTNAME multiplier
+END OPTIONS
+
+BEGIN DIMENSIONS
+  MAXBOUND     2
+END DIMENSIONS
+
+BEGIN PERIOD      1
+     1     2     4  1.000000000000E+000      0  1.000000000000E+000  'Object0'  # Data Set 6: Layer Row Column Shead IFACE multiplier boundname
+     1     6     7  4.000000000000E+000      0 MyMult 'Object1'  # Data Set 6: Layer Row Column Shead IFACE multiplier boundname
+END PERIOD 
+

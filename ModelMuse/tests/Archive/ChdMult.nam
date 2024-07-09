@@ -1,0 +1,21 @@
+# Name File for MODFLOW created on 7/9/2024 by ModelMuse Version 5.3.0.0
+BEGIN OPTIONS
+  LIST ChdMult.lst
+  PRINT_INPUT
+  SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGES
+  DIS6         ChdMult.dis  DIS
+  IC6          ChdMult.ic  IC
+  NPF6         ChdMult.npf  NPF
+  STO6         ChdMult.sto  STO
+  OC6          ChdMult.oc  OC
+  CHD6         ChdMult.chd  CHD-1
+  GHB6         ChdMult.ghb  GHB-1
+  WEL6         ChdMult.wel  WEL-1
+  RIV6         ChdMult.riv  RIV-1
+  DRN6         ChdMult.drn  DRN-1
+  RCH6         ChdMult.rch  RCH-1
+  EVT6         ChdMult.evt  EVT-1
+END PACKAGES

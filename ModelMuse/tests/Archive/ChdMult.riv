@@ -1,0 +1,21 @@
+# RIV: River package file created on 7/9/2024 by ModelMuse version 5.3.0.0.
+BEGIN OPTIONS
+    AUXILIARY IFACE multiplier
+    BOUNDNAMES
+    PRINT_INPUT
+    SAVE_FLOWS
+    TS6 FILEIN ChdMult.riv.ChdMult.ts
+  AUXMULTNAME multiplier
+END OPTIONS
+
+BEGIN DIMENSIONS
+  MAXBOUND     1
+END DIMENSIONS
+
+BEGIN PERIOD      1
+     1     8     7 -1.000000000000E+000   1.000000000000E-005  -3.000000000000E+000      0 MyMult 'Object6'  # Data Set 6: Layer Row Column Stage Cond Rbot IFACE multiplier boundname
+END PERIOD 
+
+BEGIN PERIOD      3
+END PERIOD 
+
