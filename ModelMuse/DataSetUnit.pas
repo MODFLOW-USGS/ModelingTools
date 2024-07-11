@@ -3266,7 +3266,7 @@ begin
                             // the following doesn't work
                             // Assert(Model = AnotherDataSet.Model);
 
-                            // This ensures that the data sets all below to the
+                            // This ensures that the data sets all belong to the
                             // same model without testing for equality of
                             // Model and AnotherDataSet.Model.
                             Model.QueryInterface(IInterface, AnObject);
