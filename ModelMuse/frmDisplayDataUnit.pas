@@ -11,11 +11,11 @@ uses
   frameCustomColorUnit, frameColorGridUnit, frameContourDataUnit,
   frameVectorsUnit, frameDrawCrossSectionUnit, frameSwrReachConnectionsUnit,
   frameSwrObsDisplayUnit,
-  framePestObservationResultsUnit;
+  framePestObservationResultsUnit, frameMt3dObsResultsUnit;
 
 type
   TPostPages = (ppColorGrid, ppContourData, ppPathline, ppEndPoints,
-    ppTimeSeries, ppHeadObs, ppPestObs, ppSfrStreamLink, ppStrStreamLink,
+    ppTimeSeries, ppHeadObs, ppMt3dObs, ppPestObs, ppSfrStreamLink, ppStrStreamLink,
     ppSwrReachConnections, ppSwrObsDisplay,
     ppVectors, ppCrossSection);
 
@@ -53,6 +53,8 @@ type
     frameSwrObsDisplay: TframeSwrObsDisplay;
     jvspPestObsResults: TJvStandardPage;
     framePestObs: TframePestObservationResults;
+    jvspMt3dObs: TJvStandardPage;
+    frameMt3dObsResults: TframeMt3dObsResults;
     procedure btnApplyClick(Sender: TObject);
     procedure FormCreate(Sender: TObject); override;
     procedure pglstMainChange(Sender: TObject);
@@ -117,6 +119,7 @@ resourcestring
   StrSWRReachConnection = 'SWR Reach Connections';
   StrSWRObservations = 'SWR Observations';
   StrPESTObservationRes = 'PEST Observation Results';
+  StrMT3DObservationRes = 'MT3D Observation Results';
 
 {$R *.dfm}
 
@@ -179,8 +182,12 @@ begin
   Node := tvpglstMain.Items.Add(nil, StrHeadObservationRes) as TJvPageIndexNode;
   Node.PageIndex := jvspHeadObsResults.PageIndex;
 
+  Node := tvpglstMain.Items.Add(nil, StrMT3DObservationRes) as TJvPageIndexNode;
+  Node.PageIndex := jvspMt3dObs.PageIndex;
+
   Node := tvpglstMain.Items.Add(nil, StrPESTObservationRes) as TJvPageIndexNode;
   Node.PageIndex := jvspPestObsResults.PageIndex;
+
 
   Node := tvpglstMain.Items.Add(nil, StrStreamLinks) as TJvPageIndexNode;
   Node.PageIndex := jvspSfrStreamLinks.PageIndex;
@@ -287,7 +294,7 @@ procedure TfrmDisplayData.framePestObsflnmedHeadObsResultsChange(
   Sender: TObject);
 begin
   inherited;
-  framePestObs.flnmedHeadObsResultsChange(Sender);
+  framePestObs.fedHeadObsResultsChange(Sender);
 
 end;
 
@@ -386,6 +393,8 @@ begin
     frameModpathEndpointDisplay1.GetData;
     frameDrawCrossSection.GetData;
     frameSwrReachConnections.GetData;
+
+    frameMt3dObsResults.GetData;
   end;
   if frmGoPhast.ModelSelection in SutraSelection + [msModflow2015] then
   begin
@@ -459,6 +468,15 @@ begin
       frameHeadObservationResults.SetData;
     end;
   end
+
+  else if pglstMain.ActivePage = jvspMt3dObs then
+  begin
+    if frmGoPhast.ModelSelection in ModflowSelection then
+    begin
+      frameMt3dObsResults.SetData;
+    end;
+  end
+
   else if pglstMain.ActivePage = jvspPestObsResults then
   begin
     framePestObs.SetData;

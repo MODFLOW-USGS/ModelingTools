@@ -777,7 +777,7 @@ begin
   end;
   if inSaveObs > 0 then
   begin
-    WriteToMt3dMsNameFile(StrDataBinary, Mt3dTob_inSaveObs, ChangeFileExt(BaseName, '.pst'), foOutput, Model);
+    WriteToMt3dMsNameFile(StrDataBinary, Mt3dTob_inSaveObs, ChangeFileExt(BaseName, '._pst'), foOutput, Model);
   end;
 
 end;

@@ -1,33 +1,9 @@
-object framePestObservationResults: TframePestObservationResults
+object frameMt3dObsResults: TframeMt3dObsResults
   Left = 0
   Top = 0
   Width = 555
   Height = 521
   TabOrder = 0
-  object pnlBottom: TPanel
-    Left = 0
-    Top = 455
-    Width = 555
-    Height = 66
-    Align = alBottom
-    TabOrder = 0
-    object lblRMS: TLabel
-      Left = 10
-      Top = 6
-      Width = 217
-      Height = 15
-      Caption = 'Root Mean Square Weighted Residual = ?'
-    end
-    object comboModels: TComboBox
-      Left = 7
-      Top = 27
-      Width = 180
-      Height = 23
-      Style = csDropDownList
-      TabOrder = 0
-      Visible = False
-    end
-  end
   object pgcObservations: TPageControl
     Left = 0
     Top = 0
@@ -35,9 +11,8 @@ object framePestObservationResults: TframePestObservationResults
     Height = 455
     ActivePage = tabControls
     Align = alClient
-    TabOrder = 1
-    OnChange = pgcObservationsChange
-    ExplicitHeight = 454
+    TabOrder = 0
+    ExplicitTop = 8
     object tabControls: TTabSheet
       Caption = 'Controls'
       object lblNegativeColor: TLabel
@@ -70,14 +45,10 @@ object framePestObservationResults: TframePestObservationResults
       end
       object fedHeadObsResults: TJvFilenameEdit
         Left = 3
-        Top = 22
+        Top = 24
         Width = 505
         Height = 23
-        Filter = 
-          'PEST Residuals file (*.res)|*.res|PEST Intermim Residuals file (' +
-          '*.rei,*.rei.*)|*.rei; *.rei.*|Results files (*.Mf6Values, *.Mf20' +
-          '05Values, *.SutraValues)|*.Mf6Values;*.Mf2005Values;*.SutraValue' +
-          's'
+        Filter = 'MT3D TOB output file (*._pst)|*._pst'
         TabOrder = 0
         Text = ''
         OnChange = fedHeadObsResultsChange
@@ -220,7 +191,7 @@ object framePestObservationResults: TframePestObservationResults
           end
         end
       end
-      object clrbtnNegative: TJvColorButton
+      object btnNegative: TJvColorButton
         Left = 3
         Top = 319
         Width = 92
@@ -230,7 +201,7 @@ object framePestObservationResults: TframePestObservationResults
         TabOrder = 3
         TabStop = False
       end
-      object clrbtnPositive: TJvColorButton
+      object btnPositive: TJvColorButton
         Left = 255
         Top = 319
         Width = 92
@@ -240,7 +211,7 @@ object framePestObservationResults: TframePestObservationResults
         TabOrder = 4
         TabStop = False
       end
-      object spinSymbolSize: TJvSpinEdit
+      object seSymbolSize: TJvSpinEdit
         Left = 3
         Top = 354
         Width = 121
@@ -249,7 +220,6 @@ object framePestObservationResults: TframePestObservationResults
         MinValue = 1.000000000000000000
         Value = 20.000000000000000000
         TabOrder = 5
-        OnChange = spinSymbolSizeChange
       end
       object cbShow: TCheckBox
         Left = 3
@@ -271,13 +241,12 @@ object framePestObservationResults: TframePestObservationResults
           'Residuals'
           'Weighted residuals')
         TabOrder = 6
-        OnClick = rgDrawChoiceClick
       end
     end
     object tabValues: TTabSheet
       Caption = 'Values (read only)'
       ImageIndex = 1
-      object rdgPestObs: TRbwDataGrid4
+      object rdgMt3dObs: TRbwDataGrid4
         Left = 0
         Top = 0
         Width = 547
@@ -287,7 +256,6 @@ object framePestObservationResults: TframePestObservationResults
         FixedCols = 0
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
-        OnMouseUp = rdgPestObsMouseUp
         ExtendedAutoDistributeText = False
         AutoMultiEdit = True
         AutoDistributeText = False
@@ -619,7 +587,6 @@ object framePestObservationResults: TframePestObservationResults
         Align = alBottom
         ParentBackground = False
         TabOrder = 1
-        ExplicitTop = 359
         object btnCopy: TButton
           Left = 135
           Top = 32
@@ -627,7 +594,6 @@ object framePestObservationResults: TframePestObservationResults
           Height = 25
           Caption = 'Copy to clipboard'
           TabOrder = 2
-          OnClick = btnCopyClick
         end
         object btnHightlightObjects: TButton
           Left = 4
@@ -637,7 +603,6 @@ object framePestObservationResults: TframePestObservationResults
           Caption = 'Highlight selected objects'
           TabOrder = 0
           WordWrap = True
-          OnClick = btnHightlightObjectsClick
         end
         object btnRestore: TButton
           Left = 135
@@ -646,7 +611,6 @@ object framePestObservationResults: TframePestObservationResults
           Height = 25
           Caption = 'Original order'
           TabOrder = 1
-          OnClick = btnRestoreClick
         end
       end
     end
@@ -691,10 +655,6 @@ object framePestObservationResults: TframePestObservationResults
         Width = 547
         Height = 327
         Align = alClient
-        OnMouseDown = pbObservationsMouseDown
-        OnMouseMove = pbObservationsMouseMove
-        OnMouseUp = pbObservationsMouseUp
-        OnPaint = pbObservationsPaint
         ExplicitWidth = 520
         ExplicitHeight = 233
       end
@@ -733,24 +693,46 @@ object framePestObservationResults: TframePestObservationResults
             'Residual vs. Observed'
             'Weighted Residual vs. Observed')
           TabOrder = 0
-          OnClick = rgGraphTypeClick
         end
         object clbWhatToPlot: TCheckListBox
           Left = 279
           Top = 48
           Width = 194
           Height = 40
-          ItemHeight = 15
+          ItemHeight = 17
           Items.Strings = (
             'Observations'
             'Prior Information')
           TabOrder = 1
-          OnClickCheck = clbWhatToPlotClickCheck
         end
       end
     end
   end
-  object qtreeObservations: TRbwQuadTree
+  object pnlBottom: TPanel
+    Left = 0
+    Top = 455
+    Width = 555
+    Height = 66
+    Align = alBottom
+    TabOrder = 1
+    object lblRMS: TLabel
+      Left = 10
+      Top = 6
+      Width = 217
+      Height = 15
+      Caption = 'Root Mean Square Weighted Residual = ?'
+    end
+    object comboModels: TComboBox
+      Left = 7
+      Top = 27
+      Width = 180
+      Height = 23
+      Style = csDropDownList
+      TabOrder = 0
+      Visible = False
+    end
+  end
+  object qtreeeObservations: TRbwQuadTree
     MaxPoints = 100
     Left = 280
     Top = 16

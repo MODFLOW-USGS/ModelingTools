@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-07-15T09:29:29.017-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">TOB: Transport Observation Package Pane</title>
   <body>
     <header>
@@ -8,15 +8,16 @@
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">The TOB: Transport Observation Package pane is is on the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MODFLOW_Packages_Dialog_Box" styleclass="Normal" style="font-weight:bold;" translate="true">MODFLOW Packages and Programs</link><text styleclass="Normal" translate="true"> dialog box under </text><link displaytype="text" defaultstyle="true" type="topiclink" href="MT3DMS" styleclass="Normal" translate="true">MT3DMS or MT3D-USGS</link><text styleclass="Normal" translate="true">. It is used to specify some of the data for the TOB package in MT3DMS or MT3D-USGS. </text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Note that another sort of observation can be defined as part of the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="BTN_Basic_Transport_Package" styleclass="Normal" translate="true">Basic Transport Package</link><text styleclass="Normal" translate="true">. To define those observations, you set the data set MT3DMS_Observation_Locations to True.</text></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[inSaveObs]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[inSaveObs]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">inSaveObs—is an integer flag indicating whether the calculated concentrations and mass fluxes at the user-defined observation points and mass-flux objects should be saved to an unformatted (binary) output file [OUTNAM].PST.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">inSaveObs—is an integer flag indicating whether the calculated concentrations and mass fluxes at the user-defined observation points and mass-flux objects should be saved to an unformatted (binary) output file [OUTNAM]._PST.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">Note that the extension &quot;._PST&quot; is used for the file instead of &quot;.PST&quot; as specified in the MT3D documentation. This is to avoid a conflict with PEST. In PEST, the PEST control file must have the extension &quot;.PST&apos;.</text></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[CScale]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[CScale]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -24,17 +25,17 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[iOutCobs]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[iOutCobs]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
           <para styleclass="Normal"><text styleclass="Normal" translate="true">iOutCobs—indicates what type of output should be computed and saved:</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">If "concentrations" is selected, calculated concentrations at the observation locations are saved to the output file [OUTNAM].OCN;</text></para>
-          <para styleclass="Normal"><text styleclass="Normal" translate="true">If "concentrations, residuals" is selected, both calculated concentrations and residual errors between the calculated and observed values are saved to the output file [OUTNAM].OCN. The statistics of the residual errors are also computed and saved.</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If &quot;concentrations&quot; is selected, calculated concentrations at the observation locations are saved to the output file [OUTNAM].OCN;</text></para>
+          <para styleclass="Normal"><text styleclass="Normal" translate="true">If &quot;concentrations, residuals&quot; is selected, both calculated concentrations and residual errors between the calculated and observed values are saved to the output file [OUTNAM].OCN. The statistics of the residual errors are also computed and saved.</text></para>
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[iConcLOG]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[iConcLOG]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -44,7 +45,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[iConcINTP]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[iConcINTP]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -54,7 +55,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[FScale]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[FScale]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>
@@ -62,7 +63,7 @@
         </td>
       </tr>
     </table></para>
-    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[iOutFlux]]></caption></toggle></para>
+    <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><image src="hmtoggle_plus0.gif" scale="-99.90%" styleclass="Normal" figurelistinclude="0"></image><tab /><toggle type="dropdown" print-expanded="true" help-expanded="false" defaultstyle="true" translate="true" src-collapsed="hmtoggle_plus0.gif" src-expanded="hmtoggle_plus1.gif" styleclass="Strong"><caption translate="true"><![CDATA[iOutFlux]]></caption></toggle></para>
     <para styleclass="Normal" style="text-indent:-18px; margin-left:18px;"><table styleclass="Default" rowcount="1" colcount="1">
       <tr style="vertical-align:top">
         <td>

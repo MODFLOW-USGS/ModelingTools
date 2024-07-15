@@ -1004,6 +1004,7 @@ var
   IsResidFile: Boolean;
   Extension: string;
   Observed: IObservationItem;
+  IsObsExtractFile: Boolean;
 begin
   GetExistingObservations;
   result := False;
@@ -1022,6 +1023,9 @@ begin
     end;
     IsResidFile := SameText('.res', Extension)
       or SameText('.rei', Extension);
+    IsObsExtractFile := SameText('.Mf2005Values', Extension)
+      or SameText('.Mf6Values', Extension)
+      or SameText('.SutraValues', Extension);
     ResidualsFile := TStringList.Create;
     Splitter := TStringList.Create;
     try
@@ -1031,6 +1035,10 @@ begin
       NameFound := False;
       for LineIndex := 0 to ResidualsFile.Count - 1 do
       begin
+        if (LineIndex = 0) and IsObsExtractFile then
+        begin
+          Continue;
+        end;
         ALine := ResidualsFile[LineIndex];
         ALine := ReplaceStr(ALine, 'Cov. Mat.', 'Covariance_Matrix');
         Splitter.DelimitedText := ResidualsFile[LineIndex];
@@ -1047,6 +1055,10 @@ begin
           if IsResidFile then
           begin
             Assert(Splitter.Count >= 6);
+          end
+          else if IsObsExtractFile then
+          begin
+            Assert(Splitter.Count >= 4);
           end
           else
           begin

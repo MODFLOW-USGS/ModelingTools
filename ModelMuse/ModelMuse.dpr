@@ -944,7 +944,9 @@ uses
   Modflow6ModelImporter in 'Modflow6ModelImporter.pas',
   InputDataObservationsUnit in 'InputDataObservationsUnit.pas',
   frmImportWarningsUnit in 'frmImportWarningsUnit.pas' {frmImportWarnings},
-  framePackageUseMultiplierUnit in 'framePackageUseMultiplierUnit.pas' {framePackageUseMultiplier: TFrame};
+  framePackageUseMultiplierUnit in 'framePackageUseMultiplierUnit.pas' {framePackageUseMultiplier: TFrame},
+  Mt3dObservationResultsUnit in 'Mt3dObservationResultsUnit.pas',
+  frameMt3dObsResultsUnit in 'frameMt3dObsResultsUnit.pas' {frameMt3dObsResults: TFrame};
 
 {$R *.res}
 

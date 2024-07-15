@@ -4430,6 +4430,10 @@ procedure TFormulaProperty.ResetBoundaryObserver(Index: integer);
 var
   Observer: TObserver;
 begin
+  if (ScreenObject <> nil) and not (ScreenObject as TScreenObject).CanInvalidateModel then
+  begin
+    Exit;
+  end;
   if Index < FObserverList.Count then
   begin
     Observer := FObserverList[Index];

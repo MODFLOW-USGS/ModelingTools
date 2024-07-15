@@ -60,7 +60,7 @@ type
     lblColorPositive: TLabel;
     lblMaxSymbolSize: TLabel;
     lblHeadObsResults: TLabel;
-    flnmedHeadObsResults: TJvFilenameEdit;
+    fedHeadObsResults: TJvFilenameEdit;
     grpbxFilter: TGroupBox;
     lblMaximumTime: TLabel;
     lblMaxResidual: TLabel;
@@ -98,7 +98,7 @@ type
     rgDrawChoice: TRadioGroup;
     clbWhatToPlot: TCheckListBox;
     lblWhatToPlot: TLabel;
-    procedure flnmedHeadObsResultsChange(Sender: TObject);
+    procedure fedHeadObsResultsChange(Sender: TObject);
     procedure btnCopyClick(Sender: TObject);
     procedure btnHightlightObjectsClick(Sender: TObject);
     procedure spinSymbolSizeChange(Sender: TObject);
@@ -547,6 +547,42 @@ var
   begin
     result := True;
   end;
+  function OkResidual(Residual: Double): Boolean;
+  begin
+    result := True;
+    if framelmtMinResidual.cbCheck.Checked then
+    begin
+      result := Residual >= framelmtMinResidual.rdeLimit.RealValue;
+    end;
+    if framelmtMaxResidual.cbCheck.Checked then
+    begin
+      result := result and (Residual <= framelmtMaxResidual.rdeLimit.RealValue);
+    end;
+  end;
+  function OkTime(Time: Double): Boolean;
+  begin
+    result := True;
+    if framelmtMinimumTime.cbCheck.Checked then
+    begin
+      result := Time >= framelmtMinimumTime.rdeLimit.RealValue;
+    end;
+    if framelmtMaximumTime.cbCheck.Checked then
+    begin
+      result := result and (Time <= framelmtMaximumTime.rdeLimit.RealValue);
+    end;
+  end;
+  function OkWeigthedResidual(WeightedResidual: Double): Boolean;
+  begin
+    result := True;
+    if framelmtMinWeightedResidual.cbCheck.Checked then
+    begin
+      result := WeightedResidual >= framelmtMinWeightedResidual.rdeLimit.RealValue;
+    end;
+    if framelmtMaxWeightedResidual.cbCheck.Checked then
+    begin
+      result := result and (WeightedResidual <= framelmtMaxWeightedResidual.rdeLimit.RealValue);
+    end;
+  end;
   function OkItem(ObsItem: TPestObsResult): Boolean;
   begin
     result := True;
@@ -557,6 +593,7 @@ var
       else
         Assert(False);
     end;
+
   end;
   function GetPlotValue(ObsItem: TPestObsResult): double;
   begin
@@ -614,7 +651,8 @@ begin
         end;
 
         SimValue := GetPlotValue(ObsItem);
-        if OkSimValue(SimValue) then
+        if OkSimValue(SimValue) and OkResidual(ObsItem.Residual)
+          and OkTime(ObsItem.Time) and OkWeigthedResidual(ObsItem.WeightedResidual) then
         begin
           SimList.Add(ObsItem);
           if Initialized then
@@ -923,23 +961,23 @@ begin
   DisplayRMS;
 end;
 
-procedure TframePestObservationResults.flnmedHeadObsResultsChange(
+procedure TframePestObservationResults.fedHeadObsResultsChange(
   Sender: TObject);
 begin
   if FGettingData then
   begin
     Exit;
   end;
-  if TFile.Exists(flnmedHeadObsResults.FileName) then
+  if TFile.Exists(fedHeadObsResults.FileName) then
   begin
-    if TFile.GetSize(flnmedHeadObsResults.FileName) = 0 then
+    if TFile.GetSize(fedHeadObsResults.FileName) = 0 then
     begin
       Beep;
       MessageDlg(Format('%s is empty.',
-        [flnmedHeadObsResults.FileName]), mtWarning, [mbOK], 0);
+        [fedHeadObsResults.FileName]), mtWarning, [mbOK], 0);
       Exit;
     end;
-    FImportResult := FObservations.ReadFromFile(flnmedHeadObsResults.FileName);
+    FImportResult := FObservations.ReadFromFile(fedHeadObsResults.FileName);
     FUndoType := utImport;
   end
   else
@@ -949,7 +987,7 @@ begin
     FObservations.Clear;
   end;
   FillTable;
-  if (flnmedHeadObsResults.FilterIndex = 3) then
+  if (fedHeadObsResults.FilterIndex = 3) then
   begin
     if rgDrawChoice.ItemIndex = 1 then
     begin
@@ -974,7 +1012,7 @@ begin
       FObservations := TPestObsCollection.Create(nil);
     end;
     FObservations.Assign(frmGoPhast.PhastModel.PestObsCollection);
-    flnmedHeadObsResults.FileName := FObservations.FileName;
+    fedHeadObsResults.FileName := FObservations.FileName;
     FillTable;
 
     framelmtMinResidual.Limit := FObservations.MinResidualLimit;
@@ -1041,7 +1079,7 @@ procedure TframePestObservationResults.SetData;
 var
   Undo: TCustomUndoChangePestObsResults;
 begin
-  FObservations.FileName := flnmedHeadObsResults.FileName;
+  FObservations.FileName := fedHeadObsResults.FileName;
   FObservations.MinResidualLimit := framelmtMinResidual.Limit;
   FObservations.MaxResidualLimit := framelmtMaxResidual.Limit;
   FObservations.MinTimeLimit := framelmtMinimumTime.Limit;
@@ -1252,12 +1290,6 @@ procedure TCustomUndoChangePestObsResults.UpdateGUI;
 begin
   frmGoPhast.TopDiscretizationChanged := True;
   frmGoPhast.frameTopView.ZoomBox.InvalidateImage32;
-//  frmGoPhast.EnableExportHeadObs(nil);
-
-//  if frmDisplayData <> nil then
-//  begin
-//    frmDisplayData.frameHeadObservationResults.UpdateSelectedModel;
-//  end;
 end;
 
 procedure InitializeSortOrder;

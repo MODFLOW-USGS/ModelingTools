@@ -14797,6 +14797,7 @@ var
   Identical: Boolean;
   Method: TPestParamMethod;
   Modifier: string;
+  PriorCanInvalidateModel: Boolean;
 begin
   ValuesFunction := GetBoundaryValues;
   ColumnOffset := 2;
@@ -14863,22 +14864,28 @@ begin
       for ScreenObjectIndex := 0 to ScreenObjectList.Count - 1 do
       begin
         AScreenObject := ScreenObjectList[ScreenObjectIndex];
-        Boundary := AScreenObject.GetMfBoundary(Parameter);
-        if (Boundary <> nil) and Boundary.Used then
-        begin
-          if First then
+        PriorCanInvalidateModel := AScreenObject.CanInvalidateModel;
+        AScreenObject.CanInvalidateModel := False;
+        try
+          Boundary := AScreenObject.GetMfBoundary(Parameter);
+          if (Boundary <> nil) and Boundary.Used then
           begin
-            Modifier := Boundary.PestBoundaryFormula[BoundaryIndex];
-            First := False;
-          end
-          else
-          begin
-            Identical := Modifier = Boundary.PestBoundaryFormula[BoundaryIndex];
-            if not Identical then
+            if First then
             begin
-              break;
+              Modifier := Boundary.PestBoundaryFormula[BoundaryIndex];
+              First := False;
+            end
+            else
+            begin
+              Identical := Modifier = Boundary.PestBoundaryFormula[BoundaryIndex];
+              if not Identical then
+              begin
+                break;
+              end;
             end;
           end;
+        finally
+          AScreenObject.CanInvalidateModel := PriorCanInvalidateModel;
         end;
       end;
       if Identical then
