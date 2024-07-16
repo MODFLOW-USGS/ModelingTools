@@ -98,9 +98,9 @@ type
     rgDrawChoice: TRadioGroup;
     clbWhatToPlot: TCheckListBox;
     lblWhatToPlot: TLabel;
-    procedure fedHeadObsResultsChange(Sender: TObject);
     procedure btnCopyClick(Sender: TObject);
     procedure btnHightlightObjectsClick(Sender: TObject);
+    procedure fedHeadObsResultsChange(Sender: TObject);
     procedure spinSymbolSizeChange(Sender: TObject);
     procedure rgGraphTypeClick(Sender: TObject);
     procedure pgcObservationsChange(Sender: TObject);
@@ -775,10 +775,8 @@ begin
           begin
             SimValue := GetPlotValue(ObsItem);
 
-//            xytext(clBlack, ObsItem.Name, ObsItem.Measured, SimValue, 0, -10, 2);
             xyusertoabs(ObsItem.Measured, SimValue, CoordX, CoordY);
             simpletext(clBlack, ObsItem.Name, CoordX, CoordY-10, 0,0);
-//            pbObservations.Canvas.TextOut(CoordX, CoordY, ObsItem.Name);
           end;
         end;
       except on E: exception do
@@ -803,23 +801,23 @@ var
   Index: integer;
   CM: TCompareMethod;
 begin
-    rdgPestObs.MouseToCell(X, Y, ACol, ARow);
-    if (ARow = 0) and (ACol >= 0) and (ACol < rdgPestObs.ColCount) then
+  rdgPestObs.MouseToCell(X, Y, ACol, ARow);
+  if (ARow = 0) and (ACol >= 0) and (ACol < rdgPestObs.ColCount) then
+  begin
+    TGridCrack(rdgPestObs).HideEditor;
+    ObsCol := TPestObsColumns(ACol);
+    for Index := 0 to SortOrder.Count-1 do
     begin
-      TGridCrack(rdgPestObs).HideEditor;
-      ObsCol := TPestObsColumns(ACol);
-      for Index := 0 to SortOrder.Count-1 do
+      CM := SortOrder[Index];
+      if CM.Method = ObsCol then
       begin
-        CM := SortOrder[Index];
-        if CM.Method = ObsCol then
-        begin
-          SortOrder.Extract(CM);
-          SortOrder.Insert(0, CM);
-          FillTable;
-          break;
-        end;
+        SortOrder.Extract(CM);
+        SortOrder.Insert(0, CM);
+        FillTable;
+        break;
       end;
     end;
+  end;
 end;
 
 procedure TframePestObservationResults.rgDrawChoiceClick(Sender: TObject);

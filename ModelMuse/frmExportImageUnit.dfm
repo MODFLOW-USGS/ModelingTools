@@ -2,8 +2,8 @@ inherited frmExportImage: TfrmExportImage
   HelpType = htKeyword
   HelpKeyword = 'Export_Image_Dialog_Box'
   Caption = 'Export Image'
-  ClientHeight = 549
-  ClientWidth = 731
+  ClientHeight = 548
+  ClientWidth = 727
   ShowHint = True
   OnClose = FormClose
   ExplicitWidth = 743
@@ -12,7 +12,7 @@ inherited frmExportImage: TfrmExportImage
   object JvNetscapeSplitter2: TJvNetscapeSplitter
     Left = 249
     Top = 0
-    Height = 444
+    Height = 443
     Align = alLeft
     MinSize = 3
     Maximized = False
@@ -26,7 +26,7 @@ inherited frmExportImage: TfrmExportImage
     Left = 0
     Top = 0
     Width = 249
-    Height = 444
+    Height = 443
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 0
@@ -44,7 +44,6 @@ inherited frmExportImage: TfrmExportImage
       HeaderFont.Name = 'Tahoma'
       HeaderFont.Style = []
       TabOrder = 0
-      ExplicitHeight = 447
       object cpAnimation: TCategoryPanel
         Top = 416
         Height = 30
@@ -52,6 +51,7 @@ inherited frmExportImage: TfrmExportImage
         Collapsed = True
         TabOrder = 0
         OnExpand = cpAnimationExpand
+        ExplicitWidth = 245
         ExpandedHeight = 386
         object pnlAnimation: TPanel
           Left = 0
@@ -261,6 +261,7 @@ inherited frmExportImage: TfrmExportImage
         Collapsed = True
         TabOrder = 1
         OnExpand = cpTextExpand
+        ExplicitWidth = 245
         ExpandedHeight = 386
         object pnlText: TPanel
           Left = 0
@@ -399,6 +400,7 @@ inherited frmExportImage: TfrmExportImage
         Caption = '&View'
         TabOrder = 2
         OnExpand = cpViewExpand
+        ExplicitWidth = 185
         object Panel3: TPanel
           Left = 0
           Top = 0
@@ -545,15 +547,15 @@ inherited frmExportImage: TfrmExportImage
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 444
-    Width = 731
+    Top = 443
+    Width = 727
     Height = 105
     Align = alBottom
     TabOrder = 2
     ExplicitTop = 447
     ExplicitWidth = 709
     DesignSize = (
-      731
+      727
       105)
     object lblSavedSettings: TLabel
       Left = 6
@@ -564,7 +566,7 @@ inherited frmExportImage: TfrmExportImage
       FocusControl = comboSavedSettings
     end
     object btnHelp: TBitBtn
-      Left = 627
+      Left = 619
       Top = 6
       Width = 87
       Height = 26
@@ -576,7 +578,7 @@ inherited frmExportImage: TfrmExportImage
       ExplicitLeft = 605
     end
     object btnClose: TBitBtn
-      Left = 627
+      Left = 619
       Top = 38
       Width = 87
       Height = 26
@@ -610,7 +612,7 @@ inherited frmExportImage: TfrmExportImage
       OnDropDown = comboSavedSettingsDropDown
     end
     object btnRefresh: TBitBtn
-      Left = 406
+      Left = 398
       Top = 6
       Width = 87
       Height = 58
@@ -645,7 +647,7 @@ inherited frmExportImage: TfrmExportImage
       OnClick = btnManageSettingsClick
     end
     object btnSaveImage1: TJvBitBtn
-      Left = 499
+      Left = 491
       Top = 38
       Width = 122
       Height = 26
@@ -676,7 +678,7 @@ inherited frmExportImage: TfrmExportImage
       ExplicitLeft = 477
     end
     object JvBitBtn1: TJvBitBtn
-      Left = 499
+      Left = 491
       Top = 6
       Width = 122
       Height = 26
@@ -842,8 +844,8 @@ inherited frmExportImage: TfrmExportImage
   object scrollBoxPreview: TScrollBox
     Left = 259
     Top = 0
-    Width = 472
-    Height = 444
+    Width = 468
+    Height = 443
     Align = alClient
     TabOrder = 1
     ExplicitWidth = 450

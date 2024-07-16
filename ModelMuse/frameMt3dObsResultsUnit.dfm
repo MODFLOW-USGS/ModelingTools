@@ -12,7 +12,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
     ActivePage = tabControls
     Align = alClient
     TabOrder = 0
-    ExplicitTop = 8
+    OnChange = pgcObservationsChange
     object tabControls: TTabSheet
       Caption = 'Controls'
       object lblNegativeColor: TLabel
@@ -191,7 +191,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
           end
         end
       end
-      object btnNegative: TJvColorButton
+      object clrbtnNegative: TJvColorButton
         Left = 3
         Top = 319
         Width = 92
@@ -201,7 +201,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
         TabOrder = 3
         TabStop = False
       end
-      object btnPositive: TJvColorButton
+      object clrbtnPositive: TJvColorButton
         Left = 255
         Top = 319
         Width = 92
@@ -220,6 +220,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
         MinValue = 1.000000000000000000
         Value = 20.000000000000000000
         TabOrder = 5
+        OnChange = seSymbolSizeChange
       end
       object cbShow: TCheckBox
         Left = 3
@@ -241,6 +242,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
           'Residuals'
           'Weighted residuals')
         TabOrder = 6
+        OnClick = rgDrawChoiceClick
       end
     end
     object tabValues: TTabSheet
@@ -252,10 +254,11 @@ object frameMt3dObsResults: TframeMt3dObsResults
         Width = 547
         Height = 360
         Align = alClient
-        ColCount = 13
+        ColCount = 10
         FixedCols = 0
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goAlwaysShowEditor]
         TabOrder = 0
+        OnMouseUp = rdgMt3dObsMouseUp
         ExtendedAutoDistributeText = False
         AutoMultiEdit = True
         AutoDistributeText = False
@@ -327,30 +330,6 @@ object frameMt3dObsResults: TframeMt3dObsResults
             CheckMax = False
             CheckMin = False
             ComboUsed = False
-            Format = rcf4String
-            LimitToList = False
-            MaxLength = 0
-            ParentButtonFont = False
-            WordWrapCaptions = True
-            WordWrapCells = False
-            CaseSensitivePicklist = False
-            CheckStyle = csCheck
-            AutoAdjustColWidths = True
-          end
-          item
-            AutoAdjustRowHeights = False
-            AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
-            ButtonFont.Charset = DEFAULT_CHARSET
-            ButtonFont.Color = clWindowText
-            ButtonFont.Height = -11
-            ButtonFont.Name = 'Tahoma'
-            ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
-            CheckMax = False
-            CheckMin = False
-            ComboUsed = False
             Format = rcf4Real
             LimitToList = False
             MaxLength = 0
@@ -520,54 +499,6 @@ object frameMt3dObsResults: TframeMt3dObsResults
             CheckMin = False
             ComboUsed = False
             Format = rcf4Real
-            LimitToList = False
-            MaxLength = 0
-            ParentButtonFont = False
-            WordWrapCaptions = True
-            WordWrapCells = False
-            CaseSensitivePicklist = False
-            CheckStyle = csCheck
-            AutoAdjustColWidths = True
-          end
-          item
-            AutoAdjustRowHeights = False
-            AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
-            ButtonFont.Charset = DEFAULT_CHARSET
-            ButtonFont.Color = clWindowText
-            ButtonFont.Height = -11
-            ButtonFont.Name = 'Tahoma'
-            ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
-            CheckMax = False
-            CheckMin = False
-            ComboUsed = False
-            Format = rcf4String
-            LimitToList = False
-            MaxLength = 0
-            ParentButtonFont = False
-            WordWrapCaptions = True
-            WordWrapCells = False
-            CaseSensitivePicklist = False
-            CheckStyle = csCheck
-            AutoAdjustColWidths = True
-          end
-          item
-            AutoAdjustRowHeights = False
-            AutoAdjustCaptionRowHeights = True
-            ButtonCaption = '...'
-            ButtonFont.Charset = DEFAULT_CHARSET
-            ButtonFont.Color = clWindowText
-            ButtonFont.Height = -11
-            ButtonFont.Name = 'Tahoma'
-            ButtonFont.Style = []
-            ButtonUsed = False
-            ButtonWidth = 20
-            CheckMax = False
-            CheckMin = False
-            ComboUsed = False
-            Format = rcf4String
             LimitToList = False
             MaxLength = 0
             ParentButtonFont = False
@@ -594,6 +525,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
           Height = 25
           Caption = 'Copy to clipboard'
           TabOrder = 2
+          OnClick = btnCopyClick
         end
         object btnHightlightObjects: TButton
           Left = 4
@@ -603,6 +535,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
           Caption = 'Highlight selected objects'
           TabOrder = 0
           WordWrap = True
+          OnClick = btnHightlightObjectsClick
         end
         object btnRestore: TButton
           Left = 135
@@ -611,6 +544,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
           Height = 25
           Caption = 'Original order'
           TabOrder = 1
+          OnClick = btnRestoreClick
         end
       end
     end
@@ -655,6 +589,10 @@ object frameMt3dObsResults: TframeMt3dObsResults
         Width = 547
         Height = 327
         Align = alClient
+        OnMouseDown = pbObservationsMouseDown
+        OnMouseMove = pbObservationsMouseMove
+        OnMouseUp = pbObservationsMouseUp
+        OnPaint = pbObservationsPaint
         ExplicitWidth = 520
         ExplicitHeight = 233
       end
@@ -666,20 +604,12 @@ object frameMt3dObsResults: TframeMt3dObsResults
         Align = alBottom
         ParentBackground = False
         TabOrder = 0
-        ExplicitTop = 326
         object lblGraphInstructions: TLabel
           Left = 279
           Top = 6
           Width = 161
           Height = 15
           Caption = 'Click on a point to highlight it.'
-        end
-        object lblWhatToPlot: TLabel
-          Left = 279
-          Top = 30
-          Width = 66
-          Height = 15
-          Caption = 'What to plot'
         end
         object rgGraphType: TRadioGroup
           Left = 4
@@ -693,17 +623,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
             'Residual vs. Observed'
             'Weighted Residual vs. Observed')
           TabOrder = 0
-        end
-        object clbWhatToPlot: TCheckListBox
-          Left = 279
-          Top = 48
-          Width = 194
-          Height = 40
-          ItemHeight = 17
-          Items.Strings = (
-            'Observations'
-            'Prior Information')
-          TabOrder = 1
+          OnClick = rgGraphTypeClick
         end
       end
     end
@@ -732,7 +652,7 @@ object frameMt3dObsResults: TframeMt3dObsResults
       Visible = False
     end
   end
-  object qtreeeObservations: TRbwQuadTree
+  object qtreeObservations: TRbwQuadTree
     MaxPoints = 100
     Left = 280
     Top = 16

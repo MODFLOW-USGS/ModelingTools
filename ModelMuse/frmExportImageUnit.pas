@@ -1290,11 +1290,12 @@ begin
       begin
         LocalModel.DrawHeadObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
         LocalModel.DrawPestPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+        LocalModel.DrawMt3dPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
         LocalModel.DrawSfrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
         LocalModel.DrawStrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
         LocalModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
         LocalModel.DrawSwrReachConnections(FModelImage, frmGoPhast.frameTopView.ZoomBox);
-          if LocalModel.LgrUsed then
+        if LocalModel.LgrUsed then
         begin
           for ChildIndex := 0 to LocalModel.ChildModels.Count - 1 do
           begin
@@ -1303,6 +1304,7 @@ begin
             begin
               ChildModel.DrawHeadObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
               ChildModel.DrawPestPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
+              ChildModel.DrawMt3dPointObservations(FModelImage, frmGoPhast.frameTopView.ZoomBox);
               ChildModel.DrawSfrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
               ChildModel.DrawStrStreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
               ChildModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
@@ -1483,6 +1485,7 @@ begin
           begin
             LocalModel.DrawHeadObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
             LocalModel.DrawPestPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+            LocalModel.DrawMt3dPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
             LocalModel.DrawSfrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
             LocalModel.DrawStrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
             LocalModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);
@@ -1496,6 +1499,7 @@ begin
                 begin
                   ChildModel.DrawHeadObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
                   ChildModel.DrawPestPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
+                  ChildModel.DrawMt3dPointObservations(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
                   ChildModel.DrawSfrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
                   ChildModel.DrawStrStreamLinkages(ModelMetaFileCanvas, frmGoPhast.frameTopView.ZoomBox);
                   ChildModel.DrawSfrMf6StreamLinkages(FModelImage, frmGoPhast.frameTopView.ZoomBox);

@@ -15813,17 +15813,14 @@ begin
   FMt3d_UZT_Rech_Node := nil;
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
-  // UZT is not currently supported with MODFLOW 6.
-//    Used := frmGoPhast.PhastModel.UzfMf6IsSelected and
-//      (frmGoPhast.PhastModel.Mt3d_UztIsSelected
-//      or frmGoPhast.PhastModel.Mt3dmsIsSelected)
+  // UZT in MODFLOW 6 is different from UZT in MODFLOW-2005.
     Used := False
   end
   else
   begin
     Used := frmGoPhast.PhastModel.UzfIsSelected and
       (frmGoPhast.PhastModel.Mt3d_UztIsSelected
-      or frmGoPhast.PhastModel.Mt3dmsIsSelected)
+      or frmGoPhast.PhastModel.Mt3dIsSelected)
   end;
   if Used then
   begin
@@ -22996,7 +22993,7 @@ var
   State: TCheckBoxState;
   FoundFirst: boolean;
 begin
-  if not frmGoPhast.PhastModel.Mt3dmsIsSelected then
+  if not frmGoPhast.PhastModel.Mt3dIsSelected then
   begin
     Exit;
   end;
@@ -23116,7 +23113,7 @@ var
   State: TCheckBoxState;
 //  FoundFirst: boolean;
 begin
-  if not frmGoPhast.PhastModel.Mt3dmsIsSelected then
+  if not frmGoPhast.PhastModel.Mt3dIsSelected then
   begin
     Exit;
   end;
@@ -23256,7 +23253,7 @@ var
   State: TCheckBoxState;
 //  FoundFirst: boolean;
 begin
-  if not frmGoPhast.PhastModel.Mt3dmsIsSelected then
+  if not frmGoPhast.PhastModel.Mt3dIsSelected then
   begin
     Exit;
   end;
@@ -23344,7 +23341,7 @@ var
   State: TCheckBoxState;
 //  FoundFirst: boolean;
 begin
-  if not frmGoPhast.PhastModel.Mt3dmsIsSelected then
+  if not frmGoPhast.PhastModel.Mt3dIsSelected then
   begin
     Exit;
   end;
@@ -23431,7 +23428,7 @@ var
   State: TCheckBoxState;
 //  FoundFirst: boolean;
 begin
-  if not frmGoPhast.PhastModel.Mt3dmsIsSelected then
+  if not frmGoPhast.PhastModel.Mt3dIsSelected then
   begin
     Exit;
   end;

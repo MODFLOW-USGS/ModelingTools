@@ -323,7 +323,7 @@ begin
       MessageDlg(StrTheMaximumNumberO, mtWarning, [mbOK], 0);
     end;
   end;
-  if (TotalSteps > 1000) and frmGoPhast.PhastModel.Mt3dmsIsSelected then
+  if (TotalSteps > 1000) and frmGoPhast.PhastModel.Mt3dIsSelected then
   begin
     Beep;
     MessageDlg(StrMT3DMSAllowsAMaxi, mtWarning, [mbOK], 0);
@@ -1020,8 +1020,8 @@ begin
       rdgAts.EndUpdate;
     end;
 
-    tabMt3dms.TabVisible := frmGoPhast.PhastModel.Mt3dmsIsSelected;
-    if frmGoPhast.PhastModel.Mt3dmsIsSelected then
+    tabMt3dms.TabVisible := frmGoPhast.PhastModel.Mt3dIsSelected;
+    if frmGoPhast.PhastModel.Mt3dIsSelected then
     begin
       frameGrid.Grid.BeginUpdate;
       try

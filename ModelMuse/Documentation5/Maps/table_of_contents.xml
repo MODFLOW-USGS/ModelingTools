@@ -996,6 +996,9 @@
         <topicref type="topic" id="407483930310218" build="ALL" modified="2011-10-17T11:22:47.090Z" icon="0" href="Head_Observation_Results">
           <caption translate="true">Head Observation Results Pane</caption>
         </topicref>
+        <topicref type="topic" id="454895928550093" build="ALL" modified="2024-07-16T15:27:06.371Z" icon="0" href="MT3D-Observations-Results-Pane">
+          <caption translate="true">MT3D Observations Results Pane</caption>
+        </topicref>
         <topicref type="topic" id="444875875062253" build="ALL" modified="2021-10-18T15:12:50.063Z" icon="0" href="PEST_Observation_Results_Pane">
           <caption translate="true">PEST Observation Results Pane</caption>
         </topicref>

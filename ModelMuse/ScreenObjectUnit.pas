@@ -35762,7 +35762,7 @@ begin
     ModflowMnw2Boundary.UpdateTimes(ModflowTimes,
       StartTestTime, EndTestTime, StartRangeExtended,EndRangeExtended, Model);
   end;
-  if PhastModel.Mt3dmsIsSelected
+  if PhastModel.Mt3dIsSelected
     and (Mt3dmsConcBoundary <> nil)
     and Mt3dmsConcBoundary.Used
     and (Model.ModelSelection <> msModflow2015)
@@ -35771,7 +35771,7 @@ begin
     Mt3dmsConcBoundary.UpdateTimes(ModflowTimes,
       StartTestTime, EndTestTime, StartRangeExtended,EndRangeExtended, Model);
   end;
-  if PhastModel.Mt3dmsIsSelected
+  if PhastModel.Mt3dIsSelected
     and (Mt3dUzfRechConc <> nil)
     and Mt3dUzfRechConc.Used
     and (Model.ModelSelection <> msModflow2015)
@@ -35780,7 +35780,7 @@ begin
     Mt3dUzfRechConc.UpdateTimes(ModflowTimes,
       StartTestTime, EndTestTime, StartRangeExtended,EndRangeExtended, Model);
   end;
-  if PhastModel.Mt3dmsIsSelected
+  if PhastModel.Mt3dIsSelected
     and (Mt3dUztSatEtConcBoundary <> nil)
     and Mt3dUztSatEtConcBoundary.Used
     and (Model.ModelSelection <> msModflow2015)
@@ -35789,7 +35789,7 @@ begin
     Mt3dUztSatEtConcBoundary.UpdateTimes(ModflowTimes,
       StartTestTime, EndTestTime, StartRangeExtended,EndRangeExtended, Model);
   end;
-  if PhastModel.Mt3dmsIsSelected
+  if PhastModel.Mt3dIsSelected
     and (Mt3dUztUnsatEtConcBoundary <> nil)
     and Mt3dUztUnsatEtConcBoundary.Used
     and (Model.ModelSelection <> msModflow2015)
@@ -35798,7 +35798,7 @@ begin
     Mt3dUztUnsatEtConcBoundary.UpdateTimes(ModflowTimes,
       StartTestTime, EndTestTime, StartRangeExtended,EndRangeExtended, Model);
   end;
-  if PhastModel.Mt3dmsIsSelected
+  if PhastModel.Mt3dIsSelected
     and (Mt3dUzSsmSinkConcBoundary <> nil)
     and Mt3dUzSsmSinkConcBoundary.Used
     and (Model.ModelSelection <> msModflow2015)

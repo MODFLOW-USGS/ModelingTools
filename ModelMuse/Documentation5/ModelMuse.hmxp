@@ -142,7 +142,7 @@
       <config-value name="deffont">font-family:'MS Sans Serif'; font-size:8pt; color:#000000;</config-value>
       <config-value name="contents"></config-value>
       <config-value name="topicprefix"></config-value>
-      <config-value name="autohelpstart">4516</config-value>
+      <config-value name="autohelpstart">4517</config-value>
       <config-value name="autohelpincrement">1</config-value>
       <config-value name="autohelpanchor">1</config-value>
       <config-value name="searchpath">.\;.\Used Images\;.\ScreenShots\;.\ModflowGuide\;.\Topics\Invisible\;.\ModflowGuide\Figures\;.\Topics\</config-value>
@@ -1466,6 +1466,7 @@ document.write('</frameset>');
       <helpcontext-number href="MT3DMS" value="3639"/>
       <helpcontext-number href="MT3DMS_Pane" value="3648"/>
       <helpcontext-number href="MT3DMS_Pane#TIMPRS" value="3662"/>
+      <helpcontext-number href="MT3D-Observations-Results-Pane" value="4517"/>
       <helpcontext-number href="MT3D-USGS_Output_Control_in_GW" value="4101"/>
       <helpcontext-number href="MultiInterpolate" value="850"/>
       <helpcontext-number href="Multiplier_and_Zone_Arrays" value="3300"/>

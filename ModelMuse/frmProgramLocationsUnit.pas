@@ -435,12 +435,12 @@ begin
     or (frmGoPhast.PhastModel.ModelSelection <> msModflow2015);
 
   jvrltMt3dms.Collapsed :=
-    not frmGoPhast.PhastModel.Mt3dmsIsSelected
+    not frmGoPhast.PhastModel.Mt3dIsSelected
     or (frmGoPhast.PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion <> mvMS);
   CheckControl(fedMt3dms);
 
   jvrltMt3dUsgs.Collapsed :=
-    not frmGoPhast.PhastModel.Mt3dmsIsSelected
+    not frmGoPhast.PhastModel.Mt3dIsSelected
     or (frmGoPhast.PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion <> mvUSGS);
   CheckControl(fedMt3dms);
 

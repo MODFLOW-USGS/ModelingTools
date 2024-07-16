@@ -143,11 +143,11 @@ type
     FFileDate: TDateTime;
     FMaxResidualLimit: TColoringLimit;
     FMinTimeLimit: TColoringLimit;
-    FPositiveColor: TColor;
     FMinResidualLimit: TColoringLimit;
     FVisible: boolean;
     FMaxWeightedResidualLimit: TColoringLimit;
     FMaxSymbolSize: integer;
+    FPositiveColor: TColor;
     FNegativeColor: TColor;
     FPositiveColor32: TColor32;
     FNegativeColor32: TColor32;
@@ -751,8 +751,6 @@ begin
   FMaxResidualLimit := TColoringLimit.Create;
   FMinTimeLimit := TColoringLimit.Create;
   FMinResidualLimit := TColoringLimit.Create;
-//  FMaxLayerLimit := TColoringLimit.Create;
-//  FMinLayerLimit := TColoringLimit.Create;
   FMaxWeightedResidualLimit := TColoringLimit.Create;
   FMinWeightedResidualLimit := TColoringLimit.Create;
 //  if FModel <> nil then
@@ -786,12 +784,10 @@ end;
 procedure TPestObsCollection.CalculateMaxValues;
 var
   Obs: TPestObsResult;
-//  UsedObs: TList<TPestObsResult>;
   ObsIndex: Integer;
 begin
   FMaxObjectResidual := 0;
   FMaxObjectWeightedResidual := 0;
-//  UsedObs := TList<TPestObsResult>.Create;
   try
     for ObsIndex := 0 to Count - 1 do
     begin

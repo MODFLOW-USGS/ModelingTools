@@ -327,6 +327,7 @@ var
   SwrSelected: Boolean;
   Modflow6Selected: Boolean;
   PestSelected: Boolean;
+  Mt3dSelected: Boolean;
 begin
   Handle;
   tvpglstMain.Handle;
@@ -341,6 +342,7 @@ begin
   HeadObsSelected := ModflowSelected and LocalModel.HobIsSelected;
   SutraSelected := LocalModel.ModelSelection in SutraSelection;
   PestSelected := LocalModel.PestStatus in [psObservations, psActive];
+  Mt3dSelected := LocalModel.Mt3dIsSelected;
 
   if Ord(High(TPostPages)) <> tvpglstMain.Items.Count-1 then
   begin
@@ -375,6 +377,11 @@ begin
 
   tvpglstMain.Items[Ord(ppVectors)].Enabled := SutraSelected or Modflow6Selected;
   tvpglstMain.Items[Ord(ppCrossSection)].Enabled := ModflowSelected or SutraSelected;
+
+  tvpglstMain.Items[Ord(ppMt3dObs)].Enabled :=
+    Mt3dSelected
+    or (LocalModel.Mt3dObsCollection.Count > 0);
+
 
   if frmGoPhast.ModelSelection in ModflowSelection then
   begin

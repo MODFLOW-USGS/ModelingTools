@@ -13,7 +13,6 @@ inherited frmGoPhast: TfrmGoPhast
   OnActivate = FormActivate
   OnClose = FormClose
   OnDeactivate = FormDeactivate
-  OnHelp = FormHelp
   OnKeyUp = FormKeyUp
   OnMouseMove = pnlLowerRightMouseMove
   OnMouseWheel = FormMouseWheel
@@ -309,6 +308,8 @@ inherited frmGoPhast: TfrmGoPhast
     OnMouseMove = sbMainMouseMove
     OnMouseUp = sbMainMouseUp
     OnDrawPanel = sbMainDrawPanel
+    ExplicitTop = 526
+    ExplicitWidth = 772
   end
   object cbControlBar: TControlBar
     Left = 0
@@ -674,7 +675,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 165
+      Left = 422
       Top = 66
       Width = 212
       Height = 28
@@ -776,7 +777,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 390
+      Left = 165
       Top = 66
       Width = 244
       Height = 28

@@ -2336,7 +2336,7 @@ var
   PhastModel: TPhastModel;
 begin
   PhastModel := frmGoPhast.PhastModel;
-  if PhastModel.Mt3dmsIsSelected
+  if PhastModel.Mt3dIsSelected
     and (PhastModel.MobileComponents.Count = 0)
     and (PhastModel.ImmobileComponents.Count = 0) then
   begin

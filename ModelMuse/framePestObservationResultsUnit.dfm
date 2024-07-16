@@ -37,7 +37,6 @@ object framePestObservationResults: TframePestObservationResults
     Align = alClient
     TabOrder = 1
     OnChange = pgcObservationsChange
-    ExplicitHeight = 454
     object tabControls: TTabSheet
       Caption = 'Controls'
       object lblNegativeColor: TLabel
@@ -222,7 +221,7 @@ object framePestObservationResults: TframePestObservationResults
       end
       object clrbtnNegative: TJvColorButton
         Left = 3
-        Top = 319
+        Top = 315
         Width = 92
         OtherCaption = '&Other...'
         Options = []
@@ -619,7 +618,6 @@ object framePestObservationResults: TframePestObservationResults
         Align = alBottom
         ParentBackground = False
         TabOrder = 1
-        ExplicitTop = 359
         object btnCopy: TButton
           Left = 135
           Top = 32
@@ -706,7 +704,6 @@ object framePestObservationResults: TframePestObservationResults
         Align = alBottom
         ParentBackground = False
         TabOrder = 0
-        ExplicitTop = 326
         object lblGraphInstructions: TLabel
           Left = 279
           Top = 6
@@ -737,10 +734,10 @@ object framePestObservationResults: TframePestObservationResults
         end
         object clbWhatToPlot: TCheckListBox
           Left = 279
-          Top = 48
+          Top = 51
           Width = 194
           Height = 40
-          ItemHeight = 15
+          ItemHeight = 17
           Items.Strings = (
             'Observations'
             'Prior Information')

@@ -1072,7 +1072,7 @@ var
 begin
   Model := frmGoPhast.PhastModel;
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoChemicalSpecies);
-  if Model.Mt3dmsIsSelected then
+  if Model.Mt3dIsSelected then
   begin
     if (Model.MobileComponents.Count = 0)
       and (Model.ImmobileComponents.Count = 0) then
@@ -5874,7 +5874,7 @@ begin
   PhastModel.MobileComponents := FNewMobileComponents;
   PhastModel.ImmobileComponents := FNewImmobileComponents;
 
-  if PhastModel.Mt3dmsIsSelected and
+  if PhastModel.Mt3dIsSelected and
     (PhastModel.Mt3dmsTimes.Count = 0) then
   begin
     TimeItem := PhastModel.Mt3dmsTimes.Add;

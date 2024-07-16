@@ -1598,6 +1598,7 @@ begin
       begin
         frmGoPhast.PhastModel.DrawHeadObservations(FBitMap32, ZoomBox);
         frmGoPhast.PhastModel.DrawPestPointObservations(FBitMap32, ZoomBox);
+        frmGoPhast.PhastModel.DrawMt3dPointObservations(FBitMap32, ZoomBox);
         frmGoPhast.PhastModel.DrawSfrStreamLinkages(FBitMap32, ZoomBox);
         frmGoPhast.PhastModel.DrawStrStreamLinkages(FBitMap32, ZoomBox);
         frmGoPhast.PhastModel.DrawSfrMf6StreamLinkages(FBitMap32, ZoomBox);

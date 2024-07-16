@@ -2093,6 +2093,7 @@ type
     procedure WMEnterSizeMove(var Message: TMessage); message WM_ENTERSIZEMOVE;
     procedure WMExitSizeMove(var Message: TMessage); message WM_EXITSIZEMOVE;
     procedure EnablePilotPointItems;
+    procedure UpdateMt3dObsResults;
     procedure UpdateControlsEnabledOrVisible;
     property ContourDataSet: TDataArray read GetContourDataSet;
     function ZoneBudgetWarning: string;
@@ -8157,7 +8158,7 @@ var
 begin
   result := True;
   if (PhastModel.ModelSelection = msModflow)
-    and PhastModel.Mt3dmsIsSelected
+    and PhastModel.Mt3dIsSelected
     and (PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS) then
   begin
     ModelProgramName := PhastModel.ModflowLocation;
@@ -8174,7 +8175,7 @@ begin
     end;
   end;
   if (PhastModel.ModelSelection = msModflowNWT)
-    and PhastModel.Mt3dmsIsSelected
+    and PhastModel.Mt3dIsSelected
     and (PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvMS)
     and (PhastModel.SfrIsSelected or PhastModel.LakIsSelected or PhastModel.UzfIsSelected) then
   begin
@@ -8184,7 +8185,7 @@ begin
     result := false;
   end;
   if (PhastModel.ModelSelection = msModflow2015)
-    and (PhastModel.Mt3dmsIsSelected)
+    and (PhastModel.Mt3dIsSelected)
     and (PhastModel.ModflowPackages.Mt3dBasic.Mt3dVersion = mvUSGS)
     and PhastModel.ModflowPackages.NpfPackage.SaveSaturation
     then
@@ -10785,6 +10786,18 @@ begin
     and (PhastModel.Grid = PhastModel.PhastGrid);
 end;
 
+procedure TfrmGoPhast.UpdateMt3dObsResults;
+var
+  ChildModel: TChildModel;
+begin
+  PhastModel.Mt3dObsCollection.Loaded;
+  for var ChildIndex := 0 to PhastModel.ChildModels.Count - 1 do
+  begin
+    ChildModel := PhastModel.ChildModels[ChildIndex].ChildModel;
+    ChildModel.Mt3dObsCollection.Loaded;
+  end;
+end;
+
 procedure TfrmGoPhast.DeleteSelectedNodesOrSelectedScreenObjects;
 var
   SelectedScreenObjects: TScreenObjectList;
@@ -11194,14 +11207,6 @@ end;
 procedure TfrmGoPhast.miManageFluxObservationsClick(Sender: TObject);
 begin
   inherited;
-//  if PhastModel.Mt3dmsIsSelected
-//    and (PhastModel.MobileComponents.Count = 0)
-//    and (PhastModel.ImmobileComponents.Count = 0) then
-//  begin
-//    Beep;
-//    MessageDlg(StrYouMustDefineAtL, mtError, [mbOK], 0);
-//    Exit;
-//  end;
   ShowAForm(TfrmManageFluxObservations);
 end;
 
@@ -12375,6 +12380,7 @@ begin
       EnableMt3dmsMenuItems;
       EnableMeshRenumbering;
       EnablePilotPointItems;
+      UpdateMt3dObsResults;
       if ModelSelection in SutraSelection then
       begin
         if SutraMesh <> nil then
@@ -15165,7 +15171,7 @@ begin
       mtWarning, [mbOK], 0);
     Exit;
   end;
-  if not PhastModel.Mt3dmsIsSelected then
+  if not PhastModel.Mt3dIsSelected then
   begin
     Beep;
     MessageDlg(StrYouMustActivateMT,
