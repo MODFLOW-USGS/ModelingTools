@@ -1,4 +1,4 @@
-# Name File for MT3DMS created on 11/16/2019 by ModelMuse
+# Name File for MT3DMS created on 7/18/2024 by ModelMuse
 LIST 16 ImportMt3dmsTob.mls
 FTL 10 ImportMt3dmsTob.ftl
 DATA 17 ImportMt3dmsTob.cnf
@@ -13,4 +13,4 @@ GCG 9 ImportMt3dmsTob.gcg
 TOB 12 ImportMt3dmsTob.tob
 DATA 29 ImportMt3dmsTob.ocn
 DATA 30 ImportMt3dmsTob.mfx
-DATA(BINARY) 31 ImportMt3dmsTob.pst
+DATA(BINARY) 31 ImportMt3dmsTob._pst

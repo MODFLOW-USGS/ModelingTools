@@ -1,4 +1,4 @@
-# Name File for MT3DMS created on 7/13/2021 by ModelMuse
+# Name File for MT3DMS created on 7/17/2024 by ModelMuse
 LIST 16 StrFhbTobTest.mls
 FTL 10 StrFhbTobTest.ftl
 DATA 17 StrFhbTobTest.cnf
@@ -9,4 +9,4 @@ SSM 4 StrFhbTobTest.ssm
 GCG 9 StrFhbTobTest.gcg
 TOB 12 StrFhbTobTest.tob
 DATA 30 StrFhbTobTest.mfx
-DATA(BINARY) 31 StrFhbTobTest.pst
+DATA(BINARY) 31 StrFhbTobTest._pst

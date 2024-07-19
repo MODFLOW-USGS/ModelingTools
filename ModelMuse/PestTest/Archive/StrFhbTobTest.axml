@@ -44,10 +44,10 @@
     <FileName Model_Name="StrFhbTobTest" FileType="Mt3dms Input">usgs.StrFhbTobTest_MT3DMS.reference</FileName>
   </Mt3dms_Input_Files>
   <Mt3dms_Output_Files Model_Name="StrFhbTobTest" FileType="Mt3dms Output">
+    <FileName Model_Name="StrFhbTobTest" FileType="Mt3dms Output">StrFhbTobTest._pst</FileName>
     <FileName Model_Name="StrFhbTobTest" FileType="Mt3dms Output">StrFhbTobTest.cnf</FileName>
     <FileName Model_Name="StrFhbTobTest" FileType="Mt3dms Output">StrFhbTobTest.mfx</FileName>
     <FileName Model_Name="StrFhbTobTest" FileType="Mt3dms Output">StrFhbTobTest.mls</FileName>
-    <FileName Model_Name="StrFhbTobTest" FileType="Mt3dms Output">StrFhbTobTest.pst</FileName>
     <FileName Model_Name="StrFhbTobTest" FileType="Mt3dms Output">StrFhbTobTest_abc._mas</FileName>
     <FileName Model_Name="StrFhbTobTest" FileType="Mt3dms Output">StrFhbTobTest_abc.ucn</FileName>
   </Mt3dms_Output_Files>

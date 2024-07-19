@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="ImportMt3dmsTob" FileType="bin">
-    <FileName Model_Name="ImportMt3dmsTob" FileType="bin">C:\mt3dms5\bin\mt3dms5b.exe</FileName>
-    <FileName Model_Name="ImportMt3dmsTob" FileType="bin">C:\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
+    <FileName Model_Name="ImportMt3dmsTob" FileType="bin">..\..\..\mt3dms5\bin\mt3dms5b.exe</FileName>
+    <FileName Model_Name="ImportMt3dmsTob" FileType="bin">..\..\..\WRDAPP\MF2005.1_12\bin\mf2005.exe</FileName>
   </bin>
   <ancillary Model_Name="ImportMt3dmsTob" FileType="ancillary">
     <FileName Model_Name="ImportMt3dmsTob" FileType="ancillary">ImportMt3dmsTob.gpt</FileName>
@@ -40,11 +40,11 @@
     <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Input">usgs.ImportMt3dmsTob_MT3DMS.reference</FileName>
   </Mt3dms_Input_Files>
   <Mt3dms_Output_Files Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">
+    <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob._pst</FileName>
     <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob.cnf</FileName>
     <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob.mfx</FileName>
     <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob.mls</FileName>
     <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob.ocn</FileName>
-    <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob.pst</FileName>
     <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob_Chem1._mas</FileName>
     <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob_Chem1.mto</FileName>
     <FileName Model_Name="ImportMt3dmsTob" FileType="Mt3dms Output">ImportMt3dmsTob_Chem1.ucn</FileName>
