@@ -109,6 +109,9 @@ resourcestring
 //  StrWritingDataSet3 = '  Writing Data Set 3.';
   StrWritingDataSet4and5 = '  Writing Data Sets 4 and 5.';
   Str0sDefinedByObje = '%0:s defined by object %1:s';
+  StrNoTransportObserva = 'No transport observations defined';
+  StrNoTransportObservaTob = 'No transport observations have been defined in' +
+  ' the MT3D Transport Observations package.';
 
 
 { TMt3dmsTobWriter }
@@ -247,6 +250,7 @@ begin
   frmErrorsAndWarnings.BeginUpdate;
   try
     frmErrorsAndWarnings.RemoveWarningGroup(Model, StrTheFollowingMASSF);
+    frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoTransportObserva);
 
     FNameOfFile := FileName(AFileName);
     WriteToMt3dMsNameFile(StrTOB, Mt3dTob,
@@ -728,6 +732,11 @@ begin
   WriteInteger(MaxFluxCells);
   WriteString(' # Data Set 1: MaxConcObs, MaxFluxObs, MaxFluxCells');
   NewLine;
+  if (FMaxConcObs = 0) and (FMaxFluxObs = 0) then
+  begin
+    frmErrorsAndWarnings.AddError(Model, StrNoTransportObserva,
+      StrNoTransportObservaTob);
+  end;
 end;
 
 procedure TMt3dmsTobWriter.WriteDataSet2;

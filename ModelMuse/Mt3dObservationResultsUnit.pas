@@ -190,12 +190,14 @@ implementation
 
 uses
   System.IOUtils, PhastModelUnit, ScreenObjectUnit, Mt3dmsTobUnit,
-  BigCanvasMethods;
+  BigCanvasMethods, frmErrorsAndWarningsUnit;
 
 resourcestring
   StrTheFileFromWhich = 'The file from which you are attempting to read ' +
   'MT3D bservation results, %s, does not exist.';
   StrNotRecorded = 'Not recorded';
+  StrNoObservationsReco = 'No observations recorded';
+  StrSIsEmptyExceptF = '%s is empty except for a header.';
 
 { TMt3dObsResult }
 
@@ -831,6 +833,12 @@ begin
   FileReader := TFile.OpenRead(AFileName);
   try
     FileReader.Read(Header[0], SizeOf(AnsiChar)*HeaderLength);
+    if FileReader.Position = FileReader.Size then
+    begin
+      Beep;
+      MessageDlg(Format(StrSIsEmptyExceptF, [AFileName]), mtError, [mbOK], 0);
+      Exit;
+    end;
     repeat
       FileReader.Read(ANameArray[0], SizeOf(AnsiChar)*NameLength);
       AName := Trim(String(ANameArray));
