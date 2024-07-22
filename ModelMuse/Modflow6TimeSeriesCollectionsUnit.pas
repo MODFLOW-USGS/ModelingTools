@@ -244,7 +244,6 @@ const
   NoValue = 3.0E30;
   Epsilon = 1E-8;
 var
-  TimeStep: TTimeStep;
   TimeIndex: Integer;
   UsedTime: double;
   Series: TMf6TimeSeries;
@@ -379,11 +378,11 @@ begin
 //          end
           else
           begin
-            FirstValue := Interpolate(TimeStep.StartTime,
+            FirstValue := Interpolate(UsedTime,
               Times[StartTimeIndex].Value, Times[NextTimeIndex].Value,
               Series[StartTimeIndex].Value, Series[NextTimeIndex].Value);
     		  end;
-          UsedTimes.Add(TimeStep.StartTime);
+          UsedTimes.Add(UsedTime);
           UsedValues.Add(FirstValue);
           for TimeIndex := StartTimeIndex + 1 to EndTimeIndex - 1 do
           begin

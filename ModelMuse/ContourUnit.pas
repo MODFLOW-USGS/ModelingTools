@@ -6,7 +6,7 @@ unit ContourUnit;
 
 interface
 
-uses Classes, Graphics, FastGeo, GR32, ZoomBox2, GoPhastTypes, DataSetUnit,
+uses Classes, Graphics, FastGEO, GR32, ZoomBox2, GoPhastTypes, DataSetUnit,
   ColorSchemes, QuadTreeClass, Generics.Collections, Types, TriPackRoutines,
   SparseDataSets, SparseArrayUnit, DrawMeshTypesUnit, MeshRenumberingTypes,
   ContourInterfaceUnit;

@@ -2,7 +2,7 @@ unit SfrInterpolatorUnit;
 
 interface
 
-uses FastGeo, TripackTypes, SysUtils;
+uses FastGEO, TripackTypes, SysUtils;
 
 
 type

@@ -77,6 +77,8 @@ resourcestring
 
 
 const
+// previously
+//  UpdateURL =      'https://water.usgs.gov/nrp/gwsoftware/ModelMuse/ModelMuseInternetUpdate.txt';
   UpdateURL =      'https://water.usgs.gov/water-resources/software/ModelMuse/ModelMuseInternetUpdate.txt';
   VideoUpdateURL = 'https://water.usgs.gov/water-resources/software/ModelMuse/Videos.xml';
 

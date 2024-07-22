@@ -10,7 +10,7 @@ interface
 
 uses
   Classes, SysUtils, Generics.Defaults, CustomOutputFileReader,
-  OutputFileReader, RbwParser, FastGeo, CustomInputReader;
+  OutputFileReader, RbwParser, FastGEO, CustomInputReader;
 
 type
   { TInputHandler }

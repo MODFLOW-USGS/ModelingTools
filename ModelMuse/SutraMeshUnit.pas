@@ -60,17 +60,17 @@ Type
     FNodeType: TNodeType;
     FElements: TSutraElement2D_List;
     FCellOutline: TVertexArray;
-    FMinX: FastGeo.TFloat;
-    FMaxX: FastGeo.TFloat;
-    FMinY: FastGeo.TFloat;
-    FMaxY: FastGeo.TFloat;
+    FMinX: FastGEO.TFloat;
+    FMaxX: FastGEO.TFloat;
+    FMinY: FastGEO.TFloat;
+    FMaxY: FastGEO.TFloat;
     FSelected: Boolean;
     FTriangNumber: Integer;
     // @Name is used in extracting the edge of the mesh in a particular layer.
     // It should not be relied on outside that procedure.
     FNeighborNodes: TSutraNode2D_List;
     procedure SetLocation(const Value: TPoint2D);
-    procedure SetX(const Value: FastGeo.TFloat);
+    procedure SetX(const Value: FastGEO.TFloat);
     procedure SetY(const Value: FastGEO.TFloat);
     procedure SetNodeType(const Value: TNodeType);
     procedure DrawTop(const BitMap: TPersistent;
@@ -601,8 +601,8 @@ Type
     procedure SetZ(const Value: FastGEO.TFloat);
     function GetNode2D: TSutraNode2D;
     procedure UpdateNode2D;
-    function GetX: FastGeo.TFloat;
-    function GetY: FastGeo.TFloat;
+    function GetX: FastGEO.TFloat;
+    function GetY: FastGEO.TFloat;
     procedure UpdateActiveElementList;
     function CreatePolyhedron: TPolyhedron;
     function GetVolume: Extended;
@@ -625,8 +625,8 @@ Type
     procedure Assign(Source: TPersistent); override;
     procedure AssignINode(Source: INode);
     property Node2D: TSutraNode2D read GetNode2D;
-    property X: FastGeo.TFloat read GetX;
-    property Y: FastGeo.TFloat read GetY;
+    property X: FastGEO.TFloat read GetX;
+    property Y: FastGEO.TFloat read GetY;
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
     function NodeLocation: TPoint3D;
@@ -3001,7 +3001,7 @@ var
   Node2: TPoint2D;
   Node3: TPoint2D;
   NodeIndex: Integer;
-  Angle: FastGeo.TFloat;
+  Angle: FastGEO.TFloat;
 begin
   Node1 := self.Nodes[2].Node.Location;
   Node2 := self.Nodes[3].Node.Location;
@@ -3052,10 +3052,10 @@ var
   Node2: TSutraNode2D;
   Node3: TSutraNode2D;
   Node4: TSutraNode2D;
-  Distance13: FastGeo.TFloat;
-  Distance24: FastGeo.TFloat;
-  TestDistance: FastGeo.TFloat;
-  MinDistance: FastGeo.TFloat;
+  Distance13: FastGEO.TFloat;
+  Distance24: FastGEO.TFloat;
+  TestDistance: FastGEO.TFloat;
+  MinDistance: FastGEO.TFloat;
   LongDistance: Extended;
   P1: TPoint2D;
   P2: TPoint2D;
@@ -4994,12 +4994,12 @@ begin
   result := FVolume
 end;
 
-function TSutraNode3D.GetX: FastGeo.TFloat;
+function TSutraNode3D.GetX: FastGEO.TFloat;
 begin
   result := Node2D.X
 end;
 
-function TSutraNode3D.GetY: FastGeo.TFloat;
+function TSutraNode3D.GetY: FastGEO.TFloat;
 begin
   result := Node2D.Y
 end;
@@ -6956,7 +6956,7 @@ var
   ALine: TLine2D;
   ClosestPoint: TPoint2D;
   ADistance: double;
-  OffSet: FastGeo.TFloat;
+  OffSet: FastGEO.TFloat;
   DrawEdge: Boolean;
   MinMax: TMinMax;
   Extent: TSize;
@@ -9725,8 +9725,8 @@ end;
 function TSutraNode2DComparer.Compare(const Left, Right: TSutraNode2D): Integer;
 var
   Angle: double;
-  LeftX: FastGeo.TFloat;
-  RightX: FastGeo.TFloat;
+  LeftX: FastGEO.TFloat;
+  RightX: FastGEO.TFloat;
 begin
   Angle := ArcTan2(Left.y - FStartPoint.y, Left.x - FStartPoint.x) - FAngle;
   LeftX := Distance(FStartPoint, Left.Location)*Cos(Angle);
@@ -9748,8 +9748,8 @@ function TSutraElement2DComparer.Compare(const Left,
   Right: TSutraElement2D): Integer;
 var
   Angle: double;
-  LeftX: FastGeo.TFloat;
-  RightX: FastGeo.TFloat;
+  LeftX: FastGEO.TFloat;
+  RightX: FastGEO.TFloat;
   CenterPoint: TPoint2D;
 begin
   CenterPoint := Left.Center;
@@ -10268,8 +10268,8 @@ var
   Node2D_Index: Integer;
   Node2D: TSutraNode2D;
   Angle: Extended;
-  X_Float: FastGeo.TFloat;
-  XDistances: TList<FastGeo.TFloat>;
+  X_Float: FastGEO.TFloat;
+  XDistances: TList<FastGEO.TFloat>;
   PolygonList: TList<TPolygon2D>;
   Node2D_1: TSutraNode2D;
   Node2D_2: TSutraNode2D;
@@ -10301,7 +10301,7 @@ begin
 
 
     // Determine the locations of the outlines of the elements in cross section.
-    XDistances := TList<FastGeo.TFloat>.Create;
+    XDistances := TList<FastGEO.TFloat>.Create;
     PolygonList := TList<TPolygon2D>.Create;
     try
       XDistances.Capacity := NodeList.Count;

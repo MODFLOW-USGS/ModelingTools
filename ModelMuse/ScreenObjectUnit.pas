@@ -12289,7 +12289,7 @@ begin
     S1.y := (Segment1.Segment[1].y + Segment1.Segment[2].y)/2;
     S2.x := (Segment2.Segment[1].x + Segment2.Segment[2].x)/2;
     S2.y := (Segment2.Segment[1].y + Segment2.Segment[2].y)/2;
-    result := Sign(FastGeo.Distance(StartPoint,S1) - FastGeo.Distance(StartPoint,S2));
+    result := Sign(FastGEO.Distance(StartPoint,S1) - FastGEO.Distance(StartPoint,S2));
     if result = 0 then
     begin
       result := Segment1.Layer - Segment2.Layer;
@@ -12315,7 +12315,7 @@ begin
     S1.y := (Segment1.Segment[1].y + Segment1.Segment[2].y)/2;
     S2.x := (Segment2.Segment[1].x + Segment2.Segment[2].x)/2;
     S2.y := (Segment2.Segment[1].y + Segment2.Segment[2].y)/2;
-    result := Sign(FastGeo.Distance(StartPoint,S1) - FastGeo.Distance(StartPoint,S2));
+    result := Sign(FastGEO.Distance(StartPoint,S1) - FastGEO.Distance(StartPoint,S2));
     if result = 0 then
     begin
       result := Segment1.Col - Segment2.Col;
@@ -17437,8 +17437,8 @@ begin
         if DistanceEpsilon > 0 then
         begin
           ShouldDelete :=
-            (FastGeo.Distance(Point1, Point2) < DistanceEpsilon) and
-            (FastGeo.Distance(Point2, Point3) < DistanceEpsilon)
+            (FastGEO.Distance(Point1, Point2) < DistanceEpsilon) and
+            (FastGEO.Distance(Point2, Point3) < DistanceEpsilon)
         end;
         if ShouldDelete and (AngleEpsilon > 0) then
         begin
@@ -30082,10 +30082,10 @@ begin
     if CandidateCount > 0 then
     begin
       Int := Candidates[0];
-      Separation := FastGeo.Distance(ObjectSegment[1], Int);
+      Separation := FastGEO.Distance(ObjectSegment[1], Int);
       for CandidateIndex := 1 to CandidateCount - 1 do
       begin
-        TestSeparation := FastGeo.Distance(ObjectSegment[1],
+        TestSeparation := FastGEO.Distance(ObjectSegment[1],
           Candidates[CandidateIndex]);
         if TestSeparation < Separation then
         begin

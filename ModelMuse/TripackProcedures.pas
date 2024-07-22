@@ -79,7 +79,7 @@ interface
   {$WARNINGS OFF}
 {$ENDIF}
 
-uses FastGeo, TripackTypes;
+uses FastGEO, TripackTypes;
 
 procedure ADDCST (const NCC: longint; const LCC: TNcmaxIntArray;
   const N: longint; const X,Y: TNmaxSingleArray; var LWK: longint; var IWK: TLwkIntArray;

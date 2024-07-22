@@ -7,7 +7,7 @@ interface
   {$WARNINGS OFF}
 {$ENDIF}
 
-uses FastGeo, TripackTypes, SysUtils;
+uses FastGEO, TripackTypes, SysUtils;
 
 type
   ESfrProcedureException = class(Exception);

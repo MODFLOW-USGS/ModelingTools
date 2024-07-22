@@ -770,7 +770,7 @@ begin
     Segment1[2] := Nodes[2].FLocation;
     Segment2[1] := Nodes[1].FLocation;
     Segment2[2] := Nodes[3].FLocation;
-    result := FastGeo.Intersect(Segment1, Segment2);
+    result := FastGEO.Intersect(Segment1, Segment2);
   end;
   if result then
   begin

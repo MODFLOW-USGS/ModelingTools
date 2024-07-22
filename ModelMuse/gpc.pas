@@ -48,7 +48,7 @@ unit gpc;
 
 interface
 uses
-  Windows {$IFDEF UseFastGeo}, FastGeo {$ENDIF};
+  Windows {$IFDEF UseFastGeo}, FastGEO {$ENDIF};
 //===========================================================================
 //                               Constants
 //===========================================================================

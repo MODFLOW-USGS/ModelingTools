@@ -9,7 +9,7 @@ interface
 
 uses
   Classes, SysUtils, Math, Generics.Collections, Generics.Defaults, RbwParser,
-  FastGeo, CustomOutputFileReader;
+  FastGEO, CustomOutputFileReader;
 
 type
   TProcessStatus = (psNone, psOptions, psObsFiles, psIdentifiers, psDerivedObs);

@@ -1327,7 +1327,7 @@ begin
   result.y := APoint.x;
 end;
 
-// Adapted from FastGeo.
+// Adapted from FastGEO.
 function VertexAngleRadians(x1,y1,x2,y2,x3,y3:TFloat):TFloat; overload;
 var
   Dist      : TFloat;

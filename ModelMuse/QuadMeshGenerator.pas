@@ -3555,7 +3555,7 @@ begin
                 APolygon1[NIndex] := Items[InnerIndex].FNode.Location;
                 Inc(NIndex);
               end;
-              if Abs(FastGeo.Area(APolygon1)) < Epsilon then
+              if Abs(FastGEO.Area(APolygon1)) < Epsilon then
               begin
                 Continue;
               end;
@@ -3577,7 +3577,7 @@ begin
                 Inc(NIndex);
               end;
               SetLength(APolygon2, NIndex);
-              if Abs(FastGeo.Area(APolygon1)) < Epsilon then
+              if Abs(FastGEO.Area(APolygon1)) < Epsilon then
               begin
                 Continue;
               end;
@@ -3859,7 +3859,7 @@ end;
 //        begin
 //          Poly1[NodeIndex-PositionInList] := NewPolyList[NodeIndex].Location;
 //        end;
-//        if Abs(FastGeo.Area(Poly1)) > 0 then
+//        if Abs(FastGEO.Area(Poly1)) > 0 then
 //        begin
 //          PolySegments1 := TSegmentList.Create;
 //          try
@@ -3902,7 +3902,7 @@ end;
 //                  Poly2[SegIndex] := ASeg.FNode1.Location;
 //                  PriorSeg := ASeg;
 //                end;
-//                if Abs(FastGeo.Area(Poly2)) > 0 then
+//                if Abs(FastGEO.Area(Poly2)) > 0 then
 //                begin
 //                  // break out boundary here and Set Changed := True;
 //                  Exit;

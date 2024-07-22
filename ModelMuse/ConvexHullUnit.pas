@@ -21,8 +21,8 @@ procedure ConvexHull(const InputPoints: TPolygon2D;
   out OutputPoints : TPolygon2D; const Epsilon: TFloat = 0);
 
 // @name is like @link(ConvexHull) except that InputOrientation will
-// be set to FastGeo.CollinearOrientation, FastGeo.CounterClockwise, or
-// FastGeo.Clockwise depending on the orientation of InputPoints.
+// be set to FastGEO.CollinearOrientation, FastGEO.CounterClockwise, or
+// FastGEO.Clockwise depending on the orientation of InputPoints.
 // InputPoints must represent a polygon and not a random set of points
 // for InputOrientation to be meaningful.
 procedure ConvexHull2(const InputPoints: TPolygon2D;

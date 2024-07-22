@@ -1225,7 +1225,7 @@ begin
     ANode := ElementCorners[NodeIndex];
     Polygon[NodeIndex] := ANode.Location;
   end;
-  Result := Abs(FastGeo.Area(Polygon));
+  Result := Abs(FastGEO.Area(Polygon));
 end;
 
 procedure TModflowIrregularCell2D.Assign(Source: TPersistent);
@@ -8229,8 +8229,8 @@ function TMF_IrregCellComparer.CompareX(const Left,
   Right: TModflowIrregularCell2D): Integer;
 var
   Angle: double;
-  LeftX: FastGeo.TFloat;
-  RightX: FastGeo.TFloat;
+  LeftX: FastGEO.TFloat;
+  RightX: FastGEO.TFloat;
   CenterPoint: TPoint2D;
 begin
   CenterPoint := Left.Center;
@@ -8300,8 +8300,8 @@ function TMF_IrregCellComparer.Compare(const Left,
   Right: TModflowIrregularCell2D): Integer;
 var
   Angle: double;
-  LeftY: FastGeo.TFloat;
-  RightY: FastGeo.TFloat;
+  LeftY: FastGEO.TFloat;
+  RightY: FastGEO.TFloat;
   CenterPoint: TPoint2D;
 begin
   CenterPoint := Left.Center;

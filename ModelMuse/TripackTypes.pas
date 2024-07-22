@@ -7,7 +7,7 @@ interface
   {$WARNINGS OFF}
 {$ENDIF}
 
-uses FastGeo;
+uses FastGEO;
 
 //const
   // Tripack values
