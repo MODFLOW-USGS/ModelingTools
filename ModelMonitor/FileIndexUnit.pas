@@ -424,16 +424,6 @@ begin
       Converter.Clear;
       Converter.Append(Buffer);
       AString := Converter.ToString;
-//      LineEnd := '';
-      if AString[Length(AString)] = #10 then
-      begin
-        AString := Copy(AString,1, Length(AString)-1);
-//        NextLine := #10 + NextLine;
-        Dec(NumberRead);
-        SetLength(Buffer, NumberRead);
-        Dec(StartPosition);
-//        LineEnd := #10;
-      end;
       GetLineStartingPositions(OffSet, FPositions, AString);
       if Buffer[Length(Buffer)-1] = #13 then
       begin
@@ -495,10 +485,10 @@ begin
           else
           begin
             CurrentLine := NextLine + Copy(AString,1,LineBreakPos+LineBreakLength-1);
-            if CurrentLine[Length(CurrentLine)] = #10 then
-            begin
-//              CurrentLine := Copy(CurrentLine, 1, Length(CurrentLine)-1);
-            end;
+//            if CurrentLine[Length(CurrentLine)] = #10 then
+//            begin
+////              CurrentLine := Copy(CurrentLine, 1, Length(CurrentLine)-1);
+//            end;
           end;
           NextLine := Copy(AString,LineBreakPos+LineBreakLength,MaxInt);
         end;

@@ -232,8 +232,62 @@ begin
   PackageIdentifiers.Add('PROCESSING SFR DIVERSIONS');
   PackageIdentifiers.Add('STAGE/VOLUME RELATION');
   PackageIdentifiers.Add('IMS -- ITERATIVE MODEL SOLUTION PACKAGE');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
-//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+
+  // PEST
+  PackageIdentifiers.Add(':-');
+  PackageIdentifiers.Add(': -');
+  PackageIdentifiers.Add('OPTIMISATION RECORD');
+  PackageIdentifiers.Add('OPTIMISATION RESULTS');
+
+  // MT3D
+  PackageIdentifiers.Add('BASIC TRANSPORT PACKAGE');
+  PackageIdentifiers.Add('FLOW MODEL INTERFACE PACKAGE');
+  PackageIdentifiers.Add('LOCATION OF OBSERVATION POINTS');
+  PackageIdentifiers.Add('ADVECTION PACKAGE');
+  PackageIdentifiers.Add('DISPERSION PACKAGE');
+  PackageIdentifiers.Add('SINK & SOURCE MIXING PACKAGE');
+  PackageIdentifiers.Add('GENERALIZED CONJUGATE GRADIENT SOLVER PACKAGE');
+  PackageIdentifiers.Add('TRANSPORT OBSERVATION PACKAGE');
+  PackageIdentifiers.Add('CHEMICAL REACTION PACKAGE');
+  PackageIdentifiers.Add('LAKE TRANSPORT PACKAGE');
+  PackageIdentifiers.Add('STREAM TRANSPORT PACKAGE');
+  PackageIdentifiers.Add('UNSATURATED-ZONE TRANSPORT PACKAGE');
+  PackageIdentifiers.Add('CONTAMINANT TREATMENT SYSTEM');
+  PackageIdentifiers.Add('STRESS PERIOD NO.');
+  PackageIdentifiers.Add('TRANSPORT STEP NO. ');
+  PackageIdentifiers.Add('CONCENTRATIONS');
+  PackageIdentifiers.Add('MASS BUDGETS AT END');
+  PackageIdentifiers.Add('TIME STEP NO. ');
+  // SUTRA
+  PackageIdentifiers.Add('F I L E   U N I T   A S S I G N M E N T S');
+  PackageIdentifiers.Add('S I M U L A T I O N   M O D E   O P T I O N S');
+  PackageIdentifiers.Add('S I M U L A T I O N   C O N T R O L   N U M B E R S');
+  PackageIdentifiers.Add('N U M E R I C A L   C O N T R O L   D A T A');
+  PackageIdentifiers.Add('T E M P O R A L   C O N T R O L   A N D   S O L U T I O N   C Y C L I N G   D A T A');
+  PackageIdentifiers.Add('I T E R A T I O N   C O N T R O L   D A T A');
+  PackageIdentifiers.Add('S O L V E R - R E L A T E D   P A R A M E T E R S');
+  PackageIdentifiers.Add('O U T P U T   C O N T R O L S   A N D   O P T I O N S');
+  PackageIdentifiers.Add('C O N S T A N T   P R O P E R T I E S   O F   F L U I D   A N D   S O L I D   M A T R I X');
+  PackageIdentifiers.Add('A D S O R P T I O N   P A R A M E T E R S');
+  PackageIdentifiers.Add('P R O D U C T I O N   A N D   D E C A Y   O F   S P E C I E S   M A S S');
+  PackageIdentifiers.Add('C O O R D I N A T E   O R I E N T A T I O N   T O   G R A V I T Y');
+  PackageIdentifiers.Add('N O D E   I N F O R M A T I O N');
+  PackageIdentifiers.Add('E L E M E N T   I N F O R M A T I O N');
+  PackageIdentifiers.Add('F L U I D   S O U R C E   D A T A');
+  PackageIdentifiers.Add('S P E C I F I E D   P R E S S U R E   D A T A');
+  PackageIdentifiers.Add('M E S H   C O N N E C T I O N   D A T A');
+  PackageIdentifiers.Add('S I M U L A T I O N   D I M E N S I O N S');
+  PackageIdentifiers.Add('RESULTS FOR TIME STEP');
+  PackageIdentifiers.Add('SUTRA SIMULATION TERMINATED');
+  PackageIdentifiers.Add('G E N E R A L I Z E D   F L O W   D A T A');
+  PackageIdentifiers.Add('G E N E R A L I Z E D   T R A N S P O R T   D A T A');
+  PackageIdentifiers.Add('I N I T I A L   C O N D I T I O N S');
+  PackageIdentifiers.Add('O B S E R V A T I O N   P O I N T S');
+  PackageIdentifiers.Add('S O L U T E   S O U R C E   D A T A');
+  PackageIdentifiers.Add('S P E C I F I E D   C O N C E N T R A T I O N   D A T A');
+  PackageIdentifiers.Add('P R O D U C T I O N   A N D   L O S S   O F   E N E R G Y');
+  PackageIdentifiers.Add('E N E R G Y   S O U R C E   D A T A');
+  PackageIdentifiers.Add('S P E C I F I E D   T E M P E R A T U R E   D A T A');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
@@ -731,6 +785,29 @@ begin
   BoundaryIdentifiers.Add('SUMMARY OF FLOWS FOR EACH CONTROL VOLUME');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
+  // PEST
+  BoundaryIdentifiers.Add('INITIAL CONDITIONS:');
+  BoundaryIdentifiers.Add('OPTIMISATION ITERATION NO.');
+  BoundaryIdentifiers.Add('----->');
+
+  // SUTRA
+  BoundaryIdentifiers.Add('**** MESH ANALYSIS ****');
+  BoundaryIdentifiers.Add('S  A  T  U  R  A  T  I  O  N');
+  BoundaryIdentifiers.Add('F L U I D   M A S S   B U D G E T');
+  BoundaryIdentifiers.Add('S O L U T E   B U D G E T');
+  BoundaryIdentifiers.Add('SOURCES OR SINKS');
+  BoundaryIdentifiers.Add('P  R  E  S  S  U  R  E');
+  BoundaryIdentifiers.Add('C  O  N  C  E  N  T  R  A  T  I  O  N');
+  BoundaryIdentifiers.Add('F  L  U  I  D     V  E  L  O  C  I  T  Y');
+  BoundaryIdentifiers.Add('**** NODAL INCIDENCES ****');
+  BoundaryIdentifiers.Add('E N E R G Y   B U D G E T');
+  BoundaryIdentifiers.Add('T  E  M  P  E  R  A  T  U  R  E');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+
 end;
 
 procedure InitializeNonIdenfiers;
@@ -762,9 +839,7 @@ begin
   NonIdentifiers.Add('RECHARGE     =');
   NonIdentifiers.Add('USGS');
   NonIdentifiers.Add('STORAGE-CELLBLK =');
-//  NonIdentifiers.Add('StrRECHARGE');
-//  NonIdentifiers.Add('StrRECHARGE');
-//  NonIdentifiers.Add('StrRECHARGE');
+
 //  NonIdentifiers.Add('StrRECHARGE');
 end;
 

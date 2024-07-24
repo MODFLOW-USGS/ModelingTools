@@ -14,8 +14,8 @@
       <Unit1>
         <Filename Value="ProcessTemplateUnit.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
         <TopLine Value="705"/>
         <CursorPos X="13" Y="724"/>
         <UsageCount Value="21"/>

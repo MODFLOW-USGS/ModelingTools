@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{A3F7E5FA-76EF-424F-B6D5-C232A9363DE3}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ListingAnalyst.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ModelMonitor.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ListingAnalyst">
+        <MSBuild Projects="ListingAnalyst.dproj"/>
+    </Target>
+    <Target Name="ListingAnalyst:Clean">
+        <MSBuild Projects="ListingAnalyst.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ListingAnalyst:Make">
+        <MSBuild Projects="ListingAnalyst.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ModelMonitor">
+        <MSBuild Projects="ModelMonitor.dproj"/>
+    </Target>
+    <Target Name="ModelMonitor:Clean">
+        <MSBuild Projects="ModelMonitor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ModelMonitor:Make">
+        <MSBuild Projects="ModelMonitor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ListingAnalyst;ModelMonitor"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ListingAnalyst:Clean;ModelMonitor:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ListingAnalyst:Make;ModelMonitor:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

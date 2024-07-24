@@ -10350,13 +10350,11 @@ const
 //                recalculated just becaue the Object Properties dialog box
 //                has been displayed.
 //    '5.2.0.22' Bug fix: Fixed interpolation in display of time series values.
-
-
 //    '5.3.0.0'  Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.22';
+  IIModelVersion = '5.3.0.0';
 
 function IModelVersion: string;
 begin

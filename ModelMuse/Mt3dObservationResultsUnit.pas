@@ -197,7 +197,9 @@ resourcestring
   'MT3D bservation results, %s, does not exist.';
   StrNotRecorded = 'Not recorded';
   StrNoObservationsReco = 'No observations recorded';
-  StrSIsEmptyExceptF = '%s is empty except for a header.';
+  StrSIsEmptyExceptF = '%s is empty except for a header. There might be no ' +
+  'transportation observations defined or the transport model may have ' +
+  'terminated before reaching any of the observation times.';
 
 { TMt3dObsResult }
 

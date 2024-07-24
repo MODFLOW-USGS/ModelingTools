@@ -39,6 +39,7 @@ object frmMain: TfrmMain
     Images = ilTabFaces
     MultiLine = True
     TabOrder = 1
+    ExplicitHeight = 371
     object tabIndex: TTabSheet
       Caption = 'Contents'
       ImageIndex = -1
@@ -50,7 +51,7 @@ object frmMain: TfrmMain
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 265
-        ExplicitHeight = 335
+        ExplicitHeight = 334
         inherited vstIndexLines: TVirtualStringTree
           Width = 265
           Height = 335
@@ -136,6 +137,7 @@ object frmMain: TfrmMain
     Height = 129
     Align = alTop
     TabOrder = 0
+    ExplicitWidth = 793
     object lblLineCount: TLabel
       Left = 272
       Top = 19
@@ -303,6 +305,8 @@ object frmMain: TfrmMain
     ActivePage = tabTable
     Align = alClient
     TabOrder = 2
+    ExplicitWidth = 510
+    ExplicitHeight = 371
     object tabLines: TTabSheet
       Caption = 'Lines'
       TabVisible = False
@@ -480,6 +484,8 @@ object frmMain: TfrmMain
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 502
+        ExplicitHeight = 329
         ColWidths = (
           64
           64
@@ -503,6 +509,8 @@ object frmMain: TfrmMain
         Margins.Bottom = 2
         Align = alBottom
         TabOrder = 1
+        ExplicitTop = 329
+        ExplicitWidth = 502
         object btnCopy: TButton
           Left = 2
           Top = 6
@@ -526,6 +534,8 @@ object frmMain: TfrmMain
     Height = 23
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 500
+    ExplicitWidth = 793
     object lblFileCount: TLabel
       Left = 4
       Top = 2
@@ -542,14 +552,15 @@ object frmMain: TfrmMain
       Max = 1000
       Step = 1
       TabOrder = 0
+      ExplicitWidth = 656
     end
   end
   object OpenDialog1: TOpenDialog
     OnClose = OpenDialog1Close
     OnShow = OpenDialog1Show
     Filter = 
-      'Listing File (*.lst, *.list, *.out)|*.lst;*.out;*.list|All files' +
-      ' (*.*)|*.*'
+      'Listing File (*.lst, *.list, *.out, *.mls, *.m3d, *.rec)|*.lst;*' +
+      '.out;*.list;*.mls;*.m3d;*.rec|All files (*.*)|*.*'
     Left = 136
     Top = 128
   end
