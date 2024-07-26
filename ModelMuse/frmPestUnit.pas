@@ -451,6 +451,7 @@ type
     procedure SetIREGADJ(const Value: Integer);
     procedure GetUsedTypes(var UsedTypes: TParameterTypes);
     function PredictGroupOK: boolean;
+    function SearchDistanceOK: Boolean;
     property IREGADJ: Integer read GetIREGADJ write SetIREGADJ;
     procedure InsertObsGroup(ObsGroupFrame: TframeGrid; Sender: TObject);
     procedure GetCovarianceFileName(ObsGridFrame: TframeGrid;
@@ -543,6 +544,11 @@ resourcestring
   'define pilot points between observations.';
   StrNoObservationPoint = 'No observation points defined.';
   StrWeight = 'Weight';
+  StrWhenPESTIsActive = 'When PEST is active and within-layer continuity prior informat' +
+  'ion equations are used, the search distance for the seach distance must b' +
+  'e great enough that every pilot point has at least one neighber whose dis' +
+  'tance is less than or equal to the search distance. You haven''t done ' +
+  'this. Do you want to fix this now?';
 
 type
   TCheckedPointItem = class(TPointItem)
@@ -1577,6 +1583,14 @@ begin
       Exit;
     end;
   end;
+   if not SearchDistanceOK then
+   begin
+     if MessageDlg(StrWhenPESTIsActive, mtError, [mbYes, mbNo], 0) <> mrYes then
+      begin
+        ModalResult := mrNone;
+        Exit;
+      end;
+   end;
   SetData;
 end;
 
@@ -2584,6 +2598,23 @@ begin
       end;
     else
       Assert(False);
+  end;
+end;
+
+function TfrmPEST.SearchDistanceOK: Boolean;
+var
+  PestStatus: TPestStatus;
+  UseHorizontalSpatialContinuityPriorInfo: Boolean;
+  SeachDistance: Double;
+begin
+  PestStatus := TPestStatus(comboPestStatus.ItemIndex);
+  UseHorizontalSpatialContinuityPriorInfo := cbPriorInfoHorizContinuity.Checked;
+  SeachDistance := rdeSearchDistance.RealValue;
+  result := True;
+  if (PestStatus = psActive) and UseHorizontalSpatialContinuityPriorInfo
+    and (SeachDistance <= 0) then
+  begin
+    result := False;
   end;
 end;
 

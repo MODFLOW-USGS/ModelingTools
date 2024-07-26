@@ -4,8 +4,8 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 484
   ClientWidth = 760
-  ExplicitWidth = 776
-  ExplicitHeight = 523
+  ExplicitWidth = 772
+  ExplicitHeight = 522
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
@@ -30,16 +30,19 @@ inherited frmPEST: TfrmPEST
     TabOrder = 0
     OnMouseDown = tvPESTMouseDown
     Items.Links = {00000000}
+    ExplicitHeight = 441
   end
   object plMain: TJvPageList
     Left = 198
     Top = 0
     Width = 562
     Height = 442
-    ActivePage = jvspPriorInfoObsGroups
+    ActivePage = jvspPriorInfoHorizContinuity
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
+    ExplicitWidth = 558
+    ExplicitHeight = 441
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
@@ -48,6 +51,8 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Basic_Pane'
       Caption = 'jvspBasic'
+      ExplicitWidth = 558
+      ExplicitHeight = 441
       DesignSize = (
         562
         442)
@@ -137,12 +142,13 @@ inherited frmPEST: TfrmPEST
       object diredPest: TJvDirectoryEdit
         Left = 17
         Top = 312
-        Width = 520
+        Width = 512
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 2
         Text = 'C:\PEST'
         OnChange = diredPestChange
+        ExplicitWidth = 508
       end
       object comboArrayMarker: TComboBox
         Left = 17
@@ -1096,16 +1102,16 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 451
+            Left = 445
             ExplicitLeft = 419
           end
           inherited sbInsert: TSpeedButton
-            Left = 482
+            Left = 476
             OnClick = frameObservationGroupssbInsertClick
             ExplicitLeft = 448
           end
           inherited sbDelete: TSpeedButton
-            Left = 512
+            Left = 504
             OnClick = frameObservationGroupssbDeleteClick
             ExplicitLeft = 477
           end
@@ -2035,15 +2041,15 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 337
+            Left = 332
             ExplicitLeft = 338
           end
           inherited sbInsert: TSpeedButton
-            Left = 364
+            Left = 359
             ExplicitLeft = 367
           end
           inherited sbDelete: TSpeedButton
-            Left = 393
+            Left = 387
             ExplicitLeft = 477
           end
           inherited seNumber: TJvSpinEdit
@@ -3352,6 +3358,8 @@ inherited frmPEST: TfrmPEST
     Height = 42
     Align = alBottom
     TabOrder = 2
+    ExplicitTop = 441
+    ExplicitWidth = 756
     object btnHelp: TBitBtn
       Left = 494
       Top = 6

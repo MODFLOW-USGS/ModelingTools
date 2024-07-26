@@ -128,6 +128,11 @@ resourcestring
   StrEquationsForHori = '# Equations for horizontal continuity in layers %0:' +
   'd for parameter %1:s.';
   StrEquationForIniti = '# Equation for initial value for parameter %0:s.';
+  StrTheSearchDistance = 'The search distance for within-layer continuity pr' +
+  'ior information equations is zero.';
+  StrToDefinePriorinfo = 'To define prior-information equations for within-l' +
+  'ayer continuity, the search distance musts be large enough that every pil' +
+  'ot point has at least one neighbor that is within the search distance.';
 
 { TPestControlFileWriter }
 
@@ -443,6 +448,11 @@ var
     ParameterName2: string;
 //    X: TPoint3D;
   begin
+    if SearchDistance <= 0 then
+    begin
+      frmErrorsAndWarnings.AddError(Model, StrTheSearchDistance,
+        StrToDefinePriorinfo)
+    end;
     FPriorInfomationEquations.Add(Format(StrEquationsForHori,
       [PPItem.Layer + 1, Param.ParameterName]));
     Inc(CommentCount);
@@ -1387,6 +1397,8 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTooManyParameters);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidPESTDelimit);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationGroupTa);
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTheSearchDistance);
+
 
   if not Model.PestUsed then
   begin

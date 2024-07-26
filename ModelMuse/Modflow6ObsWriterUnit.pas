@@ -1131,7 +1131,7 @@ begin
                   if not (ogwtConcentration in
                     Obs.CalibrationObservations.GwtObs[SpeciesIndex]) then
                   begin
-                    HeadDrawdown.FName := Obs.Name + '_C'
+                    HeadDrawdown.FName := Obs.Name+ WriteCellName(ACell.Cell) + '_C'
                       + IntToStr(ObsIndex) + '_' + IntToStr(SpeciesIndex);
                     FConcentrations[SpeciesIndex].Add(HeadDrawdown);
                   end;

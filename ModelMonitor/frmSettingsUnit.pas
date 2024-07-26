@@ -29,6 +29,12 @@ type
     tabWarnings: TTabSheet;
     memoErrors: TMemo;
     memoWarnings: TMemo;
+    pnlPrimary: TPanel;
+    pnlSecondary: TPanel;
+    pnlObservations: TPanel;
+    pnlIgnored: TPanel;
+    pnlErrors: TPanel;
+    pnlWarnings: TPanel;
     procedure btnOKClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private

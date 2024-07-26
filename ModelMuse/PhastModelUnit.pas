@@ -10350,11 +10350,16 @@ const
 //                recalculated just becaue the Object Properties dialog box
 //                has been displayed.
 //    '5.2.0.22' Bug fix: Fixed interpolation in display of time series values.
+//    '5.2.0.23' Bug fix: Fixed export of concentration observations when some
+//                concentration observations are used for parameter estimation
+//                and some are not.
+
+
 //    '5.3.0.0'  Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.0.0';
+  IIModelVersion = '5.2.0.23';
 
 function IModelVersion: string;
 begin
