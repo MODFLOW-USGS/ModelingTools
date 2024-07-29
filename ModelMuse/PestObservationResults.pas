@@ -1019,9 +1019,7 @@ begin
     end;
     IsResidFile := SameText('.res', Extension)
       or SameText('.rei', Extension);
-    IsObsExtractFile := SameText('.Mf2005Values', Extension)
-      or SameText('.Mf6Values', Extension)
-      or SameText('.SutraValues', Extension);
+    IsObsExtractFile := SameText('.Mf2005Values', Extension);
     ResidualsFile := TStringList.Create;
     Splitter := TStringList.Create;
     try
@@ -1058,6 +1056,7 @@ begin
           end
           else
           begin
+            // MF 6 or SUTRA
             Assert(Splitter.Count >= 2);
           end;
 

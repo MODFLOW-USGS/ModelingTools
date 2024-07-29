@@ -3,25 +3,25 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
     Top = 144
     Height = 172
     ExplicitTop = 144
-    ExplicitWidth = 459
+    ExplicitWidth = 541
     ExplicitHeight = 172
     DesignSize = (
       541
       172)
     object lblParameterName: TLabel [1]
-      Left = 8
-      Top = 48
-      Width = 87
+      Left = 208
+      Top = 46
+      Width = 153
       Height = 15
       Margins.Left = 8
       Caption = 'Parameter name'
       Enabled = False
     end
     inherited btnDelete: TBitBtn
-      ExplicitLeft = 371
+      ExplicitLeft = 453
     end
     inherited btnInsert: TBitBtn
-      ExplicitLeft = 287
+      ExplicitLeft = 369
     end
     object rgAngleAdjustment: TRadioGroup
       Left = 0
@@ -42,13 +42,12 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
       TabOrder = 3
     end
     object comboHfbParameters: TJvImageComboBox
-      Left = 365
-      Top = 45
+      Left = 9
+      Top = 43
       Width = 170
       Height = 25
       Margins.Right = 8
       Style = csOwnerDrawVariable
-      Anchors = [akTop, akRight]
       ButtonStyle = fsLighter
       Color = clBtnFace
       DroppedWidth = 170
@@ -60,22 +59,18 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
       TabOrder = 4
       OnChange = comboHfbParametersChange
       Items = <>
-      ExplicitLeft = 283
     end
   end
   inherited pnlTop: TPanel
-    ExplicitWidth = 459
+    ExplicitWidth = 541
     inherited pnlCaption: TPanel
-      ExplicitWidth = 457
+      ExplicitWidth = 539
     end
   end
   inherited pnlGrid: TPanel
     Height = 119
-    ExplicitWidth = 459
+    ExplicitWidth = 541
     ExplicitHeight = 119
-    inherited pnlEditGrid: TPanel
-      ExplicitWidth = 457
-    end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Height = 67
       ColCount = 4
@@ -176,7 +171,7 @@ inherited frameScreenObjectHfbMf6: TframeScreenObjectHfbMf6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 457
+      ExplicitWidth = 539
       ExplicitHeight = 67
     end
   end

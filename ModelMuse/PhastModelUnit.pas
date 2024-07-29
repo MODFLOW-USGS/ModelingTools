@@ -10353,13 +10353,23 @@ const
 //    '5.2.0.23' Bug fix: Fixed export of concentration observations when some
 //                concentration observations are used for parameter estimation
 //                and some are not.
+//    '5.2.0.24' Bug fix: not in released version. fixed import of MF6 and SUTRA
+//                results from MF6ObsExtractor and SUTRA ObsExtractor
 
 
 //    '5.3.0.0'  Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.23';
+  IIModelVersion = '5.2.0.24';
+
+{ TODO : Add support for time-varying conductance in MF6 version of SFR }
+{ TODO : Support MODFLOW 6 Particle Tracking Model. }
+{ TODO : Support MODFLOW 6 Energy Transport Model. }
+{ TODO : Add support for model splitting for use with parallel MODFLOW }
+{ TODO : Support PEST++. }
+{ TODO : Support SENSAN from the PEST suite of programs. }
+{ TODO : Support analytical element model(s). }
 
 function IModelVersion: string;
 begin
