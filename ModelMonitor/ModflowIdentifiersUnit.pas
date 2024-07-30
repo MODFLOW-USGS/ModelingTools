@@ -235,9 +235,10 @@ begin
 
   // PEST
   PackageIdentifiers.Add(':-');
-  PackageIdentifiers.Add(': -');
+  PackageIdentifiers.Add('File saving options: -');
   PackageIdentifiers.Add('OPTIMISATION RECORD');
   PackageIdentifiers.Add('OPTIMISATION RESULTS');
+  PackageIdentifiers.Add('OPTIMISATION ITERATION NO.');
 
   // MT3D
   PackageIdentifiers.Add('BASIC TRANSPORT PACKAGE');
@@ -787,7 +788,6 @@ begin
 //  BoundaryIdentifiers.Add('aaa');
   // PEST
   BoundaryIdentifiers.Add('INITIAL CONDITIONS:');
-  BoundaryIdentifiers.Add('OPTIMISATION ITERATION NO.');
   BoundaryIdentifiers.Add('----->');
 
   // SUTRA

@@ -910,7 +910,9 @@ begin
     ErrorValues.Add('THE FOLLOWING COMMENTS WERE PASSED TO THE ERROR ROUTINE');
     ErrorValues.Add('The following comments were passed to the error routine');
 //    ErrorValues.Add('FILE_IO_ERROR');
-//    ErrorValues.Add('aaa');
+
+    // PEST
+    ErrorValues.Add('Error condition prevents continued PEST execution:-');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
