@@ -4284,10 +4284,22 @@ begin
 end;
 
 procedure TCustomFileWriter.WriteString(const Value: AnsiString);
+var
+  TempValue: AnsiString;
+  AChar: AnsiChar;
 begin
-  if Length(Value) > 0 then
+  TempValue := Value;
+  for var CharIndex := 1 to Length(TempValue) do
   begin
-    FFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+    AChar := TempValue[CharIndex];
+    if Ord(AChar) >= 128 then
+    begin
+      TempValue[CharIndex] := '_';
+    end;
+  end;
+  if Length(TempValue) > 0 then
+  begin
+    FFileStream.Write(TempValue[1], Length(TempValue)*SizeOf(AnsiChar));
 //    UpdateExportTime;
   end;
 end;
@@ -10563,13 +10575,13 @@ end;
 procedure TCustomTransientWriter.WriteBoundName(ACell: TValueCell);
 var
   ScreenObject: TScreenObject;
-  BoundName: string;
+  BoundName: AnsiString;
 begin
   if (Model.ModelSelection = msModflow2015) then
   begin
     if ACell.Mf6ObsName <> '' then
     begin
-      BoundName := ' ''' + ACell.Mf6ObsName + ''' ';
+      BoundName := AnsiString(' ''' + ACell.Mf6ObsName + ''' ');
       WriteString(BoundName);
       if ACell.ScreenObject <> nil then
       begin
@@ -10584,7 +10596,7 @@ begin
     else
     begin
       ScreenObject := ACell.ScreenObject as TScreenObject;
-      BoundName := Copy(ScreenObject.Name, 1, MaxBoundNameLength);
+      BoundName := AnsiString(Copy(ScreenObject.Name, 1, MaxBoundNameLength));
       BoundName := ' ''' + BoundName + ''' ';
       WriteString(BoundName);
     end;

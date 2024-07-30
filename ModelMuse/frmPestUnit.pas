@@ -548,7 +548,7 @@ resourcestring
   'ion equations are used, the search distance for the seach distance must b' +
   'e great enough that every pilot point has at least one neighber whose dis' +
   'tance is less than or equal to the search distance. You haven''t done ' +
-  'this. Do you want to fix this now?';
+  'this. Do you want to continue in spite of this problem?';
 
 type
   TCheckedPointItem = class(TPointItem)
@@ -1577,7 +1577,7 @@ begin
   if not PredictGroupOK then
   begin
     Beep;
-    if MessageDlg(StrWhenThePrediction, mtError, [mbYes, mbNo], 0) <> mrYes then
+    if MessageDlg(StrWhenThePrediction, mtError, [mbYes, mbNo], 0, mbNo) <> mrYes then
     begin
       ModalResult := mrNone;
       Exit;
@@ -1585,7 +1585,7 @@ begin
   end;
    if not SearchDistanceOK then
    begin
-     if MessageDlg(StrWhenPESTIsActive, mtError, [mbYes, mbNo], 0) <> mrYes then
+     if MessageDlg(StrWhenPESTIsActive, mtError, [mbYes, mbNo], 0, mbNo) <> mrYes then
       begin
         ModalResult := mrNone;
         Exit;

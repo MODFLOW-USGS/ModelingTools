@@ -51,8 +51,6 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'Pest_Properties_Basic_Pane'
       Caption = 'jvspBasic'
-      ExplicitWidth = 558
-      ExplicitHeight = 441
       DesignSize = (
         562
         442)
@@ -142,13 +140,12 @@ inherited frmPEST: TfrmPEST
       object diredPest: TJvDirectoryEdit
         Left = 17
         Top = 312
-        Width = 512
+        Width = 508
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 2
         Text = 'C:\PEST'
         OnChange = diredPestChange
-        ExplicitWidth = 508
       end
       object comboArrayMarker: TComboBox
         Left = 17
@@ -1102,16 +1099,16 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 445
+            Left = 442
             ExplicitLeft = 419
           end
           inherited sbInsert: TSpeedButton
-            Left = 476
+            Left = 473
             OnClick = frameObservationGroupssbInsertClick
             ExplicitLeft = 448
           end
           inherited sbDelete: TSpeedButton
-            Left = 504
+            Left = 500
             OnClick = frameObservationGroupssbDeleteClick
             ExplicitLeft = 477
           end
@@ -2041,15 +2038,15 @@ inherited frmPEST: TfrmPEST
             ExplicitHeight = 18
           end
           inherited sbAdd: TSpeedButton
-            Left = 332
+            Left = 330
             ExplicitLeft = 338
           end
           inherited sbInsert: TSpeedButton
-            Left = 359
+            Left = 356
             ExplicitLeft = 367
           end
           inherited sbDelete: TSpeedButton
-            Left = 387
+            Left = 384
             ExplicitLeft = 477
           end
           inherited seNumber: TJvSpinEdit
@@ -2374,6 +2371,8 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Within_Layer_C'
       Caption = 'jvspPriorInfoHorizContinuity'
+      ExplicitWidth = 558
+      ExplicitHeight = 441
       object pnlPriorInfoContinuity: TPanel
         Left = 0
         Top = 0
@@ -2381,6 +2380,7 @@ inherited frmPEST: TfrmPEST
         Height = 161
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 558
         object lblSearchDistance: TLabel
           Left = 157
           Top = 36
@@ -2556,6 +2556,8 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
+        ExplicitWidth = 558
+        ExplicitHeight = 280
       end
     end
     object jvspPriorInfoVertContinuity: TJvStandardPage
