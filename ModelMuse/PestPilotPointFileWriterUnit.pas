@@ -11,8 +11,8 @@ type
   TPilotPointWriter = class(TCustomFileWriter)
   private
     FFileName: string;
-    FMainFileStream: TFileStream;
-    FTemplateFileStream: TFileStream;
+    FMainFileStream: TStreamWriter;
+    FTemplateFileStream: TStreamWriter;
     procedure OpenTemplateFile(const FileName: string);
     procedure CloseTemplateFile;
     procedure SwitchToTemplate;
@@ -60,7 +60,8 @@ begin
   Assert(FMainFileStream = nil);
   Assert(FFileStream <> nil);
   FMainFileStream := FFileStream;
-  FTemplateFileStream:= TFileStream.Create(FileName + '.tpl', fmCreate or fmShareDenyWrite);
+//  FTemplateFileStream:= TFileStream.Create(FileName + '.tpl', fmCreate or fmShareDenyWrite);
+  FTemplateFileStream:= TFile.CreateText(FileName + '.tpl');
 end;
 
 procedure TPilotPointWriter.SwitchToMain;

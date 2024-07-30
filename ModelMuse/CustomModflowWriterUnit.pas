@@ -79,12 +79,12 @@ type
   TCustomFileWriter = class(TObject)
   strict protected
     // name is the file that is created by @classname.
-    FFileStream: TFileStream;
+    FFileStream: TStreamWriter;
     FPestDataArrays: TDictionary<string, TDataArray>;
     // @name is the name of the file being created.
     // It is different from @link(FInputFileName)
     FNameOfFile: string;
-    FFileStreamList: TList<TFileStream>;
+    FFileStreamList: TList<TStreamWriter>;
   private
     // See @link(Model).
     FModel: TCustomModel;
@@ -3288,7 +3288,7 @@ begin
   FTimeSeriesNames := TStringList.Create;
   FTimeSeriesNames.Sorted := True;
   FTimeSeriesNames.Duplicates := dupIgnore;
-  FFileStreamList := TList<TFileStream>.Create;
+  FFileStreamList := TList<TStreamWriter>.Create;
   FPestDataArrays := TDictionary<string, TDataArray>.Create;
   FEvaluationType := EvaluationType;
   FModel := AModel;
@@ -3807,7 +3807,7 @@ end;
 
 procedure TCustomFileWriter.OpenFile(const FileName: string);
 begin
-  FFileStream:= TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
+  FFileStream:= TFile.CreateText(FileName);
 end;
 
 procedure TCustomModflowWriter.WriteArray(const DataArray: TDataArray;
@@ -4284,22 +4284,23 @@ begin
 end;
 
 procedure TCustomFileWriter.WriteString(const Value: AnsiString);
-var
-  TempValue: AnsiString;
-  AChar: AnsiChar;
+//var
+//  TempValue: AnsiString;
+//  AChar: AnsiChar;
 begin
-  TempValue := Value;
-  for var CharIndex := 1 to Length(TempValue) do
+//  TempValue := Value;
+//  for var CharIndex := 1 to Length(TempValue) do
+//  begin
+//    AChar := TempValue[CharIndex];
+//    if Ord(AChar) >= 128 then
+//    begin
+//      TempValue[CharIndex] := '_';
+//    end;
+//  end;
+  if Length(Value) > 0 then
   begin
-    AChar := TempValue[CharIndex];
-    if Ord(AChar) >= 128 then
-    begin
-      TempValue[CharIndex] := '_';
-    end;
-  end;
-  if Length(TempValue) > 0 then
-  begin
-    FFileStream.Write(TempValue[1], Length(TempValue)*SizeOf(AnsiChar));
+    FFileStream.Write(Value);
+//    FFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
 //    UpdateExportTime;
   end;
 end;
@@ -10575,13 +10576,13 @@ end;
 procedure TCustomTransientWriter.WriteBoundName(ACell: TValueCell);
 var
   ScreenObject: TScreenObject;
-  BoundName: AnsiString;
+  BoundName: string;
 begin
   if (Model.ModelSelection = msModflow2015) then
   begin
     if ACell.Mf6ObsName <> '' then
     begin
-      BoundName := AnsiString(' ''' + ACell.Mf6ObsName + ''' ');
+      BoundName := ' ''' + ACell.Mf6ObsName + ''' ';
       WriteString(BoundName);
       if ACell.ScreenObject <> nil then
       begin
@@ -10596,7 +10597,7 @@ begin
     else
     begin
       ScreenObject := ACell.ScreenObject as TScreenObject;
-      BoundName := AnsiString(Copy(ScreenObject.Name, 1, MaxBoundNameLength));
+      BoundName := Copy(ScreenObject.Name, 1, MaxBoundNameLength);
       BoundName := ' ''' + BoundName + ''' ';
       WriteString(BoundName);
     end;
@@ -11301,7 +11302,8 @@ procedure TCustomFileWriter.OpenTempFile(const FileName: string);
 begin
   Assert(FFileStream <> nil);
   FFileStreamList.Add(FFileStream);
-  FFileStream := TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
+  FFileStream := TFile.CreateText(FileName);
+//  FFileStream := TFileStream.Create(FileName, fmCreate or fmShareDenyWrite);
 end;
 
 class function TCustomFileWriter.PestUtilityProgramPath(UtilityProgramName,
