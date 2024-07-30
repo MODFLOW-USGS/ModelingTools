@@ -502,7 +502,7 @@ resourcestring
   StrTheShapeHeaderFil = 'The shape header file "%s" could not be found.';
   StrLine0d1sM = 'Line %0:d ("%1:s") must contain at least two values separa' +
   'ted by a comma or space character.';
-  StrRegularizationGroup = 'Regularization Group';
+//  StrRegularizationGroup = 'Regularization Group';
   StrX = 'X';
   StrY = 'Y';
   StrParameterName = 'Parameter name';
@@ -549,6 +549,8 @@ resourcestring
   'e great enough that every pilot point has at least one neighber whose dis' +
   'tance is less than or equal to the search distance. You haven''t done ' +
   'this. Do you want to continue in spite of this problem?';
+  StrRegularizationGroupNUnC = 'Regularization Group ' + sLineBreak + '(rarely selected)';
+  StrRegularizationGroupNC = 'Regularization Group' + sLineBreak + ' (typically selected)';
 
 type
   TCheckedPointItem = class(TPointItem)
@@ -2269,8 +2271,12 @@ begin
   {$REGION 'Observation Groups'}
   GetObsGroups(frameObservationGroups, PestProperties.ObservationGroups,
     FLocalObsGroups);
+  frameObservationGroups.Grid.Cells[Ord(pogcRegularization), 0] := StrRegularizationGroupNUnC;
+
   GetObsGroups(framePriorInfoObservationGroups,
     PestProperties.PriorInfoObservationGroups, FLocalPriorInfoObsGroups);
+  framePriorInfoObservationGroups.Grid.Cells[Ord(pogcRegularization), 0] := StrRegularizationGroupNC;
+
   {$ENDREGION}
 
   {$REGION 'Observation Group Assignments'}
@@ -3263,7 +3269,7 @@ begin
   Grid.BeginUpdate;
   try
     Grid.Cells[Ord(pogcName), 0] := StrObservationGroupNa;
-    Grid.Cells[Ord(pogcRegularization), 0] := StrRegularizationGroup;
+//    Grid.Cells[Ord(pogcRegularization), 0] := StrRegularizationGroup;
     Grid.Cells[Ord(pogcUseTarget), 0] := StrUseGroupTargetGT;
     Grid.Cells[Ord(pogcTarget), 0] := StrGroupTargetGTARG;
     Grid.Cells[Ord(pogcFileName), 0] := StrCovarianceMatrixFi;

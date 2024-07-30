@@ -4284,23 +4284,10 @@ begin
 end;
 
 procedure TCustomFileWriter.WriteString(const Value: AnsiString);
-//var
-//  TempValue: AnsiString;
-//  AChar: AnsiChar;
 begin
-//  TempValue := Value;
-//  for var CharIndex := 1 to Length(TempValue) do
-//  begin
-//    AChar := TempValue[CharIndex];
-//    if Ord(AChar) >= 128 then
-//    begin
-//      TempValue[CharIndex] := '_';
-//    end;
-//  end;
   if Length(Value) > 0 then
   begin
-    FFileStream.Write(Value);
-//    FFileStream.Write(Value[1], Length(Value)*SizeOf(AnsiChar));
+    FFileStream.Write(string(Value));
 //    UpdateExportTime;
   end;
 end;

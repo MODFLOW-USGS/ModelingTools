@@ -10355,17 +10355,15 @@ const
 //                and some are not.
 //    '5.2.0.24' Bug fix: not in released version. fixed import of MF6 and SUTRA
 //                results from MF6ObsExtractor and SUTRA ObsExtractor
-
-//               Bug fix: fixed bug in writing ASCII characters with codes
-//                greater than or equal to 128. Such characters are now
-//                converted to underscore characters.
+//    '5.2.0.25' Bug fix: fixed bug in writing ASCII characters with codes
+//                greater than or equal to 128.
 
 
 //    '5.3.0.0'  Enhancement: Added the ability to import MODFLOW 6 models.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.2.0.24';
+  IIModelVersion = '5.2.0.25';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }

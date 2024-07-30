@@ -4,8 +4,8 @@ inherited frmPEST: TfrmPEST
   Caption = 'PEST Properties'
   ClientHeight = 484
   ClientWidth = 760
-  ExplicitWidth = 772
-  ExplicitHeight = 522
+  ExplicitWidth = 776
+  ExplicitHeight = 523
   TextHeight = 18
   object splMain: TSplitter
     Left = 193
@@ -30,7 +30,6 @@ inherited frmPEST: TfrmPEST
     TabOrder = 0
     OnMouseDown = tvPESTMouseDown
     Items.Links = {00000000}
-    ExplicitHeight = 441
   end
   object plMain: TJvPageList
     Left = 198
@@ -41,8 +40,6 @@ inherited frmPEST: TfrmPEST
     PropagateEnable = False
     Align = alClient
     OnChange = plMainChange
-    ExplicitWidth = 558
-    ExplicitHeight = 441
     object jvspBasic: TJvStandardPage
       Left = 0
       Top = 0
@@ -1261,6 +1258,8 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Observation_G2'
       Caption = 'jvspObsGroupAssignments'
+      ExplicitWidth = 426
+      ExplicitHeight = 399
       inline frameParentObsGroups: TframeParentChild
         Left = 0
         Top = 0
@@ -1268,8 +1267,8 @@ inherited frmPEST: TfrmPEST
         Height = 442
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 562
-        ExplicitHeight = 442
+        ExplicitWidth = 426
+        ExplicitHeight = 399
         inherited tvTree: TTreeView
           Width = 562
           Height = 442
@@ -2371,8 +2370,6 @@ inherited frmPEST: TfrmPEST
       HelpType = htKeyword
       HelpKeyword = 'PEST_Properties_Within_Layer_C'
       Caption = 'jvspPriorInfoHorizContinuity'
-      ExplicitWidth = 558
-      ExplicitHeight = 441
       object pnlPriorInfoContinuity: TPanel
         Left = 0
         Top = 0
@@ -2380,7 +2377,6 @@ inherited frmPEST: TfrmPEST
         Height = 161
         Align = alTop
         TabOrder = 0
-        ExplicitWidth = 558
         object lblSearchDistance: TLabel
           Left = 157
           Top = 36
@@ -2556,8 +2552,6 @@ inherited frmPEST: TfrmPEST
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 558
-        ExplicitHeight = 280
       end
     end
     object jvspPriorInfoVertContinuity: TJvStandardPage
@@ -3360,8 +3354,6 @@ inherited frmPEST: TfrmPEST
     Height = 42
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 441
-    ExplicitWidth = 756
     object btnHelp: TBitBtn
       Left = 494
       Top = 6
