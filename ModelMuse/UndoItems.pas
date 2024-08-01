@@ -3542,6 +3542,7 @@ end;
 
 procedure TUndoRenumberMesh.Redo;
 begin
+// do not call inherited Redo.
 //  inherited;
   frmGoPhast.PhastModel.SutraMesh.Mesh2D.MeshGenControls.RenumberingAlgorithm
     := FNewAlgorithm;
