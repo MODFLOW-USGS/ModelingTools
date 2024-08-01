@@ -35,7 +35,7 @@
 17. Update draft web page.
 17a. Update Videos web page.
 17b. Update Download web page.
-18. Update ModelMuseInternetUpdate.txt \\AFS\.usgs.gov\www_RW\water\htdocs\nrp\gwsoftware\ModelMuse\ModelMuseInternetUpdate.txt \\AFS\.usgs.gov\www_RW\water\htdocs\water-resources\software\ModelMuse\ModelMuseInternetUpdate.txt
+18. Update ModelMuseInternetUpdate.txt 
 19. Transfer html help to web. \\AFS\.usgs.gov\www_RW\water\htdocs\nrp\gwsoftware\ModelMuse\Help\
 19a. Check that html help works with new pages
 19b. Transfer videos and video web page to web.
@@ -47,7 +47,7 @@
 23b. Activate DOI
 23c. Link to doi in main web page
 23d. Activate main web page
-24. Transfer ModelMuseInternetUpdate.txt to web.
+24. Transfer ModelMuseInternetUpdate.txt to web. \\AFS\.usgs.gov\www_RW\water\htdocs\nrp\gwsoftware\ModelMuse\ModelMuseInternetUpdate.txt \\AFS\.usgs.gov\www_RW\water\htdocs\water-resources\software\ModelMuse\ModelMuseInternetUpdate.txt
 24a. Transfer Videos.xml to web.
 25. Send out email to OGW.
 25a. Update and disseminate IPDS.
