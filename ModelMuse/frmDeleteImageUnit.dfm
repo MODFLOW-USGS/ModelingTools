@@ -4,35 +4,34 @@ inherited frmDeleteImage: TfrmDeleteImage
   Caption = 'Delete Image'
   ClientWidth = 422
   ExplicitWidth = 434
-  ExplicitHeight = 272
   PixelsPerInch = 120
   TextHeight = 18
   object clbBitmaps: TCheckListBox
     Left = 0
     Top = 0
     Width = 422
-    Height = 189
+    Height = 156
     Align = alClient
     ItemHeight = 18
     TabOrder = 0
     ExplicitWidth = 418
-    ExplicitHeight = 188
+    ExplicitHeight = 155
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 189
+    Top = 156
     Width = 422
     Height = 45
     Align = alBottom
     ParentColor = True
     TabOrder = 1
-    ExplicitTop = 188
+    ExplicitTop = 155
     ExplicitWidth = 418
     DesignSize = (
       422
       45)
     object btnOK: TBitBtn
-      Left = 232
+      Left = 228
       Top = 6
       Width = 83
       Height = 33
@@ -41,10 +40,10 @@ inherited frmDeleteImage: TfrmDeleteImage
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 228
+      ExplicitLeft = 224
     end
     object BitBtn1: TBitBtn
-      Left = 321
+      Left = 317
       Top = 6
       Width = 83
       Height = 33
@@ -52,10 +51,10 @@ inherited frmDeleteImage: TfrmDeleteImage
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 317
+      ExplicitLeft = 313
     end
     object btnHelp: TBitBtn
-      Left = 143
+      Left = 139
       Top = 6
       Width = 83
       Height = 33
@@ -64,7 +63,7 @@ inherited frmDeleteImage: TfrmDeleteImage
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 139
+      ExplicitLeft = 135
     end
   end
 end

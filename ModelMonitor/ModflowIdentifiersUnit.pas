@@ -19,6 +19,8 @@ const
   StressPeriodID1 = 'STRESS PERIOD NO. ';
   StressPeriodID2 = 'LENGTH =';
   TransportStep = 'TRANSPORT STEP NO.';
+  StrMASSBUDGETSATEND = 'MASS BUDGETS AT END';
+  StrCONCENTRATIONS = 'CONCENTRATIONS   IN';
   StartNewTimeStep = 'SOLVING FOR HEAD';
   StrINNERITERATIONSUMM = 'INNER ITERATION SUMMARY';
   StrTimeseriesControll = 'Time-series controlled values';
@@ -173,6 +175,7 @@ begin
   PackageIdentifiers.Add('PRP -- PARTICLE RELEASE POINT PACKAGE');
   PackageIdentifiers.Add('PRP   -- PRP PACKAGE');
   PackageIdentifiers.Add('IDENTIFYING FLOW TERMS IN');
+  PackageIdentifiers.Add('SFR PACKAGE (SFR-1) STATIC');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
@@ -255,9 +258,9 @@ begin
   PackageIdentifiers.Add('UNSATURATED-ZONE TRANSPORT PACKAGE');
   PackageIdentifiers.Add('CONTAMINANT TREATMENT SYSTEM');
   PackageIdentifiers.Add('STRESS PERIOD NO.');
-  PackageIdentifiers.Add('TRANSPORT STEP NO. ');
-  PackageIdentifiers.Add('CONCENTRATIONS');
-  PackageIdentifiers.Add('MASS BUDGETS AT END');
+//  PackageIdentifiers.Add('TRANSPORT STEP NO. ');
+//  PackageIdentifiers.Add(StrCONCENTRATIONS);
+  PackageIdentifiers.Add(StrMASSBUDGETSATEND);
   PackageIdentifiers.Add('TIME STEP NO. ');
   // SUTRA
   PackageIdentifiers.Add('F I L E   U N I T   A S S I G N M E N T S');
@@ -289,6 +292,7 @@ begin
   PackageIdentifiers.Add('P R O D U C T I O N   A N D   L O S S   O F   E N E R G Y');
   PackageIdentifiers.Add('E N E R G Y   S O U R C E   D A T A');
   PackageIdentifiers.Add('S P E C I F I E D   T E M P E R A T U R E   D A T A');
+  PackageIdentifiers.Add('OUTPUT CONTROL OPTIONS');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
 //  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
@@ -517,7 +521,6 @@ begin
   BoundaryIdentifiers.Add('THE TRANSPORT MODEL CONSISTS OF');
   BoundaryIdentifiers.Add('POROSITY                 FOR LAYER');
   BoundaryIdentifiers.Add('INITIAL CONC.: COMP');
-  BoundaryIdentifiers.Add('OUTPUT CONTROL OPTIONS');
   BoundaryIdentifiers.Add('ADVECTION SOLUTION OPTIONS');
   BoundaryIdentifiers.Add('DISPERSION INPUT PARAMETERS');
   BoundaryIdentifiers.Add('LONG. DISPERSIVITY (AL)  FOR LAYER');
@@ -776,7 +779,6 @@ begin
   BoundaryIdentifiers.Add('NEWTON-RAPHSON');
   BoundaryIdentifiers.Add('LAMINAR PRECALCULATION');
   BoundaryIdentifiers.Add('BUDGET FOR ENTIRE MODEL');
-  BoundaryIdentifiers.Add('SFR PACKAGE (');
   BoundaryIdentifiers.Add('GHB NO.    LAYER  CELL2D       ');
   BoundaryIdentifiers.Add('SFR-1 PACKAGE - SUMMARY OF FLOWS');
   BoundaryIdentifiers.Add('LAK PACKAGE (');
@@ -789,6 +791,10 @@ begin
   // PEST
   BoundaryIdentifiers.Add('INITIAL CONDITIONS:');
   BoundaryIdentifiers.Add('----->');
+  BoundaryIdentifiers.Add('Name         Group          Scale         Offset');
+//  BoundaryIdentifiers.Add('aaa');
+
+
 
   // SUTRA
   BoundaryIdentifiers.Add('**** MESH ANALYSIS ****');
@@ -802,11 +808,41 @@ begin
   BoundaryIdentifiers.Add('**** NODAL INCIDENCES ****');
   BoundaryIdentifiers.Add('E N E R G Y   B U D G E T');
   BoundaryIdentifiers.Add('T  E  M  P  E  R  A  T  U  R  E');
+  BoundaryIdentifiers.Add('THAT INCLUDES THE FOLLOWING ');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+
+  // MT3D
+  BoundaryIdentifiers.Add('Dxx^ Comp.');
+  BoundaryIdentifiers.Add('Dxy^ Comp.');
+  BoundaryIdentifiers.Add('Dxz^ Comp.');
+  BoundaryIdentifiers.Add('Dyy^ Comp.');
+  BoundaryIdentifiers.Add('Dyx^ Comp.');
+  BoundaryIdentifiers.Add('Dyz^ Comp.');
+  BoundaryIdentifiers.Add('Dzz^ Comp.');
+  BoundaryIdentifiers.Add('Dzx^ Comp.');
+  BoundaryIdentifiers.Add('Dzy^ Comp.');
+  BoundaryIdentifiers.Add('TREATMENT SYSTEM #');
+  BoundaryIdentifiers.Add('OVERALL CTS MASS BUDGETS');
+  BoundaryIdentifiers.Add('PARTICLE NUMBER  IN');
+  BoundaryIdentifiers.Add('LAKE MASS BUDGETS AT END OF TRANSPORT STEP');
+  BoundaryIdentifiers.Add('STREAM MASS BUDGETS AT END OF TRANSPORT STEP');
+  BoundaryIdentifiers.Add('POROSITY                 ');
+  BoundaryIdentifiers.Add('OBS_NAME     LAYER  ROW  COL. SPECIES  OBS_TIME   ROW_OFFSET  COL_OFFSET    WEIGHT      OBS_CONC');
+  BoundaryIdentifiers.Add('OBS_NAME    SPECIES  OBS_TIME     WEIGHT       OBS_FLUX');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('aaa');
+//  BoundaryIdentifiers.Add('TRANSPORT STEP NO. ');
 
 end;
 
@@ -840,7 +876,8 @@ begin
   NonIdentifiers.Add('USGS');
   NonIdentifiers.Add('STORAGE-CELLBLK =');
 
-//  NonIdentifiers.Add('StrRECHARGE');
+  // MT3D
+  NonIdentifiers.Add('CTS TO EXTERNAL SINK');
 end;
 
 

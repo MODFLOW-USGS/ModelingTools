@@ -3098,7 +3098,7 @@ inherited frmAbout: TfrmAbout
     object ctgrypnlgrp1: TCategoryPanelGroup
       Left = 328
       Top = 6
-      Width = 393
+      Width = 389
       Height = 293
       VertScrollBar.Tracking = True
       Align = alNone
@@ -3109,16 +3109,17 @@ inherited frmAbout: TfrmAbout
       HeaderFont.Name = 'Tahoma'
       HeaderFont.Style = []
       TabOrder = 0
+      ExplicitWidth = 385
       object ctgrypnl2: TCategoryPanel
         Top = 30
         Height = 250
         Caption = 'References'
         TabOrder = 1
-        ExplicitWidth = 385
+        ExplicitWidth = 381
         object reReference: TRichEdit
           Left = 0
           Top = 0
-          Width = 387
+          Width = 383
           Height = 224
           Align = alClient
           Lines.Strings = (
@@ -3147,7 +3148,7 @@ inherited frmAbout: TfrmAbout
           ScrollBars = ssVertical
           TabOrder = 0
           WordWrap = False
-          ExplicitWidth = 383
+          ExplicitWidth = 379
         end
       end
       object ctgrypnl1: TCategoryPanel
@@ -3156,7 +3157,7 @@ inherited frmAbout: TfrmAbout
         Caption = 'Disclaimer/License'
         Collapsed = True
         TabOrder = 0
-        ExplicitWidth = 372
+        ExplicitWidth = 381
         object memoDisclaimer: TMemo
           Left = 0
           Top = 0
@@ -3179,6 +3180,7 @@ inherited frmAbout: TfrmAbout
           ScrollBars = ssVertical
           TabOrder = 0
           WordWrap = False
+          ExplicitWidth = 379
         end
       end
     end
@@ -3211,7 +3213,7 @@ inherited frmAbout: TfrmAbout
       Caption = '0.0.3.0'
     end
     object btnClose: TBitBtn
-      Left = 632
+      Left = 628
       Top = 6
       Width = 89
       Height = 33
@@ -3219,10 +3221,10 @@ inherited frmAbout: TfrmAbout
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 628
+      ExplicitLeft = 624
     end
     object btnGoToWeb: TBitBtn
-      Left = 471
+      Left = 467
       Top = 6
       Width = 155
       Height = 33
@@ -3290,7 +3292,7 @@ inherited frmAbout: TfrmAbout
         0800000000000000000000000000000000000000080808080800}
       TabOrder = 0
       OnClick = btnGoToWebClick
-      ExplicitLeft = 467
+      ExplicitLeft = 463
     end
   end
   object dgCredit: TRbwDataGrid4

@@ -12,7 +12,7 @@ uses
 
 type
   TIndexType = (itNone, itPackage, itObservation, itBoundary, itNumberBoundary,
-    itWarning, itError, itIndent1, {itIndent2,} itIndent3, itNoIndentChange,
+    itWarning, itError, itIndent1, itIndent2, itIndent3, itNoIndentChange,
     itStressPeriod, itStressPeriod2, itStartTimeStep, itIteration, itIteration2,
     itArray1, itArray2, itArray3, itEndModel, itParameter, itNonID);
   TIndexTypes = set of TIndexType;
@@ -352,6 +352,10 @@ begin
   {$IFDEF ShowTimes}
   StartTime := Now;
   {$ENDIF}
+  if OpenDialog1.FileName <> FileName then
+  begin
+    OpenDialog1.FileName := FileName
+  end;
   FPromptReopen := True;
   FReopeningAllowed := True;
   tabTable.TabVisible := False;
@@ -470,6 +474,9 @@ procedure TfrmMain.InitializeSearchTrie;
 var
   index: Integer;
 begin
+  FSearcher.Free;
+  FSearcher := TModflowSearchTrie.Create;
+
   FMinLength := Length(ErrorValues[0]);
   for index := 0 to ErrorValues.Count - 1 do
   begin
@@ -520,7 +527,11 @@ begin
 //  AddKey(StrParameter, itNoIndentChange);
   AddKey(StrParameter, itParameter);
 //  AddKey(StrParameterName, itParameter);
-  AddKey(TransportStep, itIndent3);
+  AddKey(TransportStep, itIndent2);
+  AddKey(StrMASSBUDGETSATEND, itIndent3);
+  AddKey(StrCONCENTRATIONS, itIndent3);
+
+
   AddKey(StrINSTANCE2, itIndent3);
   AddKey(StrCLASSIFICATIONCOU, itIndent1);
   AddKey(StrGROUNDSURFACE, itIndent1);
@@ -1207,7 +1218,6 @@ end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  FSearcher := TModflowSearchTrie.Create;
 //  FQuickSearcher := TQuickSearchTrie.Create;
   InitializeSearchTrie;
 
@@ -1780,6 +1790,7 @@ var
   ActiveLineNo: integer;
   ScrollBarActive: Boolean;
   DisV: Boolean;
+  BlankLineCount: Integer;
 begin
   try
     result := False;
@@ -1877,6 +1888,7 @@ begin
               begin
                 EndFound := True;
               end;
+              BlankLineCount := 0;
               for LineIndex := 0 to Lines.Count - 1 do
               begin
                 ALine := Lines[LineIndex];
@@ -1884,13 +1896,25 @@ begin
                 begin
                   if (LineIndex > 0) then
                   begin
-                    EndFound := True;
-                    break;
+                    if BlankLineCount = 0 then
+                    begin
+                      Inc(BlankLineCount);
+                      Continue;
+                    end
+                    else
+                    begin
+                      EndFound := True;
+                      break;
+                    end;
                   end
                   else
                   begin
                     Continue;
                   end;
+                end
+                else
+                begin
+                  BlankLineCount := 0;
                 end;
                 if ((Trim(ALine) = '1')) then
                 begin
@@ -2167,7 +2191,9 @@ begin
     AFileName := Value[FileIndexUnit];
     if FileExists(AFileName) then
     begin
+//      ShowMessage(AFileName);
       FShowIndexFile := ifcYes;
+      OpenDialog1.FileName := AFileName;
       OpenAFile(AFileName);
       break;
     end;
@@ -2471,7 +2497,7 @@ begin
 
         UseKey := False;
         if IndexTypes[0] in [itPackage, itObservation, itBoundary,
-          itNumberBoundary, itIndent1, itIndent3, itNoIndentChange,
+          itNumberBoundary, itIndent1, itIndent2, itIndent3, itNoIndentChange,
           itStartTimeStep, itArray2, itArray3, itEndModel, itParameter] then
         begin
           UseKey := True;
@@ -2660,6 +2686,15 @@ begin
               frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 1);
               Inc(AddLineCount);
               Indent := 1;
+              FParameterDefined := False;
+            end;
+          itIndent2:
+            begin
+              frameSorted.AddToDictionary(FoundKey, LineIndex + InnerLineIndex, ALine);
+              Inc(AddToDictionaryCount);
+              frameListing.AddLine(LineIndex + InnerLineIndex, ALine, 1);
+              Inc(AddLineCount);
+              Indent := 2;
               FParameterDefined := False;
             end;
           itIndent3:

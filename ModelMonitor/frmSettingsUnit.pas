@@ -62,6 +62,7 @@ begin
   SetData;
   if frmMain.OpenDialog1.FileName <> '' then
   begin
+    frmMain.InitializeSearchTrie;
     frmMain.OpenAFile(frmMain.OpenDialog1.FileName);
   end;
 end;

@@ -64,6 +64,8 @@ type
     procedure cbChemistryClick(Sender: TObject);
     // @name creates an instance of @classname.
     procedure FormCreate(Sender: TObject); override;
+    function FormHelp(Command: Word; Data: NativeInt; var CallHelp: Boolean):
+        Boolean;
   private
     // @name displays the options related to chemistry to the user.
     procedure GetData;
@@ -208,6 +210,12 @@ procedure TfrmChemistryOptions.btnOKClick(Sender: TObject);
 begin
   inherited;
   SetData;
+end;
+
+function TfrmChemistryOptions.FormHelp(Command: Word; Data: NativeInt; var
+    CallHelp: Boolean): Boolean;
+begin
+  inherited;
 end;
 
 { TUndoChemistryOptions }

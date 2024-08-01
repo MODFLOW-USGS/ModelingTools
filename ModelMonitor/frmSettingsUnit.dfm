@@ -32,7 +32,8 @@ object frmSettings: TfrmSettings
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
-        ExplicitHeight = 370
+        ExplicitWidth = 637
+        ExplicitHeight = 328
       end
       object pnlPrimary: TPanel
         Left = 0
@@ -44,9 +45,8 @@ object frmSettings: TfrmSettings
           'Primary identifiers are used to identify the highest level items' +
           ' in the table of contents'
         TabOrder = 1
-        ExplicitLeft = 208
-        ExplicitTop = 240
-        ExplicitWidth = 185
+        ExplicitTop = 328
+        ExplicitWidth = 637
       end
     end
     object tabSecondary: TTabSheet
@@ -60,7 +60,6 @@ object frmSettings: TfrmSettings
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
-        ExplicitHeight = 370
       end
       object pnlSecondary: TPanel
         Left = 0
@@ -72,9 +71,6 @@ object frmSettings: TfrmSettings
           'Secondary identifiers are for used to identify sub-headings in t' +
           'he table of contents'
         TabOrder = 1
-        ExplicitLeft = 120
-        ExplicitTop = 240
-        ExplicitWidth = 185
       end
     end
     object tabObsID: TTabSheet
@@ -88,7 +84,6 @@ object frmSettings: TfrmSettings
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
-        ExplicitHeight = 370
       end
       object pnlObservations: TPanel
         Left = 0
@@ -100,9 +95,6 @@ object frmSettings: TfrmSettings
           'Observation Identifiers are used to identify a list of observati' +
           'ons'
         TabOrder = 1
-        ExplicitLeft = 272
-        ExplicitTop = 232
-        ExplicitWidth = 185
       end
     end
     object tabIgnored: TTabSheet
@@ -116,7 +108,6 @@ object frmSettings: TfrmSettings
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
-        ExplicitHeight = 370
       end
       object pnlIgnored: TPanel
         Left = 0
@@ -128,9 +119,6 @@ object frmSettings: TfrmSettings
           'Ignored contains text that serve to identify lines that might ot' +
           'herwise be identified as primary or secondary identifiers'
         TabOrder = 1
-        ExplicitLeft = 272
-        ExplicitTop = 272
-        ExplicitWidth = 185
       end
     end
     object tabErrors: TTabSheet
@@ -144,7 +132,6 @@ object frmSettings: TfrmSettings
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
-        ExplicitHeight = 370
       end
       object pnlErrors: TPanel
         Left = 0
@@ -154,9 +141,6 @@ object frmSettings: TfrmSettings
         Align = alBottom
         Caption = 'Error identifers is used to identify text in error messages'
         TabOrder = 1
-        ExplicitLeft = 112
-        ExplicitTop = 256
-        ExplicitWidth = 185
       end
     end
     object tabWarnings: TTabSheet
@@ -170,8 +154,6 @@ object frmSettings: TfrmSettings
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
-        ExplicitWidth = 637
-        ExplicitHeight = 369
       end
       object pnlWarnings: TPanel
         Left = 0
@@ -181,9 +163,6 @@ object frmSettings: TfrmSettings
         Align = alBottom
         Caption = 'Warning identifers is used to identify text in warning messages'
         TabOrder = 1
-        ExplicitLeft = 144
-        ExplicitTop = 304
-        ExplicitWidth = 185
       end
     end
   end

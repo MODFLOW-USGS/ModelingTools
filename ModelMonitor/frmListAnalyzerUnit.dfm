@@ -302,7 +302,7 @@ object frmMain: TfrmMain
     Top = 129
     Width = 514
     Height = 372
-    ActivePage = tabTable
+    ActivePage = tabLines
     Align = alClient
     TabOrder = 2
     ExplicitWidth = 510
@@ -484,8 +484,7 @@ object frmMain: TfrmMain
             AutoAdjustColWidths = True
           end>
         WordWrapRowCaptions = False
-        ExplicitWidth = 502
-        ExplicitHeight = 329
+        ExplicitLeft = 2
         ColWidths = (
           64
           64

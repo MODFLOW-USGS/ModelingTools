@@ -913,7 +913,7 @@ begin
 
     // PEST
     ErrorValues.Add('Error condition prevents continued PEST execution:-');
-//    ErrorValues.Add('aaa');
+    ErrorValues.Add('Run failure');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
 //    ErrorValues.Add('aaa');
