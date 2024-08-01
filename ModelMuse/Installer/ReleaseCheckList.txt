@@ -36,7 +36,7 @@
 17a. Update Videos web page.
 17b. Update Download web page.
 18. Update ModelMuseInternetUpdate.txt
-19. Transfer html help to web.
+19. Transfer html help to web. \\AFS\.usgs.gov\www_RW\water\htdocs\nrp\gwsoftware\ModelMuse\Help\
 19a. Check that html help works with new pages
 19b. Transfer videos and video web page to web.
 20. Transfer release web page or ModelMuse-release-history.txt to web. 
