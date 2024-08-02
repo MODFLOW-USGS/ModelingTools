@@ -242,6 +242,12 @@ begin
   PackageIdentifiers.Add('OPTIMISATION RECORD');
   PackageIdentifiers.Add('OPTIMISATION RESULTS');
   PackageIdentifiers.Add('OPTIMISATION ITERATION NO.');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+//  PackageIdentifiers.Add('StrCLASSIFICATIONCOU');
+
 
   // MT3D
   PackageIdentifiers.Add('BASIC TRANSPORT PACKAGE');
@@ -258,10 +264,13 @@ begin
   PackageIdentifiers.Add('UNSATURATED-ZONE TRANSPORT PACKAGE');
   PackageIdentifiers.Add('CONTAMINANT TREATMENT SYSTEM');
   PackageIdentifiers.Add('STRESS PERIOD NO.');
-//  PackageIdentifiers.Add('TRANSPORT STEP NO. ');
-//  PackageIdentifiers.Add(StrCONCENTRATIONS);
+  PackageIdentifiers.Add('LENGTH OF CURRENT STRESS PERIOD =');
   PackageIdentifiers.Add(StrMASSBUDGETSATEND);
   PackageIdentifiers.Add('TIME STEP NO. ');
+//  PackageIdentifiers.Add(StrCONCENTRATIONS);
+//  PackageIdentifiers.Add(StrCONCENTRATIONS);
+//  PackageIdentifiers.Add(StrCONCENTRATIONS);
+//  PackageIdentifiers.Add(StrCONCENTRATIONS);
   // SUTRA
   PackageIdentifiers.Add('F I L E   U N I T   A S S I G N M E N T S');
   PackageIdentifiers.Add('S I M U L A T I O N   M O D E   O P T I O N S');
@@ -788,13 +797,18 @@ begin
   BoundaryIdentifiers.Add('SUMMARY OF FLOWS FOR EACH CONTROL VOLUME');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
+
   // PEST
   BoundaryIdentifiers.Add('INITIAL CONDITIONS:');
   BoundaryIdentifiers.Add('----->');
   BoundaryIdentifiers.Add('Name         Group          Scale         Offset');
+  BoundaryIdentifiers.Add('Prior Info Name           Observation Group');
+  BoundaryIdentifiers.Add('Current parameter values');
+  BoundaryIdentifiers.Add('Instruction files:');
+  BoundaryIdentifiers.Add('Templates:');
+  BoundaryIdentifiers.Add('for reading model output files:');
 //  BoundaryIdentifiers.Add('aaa');
-
-
+//  BoundaryIdentifiers.Add('aaa');
 
   // SUTRA
   BoundaryIdentifiers.Add('**** MESH ANALYSIS ****');
@@ -832,17 +846,21 @@ begin
   BoundaryIdentifiers.Add('POROSITY                 ');
   BoundaryIdentifiers.Add('OBS_NAME     LAYER  ROW  COL. SPECIES  OBS_TIME   ROW_OFFSET  COL_OFFSET    WEIGHT      OBS_CONC');
   BoundaryIdentifiers.Add('OBS_NAME    SPECIES  OBS_TIME     WEIGHT       OBS_FLUX');
+  BoundaryIdentifiers.Add('CELL THICKNESS (DZ)');
+  BoundaryIdentifiers.Add('DISP COEF L2/T');
+  BoundaryIdentifiers.Add('"THKSAT          "');
+  BoundaryIdentifiers.Add('"QXX             "');
+  BoundaryIdentifiers.Add('"QYY             "');
+  BoundaryIdentifiers.Add('"STO             "');
+  BoundaryIdentifiers.Add('MAXIMUM STEPSIZE DURING WHICH ANY PARTICLE CANNOT MOVE MORE THAN ONE CELL');
+  BoundaryIdentifiers.Add('MAXIMUM STEPSIZE WHICH MEETS STABILITY CRITERION');
+  BoundaryIdentifiers.Add('"CNH             "');
+  BoundaryIdentifiers.Add('NODE    VOLUME          RCHLEN');
+  BoundaryIdentifiers.Add('NOD1 NOD2 IDIV      FLOW RATE           AREA');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('TRANSPORT STEP NO. ');
 
 end;
 
@@ -878,6 +896,16 @@ begin
 
   // MT3D
   NonIdentifiers.Add('CTS TO EXTERNAL SINK');
+  NonIdentifiers.Add('Warning threshold for high sensitivities');
+  NonIdentifiers.Add('change limit for near-zero parameters');
+  NonIdentifiers.Add('Allow parameters to stick to their bounds');
+  NonIdentifiers.Add('Scale parameters by their bounds');
+  NonIdentifiers.Add('articles with non-zero weight minus the number of adjustable parameters.)');
+//  NonIdentifiers.Add('aaa');
+//  NonIdentifiers.Add('aaa');
+//  NonIdentifiers.Add('aaa');
+//  NonIdentifiers.Add('aaa');
+
 end;
 
 
