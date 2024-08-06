@@ -209,7 +209,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
         ExplicitHeight = 145
         inherited Panel: TPanel
           Top = 104
-          Width = 404
+          Width = 533
           ExplicitTop = 104
           ExplicitWidth = 404
           inherited lbNumber: TLabel
@@ -236,7 +236,7 @@ inherited frameScreenObjectMvr: TframeScreenObjectMvr
           end
         end
         inherited Grid: TRbwDataGrid4
-          Width = 404
+          Width = 533
           Height = 104
           ColCount = 5
           Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]

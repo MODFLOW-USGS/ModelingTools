@@ -5,26 +5,28 @@ inherited frmStartUp: TfrmStartUp
   HelpKeyword = 'Start_Up_Dialog_Box'
   ActiveControl = btnNext
   Caption = 'GoPhast'
-  ClientHeight = 403
-  ClientWidth = 739
+  ClientHeight = 402
+  ClientWidth = 735
   OnClose = FormClose
-  ExplicitWidth = 755
-  ExplicitHeight = 442
+  ExplicitWidth = 751
+  ExplicitHeight = 441
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
-    Top = 356
-    Width = 739
+    Top = 355
+    Width = 735
     Height = 47
     Align = alBottom
     BevelOuter = bvNone
     ParentColor = True
     TabOrder = 1
+    ExplicitTop = 356
+    ExplicitWidth = 739
     DesignSize = (
-      739
+      735
       47)
     object btnNext: TBitBtn
-      Left = 647
+      Left = 639
       Top = 6
       Width = 86
       Height = 33
@@ -47,9 +49,10 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 2
       OnClick = btnNextClick
+      ExplicitLeft = 647
     end
     object btnDontCreateGrid: TBitBtn
-      Left = 460
+      Left = 452
       Top = 6
       Width = 100
       Height = 33
@@ -60,9 +63,10 @@ inherited frmStartUp: TfrmStartUp
       TabOrder = 0
       Visible = False
       OnClick = btnDontCreateGridClick
+      ExplicitLeft = 460
     end
     object btnHelp: TBitBtn
-      Left = 566
+      Left = 558
       Top = 6
       Width = 75
       Height = 33
@@ -72,19 +76,22 @@ inherited frmStartUp: TfrmStartUp
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnHelpClick
+      ExplicitLeft = 566
     end
   end
   object pcStartup: TPageControl
     Left = 0
     Top = 0
-    Width = 739
-    Height = 356
+    Width = 735
+    Height = 355
     HelpType = htKeyword
     HelpKeyword = 'Initial_Grid_Dialog_Box'
     ActivePage = tabModelChoice
     Align = alClient
     TabOrder = 0
     OnChange = pcStartupChange
+    ExplicitWidth = 739
+    ExplicitHeight = 356
     object tabModelChoice: TTabSheet
       HelpType = htKeyword
       HelpKeyword = 'Start_Up_Dialog_Box'
@@ -118,11 +125,12 @@ inherited frmStartUp: TfrmStartUp
       object grpGeoRef: TGroupBox
         Left = 0
         Top = 0
-        Width = 731
+        Width = 735
         Height = 323
         Align = alClient
         Caption = 'Geo Reference and Model Description'
         TabOrder = 0
+        ExplicitWidth = 731
         object lblSimStartTime: TLabel
           Left = 11
           Top = 267
@@ -140,7 +148,7 @@ inherited frmStartUp: TfrmStartUp
         object lblModelDescription: TLabel
           Left = 2
           Top = 20
-          Width = 727
+          Width = 731
           Height = 18
           Align = alTop
           Caption = 'Model description'
@@ -195,10 +203,11 @@ inherited frmStartUp: TfrmStartUp
         object mmoModelDescription: TMemo
           Left = 2
           Top = 38
-          Width = 727
+          Width = 731
           Height = 156
           Align = alTop
           TabOrder = 0
+          ExplicitWidth = 727
         end
         object calSimStartDate: TJvDateTimePicker
           Left = 11
@@ -236,11 +245,13 @@ inherited frmStartUp: TfrmStartUp
       object gbInitialGrid: TGroupBox
         Left = 0
         Top = 0
-        Width = 731
+        Width = 735
         Height = 323
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 616
+        ExplicitHeight = 361
         object lblZDist: TLabel
           Left = 520
           Top = 110
@@ -424,7 +435,7 @@ inherited frmStartUp: TfrmStartUp
       object gbInitialGridModflow: TGroupBox
         Left = 0
         Top = 41
-        Width = 731
+        Width = 735
         Height = 282
         Margins.Left = 0
         Margins.Top = 40
@@ -433,6 +444,7 @@ inherited frmStartUp: TfrmStartUp
         Align = alClient
         Caption = 'Specify initial grid (optional)'
         TabOrder = 0
+        ExplicitWidth = 731
         object Label8: TLabel
           Left = 344
           Top = 68
@@ -538,10 +550,10 @@ inherited frmStartUp: TfrmStartUp
           ChangeDisabledColor = True
         end
         object rdgInitialLayers: TRbwDataGrid4
-          Left = 503
+          Left = 507
           Top = 20
-          Width = 226
-          Height = 260
+          Width = 218
+          Height = 259
           Align = alRight
           Anchors = [akLeft, akTop, akRight, akBottom]
           ColCount = 2
@@ -608,6 +620,9 @@ inherited frmStartUp: TfrmStartUp
               AutoAdjustColWidths = True
             end>
           WordWrapRowCaptions = False
+          ExplicitLeft = 503
+          ExplicitWidth = 226
+          ExplicitHeight = 260
           ColWidths = (
             64
             64)
@@ -622,10 +637,11 @@ inherited frmStartUp: TfrmStartUp
       object pnlModflowChoice: TPanel
         Left = 0
         Top = 0
-        Width = 731
+        Width = 727
         Height = 41
         Align = alTop
         TabOrder = 1
+        ExplicitWidth = 731
         object lblModflowSelection: TLabel
           Left = 195
           Top = 13
@@ -658,8 +674,8 @@ inherited frmStartUp: TfrmStartUp
       Caption = 'tabInitialSutraMesh'
       ImageIndex = 3
       DesignSize = (
-        731
-        323)
+        727
+        322)
       object lblLayerGroups: TLabel
         Left = 464
         Top = 8
@@ -698,8 +714,8 @@ inherited frmStartUp: TfrmStartUp
       inline frameModelLayers: TframeGrid
         Left = 464
         Top = 29
-        Width = 248
-        Height = 291
+        Width = 240
+        Height = 290
         Anchors = [akLeft, akTop, akRight, akBottom]
         Enabled = False
         TabOrder = 2
@@ -951,7 +967,7 @@ inherited frmStartUp: TfrmStartUp
       object rgSaturation: TRadioGroup
         Left = 216
         Top = 112
-        Width = 170
+        Width = 162
         Height = 85
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Flow conditions (CUNSAT)'
@@ -961,6 +977,7 @@ inherited frmStartUp: TfrmStartUp
           'Saturated'
           'Unsaturated')
         TabOrder = 3
+        ExplicitWidth = 170
       end
     end
     object tabInitialGridFootprint: TTabSheet

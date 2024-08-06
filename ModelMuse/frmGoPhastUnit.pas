@@ -2191,9 +2191,7 @@ uses
   frmTimeSeriesUnit, frmIrrigationTypesUnit,
   frmLayersToExportUnit, DataArrayManagerUnit, DataSetNamesUnit,
   PhastModelInterfaceUnit,
-  {$IFDEF ImportMF6}
   frmImportModflow6Unit,
-  {$ENDIF}
   frmImportSurferGridFilesUnit, frmImportWarningsUnit;
 
 const
@@ -3622,10 +3620,6 @@ begin
 
 {$IFNDEF LinkedRasters}
   FreeAndNil(miLinkedRasters);
-{$ENDIF}
-
-{$IFNDEF ImportMF6}
-  acImportModflow6Model.Visible := False;
 {$ENDIF}
 
   FRunSutra := True;
@@ -14259,7 +14253,6 @@ end;
 procedure TfrmGoPhast.acImportModflow6ModelExecute(Sender: TObject);
 begin
   inherited;
-{$IFDEF ImportMF6}
   if ShowAForm(TfrmImportModflow6) = mrCancel then
   begin
     Application.Terminate;
@@ -14270,7 +14263,6 @@ begin
     frmImportWarnings.Show;
     frmImportWarnings.tmr1.Enabled := True;
   end;
-{$ENDIF}
 end;
 
 procedure TfrmGoPhast.acImportSurferGridFilesExecute(Sender: TObject);

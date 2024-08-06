@@ -708,7 +708,6 @@ begin
   Changing := True;
   try
     comboSourcePackage.ItemIndex := -1;
-  {$IFDEF ImportMF6}
     if ScreenObjectList.Count = 1 then
     begin
       AScreenObject := ScreenObjectList[0].ScreenObject;
@@ -722,9 +721,6 @@ begin
         end;
       end;
     end;
-  {$ELSE}
-    tabMvrMap.Visible := False;
-  {$ENDIF}
 
     FoundFirst := False;
     FirstModflowMvr := nil;

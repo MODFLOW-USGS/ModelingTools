@@ -17,9 +17,7 @@ type
   TStandardChoices = (scNewModflow, scNewPhast, scNewSutra,
     scNewFootprint,
     scExisting, scImportModflow
-  {$IFDEF ImportMF6}
     , scImportModflow6
-  {$ENDIF}
     );
 
   TStartUpPages = (supModelChoice, supGeoRef, supPhastGrid, supModflowGrid,
@@ -324,7 +322,6 @@ begin
                 ModalResult := mrOK;
                 frmGoPhast.acFileNewModflowModelExecute(frmGoPhast.miModflow2005Model)
               end;
-          {$IFDEF ImportMF6}
             scImportModflow6:
               begin
                 // import a MODFLOW 6 model
@@ -332,7 +329,6 @@ begin
                 ModalResult := mrOK;
                 frmGoPhast.acImportModflow6ModelExecute(nil);
               end;
-          {$ENDIF}
             else
               begin
                 Assert(False);
@@ -666,10 +662,6 @@ var
   Grid: TRbwDataGrid4;
 begin
   inherited;
-
-{$IFNDEF ImportMF6}
-  rgChoice.Items.Delete(rgChoice.Items.Count-1);
-{$ENDIF}
 
   jvtmdtSimStartTime.Time := 0;
 
