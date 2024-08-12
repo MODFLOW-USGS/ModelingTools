@@ -3196,10 +3196,10 @@ that affects the model output should also have a comment. }
     property CombinedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent
       read GetCombinedHorizontalTransverseDispersionUsedPerSpecies;
   published
-    // @name defines the grid used with PHAST.
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
       stored StoreDisvGrid;
     property Mf6GridType: TMf6GridType read FMf6GridType write SetMf6GridType;
+    // @name defines the grid used with PHAST.
     property PhastGrid: TPhastGrid read FPhastGrid write SetPhastGrid;
     property AlternateFlowPackage: boolean read FAlternateFlowPackage
       write SetAlternateFlowPackage;

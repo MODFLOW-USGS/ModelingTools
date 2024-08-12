@@ -7,7 +7,7 @@ uses
   Dialogs, frmCustomGoPhastUnit, StdCtrls, Buttons, ScreenObjectUnit,
   DataSetUnit, VirtualTrees, FastGEO, GoPhastTypes, SsButtonEd,
   RbwStringTreeCombo, Grids, RbwDataGrid4, ExtCtrls,
-  RbwRollupPanel, Vcl.Mask;
+  RbwRollupPanel, Vcl.Mask, ZoomBox2, GR32, GR32_Layers;
 
 type
   TPathLineColumn = (plcLabel, plcFirst, plcLast, plcClosest);
@@ -90,6 +90,12 @@ type
     imgAngle1: TImage;
     imgAngle2: TImage;
     imgAngle3: TImage;
+    rrlFlowFace: TRbwRollupPanel;
+    splFlowFace: TSplitter;
+    pnlFlowFaces: TPanel;
+    lblFlowFaces: TLabel;
+    Panel1: TPanel;
+    qzbNodeInformation: TQRbwZoomBox2;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject); override;
     procedure edCellValueKeyUp(Sender: TObject; var Key: Word;
@@ -129,6 +135,8 @@ type
     FPriorLocation: TPoint2D;
     FPriorEndPointLocation: TPoint2D;
     FModel: TBaseModel;
+    FBitMap32FlowFace: TBitmap32;
+    FPositionedLayer: TPositionedLayer;
     procedure DisplayEndPointData(const Location: TPoint2D);
     procedure InitializeEndpointGrid;
     procedure InitializeGncGrid;
@@ -149,6 +157,8 @@ type
     procedure InitializeSwrGrids;
     procedure UpdateXt3d;
     procedure ArrangeSplitters;
+    procedure DisplayPrtFlowFace;
+    procedure PaintLayer(Sender: TObject; Buffer: TBitmap32);
     { Private declarations }
   public
     procedure UpdateValue(const Layer, Row, Column: integer;
@@ -168,11 +178,11 @@ implementation
 
 uses AbstractGridUnit, frmGoPhastUnit,
   GIS_Functions, RbwParser, Contnrs, ClassificationUnit,
-  PhastModelUnit, PathlineReader, QuadtreeClass, ZoomBox2, InteractiveTools,
+  PhastModelUnit, PathlineReader, QuadtreeClass, InteractiveTools,
   SutraMeshUnit, DisplaySettingsUnit,
   System.Generics.Collections, ModflowSwrStructureUnit,
   ModflowIrregularMeshUnit, ModflowGncUnit, DataArrayManagerUnit,
-  DataSetNamesUnit, CellLocationUnit;
+  DataSetNamesUnit, CellLocationUnit, System.Math, BigCanvasMethods;
 
 resourcestring
   StrSelectedObject = 'Selected object';
@@ -270,6 +280,7 @@ begin
   ArrangeASplitter(splSWR, rrlSWR);
   ArrangeASplitter(splGNC, rrlGNC);
   ArrangeASplitter(splXt3d, rrlXt3d);
+  ArrangeASplitter(splFlowFace, rrlFlowFace);
 
 end;
 
@@ -367,6 +378,14 @@ var
   ChildModel: TChildModel;
 begin
   inherited;
+{$IFNDEF PRT}
+  rrlFlowFace.Visible := False;
+{$ENDIF}
+  FPositionedLayer := qzbNodeInformation.Image32.Layers.Add(TPositionedLayer) as
+    TPositionedLayer;
+  // Assign an event handler for the OnPaint event.
+  FPositionedLayer.OnPaint := PaintLayer;
+
   AdjustFormPosition(dpLeft);
   FDataSetDummyObjects := TObjectList.Create;
 
@@ -411,6 +430,8 @@ procedure TfrmGridValue.FormDestroy(Sender: TObject);
 begin
   inherited;
   FDataSetDummyObjects.Free;
+  FreeAndNil(FBitMap32FlowFace);
+
 end;
 
 procedure TfrmGridValue.FormResize(Sender: TObject);
@@ -433,6 +454,7 @@ begin
   rrlGNC.Collapsed := True;
   rrlSWR.Collapsed := True;
   rrlXt3d.Collapsed := True;
+  rrlFlowFace.Collapsed := True;
 
 //  pcDataDisplay.ActivePageIndex := 0;
 end;
@@ -444,6 +466,20 @@ begin
   if ((Key = Ord('C')) or (Key = Ord('c'))) and (ssCtrl in Shift) then
   begin
     memoExplanation.CopyToClipboard;
+  end;
+end;
+
+procedure TfrmGridValue.PaintLayer(Sender: TObject; Buffer: TBitmap32);
+begin
+  DisplayPrtFlowFace;
+  if FBitMap32FlowFace <> nil then
+  begin
+    Buffer.BeginUpdate;
+    try
+      Buffer.Draw(0, 0, FBitMap32FlowFace);
+    finally
+      Buffer.EndUpdate;
+    end;
   end;
 end;
 
@@ -789,6 +825,7 @@ begin
   DisplayEndPointData(Location);
   DisplayGnc;
   UpdateXt3d;
+  DisplayPrtFlowFace;
   ArrangeSplitters;
 end;
 
@@ -1406,8 +1443,8 @@ procedure TfrmGridValue.DisplayEndPointData(const Location: TPoint2D);
 var
   AnEndPoint: TEndPoint;
   APointer: Pointer;
-  Y: TFloat;
-  X: TFloat;
+  Y: double;
+  X: double;
   EndPointQuadTree: TRbwQuadTree;
   EndPoints: TEndPointReader;
   DisplayPoint: Boolean;
@@ -1704,8 +1741,8 @@ procedure TfrmGridValue.DisplayPathlineData(const Location: TPoint2D);
 var
   PathLinePoint: TPathLinePoint;
   APointer: Pointer;
-  Y: TFloat;
-  X: TFloat;
+  Y: double;
+  X: double;
   PathQuadTree: TRbwQuadTree;
   PathLines: TPathLineReader;
   DisplayPoint: Boolean;
@@ -1942,6 +1979,124 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TfrmGridValue.DisplayPrtFlowFace;
+const
+  // @name is the thickness of thin grid lines when drawn in the top, front,
+  // or side views.
+  OrdinaryGridLineThickness = 1.0;
+var
+  ACell: TModflowIrregularCell2D;
+  Polygon: TPolygon2D;
+  NodeNumbers: TArray<Integer>;
+  MinPoint: TPoint2D;
+  MaxPoint: TPoint2D;
+  APoint: TPoint2D;
+  XWidth: double;
+  YWidth: double;
+  DeltaX: double;
+  DeltaY: double;
+  Points: GoPhastTypes.TPointArray;
+  ARect: TRect;
+  TextPoint: TPoint;
+begin
+{$IFNDEF PRT}
+  Exit;
+{$ENDIF}
+
+  if not frmGoPhast.PhastModel.DisvUsed then
+  begin
+    rrlFlowFace.Visible := False;
+    Exit;
+  end;
+
+  FreeAndNil(FBitMap32FlowFace);
+  if (FModel <> nil) and (FColumn >= 0) then
+  begin
+    FBitMap32FlowFace := TBitmap32.Create;
+
+    FBitMap32FlowFace.Height := qzbNodeInformation.Image32.Height;
+    FBitMap32FlowFace.Width := qzbNodeInformation.Image32.Width;
+    FBitMap32FlowFace.Font := frmGoPhast.PhastModel.ContourFont;
+
+    ACell := (FModel as TCustomModel).DisvGrid.TwoDGrid.Cells[FColumn];
+
+    SetLength(Polygon, ACell.NodeCount);
+    SetLength(NodeNumbers, ACell.NodeCount);
+    for var NodeIndex := 0 to ACell.NodeCount - 1 do
+    begin
+      Polygon[NodeIndex] := ACell.Nodes[NodeIndex].Location;
+      NodeNumbers[NodeIndex] := ACell.Nodes[NodeIndex].NodeNumber;
+    end;
+    MinPoint := Polygon[0];
+    MaxPoint := MinPoint;
+    for var NodeIndex := 1 to Length(Polygon) - 1 do
+    begin
+      APoint := Polygon[NodeIndex];
+      if APoint.x > MaxPoint.x then
+      begin
+        MaxPoint.x := APoint.x;
+      end
+      else if APoint.x < MinPoint.x then
+      begin
+        MinPoint.x := APoint.x;
+      end;
+
+      if APoint.y > MaxPoint.y then
+      begin
+        MaxPoint.y := APoint.y;
+      end
+      else if APoint.y < MinPoint.y then
+      begin
+        MinPoint.y := APoint.y;
+      end;
+    end;
+
+    XWidth := MaxPoint.x - MinPoint.x;
+    YWidth := MaxPoint.y - MinPoint.y;
+    qzbNodeInformation.Magnification := 0.9 *
+      Min(qzbNodeInformation.Width / XWidth,
+      qzbNodeInformation.Height / YWidth);
+
+    DeltaX := (qzbNodeInformation.X(qzbNodeInformation.Image32.Width)
+      - qzbNodeInformation.X(0)) / 2;
+    DeltaY := (qzbNodeInformation.Y(0)
+      - qzbNodeInformation.Y(qzbNodeInformation.Image32.Height)) / 2;
+    qzbNodeInformation.OriginX := ACell.X - DeltaX;
+    qzbNodeInformation.OriginY := ACell.Y - DeltaY;
+
+    DrawBigRectangle32(FBitMap32FlowFace, clBlack32, clWhite32, 1.0, 0, 0,
+      qzbNodeInformation.Image32.ClientWidth-1, qzbNodeInformation.Image32.ClientHeight-1);
+
+    SetLength(Points, Length(Polygon)+1);
+    for var NodeIndex := 0 to Length(Polygon) - 1 do
+    begin
+      Points[NodeIndex].X := qzbNodeInformation.XCoord(Polygon[NodeIndex].x);
+      Points[NodeIndex].Y := qzbNodeInformation.YCoord(Polygon[NodeIndex].y);
+    end;
+    Points[Length(Polygon)] := Points[0];
+
+    DrawBigPolyline32(FBitMap32FlowFace, clBlack32, OrdinaryGridLineThickness,
+      Points, True);
+
+    for var NodeIndex := 0 to Length(Polygon) - 1 do
+    begin
+      ARect.Top := Points[NodeIndex].Y-1;
+      ARect.Bottom := Points[NodeIndex].Y+1;
+      ARect.Left := Points[NodeIndex].X-1;
+      ARect.Right := Points[NodeIndex].X+1;
+      DrawBigRectangle32(FBitMap32FlowFace, clBlack32, clBlack32, 0, ARect)
+    end;
+
+    for var NodeIndex := 0 to Length(Polygon) - 1 do
+    begin
+      TextPoint.x := (Points[NodeIndex].x + Points[NodeIndex+1].x) div 2;
+      TextPoint.y := (Points[NodeIndex].y + Points[NodeIndex+1].y) div 2;
+      DrawBigText(FBitMap32FlowFace, TextPoint, IntToStr(NodeIndex+1));
+    end;
+  end;
+
 end;
 
 procedure TfrmGridValue.DisplaySwrData(Layer, Row, Column: integer);

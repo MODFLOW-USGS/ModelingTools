@@ -2906,6 +2906,59 @@ Type
       read FLak_Source write SetLak_Source default sapVertical;
   end;
 
+  TPrtTrackingOption = (ptoRelease, ptoExit, ptoTimeStep, ptoTerminate,
+    ptoWeakSink, ptoUserTime);
+  TPrtTrackingOptions = set of TPrtTrackingOption;
+
+  TPrtPackage = class(TModflowPackageSelection)
+  private
+    FReleaseTimes: TRealCollection;
+    procedure SetReleaseTimes(const Value: TRealCollection);
+  published
+    property ReleaseTimes: TRealCollection read FReleaseTimes write SetReleaseTimes;
+  end;
+
+  TPrtPackageItem = class(TPhastCollectionItem)
+  private
+    FPrtPackage: TPrtPackage;
+    procedure SetPrtPackage(const Value: TPrtPackage);
+  published
+    property PrtPackage: TPrtPackage read FPrtPackage write SetPrtPackage;
+  end;
+
+  TPrtModel = class(TPhastCollection)
+  private
+    FZoneUsed: Boolean;
+    FRetentionFactorUsed: Boolean;
+    FStoredSolverTolerance: TRealStorage;
+    FTrackTimes: TRealCollection;
+    procedure SetRetentionFactorUsed(const Value: Boolean);
+    procedure SetZoneUsed(const Value: Boolean);
+    procedure SetStoredSolverTolerance(const Value: TRealStorage);
+    function GetSolverTolerance: double;
+    procedure SetSolverTolerance(const Value: double);
+    procedure SetTrackTimes(const Value: TRealCollection);
+  public
+    property SolverTolerance: double read GetSolverTolerance write SetSolverTolerance;
+  published
+    property RetentionFactorUsed: Boolean read FRetentionFactorUsed write SetRetentionFactorUsed;
+    property ZoneUsed: Boolean read FZoneUsed write SetZoneUsed;
+    property StoredSolverTolerance: TRealStorage read FStoredSolverTolerance write SetStoredSolverTolerance;
+    property TrackTimes: TRealCollection read FTrackTimes write SetTrackTimes;
+  end;
+
+  TPrtModelItem = class(TPhastCollectionItem)
+  private
+    FPrtModel: TPrtModel;
+    procedure SetPrtModel(const Value: TPrtModel);
+  published
+    property PrtModel: TPrtModel read FPrtModel write SetPrtModel;
+  end;
+
+  TPrtModels = class(TPhastCollection)
+
+  end;
+
   ZZoneItem = class(TOrderedItem)
   private
     FZoneNumber: integer;
@@ -31202,6 +31255,59 @@ begin
     FUseMultiplier := Value;
     InvalidateModel;
   end;
+end;
+
+{ TPrtModelItem }
+
+procedure TPrtModelItem.SetPrtModel(const Value: TPrtModel);
+begin
+  FPrtModel.Assign(Value);
+end;
+
+{ TPrtPackageItem }
+
+procedure TPrtPackageItem.SetPrtPackage(const Value: TPrtPackage);
+begin
+  FPrtPackage.Assign(Value);
+end;
+
+{ TPrtModel }
+
+function TPrtModel.GetSolverTolerance: double;
+begin
+
+end;
+
+procedure TPrtModel.SetRetentionFactorUsed(const Value: Boolean);
+begin
+  FRetentionFactorUsed := Value;
+end;
+
+procedure TPrtModel.SetSolverTolerance(const Value: double);
+begin
+
+end;
+
+procedure TPrtModel.SetStoredSolverTolerance(const Value: TRealStorage);
+begin
+  FStoredSolverTolerance.Assign(Value);
+end;
+
+procedure TPrtModel.SetTrackTimes(const Value: TRealCollection);
+begin
+  FTrackTimes.Assign(Value);
+end;
+
+procedure TPrtModel.SetZoneUsed(const Value: Boolean);
+begin
+  FZoneUsed := Value;
+end;
+
+{ TPrtPackage }
+
+procedure TPrtPackage.SetReleaseTimes(const Value: TRealCollection);
+begin
+  FReleaseTimes.Assign(Value);
 end;
 
 end.

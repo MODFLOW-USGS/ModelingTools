@@ -3,17 +3,17 @@ inherited frmGridValue: TfrmGridValue
   HelpKeyword = 'Grid_Value_Dialog_Box'
   Caption = 'Grid or Mesh Value'
   ClientHeight = 509
-  ClientWidth = 634
+  ClientWidth = 663
   KeyPreview = True
   OnClose = FormClose
-  ExplicitWidth = 650
+  ExplicitWidth = 679
   ExplicitHeight = 548
   DesignSize = (
-    634
+    663
     509)
   TextHeight = 18
   object btnHelp: TBitBtn
-    Left = 448
+    Left = 477
     Top = 469
     Width = 89
     Height = 33
@@ -22,9 +22,10 @@ inherited frmGridValue: TfrmGridValue
     NumGlyphs = 2
     TabOrder = 1
     OnClick = btnHelpClick
+    ExplicitLeft = 448
   end
   object btnClose: TBitBtn
-    Left = 545
+    Left = 574
     Top = 469
     Width = 89
     Height = 33
@@ -32,15 +33,17 @@ inherited frmGridValue: TfrmGridValue
     Kind = bkClose
     NumGlyphs = 2
     TabOrder = 2
+    ExplicitLeft = 545
   end
   object pnlTabs: TPanel
     Left = 0
     Top = 0
-    Width = 634
+    Width = 663
     Height = 463
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
+    ExplicitWidth = 634
     object splAllDataSets: TSplitter
       Left = 441
       Top = 1
@@ -82,6 +85,12 @@ inherited frmGridValue: TfrmGridValue
       Height = 461
       ExplicitLeft = 178
       ExplicitHeight = 465
+    end
+    object splFlowFace: TSplitter
+      Left = 621
+      Top = 1
+      Width = 5
+      Height = 461
     end
     object rrlcurrentData: TRbwRollupPanel
       Left = 1
@@ -1179,6 +1188,7 @@ inherited frmGridValue: TfrmGridValue
       RollupCaption = 'XT3D Data'
       LabelWidth = 27
       ExpandedWidth = 288
+      ExplicitLeft = 593
       object lblAngle1: TLabel
         Left = 40
         Top = 76
@@ -1247,6 +1257,90 @@ inherited frmGridValue: TfrmGridValue
         Caption = 'Update'
         TabOrder = 1
         OnClick = btnUpdateXT3DClick
+      end
+    end
+    object rrlFlowFace: TRbwRollupPanel
+      Left = 626
+      Top = 1
+      Width = 27
+      Height = 461
+      Align = alLeft
+      Caption = 'rrlFlowFace'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Style = []
+      ShowCaption = False
+      TabOrder = 7
+      Collapsed = True
+      RollupCaption = 'PRT Flow Faces'
+      LabelWidth = 27
+      ExpandedWidth = 196
+      object Panel1: TPanel
+        Left = 28
+        Top = 1
+        Width = 194
+        Height = 459
+        Align = alClient
+        Caption = 'Panel1'
+        TabOrder = 1
+        ExplicitLeft = 32
+        ExplicitTop = 3
+        object pnlFlowFaces: TPanel
+          Left = 1
+          Top = 1
+          Width = 192
+          Height = 68
+          Align = alTop
+          TabOrder = 0
+          object lblFlowFaces: TLabel
+            AlignWithMargins = True
+            Left = 4
+            Top = 4
+            Width = 184
+            Height = 60
+            Align = alClient
+            Alignment = taCenter
+            Caption = 'Cell Center = 0'#13#10'Top Face = -1'#13#10'Bottom Face = -2'
+            Layout = tlCenter
+            ExplicitWidth = 121
+            ExplicitHeight = 54
+          end
+        end
+        object qzbNodeInformation: TQRbwZoomBox2
+          Left = 1
+          Top = 69
+          Width = 192
+          Height = 389
+          Align = alClient
+          Caption = 'qzbFlowFace'
+          TabOrder = 1
+          Exaggeration = 1.000000000000000000
+          HorizontalDirection = hdRight
+          Image32.Left = 0
+          Image32.Top = 0
+          Image32.Width = 192
+          Image32.Height = 389
+          Image32.Anchors = [akLeft, akBottom]
+          Image32.Bitmap.ResamplerClassName = 'TNearestResampler'
+          Image32.BitmapAlign = baTopLeft
+          Image32.Color = clWhite
+          Image32.ParentColor = False
+          Image32.Scale = 1.000000000000000000
+          Image32.ScaleMode = smNormal
+          Image32.TabOrder = 0
+          ImmediateResize = True
+          Magnification = 1.000000000000000000
+          VerticalDirection = vdUp
+          ExplicitTop = 160
+          ExplicitWidth = 221
+          ExplicitHeight = 300
+          DesignSize = (
+            192
+            389)
+        end
       end
     end
   end

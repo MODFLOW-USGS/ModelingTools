@@ -495,6 +495,10 @@ object TTaskHistory
     item
       Name = 'Viscosity'
       Display = False
+    end
+    item
+      Name = 'PRT'
+      Display = True
     end>
   History = <
     item
@@ -33447,5 +33451,39 @@ object TTaskHistory
       Date = 45506.000000000000000000
       Categories.Strings = (
         'List File Analyzer')
+    end
+    item
+      Date = 45507.000000000000000000
+    end
+    item
+      Date = 45508.000000000000000000
+    end
+    item
+      Date = 45509.000000000000000000
+    end
+    item
+      Date = 45510.000000000000000000
+    end
+    item
+      Date = 45511.000000000000000000
+    end
+    item
+      Date = 45512.000000000000000000
+    end
+    item
+      Date = 45513.000000000000000000
+    end
+    item
+      Date = 45514.000000000000000000
+    end
+    item
+      Date = 45515.000000000000000000
+    end
+    item
+      Date = 45516.000000000000000000
+      Categories.Strings = (
+        'PRT'
+        'Design and Planning'
+        'Dialog boxes')
     end>
 end

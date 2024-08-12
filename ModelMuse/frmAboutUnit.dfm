@@ -5,8 +5,8 @@ inherited frmAbout: TfrmAbout
   ClientHeight = 527
   ClientWidth = 732
   FormStyle = fsStayOnTop
-  ExplicitWidth = 744
-  ExplicitHeight = 565
+  ExplicitWidth = 748
+  ExplicitHeight = 566
   TextHeight = 18
   object pnlTop: TPanel
     Left = 0
@@ -16,7 +16,6 @@ inherited frmAbout: TfrmAbout
     Align = alTop
     ParentColor = True
     TabOrder = 0
-    ExplicitWidth = 728
     DesignSize = (
       732
       305)
@@ -3109,13 +3108,11 @@ inherited frmAbout: TfrmAbout
       HeaderFont.Name = 'Tahoma'
       HeaderFont.Style = []
       TabOrder = 0
-      ExplicitWidth = 385
       object ctgrypnl2: TCategoryPanel
         Top = 30
         Height = 250
         Caption = 'References'
         TabOrder = 1
-        ExplicitWidth = 381
         object reReference: TRichEdit
           Left = 0
           Top = 0
@@ -3143,12 +3140,17 @@ inherited frmAbout: TfrmAbout
               'Winston, R.B., 2019, ModelMuse version 4'#8212'A graphical user interf' +
               'ace for MODFLOW 6: U.S. Geological Survey Scientific Investigati' +
               'ons Report 2019'#8211'5036, 10 p., https://doi.org/10.3133/sir20195036' +
-              '.')
+              '.'
+            ''
+            
+              'Winston, R.B., 2024, Revision of ModelMuse to support the use of' +
+              ' PEST software with MODFLOW and SUTRA models: U.S. Geological Su' +
+              'rvey Techniques and Methods book 6, chap. A64, 56 p., https://do' +
+              'i.org/10.3133/tm6A64')
           ReadOnly = True
           ScrollBars = ssVertical
           TabOrder = 0
           WordWrap = False
-          ExplicitWidth = 379
         end
       end
       object ctgrypnl1: TCategoryPanel
@@ -3157,7 +3159,6 @@ inherited frmAbout: TfrmAbout
         Caption = 'Disclaimer/License'
         Collapsed = True
         TabOrder = 0
-        ExplicitWidth = 381
         object memoDisclaimer: TMemo
           Left = 0
           Top = 0
@@ -3180,7 +3181,6 @@ inherited frmAbout: TfrmAbout
           ScrollBars = ssVertical
           TabOrder = 0
           WordWrap = False
-          ExplicitWidth = 379
         end
       end
     end
@@ -3193,8 +3193,6 @@ inherited frmAbout: TfrmAbout
     Align = alBottom
     ParentColor = True
     TabOrder = 2
-    ExplicitTop = 477
-    ExplicitWidth = 728
     DesignSize = (
       732
       49)
@@ -3221,7 +3219,6 @@ inherited frmAbout: TfrmAbout
       Kind = bkClose
       NumGlyphs = 2
       TabOrder = 1
-      ExplicitLeft = 624
     end
     object btnGoToWeb: TBitBtn
       Left = 467
@@ -3292,7 +3289,6 @@ inherited frmAbout: TfrmAbout
         0800000000000000000000000000000000000000080808080800}
       TabOrder = 0
       OnClick = btnGoToWebClick
-      ExplicitLeft = 463
     end
   end
   object dgCredit: TRbwDataGrid4
@@ -3389,7 +3385,5 @@ inherited frmAbout: TfrmAbout
         AutoAdjustColWidths = True
       end>
     WordWrapRowCaptions = False
-    ExplicitWidth = 728
-    ExplicitHeight = 172
   end
 end
