@@ -111,7 +111,7 @@ var
   CompositeZoneItem: TCompositeZoneItem;
   CompositeZone: TCompositeZone;
   ZoneIndex: Integer;
-  Zone: ZZoneItem;
+  Zone: TZoneItem;
   RowIndex: Integer;
   ColIndex: Integer;
 begin
@@ -257,7 +257,7 @@ var
   CompositeZone: TCompositeZone;
   ColIndex: Integer;
   AZone: Integer;
-  ZoneItem: ZZoneItem;
+  ZoneItem: TZoneItem;
   Zones: TIntegerList;
   ZoneIndex: Integer;
 begin
@@ -314,7 +314,7 @@ begin
             end
             else
             begin
-              ZoneItem := CompositeZone.Add as ZZoneItem;
+              ZoneItem := CompositeZone.Add as TZoneItem;
             end;
             ZoneItem.ZoneNumber := Zones[ZoneIndex];
           end;

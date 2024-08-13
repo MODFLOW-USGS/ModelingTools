@@ -215,7 +215,7 @@ end;
 function TfrmChemistryOptions.FormHelp(Command: Word; Data: NativeInt; var
     CallHelp: Boolean): Boolean;
 begin
-  inherited;
+  result := inherited;
 end;
 
 { TUndoChemistryOptions }

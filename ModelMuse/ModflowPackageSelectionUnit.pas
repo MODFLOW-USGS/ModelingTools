@@ -2910,40 +2910,78 @@ Type
     ptoWeakSink, ptoUserTime);
   TPrtTrackingOptions = set of TPrtTrackingOption;
 
-  TPrtPackage = class(TModflowPackageSelection)
+  TPrpPackage = class(TModflowPackageSelection)
   private
     FReleaseTimes: TRealCollection;
+    FCsvTrackOutput: Boolean;
+    FBinaryTrackOutput: Boolean;
+    FStoredStopTime: TOptionalRealValue;
+    FStoredStopTravelTime: TOptionalRealValue;
+    FStoredSolverTolerance: TRealStorage;
+    FStopAtWeakSinks: Boolean;
+    FStopZone: Integer;
+    FDrape: Boolean;
     procedure SetReleaseTimes(const Value: TRealCollection);
+    procedure SetBinaryTrackOutput(const Value: Boolean);
+    procedure SetCsvTrackOutput(const Value: Boolean);
+    procedure SetStoredStopTime(const Value: TOptionalRealValue);
+    procedure SetStoredStopTravelTime(const Value: TOptionalRealValue);
+    function GetSolverTolerance: double;
+    procedure SetSolverTolerance(const Value: double);
+    procedure SetStoredSolverTolerance(const Value: TRealStorage);
+    procedure SetStopAtWeakSinks(const Value: Boolean);
+    procedure SetStopZone(const Value: Integer);
+    procedure SetDrape(const Value: Boolean);
+  public
+    // EXIT_SOLVE_TOLERANCE
+    property SolverTolerance: double read GetSolverTolerance write SetSolverTolerance;
   published
+    // EXIT_SOLVE_TOLERANCE
+    property StoredSolverTolerance: TRealStorage read FStoredSolverTolerance write SetStoredSolverTolerance;
+    // TRACK FILEOUT
+    property BinaryTrackOutput: Boolean read FBinaryTrackOutput write SetBinaryTrackOutput;
+    // TRACKCSV FILEOUT
+    property CsvTrackOutput: Boolean read FCsvTrackOutput write SetCsvTrackOutput;
+    // STOPTIME
+    property StoredStopTime: TOptionalRealValue read FStoredStopTime write SetStoredStopTime;
+    // STOPTRAVELTIME
+    property StoredStopTravelTime: TOptionalRealValue read FStoredStopTravelTime write SetStoredStopTravelTime;
+    // STOP_AT_WEAK_SINK
+    property StopAtWeakSinks: Boolean read FStopAtWeakSinks write SetStopAtWeakSinks;
+    // ISTOPZONE. Zero means not used.
+    property StopZone: Integer read FStopZone write SetStopZone;
+    // DRAPE]
+    property Drape: Boolean read FDrape write SetDrape;
+    // RELEASE_TIMES or RELEASE_TIMESFILE
     property ReleaseTimes: TRealCollection read FReleaseTimes write SetReleaseTimes;
   end;
 
-  TPrtPackageItem = class(TPhastCollectionItem)
+  TPrpPackageItem = class(TPhastCollectionItem)
   private
-    FPrtPackage: TPrtPackage;
-    procedure SetPrtPackage(const Value: TPrtPackage);
+    FPrpPackage: TPrpPackage;
+    procedure SetPrpPackage(const Value: TPrpPackage);
   published
-    property PrtPackage: TPrtPackage read FPrtPackage write SetPrtPackage;
+    property PrpPackage: TPrpPackage read FPrpPackage write SetPrpPackage;
   end;
 
   TPrtModel = class(TPhastCollection)
   private
     FZoneUsed: Boolean;
     FRetentionFactorUsed: Boolean;
-    FStoredSolverTolerance: TRealStorage;
     FTrackTimes: TRealCollection;
     procedure SetRetentionFactorUsed(const Value: Boolean);
     procedure SetZoneUsed(const Value: Boolean);
-    procedure SetStoredSolverTolerance(const Value: TRealStorage);
-    function GetSolverTolerance: double;
-    procedure SetSolverTolerance(const Value: double);
     procedure SetTrackTimes(const Value: TRealCollection);
+    function GetItem(Index: Integer): TPrpPackageItem;
+    procedure SetItem(Index: Integer; const Value: TPrpPackageItem);
   public
-    property SolverTolerance: double read GetSolverTolerance write SetSolverTolerance;
+    property Items[Index: Integer]: TPrpPackageItem read GetItem write SetItem;  default;
   published
+    // RETFACTOR
     property RetentionFactorUsed: Boolean read FRetentionFactorUsed write SetRetentionFactorUsed;
+    // IZONE
     property ZoneUsed: Boolean read FZoneUsed write SetZoneUsed;
-    property StoredSolverTolerance: TRealStorage read FStoredSolverTolerance write SetStoredSolverTolerance;
+
     property TrackTimes: TRealCollection read FTrackTimes write SetTrackTimes;
   end;
 
@@ -2956,10 +2994,14 @@ Type
   end;
 
   TPrtModels = class(TPhastCollection)
-
+  private
+    function GetItem(Index: Integer): TPrtModelItem;
+    procedure SetItem(Index: Integer; const Value: TPrtModelItem);
+  public
+    property Items[Index: Integer]: TPrtModelItem read GetItem write SetItem; default;
   end;
 
-  ZZoneItem = class(TOrderedItem)
+  TZoneItem = class(TOrderedItem)
   private
     FZoneNumber: integer;
     procedure SetZoneNumber(const Value: integer);
@@ -2973,8 +3015,8 @@ Type
   TCompositeZone = class(TOrderedCollection)
   private
     FZoneName: string;
-    function GetItem(Index: integer): ZZoneItem;
-    procedure SetItem(Index: integer; const Value: ZZoneItem);
+    function GetItem(Index: integer): TZoneItem;
+    procedure SetItem(Index: integer; const Value: TZoneItem);
     procedure SetZoneName(Value: string);
   public
     procedure Assign(Source: TPersistent); override;
@@ -2982,7 +3024,7 @@ Type
     //
     constructor Create(Model: IModelForTOrderedCollection);
     function IsSame(AnOrderedCollection: TOrderedCollection): boolean; override;
-    property Items[Index: integer]: ZZoneItem read GetItem
+    property Items[Index: integer]: TZoneItem read GetItem
       write SetItem; default;
   published
     property ZoneName: string read FZoneName write SetZoneName;
@@ -8756,9 +8798,6 @@ end;
 
 procedure TEtsPackageSelection.GetMfEtsMultiplierUseList(Sender: TObject;
   NewUseList: TStringList);
-var
-  Index: integer;
-  DataSetName: string;
 begin
   UpdateEtsUseList(NewUseList, ptETS, 13, StrMODFLOWEtsMultiplier);
 end;
@@ -14266,26 +14305,26 @@ end;
 
 { ZZoneItem }
 
-procedure ZZoneItem.Assign(Source: TPersistent);
+procedure TZoneItem.Assign(Source: TPersistent);
 begin
   // if Assign is updated, update IsSame too.
-  if Source is ZZoneItem then
+  if Source is TZoneItem then
   begin
-    ZoneNumber := ZZoneItem(Source).ZoneNumber;
+    ZoneNumber := TZoneItem(Source).ZoneNumber;
   end;
   inherited;
 end;
 
-function ZZoneItem.IsSame(AnotherItem: TOrderedItem): boolean;
+function TZoneItem.IsSame(AnotherItem: TOrderedItem): boolean;
 begin
-  result := AnotherItem is ZZoneItem;
+  result := AnotherItem is TZoneItem;
   if result then
   begin
-    result := ZoneNumber = ZZoneItem(AnotherItem).ZoneNumber;
+    result := ZoneNumber = TZoneItem(AnotherItem).ZoneNumber;
   end;
 end;
 
-procedure ZZoneItem.SetZoneNumber(const Value: integer);
+procedure TZoneItem.SetZoneNumber(const Value: integer);
 begin
   if FZoneNumber <> Value then
   begin
@@ -14308,12 +14347,12 @@ end;
 
 constructor TCompositeZone.Create(Model: IModelForTOrderedCollection);
 begin
-  inherited Create(ZZoneItem, Model);
+  inherited Create(TZoneItem, Model);
 end;
 
-function TCompositeZone.GetItem(Index: integer): ZZoneItem;
+function TCompositeZone.GetItem(Index: integer): TZoneItem;
 begin
-  result := inherited Items[Index] as ZZoneItem;
+  result := inherited Items[Index] as TZoneItem;
 end;
 
 function TCompositeZone.IsSame(
@@ -14330,7 +14369,7 @@ begin
   end;
 end;
 
-procedure TCompositeZone.SetItem(Index: integer; const Value: ZZoneItem);
+procedure TCompositeZone.SetItem(Index: integer; const Value: TZoneItem);
 begin
   inherited Items[Index] := Value;
 end;
@@ -31266,31 +31305,26 @@ end;
 
 { TPrtPackageItem }
 
-procedure TPrtPackageItem.SetPrtPackage(const Value: TPrtPackage);
+procedure TPrpPackageItem.SetPrpPackage(const Value: TPrpPackage);
 begin
-  FPrtPackage.Assign(Value);
+  FPrpPackage.Assign(Value);
 end;
 
 { TPrtModel }
 
-function TPrtModel.GetSolverTolerance: double;
+function TPrtModel.GetItem(Index: Integer): TPrpPackageItem;
 begin
+  result := inherited Items[Index] as TPrpPackageItem;
+end;
 
+procedure TPrtModel.SetItem(Index: Integer; const Value: TPrpPackageItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 procedure TPrtModel.SetRetentionFactorUsed(const Value: Boolean);
 begin
   FRetentionFactorUsed := Value;
-end;
-
-procedure TPrtModel.SetSolverTolerance(const Value: double);
-begin
-
-end;
-
-procedure TPrtModel.SetStoredSolverTolerance(const Value: TRealStorage);
-begin
-  FStoredSolverTolerance.Assign(Value);
 end;
 
 procedure TPrtModel.SetTrackTimes(const Value: TRealCollection);
@@ -31305,9 +31339,71 @@ end;
 
 { TPrtPackage }
 
-procedure TPrtPackage.SetReleaseTimes(const Value: TRealCollection);
+function TPrpPackage.GetSolverTolerance: double;
+begin
+  result := StoredSolverTolerance.Value;
+end;
+
+procedure TPrpPackage.SetBinaryTrackOutput(const Value: Boolean);
+begin
+  FBinaryTrackOutput := Value;
+end;
+
+procedure TPrpPackage.SetCsvTrackOutput(const Value: Boolean);
+begin
+  FCsvTrackOutput := Value;
+end;
+
+procedure TPrpPackage.SetDrape(const Value: Boolean);
+begin
+  FDrape := Value;
+end;
+
+procedure TPrpPackage.SetReleaseTimes(const Value: TRealCollection);
 begin
   FReleaseTimes.Assign(Value);
+end;
+
+procedure TPrpPackage.SetSolverTolerance(const Value: double);
+begin
+
+end;
+
+procedure TPrpPackage.SetStopAtWeakSinks(const Value: Boolean);
+begin
+  FStopAtWeakSinks := Value;
+end;
+
+procedure TPrpPackage.SetStopZone(const Value: Integer);
+begin
+  FStopZone := Value;
+end;
+
+procedure TPrpPackage.SetStoredSolverTolerance(const Value: TRealStorage);
+begin
+  FStoredSolverTolerance.Assign(Value);
+end;
+
+procedure TPrpPackage.SetStoredStopTime(const Value: TOptionalRealValue);
+begin
+  FStoredStopTime.Assign(Value);
+end;
+
+procedure TPrpPackage.SetStoredStopTravelTime(const Value: TOptionalRealValue);
+begin
+  FStoredStopTravelTime.Assign(Value);
+end;
+
+{ TPrtModels }
+
+function TPrtModels.GetItem(Index: Integer): TPrtModelItem;
+begin
+  result := inherited Items[Index] as TPrtModelItem;
+end;
+
+procedure TPrtModels.SetItem(Index: Integer; const Value: TPrtModelItem);
+begin
+  inherited Items[Index] := Value;
 end;
 
 end.

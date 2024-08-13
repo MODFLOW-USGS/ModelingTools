@@ -684,6 +684,8 @@ type
 
   TPointArray = array of TPoint;
 
+  // @name ensures that a real value is always stored even if
+  // it otherwise would not be.
   TRealStorage = class(TPersistent)
   private
     FValue: real;
@@ -701,6 +703,17 @@ type
   published
     property Value: real read FValue write SetValue;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
+  end;
+
+  // @name is for storing optional real numbers.
+  TOptionalRealValue = class(TRealStorage)
+  private
+    FUsed: boolean;
+    procedure SetUsed(const Value: boolean);
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    property Used: boolean read FUsed write SetUsed;
   end;
 
   // @name is used to ensure that a value for a string is saved even if it
@@ -2987,6 +3000,29 @@ function TZeroBasedID.RowPlus1: TZeroBasedID;
 begin
   result := self;
   result.Row := result.Row + 1;
+end;
+
+{ TOptionalRealValue }
+
+procedure TOptionalRealValue.Assign(Source: TPersistent);
+begin
+  if Source is TOptionalRealValue then
+  begin
+    Used := TOptionalRealValue(Source).Used;
+  end;
+  inherited;
+end;
+
+procedure TOptionalRealValue.SetUsed(const Value: boolean);
+begin
+  if FUsed <> Value then
+  begin
+    FUsed := Value;
+    if Assigned(OnChange) then
+    begin
+      OnChange(self);
+    end;
+  end;
 end;
 
 initialization
