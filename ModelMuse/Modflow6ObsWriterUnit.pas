@@ -347,6 +347,10 @@ resourcestring
   'vation time. No simulated values have been calculated at the start of the' +
   ' model.';
   StrObjectS0Observ = 'Object: %0:s; Observation name: %:1s';
+  StrUndefinedObservatio = 'Undefined observation location';
+  StrNoHeadOrDrawDown = 'No head or draw down observations are defined for %' +
+  's. This may be because it is outside the active area of the grid or is ab' +
+  'ove the top or below the bottom of the grid.';
 
 { TModflow6Obs_Writer }
 
@@ -557,6 +561,8 @@ begin
   frmErrorsAndWarnings.RemoveWarningGroup(Model, StrNoHeadDrawdownO);
   frmErrorsAndWarnings.RemoveErrorGroup(Model,StrObservationNameToo);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrObservationTimeTo);
+  frmErrorsAndWarnings.RemoveWarningGroup(Model, StrUndefinedObservatio);
+
   if Model.PestStatus in [psObservations, psActive] then
   begin
     // These three properties need to be specified outside of TModflow6Obs_Writer;
@@ -637,6 +643,11 @@ begin
         try
           AScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
           SetLength(TransmissivityFactors, CellList.Count);
+          if CellList.Count = 0 then
+          begin
+            frmErrorsAndWarnings.AddWarning(Model, StrUndefinedObservatio,
+              Format(StrNoHeadOrDrawDown, [AScreenObject.Name]), AScreenObject);
+          end;
           MaxIndex := -1;
           MaxThick := -1.0;
           CellListStart := -1;

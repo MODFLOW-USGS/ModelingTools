@@ -84,10 +84,10 @@ type
     property WeightedResidual: double read GetWeightedResidual write SetWeightedResidual;
     property X: double read Fx;
     property Y: double read Fy;
+    property ScreenObject: TObject read FScreenObject;
   published
     property Name: string read FName write SetName;
     property ScreenObjectName: string read FScreenObjectName write SetScreenObjectName;
-    property ScreenObject: TObject read FScreenObject;
     property StoredTime: TRealStorage read FStoredTime write SetStoredTime;
     property StoredSimulatedValue: TRealStorage read FStoredSimulatedValue
       write SetStoredSimulatedValue;

@@ -542,7 +542,7 @@ begin
         Exit;
       end;
         DataSets.Clear;
-      for DataIndex := 0 to 1 do
+      for DataIndex := 0 to TimeLists.Count - 1 do
       begin
         TimeList := TimeLists[DataIndex];
         for TimeIndex := 0 to TimeList.Count - 1 do

@@ -1435,8 +1435,7 @@ begin
   case Index of
     CncActivePosition:
       begin
-        Result := 0.0;
-        Assert(False);
+        Result := Ord(Active);
       end;
     CncConcentrationPosition: result := Concentration;
     CncMultiplierPosition: result := Multiplier;

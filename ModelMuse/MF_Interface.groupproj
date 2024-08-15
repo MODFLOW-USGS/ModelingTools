@@ -30,6 +30,9 @@
         <Projects Include="..\GetValuesFromArrayFiles\GetValuesFromArrayFiles.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\Convert_mmZLib\Convert_mmZlib.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -119,14 +122,23 @@
     <Target Name="GetValuesFromArrayFiles:Make">
         <MSBuild Projects="..\GetValuesFromArrayFiles\GetValuesFromArrayFiles.dproj" Targets="Make"/>
     </Target>
+    <Target Name="Convert_mmZlib">
+        <MSBuild Projects="..\Convert_mmZLib\Convert_mmZlib.dproj"/>
+    </Target>
+    <Target Name="Convert_mmZlib:Clean">
+        <MSBuild Projects="..\Convert_mmZLib\Convert_mmZlib.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Convert_mmZlib:Make">
+        <MSBuild Projects="..\Convert_mmZLib\Convert_mmZlib.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor;Mf6ObsExtractor;Mf2005ObsExtractor;SutraObsExtractor;Mf6InputReader;GetValuesFromArrayFiles"/>
+        <CallTarget Targets="ModelMuse;ModelMonitor;SwiObsExtractor;EnhancedTemplateProcessor;Mf6ObsExtractor;Mf2005ObsExtractor;SutraObsExtractor;Mf6InputReader;GetValuesFromArrayFiles;Convert_mmZlib"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean;Mf6ObsExtractor:Clean;Mf2005ObsExtractor:Clean;SutraObsExtractor:Clean;Mf6InputReader:Clean;GetValuesFromArrayFiles:Clean"/>
+        <CallTarget Targets="ModelMuse:Clean;ModelMonitor:Clean;SwiObsExtractor:Clean;EnhancedTemplateProcessor:Clean;Mf6ObsExtractor:Clean;Mf2005ObsExtractor:Clean;SutraObsExtractor:Clean;Mf6InputReader:Clean;GetValuesFromArrayFiles:Clean;Convert_mmZlib:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make;Mf6ObsExtractor:Make;Mf2005ObsExtractor:Make;SutraObsExtractor:Make;Mf6InputReader:Make;GetValuesFromArrayFiles:Make"/>
+        <CallTarget Targets="ModelMuse:Make;ModelMonitor:Make;SwiObsExtractor:Make;EnhancedTemplateProcessor:Make;Mf6ObsExtractor:Make;Mf2005ObsExtractor:Make;SutraObsExtractor:Make;Mf6InputReader:Make;GetValuesFromArrayFiles:Make;Convert_mmZlib:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

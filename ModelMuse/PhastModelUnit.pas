@@ -10358,10 +10358,17 @@ const
 //    '5.2.0.25' Bug fix: fixed bug in writing ASCII characters with codes
 //                greater than or equal to 128.
 //    '5.3.0.0'  Enhancement: Added the ability to import MODFLOW 6 models.
+//    '5.3.0.1'  Bug fix: Fixed bug in saving files that had MT3D Observation
+//                results in a way that prevented the files from being opened
+//                again.
+
+//               Enhancement: ModelMuse now issues a warning for objects that
+//                are intended to define head or drawdown observation locations
+//                but do not because they are outside the grid.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.0.0';
+  IIModelVersion = '5.3.0.1';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
@@ -17042,10 +17049,14 @@ begin
   ModflowPackages.SfrModflow6Package.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.MawPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.UzfMf6Package.AddRemoveRenameGwtConcentrationTimeLists;
+
   ModflowPackages.GwtCncPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.GwtCncPackage.AddRemoveRenameGwtMultiplierTimeLists;
+  ModflowPackages.GwtCncPackage.AddRemoveRenameGwtActiveTimeLists;
+
   ModflowPackages.GwtSrcPackage.AddRemoveRenameGwtConcentrationTimeLists;
   ModflowPackages.GwtSrcPackage.AddRemoveRenameGwtMultiplierTimeLists;
+  ModflowPackages.GwtSrcPackage.AddRemoveRenameGwtActiveTimeLists;
 end;
 
 procedure TCustomModel.UpdateMt3dmsActive(Sender: TObject);
