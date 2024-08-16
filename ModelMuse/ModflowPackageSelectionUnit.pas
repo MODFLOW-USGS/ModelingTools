@@ -2906,10 +2906,12 @@ Type
       read FLak_Source write SetLak_Source default sapVertical;
   end;
 
+  // these are used to represent tracking options in the PRT output control
   TPrtTrackingOption = (ptoRelease, ptoExit, ptoTimeStep, ptoTerminate,
     ptoWeakSink, ptoUserTime);
   TPrtTrackingOptions = set of TPrtTrackingOption;
 
+  // @name represents one PRP package in one PRT model.
   TPrpPackage = class(TModflowPackageSelection)
   private
     FReleaseTimes: TRealCollection;
@@ -2932,9 +2934,29 @@ Type
     procedure SetStopAtWeakSinks(const Value: Boolean);
     procedure SetStopZone(const Value: Integer);
     procedure SetDrape(const Value: Boolean);
+    function GetStopTime: double;
+    function GetStopTimeUsed: Boolean;
+    function GetStopTravelTime: double;
+    function GetStopTravelTimeUsed: Boolean;
+    procedure SetStopTime(const Value: double);
+    procedure SetStopTimeUsed(const Value: Boolean);
+    procedure SetStopTravelTime(const Value: double);
+    procedure SetStopTravelTimeUsed(const Value: Boolean);
   public
+    procedure Assign(Source: TPersistent); override;
+    { TODO -cRefactor : Consider replacing Model with an interface. }
+    //
+    Constructor Create(Model: TBaseModel); override;
+    Destructor Destroy; override;
+    procedure InitializeVariables; override;
     // EXIT_SOLVE_TOLERANCE
     property SolverTolerance: double read GetSolverTolerance write SetSolverTolerance;
+    // Optional variable STOPTIME
+    property StopTime: double read GetStopTime write SetStopTime;
+    property StopTimeUsed: Boolean read GetStopTimeUsed write SetStopTimeUsed;
+    // Optional variable [STOPTRAVELTIME
+    property StopTravelTime: double read GetStopTravelTime write SetStopTravelTime;
+    property StopTravelTimeUsed: Boolean read GetStopTravelTimeUsed write SetStopTravelTimeUsed;
   published
     // EXIT_SOLVE_TOLERANCE
     property StoredSolverTolerance: TRealStorage read FStoredSolverTolerance write SetStoredSolverTolerance;
@@ -2956,16 +2978,22 @@ Type
     property ReleaseTimes: TRealCollection read FReleaseTimes write SetReleaseTimes;
   end;
 
+  // @name is a collection item
   TPrpPackageItem = class(TPhastCollectionItem)
   private
     FPrpPackage: TPrpPackage;
     procedure SetPrpPackage(const Value: TPrpPackage);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
   published
     property PrpPackage: TPrpPackage read FPrpPackage write SetPrpPackage;
   end;
 
   TPrtModel = class(TPhastCollection)
   private
+    FModel: TBaseModel;
     FZoneUsed: Boolean;
     FRetentionFactorUsed: Boolean;
     FTrackTimes: TRealCollection;
@@ -2974,7 +3002,10 @@ Type
     procedure SetTrackTimes(const Value: TRealCollection);
     function GetItem(Index: Integer): TPrpPackageItem;
     procedure SetItem(Index: Integer; const Value: TPrpPackageItem);
+    procedure InitializeVariables;
   public
+    constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel);
+    destructor Destroy; override;
     property Items[Index: Integer]: TPrpPackageItem read GetItem write SetItem;  default;
   published
     // RETFACTOR
@@ -31305,6 +31336,28 @@ end;
 
 { TPrtPackageItem }
 
+procedure TPrpPackageItem.Assign(Source: TPersistent);
+begin
+  if Source is TPrpPackageItem then
+  begin
+    PrpPackage := TPrpPackageItem(Source).PrpPackage;
+  end;
+  inherited;
+
+end;
+
+constructor TPrpPackageItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FPrpPackage := TPrpPackage.Create((Collection as TPrtModel).FModel);
+end;
+
+destructor TPrpPackageItem.Destroy;
+begin
+  FPrpPackage.Free;
+  inherited;
+end;
+
 procedure TPrpPackageItem.SetPrpPackage(const Value: TPrpPackage);
 begin
   FPrpPackage.Assign(Value);
@@ -31312,9 +31365,39 @@ end;
 
 { TPrtModel }
 
+constructor TPrtModel.Create(ItemClass: TCollectionItemClass;
+  Model: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  FModel := Model;
+  if Model = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := Model.Invalidate;
+  end;
+  inherited Create(TPrpPackageItem, InvalidateModelEvent);
+  FTrackTimes := TRealCollection.Create(InvalidateModelEvent);
+  InitializeVariables;
+end;
+
+destructor TPrtModel.Destroy;
+begin
+  FTrackTimes.Free;
+  inherited;
+end;
+
 function TPrtModel.GetItem(Index: Integer): TPrpPackageItem;
 begin
   result := inherited Items[Index] as TPrpPackageItem;
+end;
+
+procedure TPrtModel.InitializeVariables;
+begin
+
 end;
 
 procedure TPrtModel.SetItem(Index: Integer; const Value: TPrpPackageItem);
@@ -31339,9 +31422,86 @@ end;
 
 { TPrtPackage }
 
+procedure TPrpPackage.Assign(Source: TPersistent);
+var
+  PrpSource: TPrpPackage;
+begin
+  if Source is TPrpPackage then
+  begin
+    PrpSource := TPrpPackage(Source);
+    StoredSolverTolerance := PrpSource.StoredSolverTolerance;
+    BinaryTrackOutput := PrpSource.BinaryTrackOutput;
+    CsvTrackOutput := PrpSource.CsvTrackOutput;
+    StoredStopTime := PrpSource.StoredStopTime;
+    StoredStopTravelTime := PrpSource.StoredStopTravelTime;
+    StopAtWeakSinks := PrpSource.StopAtWeakSinks;
+    StopZone := PrpSource.StopZone;
+    Drape := PrpSource.Drape;
+    ReleaseTimes := PrpSource.ReleaseTimes;
+  end;
+  inherited;
+end;
+
+constructor TPrpPackage.Create(Model: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  inherited;
+
+  if Model = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := Model.Invalidate;
+  end;
+
+  FStoredSolverTolerance := TRealStorage.Create(InvalidateModelEvent);
+  FStoredStopTime := TOptionalRealValue.Create(InvalidateModelEvent);
+  FStoredStopTravelTime := TOptionalRealValue.Create(InvalidateModelEvent);
+  FReleaseTimes := TRealCollection.Create(InvalidateModelEvent)
+end;
+
+destructor TPrpPackage.Destroy;
+begin
+  FStoredSolverTolerance.Free;
+  FStoredStopTime.Free;
+  FStoredStopTravelTime.Free;
+  FReleaseTimes.Free;
+
+  inherited;
+end;
+
 function TPrpPackage.GetSolverTolerance: double;
 begin
   result := StoredSolverTolerance.Value;
+end;
+
+function TPrpPackage.GetStopTime: double;
+begin
+
+end;
+
+function TPrpPackage.GetStopTimeUsed: Boolean;
+begin
+
+end;
+
+function TPrpPackage.GetStopTravelTime: double;
+begin
+
+end;
+
+function TPrpPackage.GetStopTravelTimeUsed: Boolean;
+begin
+
+end;
+
+procedure TPrpPackage.InitializeVariables;
+begin
+  inherited;
+
 end;
 
 procedure TPrpPackage.SetBinaryTrackOutput(const Value: Boolean);
@@ -31372,6 +31532,26 @@ end;
 procedure TPrpPackage.SetStopAtWeakSinks(const Value: Boolean);
 begin
   FStopAtWeakSinks := Value;
+end;
+
+procedure TPrpPackage.SetStopTime(const Value: double);
+begin
+
+end;
+
+procedure TPrpPackage.SetStopTimeUsed(const Value: Boolean);
+begin
+
+end;
+
+procedure TPrpPackage.SetStopTravelTime(const Value: double);
+begin
+
+end;
+
+procedure TPrpPackage.SetStopTravelTimeUsed(const Value: Boolean);
+begin
+
 end;
 
 procedure TPrpPackage.SetStopZone(const Value: Integer);
