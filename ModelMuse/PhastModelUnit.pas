@@ -10361,14 +10361,15 @@ const
 //    '5.3.0.1'  Bug fix: Fixed bug in saving files that had MT3D Observation
 //                results in a way that prevented the files from being opened
 //                again.
-
-//               Enhancement: ModelMuse now issues a warning for objects that
+//    '5.3.0.2'  Enhancement: ModelMuse now issues a warning for objects that
 //                are intended to define head or drawdown observation locations
 //                but do not because they are outside the grid.
+//               Bug fix: The nodes in the "Model|MODFLOW Output Control" dialog
+//                box have been restored.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.0.1';
+  IIModelVersion = '5.3.0.2';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
