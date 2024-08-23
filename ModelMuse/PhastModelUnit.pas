@@ -10366,10 +10366,15 @@ const
 //                but do not because they are outside the grid.
 //               Bug fix: The nodes in the "Model|MODFLOW Output Control" dialog
 //                box have been restored.
+//    '5.3.0.3'
+//    '5.3.1.0'  No additional changes.
+
+//               Enhancement: The Grid and Mesh Values dialog box now can
+//                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.0.2';
+  IIModelVersion = '5.3.0.3';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
