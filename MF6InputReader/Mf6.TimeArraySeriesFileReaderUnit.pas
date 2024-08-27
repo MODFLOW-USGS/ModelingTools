@@ -154,7 +154,7 @@ procedure TTasTime.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
 var
   ALine: string;
   ErrorLine: string;
-  StreamPosition: Int64;
+//  StreamPosition: Int64;
   Double2DDReader: TDouble2DArrayReader;
 begin
   Initialize;

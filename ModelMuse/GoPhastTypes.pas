@@ -5,8 +5,18 @@ unit GoPhastTypes;
 interface
 
 uses
+{$IFDEF VCL}
   GR32, // defines TColor32.
-  SysUtils, Types, Classes, FastGEO, Graphics, Generics.Collections, Character,
+{$ELSE}
+{$ENDIF}
+  SysUtils, Types, Classes, FastGEO,
+{$IFDEF VCL}
+  Graphics,
+{$ELSE}
+  System.UITypes,
+  FMX.Graphics,
+{$ENDIF}
+  Generics.Collections, Character,
   System.ZLib, System.Generics.Defaults;
 
 type
@@ -1136,7 +1146,10 @@ const
   ReadWritePermissions = S_IREAD or S_IWRITE or S_IRGRP or S_IWGRP or S_IROTH;
 {$ENDIF}
 
+{$IFDEF VCL}
   clTransparent32 : TColor32 = 0;
+{$ELSE}
+{$ENDIF}
   SelectEpsilon = 5;
   StrArraysExt = '.arrays';
 
@@ -3030,11 +3043,14 @@ initialization
   LFormatSettings := TFormatSettings.Create('en-US'); // do not localize
   LFormatSettings.DecimalSeparator := AnsiChar('.');
   FxButton := TBitMap.Create;
-  FxButton.Canvas.Font.Name := 'Arial';
   FxButton.Canvas.Font.Size := -14;
   FxButton.Width := 22;
   FxButton.Height := 22;
+{$IFDEF VCL}
+  FxButton.Canvas.Font.Name := 'Arial';
   FxButton.Canvas.TextOut(0,0, 'F()');
+{$ELSE}
+{$ENDIF}
 
 finalization
   ObservationStatFlagLabels.Free;

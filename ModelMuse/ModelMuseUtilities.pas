@@ -5,7 +5,12 @@ unit ModelMuseUtilities;
 interface
 
 uses System.UITypes,
-  Windows, SysUtils, Classes, Graphics, OpenGL,
+  Windows, SysUtils, Classes,
+{$IFDEF VCL}
+  Graphics,
+{$ELSE}
+{$IFEND}
+  OpenGL,
   System.ConvUtils, System.StdConvs, FastGEO, System.Character;
 
 type
@@ -17,8 +22,11 @@ resourcestring
 
 // @abstract(@name gets the red, green, and blue components from a TColor
 // in a form suitable for use with OpenGL.)
+{$IFDEF VCL}
 procedure ExtractColorComponents(const AColor: TColor;
   out Red, Green, Blue: GLubyte);
+{$ELSE}
+{$ENDIF}
 
 // @name extracts the file name without the drive, directory or extension.
 function ExtractFileRoot(const FileName: string): string;
@@ -80,13 +88,19 @@ function ArchiveQuoteFileName(AName: string): string;
 
 function FixShapeFileFieldName(FieldName: AnsiString; Fields: TStringList): AnsiString;
 
+{$IFDEF VCL}
 procedure RunAProgram(const CommandLine: string);
+{$ELSE}
+{$ENDIF}
 
 function FileLength(fileName : string) : Int64;
 
 function IsWOW64: Boolean;
 
+{$IFDEF VCL}
 procedure CantOpenFileMessage(AFileName: string);
+{$ELSE}
+{$ENDIF}
 
 // @name is a function suitable for use in TStringList.CustomSort so that
 // strings that have numbers at the end are sorted in numerical order if the
@@ -127,7 +141,12 @@ var
 
 implementation
 
-uses AnsiStrings, StrUtils, Dialogs, Math,
+uses AnsiStrings, StrUtils,
+{$IFDEF VCL}
+  Dialogs,
+{$ELSE}
+{$IFEND}
+  Math,
   IdGlobal, IOUtils, System.RTLConsts, System.TypInfo,
   JvCreateProcess;
 
@@ -151,6 +170,7 @@ function FileLength(fileName : string) : Int64;
    FindClose(sr) ;
  end;
 
+{$IFDEF VCL}
 procedure RunAProgram(const CommandLine: string);
 var
   Runner: TJvCreateProcess;
@@ -171,6 +191,7 @@ begin
   end;
 end;
 
+
 procedure ExtractColorComponents(const AColor: TColor;
   out Red, Green, Blue: GLubyte);
 var
@@ -186,6 +207,8 @@ begin
   v := v shr 8;
   Blue := (v shl 24) shr 24;
 end;
+{$ELSE}
+{$IFEND}
 
 procedure CrossProduct(const v1, v2: TPoint3D; out result: TPoint3D);
 begin
@@ -579,11 +602,14 @@ begin
     Result := False;
 end;
 
+{$IFDEF VCL}
 procedure CantOpenFileMessage(AFileName: string);
 begin
   Beep;
   MessageDlg(Format(StrSorryItLooksLike, [AFileName]), mtError, [mbOK], 0);
 end;
+{$ELSE}
+{$ENDIF}
 
 function CompareNames(List: TStringList; Index1, Index2: Integer): Integer;
   procedure ProcessName(var AName, ANumber: string);

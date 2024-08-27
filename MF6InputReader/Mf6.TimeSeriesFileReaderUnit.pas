@@ -371,7 +371,7 @@ begin
     end;
 
     HasError := False;
-    TimeValues := nil;
+//    TimeValues := nil;
     for Index := 1 to FSplitter.Count - 1 do
     begin
       if TryFortranStrToFloat(FSplitter[Index], AValue) then

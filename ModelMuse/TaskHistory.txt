@@ -499,6 +499,10 @@ object TTaskHistory
     item
       Name = 'PRT'
       Display = True
+    end
+    item
+      Name = 'Skia For Delphi Experiment'
+      Display = True
     end>
   History = <
     item
@@ -33532,5 +33536,19 @@ object TTaskHistory
       Categories.Strings = (
         'Bug fix'
         'Documentation')
+    end
+    item
+      Date = 45528.000000000000000000
+    end
+    item
+      Date = 45529.000000000000000000
+    end
+    item
+      Date = 45530.000000000000000000
+    end
+    item
+      Date = 45531.000000000000000000
+      Categories.Strings = (
+        'Skia For Delphi Experiment')
     end>
 end
