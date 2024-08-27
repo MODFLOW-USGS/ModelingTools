@@ -31480,28 +31480,38 @@ end;
 
 function TPrpPackage.GetStopTime: double;
 begin
-
+   result := StoredStopTime.Value;
 end;
 
 function TPrpPackage.GetStopTimeUsed: Boolean;
 begin
-
+   result := StoredStopTime.Used;
 end;
 
 function TPrpPackage.GetStopTravelTime: double;
 begin
-
+   result := StoredStopTravelTime.Value;
 end;
 
 function TPrpPackage.GetStopTravelTimeUsed: Boolean;
 begin
-
+   result := StoredStopTravelTime.Used;
 end;
 
 procedure TPrpPackage.InitializeVariables;
 begin
   inherited;
-
+  SolverTolerance := 1.0e-5;
+  StopTime := 0.0;
+  StopTimeUsed := False ;
+  StopTravelTime := 0.0;
+  StopTravelTimeUsed := False;
+  BinaryTrackOutput := False;
+  CsvTrackOutput := False;
+  StopAtWeakSinks := False;
+  StopZone := 0;
+  Drape := False;
+  ReleaseTimes.clear;
 end;
 
 procedure TPrpPackage.SetBinaryTrackOutput(const Value: Boolean);
@@ -31526,7 +31536,7 @@ end;
 
 procedure TPrpPackage.SetSolverTolerance(const Value: double);
 begin
-
+  StoredSolverTolerance.value := Value;
 end;
 
 procedure TPrpPackage.SetStopAtWeakSinks(const Value: Boolean);
@@ -31536,22 +31546,22 @@ end;
 
 procedure TPrpPackage.SetStopTime(const Value: double);
 begin
-
+   StoredStopTime.Value := Value;
 end;
 
 procedure TPrpPackage.SetStopTimeUsed(const Value: Boolean);
 begin
-
+   StoredStopTime.Used := Value;
 end;
 
 procedure TPrpPackage.SetStopTravelTime(const Value: double);
 begin
-
+   StoredStopTravelTime.Value := Value;
 end;
 
 procedure TPrpPackage.SetStopTravelTimeUsed(const Value: Boolean);
 begin
-
+   StoredStopTravelTime.Used := Value;
 end;
 
 procedure TPrpPackage.SetStopZone(const Value: Integer);
