@@ -3,7 +3,13 @@ unit ColorSchemesInterface;
 interface
 
 uses
-  GoPhastTypes, Graphics, System.Classes;
+  GoPhastTypes,
+{$IFDEF VCL}
+  Graphics,
+{$ELSE}
+  System.UITypes,
+{$ENDIF}
+  System.Classes;
 
 type
   IColorItem = interface(IInterface)

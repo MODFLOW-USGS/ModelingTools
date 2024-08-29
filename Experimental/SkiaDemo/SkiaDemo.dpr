@@ -59,7 +59,9 @@ uses
   ModelMuseUtilities in '..\..\ModelMuse\ModelMuseUtilities.pas',
   ReadModflowArrayUnit in '..\..\ModelMuse\ReadModflowArrayUnit.pas',
   FastGEO in '..\..\ModelMuse\FastGEO.pas',
-  GoPhastTypes in '..\..\ModelMuse\GoPhastTypes.pas';
+  GoPhastTypes in '..\..\ModelMuse\GoPhastTypes.pas',
+  ColorSchemes in '..\..\ModelMuse\ColorSchemes.pas',
+  ColorSchemesInterface in '..\..\ModelMuse\ColorSchemesInterface.pas';
 
 {$R *.res}
 

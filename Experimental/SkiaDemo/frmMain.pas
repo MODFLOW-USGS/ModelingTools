@@ -7,7 +7,7 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, System.Skia,
   FMX.Skia, FMX.Skia.Canvas, FMX.StdCtrls, FMX.Controls.Presentation,
   System.ImageList, FMX.ImgList, FMX.Edit, FMX.Objects,
-  Mf6.SimulationNameFileReaderUnit;
+  Mf6.SimulationNameFileReaderUnit, System.Generics.Collections, FMX.Menus;
 
 type
   // @name indicates whether exaggeration is applied in
@@ -28,15 +28,23 @@ type
     MaxZ: double;
   end;
 
+  TCellList = TList<ISkPath>;
+
+  TMyThread = class(TThread)
+  private
+    FCellList: TCellList;
+  public
+    procedure Execute; override;
+    constructor Create(CellList: TCellList);
+  end;
+
   TForm2 = class(TForm)
     SkPaintBox1: TSkPaintBox;
     Timer1: TTimer;
-    Panel1: TPanel;
-    edSimulationNameFile: TEdit;
-    btnOpenFile: TButton;
     OpenDialog1: TOpenDialog;
     ImageList1: TImageList;
-    Image1: TImage;
+    MainMenu1: TMainMenu;
+    miFile: TMenuItem;
     procedure SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
       const ADest: TRectF; const AOpacity: Single);
     procedure btnOpenFileClick(Sender: TObject);
@@ -54,6 +62,12 @@ type
     FVerticalDirection: TVerticalDirection;
     FExaggerationDirection: TExaggerationDirection;
     FExaggeration: Double;
+    FCellList: TCellList;
+    MinK: double;
+    MaxK: double;
+    KxValues: TDoubleDynArray;
+    FThreadCount: Integer;
+    FRotationAngle: Double;
     procedure SetMagnification(const Value: double);
     procedure SetOriginX(const Value: double);
     procedure SetOriginY(const Value: double);
@@ -62,6 +76,8 @@ type
     procedure SetVerticalDirection(const Value: TVerticalDirection);
     procedure SetExaggeration(const Value: Double);
     procedure SetTopPosition(const XCoordinate, YCoordinate: Double);
+    function Color2AlphaColor(AColor: TColor): TAlphaColor;
+    procedure DecrementThreadCount(Sender: TObject);
     { Private declarations }
   public
     {X converts a screen coordinate into a real-number X coordinate.}
@@ -111,7 +127,7 @@ implementation
 
 uses
   Mf6.NameFileReaderUnit, Mf6.CustomMf6PersistentUnit, Mf6.DisFileReaderUnit,
-  System.Math;
+  System.Math, Mf6.NpfFileReaderUnit, ColorSchemes;
 
 {$R *.fmx}
 
@@ -120,11 +136,30 @@ begin
   if OpenDialog1.Execute then
   begin
     FGrid := nil;
-    edSimulationNameFile.Text := OpenDialog1.FileName;
+//    edSimulationNameFile.Text := OpenDialog1.FileName;
     FMf6Simulation.Free;
     FMf6Simulation := TMf6Simulation.Create('Simulation');
     FMf6Simulation.ReadSimulation(OpenDialog1.FileName);
+    SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Never;
   end;
+end;
+
+function TForm2.Color2AlphaColor(AColor: TColor): TAlphaColor;
+//var
+//  C1: Integer;
+//  C2: Integer;
+//  C3: Integer;
+begin
+//  C1 := ($FF0000 and AColor) shr 16;
+//  C2 := ($FF00 and AColor);
+//  C3 := ($FF0000 and AColor) shl 16;
+//  result := $FF000000 or C1 or C2 or C3;
+  result := $FF000000 or AColor;
+end;
+
+procedure TForm2.DecrementThreadCount(Sender: TObject);
+begin
+  AtomicDecrement(FThreadCount);
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);
@@ -134,10 +169,16 @@ begin
   FMagnification := 1;
   FExaggeration := 1;
   FVerticalDirection := vdUp;
+  FCellList := TCellList.Create;
 end;
 
 procedure TForm2.FormDestroy(Sender: TObject);
 begin
+  while FThreadCount > 0 do
+  begin
+    Sleep(1000)
+  end;
+  FCellList.Free;
   FMf6Simulation.Free;
 end;
 
@@ -213,7 +254,16 @@ var
   RowEnd: Integer;
   RowPosition: Double;
   RowY: Integer;
+  NpfPackage: TNpf;
+  ColumnPositions: TIntegerDynArray;
+  RowPositions: TIntegerDynArray;
+  Kx: TDArray3D;
+  ACellPath: ISkPath;
+  Fraction: Double;
+  Range: double;
+  MyThread: TMyThread;
 begin
+  SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Raster;
 
   PathBuilder := TSkPathBuilder.Create;
   LPaint := TSkPaint.Create(TSkPaintStyle.Stroke);
@@ -271,6 +321,7 @@ begin
 
 
   DisPackage := nil;
+  NpfPackage := nil;
   if (not Assigned(FGrid)) and (FMf6Simulation <> nil) then
   begin
     for var ModelIndex := 0 to FMf6Simulation.Models.Count - 1 do
@@ -287,6 +338,22 @@ begin
             DisPackage := APackage.Package as TDis;
             break;
           end;
+        end;
+
+        if DisPackage <> nil then
+        begin
+          FRotationAngle := -DisPackage.Options.ANGROT;
+        
+          for var PackageIndex := 0 to Packages.Count - 1 do
+          begin
+            APackage := Packages[PackageIndex];
+            if AnsiSameText(APackage.FileType, 'NPF6') then
+            begin
+              NpfPackage := APackage.Package as TNpf;
+              break;
+            end;
+          end;
+
         end;
         break;
       end;
@@ -305,7 +372,7 @@ begin
       GridLimit.MaxY := DisPackage.Options.YORIGIN;
       for var RowIndex := 0 to Length(GridData.DELC) - 1 do
       begin
-        GridLimit.MinY := GridLimit.MinY - GridData.DELC[RowIndex]
+        GridLimit.MaxY := GridLimit.MaxY + GridData.DELC[RowIndex]
       end;
       ModelXWidth := GridLimit.MaxX - GridLimit.MinX;
       ModelYWidth := GridLimit.MaxY - GridLimit.MinY;
@@ -313,27 +380,34 @@ begin
         Min(SkPaintBox1.Width / ModelXWidth,
         SkPaintBox1.Height / ModelYWidth);
       SetTopPosition((GridLimit.MinX + GridLimit.MaxX)/2,
-        (GridLimit.MinZ + GridLimit.MaxZ)/2);
+        (GridLimit.MinY + GridLimit.MaxY)/2);
+
+      SetLength(ColumnPositions, Length(GridData.DELR)+1);
 
       ColTop  := YCoord(GridLimit.MaxY);
       ColBottom  := YCoord(GridLimit.MinY);
       ColumnPosition := GridLimit.MinX;
       ColX := XCoord(ColumnPosition);
+      ColumnPositions[0] := ColX;
       PathBuilder.moveTo(ColX, ColBottom);
         PathBuilder.lineTo(ColX, ColTop);
       for var ColIndex := 0 to Length(GridData.DELR) - 1 do
       begin
         ColumnPosition := ColumnPosition + GridData.DELR[ColIndex];
         ColX := XCoord(ColumnPosition);
+        ColumnPositions[ColIndex+1] := ColX;
 
         PathBuilder.moveTo(ColX, ColBottom);
           PathBuilder.lineTo(ColX, ColTop);
       end;
 
+      SetLength(RowPositions, Length(GridData.DELC)+1);
+
       RowStart := XCoord(GridLimit.MinX);
       RowEnd := XCoord(GridLimit.MaxX);
       RowPosition := GridLimit.MaxY;
       RowY := YCoord(RowPosition);
+      RowPositions[0] := RowY;
       PathBuilder.moveTo(RowStart, RowY);
         PathBuilder.lineTo(RowEnd, RowY);
 
@@ -341,6 +415,7 @@ begin
       begin
         RowPosition := RowPosition - GridData.DELC[RowIndex];
         RowY := YCoord(RowPosition);
+        RowPositions[RowIndex+1] := RowY;
 
         PathBuilder.moveTo(RowStart, RowY);
           PathBuilder.lineTo(RowEnd, RowY);
@@ -348,9 +423,63 @@ begin
 
       FGrid := PathBuilder.Detach;
 
+      if NpfPackage <> nil then
+      begin
+
+        Inc(FThreadCount);
+        MyThread := TMyThread.Create(FCellList);
+        MyThread.OnTerminate := DecrementThreadCount;
+        MyThread.Start;
+        FCellList := TCellList.Create;
+
+        for var RowIndex := 0 to Length(RowPositions) - 2 do
+        begin
+          for var ColIndex := 0 to Length(ColumnPositions) - 2 do
+          begin
+            PathBuilder.moveTo(ColumnPositions[ColIndex], RowPositions[RowIndex]);
+            PathBuilder.LineTo(ColumnPositions[ColIndex+1], RowPositions[RowIndex]);
+            PathBuilder.LineTo(ColumnPositions[ColIndex+1], RowPositions[RowIndex+1]);
+            PathBuilder.LineTo(ColumnPositions[ColIndex], RowPositions[RowIndex+1]);
+            PathBuilder.LineTo(ColumnPositions[ColIndex], RowPositions[RowIndex]);
+            FCellList.Add(PathBuilder.Detach);
+          end;
+        end;
+
+        Kx := NpfPackage.GridData.K;
+        if Kx <> nil then
+        begin
+          Assert(Length(Kx) > 0);
+          Assert(Length(Kx[0]) = Length(RowPositions)-1);
+          Assert(Length(Kx[0,0]) = Length(ColumnPositions)-1);
+          MinK := Kx[0,0,0];
+          MaxK := MinK;
+          SetLength(KxValues, (Length(RowPositions)-1) * (Length(ColumnPositions)-1));
+          var CellIndex: Integer := 0;
+          for var RowIndex := 0 to Length(Kx[0]) - 1 do
+          begin
+            for var ColIndex := 0 to Length(Kx[0,0]) - 1 do
+            begin
+              KxValues[CellIndex] := Kx[0,RowIndex,ColIndex];
+              Inc(CellIndex);
+              if Kx[0,RowIndex,ColIndex] < MinK then
+              begin
+                MinK := Kx[0,RowIndex,ColIndex]
+              end;
+              if Kx[0,RowIndex,ColIndex] > MaxK then
+              begin
+                MaxK := Kx[0,RowIndex,ColIndex]
+              end;
+            end;
+          end;
+        end;
+      end;
     end;
   end;
-
+          
+  ACanvas.Translate(SkPaintBox1.Width /4, SkPaintBox1.Height/4);
+  ACanvas.Scale(0.5,0.5);
+  ACanvas.Rotate(FRotationAngle, SkPaintBox1.Width /2, SkPaintBox1.Height/2);
+  
   if Assigned(FGrid) then
   begin
     LPaint.Style := TSkPaintStyle.Stroke;
@@ -360,6 +489,26 @@ begin
 //    ACanvas.translate(-1 * scale, -1.5 * scale);
     ACanvas.DrawPath(FGrid, LPaint);
 
+    Range := MaxK - MinK;
+    for var CellIndex := 0 to FCellList.Count - 1 do
+    begin
+      ACellPath := FCellList[CellIndex];
+      if Range = 0 then
+      begin
+        Fraction := 0.5;
+      end
+      else
+      begin
+        Fraction :=   (KxValues[CellIndex] - MinK)/Range;
+      end;
+      LPaint.Style := TSkPaintStyle.Fill;
+      LPaint.Color := Color2AlphaColor(FracAndSchemeToColor(0, Fraction, 0.6, 1)); 
+      ACanvas.DrawPath(ACellPath, LPaint);
+      
+//      LPaint.Style := TSkPaintStyle.Stroke;
+//      LPaint.Color := TAlphaColorRec.Black; 
+//      ACanvas.DrawPath(ACellPath, LPaint);
+    end;
   end;
 end;
 
@@ -367,7 +516,7 @@ function TForm2.X(XCoord: integer): extended;
 begin
   if HorizontalDirection = hdLeft then
   begin
-    XCoord := ClientWidth - XCoord;
+    XCoord := Round(SkPaintBox1.Width) - XCoord;
   end;
   if ExaggerationDirection = edHorizontal then
   begin
@@ -438,7 +587,7 @@ function TForm2.Y(YCoord: integer): extended;
 begin
   if VerticalDirection = vdUp then
   begin
-    YCoord := ClientHeight - YCoord;
+    YCoord := Round(SkPaintBox1.Height) - YCoord;
   end;
 
   if ExaggerationDirection = edVertical then
@@ -503,6 +652,21 @@ begin
       end;
     end;
   end;
+end;
+
+{ TMyThread }
+
+constructor TMyThread.Create(CellList: TCellList);
+begin
+  FCellList := CellList;
+  FreeOnTerminate := True;
+  inherited Create(True);
+end;
+
+procedure TMyThread.Execute;
+begin
+  FCellList.Free;
+  
 end;
 
 end.

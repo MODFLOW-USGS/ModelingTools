@@ -8,7 +8,13 @@ unit ColorSchemes;
 
 interface
 
-uses Classes, Graphics, GoPhastTypes, Generics.Collections,
+uses Classes,
+{$IFDEF VCL}
+  Graphics,
+{$ELSE}
+  System.UITypes,
+{$ENDIF}
+  GoPhastTypes, Generics.Collections,
   Generics.Defaults, ColorSchemesInterface;
 
 type
@@ -196,7 +202,11 @@ const MaxColorScheme = 11;
 
 implementation
 
-uses Math, PhastModelInterfaceUnit;
+uses Math
+{$IFDEF VCL}
+, PhastModelInterfaceUnit
+{$ENDIF}
+;
 
 var
   ColorParameters: TColorParameters;
@@ -668,7 +678,11 @@ begin
       end;
   else
     Assert(False);
+  {$IFDEF VCL}
     result := clBlack;
+  {$ELSE}
+    result := TColorRec.Black;
+  {$ENDIF}
   end;
 end;
 
@@ -744,7 +758,11 @@ var
   Comp1: Integer;
   Comp2: Integer;
 begin
-  Result := clBlack;
+  {$IFDEF VCL}
+    result := clBlack;
+  {$ELSE}
+    result := TColorRec.Black;
+  {$ENDIF}
   Fraction := 1-Fraction;
   Assert(ColorScheme <> nil);
   if ColorScheme.ColorsI.Count = 0 then
@@ -821,10 +839,12 @@ begin
 end;
 
 function TColorParameters.FracToColor(Fraction: real): TColor;
+{$IFDEF VCL}
 var
   CustomIndex: Integer;
   CustomColorScheme: IUserDefinedColorSchemeItem;
   LocalModel: IModelForTUserDefinedColorSchemeCollection;
+{$ENDIF}
 begin
   Assert(ColorScheme >= 0);
   if ColorScheme <= MaxColorScheme then
@@ -847,12 +867,17 @@ begin
       10: result := ModifiedSpectralScheme(1 - Fraction, ColorExponent);
       11: result := SteppedSequential(1 - Fraction, ColorExponent);
     else
+    {$IFDEF VCL}
       result := clWhite;
+    {$ELSE}
+      Result := TColorRec.White;
+    {$ENDIF}
       Assert(False);
     end;
   end
   else
   begin
+  {$IFDEF VCL}
     CustomIndex := ColorScheme-MaxColorScheme-1;
     LocalModel := IGlobalModel as IModelForTUserDefinedColorSchemeCollection;
     if CustomIndex < LocalModel.ColorSchemesI.Count then
@@ -864,6 +889,10 @@ begin
     begin
       result := clBlack;
     end;
+  {$ELSE}
+    result := TColorRec.Black;
+    Assert(False);
+  {$ENDIF}
   end;
 end;
 
@@ -1132,15 +1161,21 @@ end;
 
 function FracAndSchemeToColor(ColorSchemeIndex: integer;
   Fraction, ColorAdjustmentFactor: real; const Cycles: integer): TColor;
+{$IFDEF VCL}
 var
   ColorScheme: IUserDefinedColorSchemeItem;
   LocalModel: IModelForTUserDefinedColorSchemeCollection;
+{$ENDIF}
 begin
   if ColorSchemeIndex <= MaxColorScheme then
   begin
     if ColorSchemeIndex < 0 then
     begin
-      result := clWhite;
+      {$IFDEF VCL}
+        result := clWhite;
+      {$ELSE}
+        Result := TColorRec.White;
+      {$ENDIF}
       Exit;
     end;
     if Fraction <> 1 then
@@ -1162,12 +1197,17 @@ begin
       10: result := ModifiedSpectralScheme(1 - Fraction, ColorAdjustmentFactor);
       11: result := SteppedSequential(1 - Fraction, ColorAdjustmentFactor);
     else
-      result := clWhite;
+      {$IFDEF VCL}
+        result := clWhite;
+      {$ELSE}
+        Result := TColorRec.White;
+      {$ENDIF}
       Assert(False);
     end;
   end
   else
   begin
+  {$IFDEF VCL}
     ColorSchemeIndex := ColorSchemeIndex-MaxColorScheme-1;
     LocalModel := IGlobalModel as IModelForTUserDefinedColorSchemeCollection;
     if ColorSchemeIndex <= LocalModel.ColorSchemesI.Count then
@@ -1181,6 +1221,10 @@ begin
     begin
       result := clWhite;
     end;
+  {$ELSE}
+    result := TColorRec.White;
+    Assert(False);
+  {$ENDIF}
   end;
 end;
 

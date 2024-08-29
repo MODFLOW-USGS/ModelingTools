@@ -1444,6 +1444,8 @@ that affects the model output should also have a comment. }
     procedure DoAssignModflow6LakeDisplayArrays(Sender: TObject);
     function GetAssignModflow6LakeDisplayArrays: TNotifyEvent;
     property AssignModflow6LakeDisplayArrays: TNotifyEvent read GetAssignModflow6LakeDisplayArrays;
+    // Ensure that IDOMAIN is only set to -1 if the cell is vertically between
+    // active cells.
     procedure UpdateIdomain(Sender: TObject);
 
     // functions procedures and properties used in interfaces to TCustomModel.
@@ -10367,6 +10369,10 @@ const
 //               Bug fix: The nodes in the "Model|MODFLOW Output Control" dialog
 //                box have been restored.
 //    '5.3.0.3'
+
+//               Change: ModelMuse now ensures that IDOMAIN is never set to -1
+//                on the top and bottom layers.
+
 //    '5.3.1.0'  No additional changes.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
@@ -41596,7 +41602,7 @@ begin
         end;
         if IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] < 0 then
         begin
-          if (LayerIndex > 0) and (LayerIndex < IDomainArray.LayerCount - 1) then
+//          if {(LayerIndex > 0) and} (LayerIndex < IDomainArray.LayerCount - 1) then
           begin
             IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] := 0;
             IDomainArray.Annotation[LayerIndex, RowIndex, ColIndex] :=
@@ -41612,7 +41618,7 @@ begin
         end;
         if IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] < 0 then
         begin
-          if (LayerIndex > 0) and (LayerIndex < IDomainArray.LayerCount - 1) then
+//          if {(LayerIndex > 0) and} (LayerIndex < IDomainArray.LayerCount - 1) then
           begin
             IDomainArray.IntegerData[LayerIndex, RowIndex, ColIndex] := 0;
             IDomainArray.Annotation[LayerIndex, RowIndex, ColIndex] :=
