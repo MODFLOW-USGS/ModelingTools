@@ -10380,7 +10380,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.0.3';
+  IIModelVersion = '5.3.1.0';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }

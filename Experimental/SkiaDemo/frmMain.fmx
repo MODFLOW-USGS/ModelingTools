@@ -16,6 +16,13 @@ object Form2: TForm2
     Size.Height = 480.000000000000000000
     Size.PlatformDefault = False
     OnDraw = SkPaintBox1Draw
+    object Panel1: TPanel
+      Align = Left
+      Size.Width = 120.000000000000000000
+      Size.Height = 480.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+    end
   end
   object Timer1: TTimer
     Enabled = False
@@ -26,6 +33,14 @@ object Form2: TForm2
     Filter = '*mfsim.nam|*mfsim.nam'
     Left = 360
     Top = 8
+  end
+  object MainMenu1: TMainMenu
+    Left = 288
+    Top = 121
+    object miFile: TMenuItem
+      Text = 'File'
+      OnClick = btnOpenFileClick
+    end
   end
   object ImageList1: TImageList
     Source = <
@@ -64,13 +79,5 @@ object Form2: TForm2
     Destination = <>
     Left = 432
     Top = 16
-  end
-  object MainMenu1: TMainMenu
-    Left = 288
-    Top = 121
-    object miFile: TMenuItem
-      Text = 'File'
-      OnClick = btnOpenFileClick
-    end
   end
 end
