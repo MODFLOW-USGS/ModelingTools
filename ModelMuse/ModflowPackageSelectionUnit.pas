@@ -3028,7 +3028,7 @@ Type
     procedure SetItem(Index: Integer; const Value: TPrpPackageItem);
     procedure InitializeVariables;
   public
-    //procedure Assign(Source: TPersistent); override;
+    procedure Assign(Source: TPersistent); override;
     constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel);
     destructor Destroy; override;
     property Items[Index: Integer]: TPrpPackageItem read GetItem write SetItem;  default;
@@ -31390,6 +31390,20 @@ end;
 
 { TPrtModel }
 
+procedure TPrtModel.Assign(Source: TPersistent);
+var
+  PrtSource: TPrtModel;
+begin
+  if Source is TPrtModel then
+  begin
+    PrtSource := TPrtModel(Source);
+    ZoneUsed := PrtSource.ZoneUsed;
+    RetentionFactorUsed := PrtSource.RetentionFactorUsed;
+    TrackTimes := PrtSource.TrackTimes;
+  end;
+  inherited;
+end;
+
 constructor TPrtModel.Create(ItemClass: TCollectionItemClass;
   Model: TBaseModel);
 var
@@ -31575,17 +31589,29 @@ end;
 
 procedure TPrpPackage.SetBinaryTrackOutput(const Value: Boolean);
 begin
-  FBinaryTrackOutput := Value;
+  if FBinaryTrackOutput <> Value then
+  begin
+    FBinaryTrackOutput := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetCsvTrackOutput(const Value: Boolean);
 begin
-  FCsvTrackOutput := Value;
+  if FCsvTrackOutput <> Value then
+  begin
+    FCsvTrackOutput := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetDrape(const Value: Boolean);
 begin
-  FDrape := Value;
+  if FDrape <> Value then
+  begin
+    FDrape := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetReleaseTimes(const Value: TRealCollection);
@@ -31600,7 +31626,11 @@ end;
 
 procedure TPrpPackage.SetStopAtWeakSinks(const Value: Boolean);
 begin
-  FStopAtWeakSinks := Value;
+  if FStopAtWeakSinks <> Value then
+  begin
+    FStopAtWeakSinks := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetStopTime(const Value: double);
@@ -31645,12 +31675,20 @@ end;
 
 procedure TPrpPackage.SetStopZone(const Value: Integer);
 begin
-  FStopZone := Value;
+  if FStopZone <> Value then
+  begin
+    FStopZone := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetExtendTracking(const Value: Boolean);
 begin
-  FExtendTracking := Value;
+  if FExtendTracking <> Value then
+  begin
+    FExtendTracking := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetStoredReleaseTimeFrequency(
