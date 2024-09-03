@@ -83,6 +83,7 @@ Name: "{group}\ModelMuse 2.0 Documentation"; Filename: "{app}\doc\tm6A29.pdf"
 Name: "{group}\ModelMuse 3.0 Documentation"; Filename: "{app}\doc\tm6-a49.pdf"
 Name: "{group}\WellFootprint Documentation"; Filename: "{app}\doc\ofr20171137.pdf"
 Name: "{group}\ModelMuse 4.0 Documentation"; Filename: "{app}\doc\sir20195036.pdf"
+Name: "{group}\ModelMuse 5.0 Documentation"; Filename: "{app}\doc\tm6a64.pdf"
 Name: "{group}\MODFLOW 6 Supported Features"; Filename: "{app}\doc\MODFLOW 6 Supported Features.pdf"
 Name: "{group}\ModelMuse Revision History"; Filename: "{app}\doc\Release.chm"
 Name: "{commondesktop}\ModelMuse"; Filename: "{app}\bin\ModelMuse.exe"; Tasks: desktopicon

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2022-11-21T09:23:03.811-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2024-09-03T11:49:56.409-04:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Version 5.1</title>
   <body>
     <header>
@@ -17,7 +17,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for the groundwater transport (GWT) process in MODFLOW 6.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for MODFLOW 6 Time Series files.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The Edit Data Sets and Show/Hide Objects dialog boxes retain their positions, size, and the expanded status of their nodes after closing and reopening.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Changing the MT3D times in the MODFLOW Time dialog box causes those times to also be change in the MT3D boundaries.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Changing the MT3D times in the MODFLOW Time dialog box causes those times to also be changed in the MT3D boundaries.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">An &quot;Ignore this&quot; option has been added to the pop-up menu in the Errors and Warnings dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added an option to plot PEST direct observations, prior information, or both in the Data Visualization dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">The line thicknesses of vectors can now be specified.</text></para>
