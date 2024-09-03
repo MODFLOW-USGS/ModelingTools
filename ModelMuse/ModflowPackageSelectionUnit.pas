@@ -31436,7 +31436,10 @@ end;
 
 procedure TPrtModel.InitializeVariables;
 begin
-
+  clear;
+  RetentionFactorUsed := False;
+  ZoneUsed := False;
+  TrackTimes.clear;
 end;
 
 procedure TPrtModel.SetItem(Index: Integer; const Value: TPrpPackageItem);
@@ -31446,7 +31449,11 @@ end;
 
 procedure TPrtModel.SetRetentionFactorUsed(const Value: Boolean);
 begin
-  FRetentionFactorUsed := Value;
+  if FRetentionFactorUsed <> Value then
+  begin
+    FRetentionFactorUsed := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrtModel.SetTrackTimes(const Value: TRealCollection);
@@ -31456,7 +31463,11 @@ end;
 
 procedure TPrtModel.SetZoneUsed(const Value: Boolean);
 begin
-  FZoneUsed := Value;
+  if FZoneUsed <> Value then
+  begin
+    FZoneUsed := Value;
+    InvalidateModel;
+  end;
 end;
 
 { TPrtPackage }
