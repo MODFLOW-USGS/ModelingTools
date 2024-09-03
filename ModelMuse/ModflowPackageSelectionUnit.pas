@@ -2920,9 +2920,12 @@ Type
     FStoredStopTime: TOptionalRealValue;
     FStoredStopTravelTime: TOptionalRealValue;
     FStoredSolverTolerance: TRealStorage;
+    FStoredReleaseTimeTolerance: TOptionalRealValue;
+    FStoredReleaseTimeFrequency: TOptionalRealValue;
     FStopAtWeakSinks: Boolean;
     FStopZone: Integer;
     FDrape: Boolean;
+    FExtendTracking: Boolean;
     procedure SetReleaseTimes(const Value: TRealCollection);
     procedure SetBinaryTrackOutput(const Value: Boolean);
     procedure SetCsvTrackOutput(const Value: Boolean);
@@ -2942,6 +2945,17 @@ Type
     procedure SetStopTimeUsed(const Value: Boolean);
     procedure SetStopTravelTime(const Value: double);
     procedure SetStopTravelTimeUsed(const Value: Boolean);
+    procedure SetStoredReleaseTimeFrequency(const Value: TOptionalRealValue);
+    procedure SetStoredReleaseTimeTolerance(const Value: TOptionalRealValue);
+    procedure SetExtendTracking(const Value: Boolean);
+    function GetReleaseTimeFrequency: double;
+    function GetReleaseTimeFrequencyUsed: Boolean;
+    function GetReleaseTimeTolerance: double;
+    function GetReleaseTimeToleranceUsed: Boolean;
+    procedure SetReleaseTimeFrequency(const Value: double);
+    procedure SetReleaseTimeFrequencyUsed(const Value: Boolean);
+    procedure SetReleaseTimeTolerance(const Value: double);
+    procedure SetReleaseTimeToleranceUsed(const Value: Boolean);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -2957,6 +2971,10 @@ Type
     // Optional variable [STOPTRAVELTIME
     property StopTravelTime: double read GetStopTravelTime write SetStopTravelTime;
     property StopTravelTimeUsed: Boolean read GetStopTravelTimeUsed write SetStopTravelTimeUsed;
+    property ReleaseTimeTolerance: Double read GetReleaseTimeTolerance write SetReleaseTimeTolerance;
+    property ReleaseTimeToleranceUsed: Boolean read GetReleaseTimeToleranceUsed write SetReleaseTimeToleranceUsed;
+    property ReleaseTimeFrequency: Double read GetReleaseTimeFrequency write SetReleaseTimeFrequency;
+    property ReleaseTimeFrequencyUsed: Boolean read GetReleaseTimeFrequencyUsed write SetReleaseTimeFrequencyUsed;
   published
     // EXIT_SOLVE_TOLERANCE
     property StoredSolverTolerance: TRealStorage read FStoredSolverTolerance write SetStoredSolverTolerance;
@@ -2976,6 +2994,12 @@ Type
     property Drape: Boolean read FDrape write SetDrape;
     // RELEASE_TIMES or RELEASE_TIMESFILE
     property ReleaseTimes: TRealCollection read FReleaseTimes write SetReleaseTimes;
+    // RELEASE_TIME_TOLERANCE
+    property StoredReleaseTimeTolerance: TOptionalRealValue read FStoredReleaseTimeTolerance write SetStoredReleaseTimeTolerance;
+    // RELEASE_TIME_FREQUENCY
+    property StoredReleaseTimeFrequency: TOptionalRealValue read FStoredReleaseTimeFrequency write SetStoredReleaseTimeFrequency;
+    // Extend_Tracking
+    property ExtendTracking: Boolean read FExtendTracking write SetExtendTracking;
   end;
 
   // @name is a collection item
@@ -3004,7 +3028,8 @@ Type
     procedure SetItem(Index: Integer; const Value: TPrpPackageItem);
     procedure InitializeVariables;
   public
-    constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel);
+    procedure Assign(Source: TPersistent); override;
+    constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     property Items[Index: Integer]: TPrpPackageItem read GetItem write SetItem;  default;
   published
@@ -3020,14 +3045,21 @@ Type
   private
     FPrtModel: TPrtModel;
     procedure SetPrtModel(const Value: TPrtModel);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
   published
     property PrtModel: TPrtModel read FPrtModel write SetPrtModel;
   end;
 
   TPrtModels = class(TPhastCollection)
   private
+    FModel: TBaseModel;
     function GetItem(Index: Integer): TPrtModelItem;
     procedure SetItem(Index: Integer; const Value: TPrtModelItem);
+  public
+    constructor Create(Model: TBaseModel);
   public
     property Items[Index: Integer]: TPrtModelItem read GetItem write SetItem; default;
   end;
@@ -31329,6 +31361,30 @@ end;
 
 { TPrtModelItem }
 
+procedure TPrtModelItem.Assign(Source: TPersistent);
+var
+ PrtSource: TPrtModelItem;
+begin
+  if Source is TPrtModelItem then
+  begin
+    PrtSource := TPrtModelItem(Source);
+    PrtModel := PrtSource.PrtModel;
+  end;
+  inherited;
+end;
+
+constructor TPrtModelItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FPrtModel := TPrtModel.Create((Collection as TPrtModels).FModel);
+end;
+
+destructor TPrtModelItem.Destroy;
+begin
+  FPrtModel.Free;
+  inherited;
+end;
+
 procedure TPrtModelItem.SetPrtModel(const Value: TPrtModel);
 begin
   FPrtModel.Assign(Value);
@@ -31365,8 +31421,21 @@ end;
 
 { TPrtModel }
 
-constructor TPrtModel.Create(ItemClass: TCollectionItemClass;
-  Model: TBaseModel);
+procedure TPrtModel.Assign(Source: TPersistent);
+var
+  PrtSource: TPrtModel;
+begin
+  if Source is TPrtModel then
+  begin
+    PrtSource := TPrtModel(Source);
+    ZoneUsed := PrtSource.ZoneUsed;
+    RetentionFactorUsed := PrtSource.RetentionFactorUsed;
+    TrackTimes := PrtSource.TrackTimes;
+  end;
+  inherited;
+end;
+
+constructor TPrtModel.Create(Model: TBaseModel);
 var
   InvalidateModelEvent: TNotifyEvent;
 begin
@@ -31397,7 +31466,10 @@ end;
 
 procedure TPrtModel.InitializeVariables;
 begin
-
+  clear;
+  RetentionFactorUsed := False;
+  ZoneUsed := False;
+  TrackTimes.clear;
 end;
 
 procedure TPrtModel.SetItem(Index: Integer; const Value: TPrpPackageItem);
@@ -31407,7 +31479,11 @@ end;
 
 procedure TPrtModel.SetRetentionFactorUsed(const Value: Boolean);
 begin
-  FRetentionFactorUsed := Value;
+  if FRetentionFactorUsed <> Value then
+  begin
+    FRetentionFactorUsed := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrtModel.SetTrackTimes(const Value: TRealCollection);
@@ -31417,7 +31493,11 @@ end;
 
 procedure TPrtModel.SetZoneUsed(const Value: Boolean);
 begin
-  FZoneUsed := Value;
+  if FZoneUsed <> Value then
+  begin
+    FZoneUsed := Value;
+    InvalidateModel;
+  end;
 end;
 
 { TPrtPackage }
@@ -31438,6 +31518,10 @@ begin
     StopZone := PrpSource.StopZone;
     Drape := PrpSource.Drape;
     ReleaseTimes := PrpSource.ReleaseTimes;
+    ReleaseTimeTolerance := PrpSource.ReleaseTimeTolerance;
+    ReleaseTimeFrequency := PrpSource.ReleaseTimeFrequency;
+    ExtendTracking := PrpSource.ExtendTracking;
+
   end;
   inherited;
 end;
@@ -31460,7 +31544,10 @@ begin
   FStoredSolverTolerance := TRealStorage.Create(InvalidateModelEvent);
   FStoredStopTime := TOptionalRealValue.Create(InvalidateModelEvent);
   FStoredStopTravelTime := TOptionalRealValue.Create(InvalidateModelEvent);
-  FReleaseTimes := TRealCollection.Create(InvalidateModelEvent)
+  FReleaseTimes := TRealCollection.Create(InvalidateModelEvent);
+  FStoredReleaseTimeTolerance := TOptionalRealValue.Create(InvalidateModelEvent);
+  FStoredReleaseTimeFrequency := TOptionalRealValue.Create(InvalidateModelEvent);
+  InitializeVariables();
 end;
 
 destructor TPrpPackage.Destroy;
@@ -31469,6 +31556,8 @@ begin
   FStoredStopTime.Free;
   FStoredStopTravelTime.Free;
   FReleaseTimes.Free;
+  FStoredReleaseTimeTolerance.Free;
+  FStoredReleaseTimeFrequency.Free;
 
   inherited;
 end;
@@ -31498,6 +31587,26 @@ begin
    result := StoredStopTravelTime.Used;
 end;
 
+function TPrpPackage.GetReleaseTimeTolerance: double;
+begin
+   result := StoredReleaseTimeTolerance.Value;
+end;
+
+function TPrpPackage.GetReleaseTimeToleranceUsed: Boolean;
+begin
+   result := StoredReleaseTimeTolerance.Used;
+end;
+
+function TPrpPackage.GetReleaseTimeFrequency: double;
+begin
+   result := StoredReleaseTimeFrequency.Value;
+end;
+
+function TPrpPackage.GetReleaseTimeFrequencyUsed: Boolean;
+begin
+   result := StoredReleaseTimeFrequency.Used;
+end;
+
 procedure TPrpPackage.InitializeVariables;
 begin
   inherited;
@@ -31512,21 +31621,38 @@ begin
   StopZone := 0;
   Drape := False;
   ReleaseTimes.clear;
+  ReleaseTimeTolerance := 1.0e-10;
+  ReleaseTimeToleranceUsed := False;
+  ReleaseTimeFrequency := 0.0;
+  ReleaseTimeFrequencyUsed := False;
+  ExtendTracking := False;
 end;
 
 procedure TPrpPackage.SetBinaryTrackOutput(const Value: Boolean);
 begin
-  FBinaryTrackOutput := Value;
+  if FBinaryTrackOutput <> Value then
+  begin
+    FBinaryTrackOutput := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetCsvTrackOutput(const Value: Boolean);
 begin
-  FCsvTrackOutput := Value;
+  if FCsvTrackOutput <> Value then
+  begin
+    FCsvTrackOutput := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetDrape(const Value: Boolean);
 begin
-  FDrape := Value;
+  if FDrape <> Value then
+  begin
+    FDrape := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetReleaseTimes(const Value: TRealCollection);
@@ -31541,7 +31667,11 @@ end;
 
 procedure TPrpPackage.SetStopAtWeakSinks(const Value: Boolean);
 begin
-  FStopAtWeakSinks := Value;
+  if FStopAtWeakSinks <> Value then
+  begin
+    FStopAtWeakSinks := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrpPackage.SetStopTime(const Value: double);
@@ -31564,9 +31694,54 @@ begin
    StoredStopTravelTime.Used := Value;
 end;
 
+procedure TPrpPackage.SetReleaseTimeTolerance(const Value: double);
+begin
+   StoredReleaseTimeTolerance.Value := Value;
+end;
+
+procedure TPrpPackage.SetReleaseTimeToleranceUsed(const Value: Boolean);
+begin
+   StoredReleaseTimeTolerance.Used := Value;
+end;
+
+procedure TPrpPackage.SetReleaseTimeFrequency(const Value: double);
+begin
+   StoredReleaseTimeFrequency.Value := Value;
+end;
+
+procedure TPrpPackage.SetReleaseTimeFrequencyUsed(const Value: Boolean);
+begin
+   StoredReleaseTimeFrequency.Used := Value;
+end;
+
 procedure TPrpPackage.SetStopZone(const Value: Integer);
 begin
-  FStopZone := Value;
+  if FStopZone <> Value then
+  begin
+    FStopZone := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPrpPackage.SetExtendTracking(const Value: Boolean);
+begin
+  if FExtendTracking <> Value then
+  begin
+    FExtendTracking := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPrpPackage.SetStoredReleaseTimeFrequency(
+  const Value: TOptionalRealValue);
+begin
+  FStoredReleaseTimeFrequency.Assign(Value);
+end;
+
+procedure TPrpPackage.SetStoredReleaseTimeTolerance(
+  const Value: TOptionalRealValue);
+begin
+  FStoredReleaseTimeTolerance.Assign(Value);
 end;
 
 procedure TPrpPackage.SetStoredSolverTolerance(const Value: TRealStorage);
@@ -31585,6 +31760,24 @@ begin
 end;
 
 { TPrtModels }
+
+constructor TPrtModels.Create(Model: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  if Model = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := Model.Invalidate;
+  end;
+
+  inherited Create(TPrtModelItem, InvalidateModelEvent);
+  Fmodel := Model;
+
+end;
 
 function TPrtModels.GetItem(Index: Integer): TPrtModelItem;
 begin
