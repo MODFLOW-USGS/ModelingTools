@@ -3029,7 +3029,7 @@ Type
     procedure InitializeVariables;
   public
     procedure Assign(Source: TPersistent); override;
-    constructor Create(ItemClass: TCollectionItemClass; Model: TBaseModel);
+    constructor Create(Model: TBaseModel);
     destructor Destroy; override;
     property Items[Index: Integer]: TPrpPackageItem read GetItem write SetItem;  default;
   published
@@ -3045,14 +3045,21 @@ Type
   private
     FPrtModel: TPrtModel;
     procedure SetPrtModel(const Value: TPrtModel);
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
   published
     property PrtModel: TPrtModel read FPrtModel write SetPrtModel;
   end;
 
   TPrtModels = class(TPhastCollection)
   private
+    FModel: TBaseModel;
     function GetItem(Index: Integer): TPrtModelItem;
     procedure SetItem(Index: Integer; const Value: TPrtModelItem);
+  public
+    constructor Create(Model: TBaseModel);
   public
     property Items[Index: Integer]: TPrtModelItem read GetItem write SetItem; default;
   end;
@@ -31354,6 +31361,30 @@ end;
 
 { TPrtModelItem }
 
+procedure TPrtModelItem.Assign(Source: TPersistent);
+var
+ PrtSource: TPrtModelItem;
+begin
+  if Source is TPrtModelItem then
+  begin
+    PrtSource := TPrtModelItem(Source);
+    PrtModel := PrtSource.PrtModel;
+  end;
+  inherited;
+end;
+
+constructor TPrtModelItem.Create(Collection: TCollection);
+begin
+  inherited;
+  FPrtModel := TPrtModel.Create((Collection as TPrtModels).FModel);
+end;
+
+destructor TPrtModelItem.Destroy;
+begin
+  FPrtModel.Free;
+  inherited;
+end;
+
 procedure TPrtModelItem.SetPrtModel(const Value: TPrtModel);
 begin
   FPrtModel.Assign(Value);
@@ -31404,8 +31435,7 @@ begin
   inherited;
 end;
 
-constructor TPrtModel.Create(ItemClass: TCollectionItemClass;
-  Model: TBaseModel);
+constructor TPrtModel.Create(Model: TBaseModel);
 var
   InvalidateModelEvent: TNotifyEvent;
 begin
@@ -31730,6 +31760,24 @@ begin
 end;
 
 { TPrtModels }
+
+constructor TPrtModels.Create(Model: TBaseModel);
+var
+  InvalidateModelEvent: TNotifyEvent;
+begin
+  if Model = nil then
+  begin
+    InvalidateModelEvent := nil;
+  end
+  else
+  begin
+    InvalidateModelEvent := Model.Invalidate;
+  end;
+
+  inherited Create(TPrtModelItem, InvalidateModelEvent);
+  Fmodel := Model;
+
+end;
 
 function TPrtModels.GetItem(Index: Integer): TPrtModelItem;
 begin
