@@ -3021,9 +3021,11 @@ Type
     FZoneUsed: Boolean;
     FRetentionFactorUsed: Boolean;
     FTrackTimes: TRealCollection;
+    FIsSelected: Boolean;
     procedure SetRetentionFactorUsed(const Value: Boolean);
     procedure SetZoneUsed(const Value: Boolean);
     procedure SetTrackTimes(const Value: TRealCollection);
+    procedure SetIsSelected(const Value: Boolean);
     function GetItem(Index: Integer): TPrpPackageItem;
     procedure SetItem(Index: Integer; const Value: TPrpPackageItem);
     procedure InitializeVariables;
@@ -3039,6 +3041,7 @@ Type
     property ZoneUsed: Boolean read FZoneUsed write SetZoneUsed;
 
     property TrackTimes: TRealCollection read FTrackTimes write SetTrackTimes;
+    property IsSelected: Boolean  read FIsSelected write SetIsSelected;
   end;
 
   TPrtModelItem = class(TPhastCollectionItem)
@@ -7911,6 +7914,8 @@ resourcestring
   StrMAWFluidDensity = 'MAW Fluid Density';
   StrGHBConductanceMult = 'GHB Conductance Multiplier';
   StrRiverMultiplier = 'River Multiplier';
+  StrPRPParticalReleas = 'PRP: Partical Release Point Package';
+  StrParticleTracking = 'Particle Tracking';
 //  StrDrainDDRN = 'Drain Discharge Scaling';
 //  StrDRNDDRN = 'DRN Discharge Scaling';
 
@@ -31385,6 +31390,15 @@ begin
   inherited;
 end;
 
+procedure TPrtModelItem.SetIsSelected(const Value: Boolean);
+begin
+  if FIsSelected <> Value then
+  begin
+    FIsSelected := Value;
+    InvalidateModel;
+  end;
+end;
+
 procedure TPrtModelItem.SetPrtModel(const Value: TPrtModel);
 begin
   FPrtModel.Assign(Value);
@@ -31431,6 +31445,7 @@ begin
     ZoneUsed := PrtSource.ZoneUsed;
     RetentionFactorUsed := PrtSource.RetentionFactorUsed;
     TrackTimes := PrtSource.TrackTimes;
+    IsSelected := PrtSource.IsSelected;
   end;
   inherited;
 end;
@@ -31469,6 +31484,7 @@ begin
   clear;
   RetentionFactorUsed := False;
   ZoneUsed := False;
+  IsSelected := False;
   TrackTimes.clear;
 end;
 
@@ -31626,6 +31642,10 @@ begin
   ReleaseTimeFrequency := 0.0;
   ReleaseTimeFrequencyUsed := False;
   ExtendTracking := False;
+
+  PackageIdentifier := StrPRPParticalReleas;
+  Classification := StrParticleTracking;
+  SelectionType := stCheckBox;
 end;
 
 procedure TPrpPackage.SetBinaryTrackOutput(const Value: Boolean);

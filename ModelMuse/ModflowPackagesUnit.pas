@@ -95,6 +95,7 @@ type
     FViscosityPackage: TViscosityPackage;
     FTvkPackage: TTvkPackage;
     FTvsPackage: TTvsPackage;
+    FPrtModels: TPrtModels;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -180,6 +181,7 @@ type
     procedure SetViscosityPackage(const Value: TViscosityPackage);
     procedure SetTvkPackage(const Value: TTvkPackage);
     procedure SetTvsPackage(const Value: TTvsPackage);
+    procedure SetPrtModels(const Value: TPrtModels);  
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -338,6 +340,10 @@ type
       write SetViscosityPackage;
     property TvkPackage: TTvkPackage read FTvkPackage write SetTvkPackage;
     property TvsPackage: TTvsPackage read FTvsPackage write SetTvsPackage;
+    property PrtModels: TPrtModels read FPrtModels write SetPrtModels
+    {$IFNDEF PRT}
+      stored False
+    {$ENDIF};
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
@@ -560,6 +566,7 @@ begin
     ViscosityPackage := SourcePackages.ViscosityPackage;
     TvkPackage := SourcePackages.TvkPackage;
     TvsPackage := SourcePackages.TvsPackage;
+    PrtModels := SourcePackages.PrtModels;
 
   end
   else
@@ -983,6 +990,9 @@ begin
   FTvsPackage.PackageIdentifier := StrTVSTimeVaryingSt;
   FTvsPackage.Classification := StrFlowPackages;
   FTvsPackage.SelectionType := stCheckBox;
+
+  FPrtModels := TPrtModels.Create(Model);
+
 end;
 
 destructor TModflowPackages.Destroy;
@@ -1073,6 +1083,7 @@ begin
   FMt3dLkt.Free;
   FMt3dSft.Free;
   FMt3dCts.Free;
+  FPrtModels.Free;
   inherited;
 end;
 
@@ -1171,6 +1182,7 @@ begin
   ViscosityPackage.InitializeVariables;
   TvkPackage.InitializeVariables;
   TvsPackage.InitializeVariables;
+  PrtModels.Clear;
 end;
 
 
@@ -1462,6 +1474,28 @@ begin
   begin
     Inc(Result, LocalModel.MobileComponents.Count);
   end;
+
+  {$IFDEF PRT}
+  if Model.ModelSelection = msModflow2015 then
+  begin
+    for var I := 0 to PrtModels.Count - 1 do
+    begin
+      Var PrtModel: TPrtModel := PrtModels[I].PrtModel;
+      if PrtModel.IsSelected then
+      begin
+        Inc(result, 3);
+        for var J := 0 to PrtModel.Count - 1 do
+        begin
+          var PrpPackage := PrtModel[J].PrpPackage;
+          if PrpPackage.IsSelected then
+          begin
+            Inc(result);
+          end;
+        end;
+      end;
+    end;
+  end;
+  {$ENDIF};
 
   // Don't count Modpath or ZoneBudget
   // because they are exported seperately from MODFLOW.
@@ -1803,6 +1837,11 @@ begin
   FPcgPackage.Assign(Value);
 end;
 
+procedure TModflowPackages.SetPrtModels(const Value: TPrtModels);
+begin
+  FPrtModels.Assign(Value);
+end;
+
 procedure TModflowPackages.SetRchPackage(const Value: TRchPackageSelection);
 begin
   FRchPackage.Assign(Value);
@@ -1955,4 +1994,3 @@ initialization
   FBC_HeadDependentFlux := StrBoundaryCondition + '|' + StrHeaddependentFlux;
 
 end.
-
