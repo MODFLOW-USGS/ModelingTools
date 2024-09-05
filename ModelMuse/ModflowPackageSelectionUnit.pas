@@ -31390,7 +31390,7 @@ begin
   inherited;
 end;
 
-procedure TPrtModelItem.SetIsSelected(const Value: Boolean);
+procedure TPrtModel.SetIsSelected(const Value: Boolean);
 begin
   if FIsSelected <> Value then
   begin
