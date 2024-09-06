@@ -74,6 +74,7 @@
         <DCC_RangeChecking>true</DCC_RangeChecking>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <DCC_Define>FullSizeTest;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>FireDACIBDriver;XBasePkg12_1;vclwinx;fmx;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;FireDACCommonODBC;appanalytics;IndyProtocols;vclx;Skia.Package.RTL;RbwDataGridD12_1;dbxcds;vcledge;FmxTeeUI;RbwControllerPackage12_1;JvAppFrm;FireDACSqliteDriver;DbxClientDriver;JclVcl;soapmidas;ButtonEdit12_1;TeeUI;Jcl;dbexpress;JvManagedThreads;inet;MMJLabel12_1;vcltouch;JvDB;fmxdae;ZoomBox2_12_1;DynamicCursor12_1;JvCustom;CustomIPTransport;JvSystem;GR32_DSGN_RS12_1;JvControls;madExcept_;JvCrypt;JvJans;JvMM;IndySystem;JvGlobus;JclContainers;JvPageComps;vclFireDAC;madDisAsm_;FireDACCommon;bindcompdbx;rtl;FireDACMySQLDriver;DBXSqliteDriver;VirtualTreesDR;JvRuntimeDesign;JvXPCtrls;vclimg;inetdbxpress;FireDAC;JvDocking;JvDlgs;xmlrtl;dsnap;JvCmp;RbwParser12_1;fmxobj;bindcompvclsmp;MostRecentFiles12_1;Ade12_1;FireDACCommonDriver;IndyIPClient;bindcompvclwinx;datagrid12_1;bindcompfmx;madBasic_;JvBands;inetdb;Tee;vclactnband;fmxFireDAC;DBXMySQLDriver;VclSmp;JvPascalInterpreter;fmxase;JvPluginSystem;JvTimeFramework;dbrtl;Skia.Package.FMX;TeeDB;FireDACMSAccDriver;AbbreviaVCLD;JclDeveloperTools;RbwEdit12_1;vcldsnap;DBXInterBaseDriver;JvWizards;Skia.Package.VCL;vcldb;JvCore;bindcomp;GlWidget12_1;IndyCore;RESTBackendComponents;FireDACADSDriver;RbwRuler12_1;RESTComponents;IndyIPServer;vcl;dsnapxml;adortl;dsnapcon;JvDotNetCtrls;JvHMI;FireDACPgDriver;JvPrintPreview;tethering;JvStdCtrls;RbwRollupPanel12_1;bindcompvcl;CloudService;ModelCube12_1;FMXTee;QuadTreePkg12_1;addbtn95_D12_1;soaprtl;soapserver;JvNet;$(DCC_UsePackage)</DCC_UsePackage>
@@ -111,7 +112,6 @@
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
@@ -215,8 +215,8 @@
                     <Source Name="MainSource">SkiaDemo.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k290.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp290.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="4">

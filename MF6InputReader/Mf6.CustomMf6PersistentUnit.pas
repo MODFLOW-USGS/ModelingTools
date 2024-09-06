@@ -532,7 +532,6 @@ var
   ErrorLine: string;
   Option: string;
   OptionIndex: Integer;
-  Factor: string;
 begin
   while not Stream.EndOfStream do
   begin

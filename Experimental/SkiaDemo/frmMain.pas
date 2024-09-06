@@ -46,14 +46,15 @@ type
     MainMenu1: TMainMenu;
     miFile: TMenuItem;
     Panel1: TPanel;
+    Label1: TLabel;
     procedure SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
       const ADest: TRectF; const AOpacity: Single);
     procedure btnOpenFileClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure SkPaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Single);
   private
-    FPath: ISkPath;
-    FPath2: ISkPath;
     FGrid: ISkPath;
     FMf6Simulation: TMf6Simulation;
     FOriginX: double;
@@ -69,7 +70,8 @@ type
     KxValues: TDoubleDynArray;
     FThreadCount: Integer;
     FRotationAngle: Double;
-    ModelXWidth, ModelYWidth, ModelHeight: double;
+    ModelXWidth, ModelYWidth {, ModelHeight}: double;
+    ModelXCenter, ModelYCenter: double;
     procedure SetMagnification(const Value: double);
     procedure SetOriginX(const Value: double);
     procedure SetOriginY(const Value: double);
@@ -83,13 +85,13 @@ type
     { Private declarations }
   public
     {X converts a screen coordinate into a real-number X coordinate.}
-    function X(XCoord: integer): extended;
+    function X(XCoord: single): extended;
     {XCoord converts a real-number X coordinate into a screen coordinate.}
-    function XCoord(X: extended): integer;
+    function XCoord(X: extended): single;
     {Y converts a screen coordinate into a real-number Y coordinate.}
-    function Y(YCoord: integer): extended;
+    function Y(YCoord: single): extended;
     {YCoord converts a real-number Y coordinate into a screen coordinate.}
-    function YCoord(Y: extended): integer;
+    function YCoord(Y: extended): single;
     // @name is the ratio of distances in screen coordinates to
     // corresponding distances in real-world coordinates.
     // Usually @name is not set directly. See @link(BeginZoom),
@@ -134,8 +136,8 @@ uses
 {$R *.fmx}
 
 procedure TForm2.btnOpenFileClick(Sender: TObject);
-var
-  MyThread: TMyThread;
+//var
+//  MyThread: TMyThread;
 begin
   if OpenDialog1.Execute then
   begin
@@ -160,8 +162,8 @@ begin
 end;
 
 function TForm2.Color2AlphaColor(AColor: TColor): TAlphaColor;
-var
-  C1: Integer;
+//var
+//  C1: Integer;
 //  C2: Integer;
 //  C3: Integer;
 begin
@@ -232,6 +234,12 @@ procedure TForm2.SetTopPosition(const XCoordinate, YCoordinate: Double);
 var
   DeltaX, DeltaY: double;
 begin
+  {$IFDEF FullSizeTest}
+  OriginX := 0;
+  OriginY := 0;
+  Exit;
+  {$ENDIF}
+
   DeltaX := (X(Round(SkPaintBox1.Width)) - X(0)) / 2;
   DeltaY := (Y(0) - Y(Round(SkPaintBox1.Height))) / 2;
   OriginX := XCoordinate - DeltaX;
@@ -262,80 +270,30 @@ var
   GridLimit: TGridLimit;
   MinY, MaxY, MinX, MaxX: double;
   ColumnPosition: Double;
-  ColX: Integer;
-  ColTop: Integer;
-  ColBottom: Integer;
-  RowStart: Integer;
-  RowEnd: Integer;
+  ColX: single;
+  ColTop: single;
+  ColBottom: single;
+  RowStart: single;
+  RowEnd: single;
   RowPosition: Double;
-  RowY: Integer;
+  RowY: single;
   NpfPackage: TNpf;
-  ColumnPositions: TIntegerDynArray;
-  RowPositions: TIntegerDynArray;
+  ColumnPositions: TSingleDynArray;
+  RowPositions: TSingleDynArray;
   Kx: TDArray3D;
   ACellPath: ISkPath;
   Fraction: Double;
   Range: double;
   MyThread: TMyThread;
   LocalMagnification: double;
+  RowIndex, ColIndex: Integer;
 begin
   SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Raster;
 
   PathBuilder := TSkPathBuilder.Create;
   LPaint := TSkPaint.Create(TSkPaintStyle.Stroke);
 
-
-  if not Assigned(FPath) then
-  begin
-    PathBuilder.moveTo(R, 0.0);
-    for var i := 1 to 7 do
-    begin
-      theta := 3 * i * TAU / 7;
-      PathBuilder.lineTo(R * cos(theta), R * sin(theta));
-    end;
-    FPath := PathBuilder.Detach;
-  end;
-
-  if not Assigned(FPath2) then
-  begin
-    PathBuilder.moveTo(R, 0.0);
-    for var i := 1 to 5 do
-    begin
-      theta := 3 * i * TAU / 7;
-      PathBuilder.lineTo(R * cos(theta), R * sin(theta));
-    end;
-    FPath2 := PathBuilder.Detach;
-  end;
-
   ACanvas.clear(TAlphaColorRec.White);
-//  ACanvas.translate(Panel1.Width/2, 0);
-//  ACanvas.translate(0.5 * scale, 0.75 * scale);
-//  // no line
-////  LPaint.Color := 0;
-//  // blue line
-//  LPaint.Color := TAlphaColorRec.Blue;
-//  // thin line
-////  LPaint.StrokeWidth := 2;
-//  // thick line.
-//  LPaint.StrokeWidth := 4;
-//
-//  ACanvas.DrawPath(FPath, LPaint);
-//
-//  LPaint.Style := TSkPaintStyle.Fill;
-//  LPaint.Color := TAlphaColorRec.Darkgoldenrod;
-//  ACanvas.DrawPath(FPath, LPaint);
-//
-//
-//  LPaint.Style := TSkPaintStyle.Stroke;
-//  LPaint.Color := TAlphaColorRec.Blue;
-//
-//  ACanvas.translate(0.5 * scale, 0.75 * scale);
-//  ACanvas.DrawPath(FPath2, LPaint);
-//
-//  LPaint.Style := TSkPaintStyle.Fill;
-//  LPaint.Color := TAlphaColorRec.Darkgoldenrod;
-//  ACanvas.DrawPath(FPath2, LPaint);
-
 
   DisPackage := nil;
   NpfPackage := nil;
@@ -383,21 +341,26 @@ begin
         GridData := DisPackage.GridData;
         GridLimit.MinX := DisPackage.Options.XORIGIN;
         GridLimit.MaxX := DisPackage.Options.XORIGIN;
-        for var ColIndex := 0 to Length(GridData.DELR) - 1 do
+        for ColIndex := 0 to Length(GridData.DELR) - 1 do
         begin
           GridLimit.MaxX := GridLimit.MaxX + GridData.DELR[ColIndex]
         end;
         GridLimit.MinY:= DisPackage.Options.YORIGIN;
         GridLimit.MaxY := DisPackage.Options.YORIGIN;
-        for var RowIndex := 0 to Length(GridData.DELC) - 1 do
+        for RowIndex := 0 to Length(GridData.DELC) - 1 do
         begin
           GridLimit.MaxY := GridLimit.MaxY + GridData.DELC[RowIndex]
         end;
         ModelXWidth := GridLimit.MaxX - GridLimit.MinX;
         ModelYWidth := GridLimit.MaxY - GridLimit.MinY;
-        Magnification := 0.9 *
-          Min(SkPaintBox1.Width / ModelXWidth,
-          SkPaintBox1.Height / ModelYWidth);
+
+        ModelXCenter := (GridLimit.MaxX + GridLimit.MinX)/2;
+        ModelYCenter := (GridLimit.MaxY + GridLimit.MinY)/2;
+
+        {$IFDEF FullSizeTest}
+        Magnification := 1;
+        {$ENDIF}
+
         SetTopPosition((GridLimit.MinX + GridLimit.MaxX)/2,
           (GridLimit.MinY + GridLimit.MaxY)/2);
 
@@ -410,7 +373,7 @@ begin
         ColumnPositions[0] := ColX;
         PathBuilder.moveTo(ColX, ColBottom);
           PathBuilder.lineTo(ColX, ColTop);
-        for var ColIndex := 0 to Length(GridData.DELR) - 1 do
+        for ColIndex := 0 to Length(GridData.DELR) - 1 do
         begin
           ColumnPosition := ColumnPosition + GridData.DELR[ColIndex];
           ColX := XCoord(ColumnPosition);
@@ -422,17 +385,18 @@ begin
 
         SetLength(RowPositions, Length(GridData.DELC)+1);
 
+
         RowStart := XCoord(GridLimit.MinX);
         RowEnd := XCoord(GridLimit.MaxX);
-        RowPosition := GridLimit.MaxY;
+        RowPosition := GridLimit.MinX;
         RowY := YCoord(RowPosition);
         RowPositions[0] := RowY;
         PathBuilder.moveTo(RowStart, RowY);
           PathBuilder.lineTo(RowEnd, RowY);
 
-        for var RowIndex := 0 to Length(GridData.DELC) - 1 do
+        for RowIndex := 0 to Length(GridData.DELC) -1 do
         begin
-          RowPosition := RowPosition - GridData.DELC[RowIndex];
+          RowPosition := (RowPosition + GridData.DELC[RowIndex]);
           RowY := YCoord(RowPosition);
           RowPositions[RowIndex+1] := RowY;
 
@@ -451,9 +415,9 @@ begin
           MyThread.Start;
           FCellList := TCellList.Create;
 
-          for var RowIndex := 0 to Length(RowPositions) - 2 do
+          for RowIndex := 0 to Length(RowPositions) - 2 do
           begin
-            for var ColIndex := 0 to Length(ColumnPositions) - 2 do
+            for ColIndex := 0 to Length(ColumnPositions) - 2 do
             begin
               PathBuilder.moveTo(ColumnPositions[ColIndex], RowPositions[RowIndex]);
               PathBuilder.LineTo(ColumnPositions[ColIndex+1], RowPositions[RowIndex]);
@@ -474,9 +438,9 @@ begin
             MaxK := MinK;
             SetLength(KxValues, (Length(RowPositions)-1) * (Length(ColumnPositions)-1));
             var CellIndex: Integer := 0;
-            for var RowIndex := 0 to Length(Kx[0]) - 1 do
+            for RowIndex := 0 to Length(Kx[0]) - 1 do
             begin
-              for var ColIndex := 0 to Length(Kx[0,0]) - 1 do
+              for ColIndex := 0 to Length(Kx[0,0]) - 1 do
               begin
                 KxValues[CellIndex] := Kx[0,RowIndex,ColIndex];
                 Inc(CellIndex);
@@ -498,18 +462,28 @@ begin
     end;
   end;
 
-  LocalMagnification := 0.75;
-
-  try
-    ACanvas.Translate(Panel1.Width /2, 0);
-
-  finally
+  if (ModelXWidth = 0) or (ModelYWidth = 0) then
+  begin
+    LocalMagnification := 1;
+  end
+  else
+  begin
+    LocalMagnification :=// 0.9 *
+      Min(SkPaintBox1.Width / ModelXWidth,
+      SkPaintBox1.Height / ModelYWidth);
   end;
+
+//  ACanvas.Translate(Panel1.Width, 0);
+
 
 //  ACanvas.Save;
   try
+//    ACanvas.Translate(ModelXWidth/2,0);
     ACanvas.Scale(LocalMagnification,LocalMagnification);
-    ACanvas.Translate((ModelXWidth * (1-LocalMagnification)*Magnification) , (ModelYWidth * (1 -LocalMagnification)) * Magnification);
+//    ACanvas.Translate(ModelXWidth/2*LocalMagnification,0);
+//    ACanvas.Translate((ModelXWidth/2 * ({1-}LocalMagnification)*Magnification)/2, 0);
+//      (ModelYWidth/2 * ({1 -}LocalMagnification) * Magnification)/2);
+
     ACanvas.Rotate(FRotationAngle, SkPaintBox1.Width /2, SkPaintBox1.Height/2);
 
     if Assigned(FGrid) then
@@ -518,8 +492,6 @@ begin
       LPaint.Color := TAlphaColorRec.Black;
       LPaint.StrokeWidth := 1;
 
-  //    ACanvas.translate(-1 * scale, -1.5 * scale);
-      ACanvas.DrawPath(FGrid, LPaint);
 
       Range := MaxK - MinK;
       for var CellIndex := 0 to FCellList.Count - 1 do
@@ -537,21 +509,36 @@ begin
         LPaint.Color := Color2AlphaColor(FracAndSchemeToColor(0, Fraction, 0.6, 1));
         ACanvas.DrawPath(ACellPath, LPaint);
 
-  //      LPaint.Style := TSkPaintStyle.Stroke;
-  //      LPaint.Color := TAlphaColorRec.Black;
-  //      ACanvas.DrawPath(ACellPath, LPaint);
+        LPaint.StrokeWidth := 2.5;
+        LPaint.Style := TSkPaintStyle.Stroke;
+        LPaint.Color := TAlphaColorRec.Black;
+        ACanvas.DrawPath(ACellPath, LPaint);
       end;
+
+      LPaint.AntiAlias := True;
+//      LPaint.StrokeWidth := 2.5;
+      LPaint.Style := TSkPaintStyle.Stroke;
+      LPaint.Color := TAlphaColorRec.Black;
+      ACanvas.DrawPath(FGrid, LPaint);
     end;
   finally
 //    ACanvas.Restore;
   end;
 end;
 
-function TForm2.X(XCoord: integer): extended;
+procedure TForm2.SkPaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Single);
+begin
+   Label1.Text := X.ToString + ' ' + Y.ToString;
+
+
+end;
+
+function TForm2.X(XCoord: single): extended;
 begin
   if HorizontalDirection = hdLeft then
   begin
-    XCoord := Round(SkPaintBox1.Width) - XCoord;
+    XCoord := SkPaintBox1.Width - XCoord;
   end;
   if ExaggerationDirection = edHorizontal then
   begin
@@ -563,11 +550,21 @@ begin
   end;
 end;
 
-function TForm2.XCoord(X: extended): integer;
+function TForm2.XCoord(X: extended): single;
 var
   temp: extended;
 begin
   try
+    {$IFDEF FullSizeTest}
+    if ExaggerationDirection = edHorizontal then
+    begin
+      temp := X * FExaggeration;
+    end
+    else
+    begin
+      temp := X;
+    end;
+    {$ELSE}
     if ExaggerationDirection = edHorizontal then
     begin
       temp := (X - OriginX) * FExaggeration * Magnification;
@@ -580,6 +577,7 @@ begin
     begin
       temp := ClientWidth - temp;
     end;
+    {$ENDIF}
     if temp > High(Integer) then
     begin
       result := High(Integer);
@@ -618,11 +616,11 @@ begin
   end;
 end;
 
-function TForm2.Y(YCoord: integer): extended;
+function TForm2.Y(YCoord: single): extended;
 begin
   if VerticalDirection = vdUp then
   begin
-    YCoord := Round(SkPaintBox1.Height) - YCoord;
+    YCoord := SkPaintBox1.Height - YCoord;
   end;
 
   if ExaggerationDirection = edVertical then
@@ -635,11 +633,25 @@ begin
   end;
 end;
 
-function TForm2.YCoord(Y: extended): integer;
+function TForm2.YCoord(Y: extended): single;
 var
   temp: extended;
 begin
   try
+  {$IFDEF FullSizeTest}
+    if ExaggerationDirection = edVertical then
+    begin
+      temp := Y * FExaggeration
+    end
+    else
+    begin
+      temp := Y
+    end;
+//    if VerticalDirection = vdUp then
+//    begin
+//      temp := ClientHeight - temp;
+//    end;
+  {$ELSE}
     if ExaggerationDirection = edVertical then
     begin
       temp := (Y - OriginY) * FExaggeration * Magnification
@@ -652,6 +664,7 @@ begin
     begin
       temp := ClientHeight - temp;
     end;
+    {$ENDIF}
     if temp > High(Integer) then
     begin
       result := High(Integer);
