@@ -1,0 +1,12 @@
+*.local
+*.dcu
+*.drc
+*.dsv
+*.indentcache
+*.identcache
+*.exe
+**/__history/**
+**/Release/**
+**/Debug/**
+*.dsk
+*.~dsk
