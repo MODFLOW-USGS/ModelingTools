@@ -2911,6 +2911,8 @@ Type
     ptoWeakSink, ptoUserTime);
   TPrtTrackingOptions = set of TPrtTrackingOption;
 
+  TPrtTrackingOutput = (ptoNone, ptoBinary, ptoCSV, ptoAll);
+
   // @name represents one PRP package in one PRT model.
   TPrpPackage = class(TModflowPackageSelection)
   private
@@ -2926,6 +2928,7 @@ Type
     FStopZone: Integer;
     FDrape: Boolean;
     FExtendTracking: Boolean;
+    FPrtTrackingOutput: TPrtTrackingOutput;
     procedure SetReleaseTimes(const Value: TRealCollection);
     procedure SetBinaryTrackOutput(const Value: Boolean);
     procedure SetCsvTrackOutput(const Value: Boolean);
@@ -2956,6 +2959,8 @@ Type
     procedure SetReleaseTimeFrequencyUsed(const Value: Boolean);
     procedure SetReleaseTimeTolerance(const Value: double);
     procedure SetReleaseTimeToleranceUsed(const Value: Boolean);
+
+    procedure SetPrtTrackingOutput(const Value: TPrtTrackingOutput);  
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -3000,7 +3005,9 @@ Type
     property StoredReleaseTimeFrequency: TOptionalRealValue read FStoredReleaseTimeFrequency write SetStoredReleaseTimeFrequency;
     // Extend_Tracking
     property ExtendTracking: Boolean read FExtendTracking write SetExtendTracking;
-  end;
+    // TrackCSV and Track (Binary)
+    property PrtTrackingOutput: TPrtTrackingOutput read FPrtTrackingOutput write SetPrtTrackingOutput;
+ end;
 
   // @name is a collection item
   TPrpPackageItem = class(TPhastCollectionItem)
@@ -3022,6 +3029,7 @@ Type
     FRetentionFactorUsed: Boolean;
     FTrackTimes: TRealCollection;
     FIsSelected: Boolean;
+    FPrtTrackingOptions: TPrtTrackingOptions;
     procedure SetRetentionFactorUsed(const Value: Boolean);
     procedure SetZoneUsed(const Value: Boolean);
     procedure SetTrackTimes(const Value: TRealCollection);
@@ -3029,6 +3037,8 @@ Type
     function GetItem(Index: Integer): TPrpPackageItem;
     procedure SetItem(Index: Integer; const Value: TPrpPackageItem);
     procedure InitializeVariables;
+
+    procedure SetPrtTrackingOptions(const Value: TPrtTrackingOptions);
   public
     procedure Assign(Source: TPersistent); override;
     constructor Create(Model: TBaseModel);
@@ -3042,6 +3052,7 @@ Type
 
     property TrackTimes: TRealCollection read FTrackTimes write SetTrackTimes;
     property IsSelected: Boolean  read FIsSelected write SetIsSelected;
+    property PrtTrackingOptions: TPrtTrackingOptions read FPrtTrackingOptions write SetPrtTrackingOptions;
   end;
 
   TPrtModelItem = class(TPhastCollectionItem)
@@ -31446,6 +31457,7 @@ begin
     RetentionFactorUsed := PrtSource.RetentionFactorUsed;
     TrackTimes := PrtSource.TrackTimes;
     IsSelected := PrtSource.IsSelected;
+    PrtTrackingOptions := PrtSource.PrtTrackingOptions
   end;
   inherited;
 end;
@@ -31486,11 +31498,21 @@ begin
   ZoneUsed := False;
   IsSelected := False;
   TrackTimes.clear;
+  PrtTrackingOptions := [ptoRelease, ptoExit, ptoTimeStep, ptoTerminate, ptoWeakSink, ptoUserTime];
 end;
 
 procedure TPrtModel.SetItem(Index: Integer; const Value: TPrpPackageItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+procedure TPrtModel.SetPrtTrackingOptions(const Value: TPrtTrackingOptions);
+begin
+  if FPrtTrackingOptions <> Value then
+  begin
+    FPrtTrackingOptions := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TPrtModel.SetRetentionFactorUsed(const Value: Boolean);
@@ -31537,6 +31559,7 @@ begin
     ReleaseTimeTolerance := PrpSource.ReleaseTimeTolerance;
     ReleaseTimeFrequency := PrpSource.ReleaseTimeFrequency;
     ExtendTracking := PrpSource.ExtendTracking;
+    FPrtTrackingOutput := PrpSource.FPrtTrackingOutput
 
   end;
   inherited;
@@ -31642,6 +31665,7 @@ begin
   ReleaseTimeFrequency := 0.0;
   ReleaseTimeFrequencyUsed := False;
   ExtendTracking := False;
+  FPrtTrackingOutput := [PtoNone];
 
   PackageIdentifier := StrPRPParticalReleas;
   Classification := StrParticleTracking;
@@ -31748,6 +31772,15 @@ begin
   if FExtendTracking <> Value then
   begin
     FExtendTracking := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPrpPackage.SetPrtTrackingOutput(const Value: TPrtTrackingOutput);
+begin
+  if FPrtTrackingOutput <> Value then
+  begin
+    FPrtTrackingOutput := Value;
     InvalidateModel;
   end;
 end;
