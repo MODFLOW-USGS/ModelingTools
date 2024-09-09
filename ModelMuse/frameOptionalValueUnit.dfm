@@ -17,12 +17,15 @@ object frameOptionalValue: TframeOptionalValue
     Width = 97
     Height = 17
     TabOrder = 0
+    OnClick = cbUsedClick
   end
   object RdeValue: TRbwDataEntry
     Left = 24
     Top = 21
     Width = 145
     Height = 22
+    Color = clBtnFace
+    Enabled = False
     TabOrder = 1
     Text = '0'
     DataType = dtReal

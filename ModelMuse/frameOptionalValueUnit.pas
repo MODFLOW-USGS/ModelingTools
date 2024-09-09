@@ -12,6 +12,7 @@ type
     cbUsed: TCheckBox;
     RdeValue: TRbwDataEntry;
     LblVariableLabel: TLabel;
+    procedure cbUsedClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -21,5 +22,10 @@ type
 implementation
 
 {$R *.dfm}
+
+procedure TframeOptionalValue.cbUsedClick(Sender: TObject);
+begin
+  RdeValue.Enabled := cbUsed.Checked
+end;
 
 end.

@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, framePackageUnit, RbwController,
-  Vcl.StdCtrls, ArgusDataEntry;
+  Vcl.StdCtrls, ArgusDataEntry, frameOptionalValueUnit, ModflowPackageSelectionUnit;
 
 type
   TframePackagePrp = class(TframePackage)
@@ -13,10 +13,13 @@ type
     LblSolverTolerance: TLabel;
     EXTEND_TRACKING: TCheckBox;
     ComboBox1: TComboBox;
+    frameStopTime: TframeOptionalValue;
+    lblPrpTrack: TLabel;
   private
     { Private declarations }
   public
-    { Public declarations }
+    procedure GetData(Package: TModflowPackageSelection); override;
+    procedure SetData(Package: TModflowPackageSelection); override;
   end;
 
 var
@@ -25,5 +28,28 @@ var
 implementation
 
 {$R *.dfm}
+
+{ TframePackagePrp }
+
+procedure TframePackagePrp.GetData(Package: TModflowPackageSelection);
+var
+  PrpPackage: TPrpPackage;
+begin
+  inherited;
+  PrpPackage := Package as TPrpPackage;
+  frameStopTime.cbUsed.Checked := PrpPackage.StopTimeUsed;
+  frameStopTime.RdeValue.RealValue := PrpPackage.StopTime;
+end;
+
+procedure TframePackagePrp.SetData(Package: TModflowPackageSelection);
+var
+  PrpPackage: TPrpPackage;
+begin
+  inherited;
+  PrpPackage := Package as TPrpPackage;
+  PrpPackage.StopTimeUsed := frameStopTime.cbUsed.Checked;
+  PrpPackage.StopTime := frameStopTime.RdeValue.RealValue;
+
+end;
 
 end.
