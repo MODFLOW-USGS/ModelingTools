@@ -946,7 +946,9 @@ uses
   frmImportWarningsUnit in 'frmImportWarningsUnit.pas' {frmImportWarnings},
   framePackageUseMultiplierUnit in 'framePackageUseMultiplierUnit.pas' {framePackageUseMultiplier: TFrame},
   Mt3dObservationResultsUnit in 'Mt3dObservationResultsUnit.pas',
-  frameMt3dObsResultsUnit in 'frameMt3dObsResultsUnit.pas' {frameMt3dObsResults: TFrame};
+  frameMt3dObsResultsUnit in 'frameMt3dObsResultsUnit.pas' {frameMt3dObsResults: TFrame},
+  framePackagePrpUnit in 'framePackagePrpUnit.pas' {framePackagePrp: TFrame},
+  frameOptionalValueUnit in 'frameOptionalValueUnit.pas' {frameOptionalValue: TFrame};
 
 {$R *.res}
 
