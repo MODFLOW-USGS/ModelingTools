@@ -40212,6 +40212,9 @@ resourcestring
   StrMoreThan200Input = 'More than 200 input data set observations for the f' +
   'ollowing data sets. Excessive numbers of observations can cause excessive' +
   ' memory use by PEST.';
+  StrUnableToExportThe = 'Unable to export the input for SvdaPrep because th' +
+  'e file "%s" does not exist. It is normally created in "File|Export|PEST|' +
+  'Calculate Number of Super-Parameters".';
 
 procedure TCustomModel.UpdateAllotmentFullStressPeriods(TimeList: TRealList);
 var
@@ -42692,7 +42695,15 @@ begin
   begin
     TFile.Delete(NewJcoFileName);
   end;
-  TFile.Copy(JcoFileName, NewJcoFileName);
+  if TFile.Exists(JcoFileName) then
+  begin
+    TFile.Copy(JcoFileName, NewJcoFileName);
+  end
+  else
+  begin
+    MessageDlg(Format(StrUnableToExportThe, [JcoFileName]), mtError, [mbOK], 0);
+    Exit;
+  end;
   if TFile.Exists(PreSvdaFileName) then
   begin
     TFile.Delete(PreSvdaFileName);

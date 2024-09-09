@@ -7,7 +7,8 @@ uses
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, System.Skia,
   FMX.Skia, FMX.Skia.Canvas, FMX.StdCtrls, FMX.Controls.Presentation,
   System.ImageList, FMX.ImgList, FMX.Edit, FMX.Objects,
-  Mf6.SimulationNameFileReaderUnit, System.Generics.Collections, FMX.Menus;
+  Mf6.SimulationNameFileReaderUnit, System.Generics.Collections, FMX.Menus,
+  FMX.Memo.Types, FMX.ScrollBox, FMX.Memo;
 
 type
   // @name indicates whether exaggeration is applied in
@@ -47,6 +48,9 @@ type
     miFile: TMenuItem;
     Panel1: TPanel;
     Label1: TLabel;
+    Memo1: TMemo;
+    Memo2: TMemo;
+    Label2: TLabel;
     procedure SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
       const ADest: TRectF; const AOpacity: Single);
     procedure btnOpenFileClick(Sender: TObject);
@@ -54,6 +58,10 @@ type
     procedure FormCreate(Sender: TObject);
     procedure SkPaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Single);
+    procedure SkPaintBox1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
+    procedure SkPaintBox1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Single);
   private
     FGrid: ISkPath;
     FMf6Simulation: TMf6Simulation;
@@ -72,6 +80,11 @@ type
     FRotationAngle: Double;
     ModelXWidth, ModelYWidth {, ModelHeight}: double;
     ModelXCenter, ModelYCenter: double;
+    FDisplayMag: double;
+    FStartMove: Boolean;
+    FStartPoint: TPointF;
+    FStopPoint: TPointF;
+    FMove: TPointF;
     procedure SetMagnification(const Value: double);
     procedure SetOriginX(const Value: double);
     procedure SetOriginY(const Value: double);
@@ -188,6 +201,7 @@ begin
   FExaggeration := 1;
   FVerticalDirection := vdUp;
   FCellList := TCellList.Create;
+  FDisplayMag := 1;
 end;
 
 procedure TForm2.FormDestroy(Sender: TObject);
@@ -287,6 +301,7 @@ var
   MyThread: TMyThread;
   LocalMagnification: double;
   RowIndex, ColIndex: Integer;
+  PathData: TPathData;
 begin
   SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Raster;
 
@@ -406,6 +421,18 @@ begin
 
         FGrid := PathBuilder.Detach;
 
+        Memo1.Lines.BeginUpdate;
+        Memo1.Lines.Clear;
+        try
+          PathData := SkPathToPathData(FGrid);
+          for var Index := 0 to PathData.Count - 1 do
+          begin
+            Memo1.Lines.Add(PathData.Points[Index].Point.x.ToString + ' ' + PathData.Points[Index].Point.y.ToString)
+          end;
+        finally
+          Memo1.Lines.EndUpdate;
+        end;
+
         if NpfPackage <> nil then
         begin
 
@@ -472,6 +499,8 @@ begin
       Min(SkPaintBox1.Width / ModelXWidth,
       SkPaintBox1.Height / ModelYWidth);
   end;
+  FDisplayMag := LocalMagnification;
+  Label2.Text := LocalMagnification.ToString;
 
 //  ACanvas.Translate(Panel1.Width, 0);
 
@@ -479,6 +508,9 @@ begin
 //  ACanvas.Save;
   try
 //    ACanvas.Translate(ModelXWidth/2,0);
+
+    ACanvas.Translate(FMove.X/FDisplayMag, FMove.Y/FDisplayMag);
+
     ACanvas.Scale(LocalMagnification,LocalMagnification);
 //    ACanvas.Translate(ModelXWidth/2*LocalMagnification,0);
 //    ACanvas.Translate((ModelXWidth/2 * ({1-}LocalMagnification)*Magnification)/2, 0);
@@ -488,6 +520,19 @@ begin
 
     if Assigned(FGrid) then
     begin
+
+        Memo2.Lines.BeginUpdate;
+        try
+          Memo2.Lines.Clear;
+          PathData := SkPathToPathData(FGrid);
+          for var Index := 0 to PathData.Count - 1 do
+          begin
+            Memo2.Lines.Add(PathData.Points[Index].Point.x.ToString + ' ' + PathData.Points[Index].Point.y.ToString)
+          end;
+        finally
+          Memo2.Lines.EndUpdate;
+        end;
+
       LPaint.Style := TSkPaintStyle.Stroke;
       LPaint.Color := TAlphaColorRec.Black;
       LPaint.StrokeWidth := 1;
@@ -526,12 +571,40 @@ begin
   end;
 end;
 
+procedure TForm2.SkPaintBox1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+  if ssShift in Shift then
+  begin
+    FStartMove := True;
+    FStartPoint := PointF(X, Y);
+  end;
+end;
+
 procedure TForm2.SkPaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Single);
 begin
-   Label1.Text := X.ToString + ' ' + Y.ToString;
+  if FDisplayMag <> 0 then
+  begin
+   Label1.Text := X.ToString + ' ' + Y.ToString
+   + sLineBreak
+   + (Y/FDisplayMag).ToString;
+  end;
 
+   Label2.Text := FDisplayMag.ToString;
+end;
 
+procedure TForm2.SkPaintBox1MouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Single);
+begin
+  if FStartMove then
+  begin
+    FStartMove := False;
+    FStopPoint := PointF(X, Y);
+    FMove := (FStopPoint - FStartPoint)*FDisplayMag + FMove;
+    SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Never;
+    SkPaintBox1.Redraw;
+  end;
 end;
 
 function TForm2.X(XCoord: single): extended;

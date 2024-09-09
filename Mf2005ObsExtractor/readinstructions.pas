@@ -796,7 +796,7 @@ begin
             ObsName := Splitter[2];
             SimulatedValue := FortranStrToFloat(Splitter[0]);
             try
-               ObservedValue := FortranStrToFloat(Splitter[1]);
+              ObservedValue := FortranStrToFloat(Splitter[1]);
             except on EConvertError do
               ObservedValue := 1E9;
             end;

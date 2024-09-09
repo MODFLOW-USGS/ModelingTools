@@ -31665,7 +31665,7 @@ begin
   ReleaseTimeFrequency := 0.0;
   ReleaseTimeFrequencyUsed := False;
   ExtendTracking := False;
-  FPrtTrackingOutput := [PtoNone];
+  PrtTrackingOutput := ptoNone;
 
   PackageIdentifier := StrPRPParticalReleas;
   Classification := StrParticleTracking;

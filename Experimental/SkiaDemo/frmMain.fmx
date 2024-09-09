@@ -16,7 +16,9 @@ object Form2: TForm2
     Size.Width = 520.000000000000000000
     Size.Height = 480.000000000000000000
     Size.PlatformDefault = False
+    OnMouseDown = SkPaintBox1MouseDown
     OnMouseMove = SkPaintBox1MouseMove
+    OnMouseUp = SkPaintBox1MouseUp
     OnDraw = SkPaintBox1Draw
   end
   object Timer1: TTimer
@@ -44,13 +46,48 @@ object Form2: TForm2
     Size.PlatformDefault = False
     TabOrder = 0
     object Label1: TLabel
-      Position.X = 16.000000000000000000
-      Position.Y = 112.000000000000000000
+      Position.X = 8.000000000000000000
+      Position.Y = 8.000000000000000000
       Size.Width = 89.000000000000000000
-      Size.Height = 17.000000000000000000
+      Size.Height = 65.000000000000000000
       Size.PlatformDefault = False
+      TextSettings.Trimming = None
       Text = 'Label1'
       TabOrder = 0
+    end
+    object Memo1: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Position.X = 16.000000000000000000
+      Position.Y = 152.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 129.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Viewport.Width = 92.000000000000000000
+      Viewport.Height = 125.000000000000000000
+    end
+    object Memo2: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Position.X = 16.000000000000000000
+      Position.Y = 312.000000000000000000
+      Size.Width = 96.000000000000000000
+      Size.Height = 129.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Viewport.Width = 92.000000000000000000
+      Viewport.Height = 125.000000000000000000
+    end
+    object Label2: TLabel
+      Position.X = 8.000000000000000000
+      Position.Y = 81.000000000000000000
+      Size.Width = 104.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Trimming = None
+      Text = 'Label2'
+      TabOrder = 3
     end
   end
   object ImageList1: TImageList

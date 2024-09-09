@@ -2305,12 +2305,10 @@
         </DCCReference>
         <DCCReference Include="framePackagePrpUnit.pas">
             <Form>framePackagePrp</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="frameOptionalValueUnit.pas">
             <Form>frameOptionalValue</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <None Include="ModelMuse.todo"/>

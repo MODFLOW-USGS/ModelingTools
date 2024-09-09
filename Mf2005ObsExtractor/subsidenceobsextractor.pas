@@ -208,7 +208,7 @@ begin
             True);
         else Assert(False, Format('Error reading data from %s', [ModelOutputFileName]));
       end;
-      Description := string(Trim(DESC));
+      Description := Trim(string(DESC));
 
       for Index := 0 to Pred(FSubObs.Count) do
       begin
