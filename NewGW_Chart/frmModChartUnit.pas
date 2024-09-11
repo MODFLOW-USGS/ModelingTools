@@ -6,11 +6,11 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, TeeProcs, TeEngine, Chart, ExtCtrls, Series, Math, Buttons,
   Menus, IntListUnit, ComCtrls, ToolWin, contnrs, MyFormUnit, TeeEdit,
-  TeeComma, TeeScroB, ReaderUnit, ChartRangeUnit, TeeTools, hh_funcs,
+  TeeComma, TeeScroB, ReaderUnit, ChartRangeUnit, TeeTools, //hh_funcs,
   JvPageList, JvExControls, addbtn95, ArgusDataEntry, CheckLst, basecombo,
   treecombo, Mask, JvExMask, JvSpin, BubbleCh, Grids, RbwDataGrid4,
   JvExCheckLst, JvCheckListBox, ObjectStringList, JvxCheckListBox, StatChar,
-  RealListUnit, VclTee.TeeGDIPlus;
+  RealListUnit, VclTee.TeeGDIPlus, Vcl.HtmlHelpViewer;
 
 type
   TFileType = (ftUnknown, ft_os, ft_ww, ft_ws, ft_sc, ft_sd, ft_s1, ft_nm,
@@ -501,7 +501,7 @@ resourcestring
 
 var
   frmModChart: TfrmModChart;
-  mHHelp: THookHelpSystem;
+//  mHHelp: THookHelpSystem;
 
 const
 //  MaxColor = 16;
@@ -865,7 +865,7 @@ var
 begin
   FileName := GetDLLName;
   GetDllFullPath(FileName, result);
-  result := ExtractFileDir(result) + '\TeeUser6.chm';
+  result := ExtractFileDir(result) + '\TeeUser9.chm';
 end;
 
 function HelpFileName: string;
@@ -3467,6 +3467,7 @@ var
   FileName: string;
   Option: string;
 begin
+
   rdgIgnoreValueOS.Cells[0,1] := 'Values to ignore';
   rdgValuesToIgnoreNM.Cells[0,1] := 'Values to ignore';
 
@@ -3522,7 +3523,7 @@ begin
   ExplanationFontHeight := -11;
   GetModuleFileName(HInstance, Filecheck, 255);
   Application.HelpFile := ExtractFileDir(String(Filecheck)) + '\GW_Chart.chm';
-  mHHelp := THookHelpSystem.Create(Application.HelpFile, '', htHHAPI);
+//  mHHelp := THookHelpSystem.Create(Application.HelpFile, '', htHHAPI);
 
   RangeSeries:= TRangeSeries.Create(self);
   RangeSeries.ParentChart := chartModflow;
@@ -3594,8 +3595,8 @@ begin
   RdRgStyleList.Free;
   rdRgNameList.Free;
   //Unhook and free
-  mHHelp.Free;
-  HHCloseAll;     //Close help before shutdown or big trouble
+//  mHHelp.Free;
+//  HHCloseAll;     //Close help before shutdown or big trouble
 end;
 
 procedure TfrmModChart.sbZoomInClick(Sender: TObject);
@@ -5872,11 +5873,11 @@ end;
 
 procedure TfrmModChart.sbFormatClick(Sender: TObject);
 begin
-  mHHelp.ChmFile := ChartHelpFileName;
+  Application.HelpFile := ChartHelpFileName;
   try
     ChartEditor1.Execute;
   finally
-    mHHelp.ChmFile := HelpFileName;
+    Application.HelpFile := HelpFileName;
   end;
 {  frmFormat.GetData(chartModflow, 20);
   frmFormat.ShowModal;  }
@@ -10049,5 +10050,6 @@ begin
     ASeries.Visible := clbItemsToPlot.Checked[Index];
   end;
 end;
+
 
 end.

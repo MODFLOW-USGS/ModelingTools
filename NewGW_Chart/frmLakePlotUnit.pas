@@ -1969,11 +1969,11 @@ end;
 procedure TfrmLakePlot.sbAdvancedFormatClick(Sender: TObject);
 begin
   inherited;
-  mHHelp.ChmFile := ChartHelpFileName;
+  Application.HelpFile := ChartHelpFileName;
   try
     ChartEditor1.Execute;
   finally
-    mHHelp.ChmFile := HelpFileName;
+    Application.HelpFile := HelpFileName;
   end;
 end;
 

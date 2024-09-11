@@ -1,14 +1,14 @@
 object frmPiperGraph: TfrmPiperGraph
   Left = 285
   Top = 93
-  Width = 819
-  Height = 558
   HelpContext = 600
   Caption = 'GW_Chart Piper Graph: Visual display of chemical composition'
+  ClientHeight = 499
+  ClientWidth = 803
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
-  Font.Height = -16
+  Font.Height = -13
   Font.Name = 'Times New Roman'
   Font.Style = []
   Menu = MainMenu1
@@ -18,39 +18,59 @@ object frmPiperGraph: TfrmPiperGraph
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  PixelsPerInch = 120
-  TextHeight = 19
+  PixelsPerInch = 96
+  TextHeight = 15
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 801
-    Height = 469
-    ActivePage = tabData
+    Width = 803
+    Height = 480
+    Margins.Left = 2
+    Margins.Top = 2
+    Margins.Right = 2
+    Margins.Bottom = 2
+    ActivePage = tabPlot
     Align = alClient
     TabOrder = 0
     object tabData: TTabSheet
       HelpContext = 610
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Data'
       object Panel1: TPanel
         Left = 0
-        Top = 373
-        Width = 793
-        Height = 62
+        Top = 401
+        Width = 795
+        Height = 49
+        Margins.Left = 2
+        Margins.Top = 2
+        Margins.Right = 2
+        Margins.Bottom = 2
         Align = alBottom
         TabOrder = 1
         object Label1: TLabel
-          Left = 10
-          Top = 3
-          Width = 136
-          Height = 19
+          Left = 8
+          Top = 2
+          Width = 119
+          Height = 15
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Caption = 'Number of data points'
         end
         object sbOpenFile: TSpeedButton
-          Left = 624
-          Top = 10
-          Width = 31
-          Height = 32
+          Left = 493
+          Top = 8
+          Width = 24
+          Height = 25
           Hint = 'Open File'
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Glyph.Data = {
             76010000424D7601000000000000760000002800000020000000100000000100
             0400000000000001000000000000000000001000000010000000000000000000
@@ -70,11 +90,15 @@ object frmPiperGraph: TfrmPiperGraph
           OnClick = sbOpenFileClick
         end
         object sbSaveFile: TSpeedButton
-          Left = 655
-          Top = 10
-          Width = 32
-          Height = 32
+          Left = 517
+          Top = 8
+          Width = 25
+          Height = 25
           Hint = 'Save File'
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Glyph.Data = {
             76010000424D7601000000000000760000002800000020000000100000000100
             0400000000000001000000000000000000001000000010000000000000000000
@@ -94,11 +118,15 @@ object frmPiperGraph: TfrmPiperGraph
           OnClick = sbSaveFileClick
         end
         object sbFormat2: TSpeedButton
-          Left = 592
-          Top = 10
-          Width = 32
-          Height = 32
+          Left = 467
+          Top = 8
+          Width = 26
+          Height = 25
           Hint = 'Format Chart'
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Glyph.Data = {
             76010000424D7601000000000000760000002800000020000000100000000100
             04000000000000010000120B0000120B00001000000000000000000000000000
@@ -118,10 +146,14 @@ object frmPiperGraph: TfrmPiperGraph
           OnClick = sbFormatClick
         end
         object seNumPoints: TSpinEdit
-          Left = 8
-          Top = 22
-          Width = 107
-          Height = 29
+          Left = 6
+          Top = 17
+          Width = 85
+          Height = 24
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           MaxValue = 0
           MinValue = 0
           TabOrder = 2
@@ -129,11 +161,15 @@ object frmPiperGraph: TfrmPiperGraph
           OnChange = seNumPointsChange
         end
         object Button2: TButton
-          Left = 687
-          Top = 10
-          Width = 65
-          Height = 32
+          Left = 542
+          Top = 8
+          Width = 52
+          Height = 25
           Hint = 'Paste from clipboard'
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Caption = 'Paste'
           ParentShowHint = False
           ShowHint = True
@@ -141,11 +177,15 @@ object frmPiperGraph: TfrmPiperGraph
           OnClick = Button2Click
         end
         object rgDataType: TRadioGroup
-          Left = 156
+          Left = 123
           Top = 0
-          Width = 392
-          Height = 57
+          Width = 310
+          Height = 45
           Hint = 'type of data entered in table'
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Caption = 'Data Type'
           Columns = 2
           ItemIndex = 0
@@ -160,11 +200,15 @@ object frmPiperGraph: TfrmPiperGraph
           OnClick = rgDataTypeClick
         end
       end
-      object DataGrid1: TDataGrid
+      object DataGrid1: TEcDataGrid
         Left = 0
         Top = 0
-        Width = 793
-        Height = 373
+        Width = 795
+        Height = 401
+        Margins.Left = 2
+        Margins.Top = 2
+        Margins.Right = 2
+        Margins.Bottom = 2
         Align = alClient
         ColCount = 11
         DefaultRowHeight = 20
@@ -268,22 +312,34 @@ object frmPiperGraph: TfrmPiperGraph
     end
     object tabPlot: TTabSheet
       HelpContext = 620
+      Margins.Left = 2
+      Margins.Top = 2
+      Margins.Right = 2
+      Margins.Bottom = 2
       Caption = 'Plot'
       ImageIndex = 1
       OnResize = tabPlotResize
       object Panel2: TPanel
         Left = 0
-        Top = 388
-        Width = 793
-        Height = 47
+        Top = 413
+        Width = 795
+        Height = 37
+        Margins.Left = 2
+        Margins.Top = 2
+        Margins.Right = 2
+        Margins.Bottom = 2
         Align = alBottom
         TabOrder = 1
         object sbSaveImage: TSpeedButton
-          Left = 39
-          Top = 8
-          Width = 32
-          Height = 34
+          Left = 31
+          Top = 6
+          Width = 25
+          Height = 27
           Hint = 'Export to image'
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Glyph.Data = {
             76010000424D7601000000000000760000002800000020000000100000000100
             04000000000000010000120B0000120B00001000000000000000000000000000
@@ -303,11 +359,15 @@ object frmPiperGraph: TfrmPiperGraph
           OnClick = sbSaveImageClick
         end
         object sbFormat: TSpeedButton
-          Left = 8
-          Top = 8
-          Width = 31
-          Height = 34
+          Left = 6
+          Top = 6
+          Width = 25
+          Height = 27
           Hint = 'Format Chart'
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Glyph.Data = {
             76010000424D7601000000000000760000002800000020000000100000000100
             04000000000000010000120B0000120B00001000000000000000000000000000
@@ -327,16 +387,16 @@ object frmPiperGraph: TfrmPiperGraph
           OnClick = sbFormatClick
         end
         object BitBtn2: TBitBtn
-          Left = 71
-          Top = 8
-          Width = 71
-          Height = 34
+          Left = 56
+          Top = 6
+          Width = 56
+          Height = 27
           Hint = 'print graph'
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Caption = 'Print'
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 1
-          OnClick = BitBtn2Click
           Glyph.Data = {
             76010000424D7601000000000000760000002800000020000000100000000100
             0400000000000001000000000000000000001000000010000000000000000000
@@ -351,12 +411,20 @@ object frmPiperGraph: TfrmPiperGraph
             33333337F3FF7F3733333330F08F0F0333333337F7737F7333333330FFFF0033
             33333337FFFF7733333333300000033333333337777773333333}
           NumGlyphs = 2
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 1
+          OnClick = BitBtn2Click
         end
         object rgOrientation: TRadioGroup
-          Left = 156
+          Left = 123
           Top = 0
-          Width = 230
-          Height = 41
+          Width = 182
+          Height = 32
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Caption = 'Orientation'
           Columns = 2
           ItemIndex = 0
@@ -370,20 +438,28 @@ object frmPiperGraph: TfrmPiperGraph
       object Panel3: TPanel
         Left = 0
         Top = 0
-        Width = 793
-        Height = 388
+        Width = 795
+        Height = 413
+        Margins.Left = 2
+        Margins.Top = 2
+        Margins.Right = 2
+        Margins.Bottom = 2
         Align = alClient
         Color = clWindow
         TabOrder = 0
         object PaintBox1: TPaintBox
-          Left = 66
+          Left = 52
           Top = 1
-          Width = 661
-          Height = 386
+          Width = 691
+          Height = 411
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Align = alClient
           Font.Charset = ANSI_CHARSET
           Font.Color = clWindowText
-          Font.Height = -15
+          Font.Height = -12
           Font.Name = 'Times New Roman'
           Font.Style = []
           ParentFont = False
@@ -391,35 +467,52 @@ object frmPiperGraph: TfrmPiperGraph
           OnMouseMove = PaintBox1MouseMove
           OnMouseUp = PaintBox1MouseUp
           OnPaint = PaintBox1Paint
+          ExplicitWidth = 522
+          ExplicitHeight = 305
         end
         object shpLeft: TShape
           Left = 1
           Top = 1
-          Width = 65
-          Height = 386
+          Width = 51
+          Height = 411
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Align = alLeft
           Brush.Color = clBtnFace
           Pen.Color = clBtnFace
           Visible = False
+          ExplicitHeight = 305
         end
         object shpRight: TShape
-          Left = 727
+          Left = 743
           Top = 1
-          Width = 65
-          Height = 386
+          Width = 51
+          Height = 411
+          Margins.Left = 2
+          Margins.Top = 2
+          Margins.Right = 2
+          Margins.Bottom = 2
           Align = alRight
           Brush.Color = clBtnFace
           Pen.Color = clBtnFace
           Visible = False
+          ExplicitLeft = 574
+          ExplicitHeight = 305
         end
       end
     end
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 469
-    Width = 801
+    Top = 480
+    Width = 803
     Height = 19
+    Margins.Left = 2
+    Margins.Top = 2
+    Margins.Right = 2
+    Margins.Bottom = 2
     Panels = <>
   end
   object PrinterSetupDialog1: TPrinterSetupDialog

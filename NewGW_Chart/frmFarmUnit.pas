@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ExtCtrls, TeeProcs, TeEngine, Chart, StdCtrls, CheckLst,
   JvExCheckLst, JvCheckListBox, Contnrs, RealListUnit, IntListUnit, Series,
-  TeeEdit, MyFormUnit, JvPageList, JvExControls;
+  TeeEdit, MyFormUnit, JvPageList, JvExControls, VclTee.TeeGDIPlus;
 
 type
   TFarmFileType = (fftNone, fftBudget, fftSupplyAndDemand);
@@ -927,11 +927,11 @@ end;
 
 procedure TfrmFarm.miFormatChart1Click(Sender: TObject);
 begin
-  mHHelp.ChmFile := ChartHelpFileName;
+  Application.HelpFile := ChartHelpFileName;
   try
     ChartEditor1.Execute;
   finally
-    mHHelp.ChmFile := HelpFileName;
+    Application.HelpFile := HelpFileName;
   end;
 end;
 

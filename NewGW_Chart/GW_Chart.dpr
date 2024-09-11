@@ -1,6 +1,6 @@
 program GW_Chart;
 
-{%ToDo 'GW_Chart.todo'}
+
 
 uses
   FastMM4 in 'FastMM4.pas',
@@ -21,9 +21,6 @@ uses
   frmSelectDiscretizationUnit in 'frmSelectDiscretizationUnit.pas' {frmSelectDiscretization},
   framFilePathUnit in 'framFilePathUnit.pas' {framFilePath: TFrame},
   RealListUnit in 'RealListUnit.pas',
-  hh_funcs in 'hh_funcs.pas',
-  hh in 'hh.pas',
-  D6OnHelpFix in 'D6OnHelpFix.pas',
   ReadModflowArrayUnit in 'ReadModflowArrayUnit.pas',
   frmConvertFlowsUnit in 'frmConvertFlowsUnit.pas' {frmConvertFlows},
   ObjectStringList in 'ObjectStringList.pas',

@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "GW_Chart"
-#define MyAppVersion "1.30.0"
+#define MyAppVersion "1.31.0"
 #define MyAppPublisher "U. S. Geological Survey"
-#define MyAppURL "https://www.usgs.gov/software/gwchart-a-program-creating-specialized-graphs-used-groundwater-studies"
+#define MyAppURL "https://www.usgs.gov/software/gwchart-program-creating-specialized-graphs-used-groundwater-studies"
 #define MyAppExeName "Gw_chart.exe"
 
 [Setup]
@@ -22,10 +22,10 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={commonpf}\USGS\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputBaseFilename=setup_GW_Chart_{#MyAppVersion}
-SetupIconFile=C:\ModelingTools\GW_Chart\Gw_chart.ico
+SetupIconFile=D:\ModelingTools\NewGW_Chart\Gw_chart.ico
 Compression=lzma
 SolidCompression=yes
-InfoAfterFile=C:\ModelingTools\GW_Chart\ReadMe.txt
+InfoAfterFile=D:\ModelingTools\NewGW_Chart\ReadMe.txt
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -35,14 +35,14 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "C:\ModelingTools\GW_Chart\Gw_chart.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\ModelingTools\GW_Chart\Help\Gw_chart.chm"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\ModelingTools\GW_Chart\lf90wiod.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\ModelingTools\GW_Chart\ReadFlow.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\ModelingTools\GW_Chart\ReadFlow96.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\ModelingTools\GW_Chart\TeeUser6.chm"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\ModelingTools\GW_Chart\lf90.eer"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\ModelingTools\GW_Chart\ReadMe.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\Gw_chart.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\Help\Gw_chart.chm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\lf90wiod.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\ReadFlow.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\ReadFlow96.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\TeeUser9.chm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\lf90.eer"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\ReadMe.txt"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -97,8 +97,6 @@ object frmModChart: TfrmModChart
     OnMouseDown = chartModflowMouseDown
     OnMouseMove = chartModflowMouseMove
     OnMouseUp = chartModflowMouseUp
-    ExplicitLeft = 2
-    ExplicitTop = 35
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 0
     object SerDataPoints: TPointSeries
@@ -576,6 +574,10 @@ object frmModChart: TfrmModChart
         TabOrder = 0
         object tabControls: TTabSheet
           Caption = 'Controls'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           DesignSize = (
             224
             401)
@@ -661,6 +663,10 @@ object frmModChart: TfrmModChart
         object tabGroups: TTabSheet
           Caption = 'Groups'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object treeGroups1: TTreeView
             Left = 0
             Top = 0
@@ -688,6 +694,10 @@ object frmModChart: TfrmModChart
         TabOrder = 0
         object tabDataOrderControls: TTabSheet
           Caption = 'Controls'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblN: TLabel
             Left = 72
             Top = 332
@@ -773,6 +783,10 @@ object frmModChart: TfrmModChart
         object tabSeries: TTabSheet
           Caption = 'Series'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblNumberOfSeries: TLabel
             Left = 72
             Top = 123
@@ -1018,6 +1032,10 @@ object frmModChart: TfrmModChart
         TabOrder = 0
         object tabWhatToPlot: TTabSheet
           Caption = 'Plot choice'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object gbWhatToPlotPC: TGroupBox
             Left = 7
             Top = 0
@@ -1132,6 +1150,10 @@ object frmModChart: TfrmModChart
         object tabInfo: TTabSheet
           Caption = 'Information'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblPcExpl1: TLabel
             Left = 8
             Top = 0
@@ -1197,6 +1219,10 @@ object frmModChart: TfrmModChart
         TabOrder = 0
         object tabLinpControls: TTabSheet
           Caption = 'Controls'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object cbScale_linp: TCheckBox95
             Left = 7
             Top = 0
@@ -1304,6 +1330,10 @@ object frmModChart: TfrmModChart
         object tabLinpPlotSymbols: TTabSheet
           Caption = 'Plot Symbols'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object clbLinpPlotSymbol: TCheckListBox
             Left = 0
             Top = 0
@@ -1334,6 +1364,10 @@ object frmModChart: TfrmModChart
         TabOrder = 0
         object tabIntconfControls: TTabSheet
           Caption = 'Controls'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblAdditionalFiles: TLabel
             Left = 8
             Top = 168
@@ -1393,6 +1427,10 @@ object frmModChart: TfrmModChart
         object tabWarnings: TTabSheet
           Caption = 'Warnings'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblRedCI: TLabel
             Left = 8
             Top = 108
@@ -1444,6 +1482,10 @@ object frmModChart: TfrmModChart
         TabOrder = 0
         object tabDataControls: TTabSheet
           Caption = 'Data'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblBlueRedDescripton: TLabel
             Left = 8
             Top = 336
@@ -1502,6 +1544,10 @@ object frmModChart: TfrmModChart
         object tabOptions: TTabSheet
           Caption = 'Options'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           DesignSize = (
             224
             401)
@@ -1621,6 +1667,10 @@ object frmModChart: TfrmModChart
         object tabLegend: TTabSheet
           Caption = 'Legend'
           ImageIndex = 2
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           DesignSize = (
             224
             401)
@@ -1801,6 +1851,10 @@ object frmModChart: TfrmModChart
         TabOrder = 0
         object tsBasic: TTabSheet
           Caption = 'Basic'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblN_AbsChg: TLabel
             Left = 64
             Top = 356
@@ -1860,6 +1914,10 @@ object frmModChart: TfrmModChart
         object tabParameters: TTabSheet
           Caption = 'Parameters'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object jvchklstParameters: TJvCheckListBox
             Left = 0
             Top = 0

@@ -3224,11 +3224,11 @@ end;
 
 procedure TfrmExtract.sbFormatClick(Sender: TObject);
 begin
-  mHHelp.ChmFile := ChartHelpFileName;
+  Application.HelpFile := ChartHelpFileName;
   try
     ChartEditor1.Execute;
   finally
-    mHHelp.ChmFile := HelpFileName;
+    Application.HelpFile := HelpFileName;
   end;
   {  frmFormat.GetData(ChartHydExtractor, 20);
     frmFormat.ShowModal; }

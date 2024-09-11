@@ -1,10 +1,10 @@
 object frmFarm: TfrmFarm
   Left = 554
   Top = 353
-  Width = 928
-  Height = 480
   HelpContext = 645
   Caption = 'Farm Budgets'
+  ClientHeight = 421
+  ClientWidth = 912
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,7 +13,6 @@ object frmFarm: TfrmFarm
   Font.Style = []
   Menu = mmFarm
   OldCreateOrder = False
-  Position = poDefaultPosOnly
   Scaled = False
   OnClose = FormClose
   OnCreate = FormCreate
@@ -37,11 +36,13 @@ object frmFarm: TfrmFarm
     Align = alClient
     Color = clWhite
     TabOrder = 0
+    DefaultCanvas = 'TGDIPlusCanvas'
     PrintMargins = (
       15
       20
       15
       20)
+    ColorPaletteIndex = 0
     object spl1: TSplitter
       Left = 1
       Top = 1
@@ -85,7 +86,9 @@ object frmFarm: TfrmFarm
           Height = 175
           OnClickCheck = clbFarmClickCheck
           Align = alClient
+          DoubleBuffered = False
           ItemHeight = 13
+          ParentDoubleBuffered = False
           TabOrder = 1
         end
         object pnl14: TPanel
@@ -131,7 +134,9 @@ object frmFarm: TfrmFarm
           Height = 185
           OnClickCheck = clbFarmClickCheck
           Align = alClient
+          DoubleBuffered = False
           ItemHeight = 13
+          ParentDoubleBuffered = False
           TabOrder = 1
         end
         object pnl18: TPanel
@@ -209,7 +214,9 @@ object frmFarm: TfrmFarm
               Height = 57
               OnClickCheck = clbDiscrepancyClickCheck
               Align = alClient
+              DoubleBuffered = False
               ItemHeight = 13
+              ParentDoubleBuffered = False
               TabOrder = 1
             end
             object pnl4: TPanel
@@ -246,7 +253,9 @@ object frmFarm: TfrmFarm
               Height = 57
               OnClickCheck = clbInMinusOutClickCheck
               Align = alClient
+              DoubleBuffered = False
               ItemHeight = 13
+              ParentDoubleBuffered = False
               TabOrder = 1
             end
             object pnl6: TPanel
@@ -296,7 +305,9 @@ object frmFarm: TfrmFarm
               Height = 304
               OnClickCheck = clbOutClickCheck
               Align = alClient
+              DoubleBuffered = False
               ItemHeight = 13
+              ParentDoubleBuffered = False
               TabOrder = 1
             end
             object pnl9: TPanel
@@ -333,7 +344,9 @@ object frmFarm: TfrmFarm
               Height = 304
               OnClickCheck = clbInClickCheck
               Align = alClient
+              DoubleBuffered = False
               ItemHeight = 13
+              ParentDoubleBuffered = False
               TabOrder = 1
             end
             object pnl11: TPanel
@@ -391,7 +404,9 @@ object frmFarm: TfrmFarm
             Height = 130
             OnClickCheck = clbDefFinalClickCheck
             Align = alClient
+            DoubleBuffered = False
             ItemHeight = 13
+            ParentDoubleBuffered = False
             TabOrder = 1
           end
           object pnl21: TPanel
@@ -428,7 +443,9 @@ object frmFarm: TfrmFarm
             Height = 130
             OnClickCheck = clbDefInitialClickCheck
             Align = alClient
+            DoubleBuffered = False
             ItemHeight = 13
+            ParentDoubleBuffered = False
             TabOrder = 1
           end
           object pnl23: TPanel
@@ -496,7 +513,9 @@ object frmFarm: TfrmFarm
           Height = 180
           OnClickCheck = clbFarmsSupplyDefClickCheck
           Align = alClient
+          DoubleBuffered = False
           ItemHeight = 13
+          ParentDoubleBuffered = False
           TabOrder = 1
         end
         object pnl26: TPanel
@@ -579,6 +598,10 @@ object frmFarm: TfrmFarm
     Chart = chtFarmPlot
     Options = [ceChange, ceTitle, ceHelp]
     Title = 'Editing Farm Budget Plot'
+    GalleryHeight = 0
+    GalleryWidth = 0
+    Height = 0
+    Width = 0
     Left = 368
     Top = 1
   end

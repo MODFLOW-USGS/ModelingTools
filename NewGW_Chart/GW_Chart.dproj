@@ -76,6 +76,8 @@
 			<DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+			<VerInfo_MinorVer>31</VerInfo_MinorVer>
+			<VerInfo_Keys>CompanyName=U.S. Geological Survey;FileDescription=;FileVersion=1.31.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=GW_Chart;ProductVersion=1.31.0.0;Comments=</VerInfo_Keys>
 			<Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
 			<VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
 			<DCC_DebugDCUs>true</DCC_DebugDCUs>
@@ -128,9 +130,6 @@
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
 			<DCCReference Include="RealListUnit.pas"/>
-			<DCCReference Include="hh_funcs.pas"/>
-			<DCCReference Include="hh.pas"/>
-			<DCCReference Include="D6OnHelpFix.pas"/>
 			<DCCReference Include="ReadModflowArrayUnit.pas"/>
 			<DCCReference Include="frmConvertFlowsUnit.pas">
 				<Form>frmConvertFlows</Form>

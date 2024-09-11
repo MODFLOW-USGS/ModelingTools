@@ -118,7 +118,7 @@ type
     tabPlot: TTabSheet;
     Panel1: TPanel;
     seNumPoints: TSpinEdit;
-    DataGrid1: TDataGrid;
+    DataGrid1: TECDataGrid;
     Panel2: TPanel;
     BitBtn2: TBitBtn;
     Panel3: TPanel;
