@@ -8,6 +8,8 @@ uses
   Buttons, ToolWin, ComCtrls, Strset, MyFormUnit, ReaderUnit, siComboBox,
   TeeEdit, VclTee.TeeGDIPlus;
 
+{#BACKUP  ..\Components\siComboBox\siComboBox.pas}
+
 type
   TfrmLakePlot = class(TMyForm)
     chrtLake: TChart;

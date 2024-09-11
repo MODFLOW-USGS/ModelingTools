@@ -1,9 +1,9 @@
 object frmAbout: TfrmAbout
   Left = 206
   Top = 122
-  Width = 650
-  Height = 500
   Caption = 'About'
+  ClientHeight = 461
+  ClientWidth = 634
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -420,9 +420,10 @@ object frmAbout: TfrmAbout
     Top = 416
     Width = 75
     Height = 25
+    Kind = bkClose
+    NumGlyphs = 2
     TabOrder = 2
     OnClick = btnOKClick
-    Kind = bkClose
   end
   object Memo1: TMemo
     Left = 8

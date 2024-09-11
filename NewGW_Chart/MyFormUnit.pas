@@ -17,6 +17,8 @@ type
     procedure RestoreMethod(Sender: TObject);
   end;
 
+{#BACKUP  ..\Components\SetWindowState\SetWindowStateUnit.pas}
+
 var
   MyForm: TMyForm;
 

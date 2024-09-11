@@ -14,6 +14,12 @@ he meant "total head."  Sounds like a good idea to me, since we typically
 are concerned with total hydraulic head, not pressure head. Alden Provost,
 April 11, 2006}
 
+{#BACKUP  ..\Components\ade\ArgusDataEntry.pas}
+{#BACKUP  ..\Components\datagrid\DataGrid.pas}
+{#BACKUP  ..\Components\datagrid\DataGrid.dcr}
+{#BACKUP  ..\Components\addbtn95\Addbtn95.pas}
+{#BACKUP  ..\Components\addbtn95\addbtn95_DXEpkg_Icon.ico}
+
 type
   TSutraCoordType = (sct2D, sct3D);
 

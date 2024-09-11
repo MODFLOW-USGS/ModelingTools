@@ -6,11 +6,17 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, TeeProcs, TeEngine, Chart, ExtCtrls, Series, Math, Buttons,
   Menus, IntListUnit, ComCtrls, ToolWin, contnrs, MyFormUnit, TeeEdit,
-  TeeComma, TeeScroB, ReaderUnit, ChartRangeUnit, TeeTools, //hh_funcs,
+  TeeComma, TeeScroB, ReaderUnit, ChartRangeUnit, TeeTools,
   JvPageList, JvExControls, addbtn95, ArgusDataEntry, CheckLst, basecombo,
   treecombo, Mask, JvExMask, JvSpin, BubbleCh, Grids, RbwDataGrid4,
   JvExCheckLst, JvCheckListBox, ObjectStringList, JvxCheckListBox, StatChar,
   RealListUnit, VclTee.TeeGDIPlus, Vcl.HtmlHelpViewer;
+
+{#BACKUP  ..\Components\Office\license.txt}
+{#BACKUP  ..\Components\Office\Sources\*.pas}
+{#BACKUP  ..\Components\Office\Sources\*.dfm}
+{#BACKUP  ..\Components\Office\Sources\*.inc}
+{#BACKUP  ..\Components\Office\Sources\*.dcr}
 
 type
   TFileType = (ftUnknown, ft_os, ft_ww, ft_ws, ft_sc, ft_sd, ft_s1, ft_nm,

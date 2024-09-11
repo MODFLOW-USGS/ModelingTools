@@ -26,6 +26,11 @@ type
     { Public declarations }
   end;
 
+{#BACKUP  ..\Components\aslink\ASLink.pas}
+{#BACKUP  ..\Components\aslink\ASLink.dcr}
+{#BACKUP  ..\Components\aslink\ASLink.txt}
+{#BACKUP  ..\Components\aslink\AsLinkPkg_Icon.ico}
+
 var
   frmAbout: TfrmAbout;
 

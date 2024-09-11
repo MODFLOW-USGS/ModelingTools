@@ -69,6 +69,9 @@ type
     { Public declarations }
   end;
 
+{#BACKUP  ..\Components\RbwDataGrid\RbwDataGrid4.pas}
+{#BACKUP  ..\Components\RbwDataGrid\RbwDataGridPkgXE_Icon.ico}
+
 var
   frmConvertFlows: TfrmConvertFlows;
 

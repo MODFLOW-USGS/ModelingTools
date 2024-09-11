@@ -57,7 +57,6 @@ object frmLakePlot: TfrmLakePlot
     Align = alClient
     Color = clWindow
     TabOrder = 1
-    ExplicitHeight = 392
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 0
   end
@@ -72,7 +71,7 @@ object frmLakePlot: TfrmLakePlot
     TabOrder = 0
     object Label1: TLabel
       Left = 0
-      Top = 2
+      Top = 0
       Width = 85
       Height = 25
       AutoSize = False
@@ -81,7 +80,7 @@ object frmLakePlot: TfrmLakePlot
     end
     object comboDataSource: TComboBox
       Left = 85
-      Top = 2
+      Top = 0
       Width = 132
       Height = 25
       Style = csDropDownList
