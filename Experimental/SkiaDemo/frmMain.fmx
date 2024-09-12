@@ -90,7 +90,7 @@ object Form2: TForm2
       Text = 'Label3'
       TabOrder = 5
     end
-    object Label4: TLabel
+    object LabelX: TLabel
       Position.Y = 193.000000000000000000
       Size.Width = 112.000000000000000000
       Size.Height = 65.000000000000000000
@@ -98,7 +98,7 @@ object Form2: TForm2
       TextSettings.Trimming = None
       Text = 'Label1'
       TabOrder = 0
-      object Label5: TLabel
+      object LabelY: TLabel
         Position.Y = 80.000000000000000000
         Size.Width = 112.000000000000000000
         Size.Height = 65.000000000000000000

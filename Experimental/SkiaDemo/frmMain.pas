@@ -52,8 +52,8 @@ type
     btnMultiply: TButton;
     btnDivide: TButton;
     Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
+    LabelX: TLabel;
+    LabelY: TLabel;
     procedure SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
       const ADest: TRectF; const AOpacity: Single);
     procedure btnOpenFileClick(Sender: TObject);
@@ -754,18 +754,21 @@ begin
   if FDisplayMag <> 0 then
   begin
    Label1.Text := X.ToString + ' ' + Y.ToString;
-//   + sLineBreak
 
-   Label4.Text := 'X = ' + ({FGridLimit.MaxX +} {FGridLimit.MinX + }
+   LabelX.Text := 'X = ' +
    (((X-FMove.X)/FDisplayMag)
-//   -FModelMove.X
-   )).ToString;
+   ).ToString
+   + sLineBreak
+   + self.X(x).ToString
+   ;
 
 
-   Label5.Text := 'Y = ' + (FGridLimit.MaxY + FGridLimit.MinY -
-   (((Y-FMove.Y)/FDisplayMag)
-//   -FModelMove.Y
-   )).ToString;
+   LabelY.Text := 'Y = ' + (FGridLimit.MaxY + FGridLimit.MinY -
+   ((Y-FMove.Y)/FDisplayMag)
+   ).ToString
+   + sLineBreak
+   + self.Y(Y).ToString
+   ;
   end;
 
    Label2.Text := FDisplayMag.ToString;
@@ -797,7 +800,8 @@ begin
   end
   else
   begin
-    result := XCoord / Magnification + OriginX;
+//    result := XCoord / Magnification + OriginX;
+    result := (XCoord-FMove.X)/FDisplayMag
   end;
 end;
 
@@ -869,14 +873,17 @@ end;
 
 function TForm2.Y(YCoord: single): extended;
 begin
-  if VerticalDirection = vdUp then
-  begin
-    YCoord := SkPaintBox1.Height - YCoord;
-  end;
+//  if VerticalDirection = vdUp then
+//  begin
+//    YCoord := SkPaintBox1.Height - YCoord;
+//  end;
 
   if ExaggerationDirection = edVertical then
   begin
-    result := YCoord / Magnification / FExaggeration + OriginY;
+//    result := YCoord / Magnification / FExaggeration + OriginY;
+    result := (FGridLimit.MaxY + FGridLimit.MinY -
+   ((YCoord-FMove.Y)/FDisplayMag)
+   )
   end
   else
   begin
