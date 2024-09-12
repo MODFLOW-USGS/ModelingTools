@@ -221,6 +221,9 @@ begin
   FVerticalDirection := vdUp;
   FCellList := TCellList.Create;
   FDisplayMag := 1;
+
+  FExaggeration := 2;
+  ExaggerationDirection:= edHorizontal;
 end;
 
 procedure TForm2.FormDestroy(Sender: TObject);
@@ -683,7 +686,14 @@ begin
 
     ACanvas.Translate(FMove.X, FMove.Y);
 
-    ACanvas.Scale(LocalMagnification,LocalMagnification);
+    if ExaggerationDirection = edHorizontal then
+    begin
+      ACanvas.Scale(LocalMagnification*FExaggeration,LocalMagnification);
+    end
+    else
+    begin
+      ACanvas.Scale(LocalMagnification,LocalMagnification*FExaggeration);
+    end;
 
     if Assigned(FGrid) then
     begin
@@ -764,7 +774,7 @@ begin
 
 
    LabelY.Text := 'Y = ' + (FGridLimit.MaxY + FGridLimit.MinY -
-   ((Y-FMove.Y)/FDisplayMag)
+   ((Y-FMove.Y)/FDisplayMag/FExaggeration)
    ).ToString
    + sLineBreak
    + self.Y(Y).ToString
@@ -796,7 +806,8 @@ begin
   end;
   if ExaggerationDirection = edHorizontal then
   begin
-    result := XCoord / Magnification / FExaggeration + OriginX;
+//    result := XCoord / Magnification / FExaggeration + OriginX;
+    result := (XCoord-FMove.X)/FDisplayMag/ FExaggeration
   end
   else
   begin
@@ -881,13 +892,12 @@ begin
   if ExaggerationDirection = edVertical then
   begin
 //    result := YCoord / Magnification / FExaggeration + OriginY;
-    result := (FGridLimit.MaxY + FGridLimit.MinY -
-   ((YCoord-FMove.Y)/FDisplayMag)
-   )
+    result := FGridLimit.MaxY + FGridLimit.MinY - (YCoord-FMove.Y)/FDisplayMag/FExaggeration
   end
   else
   begin
-    result := YCoord / Magnification + OriginY;
+    result := FGridLimit.MaxY + FGridLimit.MinY - (YCoord-FMove.Y)/FDisplayMag
+//    result := YCoord / Magnification + OriginY;
   end;
 end;
 
