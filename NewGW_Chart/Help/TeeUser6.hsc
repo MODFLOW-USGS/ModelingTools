@@ -1,6 +1,6 @@
 HelpScribble project file.
 16
-_vpuneq O. dvafgba-050Q35
+_vpuneq O. dvafgba-04P935
 0
 2
 TeeChart Pro v5 Editor help
@@ -25,7 +25,7 @@ TRUE
 TRUE
 TRUE
 FALSE
-FALSE
+TRUE
 150
 50
 600
