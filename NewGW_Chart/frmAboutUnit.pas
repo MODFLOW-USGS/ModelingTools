@@ -30,6 +30,7 @@ type
 {#BACKUP  ..\Components\aslink\ASLink.dcr}
 {#BACKUP  ..\Components\aslink\ASLink.txt}
 {#BACKUP  ..\Components\aslink\AsLinkPkg_Icon.ico}
+{#BACKUP  ..\Components\versinfo2\versinfo.pas}
 
 var
   frmAbout: TfrmAbout;

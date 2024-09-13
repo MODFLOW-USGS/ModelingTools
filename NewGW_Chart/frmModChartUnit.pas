@@ -17,6 +17,12 @@ uses
 {#BACKUP  ..\Components\Office\Sources\*.dfm}
 {#BACKUP  ..\Components\Office\Sources\*.inc}
 {#BACKUP  ..\Components\Office\Sources\*.dcr}
+{#BACKUP  Help\ColorPalette.bmp}
+{#BACKUP  Help\editortabs.bmp}
+{#BACKUP  Help\Gw_chart.hsc}
+{#BACKUP  Help\HelpButtonNew.bmp}
+{#BACKUP  Help\TeeUser9.hsc}
+{#BACKUP  ReadMe.txt}
 
 type
   TFileType = (ftUnknown, ft_os, ft_ww, ft_ws, ft_sc, ft_sd, ft_s1, ft_nm,

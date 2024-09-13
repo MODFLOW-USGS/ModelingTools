@@ -56,12 +56,12 @@ Writing
 
 
 FALSE
-18
+19
 {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fswiss Arial;}{\f1\froman Times New Roman;}{\f2\froman\fcharset0 Times New Roman;}{\f3\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue255;\red0\green128\blue0;\red128\green0\blue0;\red0\green0\blue0;}
 \viewkind4\uc1\pard\cf1\b\f0\fs32 GW_Chart\cf0\b0\fs20 
 \par \f1\fs24 
-\par GW_Chart is a program for creating specialized graphs used in ground-water studies.\f2  It can also be used to convert some of the binary files produced by MODFLOW to text files.\f1   It incorporates the functionality of two previous programs, Budgeteer and Hydrograph Extractor and adds additional new features.  There are \f2 seven \f1 major types of graphs created with GW_Chart:
+\par GW_Chart is a program for creating specialized graphs used in ground-water studies.\f2  It can also be used to convert some of the binary files produced by MODFLOW to text files.\f1   It incorporates the functionality of two previous programs, Budgeteer and Hydrograph Extractor and adds additional new features.  There are \f2 seven \f1 major types of graphs created with GW_Chart\f2  as well as a selection for converting budget files.\f1 
 \par 
 \par \cf2\strike Calibration Plots\cf3\strike0\{linkID=100\}\cf0 
 \par \cf2\strike Water Budget Plots\cf3\strike0\{linkID=350\}\cf0 
@@ -70,6 +70,7 @@ FALSE
 \par \cf2\strike Piper Diagrams\cf3\strike0\{linkID=600\}
 \par \cf2\strike Cell Water Budgets\f2  or Zeta\cf3\strike0\f1\{linkID=635\}
 \par \cf2\strike Farm Budgets\cf3\strike0\{linkID=645\}
+\par \cf2\strike Convert Cell \f2 Cell\f1  Budgets\f2  or Zeta\cf3\strike0\f1\{linkID=640\}
 \par \cf4\f3 
 \par To converting MODFLOW cell-by-cell budgets, select "Chart Type/Convert|\cf2\strike Convert Cell Water Budgets\cf3\strike0\{linkID=640\}\cf4 ".\cf0\f1 
 \par 
@@ -1299,7 +1300,7 @@ FALSE
 \par 
 \par GW_Chart can read the output files from\f2  a variety of programs including\f1  \cf2\strike ZONEBDGT (Harbaugh, 1990)\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike MODFLOW (McDonald and Harbaugh, 1988; Harbaugh and McDonald, 1996)\cf3\strike0\{linkID=1000\}\cf0 ,  \cf2\strike MOC3D (Konikow, and others 1996)\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike SUTRA (Voss, 1984\f2 ; Voss and Provost, 2002, Provost and Voss, 2019\f1 )\cf3\strike0\{linkID=1000\}\cf0 , \cf2\strike MT3D (Zheng,1990)\cf3\strike0\{linkID=1000\}\cf4\f2 ,\cf0  \cf2\strike HST3D (Kipp, 1997)\cf3\strike0\{linkID=1000\} \cf0 and \cf2\strike SEAWAT-2000 (Langevin dn others, 2000)\cf3\strike0\{linkID=1000\}\cf0\f1 .  It plots the results, and saves the data in a form that can be readily imported into spreadsheet programs.  It can also save the chart in the form of bitmaps, Windows metafiles and Enhanced Windows metafiles.  
 \par 
-\par To run extract water budgets, choose the Chart Type|Water Budget menu item.  Then select the radio-button corresponding to the type of file you wish to read. Next select File|Open or click the Open button.  A dialog box will appear.  Select an output file from ZONEBDGT, MODFLOW,\f2  MODFLOW 6,\f1  MOC3D\f2  or GWT\f1 , SUTRA\f2  09.97, SUTRA\f1 , MT3D\f2 , HST3D, SEAWAT-2000, or GSFLOW\f1  and click on the Open button.  The results will be plotted.  It is possible to control the \cf2\strike format of the plot\cf3\strike0\{linkID=20\}\cf0  in a number of ways.  There is a pair of radio buttons that allow the user to plot the results for either a single zone in a single time step or for all the time steps or a single zone.  If the user chooses to plot a single time step, the data will be plotted as a bar graph.  otherwise, it will be plotted as a line graph.  There are check-boxes that can be used to select which budget items will be plotted and combo-boxes in which it is possible to select the type of budget and time step to plot.  The latter is enabled only if the user chooses to plot data for a single time step.  If the user selects File|Save or clicks on the Save Data button, the data will be saved as a tab-delimited text file.  Such files can be readily imported into most commercial spreadsheets.  The program is designed to provide rapid analysis of budget data and a method of exporting the data in a form that other programs can readily utilize.
+\par To run extract water budgets, choose the Chart Type|Water Budget menu item.  Then select the radio-button corresponding to the type of file you wish to read. Next select File|Open or click the Open button.  A dialog box will appear.  Select an output file from ZONEBDGT, MODFLOW,\f2  MODFLOW 6,\f1  MOC3D\f2  or GWT\f1 , SUTRA\f2  09.97, "SUTRA 2 or 3), SUTRA 4,\f1  MT3D\f2 , HST3D, SEAWAT-2000, or GSFLOW\f1  and click on the Open button.  The results will be plotted.  It is possible to control the \cf2\strike format of the plot\cf3\strike0\{linkID=20\}\cf0  in a number of ways.  There is a pair of radio buttons that allow the user to plot the results for either a single zone in a single time step or for all the time steps or a single zone.  If the user chooses to plot a single time step, the data will be plotted as a bar graph.  otherwise, it will be plotted as a line graph.  There are check-boxes that can be used to select which budget items will be plotted and combo-boxes in which it is possible to select the type of budget and time step to plot.  The latter is enabled only if the user chooses to plot data for a single time step.  If the user selects File|Save or clicks on the Save Data button, the data will be saved as a tab-delimited text file.  Such files can be readily imported into most commercial spreadsheets.  The program is designed to provide rapid analysis of budget data and a method of exporting the data in a form that other programs can readily utilize.
 \par 
 \par \f2 For all the plots except for SUTRA, the user can click on a data point on the graph to show the stress period and time step of the data point.\f1 
 \par }
@@ -1543,7 +1544,7 @@ FALSE
 \par }
 640
 Scribble640
-Convert Cell Water Budgets
+Convert Cell Budgets or Zeta
 
 
 
@@ -1553,12 +1554,16 @@ Writing
 
 
 FALSE
-14
+18
 {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Arial;}{\f1\fnil\fcharset0 Times New Roman;}}
 {\colortbl ;\red0\green0\blue255;\red0\green0\blue0;}
-\viewkind4\uc1\pard\cf1\b\fs32 Convert Cell Water Budgets
+\viewkind4\uc1\pard\cf1\b\fs32 Convert Cell Budgets or Zeta
 \par \cf2\b0\f1\fs24 
-\par GW_Chart can extract data from the cell-by-cell water budget file produced by MODFLOW and save that information in text files. To do so, select "Chart Type/Convert|Convert Cell Water Budgets".  Then in the edit box at the top of the window, select one or more cell-by-cell water budget files.  GW_Chart will display the various budget terms in a table.  Check the check boxes for the ones you wish to convert and, if you choose, change the file extension.  Then click the "Convert" button.  The names of the files that are exported will be the same as the cell-by-cell water budget files except that the extension will be changed.
+\par GW_Chart can extract data from the cell-by-cell water budget file produced by MODFLOW and save that information in text files. To do so, select "Chart Type/Convert|Convert Cell Budgets or Zeta".  Then in the edit box at the top of the window, select one or more cell-by-cell water budget files.  GW_Chart will display the various budget terms in a table.  Check the check boxes for the ones you wish to convert and, if you choose, change the file extension.  Then click the "Convert" button.  The names of the files that are exported will be the same as the cell-by-cell water budget files except that the extension will be changed.
+\par 
+\par It is possible to convert the data for all cells or only certain selected cells using the options under "Cells to Export." If exporting data only for selected cells specify the layer, row, and column in the provided table. 
+\par 
+\par To export data to a single comma-separated values (.csv) file, check the "Write to a single CSV File" check box.
 \par 
 \par It is also possible to use GW_Chart to convert cell-by-cell water budget files from the command line.  To do so the user would start GW_Chart as follows
 \par 
@@ -1750,12 +1755,12 @@ FALSE
 1 Farm Budgets
 2 Farm Budgets=Scribble645
 1 Convert Cell Water Budgets
-2 Convert Cell Water Budgets=Scribble640
+2 Convert Cell Budgets or Zeta=Scribble640
 1 References
 2 References=Scribble1000
 1 Frequently Asked Questions (FAQ)
 2 Frequently Asked Questions (FAQ)=Scribble1010
-6
+7
 *InternetLink
 -2147483640
 Courier New
@@ -1828,6 +1833,19 @@ Arial
 16
 1
 B...
+0
+0
+0
+0
+0
+0
+<new macro>
+-16777208
+Times New Roman
+0
+12
+1
+....
 0
 0
 0

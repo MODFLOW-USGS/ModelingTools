@@ -13,7 +13,7 @@ released on condition that neither the USGS nor the U.S. Government shall be hel
 liable for any damages resulting from its authorized or unauthorized use.
 
 This version of GW_Chart is packaged for personal computers using
-the Microsoft Windows 7, 8, 8.1, or 10 operating systems.  Executable 
+the Microsoft Windows 7, 8, 8.1, 10, or 11 operating systems.  Executable 
 files for personal computers are provided as well as the source code.
 
 Instructions for installation, execution, and compiling are provided below.
@@ -32,17 +32,17 @@ Either version may be used for installing GW_Chart.  Both contain
 the same version of GW_Chart for use on personal computers:
 
 For 32 or 64-bit operating systems:
-         setup_GW_Chart_1.30.0.exe
-         GW_Chart_1_30.zip
+         setup_GW_Chart_1.31.0.exe
+         GW_Chart_1_31.zip
 
 Both distribution files contain:
 
           Compiled runfiles for GW_Chart.
           Compiled HTML Help (.chm) files.
 
-The file GW_ChartSource_1_30.zip contains the source code for GW_Chart. 
-
-GW_Chart_Help_Source_1_30.zip contains the source code for the GW_Chart Help.
+The file GW_ChartSource_1_31.zip contains the source code for GW_Chart. 
+The Help folder in GW_ChartSource_1_31.zip contains the source code for 
+the GW_Chart Help.
 The help is compiled with HelpScribble (https://www.helpscribble.com/index.html).
 
 B. INSTALLING

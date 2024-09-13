@@ -32,11 +32,11 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
-Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
+Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\ModelingTools\NewGW_Chart\Gw_chart.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\ModelingTools\NewGW_Chart\Help\Gw_chart.chm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\GW_Chart.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\ModelingTools\NewGW_Chart\Help\GW_Chart.chm"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\ModelingTools\NewGW_Chart\lf90wiod.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\ModelingTools\NewGW_Chart\ReadFlow.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\ModelingTools\NewGW_Chart\ReadFlow96.dll"; DestDir: "{app}"; Flags: ignoreversion

@@ -33614,5 +33614,10 @@ object TTaskHistory
       Date = 45547.000000000000000000
       Categories.Strings = (
         'Skia For Delphi Experiment')
+    end
+    item
+      Date = 45548.000000000000000000
+      Categories.Strings = (
+        'GW_Chart')
     end>
 end

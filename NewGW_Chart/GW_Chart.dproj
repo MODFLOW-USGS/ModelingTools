@@ -3,7 +3,7 @@
 			<ProjectGuid>{B9D98B7E-2C57-40D2-8CDB-3F8BD782E74B}</ProjectGuid>
 			<MainSource>GW_Chart.dpr</MainSource>
 			<Base>True</Base>
-			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Config Condition="'$(Config)'==''">Release</Config>
 			<TargetedPlatforms>1</TargetedPlatforms>
 			<AppType>Application</AppType>
 			<FrameworkType>VCL</FrameworkType>
