@@ -61,7 +61,9 @@ uses
   FastGEO in '..\..\ModelMuse\FastGEO.pas',
   GoPhastTypes in '..\..\ModelMuse\GoPhastTypes.pas',
   ColorSchemes in '..\..\ModelMuse\ColorSchemes.pas',
-  ColorSchemesInterface in '..\..\ModelMuse\ColorSchemesInterface.pas';
+  ColorSchemesInterface in '..\..\ModelMuse\ColorSchemesInterface.pas',
+  DrawFrame in 'DrawFrame.pas' {Frame1: TFrame},
+  FreeThread in 'FreeThread.pas';
 
 {$R *.res}
 

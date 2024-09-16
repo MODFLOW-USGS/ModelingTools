@@ -8,7 +8,7 @@ uses
   FMX.Skia, FMX.Skia.Canvas, FMX.StdCtrls, FMX.Controls.Presentation,
   System.ImageList, FMX.ImgList, FMX.Edit, FMX.Objects, FastGEO,
   Mf6.SimulationNameFileReaderUnit, System.Generics.Collections, FMX.Menus,
-  FMX.Memo.Types, FMX.ScrollBox, FMX.Memo;
+  FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, FMX.EditBox, FMX.NumberBox;
 
 type
   // @name indicates whether exaggeration is applied in
@@ -31,14 +31,6 @@ type
 
   TCellList = TList<ISkPath>;
 
-  TMyThread = class(TThread)
-  private
-    FAnObject: TObject;
-  public
-    procedure Execute; override;
-    constructor Create(AnObject: TObject);
-  end;
-
   TForm2 = class(TForm)
     SkPaintBox1: TSkPaintBox;
     Timer1: TTimer;
@@ -51,9 +43,10 @@ type
     Label2: TLabel;
     btnMultiply: TButton;
     btnDivide: TButton;
-    Label3: TLabel;
     LabelX: TLabel;
     LabelY: TLabel;
+    NumberBox1: TNumberBox;
+    Memo1: TMemo;
     procedure SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
       const ADest: TRectF; const AOpacity: Single);
     procedure btnOpenFileClick(Sender: TObject);
@@ -67,9 +60,10 @@ type
       Shift: TShiftState; X, Y: Single);
     procedure btnMultiplyClick(Sender: TObject);
     procedure btnDivideClick(Sender: TObject);
+    procedure NumberBox1Change(Sender: TObject);
   private
-    FGrid: ISkPath;
     FMf6Simulation: TMf6Simulation;
+    FGrid: ISkPath;
     FOriginX: double;
     FOriginY: Double;
     FMagnification: Double;
@@ -92,6 +86,7 @@ type
     FMove: TPointF;
     FModelMove: TPointF;
     FGridLimit: TFGridLimit;
+    ModelXCenter, ModelYCenter: double;
     procedure SetMagnification(const Value: double);
     procedure SetOriginX(const Value: double);
     procedure SetOriginY(const Value: double);
@@ -104,6 +99,10 @@ type
     procedure DecrementThreadCount(Sender: TObject);
     { Private declarations }
   public
+    property Mf6Simulation: TMf6Simulation read FMf6Simulation;
+    property GridAngle: double read FGridAngle;
+    property GridLimit: TFGridLimit read FGridLimit write FGridLimit;
+    function ScreenToReal(APoint: TPoint2D): TPoint2D;
     {X converts a screen coordinate into a real-number X coordinate.}
     function X(XCoord: single): extended;
     {XCoord converts a real-number X coordinate into a screen coordinate.}
@@ -151,7 +150,7 @@ implementation
 
 uses
   Mf6.NameFileReaderUnit, Mf6.CustomMf6PersistentUnit, Mf6.DisFileReaderUnit,
-  System.Math, Mf6.NpfFileReaderUnit, ColorSchemes;
+  System.Math, Mf6.NpfFileReaderUnit, ColorSchemes, FreeThread;
 
 {$R *.fmx}
 
@@ -222,8 +221,8 @@ begin
   FCellList := TCellList.Create;
   FDisplayMag := 1;
 
-  FExaggeration := 2;
-  ExaggerationDirection:= edHorizontal;
+//  FExaggeration := 2;
+//  ExaggerationDirection:= edHorizontal;
 end;
 
 procedure TForm2.FormDestroy(Sender: TObject);
@@ -234,6 +233,26 @@ begin
   end;
   FCellList.Free;
   FMf6Simulation.Free;
+end;
+
+procedure TForm2.NumberBox1Change(Sender: TObject);
+begin
+  if NumberBox1.Value > 0 then
+  begin
+    Exaggeration := NumberBox1.Value;
+    SkPaintBox1.Redraw;
+  end;
+end;
+
+function TForm2.ScreenToReal(APoint: TPoint2D): TPoint2D;
+var
+  Distance: double;
+begin
+  APoint.x := APoint.x - SkPaintBox1.Width/2;
+  APoint.y := APoint.Y - SkPaintBox1.Height/2;
+  Distance := Sqrt(Sqr(APoint.X) +Sqr(APoint.Y));
+  Result.x := ModelXCenter + Abs(Sin(FGridAngle)*Distance/Magnification)*Sign(APoint.x);
+  result.y := ModelYCenter - Abs(Cos(FGridAngle)*Distance/Magnification)*Sign(APoint.y);
 end;
 
 procedure TForm2.SetExaggeration(const Value: Double);
@@ -290,10 +309,10 @@ end;
 
 procedure TForm2.SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
   const ADest: TRectF; const AOpacity: Single);
-const
-  scale = 256.0;
-  R = 0.45 * scale;
-  TAU = 6.2831853;
+//const
+//  scale = 256.0;
+//  R = 0.45 * scale;
+//  TAU = 6.2831853;
 var
   PathBuilder: ISkPathBuilder;
   theta: single;
@@ -325,21 +344,24 @@ var
   APoint: TPoint2D;
   ModelXWidth, ModelYWidth {, ModelHeight}: double;
   MinY, MaxY, MinX, MaxX: double;
+  FXOrigin: double;
+  FYOrigin: double;
   function RotateFromGridCoordinatesToRealWorldCoordinates(
     const APoint: TPoint2D): TPoint2D;
   var
     temp: TPoint2D;
   begin
     result := APoint;
+    Exit;
     if FGridAngle <> 0 then
     begin
-      result.x := result.x - FGridLimit.MinX;
-      result.y := result.y - FGridLimit.MaxY;
-      temp.X := Cos(FGridAngle) * result.X - Sin(FGridAngle) * result.Y;
-      temp.Y := Sin(FGridAngle) * result.X + Cos(FGridAngle) * result.Y;
+      result.x := result.x - FXOrigin;
+      result.y := result.y - FYOrigin;
+      temp.X := Cos(-FGridAngle) * result.X - Sin(-FGridAngle) * result.Y;
+      temp.Y := Sin(-FGridAngle) * result.X + Cos(-FGridAngle) * result.Y;
       result := temp;
-      result.x := result.x + FGridLimit.MinX;
-      result.y := result.y + FGridLimit.MaxY;
+      result.x := result.x + FXOrigin;
+      result.y := result.y + FYOrigin;
     end;
   end;
 begin
@@ -356,6 +378,9 @@ begin
   begin
     Cursor := crHourGlass;
     try
+      FMove.X := 0;
+      FMove.Y := 0;
+      memo1.Lines.Clear;
       for var ModelIndex := 0 to FMf6Simulation.Models.Count - 1 do
       begin
         AModel := FMf6Simulation.Models[ModelIndex];
@@ -375,7 +400,7 @@ begin
           if DisPackage <> nil then
           begin
             FRotationAngle := -DisPackage.Options.ANGROT;
-            FGridAngle := FRotationAngle*Pi/180;
+            FGridAngle := FRotationAngle/180*pi;
 
             for var PackageIndex := 0 to Packages.Count - 1 do
             begin
@@ -395,6 +420,8 @@ begin
       if DisPackage <> nil then
       begin
         GridData := DisPackage.GridData;
+        FXOrigin := DisPackage.Options.XORIGIN;
+        FYOrigin := DisPackage.Options.YORIGIN;
         FGridLimit.MinX := DisPackage.Options.XORIGIN;
         FGridLimit.MaxX := DisPackage.Options.XORIGIN;
         for ColIndex := 0 to Length(GridData.DELR) - 1 do
@@ -664,12 +691,30 @@ begin
 
           ModelXWidth := MaxX-MinX;
           ModelYWidth := MaxY-MinY;
+
+          APoint.x := (RowStart+RowEnd)/2;
+          APoint.Y := (ColBottom+ColTop)/2;
+          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
+
+          ModelXCenter := APoint.x;
+          ModelYCenter := APoint.Y;
+        end
+        else
+        begin
+          ModelXCenter := (FGridLimit.MaxX+FGridLimit.MinX)/2;
+          ModelYCenter := (FGridLimit.MaxY+FGridLimit.MinY)/2;
         end;
 
 
-        Magnification :=// 0.9 *
+        Magnification :=  0.9 *
           Min(SkPaintBox1.Width / ModelXWidth,
           SkPaintBox1.Height / ModelYWidth);
+
+//        ModelXCenter := XCoord(ModelXCenter);
+//        ModelYCenter := YCoord(ModelYCenter);
+        Memo1.Lines.Add((ModelXCenter).ToString + ', ' + (ModelYCenter).ToString);
+//        FMove.X := SkPaintBox1.Width/2 -ModelXCenter;
+//        FMove.Y := -(SkPaintBox1.Height/2 - ModelYCenter);
       end;
 
     finally
@@ -683,8 +728,7 @@ begin
   Label2.Text := LocalMagnification.ToString;
 
   try
-
-    ACanvas.Translate(FMove.X, FMove.Y);
+    ACanvas.Rotate(FRotationAngle, SkPaintBox1.Width/2, SkPaintBox1.Height/2);
 
     if ExaggerationDirection = edHorizontal then
     begin
@@ -694,6 +738,7 @@ begin
     begin
       ACanvas.Scale(LocalMagnification,LocalMagnification*FExaggeration);
     end;
+//    ACanvas.Translate(FMove.X, FMove.Y);
 
     if Assigned(FGrid) then
     begin
@@ -760,24 +805,34 @@ end;
 
 procedure TForm2.SkPaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Single);
+var
+  APoint: TPoint2D;
 begin
   if FDisplayMag <> 0 then
   begin
    Label1.Text := X.ToString + ' ' + Y.ToString;
 
-   LabelX.Text := 'X = ' +
-   (((X-FMove.X)/FDisplayMag)
-   ).ToString
-   + sLineBreak
-   + self.X(x).ToString
+   APoint.x := X;
+   APoint.y := Y;
+   APoint := ScreenToReal(APoint);
+
+   LabelX.Text := 'X = '
+//    +
+//   (((X-FMove.X)/FDisplayMag)
+//   ).ToString
+//   + sLineBreak
+//   + self.X(x).ToString
+   + APoint.x.ToString
    ;
 
 
-   LabelY.Text := 'Y = ' + (FGridLimit.MaxY + FGridLimit.MinY -
-   ((Y-FMove.Y)/FDisplayMag/FExaggeration)
-   ).ToString
-   + sLineBreak
-   + self.Y(Y).ToString
+   LabelY.Text := 'Y = '
+//   + (FGridLimit.MaxY + FGridLimit.MinY -
+//   ((Y-FMove.Y)/FDisplayMag/FExaggeration)
+//   ).ToString
+//   + sLineBreak
+//   + self.Y(Y).ToString
+   + APoint.y.ToString
    ;
   end;
 
@@ -791,9 +846,9 @@ begin
   begin
     FStartMove := False;
     FStopPoint := PointF(X, Y);
-    FMove := (FStopPoint - FStartPoint) + FMove;
+//    FMove := (FStopPoint - FStartPoint) + FMove;
     FModelMove := (FStopPoint - FStartPoint)/FDisplayMag + FModelMove;
-    Label3.Text := (FModelMove.X).ToString + ', ' + (FModelMove.Y).ToString;
+//    Memo1.Lines.Add((FMove.X).ToString + ', ' + (FMove.Y).ToString);
     SkPaintBox1.Redraw;
   end;
 end;
@@ -806,13 +861,11 @@ begin
   end;
   if ExaggerationDirection = edHorizontal then
   begin
-//    result := XCoord / Magnification / FExaggeration + OriginX;
-    result := (XCoord-FMove.X)/FDisplayMag/ FExaggeration
+    result := (XCoord-FMove.X)/Magnification/ FExaggeration
   end
   else
   begin
-//    result := XCoord / Magnification + OriginX;
-    result := (XCoord-FMove.X)/FDisplayMag
+    result := (XCoord-FMove.X)/Magnification
   end;
 end;
 
@@ -830,6 +883,8 @@ begin
     begin
       temp := X;
     end;
+
+    result := temp*Magnification + FMove.X;
     {$ELSE}
     if ExaggerationDirection = edHorizontal then
     begin
@@ -844,17 +899,17 @@ begin
       temp := ClientWidth - temp;
     end;
     {$ENDIF}
-    if temp > High(Integer) then
+    if result > High(Integer) then
     begin
       result := High(Integer);
     end
-    else if temp < Low(Integer) then
+    else if result < Low(Integer) then
     begin
       result := Low(Integer);
-    end
-    else
-    begin
-      result := temp;
+//    end
+//    else
+//    begin
+//      result := temp;
     end;
   except
     on EOverflow do
@@ -884,20 +939,15 @@ end;
 
 function TForm2.Y(YCoord: single): extended;
 begin
-//  if VerticalDirection = vdUp then
-//  begin
-//    YCoord := SkPaintBox1.Height - YCoord;
-//  end;
-
   if ExaggerationDirection = edVertical then
   begin
-//    result := YCoord / Magnification / FExaggeration + OriginY;
-    result := FGridLimit.MaxY + FGridLimit.MinY - (YCoord-FMove.Y)/FDisplayMag/FExaggeration
+    result := FGridLimit.MaxY + FGridLimit.MinY - (YCoord-FMove.Y)/Magnification/FExaggeration;
+//    result := {FGridLimit.MaxY + FGridLimit.MinY -} (YCoord-FMove.Y)/Magnification/FExaggeration;
   end
   else
   begin
-    result := FGridLimit.MaxY + FGridLimit.MinY - (YCoord-FMove.Y)/FDisplayMag
-//    result := YCoord / Magnification + OriginY;
+    result := FGridLimit.MaxY + FGridLimit.MinY - (YCoord-FMove.Y)/Magnification;
+//    result := {FGridLimit.MaxY + FGridLimit.MinY -} (YCoord-FMove.Y)/Magnification;
   end;
 end;
 
@@ -907,14 +957,19 @@ var
 begin
   try
   {$IFDEF FullSizeTest}
+//    temp := Y;
+//    temp := -(Y - (FGridLimit.MaxY + FGridLimit.MinY));
+    temp := -(Y - (FGridLimit.MaxY {+ FGridLimit.MinY}));
+//    temp := (Y - ({FGridLimit.MaxY {+} FGridLimit.MinY));
     if ExaggerationDirection = edVertical then
     begin
-      temp := Y * FExaggeration
+      temp := temp * FExaggeration
     end
     else
     begin
-      temp := Y
+      temp := temp
     end;
+    result := (temp * Magnification + FMove.Y);
 //    if VerticalDirection = vdUp then
 //    begin
 //      temp := ClientHeight - temp;
@@ -933,17 +988,17 @@ begin
       temp := ClientHeight - temp;
     end;
     {$ENDIF}
-    if temp > High(Integer) then
+    if result > High(Integer) then
     begin
       result := High(Integer);
     end
-    else if temp < Low(Integer) then
+    else if result < Low(Integer) then
     begin
       result := Low(Integer);
-    end
-    else
-    begin
-      result := temp;
+//    end
+//    else
+//    begin
+//      result := temp;
     end;
   except on EOverflow do
     begin
@@ -968,21 +1023,6 @@ begin
       end;
     end;
   end;
-end;
-
-{ TMyThread }
-
-constructor TMyThread.Create(AnObject: TObject);
-begin
-  FAnObject := AnObject;
-  FreeOnTerminate := True;
-  inherited Create(True);
-end;
-
-procedure TMyThread.Execute;
-begin
-  FAnObject.Free;
-  
 end;
 
 end.

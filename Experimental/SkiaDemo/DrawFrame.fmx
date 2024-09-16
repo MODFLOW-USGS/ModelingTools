@@ -1,0 +1,12 @@
+object Frame1: TFrame1
+  Size.Width = 320.000000000000000000
+  Size.Height = 240.000000000000000000
+  Size.PlatformDefault = False
+  object SkPaintBox1: TSkPaintBox
+    Align = Client
+    HitTest = True
+    Size.Width = 320.000000000000000000
+    Size.Height = 240.000000000000000000
+    Size.PlatformDefault = False
+  end
+end
