@@ -194,8 +194,8 @@
         <DCCReference Include="..\..\ModelMuse\GoPhastTypes.pas"/>
         <DCCReference Include="..\..\ModelMuse\ColorSchemes.pas"/>
         <DCCReference Include="..\..\ModelMuse\ColorSchemesInterface.pas"/>
-        <DCCReference Include="DrawFrame.pas">
-            <Form>Frame1</Form>
+        <DCCReference Include="DrawFrameUnit.pas">
+            <Form>DrawFrame</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -905,6 +905,9 @@
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Win64x">
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>

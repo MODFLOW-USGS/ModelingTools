@@ -8,17 +8,10 @@ uses
   FMX.Skia, FMX.Skia.Canvas, FMX.StdCtrls, FMX.Controls.Presentation,
   System.ImageList, FMX.ImgList, FMX.Edit, FMX.Objects, FastGEO,
   Mf6.SimulationNameFileReaderUnit, System.Generics.Collections, FMX.Menus,
-  FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, FMX.EditBox, FMX.NumberBox;
+  FMX.Memo.Types, FMX.ScrollBox, FMX.Memo, FMX.EditBox, FMX.NumberBox,
+  DrawFrameUnit;
 
 type
-  // @name indicates whether exaggeration is applied in
-  // a vertical or horizontal direction.
-  // See TQRbwZoomBox2.@link(TQRbwZoomBox2.ExaggerationDirection).
-  TExaggerationDirection = (edVertical, edHorizontal);
-  { See TQRbwZoomBox2.@link(TQRbwZoomBox2.VerticalDirection).}
-  TVerticalDirection = (vdDown, vdUp);
-  { See TQRbwZoomBox2.@link(TQRbwZoomBox2.HorizontalDirection).}
-  THorizontalDirection = (hdRight, hdLeft);
 
   TFGridLimit = record
     MinX: double;
@@ -64,10 +57,8 @@ type
   private
     FMf6Simulation: TMf6Simulation;
     FGrid: ISkPath;
-    FOriginX: double;
-    FOriginY: Double;
     FMagnification: Double;
-    FHorizontalDirection: THorizontalDirection;
+//    FHorizontalDirection: THorizontalDirection;
     FVerticalDirection: TVerticalDirection;
     FExaggerationDirection: TExaggerationDirection;
     FExaggeration: Double;
@@ -84,14 +75,11 @@ type
     FStartPoint: TPointF;
     FStopPoint: TPointF;
     FMove: TPointF;
-    FModelMove: TPointF;
     FGridLimit: TFGridLimit;
     ModelXCenter, ModelYCenter: double;
     procedure SetMagnification(const Value: double);
-    procedure SetOriginX(const Value: double);
-    procedure SetOriginY(const Value: double);
     procedure SetExaggerationDirection(const Value: TExaggerationDirection);
-    procedure SetHorizontalDirection(const Value: THorizontalDirection);
+//    procedure SetHorizontalDirection(const Value: THorizontalDirection);
     procedure SetVerticalDirection(const Value: TVerticalDirection);
     procedure SetExaggeration(const Value: Double);
     procedure SetTopPosition(const XCoordinate, YCoordinate: Double);
@@ -102,7 +90,6 @@ type
     property Mf6Simulation: TMf6Simulation read FMf6Simulation;
     property GridAngle: double read FGridAngle;
     property GridLimit: TFGridLimit read FGridLimit write FGridLimit;
-    function ScreenToReal(APoint: TPoint2D): TPoint2D;
     {X converts a screen coordinate into a real-number X coordinate.}
     function X(XCoord: single): extended;
     {XCoord converts a real-number X coordinate into a screen coordinate.}
@@ -111,17 +98,13 @@ type
     function Y(YCoord: single): extended;
     {YCoord converts a real-number Y coordinate into a screen coordinate.}
     function YCoord(Y: extended): single;
+    function ScreenToReal(APoint: TPoint2D): TPoint2D;
+    function RealToScreen(APoint: TPoint2D): TPoint2D;
     // @name is the ratio of distances in screen coordinates to
     // corresponding distances in real-world coordinates.
     // Usually @name is not set directly. See @link(BeginZoom),
     // @link(FinishZoom), @link(ZoomBy) and @link(ZoomByAt).
     property Magnification: double read FMagnification write SetMagnification;
-    // @name is the screen X-coordinate that corresponds to a
-    // real-world X-coordinate of zero.
-    property OriginX: double read FOriginX write SetOriginX;
-    // @name is the screen Y-coordinate that corresponds to a
-    // real-world Y-coordinate of zero.
-    property OriginY: double read FOriginY write SetOriginY;
     // @name is used to allow either vertical or horizontal exaggeration.
     // @name affects how screen coordinates map to real-world coordinates.
     // See @link(ExaggerationDirection).
@@ -133,8 +116,8 @@ type
     { @name indicates the direction in which the X-coordinates increase.
       hdRight indicates they increase towards the right,
       hdLeft indicates they increase towards the left.}
-    property HorizontalDirection: THorizontalDirection
-      read FHorizontalDirection write SetHorizontalDirection;
+//    property HorizontalDirection: THorizontalDirection
+//      read FHorizontalDirection write SetHorizontalDirection;
     { @name indicates the direction in which the Y-coordinates increase.
       vdDown indicates they increase downward,
       vdUp indicates they increase upward.}
@@ -193,10 +176,6 @@ begin
 end;
 
 function TForm2.Color2AlphaColor(AColor: TColor): TAlphaColor;
-//var
-//  C1: Integer;
-//  C2: Integer;
-//  C3: Integer;
 begin
   if AColor < 0 then
   begin
@@ -213,16 +192,11 @@ end;
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
-  FOriginX := 0;
-  FOriginY := 0;
   FMagnification := 1;
   FExaggeration := 1;
   FVerticalDirection := vdUp;
   FCellList := TCellList.Create;
   FDisplayMag := 1;
-
-//  FExaggeration := 2;
-//  ExaggerationDirection:= edHorizontal;
 end;
 
 procedure TForm2.FormDestroy(Sender: TObject);
@@ -244,15 +218,16 @@ begin
   end;
 end;
 
-function TForm2.ScreenToReal(APoint: TPoint2D): TPoint2D;
-var
-  Distance: double;
+function TForm2.RealToScreen(APoint: TPoint2D): TPoint2D;
 begin
-  APoint.x := APoint.x - SkPaintBox1.Width/2;
-  APoint.y := APoint.Y - SkPaintBox1.Height/2;
-  Distance := Sqrt(Sqr(APoint.X) +Sqr(APoint.Y));
-  Result.x := ModelXCenter + Abs(Sin(FGridAngle)*Distance/Magnification)*Sign(APoint.x);
-  result.y := ModelYCenter - Abs(Cos(FGridAngle)*Distance/Magnification)*Sign(APoint.y);
+  result.x := XCoord(APoint.x);
+  result.y := YCoord(APoint.y);
+end;
+
+function TForm2.ScreenToReal(APoint: TPoint2D): TPoint2D;
+begin
+  result.x := X(APoint.x);
+  result.y := Y(APoint.y);
 end;
 
 procedure TForm2.SetExaggeration(const Value: Double);
@@ -265,40 +240,24 @@ begin
   FExaggerationDirection := Value;
 end;
 
-procedure TForm2.SetHorizontalDirection(const Value: THorizontalDirection);
-begin
-  FHorizontalDirection := Value;
-end;
+//procedure TForm2.SetHorizontalDirection(const Value: THorizontalDirection);
+//begin
+//  FHorizontalDirection := Value;
+//end;
 
 procedure TForm2.SetMagnification(const Value: double);
 begin
   FMagnification := Value;
 end;
 
-procedure TForm2.SetOriginX(const Value: double);
-begin
-  FOriginX := Value;
-end;
-
-procedure TForm2.SetOriginY(const Value: double);
-begin
-  FOriginY := Value;
-end;
-
 procedure TForm2.SetTopPosition(const XCoordinate, YCoordinate: Double);
 var
   DeltaX, DeltaY: double;
 begin
-  {$IFDEF FullSizeTest}
-  OriginX := 0;
-  OriginY := 0;
   Exit;
-  {$ENDIF}
 
   DeltaX := (X(Round(SkPaintBox1.Width)) - X(0)) / 2;
   DeltaY := (Y(0) - Y(Round(SkPaintBox1.Height))) / 2;
-  OriginX := XCoordinate - DeltaX;
-  OriginY := YCoordinate - DeltaY;
 
 end;
 
@@ -309,10 +268,6 @@ end;
 
 procedure TForm2.SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
   const ADest: TRectF; const AOpacity: Single);
-//const
-//  scale = 256.0;
-//  R = 0.45 * scale;
-//  TAU = 6.2831853;
 var
   PathBuilder: ISkPathBuilder;
   theta: single;
@@ -352,7 +307,6 @@ var
     temp: TPoint2D;
   begin
     result := APoint;
-    Exit;
     if FGridAngle <> 0 then
     begin
       result.x := result.x - FXOrigin;
@@ -363,6 +317,9 @@ var
       result.x := result.x + FXOrigin;
       result.y := result.y + FYOrigin;
     end;
+    // Reverse Y direction because Skia y coordinate increases DOWNWARD
+    // instead of UPWARD.
+    result.y := -result.y;
   end;
 begin
   SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Raster;
@@ -440,35 +397,27 @@ begin
         FModelXCenter := (FGridLimit.MaxX + FGridLimit.MinX)/2;
         FModelYCenter := (FGridLimit.MaxY + FGridLimit.MinY)/2;
 
-        {$IFDEF FullSizeTest}
         Magnification := 1;
-        {$ENDIF}
 
         SetTopPosition((FGridLimit.MinX + FGridLimit.MaxX)/2,
           (FGridLimit.MinY + FGridLimit.MaxY)/2);
 
         SetLength(ColumnPositions, Length(GridData.DELR)+1);
 
-        ColTop  := {YCoord}(FGridLimit.MaxY);
-        ColBottom  := {YCoord}(FGridLimit.MinY);
+        ColTop  := FGridLimit.MaxY;
+        ColBottom  := FGridLimit.MinY;
         ColumnPosition := FGridLimit.MinX;
-        ColX := {XCoord}(ColumnPosition);
+        ColX := ColumnPosition;
         ColumnPositions[0] := ColX;
 
         APoint.x := ColX;
         APoint.y := ColBottom;
-        if FGridAngle <> 0 then
-        begin
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-        end;
+        APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
         PathBuilder.moveTo(APoint.x, APoint.y);
 
         APoint.x := ColX;
         APoint.y := ColTop;
-        if FGridAngle <> 0 then
-        begin
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-        end;
+        APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
         PathBuilder.lineTo(APoint.x, APoint.y);
 
         for ColIndex := 0 to Length(GridData.DELR) - 1 do
@@ -479,19 +428,13 @@ begin
 
           APoint.x := ColX;
           APoint.y := ColBottom;
-          if FGridAngle <> 0 then
-          begin
-            APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-          end;
+          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
 
           PathBuilder.moveTo(APoint.x, APoint.y);
 
           APoint.x := ColX;
           APoint.y := ColTop;
-          if FGridAngle <> 0 then
-          begin
-            APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-          end;
+          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
           PathBuilder.lineTo(APoint.x, APoint.y);
         end;
 
@@ -506,18 +449,12 @@ begin
 
         APoint.x := RowStart;
         APoint.y := RowY;
-        if FGridAngle <> 0 then
-        begin
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-        end;
+        APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
         PathBuilder.moveTo(APoint.x, APoint.y);
 
         APoint.x := RowEnd;
         APoint.y := RowY;
-        if FGridAngle <> 0 then
-        begin
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-        end;
+        APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
         PathBuilder.lineTo(APoint.x, APoint.y);
 
         for RowIndex := 0 to Length(GridData.DELC) -1 do
@@ -528,96 +465,58 @@ begin
 
           APoint.x := RowStart;
           APoint.y := RowY;
-          if FGridAngle <> 0 then
-          begin
-            APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-          end;
+          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
           PathBuilder.moveTo(APoint.x, APoint.y);
 
           APoint.x := RowEnd;
           APoint.y := RowY;
-          if FGridAngle <> 0 then
-          begin
-            APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-          end;
+          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
           PathBuilder.lineTo(APoint.x, APoint.y);
-
-//          PathBuilder.moveTo(RowStart, RowY);
-//            PathBuilder.lineTo(RowEnd, RowY);
         end;
 
         FGrid := PathBuilder.Detach;
 
-//        Memo1.Lines.BeginUpdate;
-//        Memo1.Lines.Clear;
-//        try
-//          PathData := SkPathToPathData(FGrid);
-//          for var Index := 0 to PathData.Count - 1 do
-//          begin
-//            Memo1.Lines.Add(PathData.Points[Index].Point.x.ToString + ' ' + PathData.Points[Index].Point.y.ToString)
-//          end;
-//        finally
-//          Memo1.Lines.EndUpdate;
-//        end;
-
         if NpfPackage <> nil then
         begin
-
           Inc(FThreadCount);
           MyThread := TMyThread.Create(FCellList);
           MyThread.OnTerminate := DecrementThreadCount;
           MyThread.Start;
           FCellList := TCellList.Create;
 
-          for RowIndex := 0 to Length(RowPositions) - 2 do
+          for RowIndex := Length(RowPositions) - 2 downto 0 do
           begin
             for ColIndex := 0 to Length(ColumnPositions) - 2 do
             begin
-
               APoint.x := ColumnPositions[ColIndex];
               APoint.y := RowPositions[RowIndex];
-              if FGridAngle <> 0 then
-              begin
-                APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-              end;
+              APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
               PathBuilder.moveTo(APoint.x, APoint.y);
 
-
               APoint.x := ColumnPositions[ColIndex+1];
               APoint.y := RowPositions[RowIndex];
-              if FGridAngle <> 0 then
-              begin
-                APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-              end;
+              APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
               PathBuilder.LineTo(APoint.x, APoint.y);
 
               APoint.x := ColumnPositions[ColIndex+1];
               APoint.y := RowPositions[RowIndex+1];
-              if FGridAngle <> 0 then
-              begin
-                APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-              end;
+              APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
               PathBuilder.LineTo(APoint.x, APoint.y);
 
               APoint.x := ColumnPositions[ColIndex];
               APoint.y := RowPositions[RowIndex+1];
-              if FGridAngle <> 0 then
-              begin
-                APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-              end;
+              APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
               PathBuilder.LineTo(APoint.x, APoint.y);
 
               APoint.x := ColumnPositions[ColIndex];
               APoint.y := RowPositions[RowIndex];
-              if FGridAngle <> 0 then
-              begin
-                APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-              end;
+              APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
               PathBuilder.LineTo(APoint.x, APoint.y);
 
               FCellList.Add(PathBuilder.Detach);
             end;
           end;
+
 
           Kx := NpfPackage.GridData.K;
           if Kx <> nil then
@@ -654,67 +553,61 @@ begin
       end
       else
       begin
-        if FGridAngle <> 0 then
-        begin
-          APoint.x := RowStart;
-          APoint.y := ColBottom;
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
+        APoint.x := ColumnPositions[0];
+        APoint.y := RowPositions[0];
+        APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
+        APoint.y := -APoint.y;
 
-          MinX := APoint.x;
-          MaxX := APoint.x;
-          MinY := APoint.y;
-          MaxY := APoint.Y;
+        MinX := APoint.x;
+        MaxX := APoint.x;
+        MinY := APoint.y;
+        MaxY := APoint.Y;
 
-          APoint.x := RowEnd;
-          APoint.y := ColBottom;
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-          MinX := Min(MinX, APoint.x);
-          MinY := Min(MinY, APoint.y);
-          MaxX := Max(MaxX, APoint.x);
-          MaxY := Max(MaxY, APoint.y);
+        APoint.x := ColumnPositions[Length(ColumnPositions)-1];
+        APoint.y := RowPositions[0];
+        APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
+        APoint.y := -APoint.y;
+        MinX := Min(MinX, APoint.x);
+        MinY := Min(MinY, APoint.y);
+        MaxX := Max(MaxX, APoint.x);
+        MaxY := Max(MaxY, APoint.y);
 
-          APoint.x := RowStart;
-          APoint.y := ColTop;
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-          MinX := Min(MinX, APoint.x);
-          MinY := Min(MinY, APoint.y);
-          MaxX := Max(MaxX, APoint.x);
-          MaxY := Max(MaxY, APoint.y);
+        APoint.x := ColumnPositions[0];
+        APoint.y := RowPositions[Length(RowPositions)-1];
+        APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
+        APoint.y := -APoint.y;
+        MinX := Min(MinX, APoint.x);
+        MinY := Min(MinY, APoint.y);
+        MaxX := Max(MaxX, APoint.x);
+        MaxY := Max(MaxY, APoint.y);
 
-          APoint.x := RowEnd;
-          APoint.y := ColTop;
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
-          MinX := Min(MinX, APoint.x);
-          MinY := Min(MinY, APoint.y);
-          MaxX := Max(MaxX, APoint.x);
-          MaxY := Max(MaxY, APoint.y);
+        APoint.x := ColumnPositions[Length(ColumnPositions)-1];
+        APoint.y := RowPositions[Length(RowPositions)-1];
+        APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
+        APoint.y := -APoint.y;
+        MinX := Min(MinX, APoint.x);
+        MinY := Min(MinY, APoint.y);
+        MaxX := Max(MaxX, APoint.x);
+        MaxY := Max(MaxY, APoint.y);
 
-          ModelXWidth := MaxX-MinX;
-          ModelYWidth := MaxY-MinY;
+        ModelXWidth := MaxX-MinX;
+        ModelYWidth := MaxY-MinY;
 
-          APoint.x := (RowStart+RowEnd)/2;
-          APoint.Y := (ColBottom+ColTop)/2;
-          APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
+        APoint.x := (MinX+MaxX)/2;
+        APoint.Y := (MinY+MaxY)/2;
 
-          ModelXCenter := APoint.x;
-          ModelYCenter := APoint.Y;
-        end
-        else
-        begin
-          ModelXCenter := (FGridLimit.MaxX+FGridLimit.MinX)/2;
-          ModelYCenter := (FGridLimit.MaxY+FGridLimit.MinY)/2;
-        end;
-
+        ModelXCenter := APoint.x;
+        ModelYCenter := APoint.Y;
 
         Magnification :=  0.9 *
           Min(SkPaintBox1.Width / ModelXWidth,
           SkPaintBox1.Height / ModelYWidth);
 
-//        ModelXCenter := XCoord(ModelXCenter);
-//        ModelYCenter := YCoord(ModelYCenter);
+        ModelXCenter := XCoord(ModelXCenter);
+        ModelYCenter := YCoord(ModelYCenter);
         Memo1.Lines.Add((ModelXCenter).ToString + ', ' + (ModelYCenter).ToString);
-//        FMove.X := SkPaintBox1.Width/2 -ModelXCenter;
-//        FMove.Y := -(SkPaintBox1.Height/2 - ModelYCenter);
+        FMove.X := SkPaintBox1.Width/2 - ModelXCenter;
+        FMove.Y := (SkPaintBox1.Height/2 - ModelYCenter);
       end;
 
     finally
@@ -727,75 +620,63 @@ begin
   FDisplayMag := LocalMagnification;
   Label2.Text := LocalMagnification.ToString;
 
-  try
-    ACanvas.Rotate(FRotationAngle, SkPaintBox1.Width/2, SkPaintBox1.Height/2);
+  ACanvas.Translate(FMove.X, FMove.Y);
+  if ExaggerationDirection = edHorizontal then
+  begin
+    ACanvas.Scale(LocalMagnification*FExaggeration,LocalMagnification);
+  end
+  else
+  begin
+    ACanvas.Scale(LocalMagnification,LocalMagnification*FExaggeration);
+  end;
 
-    if ExaggerationDirection = edHorizontal then
+  if Assigned(FGrid) then
+  begin
+    LPaint.Style := TSkPaintStyle.Stroke;
+    LPaint.Color := TAlphaColorRec.Black;
+    LPaint.StrokeWidth := 1;
+
+    Range := FMaxK - FMinK;
+    for var CellIndex := 0 to FCellList.Count - 1 do
     begin
-      ACanvas.Scale(LocalMagnification*FExaggeration,LocalMagnification);
-    end
-    else
-    begin
-      ACanvas.Scale(LocalMagnification,LocalMagnification*FExaggeration);
-    end;
-//    ACanvas.Translate(FMove.X, FMove.Y);
+      ACellPath := FCellList[CellIndex];
+      if Range = 0 then
+      begin
+        Fraction := 0.5;
+      end
+      else
+      begin
+        Fraction :=   (FKxValues[CellIndex] - FMinK)/Range;
+      end;
+      LPaint.Style := TSkPaintStyle.Fill;
+      LPaint.Color := Color2AlphaColor(FracAndSchemeToColor(0, Fraction, 0.6, 1));
+      ACanvas.DrawPath(ACellPath, LPaint);
 
-    if Assigned(FGrid) then
-    begin
-
-//        Memo2.Lines.BeginUpdate;
-//        try
-//          Memo2.Lines.Clear;
-//          PathData := SkPathToPathData(FGrid);
-//          for var Index := 0 to PathData.Count - 1 do
-//          begin
-//            Memo2.Lines.Add(PathData.Points[Index].Point.x.ToString + ' ' + PathData.Points[Index].Point.y.ToString)
-//          end;
-//        finally
-//          Memo2.Lines.EndUpdate;
-//        end;
-
+      LPaint.StrokeWidth := 2.5;
       LPaint.Style := TSkPaintStyle.Stroke;
       LPaint.Color := TAlphaColorRec.Black;
-      LPaint.StrokeWidth := 1;
-
-
-      Range := FMaxK - FMinK;
-      for var CellIndex := 0 to FCellList.Count - 1 do
-      begin
-        ACellPath := FCellList[CellIndex];
-        if Range = 0 then
-        begin
-          Fraction := 0.5;
-        end
-        else
-        begin
-          Fraction :=   (FKxValues[CellIndex] - FMinK)/Range;
-        end;
-        LPaint.Style := TSkPaintStyle.Fill;
-        LPaint.Color := Color2AlphaColor(FracAndSchemeToColor(0, Fraction, 0.6, 1));
-        ACanvas.DrawPath(ACellPath, LPaint);
-
-        LPaint.StrokeWidth := 2.5;
-        LPaint.Style := TSkPaintStyle.Stroke;
-        LPaint.Color := TAlphaColorRec.Black;
-        ACanvas.DrawPath(ACellPath, LPaint);
-      end;
-
-      LPaint.AntiAlias := True;
-      LPaint.StrokeWidth := 5;
-      LPaint.Style := TSkPaintStyle.Stroke;
-      LPaint.Color := TAlphaColorRec.Purple;
-      ACanvas.DrawPath(FGrid, LPaint);
+      ACanvas.DrawPath(ACellPath, LPaint);
     end;
-  finally
-//    ACanvas.Restore;
+
+    LPaint.AntiAlias := True;
+    LPaint.StrokeWidth := 5;
+    LPaint.Style := TSkPaintStyle.Stroke;
+    LPaint.Color := TAlphaColorRec.Purple;
+    ACanvas.DrawPath(FGrid, LPaint);
   end;
 end;
 
 procedure TForm2.SkPaintBox1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
 begin
+  Memo1.BeginUpdate;
+  try
+    Memo1.Lines.Clear;
+    Memo1.Lines.Add(X.ToString + ', ' + Y.ToString);
+  finally
+    Memo1.EndUpdate;
+  end;
+
   if ssShift in Shift then
   begin
     FStartMove := True;
@@ -821,8 +702,10 @@ begin
 //   (((X-FMove.X)/FDisplayMag)
 //   ).ToString
 //   + sLineBreak
-//   + self.X(x).ToString
-   + APoint.x.ToString
+   + self.X(x).ToString
+   + sLineBreak
+   + Xcoord(self.X(x)).ToString
+//   + APoint.x.ToString
    ;
 
 
@@ -831,8 +714,10 @@ begin
 //   ((Y-FMove.Y)/FDisplayMag/FExaggeration)
 //   ).ToString
 //   + sLineBreak
-//   + self.Y(Y).ToString
-   + APoint.y.ToString
+    + self.Y(Y).ToString
+    + sLineBreak
+    + YCoord(self.Y(Y)).ToString
+//   + APoint.y.ToString
    ;
   end;
 
@@ -846,19 +731,17 @@ begin
   begin
     FStartMove := False;
     FStopPoint := PointF(X, Y);
-//    FMove := (FStopPoint - FStartPoint) + FMove;
-    FModelMove := (FStopPoint - FStartPoint)/FDisplayMag + FModelMove;
-//    Memo1.Lines.Add((FMove.X).ToString + ', ' + (FMove.Y).ToString);
+    FMove := (FStopPoint - FStartPoint) + FMove;
     SkPaintBox1.Redraw;
   end;
 end;
 
 function TForm2.X(XCoord: single): extended;
 begin
-  if HorizontalDirection = hdLeft then
-  begin
-    XCoord := SkPaintBox1.Width - XCoord;
-  end;
+//  if HorizontalDirection = hdLeft then
+//  begin
+//    XCoord := SkPaintBox1.Width - XCoord;
+//  end;
   if ExaggerationDirection = edHorizontal then
   begin
     result := (XCoord-FMove.X)/Magnification/ FExaggeration
@@ -870,70 +753,14 @@ begin
 end;
 
 function TForm2.XCoord(X: extended): single;
-var
-  temp: extended;
 begin
-  try
-    {$IFDEF FullSizeTest}
-    if ExaggerationDirection = edHorizontal then
-    begin
-      temp := X * FExaggeration;
-    end
-    else
-    begin
-      temp := X;
-    end;
-
-    result := temp*Magnification + FMove.X;
-    {$ELSE}
-    if ExaggerationDirection = edHorizontal then
-    begin
-      temp := (X - OriginX) * FExaggeration * Magnification;
-    end
-    else
-    begin
-      temp := (X - OriginX) * Magnification;
-    end;
-    if HorizontalDirection = hdLeft then
-    begin
-      temp := ClientWidth - temp;
-    end;
-    {$ENDIF}
-    if result > High(Integer) then
-    begin
-      result := High(Integer);
-    end
-    else if result < Low(Integer) then
-    begin
-      result := Low(Integer);
-//    end
-//    else
-//    begin
-//      result := temp;
-    end;
-  except
-    on EOverflow do
-    begin
-      if X > OriginX then
-      begin
-        result := High(Integer);
-      end
-      else
-      begin
-        result := Low(Integer);
-      end;
-    end;
-    on EInvalidOp do
-    begin
-      if X > OriginX then
-      begin
-        result := High(Integer);
-      end
-      else
-      begin
-        result := Low(Integer);
-      end;
-    end;
+  if ExaggerationDirection = edHorizontal then
+  begin
+    result := X * FExaggeration  *Magnification + FMove.X;
+  end
+  else
+  begin
+    result := x*Magnification + FMove.X;
   end;
 end;
 
@@ -941,87 +768,23 @@ function TForm2.Y(YCoord: single): extended;
 begin
   if ExaggerationDirection = edVertical then
   begin
-    result := FGridLimit.MaxY + FGridLimit.MinY - (YCoord-FMove.Y)/Magnification/FExaggeration;
-//    result := {FGridLimit.MaxY + FGridLimit.MinY -} (YCoord-FMove.Y)/Magnification/FExaggeration;
+    result := (-YCoord+FMove.Y)/Magnification/FExaggeration;
   end
   else
   begin
-    result := FGridLimit.MaxY + FGridLimit.MinY - (YCoord-FMove.Y)/Magnification;
-//    result := {FGridLimit.MaxY + FGridLimit.MinY -} (YCoord-FMove.Y)/Magnification;
+    result := (-YCoord+FMove.Y)/Magnification;
   end;
 end;
 
 function TForm2.YCoord(Y: extended): single;
-var
-  temp: extended;
 begin
-  try
-  {$IFDEF FullSizeTest}
-//    temp := Y;
-//    temp := -(Y - (FGridLimit.MaxY + FGridLimit.MinY));
-    temp := -(Y - (FGridLimit.MaxY {+ FGridLimit.MinY}));
-//    temp := (Y - ({FGridLimit.MaxY {+} FGridLimit.MinY));
-    if ExaggerationDirection = edVertical then
-    begin
-      temp := temp * FExaggeration
-    end
-    else
-    begin
-      temp := temp
-    end;
-    result := (temp * Magnification + FMove.Y);
-//    if VerticalDirection = vdUp then
-//    begin
-//      temp := ClientHeight - temp;
-//    end;
-  {$ELSE}
-    if ExaggerationDirection = edVertical then
-    begin
-      temp := (Y - OriginY) * FExaggeration * Magnification
-    end
-    else
-    begin
-      temp := (Y - OriginY) * Magnification;
-    end;
-    if VerticalDirection = vdUp then
-    begin
-      temp := ClientHeight - temp;
-    end;
-    {$ENDIF}
-    if result > High(Integer) then
-    begin
-      result := High(Integer);
-    end
-    else if result < Low(Integer) then
-    begin
-      result := Low(Integer);
-//    end
-//    else
-//    begin
-//      result := temp;
-    end;
-  except on EOverflow do
-    begin
-      if Y > OriginY then
-      begin
-        result := High(Integer);
-      end
-      else
-      begin
-        result := Low(Integer);
-      end;
-    end;
-    on EInvalidOp do
-    begin
-      if Y > OriginY then
-      begin
-        result := High(Integer);
-      end
-      else
-      begin
-        result := Low(Integer);
-      end;
-    end;
+  if ExaggerationDirection = edVertical then
+  begin
+    result := -(Y * FExaggeration * Magnification - FMove.Y);
+  end
+  else
+  begin
+    result := -(Y * Magnification - FMove.Y);
   end;
 end;
 

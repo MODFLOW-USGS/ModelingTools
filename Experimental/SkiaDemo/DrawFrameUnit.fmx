@@ -1,4 +1,4 @@
-object Frame1: TFrame1
+object DrawFrame: TDrawFrame
   Size.Width = 320.000000000000000000
   Size.Height = 240.000000000000000000
   Size.PlatformDefault = False

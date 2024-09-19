@@ -5,7 +5,7 @@ program SwiObsExtractor;
 {$R *.res}
 
 {#BACKUP SwiObsExtractor.lpr}
-{#BACKUP SwiObsExtractor.lp1}
+{#BACKUP SwiObsExtractor.lpi}
 {#BACKUP SwiObsExtractor.res}
 {#BACKUP SimpleTextWriter.pas}
 

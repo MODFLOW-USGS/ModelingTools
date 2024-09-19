@@ -62,7 +62,7 @@ uses
   GoPhastTypes in '..\..\ModelMuse\GoPhastTypes.pas',
   ColorSchemes in '..\..\ModelMuse\ColorSchemes.pas',
   ColorSchemesInterface in '..\..\ModelMuse\ColorSchemesInterface.pas',
-  DrawFrame in 'DrawFrame.pas' {Frame1: TFrame},
+  DrawFrameUnit in 'DrawFrameUnit.pas' {DrawFrame: TFrame},
   FreeThread in 'FreeThread.pas';
 
 {$R *.res}

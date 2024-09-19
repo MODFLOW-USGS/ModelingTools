@@ -10369,11 +10369,8 @@ const
 //               Bug fix: The nodes in the "Model|MODFLOW Output Control" dialog
 //                box have been restored.
 //    '5.3.0.3'
-
-//               Change: ModelMuse now ensures that IDOMAIN is never set to -1
+//    '5.3.1.0'  Change: ModelMuse now ensures that IDOMAIN is never set to -1
 //                on the top and bottom layers.
-
-//    '5.3.1.0'  No additional changes.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.

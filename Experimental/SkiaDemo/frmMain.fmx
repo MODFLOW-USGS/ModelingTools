@@ -122,8 +122,8 @@ object Form2: TForm2
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 6
-      Viewport.Width = 100.000000000000000000
-      Viewport.Height = 46.000000000000000000
+      Viewport.Width = 104.000000000000000000
+      Viewport.Height = 50.000000000000000000
     end
   end
   object ImageList1: TImageList

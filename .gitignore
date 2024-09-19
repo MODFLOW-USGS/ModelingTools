@@ -10,3 +10,5 @@
 **/Debug/**
 *.dsk
 *.~dsk
+/Experimental/SkiaDemo/DrawFrame.fmx
+/Experimental/SkiaDemo/DrawFrame.pas

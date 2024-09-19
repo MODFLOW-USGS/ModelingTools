@@ -2,7 +2,7 @@ unit ProcessTemplateUnit;
 
 interface
 
-{#BACKUP SimpleTextWriter.pas}
+{#BACKUP ..\Mf2005ObsExtractor\SimpleTextWriter.pas}
 
 {$IFDEF FPC}
   {$MODE DELPHI}
