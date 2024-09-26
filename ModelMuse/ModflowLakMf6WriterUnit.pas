@@ -2915,6 +2915,7 @@ var
   MvrUsed: Boolean;
   UsedOutlets: TGenericIntegerList;
   ReceiverItem: TReceiverItem;
+  SettingIndex: Integer;
 begin
 
   if MvrWriter <> nil then
@@ -2991,7 +2992,7 @@ begin
         ALake := FLakes[LakeIndex];
         Assert(ALake.FScreenObject <> nil);
         MvrReceiver.ReceiverValues.Index := LakeIndex+1;
-        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject as TScreenObject;
+        MvrReceiver.ReceiverKey.ScreenObject := ALake.FScreenObject;
           if (MoverWriter <> nil) and not WritingTemplate then
           begin
             MoverWriter.AddMvrReceiver(MvrReceiver);
@@ -3015,8 +3016,8 @@ begin
       begin
         ALake := FLakes[LakeIndex];
         Assert(ALake.FScreenObject <> nil);
-        MvrRegSourceKey.SourceKey.ScreenObject := ALake.FScreenObject as TScreenObject;
-        LocalScreenObject := ALake.FScreenObject as TScreenObject;
+        MvrRegSourceKey.SourceKey.ScreenObject := ALake.FScreenObject;
+        LocalScreenObject := ALake.FScreenObject;
         MvrUsed := (MoverWriter <> nil)
           and (LocalScreenObject.ModflowMvr <> nil)
           and LocalScreenObject.ModflowMvr.Used
@@ -3046,7 +3047,8 @@ begin
               break;
             end;
           end;
-          if ALakeSetting.StartTime = ATime then
+          if (ALakeSetting.StartTime <= ATime)
+              and (ATime < ALakeSetting.EndTime) then
           begin
             WriteString('  ');
             WriteInteger(LakeIndex+1);
@@ -3151,22 +3153,24 @@ begin
           MvrRegSourceKey.Index := OutletNumber;
           MvrRegSourceKey.SourceKey.MvrIndex := OutletIndex;
 
-          if AnOutlet.FStartingTimeIndex < AnOutlet.Count then
+          for SettingIndex := 0 to AnOutlet.Count -1 do
+//          if AnOutlet.FStartingTimeIndex < AnOutlet.Count then
           begin
-            OutletSetting := AnOutlet[AnOutlet.FStartingTimeIndex];
-            while OutletSetting.StartTime < ATime do
-            begin
-              Inc(AnOutlet.FStartingTimeIndex);
-              if AnOutlet.FStartingTimeIndex < AnOutlet.Count then
-              begin
-                OutletSetting := AnOutlet[AnOutlet.FStartingTimeIndex];
-              end
-              else
-              begin
-                break;
-              end;
-            end;
-            if OutletSetting.StartTime = ATime then
+            OutletSetting := AnOutlet[SettingIndex];
+//            while OutletSetting.StartTime < ATime do
+//            begin
+//              Inc(AnOutlet.FStartingTimeIndex);
+//              if AnOutlet.FStartingTimeIndex < AnOutlet.Count then
+//              begin
+//                OutletSetting := AnOutlet[AnOutlet.FStartingTimeIndex];
+//              end
+//              else
+//              begin
+//                break;
+//              end;
+//            end;
+            if (OutletSetting.StartTime <= ATime)
+              and (ATime < OutletSetting.EndTime) then
             begin
               WriteString('  ');
               WriteInteger(OutletNumber);

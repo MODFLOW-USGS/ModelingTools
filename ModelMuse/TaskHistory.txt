@@ -33646,5 +33646,31 @@ object TTaskHistory
       Date = 45554.000000000000000000
       Categories.Strings = (
         'Skia For Delphi Experiment')
+    end
+    item
+      Date = 45555.000000000000000000
+      Categories.Strings = (
+        'Skia For Delphi Experiment')
+    end
+    item
+      Date = 45556.000000000000000000
+    end
+    item
+      Date = 45557.000000000000000000
+    end
+    item
+      Date = 45558.000000000000000000
+    end
+    item
+      Date = 45559.000000000000000000
+    end
+    item
+      Date = 45560.000000000000000000
+    end
+    item
+      Date = 45561.000000000000000000
+      Categories.Strings = (
+        'Bug fix'
+        'Testing')
     end>
 end

@@ -13,6 +13,7 @@ uses
 
 type
 
+
   TFGridLimit = record
     MinX: double;
     MaxX: double;
@@ -22,13 +23,8 @@ type
     MaxZ: double;
   end;
 
-  TCellList = TList<ISkPath>;
-
   TForm2 = class(TForm)
-    SkPaintBox1: TSkPaintBox;
-    Timer1: TTimer;
     OpenDialog1: TOpenDialog;
-    ImageList1: TImageList;
     MainMenu1: TMainMenu;
     miFile: TMenuItem;
     Panel1: TPanel;
@@ -40,8 +36,11 @@ type
     LabelY: TLabel;
     NumberBox1: TNumberBox;
     Memo1: TMemo;
-    procedure SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
-      const ADest: TRectF; const AOpacity: Single);
+    DrawFrame: TDrawFrame;
+    cbDrawGrid: TCheckBox;
+    cbColorGrid: TCheckBox;
+//    procedure SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
+//      const ADest: TRectF; const AOpacity: Single);
     procedure btnOpenFileClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -54,15 +53,17 @@ type
     procedure btnMultiplyClick(Sender: TObject);
     procedure btnDivideClick(Sender: TObject);
     procedure NumberBox1Change(Sender: TObject);
+    procedure cbDrawGridClick(Sender: TObject);
+    procedure cbColorGridClick(Sender: TObject);
+    procedure DrawFrameSkPaintBox1Draw(ASender: TObject;
+      const ACanvas: ISkCanvas; const ADest: TRectF; const AOpacity: Single);
   private
     FMf6Simulation: TMf6Simulation;
-    FGrid: ISkPath;
     FMagnification: Double;
 //    FHorizontalDirection: THorizontalDirection;
     FVerticalDirection: TVerticalDirection;
     FExaggerationDirection: TExaggerationDirection;
     FExaggeration: Double;
-    FCellList: TCellList;
     FMinK: double;
     FMaxK: double;
     FKxValues: TDoubleDynArray;
@@ -70,7 +71,6 @@ type
     FRotationAngle: Double;
     FGridAngle: double;
     FModelXCenter, FModelYCenter: double;
-    FDisplayMag: double;
     FStartMove: Boolean;
     FStartPoint: TPointF;
     FStopPoint: TPointF;
@@ -82,9 +82,10 @@ type
 //    procedure SetHorizontalDirection(const Value: THorizontalDirection);
     procedure SetVerticalDirection(const Value: TVerticalDirection);
     procedure SetExaggeration(const Value: Double);
-    procedure SetTopPosition(const XCoordinate, YCoordinate: Double);
+//    procedure SetTopPosition(const XCoordinate, YCoordinate: Double);
     function Color2AlphaColor(AColor: TColor): TAlphaColor;
     procedure DecrementThreadCount(Sender: TObject);
+    procedure DrawTopGridObjects;
     { Private declarations }
   public
     property Mf6Simulation: TMf6Simulation read FMf6Simulation;
@@ -145,7 +146,7 @@ begin
   begin
     Cursor := crHourGlass;
     try
-      FGrid := nil;
+      DrawFrame.Grid := nil;
 
       FMf6Simulation.Free;
 
@@ -156,23 +157,33 @@ begin
 
       FMf6Simulation := TMf6Simulation.Create('Simulation');
       FMf6Simulation.ReadSimulation(OpenDialog1.FileName);
-      SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Never;
+      DrawFrame.SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Never;
     finally
       Cursor := crDefault;
     end;
   end;
 end;
 
+procedure TForm2.cbColorGridClick(Sender: TObject);
+begin
+  DrawFrame.SkPaintBox1.Redraw;
+end;
+
+procedure TForm2.cbDrawGridClick(Sender: TObject);
+begin
+  DrawFrame.SkPaintBox1.Redraw;
+end;
+
 procedure TForm2.btnDivideClick(Sender: TObject);
 begin
   Magnification := Magnification/2;
-  SkPaintBox1.Redraw;
+  DrawFrame.SkPaintBox1.Redraw;
 end;
 
 procedure TForm2.btnMultiplyClick(Sender: TObject);
 begin
   Magnification := Magnification*2;
-  SkPaintBox1.Redraw;
+  DrawFrame.SkPaintBox1.Redraw;
 end;
 
 function TForm2.Color2AlphaColor(AColor: TColor): TAlphaColor;
@@ -195,8 +206,6 @@ begin
   FMagnification := 1;
   FExaggeration := 1;
   FVerticalDirection := vdUp;
-  FCellList := TCellList.Create;
-  FDisplayMag := 1;
 end;
 
 procedure TForm2.FormDestroy(Sender: TObject);
@@ -205,7 +214,6 @@ begin
   begin
     Sleep(1000)
   end;
-  FCellList.Free;
   FMf6Simulation.Free;
 end;
 
@@ -214,7 +222,7 @@ begin
   if NumberBox1.Value > 0 then
   begin
     Exaggeration := NumberBox1.Value;
-    SkPaintBox1.Redraw;
+    DrawFrame.SkPaintBox1.Redraw;
   end;
 end;
 
@@ -250,33 +258,113 @@ begin
   FMagnification := Value;
 end;
 
-procedure TForm2.SetTopPosition(const XCoordinate, YCoordinate: Double);
-var
-  DeltaX, DeltaY: double;
-begin
-  Exit;
-
-  DeltaX := (X(Round(SkPaintBox1.Width)) - X(0)) / 2;
-  DeltaY := (Y(0) - Y(Round(SkPaintBox1.Height))) / 2;
-
-end;
+//procedure TForm2.SetTopPosition(const XCoordinate, YCoordinate: Double);
+//var
+//  DeltaX, DeltaY: double;
+//begin
+//  Exit;
+//
+//  DeltaX := (X(Round(DrawFrame.SkPaintBox1.Width)) - X(0)) / 2;
+//  DeltaY := (Y(0) - Y(Round(DrawFrame.SkPaintBox1.Height))) / 2;
+//
+//end;
 
 procedure TForm2.SetVerticalDirection(const Value: TVerticalDirection);
 begin
   FVerticalDirection := Value;
 end;
 
-procedure TForm2.SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
-  const ADest: TRectF; const AOpacity: Single);
+procedure TForm2.DrawFrameSkPaintBox1Draw(ASender: TObject;
+  const ACanvas: ISkCanvas; const ADest: TRectF; const AOpacity: Single);
+var
+  LPaint: ISkPaint;
+  ACellPath: ISkPath;
+  Fraction: Double;
+  Range: double;
+  LocalMagnification: double;
+begin
+  DrawTopGridObjects;
+
+  DrawFrame.SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Raster;
+
+  LPaint := TSkPaint.Create(TSkPaintStyle.Stroke);
+  LPaint.AntiAlias := True;
+
+  ACanvas.clear(TAlphaColorRec.White);
+
+  LocalMagnification := Magnification;
+
+  Label2.Text := LocalMagnification.ToString;
+
+  ACanvas.Translate(FMove.X, FMove.Y);
+  if ExaggerationDirection = edHorizontal then
+  begin
+    ACanvas.Scale(LocalMagnification*FExaggeration,LocalMagnification);
+  end
+  else
+  begin
+    ACanvas.Scale(LocalMagnification,LocalMagnification*FExaggeration);
+  end;
+
+  if Assigned(DrawFrame.Grid) then
+  begin
+    LPaint.Style := TSkPaintStyle.Stroke;
+    LPaint.Color := TAlphaColorRec.Black;
+    LPaint.StrokeWidth := 1;
+
+    Range := FMaxK - FMinK;
+    for var CellIndex := 0 to DrawFrame.CellList.Count - 1 do
+    begin
+      ACellPath := DrawFrame.CellList[CellIndex];
+      if cbColorGrid.IsChecked then
+      begin
+        if Range = 0 then
+        begin
+          Fraction := 0.5;
+        end
+        else
+        begin
+          Fraction :=   (FKxValues[CellIndex] - FMinK)/Range;
+        end;
+        LPaint.Style := TSkPaintStyle.Fill;
+        LPaint.Color := Color2AlphaColor(FracAndSchemeToColor(0, Fraction, 0.6, 1));
+        ACanvas.DrawPath(ACellPath, LPaint);
+      end;
+
+      if cbDrawGrid.IsChecked then
+      begin
+        LPaint.StrokeWidth := 2.5/Magnification;
+        LPaint.Style := TSkPaintStyle.Stroke;
+        LPaint.Color := TAlphaColorRec.Black;
+        ACanvas.DrawPath(ACellPath, LPaint);
+      end;
+    end;
+
+    if cbDrawGrid.IsChecked then
+    begin
+      LPaint.AntiAlias := True;
+      LPaint.StrokeWidth := 5/Magnification;
+      LPaint.Style := TSkPaintStyle.Stroke;
+      LPaint.Color := TAlphaColorRec.Purple;
+      ACanvas.DrawPath(DrawFrame.Grid, LPaint);
+    end;
+  end;
+end;
+
+procedure TForm2.DrawTopGridObjects;
 var
   PathBuilder: ISkPathBuilder;
-  theta: single;
-  LPaint: ISkPaint;
+  FXOrigin: double;
+  FYOrigin: double;
+  NpfPackage: TNpf;
+  DisPackage: TDis;
   AModel: TModel;
   Packages: TFlowPackages;
   APackage: TPackage;
-  DisPackage: TDis;
   GridData: TDisGridData;
+  ModelXWidth, ModelYWidth {, ModelHeight}: double;
+  ColumnPositions: TSingleDynArray;
+  RowPositions: TSingleDynArray;
   ColumnPosition: Double;
   ColX: single;
   ColTop: single;
@@ -285,22 +373,11 @@ var
   RowEnd: single;
   RowPosition: Double;
   RowY: single;
-  NpfPackage: TNpf;
-  ColumnPositions: TSingleDynArray;
-  RowPositions: TSingleDynArray;
-  Kx: TDArray3D;
-  ACellPath: ISkPath;
-  Fraction: Double;
-  Range: double;
-  MyThread: TMyThread;
-  LocalMagnification: double;
-  RowIndex, ColIndex: Integer;
-  PathData: TPathData;
   APoint: TPoint2D;
-  ModelXWidth, ModelYWidth {, ModelHeight}: double;
+  MyThread: TMyThread;
+  Kx: TDArray3D;
   MinY, MaxY, MinX, MaxX: double;
-  FXOrigin: double;
-  FYOrigin: double;
+
   function RotateFromGridCoordinatesToRealWorldCoordinates(
     const APoint: TPoint2D): TPoint2D;
   var
@@ -322,17 +399,11 @@ var
     result.y := -result.y;
   end;
 begin
-  SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Raster;
-
-  PathBuilder := TSkPathBuilder.Create;
-  LPaint := TSkPaint.Create(TSkPaintStyle.Stroke);
-
-  ACanvas.clear(TAlphaColorRec.White);
-
   DisPackage := nil;
   NpfPackage := nil;
-  if (not Assigned(FGrid)) and (FMf6Simulation <> nil) then
+  if (not Assigned(DrawFrame.Grid)) and (FMf6Simulation <> nil) then
   begin
+    PathBuilder := TSkPathBuilder.Create;
     Cursor := crHourGlass;
     try
       FMove.X := 0;
@@ -381,13 +452,13 @@ begin
         FYOrigin := DisPackage.Options.YORIGIN;
         FGridLimit.MinX := DisPackage.Options.XORIGIN;
         FGridLimit.MaxX := DisPackage.Options.XORIGIN;
-        for ColIndex := 0 to Length(GridData.DELR) - 1 do
+        for var ColIndex := 0 to Length(GridData.DELR) - 1 do
         begin
           FGridLimit.MaxX := FGridLimit.MaxX + GridData.DELR[ColIndex]
         end;
         FGridLimit.MinY:= DisPackage.Options.YORIGIN;
         FGridLimit.MaxY := DisPackage.Options.YORIGIN;
-        for RowIndex := 0 to Length(GridData.DELC) - 1 do
+        for var RowIndex := 0 to Length(GridData.DELC) - 1 do
         begin
           FGridLimit.MaxY := FGridLimit.MaxY + GridData.DELC[RowIndex]
         end;
@@ -399,8 +470,8 @@ begin
 
         Magnification := 1;
 
-        SetTopPosition((FGridLimit.MinX + FGridLimit.MaxX)/2,
-          (FGridLimit.MinY + FGridLimit.MaxY)/2);
+//        SetTopPosition((FGridLimit.MinX + FGridLimit.MaxX)/2,
+//          (FGridLimit.MinY + FGridLimit.MaxY)/2);
 
         SetLength(ColumnPositions, Length(GridData.DELR)+1);
 
@@ -420,7 +491,7 @@ begin
         APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
         PathBuilder.lineTo(APoint.x, APoint.y);
 
-        for ColIndex := 0 to Length(GridData.DELR) - 1 do
+        for var ColIndex := 0 to Length(GridData.DELR) - 1 do
         begin
           ColumnPosition := ColumnPosition + GridData.DELR[ColIndex];
           ColX := {XCoord}(ColumnPosition);
@@ -457,7 +528,7 @@ begin
         APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
         PathBuilder.lineTo(APoint.x, APoint.y);
 
-        for RowIndex := 0 to Length(GridData.DELC) -1 do
+        for var RowIndex := 0 to Length(GridData.DELC) -1 do
         begin
           RowPosition := (RowPosition + GridData.DELC[RowIndex]);
           RowY := {YCoord}(RowPosition);
@@ -474,19 +545,19 @@ begin
           PathBuilder.lineTo(APoint.x, APoint.y);
         end;
 
-        FGrid := PathBuilder.Detach;
+        DrawFrame.Grid := PathBuilder.Detach;
 
         if NpfPackage <> nil then
         begin
           Inc(FThreadCount);
-          MyThread := TMyThread.Create(FCellList);
+          MyThread := TMyThread.Create(DrawFrame.CellList);
           MyThread.OnTerminate := DecrementThreadCount;
           MyThread.Start;
-          FCellList := TCellList.Create;
+          DrawFrame.CellList := TCellList.Create;
 
-          for RowIndex := Length(RowPositions) - 2 downto 0 do
+          for var RowIndex := Length(RowPositions) - 2 downto 0 do
           begin
-            for ColIndex := 0 to Length(ColumnPositions) - 2 do
+            for var ColIndex := 0 to Length(ColumnPositions) - 2 do
             begin
               APoint.x := ColumnPositions[ColIndex];
               APoint.y := RowPositions[RowIndex];
@@ -513,7 +584,7 @@ begin
               APoint := RotateFromGridCoordinatesToRealWorldCoordinates(APoint);
               PathBuilder.LineTo(APoint.x, APoint.y);
 
-              FCellList.Add(PathBuilder.Detach);
+              DrawFrame.CellList.Add(PathBuilder.Detach);
             end;
           end;
 
@@ -528,9 +599,9 @@ begin
             FMaxK := FMinK;
             SetLength(FKxValues, (Length(RowPositions)-1) * (Length(ColumnPositions)-1));
             var CellIndex: Integer := 0;
-            for RowIndex := 0 to Length(Kx[0]) - 1 do
+            for var RowIndex := 0 to Length(Kx[0]) - 1 do
             begin
-              for ColIndex := 0 to Length(Kx[0,0]) - 1 do
+              for var ColIndex := 0 to Length(Kx[0,0]) - 1 do
               begin
                 FKxValues[CellIndex] := Kx[0,RowIndex,ColIndex];
                 Inc(CellIndex);
@@ -600,74 +671,110 @@ begin
         ModelYCenter := APoint.Y;
 
         Magnification :=  0.9 *
-          Min(SkPaintBox1.Width / ModelXWidth,
-          SkPaintBox1.Height / ModelYWidth);
+          Min(DrawFrame.SkPaintBox1.Width / ModelXWidth,
+          DrawFrame.SkPaintBox1.Height / ModelYWidth);
 
         ModelXCenter := XCoord(ModelXCenter);
         ModelYCenter := YCoord(ModelYCenter);
         Memo1.Lines.Add((ModelXCenter).ToString + ', ' + (ModelYCenter).ToString);
-        FMove.X := SkPaintBox1.Width/2 - ModelXCenter;
-        FMove.Y := (SkPaintBox1.Height/2 - ModelYCenter);
+        FMove.X := DrawFrame.SkPaintBox1.Width/2 - ModelXCenter;
+        FMove.Y := DrawFrame.SkPaintBox1.Height/2 - ModelYCenter;
       end;
 
     finally
       Cursor := crDefault;
     end;
   end;
-
-  LocalMagnification := Magnification;
-
-  FDisplayMag := LocalMagnification;
-  Label2.Text := LocalMagnification.ToString;
-
-  ACanvas.Translate(FMove.X, FMove.Y);
-  if ExaggerationDirection = edHorizontal then
-  begin
-    ACanvas.Scale(LocalMagnification*FExaggeration,LocalMagnification);
-  end
-  else
-  begin
-    ACanvas.Scale(LocalMagnification,LocalMagnification*FExaggeration);
-  end;
-
-  if Assigned(FGrid) then
-  begin
-    LPaint.Style := TSkPaintStyle.Stroke;
-    LPaint.Color := TAlphaColorRec.Black;
-    LPaint.StrokeWidth := 1;
-
-    Range := FMaxK - FMinK;
-    for var CellIndex := 0 to FCellList.Count - 1 do
-    begin
-      ACellPath := FCellList[CellIndex];
-      if Range = 0 then
-      begin
-        Fraction := 0.5;
-      end
-      else
-      begin
-        Fraction :=   (FKxValues[CellIndex] - FMinK)/Range;
-      end;
-      LPaint.Style := TSkPaintStyle.Fill;
-      LPaint.Color := Color2AlphaColor(FracAndSchemeToColor(0, Fraction, 0.6, 1));
-      ACanvas.DrawPath(ACellPath, LPaint);
-
-      LPaint.StrokeWidth := 2.5;
-      LPaint.Style := TSkPaintStyle.Stroke;
-      LPaint.Color := TAlphaColorRec.Black;
-      ACanvas.DrawPath(ACellPath, LPaint);
-    end;
-
-    LPaint.AntiAlias := True;
-    LPaint.StrokeWidth := 5;
-    LPaint.Style := TSkPaintStyle.Stroke;
-    LPaint.Color := TAlphaColorRec.Purple;
-    ACanvas.DrawPath(FGrid, LPaint);
-  end;
 end;
+
+//procedure TForm2.SkPaintBox1Draw(ASender: TObject; const ACanvas: ISkCanvas;
+//  const ADest: TRectF; const AOpacity: Single);
+//var
+//  LPaint: ISkPaint;
+//  ACellPath: ISkPath;
+//  Fraction: Double;
+//  Range: double;
+//  LocalMagnification: double;
+//begin
+//  DrawTopGridObjects;
+//
+//  SkPaintBox1.DrawCacheKind := TSkDrawCacheKind.Raster;
+//
+//  LPaint := TSkPaint.Create(TSkPaintStyle.Stroke);
+//  LPaint.AntiAlias := True;
+//
+//  ACanvas.clear(TAlphaColorRec.White);
+//
+//  LocalMagnification := Magnification;
+//
+//  Label2.Text := LocalMagnification.ToString;
+//
+//  ACanvas.Translate(FMove.X, FMove.Y);
+//  if ExaggerationDirection = edHorizontal then
+//  begin
+//    ACanvas.Scale(LocalMagnification*FExaggeration,LocalMagnification);
+//  end
+//  else
+//  begin
+//    ACanvas.Scale(LocalMagnification,LocalMagnification*FExaggeration);
+//  end;
+//
+//  if Assigned(DrawFrame.Grid) then
+//  begin
+//    LPaint.Style := TSkPaintStyle.Stroke;
+//    LPaint.Color := TAlphaColorRec.Black;
+//    LPaint.StrokeWidth := 1;
+//
+//    Range := FMaxK - FMinK;
+//    for var CellIndex := 0 to DrawFrame.CellList.Count - 1 do
+//    begin
+//      ACellPath := DrawFrame.CellList[CellIndex];
+//      if cbColorGrid.IsChecked then
+//      begin
+//        if Range = 0 then
+//        begin
+//          Fraction := 0.5;
+//        end
+//        else
+//        begin
+//          Fraction :=   (FKxValues[CellIndex] - FMinK)/Range;
+//        end;
+//        LPaint.Style := TSkPaintStyle.Fill;
+//        LPaint.Color := Color2AlphaColor(FracAndSchemeToColor(0, Fraction, 0.6, 1));
+//        ACanvas.DrawPath(ACellPath, LPaint);
+//      end;
+//
+//      if cbDrawGrid.IsChecked then
+//      begin
+//        LPaint.StrokeWidth := 2.5/Magnification;
+//        LPaint.Style := TSkPaintStyle.Stroke;
+//        LPaint.Color := TAlphaColorRec.Black;
+//        ACanvas.DrawPath(ACellPath, LPaint);
+//      end;
+//    end;
+//
+//    if cbDrawGrid.IsChecked then
+//    begin
+//      LPaint.AntiAlias := True;
+//      LPaint.StrokeWidth := 5/Magnification;
+//      LPaint.Style := TSkPaintStyle.Stroke;
+//      LPaint.Color := TAlphaColorRec.Purple;
+//      ACanvas.DrawPath(DrawFrame.Grid, LPaint);
+//    end;
+//  end;
+//end;
 
 procedure TForm2.SkPaintBox1MouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Single);
+  function Point2D(X,Y: single): TPoint2D;
+  begin
+    result.x := X;
+    result.y := Y;
+  end;
+var
+  APoint: TPoint2D;
+  StartPoint: TPoint2D;
+  NewPoint: TPoint2D;
 begin
   Memo1.BeginUpdate;
   try
@@ -682,6 +789,25 @@ begin
     FStartMove := True;
     FStartPoint := PointF(X, Y);
   end;
+
+  if [ssCtrl, ssAlt] * Shift <> [] then
+  begin
+    StartPoint := Point2D(X,Y);
+    APoint := ScreenToReal(StartPoint);
+    if ssCtrl in Shift then
+    begin
+      Magnification := Magnification*2;
+    end
+    else
+    begin
+      Magnification := Magnification/2;
+    end;
+    NewPoint := RealtoScreen(APoint);
+    FMove.x := FMove.x - NewPoint.x + StartPoint.x;
+    FMove.y := FMove.y - NewPoint.y + StartPoint.y;
+//    SkPaintBox1.Redraw;
+    DrawFrame.SkPaintBox1.Redraw;
+  end;
 end;
 
 procedure TForm2.SkPaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
@@ -689,39 +815,27 @@ procedure TForm2.SkPaintBox1MouseMove(Sender: TObject; Shift: TShiftState; X,
 var
   APoint: TPoint2D;
 begin
-  if FDisplayMag <> 0 then
+  if Magnification <> 0 then
   begin
-   Label1.Text := X.ToString + ' ' + Y.ToString;
+    Label1.Text := X.ToString + ' ' + Y.ToString;
 
-   APoint.x := X;
-   APoint.y := Y;
-   APoint := ScreenToReal(APoint);
+//    APoint.x := X;
+//    APoint.y := Y;
+//    APoint := ScreenToReal(APoint);
 
-   LabelX.Text := 'X = '
-//    +
-//   (((X-FMove.X)/FDisplayMag)
-//   ).ToString
-//   + sLineBreak
-   + self.X(x).ToString
-   + sLineBreak
-   + Xcoord(self.X(x)).ToString
-//   + APoint.x.ToString
-   ;
+    LabelX.Text := 'X = '
+    + self.X(x).ToString
+    + sLineBreak
+    + Xcoord(self.X(x)).ToString
+    ;
 
 
-   LabelY.Text := 'Y = '
-//   + (FGridLimit.MaxY + FGridLimit.MinY -
-//   ((Y-FMove.Y)/FDisplayMag/FExaggeration)
-//   ).ToString
-//   + sLineBreak
+    LabelY.Text := 'Y = '
     + self.Y(Y).ToString
     + sLineBreak
     + YCoord(self.Y(Y)).ToString
-//   + APoint.y.ToString
-   ;
+    ;
   end;
-
-   Label2.Text := FDisplayMag.ToString;
 end;
 
 procedure TForm2.SkPaintBox1MouseUp(Sender: TObject; Button: TMouseButton;
@@ -732,7 +846,8 @@ begin
     FStartMove := False;
     FStopPoint := PointF(X, Y);
     FMove := (FStopPoint - FStartPoint) + FMove;
-    SkPaintBox1.Redraw;
+//    SkPaintBox1.Redraw;
+    DrawFrame.SkPaintBox1.Redraw;
   end;
 end;
 

@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
-  System.Skia, FMX.Skia, FastGeo;
+  System.Skia, FMX.Skia, FastGeo, FMX.Skia.Canvas, System.Generics.Collections;
 
 type
   // @name indicates whether exaggeration is applied in
@@ -17,6 +17,7 @@ type
   { See TQRbwZoomBox2.@link(TQRbwZoomBox2.HorizontalDirection).}
 //  THorizontalDirection = (hdRight, hdLeft);
 
+  TCellList = TList<ISkPath>;
 
   TDrawFrame = class(TFrame)
     SkPaintBox1: TSkPaintBox;
@@ -27,6 +28,8 @@ type
     FMagnification: double;
     FExaggeration: Double;
     FMove: TPointF;
+    FCellList: TCellList;
+    FGrid: ISkPath;
 //    procedure SetHorizontalDirection(const Value: THorizontalDirection);
     procedure SetVerticalDirection(const Value: TVerticalDirection);
     procedure SetExaggerationDirection(const Value: TExaggerationDirection);
@@ -35,6 +38,8 @@ type
     procedure SetMove(const Value: TPointF);
     { Private declarations }
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     {X converts a screen coordinate into a real-number X coordinate.}
     function X(XCoord: single): extended;
     {XCoord converts a real-number X coordinate into a screen coordinate.}
@@ -57,6 +62,8 @@ type
     // @name controls the direction in which @link(Exaggeration) is applied.
     { Public declarations }
     property ModelMove: TPointF read FMove write SetMove;
+    property CellList: TCellList read FCellList write FCellList;
+    property Grid: ISkPath read FGrid write FGrid;
   published
     property ExaggerationDirection: TExaggerationDirection
       read FExaggerationDirection write SetExaggerationDirection default
@@ -71,6 +78,8 @@ type
       vdUp indicates they increase upward.}
     property VerticalDirection: TVerticalDirection read FVerticalDirection write
       SetVerticalDirection;
+
+
   end;
 
 implementation
@@ -80,6 +89,18 @@ implementation
 
 
 { TDrawFrame }
+
+constructor TDrawFrame.Create(AOwner: TComponent);
+begin
+  inherited;
+  FCellList := TCellList.Create;
+end;
+
+destructor TDrawFrame.Destroy;
+begin
+  FCellList.Free;
+  inherited;
+end;
 
 function TDrawFrame.RealToScreen(APoint: TPoint2D): TPoint2D;
 begin
