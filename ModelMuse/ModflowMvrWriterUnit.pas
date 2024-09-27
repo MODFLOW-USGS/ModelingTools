@@ -128,7 +128,7 @@ uses
   frmProgressUnit, System.SysUtils, frmErrorsAndWarningsUnit, Vcl.Forms,
   FastGEO, ModflowIrregularMeshUnit, AbstractGridUnit, System.Math,
   ModflowLakMf6Unit, RbwParser, frmFormulaErrorsUnit,
-  ModflowPackagesUnit, Mt3dmsChemSpeciesUnit, QuadTreeClass;
+  ModflowPackagesUnit, Mt3dmsChemSpeciesUnit, QuadTreeClass, CellLocationUnit;
 
 resourcestring
   StrWritingMVROptions = 'Writing MVR Options';
@@ -937,6 +937,15 @@ var
   QuadTreeList: TObjectList<TRbwQuadTree>;
   SfrQuadTreeDictionary: TSfrQuadTreeDictionary;
   ReceiverSectionValue: TReceiverSectionValue;
+  CellList: TCellAssignmentList;
+  ACell: TCellAssignment;
+  APoint: TPoint2D;
+  X: double;
+  Y: double;
+  DistIndex: Integer;
+  PointDistance: double;
+  MinDistance: double;
+  APointer: Pointer;
   function GetLocation(ACol, ARow: Integer): TPoint2D;
   begin
     if Grid <> nil then
@@ -968,6 +977,10 @@ begin
     DisvGrid := nil;
   end;
 
+  WriteString('# For the Lake Package, ID1 for the lake source is the lake outlet number NOT the lake number.');
+  NewLine;
+  WriteString('# ID2 for the lake as a receiver is the lake number');
+  NewLine;
   SectionMaps := TDictionary<string,TSourceReceiverMap>.Create;
   SectionMapsList := TObjectList<TSourceReceiverMap>.Create;
   AllStreamReaches := TRbwQuadTree.Create(nil);
@@ -1343,22 +1356,51 @@ begin
               if (ReceiverItem.ReceiverPackage = rpcSfr)
                 and (ReceiverItem.SfrReceiverChoice = srcNearest) then
               begin
-                AColumn := MvrCell.Column;
-                ARow := MvrCell.Row;
-                SourceLocation := GetLocation(AColumn, ARow);
-
-                Assert(Length(ReceiverValues.StreamCells) > 0);
-                Assert(Length(ReceiverValues.StreamReachNumbers)
-                  = Length(ReceiverValues.StreamCells));
-
-                if CurrentObjectReaches.Count = 0 then
+                if ASource.SourcePackage  = spcLak then
                 begin
-                  MinIndex := -1;
+                  CellList := TCellAssignmentList.Create;
+                  try
+                    SourceScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);
+                    MinIndex := -1;
+                    MinDistance := 0;
+                    for var CellIndex := 0 to CellList.Count - 1 do
+                    begin
+                      ACell := CellList[CellIndex];
+                      APoint := Model.TwoDElementCenter(ACell.Cell.Column, ACell.Cell.Row);
+                      X := APoint.x;
+                      Y := APoint.y;
+                      CurrentObjectReaches.FirstNearestPoint(X, Y, APointer);
+                      DistIndex := PInteger(APointer)^;
+                      PointDistance := Distance(X, APoint.x, Y, APoint.y);
+                      if (MinIndex = -1) or (PointDistance < MinDistance) then
+                      begin
+                        MinDistance := PointDistance;
+                        MinIndex := DistIndex;
+                      end;
+                    end;
+                  finally
+                    CellList.Free;
+                  end;
                 end
                 else
                 begin
-                  MinIndex := PInteger(CurrentObjectReaches.NearestPointsFirstData(
-                    SourceLocation.x, SourceLocation.y))^;
+                  AColumn := MvrCell.Column;
+                  ARow := MvrCell.Row;
+                  SourceLocation := GetLocation(AColumn, ARow);
+
+                  Assert(Length(ReceiverValues.StreamCells) > 0);
+                  Assert(Length(ReceiverValues.StreamReachNumbers)
+                    = Length(ReceiverValues.StreamCells));
+
+                  if CurrentObjectReaches.Count = 0 then
+                  begin
+                    MinIndex := -1;
+                  end
+                  else
+                  begin
+                    MinIndex := PInteger(CurrentObjectReaches.NearestPointsFirstData(
+                      SourceLocation.x, SourceLocation.y))^;
+                  end;
                 end;
                 WriteInteger(MinIndex);
               end

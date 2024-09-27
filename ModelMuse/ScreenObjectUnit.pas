@@ -3640,7 +3640,7 @@ view. }
       Model: TBaseModel): boolean;
     { TODO -cRefactor : Consider replacing Model with an interface. }
     //
-    procedure GetCellsToAssign({const Grid: TCustomModelGrid; }
+    procedure GetCellsToAssign(
       const DataSetFunction: string; OtherData: TObject;
       const DataSet: TDataArray; CellList: TCellAssignmentList;
       AssignmentLocation: TAssignmentLocation; AModel: TBaseModel);

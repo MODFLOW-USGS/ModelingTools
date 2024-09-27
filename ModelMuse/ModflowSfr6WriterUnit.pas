@@ -2835,7 +2835,7 @@ begin
     for SegmentIndex := 0 to FSegments.Count - 1 do
     begin
       ASegment := FSegments[SegmentIndex];
-      MvrReceiver.ReceiverKey.ScreenObject := ASegment.FScreenObject as TScreenObject;
+      MvrReceiver.ReceiverKey.ScreenObject := ASegment.FScreenObject;
 
       Assert(ASegment.FReaches.Count = Model.ModflowFullStressPeriods.Count);
       WriteString(Format('# rno sfrsetting (defined by %s)',

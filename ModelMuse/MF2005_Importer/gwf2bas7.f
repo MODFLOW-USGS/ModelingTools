@@ -148,6 +148,7 @@ C
       CHARACTER*80 HEADNG(2)
       CHARACTER*(*) MFVNAM
       CHARACTER*200 LINE
+      logical Owhm2
 C
       DOUBLE PRECISION HNF
       CHARACTER*24 ANAME(2)
@@ -255,21 +256,66 @@ C8B-----LOOK FOR OPTIONS IN THE FIRST ITEM AFTER THE HEADING.
       IPRTIM=0
 	STOPER=0.0
       LLOC=1
+      Owhm2 = .False.
    25 CALL URWORD(LINE,LLOC,ISTART,ISTOP,1,N,R,IOUT,INBAS)
-      IF(LINE(ISTART:ISTOP).EQ.'XSECTION') THEN
+      IF (LINE(ISTART:ISTOP).EQ.'BEGIN') THEN
+         CALL URDCOM(INBAS,IOUT,LINE)
+         LLOC=1
+         Owhm2 = .True.
+         IFREFM=1
+         GOTO 25
+      ELSE IF(LINE(ISTART:ISTOP).EQ.'END') THEN
+        CONTINUE
+      ELSE IF(LINE(ISTART:ISTOP).EQ.'XSECTION') THEN
          IXSEC=1
+         If (Owhm2) then
+           CALL URDCOM(INBAS,IOUT,LINE)
+           LLOC=1
+           GOTO 25
+         ENDIF
       ELSE IF(LINE(ISTART:ISTOP).EQ.'CHTOCH') THEN
          ICHFLG=1
+         If (Owhm2) then
+           CALL URDCOM(INBAS,IOUT,LINE)
+           LLOC=1
+           GOTO 25
+         ENDIF
       ELSE IF(LINE(ISTART:ISTOP).EQ.'FREE') THEN
          IFREFM=1
+         If (Owhm2) then
+           CALL URDCOM(INBAS,IOUT,LINE)
+           LLOC=1
+           GOTO 25
+         ENDIF
+      ELSE IF(LINE(ISTART:ISTOP).EQ.'NOFREE') THEN
+         IFREFM=0
+         If (Owhm2) then
+           CALL URDCOM(INBAS,IOUT,LINE)
+           LLOC=1
+           GOTO 25
+         ENDIF
 !         WRITE(IOUT,26)
 !   26    FORMAT (1X,'THE FREE FORMAT OPTION HAS BEEN SELECTED')
       ELSEIF(LINE(ISTART:ISTOP).EQ.'PRINTTIME') THEN
          IPRTIM=1
+         If (Owhm2) then
+           CALL URDCOM(INBAS,IOUT,LINE)
+           LLOC=1
+           GOTO 25
+         ENDIF
 !         WRITE(IOUT,7)
 !    7    FORMAT(1X,'THE PRINTTIME OPTION HAS BEEN SELECTED')
       ELSE IF(LINE(ISTART:ISTOP).EQ.'STOPERROR') THEN
          CALL URWORD(LINE,LLOC,ISTART,ISTOP,3,N,STOPER,IOUT,INBAS)
+         If (Owhm2) then
+           CALL URDCOM(INBAS,IOUT,LINE)
+           LLOC=1
+           GOTO 25
+         ENDIF
+      ELSE
+         CALL URDCOM(INBAS,IOUT,LINE)
+         LLOC=1
+         GOTO 25
 !         WRITE(IOUT,*) STOPER
 !    8    FORMAT(1X,'When solver convergence criteria are not met,',/
 !     1    1X,'execution will continue unless the budget percent',/
@@ -447,6 +493,8 @@ C     ------------------------------------------------------------------
 C
       CHARACTER*200 LINE
       CHARACTER*24 ANAME(5)
+      integer temp_start
+      integer temp_stop
       DATA ANAME(1) /'                    DELR'/
       DATA ANAME(2) /'                    DELC'/
       DATA ANAME(3) /'TOP ELEVATION OF LAYER 1'/
@@ -474,8 +522,32 @@ C3------ITMUNI, and LENUNI from the line.
       CALL URWORD(LINE,LLOC,ISTART,ISTOP,2,NROW,R,IOUT,INDIS)
       CALL URWORD(LINE,LLOC,ISTART,ISTOP,2,NCOL,R,IOUT,INDIS)
       CALL URWORD(LINE,LLOC,ISTART,ISTOP,2,NPER,R,IOUT,INDIS)
-      CALL URWORD(LINE,LLOC,ISTART,ISTOP,2,ITMUNI,R,IOUT,INDIS)
-      CALL URWORD(LINE,LLOC,ISTART,ISTOP,2,LENUNI,R,IOUT,INDIS)
+      temp_start = ISTART
+      temp_stop = ISTOP
+      CALL URWORD(LINE,LLOC,ISTART,ISTOP,1,ITMUNI,R,IOUT,INDIS)
+      SELECT CASE(LINE(ISTART:ISTOP))
+      CASE('SECOND','SECONDS'); ITMUNI = ONE
+      CASE('MINUTE','MINUTES'); ITMUNI = TWO
+      CASE('HOUR'  ,'HOURS'  ); ITMUNI = THREE
+      CASE('DAY'   ,'DAYS'   ); ITMUNI = FOUR
+      CASE('YEAR'  ,'YEARS'  ); ITMUNI = FIVE
+      CASE DEFAULT
+        ISTART = temp_start
+        ISTOP = temp_stop
+        CALL URWORD(LINE,LLOC,ISTART,ISTOP,2,ITMUNI,R,IOUT,INDIS)
+      END SELECT
+      temp_start = ISTART
+      temp_stop = ISTOP
+      CALL URWORD(LINE,LLOC,ISTART,ISTOP,1,LENUNI,R,IOUT,INDIS)
+      SELECT CASE(LINE(ISTART:ISTOP))
+      CASE('FOOT'      ,'FEET'       ); LENUNI = ONE
+      CASE('METER'     ,'METERS'     ); LENUNI = TWO
+      CASE('CENTIMETER','CENTIMETERS'); LENUNI = THREE
+      CASE DEFAULT
+        ISTART = temp_start
+        ISTOP = temp_stop
+        CALL URWORD(LINE,LLOC,ISTART,ISTOP,2,LENUNI,R,IOUT,INDIS)
+      END SELECT
 C
 C4------PRINT # OF LAYERS, ROWS, COLUMNS AND STRESS PERIODS.
       WRITE(IOUT, *) 'DIS:'
@@ -495,10 +567,21 @@ C7------ALLOCATE LAYER FLAGS.
       ALLOCATE(LAYCBD(NLAY))
 C
 C8------Read confining bed information
-      READ(INDIS,*) (LAYCBD(K),K=1,NLAY)
-      LAYCBD(NLAY)=0
-      WRITE(IOUT, FMT=*) 'LAYCBD(K):'
-      WRITE(IOUT, *) (LAYCBD(K),K=1,NLAY)
+      ! adapt to NOLAYCBD option in MODFLOW OWHM V2
+      CALL URDCOM(INDIS,IOUT,LINE)
+      LLOC = 1
+      CALL URWORD(LINE,LLOC,ISTART,ISTOP,1,N,R,IOUT,INDIS)
+      IF(LINE(ISTART:ISTOP)=='NOLAYCBD'  .OR.
+     +   LINE(ISTART:ISTOP)=='NO_LAYCBD' .OR.
+     +   LINE(ISTART:ISTOP)=='NO' ) THEN
+        LAYCBD = 0
+      else
+        BACKSPACE(INDIS)
+        READ(INDIS,*) (LAYCBD(K),K=1,NLAY)
+        LAYCBD(NLAY)=0
+        WRITE(IOUT, FMT=*) 'LAYCBD(K):'
+        WRITE(IOUT, *) (LAYCBD(K),K=1,NLAY)
+      endif
 
 C
 C9------Count confining beds, setup the pointer to each layer's
@@ -525,6 +608,20 @@ C
 C11-----Read the DELR and DELC arrays.
       CALL U1DREL(DELR,ANAME(1),NCOL,INDIS,IOUT)
       CALL U1DREL(DELC,ANAME(2),NROW,INDIS,IOUT)
+
+      ! skip reading surface in OWHM V2.
+      ! this won't work if the array is internal.
+      CALL URDCOM(INDIS,IOUT,LINE)
+      LLOC = 1
+      CALL URWORD(LINE,LLOC,ISTART,ISTOP,1,N,R,IOUT,INDIS)
+      IF(LINE(ISTART:ISTOP) == 'SURFACE' .OR.
+     +   LINE(ISTART:ISTOP) == 'SURFACE_ELEVATION') THEN
+         continue
+      else
+         BACKSPACE(INDIS)
+      endif
+
+
 C
 C12-----Read the top elevation of layer 1.
       CALL U2DREL(BOTM(:,:,0),ANAME(3),NROW,NCOL,0,INDIS,IOUT)
@@ -549,6 +646,8 @@ C14-----TIME STEP MULTIPLIER, AND STEADY-STATE FLAG..
       LLOC=1
       CALL URWORD(LINE,LLOC,ISTART,ISTOP,3,I,PERLEN(N),IOUT,INDIS)
       CALL URWORD(LINE,LLOC,ISTART,ISTOP,2,NSTP(N),R,IOUT,INDIS)
+      ! OWHM V2 allows negative NSTP
+	  NSTP(N) = ABS(NSTP(N))
       CALL URWORD(LINE,LLOC,ISTART,ISTOP,3,I,TSMULT(N),IOUT,INDIS)
       CALL URWORD(LINE,LLOC,ISTART,ISTOP,1,I,R,IOUT,INDIS)
       IF (LINE(ISTART:ISTOP).EQ.'TR') THEN
@@ -938,7 +1037,7 @@ C6------SPECIAL CHECK FOR 1ST FILE.
      &             6X,'U.S. GEOLOGICAL SURVEY MODULAR',
      &             ' FINITE-DIFFERENCE GROUND-WATER FLOW MODEL',/,
      &             A,'VERSION ',A,/)
-          WRITE(IOUT,65) 
+          WRITE(IOUT,65)
 65        FORMAT('If you are attempting to run MODFLOW, you '
      &     'are making a big ***ERROR***. This is not MODFLOW. This '
      &     'program should only be used for importing existing models '

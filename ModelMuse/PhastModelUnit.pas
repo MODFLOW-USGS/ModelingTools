@@ -10373,14 +10373,17 @@ const
 //                on the top and bottom layers.
 //    '5.3.1.1'  Bug fix: Fixed bug that could cause the input to the MVR
 //                package to be incorrect when the specification of a Lake
-//                source did not completely match the time discretization
+//                source did not completely match the time discretization.
+//    '5.3.1.2'  Bug fix: Fixed bug that could cause the input to the MVR
+//                package to be incorrect when a lake source was connected
+//                to the nearest reach in an SFR receiver.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.1';
+  IIModelVersion = '5.3.1.2';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
