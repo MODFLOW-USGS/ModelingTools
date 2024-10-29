@@ -8188,13 +8188,24 @@ var
     temp: TPoint2D;
     DistanceP: double;
     AngleP: double;
+    Angle: double;
   begin
     result := APoint;
     if AngRot <> 0 then
     begin
       DistanceP := Distance(result, Origin);
       AngleP := ArcTan2(result.Y - Origin.Y, result.x - Origin.x) / Pi *180;
-      temp := ProjectPoint(Origin, AngleP + AngRot,DistanceP);
+      Angle := AngleP + AngRot;
+      if Angle < 0 then
+      begin
+        Angle := Angle + 360;
+      end
+      else if Angle > 360 then
+      begin
+        Angle := Angle - 360;
+      end;
+
+      temp := ProjectPoint(Origin, Angle,DistanceP);
       result := temp;
     end;
   end;

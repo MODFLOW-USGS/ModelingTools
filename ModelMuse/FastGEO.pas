@@ -3329,6 +3329,9 @@ end;
 
 function Quadrant(const Angle : TFloat  ):Integer;
 begin
+    Assert(Angle >= 0);
+    Assert(Angle <+ 360);
+
     Result := 0;
          if (Angle >=   0.0) and (Angle <  90.0) then Result := 1
     else if (Angle >=  90.0) and (Angle < 180.0) then Result := 2

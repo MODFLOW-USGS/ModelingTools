@@ -10377,13 +10377,15 @@ const
 //    '5.3.1.2'  Bug fix: Fixed bug that could cause the input to the MVR
 //                package to be incorrect when a lake source was connected
 //                to the nearest reach in an SFR receiver.
+//    '5.3.1.3'  Bug fix: Fixed display of MODPATH version 7 output in grids
+//                with non-zero grid angles.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.2';
+  IIModelVersion = '5.3.1.3';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
