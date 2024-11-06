@@ -655,7 +655,11 @@ begin
       begin
         WriteToNameFile(StrDATABINARY, UnitNumber, RelativeFileName,
           foInputAlreadyExists, Model, True);
-      end;
+      end
+      else
+      begin
+        Model.AddModelInputFile(ExpandFileName(RelativeFileName));
+      end
     end
     else
     begin

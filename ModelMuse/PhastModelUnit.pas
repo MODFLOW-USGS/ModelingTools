@@ -10380,6 +10380,9 @@ const
 //    '5.3.1.3'  Bug fix: Fixed display of MODPATH version 7 output in grids
 //                with non-zero grid angles.
 
+//               Bug fix: Fixed bug in saving binary head input file to a
+//                model archive.
+
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
