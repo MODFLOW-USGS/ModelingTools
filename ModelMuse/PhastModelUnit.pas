@@ -10380,15 +10380,19 @@ const
 //    '5.3.1.3'  Bug fix: Fixed display of MODPATH version 7 output in grids
 //                with non-zero grid angles.
 
-//               Bug fix: Fixed bug in saving binary head input file to a
+//    '5.3.1.4'  Bug fix: Fixed bug in saving binary head input file to a
 //                model archive.
+//               Bug fix: Fixed a bug that could cause an assertion failure
+//                when changing the model selection.
+//               Bug fix: Fixed bug in assigning the depth PEST modifier and
+//                PEST method for ETS boundaries.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.3';
+  IIModelVersion = '5.3.1.4';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }

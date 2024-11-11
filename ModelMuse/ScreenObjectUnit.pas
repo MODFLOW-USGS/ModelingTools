@@ -28842,6 +28842,7 @@ begin
   end;
   CellList := TCellAssignmentList.Create;
   try
+    GetCellsToAssign('', nil, eaBlocks, CellList, alAll, dso3D, AModel);
     case FScreenObject.EvaluatedAt of
       eaBlocks:
         begin
@@ -28855,7 +28856,6 @@ begin
         end;
       else Assert(False);
     end;
-    GetCellsToAssign('', nil, eaBlocks, CellList, alAll, dso3D, AModel);
     for Index := 0 to CellList.Count - 1 do
     begin
       Cell := CellList[Index];

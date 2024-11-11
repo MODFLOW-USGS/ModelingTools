@@ -22569,9 +22569,9 @@ end;
 procedure TfrmScreenObjectProperties.GetEtsBoundary(ScreenObjectList: TList);
 const
   RateBoundaryPosition = 0;
-  SurfaceBoundaryPosition = 1;
-  DepthBoundaryPosition = 2;
-  MultiplierPosition = 3;
+  SurfaceBoundaryPosition = 2;
+  DepthBoundaryPosition = 3;
+  MultiplierPosition = 1;
   ColOffset = 2;
 var
   Frame: TframeScreenObjectParam;
@@ -22732,7 +22732,7 @@ var
   begin
     Frame.rdgModflowBoundary.BeginUpdate;
     try
-      for BoundaryIndex := 1 to 2 do
+      for BoundaryIndex := SurfaceBoundaryPosition to DepthBoundaryPosition do
       begin
         First := True;
         Identical := True;
@@ -22768,7 +22768,7 @@ var
         end;
       end;
 
-      for BoundaryIndex := 1 to 2 do
+      for BoundaryIndex := SurfaceBoundaryPosition to DepthBoundaryPosition do
       begin
         First := True;
         Identical := True;
@@ -29575,13 +29575,14 @@ var
     Index: Integer;
     Item: TScreenObjectEditItem;
     Boundary: TEtsBoundary;
-    BoundaryValues: TCustomMF_BoundColl;
+//    BoundaryValues: TCustomMF_BoundColl;
     DataGrid: TRbwDataGrid4;
     BoundaryIndex: Integer;
     Modifier: string;
     ColumnOffset: Integer;
     BoundaryCount: Integer;
     StorageIndex: Integer;
+    ColIndex: Integer;
   begin
     if (Node = nil) then
     begin
@@ -29599,30 +29600,37 @@ var
       if ShouldStoreBoundary(Node, Boundary) then
       begin
         ColumnOffset := 2;
-        BoundaryValues := Boundary.Values;
-        BoundaryCount := BoundaryValues.TimeListCount(frmGoPhast.PhastModel);
+//        BoundaryValues := Boundary.Values;
+        BoundaryCount := 4;
+//        BoundaryCount := BoundaryCount + Boundary.EtsSurfDepthCollection.TimeListCount(frmGoPhast.PhastModel);
         for BoundaryIndex := 0 to BoundaryCount - 1 do
         begin
-          if BoundaryIndex = 0 then
-          begin
-            StorageIndex := 0;
-          end
-          else if BoundaryIndex = 1 then
-          begin
-            StorageIndex := 1;
-          end
-          else
-          begin
-            StorageIndex := EtsBoundaryStartConcentration + BoundaryIndex -1;
-          end;
-          if DataGrid.Cells[ColumnOffset+BoundaryIndex,PestMethodRow] <> '' then
+          ColIndex := ColumnOffset+BoundaryIndex;
+          StorageIndex := BoundaryIndex;
+//          if ColIndex >= Frame.rdgModflowBoundary.ColCount then
+//          begin
+//            Continue
+//          end;
+//          if BoundaryIndex = 0 then
+//          begin
+//            StorageIndex := 0;
+//          end
+//          else if BoundaryIndex = 1 then
+//          begin
+//            StorageIndex := 1;
+//          end
+//          else
+//          begin
+//            StorageIndex := EtsBoundaryStartConcentration + BoundaryIndex -1;
+//          end;
+          if DataGrid.Cells[ColIndex,PestMethodRow] <> '' then
           begin
             Boundary.PestBoundaryMethod[StorageIndex] :=
-              PestMethod[DataGrid, ColumnOffset+BoundaryIndex];
+              PestMethod[DataGrid, ColIndex];
           end;
-          if PestModifierAssigned[DataGrid, ColumnOffset+BoundaryIndex] then
+          if PestModifierAssigned[DataGrid, ColIndex] then
           begin
-            Modifier := PestModifier[DataGrid, ColumnOffset+BoundaryIndex];
+            Modifier := PestModifier[DataGrid, ColIndex];
             Boundary.PestBoundaryFormula[StorageIndex] := Modifier;
           end;
         end;
