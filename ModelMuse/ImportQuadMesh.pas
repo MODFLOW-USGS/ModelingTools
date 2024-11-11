@@ -3,7 +3,7 @@ unit ImportQuadMesh;
 interface
 
 uses
-  System.UITypes, Windows, Classes, SutraMeshUnit, SysUtils;
+  System.UITypes, Windows, Classes, SutraMeshUnit, SysUtils, System.IOUtils;
 
 procedure ImportSutraMeshFromFile(const AFileName: string; out ErrorMessage: string; GmshExag: double = 1;
   ChangeVE: Boolean = True);
@@ -11,9 +11,10 @@ procedure ImportSutraMeshFromFile(const AFileName: string; out ErrorMessage: str
 implementation
 
 uses
-  IOUtils, frmGoPhastUnit, UndoItems, Dialogs,
+  frmGoPhastUnit, UndoItems, Dialogs,
   QuadTreeClass, PhastModelUnit, ScreenObjectUnit, Math, ZoomBox2,
-  GoPhastTypes, frmErrorsAndWarningsUnit, System.Generics.Collections;
+  GoPhastTypes, frmErrorsAndWarningsUnit, System.Generics.Collections,
+  ShapefileUnit;
 
 resourcestring
   StrTheMeshContained = 'The mesh contained %d triangular elements. The tria' +
@@ -701,6 +702,131 @@ begin
   end;
 end;
 
+procedure ImportSutraMeshFromShapeFile(const AFileName: string;
+  out ErrorMessage: string;  GmshExag: double = 1; ChangeVE: Boolean = True);
+var
+  ShapeReader: TShapefileGeometryReader;
+  IndexFile: string;
+  NodeTree: TRbwQuadTree;
+  Mesh3D: TSutraMesh3D;
+  Mesh2D: TSutraMesh2D;
+  AShape: TShapeObject;
+  APoint: TShapePoint;
+  Point1: TShapePoint;
+  Point2: TShapePoint;
+  ElementNumber: Integer;
+  AnElement: TSutraElement2D;
+  ANode: TSutraNode2D;
+  NewNodeNumber: Integer;
+  XEpsilon: double;
+  YEpsilon: double;
+  NumberedNode: TSutraNodeNumber2D_Item;
+  Undo: TUndoImportMesh;
+  procedure CreateNode(x,y: Double);
+  begin
+    ANode := TSutraNode2D.Create(Mesh2D.Nodes);
+    ANode.X := X;
+    ANode.Y := Y;
+    NodeTree.AddPoint(X, Y, ANode);
+    ANode.Number := NewNodeNumber;
+    Inc(NewNodeNumber);
+  end;
+begin
+  if not TFile.Exists(AFileName) then
+  begin
+    ErrorMessage := Format('The shape file "%s" does not exist.', [AFileName]);
+    Exit;
+  end;
+  IndexFile := ChangeFileExt(AFileName, '.shx');
+  if not TFile.Exists(IndexFile) then
+  begin
+    ErrorMessage := Format('The shape index file "%s" does not exist.', [IndexFile]);
+    Exit;
+  end;
+
+  ShapeReader := TShapefileGeometryReader.Create;
+  NodeTree := TRbwQuadTree.Create(nil);
+  try
+    ShapeReader.ReadFromFile(AFileName, IndexFile);
+    NodeTree.XMin := ShapeReader.FileHeader.BoundingBoxXMin;
+    NodeTree.XMax := ShapeReader.FileHeader.BoundingBoxXMax;
+    NodeTree.YMin := ShapeReader.FileHeader.BoundingBoxYMin;
+    NodeTree.Ymax := ShapeReader.FileHeader.BoundingBoxYMax;
+    XEpsilon := (NodeTree.XMax-NodeTree.XMin)/1e7;
+    YEpsilon := (NodeTree.Ymax-NodeTree.YMin)/1e7;
+
+    Mesh3D := TSutraMesh3D.Create(nil);
+    try
+      Mesh2D := Mesh3D.Mesh2D;
+      Mesh2D.MeshGenControls := frmGoPhast.PhastModel.SutraMesh.Mesh2D.MeshGenControls;
+
+      ElementNumber := 0;
+      NewNodeNumber := 0;
+      for var Index := 0 to ShapeReader.Count - 1 do
+      begin
+        AShape := ShapeReader[index];
+        if AShape.FNumPoints in [4,5] then
+        begin
+          if AShape.FNumPoints = 5 then
+          begin
+            Point1 := AShape.FPoints[0];
+            Point2 := AShape.FPoints[4];
+            if (Point1.x <> Point2.x)
+              or (Point1.y <> Point2.y) then
+            begin
+              Continue;
+            end;
+          end;
+          AnElement := TSutraElement2D.Create(Mesh2D.Elements);
+          AnElement.ElementNumber := ElementNumber;
+          Inc(ElementNumber);
+          for var PointIndex := 0 to 4 - 1 do
+          begin
+            APoint := AShape.FPoints[PointIndex];
+            if NodeTree.Count > 0 then
+            begin
+              ANode := NodeTree.NearestPointsFirstData(APoint.X, APoint.Y);
+              if (Abs(ANode.X - APoint.X) > XEpsilon)
+                or (Abs(ANode.Y - APoint.Y) > YEpsilon) then
+              begin
+                CreateNode(APoint.x, APoint.y);
+              end;
+            end
+            else
+            begin
+              CreateNode(APoint.x, APoint.y);
+            end;
+            NumberedNode := AnElement.Nodes.Add;
+            NumberedNode.Node := ANode;
+          end;
+        end;
+      end;
+
+      Mesh3D.DeleteUnconnectedNodes;
+      Mesh3D.SetCorrectElementOrientation;
+      if Mesh3D.Mesh2D.Elements.Count > 0 then
+      begin
+        Undo := TUndoImportMesh.Create;
+        Undo.ChangeVE := ChangeVE;
+        Undo.UpdateOldMesh(frmGoPhast.PhastModel.SutraMesh);
+        Undo.UpdateNewMesh(Mesh3D);
+        frmGoPhast.UndoStack.Submit(Undo);
+      end
+      else
+      begin
+        ErrorMessage := StrThereWasAnErrorI;
+      end;
+
+    finally
+      Mesh3D.Free;
+    end;
+  finally
+    ShapeReader.Free;
+    NodeTree.Free;
+  end;
+end;
+
+
 
 procedure ImportSutraMeshFromFile(const AFileName: string; out ErrorMessage: string;
   GmshExag: double = 1; ChangeVE: Boolean = True);
@@ -713,6 +839,11 @@ var
   ALine: string;
   Value: integer;
 begin
+  if AnsiSameText(ExtractFileExt(AFileName), '.shp') then
+  begin
+    ImportSutraMeshFromShapeFile(AFileName, ErrorMessage, GmshExag, ChangeVE);
+    Exit;
+  end;
   FileReader := TFile.OpenText(AFileName);
   try
     Mesh3D := TSutraMesh3D.Create(nil);
@@ -732,32 +863,29 @@ begin
           end;
         end;
         try
-        if ALine = '$MeshFormat' then
-        begin
-          ImportFromGMsh(FileReader, Splitter, Mesh2D, GmshExag);
-        end
-        else
-        begin
-          Splitter.DelimitedText := ALine;
-          if (Splitter.Count = 1) and TryStrToInt(ALine, Value) then
+          if ALine = '$MeshFormat' then
           begin
-            ImportFromGeomPack(FileReader, Splitter, Mesh2D, GmshExag, ALine);
+            ImportFromGMsh(FileReader, Splitter, Mesh2D, GmshExag);
           end
           else
           begin
-            ImportArgusOneMesh(FileReader, Splitter, Mesh2D, ALine);
+            Splitter.DelimitedText := ALine;
+            if (Splitter.Count = 1) and TryStrToInt(ALine, Value) then
+            begin
+              ImportFromGeomPack(FileReader, Splitter, Mesh2D, GmshExag, ALine);
+            end
+            else
+            begin
+              ImportArgusOneMesh(FileReader, Splitter, Mesh2D, ALine);
+            end;
           end;
-        end;
         except on E: EAssertionFailed do
           begin
             Beep;
             MessageDlg(StrThereWasAnErrorIInvalidMesh, mtError, [mbOK], 0);
             Exit;
           end;
-
         end;
-
-
       finally
         Splitter.Free;
       end;
@@ -774,8 +902,6 @@ begin
       else
       begin
         ErrorMessage := StrThereWasAnErrorI;
-//        Beep;
-//        MessageDlg(StrThereWasAnErrorI, mtError, [mbOK], 0);
       end;
     finally
       Mesh3D.Free;

@@ -10379,13 +10379,15 @@ const
 //                to the nearest reach in an SFR receiver.
 //    '5.3.1.3'  Bug fix: Fixed display of MODPATH version 7 output in grids
 //                with non-zero grid angles.
-
 //    '5.3.1.4'  Bug fix: Fixed bug in saving binary head input file to a
 //                model archive.
 //               Bug fix: Fixed a bug that could cause an assertion failure
 //                when changing the model selection.
 //               Bug fix: Fixed bug in assigning the depth PEST modifier and
 //                PEST method for ETS boundaries.
+
+//               Enhancement: ModelMuse can now import SUTRA meshes from
+//                Shapefiles.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
@@ -35154,30 +35156,17 @@ begin
   end;
 end;
 
-//procedure TCustomModel.ImportFromGmshOnTerminate(Sender: TObject; ExitCode: DWORD);
-//begin
-//  Assert(FileExists(FMeshFileName));
-//  ImportSutraMeshFromFile(FMeshFileName);
-//end;
+
 procedure TCustomModel.GenerateMeshUsingGeompack(var ErrorMessage: string);
 var
   List: TList;
-//  ScreenObjectIndex: integer;
-//  ScreenObject: TScreenObject;
   MeshCreator: TQuadMeshCreator;
-//  SectionIndex: Integer;
   NodeIndex: Integer;
-//  ABoundary: TBoundary;
-//  ANode: TNode;
-//  FirstNode: TNode;
   SutraNode: TSutraNode2D;
-//  AdjustIndex: Integer;
   MeshNode: INode;
   ElementIndex: Integer;
   SutraElement: TSutraElement2D;
   MeshElement: IElement;
-//  StartIndex: Integer;
-//  EndIndex: Integer;
   Exag: Extended;
   InvalidMesh: boolean;
   OuterElementIndex: integer;
@@ -35185,21 +35174,7 @@ var
   InnerElementIndex: integer;
   InnerElement: TSutraElement2D;
   InnerNodeIndex: integer;
-//  NodeTree: TRbwQuadTree;
-//  ALocation: TPoint2D;
-//  Data: TPointerArray;
-//  SearchX: double;
-//  SearchY: double;
-//  NodeList: TNodeList;
-//  NodeScreenObjectsList: TList;
-//  MaxX: double;
-//  MinX: double;
-//  MaxY: double;
-//  MinY: double;
-//  Epsilon: double;
   CellSize: Real;
-//  PointItem: TPointValuesItem;
-//  SizePosition: Integer;
   GeomPackOptions: TGeompackOptions;
   OuterBoundary: TScreenObject;
   ScreenObjectArea: Real;
@@ -35233,163 +35208,13 @@ begin
     MeshCreator := TQuadMeshCreator.Create;
     try
       CreateBoundariesForMeshCreator(MeshCreator, List, Exag);
-//      InvalidMesh := False;
-//      MeshCreator.NodeAdjustmentMethod := namGiuliani;
-//      MeshCreator.RenumberingAlgorithm := SutraMesh.Mesh2D.MeshGenControls.RenumberingAlgorithm;
-//
-//      NodeTree := TRbwQuadTree.Create(nil);
-//      NodeList := TNodeList.Create;
-//      NodeScreenObjectsList := TList.Create;
-//      try
-//        if List.Count > 0 then
-//        begin
-//          ScreenObject := List[0];
-//          MaxX := ScreenObject.MaxX;
-//          MinX := ScreenObject.MinX;
-//          MaxY := ScreenObject.MaxY;
-//          MinY := ScreenObject.MinY;
-//        end
-//        else
-//        begin
-//          MaxX := 0;
-//          MinX := 0;
-//          MaxY := 0;
-//          MinY := 0;
-//        end;
-//        for ScreenObjectIndex := 0 to List.Count - 1 do
-//        begin
-//          ScreenObject := List[ScreenObjectIndex];
-//          MaxX := Max(MaxX, ScreenObject.MaxX);
-//          MinX := Min(MinX, ScreenObject.MinX);
-//          MaxY := Max(MaxY, ScreenObject.MaxY);
-//          MinY := Min(MinY, ScreenObject.MinY);
-//        end;
-//        Epsilon := Sqrt(Sqr(MaxX-MinX) + Sqr(MaxY-MinY))/1e7;
-//        for ScreenObjectIndex := 0 to List.Count - 1 do
-//        begin
-//          ScreenObject := List[ScreenObjectIndex];
-//          for SectionIndex := 0 to ScreenObject.SectionCount - 1 do
-//          begin
-//            ABoundary := MeshCreator.AddBoundary(ScreenObject.CellSize);
-//            FirstNode := nil;
-//            StartIndex := ScreenObject.SectionStart[SectionIndex];
-//            EndIndex := ScreenObject.SectionEnd[SectionIndex];
-//            if ScreenObject.SectionClosed[SectionIndex] then
-//            begin
-//              Dec(EndIndex);
-//            end;
-//            for NodeIndex := StartIndex to EndIndex do
-//            begin
-//              ALocation := ScreenObject.Points[NodeIndex];
-//              ANode := nil;
-//              if NodeTree.Count > 0 then
-//              begin
-//                SearchX := ALocation.x;
-//                SearchY := ALocation.y;
-//                NodeTree.FindClosestPointsData(SearchX, SearchY, Data);
-//                if (Abs(SearchX - ALocation.x)<Epsilon) and (Abs(SearchY - ALocation.y)<Epsilon) then
-//                begin
-//                  ANode := Data[0];
-////                  if ScreenObject.CellSize < ANode.DesiredSpacing then
-//                  begin
-//                    ANode.DesiredSpacing := ScreenObject.CellSize;
-//                  end;
-//                end;
-//              end;
-//
-//              if ANode = nil then
-//              begin
-//                CellSize := ScreenObject.CellSize;
-//                PointItem := ScreenObject.PointPositionValues.
-//                  GetItemByPosition(NodeIndex);
-//                if PointItem <> nil then
-//                begin
-//                  SizePosition := PointItem.IndexOfName(StrMeshElementSize);
-//                  if SizePosition >= 0 then
-//                  begin
-//                    CellSize := (PointItem.Values.Items[SizePosition] as TPointValue).Value;
-//                  end;
-//                end;
-//
-//                ANode := TNode.Create(MeshCreator, CellSize);
-//                ANode.Location := ALocation;
-//                ANode.Y := ANode.Y*Exag;
-//                NodeTree.AddPoint(ALocation.x, ALocation.y, ANode);
-//                NodeList.Add(ANode);
-//                NodeScreenObjectsList.Add(ScreenObject);
-//              end;
-//              if FirstNode = nil then
-//              begin
-//                FirstNode := ANode;
-//              end;
-//              ABoundary.AddNode(ANode);
-//            end;
-//            if ScreenObject.SectionClosed[SectionIndex] then
-//            begin
-//              ABoundary.AddNode(FirstNode);
-//            end;
-//          end;
-//        end;
-//        { TODO -cSUTRA : Consider moving this inside TQuadMeshCreator.GenerateMesh }
-//        for NodeIndex := 0 to NodeList.Count - 1 do
-//        begin
-//          ANode := NodeList[NodeIndex];
-//          StartIndex := List.IndexOf(NodeScreenObjectsList[NodeIndex])+1;
-//          for ScreenObjectIndex := StartIndex to List.Count - 1 do
-//          begin
-//            ScreenObject := List[ScreenObjectIndex];
-////            if (ScreenObject <> NodeScreenObjectsList[NodeIndex])
-////              and (ANode.DesiredSpacing > ScreenObject.CellSize) then
-//            begin
-//              SearchX := ANode.x;
-//              SearchY := ANode.y/Exag;
-//              if ScreenObject.IsPointInside(SearchX, SearchY, SectionIndex) then
-//              begin
-//                ANode.DesiredSpacing := ScreenObject.CellSize;
-//              end;
-//            end;
-//          end;
-//        end;
-//      finally
-//        NodeTree.Free;
-//        NodeList.Free;
-//        NodeScreenObjectsList.Free;
-//      end;
-//
-//      SutraMesh.Mesh2D.MeshGenControls.Apply;
-
-  {$IFDEF DEBUG}
-//      StartTime := Now;
-//      OutputDebugString('SAMPLING ON');
-
-  {$ENDIF}
-//      try
       MeshCreator.GenerateMeshWithGeomPackPP(ProgramLocations.GeompackLocation,
         Exag, SutraMesh.Mesh2D.MeshGenControls.GeomPackOptions, ErrorMessage);
-//        ImportFromGmshOnTerminate, FMeshFileName;
 
       SutraMesh.ElevationsNeedUpdating := True;
       SutraMesh.CheckUpdateElevations;
 
       Exit;
-
-//      except on E: EInvalidElement do
-//        begin
-//          InvalidMesh := True;
-//        end;
-//      end;
-
-//      for AdjustIndex := 1 to 5 do
-//      begin
-//        MeshCreator.AdjustNodes;
-//      end;
-//      MeshCreator.FixFinalTriangularElements;
-  {$IFDEF DEBUG}
-//      OutputDebugString('SAMPLING OFF');
-
-//      EndTime := Now;
-  {$ENDIF}
-
 
       if FSutraMesh = nil then
       begin
