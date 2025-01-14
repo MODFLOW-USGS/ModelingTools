@@ -4,8 +4,9 @@ inherited frmModflowTime: TfrmModflowTime
   Caption = 'MODFLOW Time'
   ClientHeight = 541
   ClientWidth = 750
-  ExplicitWidth = 762
-  ExplicitHeight = 579
+  StyleElements = [seFont, seClient, seBorder]
+  ExplicitWidth = 766
+  ExplicitHeight = 580
   TextHeight = 18
   object pnlBottom: TPanel
     Left = 0
@@ -14,8 +15,6 @@ inherited frmModflowTime: TfrmModflowTime
     Height = 35
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 497
-    ExplicitWidth = 744
     DesignSize = (
       750
       35)
@@ -28,7 +27,6 @@ inherited frmModflowTime: TfrmModflowTime
       Kind = bkCancel
       NumGlyphs = 2
       TabOrder = 2
-      ExplicitLeft = 630
     end
     object btnOK: TBitBtn
       Left = 548
@@ -40,7 +38,6 @@ inherited frmModflowTime: TfrmModflowTime
       NumGlyphs = 2
       TabOrder = 1
       OnClick = btnOKClick
-      ExplicitLeft = 542
     end
     object btnHelp: TBitBtn
       Left = 460
@@ -52,7 +49,6 @@ inherited frmModflowTime: TfrmModflowTime
       NumGlyphs = 2
       TabOrder = 0
       OnClick = btnHelpClick
-      ExplicitLeft = 454
     end
     object btnConvertTimeUnits: TButton
       Left = 12
@@ -82,8 +78,6 @@ inherited frmModflowTime: TfrmModflowTime
     Align = alClient
     TabOrder = 0
     OnChange = pgcMainChange
-    ExplicitWidth = 744
-    ExplicitHeight = 497
     object tabModflow: TTabSheet
       Caption = 'MODFLOW'
       object pnlTop: TPanel
@@ -569,12 +563,14 @@ inherited frmModflowTime: TfrmModflowTime
         inherited Panel: TPanel
           Top = 432
           Width = 742
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitTop = 432
           ExplicitWidth = 742
           inherited lbNumber: TLabel
             Width = 200
             Height = 18
             Caption = 'Number of MT3DMS periods'
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitWidth = 200
             ExplicitHeight = 18
           end
@@ -593,6 +589,7 @@ inherited frmModflowTime: TfrmModflowTime
           end
           inherited seNumber: TJvSpinEdit
             Height = 26
+            StyleElements = [seFont, seClient, seBorder]
             Value = 1.000000000000000000
             ExplicitHeight = 26
           end

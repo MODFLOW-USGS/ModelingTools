@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Glsoundregister.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSoundRegister.pas' rev: 36.00 (Windows)
 
 #ifndef GlsoundregisterHPP
 #define GlsoundregisterHPP
@@ -15,12 +15,12 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <Sysinit.hpp>
+#include <SysInit.hpp>
 #include <System.Classes.hpp>
-#include <Glsmbass.hpp>
-#include <Glsmfmod.hpp>
-#include <Glsmopenal.hpp>
-#include <Glsmwaveout.hpp>
+#include <GLSMBASS.hpp>
+#include <GLSMFMOD.hpp>
+#include <GLSMOpenAL.hpp>
+#include <GLSMWaveOut.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

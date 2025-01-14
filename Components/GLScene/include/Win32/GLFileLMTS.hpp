@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLFileLMTS.pas' rev: 36.00 (Windows)
@@ -153,12 +153,12 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const int C_LMTS_ID = int(0x53544d4c);
-static const System::Int8 C_LMTS_VER = System::Int8(0x4);
-static const int C_LMTS_SUBS = int(0x53425553);
-static const int C_LMTS_TEXT = int(0x54584554);
-static const int C_LMTS_TRIS = int(0x53495254);
-static const System::Byte C_LMTS_TEXFNLEN = System::Byte(0xff);
+static _DELPHI_CONST int C_LMTS_ID = int(0x53544d4c);
+static _DELPHI_CONST System::Int8 C_LMTS_VER = System::Int8(0x4);
+static _DELPHI_CONST int C_LMTS_SUBS = int(0x53425553);
+static _DELPHI_CONST int C_LMTS_TEXT = int(0x54584554);
+static _DELPHI_CONST int C_LMTS_TRIS = int(0x53495254);
+static _DELPHI_CONST System::Byte C_LMTS_TEXFNLEN = System::Byte(0xff);
 }	/* namespace Glfilelmts */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLFILELMTS)
 using namespace Glfilelmts;

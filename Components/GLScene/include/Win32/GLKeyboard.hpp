@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLKeyboard.pas' rev: 36.00 (Windows)
@@ -28,8 +28,8 @@ namespace Glkeyboard
 typedef int TVirtualKeyCode;
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte VK_MOUSEWHEELUP = System::Byte(0x86);
-static const System::Byte VK_MOUSEWHEELDOWN = System::Byte(0x87);
+static _DELPHI_CONST System::Byte VK_MOUSEWHEELUP = System::Byte(0x86);
+static _DELPHI_CONST System::Byte VK_MOUSEWHEELDOWN = System::Byte(0x87);
 extern DELPHI_PACKAGE int vLastWheelDelta;
 extern DELPHI_PACKAGE bool __fastcall IsKeyDown(System::WideChar c)/* overload */;
 extern DELPHI_PACKAGE bool __fastcall IsKeyDown(TVirtualKeyCode vk)/* overload */;

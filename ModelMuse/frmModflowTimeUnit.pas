@@ -169,9 +169,12 @@ resourcestring
   StrNoStressPeriodsHa = 'No stress periods have been properly defined. Plea' +
   'se check again.';
   StrSteadyStateTranspo = 'Steady state transport (SSFlag)';
-  StrMT3DMSAllowsAMaxi = 'MT3DMS allows a maximun of 1000 time steps in a mo' +
-  'del. You model has more than that. You will need to fix this before you c' +
-  'an run MT3DMS.';
+  StrMT3DMSAllowsAMaxi = 'MT3DMS allows a maximum of 1000 time ' +
+  'steps in a model. You model has more than that. You will need to fix this ' +
+  'before you can run MT3DMS. (MT3D-USGS allows 9000 steps)';
+  StrMT3DusgsAllowsAMaxi = 'MT3D-USGS allows a maximum of 9000 time ' +
+  'steps in a model. You model has more than that. You will need to fix this ' +
+  'before you can run MT3D-USGS.';
   StrAtLeastOneStress = 'At least one stress period has %d time steps. If th' +
   'is is not what you intend, you should fix the problem before trying to ru' +
   'n the model.';
@@ -228,6 +231,7 @@ var
   OutputControl: TModflowOutputControl;
   FormatedOutputUsed: Boolean;
   Warning: string;
+  Mt3dBasic: TMt3dBasic;
 begin
   inherited;
   for Index := 1 to dgTime.RowCount - 1 do
@@ -325,8 +329,17 @@ begin
   end;
   if (TotalSteps > 1000) and frmGoPhast.PhastModel.Mt3dIsSelected then
   begin
-    Beep;
-    MessageDlg(StrMT3DMSAllowsAMaxi, mtWarning, [mbOK], 0);
+    Mt3dBasic := frmGoPhast.PhastModel.ModflowPackages.Mt3dBasic;
+    if Mt3dBasic.Mt3dVersion = mvMS then
+    begin
+      Beep;
+      MessageDlg(StrMT3DMSAllowsAMaxi, mtWarning, [mbOK], 0);
+    end
+    else if TotalSteps > 9000 then
+    begin
+      Beep;
+      MessageDlg(StrMT3DusgsAllowsAMaxi, mtWarning, [mbOK], 0);
+    end;
   end;
 
 end;

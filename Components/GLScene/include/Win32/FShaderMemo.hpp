@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'FShaderMemo.pas' rev: 36.00 (Windows)
@@ -85,7 +85,7 @@ __published:
 	void __fastcall FormCreate(System::TObject* Sender);
 	void __fastcall FormDestroy(System::TObject* Sender);
 	void __fastcall GLSLMemoGutterClick(System::TObject* Sender, int LineNo);
-	void __fastcall GLSLMemoGutterDraw(System::TObject* Sender, Vcl::Graphics::TCanvas* ACanvas, int LineNo, const System::Types::TRect &rct);
+	void __fastcall GLSLMemoGutterDraw(System::TObject* Sender, Vcl::Graphics::TCanvas* ACanvas, int LineNo, const Winapi::Windows::TRect &rct);
 	void __fastcall TBOpenClick(System::TObject* Sender);
 	void __fastcall TBSaveClick(System::TObject* Sender);
 	void __fastcall TBStayOnTopClick(System::TObject* Sender);

@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'FGuiSkinEditor.pas' rev: 36.00 (Windows)
@@ -155,20 +155,20 @@ __published:
 	
 private:
 	System::Classes::TWndMethod FOriginalWndProc;
-	System::Types::TRect FFocusRect;
-	System::Types::TRect VisibleRect;
-	System::Types::TPoint PreviewMousePoint;
+	Winapi::Windows::TRect FFocusRect;
+	Winapi::Windows::TRect VisibleRect;
+	Winapi::Windows::TPoint PreviewMousePoint;
 	int PreviewWidth;
 	int PreviewHeight;
-	System::Types::TPoint FullMousePoint;
+	Winapi::Windows::TPoint FullMousePoint;
 	bool MouseDown;
 	void __fastcall ImageWndProc(Winapi::Messages::TMessage &Message);
-	void __fastcall DrawImageFocusRect(const System::Types::TRect &ARect);
+	void __fastcall DrawImageFocusRect(const Winapi::Windows::TRect &ARect);
 	void __fastcall AlignZoomPanel();
 	void __fastcall UpdateRegionEdits();
 	void __fastcall SetEditState(Vcl::Controls::TControl* Parent, bool Enabled);
 	void __fastcall AddElement(int Index);
-	void __fastcall DrawCrossair(const System::Types::TPoint &Point);
+	void __fastcall DrawCrossair(const Winapi::Windows::TPoint &Point);
 	
 public:
 	Glgui::TGLGuiElementList* TheGuiComponent;

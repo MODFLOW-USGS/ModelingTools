@@ -12559,7 +12559,7 @@ var
       Aux := ACell.Aux[AuxMultIndex];
       if Aux.ValueType = vtNumeric then
       begin
-        ImportedName := Format('Imported_River_Multipliler_%s_Period_%d',
+        ImportedName := Format('Imported_River_Multiplier_%s_Period_%d',
           [Package.PackageName, Period]);
         Imported_River_Multiplier := AScreenObject.ImportedValues.Add;
         Imported_River_Multiplier.Name := ImportedName;

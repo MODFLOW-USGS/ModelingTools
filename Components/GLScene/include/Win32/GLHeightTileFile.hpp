@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLHeightTileFile.pas' rev: 36.00 (Windows)
@@ -167,8 +167,8 @@ public:
 #pragma pack(pop)
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Word cHTFHashTableSize = System::Word(0x3ff);
-static const System::Int8 cHTFQuadTableSize = System::Int8(0x1f);
+static _DELPHI_CONST System::Word cHTFHashTableSize = System::Word(0x3ff);
+static _DELPHI_CONST System::Int8 cHTFQuadTableSize = System::Int8(0x1f);
 }	/* namespace Glheighttilefile */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLHEIGHTTILEFILE)
 using namespace Glheighttilefile;

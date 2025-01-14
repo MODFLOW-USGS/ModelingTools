@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLCrossPlatform.pas' rev: 36.00 (Windows)
@@ -57,7 +57,7 @@ public:
 typedef System::UnicodeString __fastcall (*TProjectTargetNameFunc)(void);
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Word FONT_CHARS_COUNT = System::Word(0x7e8);
+static _DELPHI_CONST System::Word FONT_CHARS_COUNT = System::Word(0x7e8);
 extern DELPHI_PACKAGE bool IsDesignTime;
 extern DELPHI_PACKAGE TProjectTargetNameFunc vProjectTargetName;
 extern DELPHI_PACKAGE bool __fastcall IsSubComponent(System::Classes::TComponent* const AComponent);

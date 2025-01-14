@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLScene.pas' rev: 36.00 (Windows)
@@ -1140,7 +1140,7 @@ protected:
 	void __fastcall SetGLFogEnvironment(TGLFogEnvironment* AValue);
 	bool __fastcall StoreFog();
 	void __fastcall SetAccumBufferBits(const int val);
-	void __fastcall PrepareRenderingMatrices(const Glvectorgeometry::TRectangle &aViewPort, int resolution, System::Types::PRect pickingRect = (System::Types::PRect)(0x0));
+	void __fastcall PrepareRenderingMatrices(const Glvectorgeometry::TRectangle &aViewPort, int resolution, Winapi::Windows::PRect pickingRect = (System::Types::PRect)(0x0));
 	void __fastcall DoBaseRender(const Glvectorgeometry::TRectangle &aViewPort, int resolution, Glrendercontextinfo::TDrawState drawState, TGLBaseSceneObject* baseObject);
 	void __fastcall SetupRenderingContext(Glcontext::TGLContext* context);
 	void __fastcall SetupRCOptions(Glcontext::TGLContext* context);
@@ -1161,8 +1161,8 @@ public:
 	void __fastcall Resize(int newLeft, int newTop, int newWidth, int newHeight);
 	Glcontext::TGLContextAcceleration __fastcall Acceleration();
 	__property Glvectorgeometry::TRectangle ViewPort = {read=FViewPort};
-	void __fastcall PickObjects(const System::Types::TRect &rect, Glselection::TGLPickList* pickList, int objectCountGuess);
-	Glselection::TGLPickList* __fastcall GetPickedObjects(const System::Types::TRect &rect, int objectCountGuess = 0x40);
+	void __fastcall PickObjects(const Winapi::Windows::TRect &rect, Glselection::TGLPickList* pickList, int objectCountGuess);
+	Glselection::TGLPickList* __fastcall GetPickedObjects(const Winapi::Windows::TRect &rect, int objectCountGuess = 0x40);
 	TGLBaseSceneObject* __fastcall GetPickedObject(int x, int y);
 	System::Uitypes::TColor __fastcall GetPixelColor(int x, int y);
 	float __fastcall GetPixelDepth(int x, int y);

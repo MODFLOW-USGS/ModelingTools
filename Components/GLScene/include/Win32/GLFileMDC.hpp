@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLFileMDC.pas' rev: 36.00 (Windows)
@@ -197,7 +197,7 @@ public:
 
 //-- var, const, procedure ---------------------------------------------------
 #define MDCFILE_IDENTITY L"IDPC"
-static const System::Int8 MDCFILE_VERSION = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 MDCFILE_VERSION = System::Int8(0x2);
 static const System::Extended MDC_BASEVERTEX_FACTOR = 1.562500E-02;
 static const System::Extended MDC_COMPVERTEX_FACTOR = 4.687500E-02;
 }	/* namespace Glfilemdc */

@@ -10385,16 +10385,17 @@ const
 //                when changing the model selection.
 //               Bug fix: Fixed bug in assigning the depth PEST modifier and
 //                PEST method for ETS boundaries.
-
-//               Enhancement: ModelMuse can now import SUTRA meshes from
+//    '5.3.1.5'  Enhancement: ModelMuse can now import SUTRA meshes from
 //                Shapefiles.
+//    '5.3.1.6'  Bug fix: Fixed export of objects as shapefiles for certain
+//                MODFLOW 6 features.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.4';
+  IIModelVersion = '5.3.1.6';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }

@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Fmoderrors.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'fmoderrors.pas' rev: 36.00 (Windows)
 
 #ifndef FmoderrorsHPP
 #define FmoderrorsHPP
@@ -15,8 +15,8 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <Sysinit.hpp>
-#include <Fmodtypes.hpp>
+#include <SysInit.hpp>
+#include <fmodtypes.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

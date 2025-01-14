@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLCustomShader.pas' rev: 36.00 (Windows)
@@ -319,7 +319,7 @@ public:
 enum DECLSPEC_DENUM TGLBlendingModeEx : unsigned char { bmxOpaque, bmxTransparency, bmxAdditive, bmxAlphaTest50, bmxAlphaTest100, bmxModulate, bmxDestColorOne, bmxDestAlphaOne };
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 glsShaderMaxLightSources = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 glsShaderMaxLightSources = System::Int8(0x8);
 extern DELPHI_PACKAGE void __fastcall GetActiveLightsList(Glvectorlists::TIntegerList* const ALightIDs);
 extern DELPHI_PACKAGE bool __fastcall IsFogEnabled(const TGLShaderFogSupport AFogSupportMode, Glrendercontextinfo::TGLRenderContextInfo &rci);
 extern DELPHI_PACKAGE void __fastcall CopyScreentoTexture(const Glrendercontextinfo::TGLSize &ViewPortSize, const System::Word TextureTarget = (System::Word)(0xde1));

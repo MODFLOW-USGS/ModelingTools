@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLRandomHDS.pas' rev: 36.00 (Windows)
@@ -493,7 +493,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte VerticalScalingFactor = System::Byte(0x80);
+static _DELPHI_CONST System::Byte VerticalScalingFactor = System::Byte(0x80);
 extern DELPHI_PACKAGE Vcl::Graphics::TBitmap* __fastcall LoadJPGtexture(const System::UnicodeString JpgName);
 extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall NoisyColor(const System::Uitypes::TColor Color, const float Noise = 5.000000E-02f);
 extern DELPHI_PACKAGE Glcolor::TColorVector __fastcall TextureSand(const int x, const int y);

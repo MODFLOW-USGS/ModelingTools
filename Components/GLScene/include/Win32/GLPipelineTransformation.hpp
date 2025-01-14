@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLPipelineTransformation.pas' rev: 36.00 (Windows)
@@ -112,7 +112,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte MAX_MATRIX_STACK_DEPTH = System::Byte(0x80);
+static _DELPHI_CONST System::Byte MAX_MATRIX_STACK_DEPTH = System::Byte(0x80);
 #define cAllStatesChanged (System::Set<TGLPipelineTransformationState, TGLPipelineTransformationState::trsModelViewChanged, TGLPipelineTransformationState::trsFrustum>() << TGLPipelineTransformationState::trsModelViewChanged << TGLPipelineTransformationState::trsInvModelViewChanged << TGLPipelineTransformationState::trsInvModelChanged << TGLPipelineTransformationState::trsNormalModelChanged << TGLPipelineTransformationState::trsViewProjChanged << TGLPipelineTransformationState::trsFrustum )
 }	/* namespace Glpipelinetransformation */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLPIPELINETRANSFORMATION)

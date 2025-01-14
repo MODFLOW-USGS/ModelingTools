@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'FSceneEditor.pas' rev: 36.00 (Windows)
@@ -168,7 +168,7 @@ private:
 	Vcl::Comctrls::TTreeNode* FObjectNode;
 	Vcl::Comctrls::TTreeNode* FSceneObjects;
 	Designintf::_di_IDesigner FCurrentDesigner;
-	System::Types::TPoint FLastMouseDownPos;
+	Winapi::Windows::TPoint FLastMouseDownPos;
 	System::Classes::TComponent* FPasteOwner;
 	Designintf::_di_IDesignerSelections FPasteSelection;
 	void __fastcall ReadScene();
@@ -216,9 +216,9 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 SCENE_SELECTED = System::Int8(0x0);
-static const System::Int8 BEHAVIOURS_SELECTED = System::Int8(0x1);
-static const System::Int8 EFFECTS_SELECTED = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 SCENE_SELECTED = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 BEHAVIOURS_SELECTED = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 EFFECTS_SELECTED = System::Int8(0x2);
 extern DELPHI_PACKAGE TGLSceneEditorForm* __fastcall GLSceneEditorForm(void);
 extern DELPHI_PACKAGE void __fastcall ReleaseGLSceneEditorForm(void);
 }	/* namespace Fsceneeditor */

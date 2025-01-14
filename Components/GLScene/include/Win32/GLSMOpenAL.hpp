@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Glsmopenal.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSMOpenAL.pas' rev: 36.00 (Windows)
 
 #ifndef GlsmopenalHPP
 #define GlsmopenalHPP
@@ -15,14 +15,14 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <Sysinit.hpp>
+#include <SysInit.hpp>
 #include <System.Classes.hpp>
-#include <System.Sysutils.hpp>
+#include <System.SysUtils.hpp>
 #include <Vcl.Forms.hpp>
 #include <Vcl.Dialogs.hpp>
-#include <Glscene.hpp>
-#include <Glsound.hpp>
-#include <Glsoundfileobjects.hpp>
+#include <GLScene.hpp>
+#include <GLSound.hpp>
+#include <GLSoundFileObjects.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

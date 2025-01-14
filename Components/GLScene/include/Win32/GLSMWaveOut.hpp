@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Glsmwaveout.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSMWaveOut.pas' rev: 36.00 (Windows)
 
 #ifndef GlsmwaveoutHPP
 #define GlsmwaveoutHPP
@@ -15,12 +15,12 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <Sysinit.hpp>
-#include <Winapi.Mmsystem.hpp>
+#include <SysInit.hpp>
+#include <Winapi.MMSystem.hpp>
 #include <System.Classes.hpp>
-#include <System.Sysutils.hpp>
-#include <Glsound.hpp>
-#include <Glsoundfileobjects.hpp>
+#include <System.SysUtils.hpp>
+#include <GLSound.hpp>
+#include <GLSoundFileObjects.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

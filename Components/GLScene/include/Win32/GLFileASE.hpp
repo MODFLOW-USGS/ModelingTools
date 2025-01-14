@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLFileASE.pas' rev: 36.00 (Windows)
@@ -363,10 +363,10 @@ public:
 enum DECLSPEC_DENUM TASETextureMap : unsigned char { tmGeneric, tmAmbient, tmDiffuse, tmSpecular, tmShine, tmShinestrength, tmSelfillum, tmOpacity, tmFiltercolor, tmBump, tmReflect, tmRefract };
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 GL_ASE_MAX_TEXURE_CHANNELS = System::Int8(0xc);
-static const System::Int8 GL_ASE_MAX_SUBMATERIALS = System::Int8(0x5);
-static const System::Int8 GL_ASE_MAX_SMOOTH_GROUPS = System::Int8(0x5);
-static const System::Int8 GL_ASE_MAX_TEXTURE_MAPS = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 GL_ASE_MAX_TEXURE_CHANNELS = System::Int8(0xc);
+static _DELPHI_CONST System::Int8 GL_ASE_MAX_SUBMATERIALS = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 GL_ASE_MAX_SMOOTH_GROUPS = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 GL_ASE_MAX_TEXTURE_MAPS = System::Int8(0xc);
 extern DELPHI_PACKAGE void __fastcall ASESetPreferredTexture(TASETextureMap aMap, int aSubMaterialIndex = 0xffffffff);
 extern DELPHI_PACKAGE void __fastcall ASESetPreferredLightmap(TASETextureMap aMap, int aSubMaterialIndex = 0xffffffff);
 }	/* namespace Glfilease */

@@ -118,6 +118,8 @@ type
     procedure CreateCsvFile(FieldNames: TStringList);
     procedure DefineShapeGeometry(AScreenObject: TScreenObject;
       BreakObject: boolean);
+   // If the field definitions of any boundaries are updated,
+    // then AssignBoundaryData in AssignFieldValues needs to be updated too.
     procedure InitializeDataBase;
     procedure GetShapeType(var ShapeType: Integer);
     procedure AssignFieldValues(AScreenObject: TScreenObject;
@@ -1595,6 +1597,8 @@ begin
   HeadObsFound := False;
   if FBoundaryNames.Count > 0 then
   begin
+    // If the field definitions of any boundaries are updated,
+    // then AssignBoundaryData in AssignFieldValues needs to be updated too.
     FTimeCount := 0;
     if chklstTimes.Enabled then
     begin
@@ -2355,7 +2359,18 @@ var
                 end
                 else
                 begin
-                  Formula := AnsiString(WellTimeItem.PumpingRate);
+                  if BoundaryName.Name =  StrMODFLOWWellPumping then
+                  begin
+                    Formula := AnsiString(WellTimeItem.PumpingRate);
+                  end
+                  else if BoundaryName.Name =  StrMODFLOWWellMultiplier then
+                  begin
+                    Formula := AnsiString(WellTimeItem.Multiplier);
+                  end
+                  else
+                  begin
+                    Formula := FMissingValueString;
+                  end;
                 end;
                 UpdFieldStr(
                   FFieldDefinitions[StartIndex].FieldName, Formula);
@@ -2407,9 +2422,13 @@ var
                   begin
                     Formula := AnsiString(GhbTimeItem.BoundaryHead);
                   end
+                  else if BoundaryName.Name = StrMODFLOWGhbMultiplier then
+                  begin
+                    Formula := AnsiString(GhbTimeItem.Multiplier);
+                  end
                   else
                   begin
-                    Assert(False);
+                    Formula := FMissingValueString;
                   end;
                 end;
                 UpdFieldStr(
@@ -2462,9 +2481,17 @@ var
                   begin
                     Formula := AnsiString(DrnTimeItem.Elevation);
                   end
+                  else if BoundaryName.Name = StrDRNDDRN then
+                  begin
+                    Formula := AnsiString(DrnTimeItem.DDRN);
+                  end
+                  else if BoundaryName.Name = StrDRNMultiplier then
+                  begin
+                    Formula := AnsiString(DrnTimeItem.Multiplier);
+                  end
                   else
                   begin
-                    Assert(False);
+                    Formula := FMissingValueString;
                   end;
                 end;
                 UpdFieldStr(
@@ -2580,9 +2607,13 @@ var
                   begin
                     Formula := AnsiString(RivTimeItem.RiverBottom);
                   end
+                  else if BoundaryName.Name = StrMODFLOWRiverMultiplier then
+                  begin
+                    Formula := AnsiString(RivTimeItem.Multiplier);
+                  end
                   else
                   begin
-                    Assert(False);
+                    Formula := FMissingValueString;
                   end;
                 end;
                 UpdFieldStr(
@@ -2635,9 +2666,17 @@ var
                   begin
                     Formula := AnsiString(ChdTimeItem.EndHead);
                   end
+                  else if BoundaryName.Name = StrModflowChdActive then
+                  begin
+                    Formula := AnsiString(ChdTimeItem.Active);
+                  end
+                  else if BoundaryName.Name = StrMODFLOWCHDMultiplier then
+                  begin
+                    Formula := AnsiString(ChdTimeItem.Multiplier);
+                  end
                   else
                   begin
-                    Assert(False);
+                    Formula := FMissingValueString;
                   end;
                 end;
                 UpdFieldStr(
@@ -2661,7 +2700,8 @@ var
             end
             else
             begin
-              if BoundaryName.Name = StrMODFLOWEtsRate then
+              if (BoundaryName.Name = StrMODFLOWEtsRate)
+                or (BoundaryName.Name = StrEVTMultiplier) then
               begin
                 Values := nil;
                 if EtsBoundary.Values.Count > 0 then
@@ -2684,7 +2724,18 @@ var
                   end
                   else
                   begin
-                    Formula := AnsiString(EtTimeItem.EvapotranspirationRate);
+                    if BoundaryName.Name = StrMODFLOWEtsRate then
+                    begin
+                      Formula := AnsiString(EtTimeItem.EvapotranspirationRate);
+                    end
+                    else if BoundaryName.Name = StrEVTMultiplier then
+                    begin
+                      Formula := AnsiString((EtTimeItem as TEtsItem).Multiplier);
+                    end
+                    else
+                    begin
+                      Formula := FMissingValueString;
+                    end;
                   end;
                   UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
@@ -2734,7 +2785,7 @@ var
                     end
                     else
                     begin
-                      Assert(False);
+                      Formula := FMissingValueString;
                     end;
                   end;
                   UpdFieldStr(
@@ -2913,7 +2964,8 @@ var
             end
             else
             begin
-              if BoundaryName.Name = StrMODFLOWRchRate then
+              if (BoundaryName.Name = StrMODFLOWRchRate)
+                or (BoundaryName.Name = StrMODFLOWRchMultiplier) then
               begin
                 Values := nil;
                 if RchBoundary.Values.Count > 0 then
@@ -2936,7 +2988,18 @@ var
                   end
                   else
                   begin
-                    Formula := AnsiString(RchTimeItem.RechargeRate);
+                    if BoundaryName.Name = StrMODFLOWRchRate then
+                    begin
+                      Formula := AnsiString(RchTimeItem.RechargeRate);
+                    end
+                    else if BoundaryName.Name = StrMODFLOWRchMultiplier then
+                    begin
+                      Formula := AnsiString(RchTimeItem.Multiplier);
+                    end
+                    else
+                    begin
+                      Formula := FMissingValueString;
+                    end;
                   end;
                   UpdFieldStr(
                     FFieldDefinitions[StartIndex].FieldName, Formula);
@@ -4611,7 +4674,7 @@ var
                   end
                   else
                   begin
-                    Assert(False);
+                    Formula := FMissingValueString;
                   end;
                 end;
                 UpdFieldStr(
@@ -4695,7 +4758,7 @@ var
                   end
                   else
                   begin
-                    Assert(False);
+                    Formula := FMissingValueString;
                   end;
                 end;
                 UpdFieldStr(

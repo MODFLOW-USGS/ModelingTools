@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLIsosurface.pas' rev: 36.00 (Windows)
@@ -157,7 +157,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const int ALLOC_SIZE = int(0x10000);
+static _DELPHI_CONST int ALLOC_SIZE = int(0x10000);
 extern DELPHI_PACKAGE System::StaticArray<Glisosurface__5, 7> DemoScalarField;
 extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFSphere(float X, float Y, float Z);
 extern DELPHI_PACKAGE Gltypes::TxScalarValue __fastcall SFToroidal(float X, float Y, float Z);

@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLParticleFX.pas' rev: 36.00 (Windows)
@@ -688,8 +688,8 @@ __published:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte cPFXNbRegions = System::Byte(0x80);
-static const System::Byte cPFXGranularity = System::Byte(0x80);
+static _DELPHI_CONST System::Byte cPFXNbRegions = System::Byte(0x80);
+static _DELPHI_CONST System::Byte cPFXGranularity = System::Byte(0x80);
 extern DELPHI_PACKAGE TGLSourcePFXEffect* __fastcall GetOrCreateSourcePFX(Glscene::TGLBaseSceneObject* obj, const System::UnicodeString name = System::UnicodeString());
 }	/* namespace Glparticlefx */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLPARTICLEFX)

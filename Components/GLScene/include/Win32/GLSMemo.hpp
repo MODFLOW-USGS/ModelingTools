@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLSMemo.pas' rev: 36.00 (Windows)
@@ -221,13 +221,13 @@ private:
 	int FYOffset;
 	void __fastcall SetParams(int Index, int Value);
 	void __fastcall SetState(TsbState Value);
-	System::Types::TRect __fastcall GetRect();
-	System::Types::TRect __fastcall GetThumbRect();
-	System::Types::TRect __fastcall GetBackRect();
-	System::Types::TRect __fastcall GetMiddleRect();
-	System::Types::TRect __fastcall GetForwardRect();
-	System::Types::TRect __fastcall GetPgBackRect();
-	System::Types::TRect __fastcall GetPgForwardRect();
+	Winapi::Windows::TRect __fastcall GetRect();
+	Winapi::Windows::TRect __fastcall GetThumbRect();
+	Winapi::Windows::TRect __fastcall GetBackRect();
+	Winapi::Windows::TRect __fastcall GetMiddleRect();
+	Winapi::Windows::TRect __fastcall GetForwardRect();
+	Winapi::Windows::TRect __fastcall GetPgBackRect();
+	Winapi::Windows::TRect __fastcall GetPgForwardRect();
 	
 public:
 	__fastcall TGLSMemoScrollBar(TGLSMemoAbstractScrollableObject* AParent, Vcl::Forms::TScrollBarKind AKind);
@@ -246,13 +246,13 @@ public:
 	__property int Total = {read=FTotal, write=SetParams, index=4, nodefault};
 	__property int MaxPosition = {read=FMaxPosition, write=SetParams, index=5, nodefault};
 	__property int Position = {read=FPosition, write=SetParams, index=6, nodefault};
-	__property System::Types::TRect FullRect = {read=GetRect};
-	__property System::Types::TRect ThumbRect = {read=GetThumbRect};
-	__property System::Types::TRect BackRect = {read=GetBackRect};
-	__property System::Types::TRect MiddleRect = {read=GetMiddleRect};
-	__property System::Types::TRect ForwardRect = {read=GetForwardRect};
-	__property System::Types::TRect PageForwardRect = {read=GetPgForwardRect};
-	__property System::Types::TRect PageBackRect = {read=GetPgBackRect};
+	__property Winapi::Windows::TRect FullRect = {read=GetRect};
+	__property Winapi::Windows::TRect ThumbRect = {read=GetThumbRect};
+	__property Winapi::Windows::TRect BackRect = {read=GetBackRect};
+	__property Winapi::Windows::TRect MiddleRect = {read=GetMiddleRect};
+	__property Winapi::Windows::TRect ForwardRect = {read=GetForwardRect};
+	__property Winapi::Windows::TRect PageForwardRect = {read=GetPgForwardRect};
+	__property Winapi::Windows::TRect PageBackRect = {read=GetPgBackRect};
 public:
 	/* TObject.Destroy */ inline __fastcall virtual ~TGLSMemoScrollBar() { }
 	
@@ -333,7 +333,7 @@ private:
 	int FHeight;
 	System::Uitypes::TColor FColor;
 	void __fastcall SetParams(int Index, int Value);
-	System::Types::TRect __fastcall GetRect();
+	Winapi::Windows::TRect __fastcall GetRect();
 	
 protected:
 	void __fastcall PaintTo(Vcl::Graphics::TCanvas* ACanvas);
@@ -344,7 +344,7 @@ public:
 	__property int Top = {read=FTop, write=SetParams, index=1, nodefault};
 	__property int Width = {read=FWidth, write=SetParams, index=2, nodefault};
 	__property int Height = {read=FHeight, write=SetParams, index=3, nodefault};
-	__property System::Types::TRect FullRect = {read=GetRect};
+	__property Winapi::Windows::TRect FullRect = {read=GetRect};
 public:
 	/* TObject.Create */ inline __fastcall TGLSMemoGutter() : System::TObject() { }
 	/* TObject.Destroy */ inline __fastcall virtual ~TGLSMemoGutter() { }
@@ -544,7 +544,7 @@ public:
 
 typedef void __fastcall (__closure *TGutterClickEvent)(System::TObject* Sender, int LineNo);
 
-typedef void __fastcall (__closure *TGutterDrawEvent)(System::TObject* Sender, Vcl::Graphics::TCanvas* ACanvas, int LineNo, const System::Types::TRect &rct);
+typedef void __fastcall (__closure *TGutterDrawEvent)(System::TObject* Sender, Vcl::Graphics::TCanvas* ACanvas, int LineNo, const Winapi::Windows::TRect &rct);
 
 typedef void __fastcall (__closure *TGetLineAttrsEvent)(System::TObject* Sender, int LineNo, System::UnicodeString &Attrs);
 
@@ -617,8 +617,8 @@ private:
 	void __fastcall SetCurY(int Value);
 	HIDESBASE void __fastcall SetFont(Vcl::Graphics::TFont* Value);
 	HIDESBASE void __fastcall SetColor(int Index, System::Uitypes::TColor Value);
-	System::Types::TPoint __fastcall GetSelStart();
-	System::Types::TPoint __fastcall GetSelEnd();
+	Winapi::Windows::TPoint __fastcall GetSelStart();
+	Winapi::Windows::TPoint __fastcall GetSelEnd();
 	void __fastcall SetLines(System::Classes::TStrings* ALines);
 	void __fastcall SetLineStyle(int Index, int Value);
 	int __fastcall GetLineStyle(int Index);
@@ -658,9 +658,9 @@ private:
 	
 protected:
 	virtual void __fastcall WndProc(Winapi::Messages::TMessage &Message);
-	System::Types::TRect __fastcall EditorRect();
-	System::Types::TRect __fastcall LineRangeRect(int FromLine, int ToLine);
-	System::Types::TRect __fastcall ColRangeRect(int FromCol, int ToCol);
+	Winapi::Windows::TRect __fastcall EditorRect();
+	Winapi::Windows::TRect __fastcall LineRangeRect(int FromLine, int ToLine);
+	Winapi::Windows::TRect __fastcall ColRangeRect(int FromCol, int ToCol);
 	void __fastcall InvalidateLineRange(int FromLine, int ToLine);
 	int __fastcall AddString(const System::UnicodeString S);
 	void __fastcall InsertString(int Index, System::UnicodeString S);
@@ -734,8 +734,8 @@ public:
 	void __fastcall CutToClipBoard();
 	void __fastcall SelectLines(int StartLine, int EndLine);
 	void __fastcall SelectAll();
-	__property System::Types::TPoint SelStart = {read=GetSelStart};
-	__property System::Types::TPoint SelEnd = {read=GetSelEnd};
+	__property Winapi::Windows::TPoint SelStart = {read=GetSelStart};
+	__property Winapi::Windows::TPoint SelEnd = {read=GetSelEnd};
 	__property System::UnicodeString Selection = {read=GetSelText, write=SetSelText};
 	__property int SelLength = {read=GetSelLength, nodefault};
 	void __fastcall ClearSelection();
@@ -745,9 +745,9 @@ public:
 	void __fastcall SelectChar(int LineNo, int Pos, int StyleNo);
 	TCellPos __fastcall CellFromPos(int X, int Y);
 	TFullPos __fastcall CharFromPos(int X, int Y);
-	System::Types::TRect __fastcall CellRect(int ACol, int ARow);
-	System::Types::TRect __fastcall LineRect(int ARow);
-	System::Types::TRect __fastcall ColRect(int ACol);
+	Winapi::Windows::TRect __fastcall CellRect(int ACol, int ARow);
+	Winapi::Windows::TRect __fastcall LineRect(int ARow);
+	Winapi::Windows::TRect __fastcall ColRect(int ACol);
 	int __fastcall CharStyleNo(int LineNo, int Pos);
 	void __fastcall InsertTemplate(System::UnicodeString AText);
 	void __fastcall UnSelectChar();
@@ -956,7 +956,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern DELPHI_PACKAGE void __fastcall Border(Vcl::Graphics::TCanvas* Canvas, const System::Types::TRect &rct, TBorderType BorderType);
+extern DELPHI_PACKAGE void __fastcall Border(Vcl::Graphics::TCanvas* Canvas, const Winapi::Windows::TRect &rct, TBorderType BorderType);
 }	/* namespace Glsmemo */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLSMEMO)
 using namespace Glsmemo;

@@ -36,7 +36,6 @@ requires
   rtl,
   designide,
   vcl,
-  GLScene_RT,
   GLScene_Sounds_RT;
 
 contains

@@ -385,6 +385,7 @@ begin
   for index := 0 to frameCropName.Grid.ColCount - 1 do
   begin
     frameCropName.Grid.Columns[index].WordWrapCaptions := True;
+    frameCropName.Grid.Columns[index].AutoAdjustColWidths := True;
   end;
   frameCropName.Grid.FixedCols := 1;
   frameCropName.Grid.Cells[Ord(ncID), 0] := StrCropIDCID;

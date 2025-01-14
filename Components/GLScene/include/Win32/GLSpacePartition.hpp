@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLSpacePartition.pas' rev: 36.00 (Windows)
@@ -381,8 +381,8 @@ public:
 #pragma pack(pop)
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 COctree_LEAF_TRHESHOLD = System::Int8(0x1e);
-static const System::Int8 COctree_MAX_TREE_DEPTH = System::Int8(0x8);
+static _DELPHI_CONST System::Int8 COctree_LEAF_TRHESHOLD = System::Int8(0x1e);
+static _DELPHI_CONST System::Int8 COctree_MAX_TREE_DEPTH = System::Int8(0x8);
 #define COctree_GROW_GRAVY  (1.000000E-01)
 extern DELPHI_PACKAGE Glgeometrybb::TSpaceContains __fastcall ConeContainsBSphere(const TSPCone &Cone, const Glgeometrybb::TBSphere &BSphere);
 extern DELPHI_PACKAGE bool __fastcall ExtendedFrustumIntersectsBSphere(const TExtendedFrustum &AExtendedFrustum, const Glgeometrybb::TBSphere &ABSphere);

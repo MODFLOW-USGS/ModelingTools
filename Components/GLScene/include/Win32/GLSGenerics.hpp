@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLSGenerics.pas' rev: 36.00 (Windows)
@@ -187,7 +187,7 @@ public:
 #pragma pack(pop)
 
 //-- var, const, procedure ---------------------------------------------------
-static const int MaxListSize = int(0x7ffffff);
+static _DELPHI_CONST int MaxListSize = int(0x7ffffff);
 }	/* namespace Glsgenerics */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLSGENERICS)
 using namespace Glsgenerics;

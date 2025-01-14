@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Glsmfmod.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'GLSMFMOD.pas' rev: 36.00 (Windows)
 
 #ifndef GlsmfmodHPP
 #define GlsmfmodHPP
@@ -15,15 +15,15 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <Sysinit.hpp>
+#include <SysInit.hpp>
 #include <System.Classes.hpp>
-#include <System.Sysutils.hpp>
-#include <Glsound.hpp>
-#include <Glscene.hpp>
-#include <Glvectorgeometry.hpp>
-#include <Fmod.hpp>
-#include <Fmodtypes.hpp>
-#include <Fmodpresets.hpp>
+#include <System.SysUtils.hpp>
+#include <GLSound.hpp>
+#include <GLScene.hpp>
+#include <GLVectorGeometry.hpp>
+#include <fmod.hpp>
+#include <fmodtypes.hpp>
+#include <fmodpresets.hpp>
 
 //-- user supplied -----------------------------------------------------------
 

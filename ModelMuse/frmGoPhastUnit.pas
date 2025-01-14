@@ -6520,6 +6520,7 @@ begin
   else
   begin
     acFarmClimate.Enabled := False;
+    // Climate data for FMP4 is specified in objects not a dialog box.
     acFarmAllotment.Enabled := False;
   end;
 end;
@@ -16088,7 +16089,7 @@ initialization
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;
   FootprintDate := EncodeDate(2018,3,27);
-  PestDate := EncodeDate(2024,1,18);
+  PestDate := EncodeDate(2025,1,14);
   MfOwhmV2Date := EncodeDate(2024,1,15);
 
   {$IFDEF Win64}

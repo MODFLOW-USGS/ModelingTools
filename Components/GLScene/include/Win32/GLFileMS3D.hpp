@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLFileMS3D.pas' rev: 36.00 (Windows)
@@ -276,12 +276,12 @@ public:
 #pragma pack(pop)
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Word MAX_MS3D_VERTICES = System::Word(0x2000);
-static const System::Word MAX_MS3D_TRIANGLES = System::Word(0x4000);
-static const System::Byte MAX_MS3D_GROUPS = System::Byte(0x80);
-static const System::Byte MAX_MS3D_MATERIALS = System::Byte(0x80);
-static const System::Byte MAX_MS3D_JOINTS = System::Byte(0x80);
-static const System::Word MAX_MS3D_KEYFRAMES = System::Word(0x1388);
+static _DELPHI_CONST System::Word MAX_MS3D_VERTICES = System::Word(0x2000);
+static _DELPHI_CONST System::Word MAX_MS3D_TRIANGLES = System::Word(0x4000);
+static _DELPHI_CONST System::Byte MAX_MS3D_GROUPS = System::Byte(0x80);
+static _DELPHI_CONST System::Byte MAX_MS3D_MATERIALS = System::Byte(0x80);
+static _DELPHI_CONST System::Byte MAX_MS3D_JOINTS = System::Byte(0x80);
+static _DELPHI_CONST System::Word MAX_MS3D_KEYFRAMES = System::Word(0x1388);
 }	/* namespace Glfilems3d */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLFILEMS3D)
 using namespace Glfilems3d;

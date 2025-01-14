@@ -126,7 +126,6 @@
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="designide.dcp"/>
         <DCCReference Include="vcl.dcp"/>
-        <DCCReference Include="GLScene_RT.dcp"/>
         <DCCReference Include="GLScene_Sounds_RT.dcp"/>
         <DCCReference Include="..\..\Source\SoundVideoAPIs\GLSoundRegister.pas"/>
         <BuildConfiguration Include="Base">
@@ -158,6 +157,12 @@
             </Platforms>
             <Deployment Version="4">
                 <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\19.0\Bpl\GLScene_Sounds_DT.bpl" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\23.0\Bpl\GLScene_Sounds_DT.bpl" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>GLScene_Sounds_DT.bpl</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="OSX32">
                         <Operation>1</Operation>

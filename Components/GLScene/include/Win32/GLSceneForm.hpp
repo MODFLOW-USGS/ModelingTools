@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLSceneForm.pas' rev: 36.00 (Windows)
@@ -138,9 +138,9 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 lcl_major = System::Int8(0x0);
-static const System::Int8 lcl_minor = System::Int8(0x0);
-static const System::Int8 lcl_release = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 lcl_major = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 lcl_minor = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 lcl_release = System::Int8(0x0);
 }	/* namespace Glsceneform */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GLSCENEFORM)
 using namespace Glsceneform;

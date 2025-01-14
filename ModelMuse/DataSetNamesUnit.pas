@@ -307,7 +307,7 @@ const
   StrMODFLOWWellMultiplier = 'WEL Multiplier';
   StrMODFLOWGhbConductance = 'GHB Conductance';
   StrMODFLOWGhbHead = 'GHB Boundary Head';
-  StrMODFLOWGhbMultiplier = 'GHB Multipliler';
+  StrMODFLOWGhbMultiplier = 'GHB Multiplier';
   StrMODFLOWDrainConductance = 'DRN Conductance';
   StrMODFLOWDrainElevation = 'DRN Elevation';
   StrMODFLOWDrainMultiplier = 'DRN Multiplier';
@@ -1183,7 +1183,7 @@ resourcestring
   StrModelMonitorDefaultPath = 'ModelMonitor.exe';
   strModflowOwhmDefaultPath = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe';
   StrMFOwhmDefaultPath64 = 'C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM.exe';
-  StrPestDefaultDir = 'C:\Pest17\';
+  StrPestDefaultDir = 'C:\Pest18\';
 
   // See also GMshDate in frmMeshGenerationControlVariablesUnit.pas
   StrDefaultGmshPath = 'C:\gmsh-4.13.1-Windows64\gmsh.exe';

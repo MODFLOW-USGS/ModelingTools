@@ -2,7 +2,7 @@
 // Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Openal.pas' rev: 36.00 (Windows)
+// (DO NOT EDIT: machine generated header) 'OpenAL.pas' rev: 36.00 (Windows)
 
 #ifndef OpenalHPP
 #define OpenalHPP
@@ -15,8 +15,8 @@
 #endif
 #pragma pack(push,8)
 #include <System.hpp>
-#include <Sysinit.hpp>
-#include <System.Sysutils.hpp>
+#include <SysInit.hpp>
+#include <System.SysUtils.hpp>
 #include <Winapi.Windows.hpp>
 
 //-- user supplied -----------------------------------------------------------

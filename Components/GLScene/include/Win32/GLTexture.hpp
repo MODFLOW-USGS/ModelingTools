@@ -1,5 +1,5 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GLTexture.pas' rev: 36.00 (Windows)
@@ -603,12 +603,12 @@ public:
 
 //-- var, const, procedure ---------------------------------------------------
 #define cDefaultNormalMapScale  (1.250000E-01)
-static const System::Int8 CmtPX = System::Int8(0x0);
-static const System::Int8 CmtNX = System::Int8(0x1);
-static const System::Int8 CmtPY = System::Int8(0x2);
-static const System::Int8 CmtNY = System::Int8(0x3);
-static const System::Int8 CmtPZ = System::Int8(0x4);
-static const System::Int8 CmtNZ = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 CmtPX = System::Int8(0x0);
+static _DELPHI_CONST System::Int8 CmtNX = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 CmtPY = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 CmtNY = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 CmtPZ = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 CmtNZ = System::Int8(0x5);
 extern DELPHI_PACKAGE void __fastcall RegisterTGraphicClassFileExtension(const System::UnicodeString extension, const Vcl::Graphics::TGraphicClass aClass);
 extern DELPHI_PACKAGE Vcl::Graphics::TGraphic* __fastcall CreateGraphicFromFile(const System::UnicodeString fileName);
 extern DELPHI_PACKAGE void __fastcall RegisterGLTextureImageClass(TGLTextureImageClass textureImageClass);
