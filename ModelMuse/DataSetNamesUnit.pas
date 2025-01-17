@@ -1164,7 +1164,7 @@ resourcestring
   KSutraDefaultPath = 'C:\SutraSuite\SUTRA_2_2\bin\sutra_2_2.exe';
   KSutra30DefaultPath = 'C:\SutraSuite\SUTRA_3_0\bin\sutra_3_0.exe';
 //  KSutra40DefaultPath = 'C:\SutraSuite\SUTRA_3_0\bin\sutra_4_0.exe';
-  KSutra40DefaultPath = 'C:\WRDAPP\SUTRA_4-develop\msvs\bin_PROVISIONAL\sutra_4_0_0_PROVISIONAL_2023-02-28_8b569f6.exe';
+  KSutra40DefaultPath = 'C:\SutraSuite\SUTRA_4_0\bin\sutra_4_0.exe';
   StrMpathDefaultPath = 'C:\WRDAPP\Mpath.5_0\setup\Mpathr5_0.exe';
   StrMpathDefaultPathVersion6 = 'C:\WRDAPP\modpath.6_0\bin\mp6.exe';
   StrMpathDefaultPathVersion7 = 'C:\WRDAPP\modpath_7_2_001\bin\mpath7.exe';
@@ -1192,8 +1192,8 @@ resourcestring
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
 
   // Be sure to update zonebudget path when updating mf6 path.
-  StrDefaultModflow6Path =      'C:\WRDAPP\mf6.5.0_win64\bin\mf6.exe';
-  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.5.0_win64\bin\zbud6.exe';
+  StrDefaultModflow6Path =      'C:\WRDAPP\mf6.6.0_win64\bin\mf6.exe';
+  StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.6.0_win64\bin\zbud6.exe';
 
   StrDefaultOwhmV2Path = 'C:\WRDAPP\mf-owhm-2.3.0\bin\mf-owhm.exe';
 

@@ -62,11 +62,13 @@ inherited frmSutraProgramLocations: TfrmSutraProgramLocations
   object htlblSutra4: TJvHTLabel
     Left = 105
     Top = 129
-    Width = 388
+    Width = 835
     Height = 19
     Caption = 
-      '<a href="https://github.com/aprovost-usgs/SUTRA_4/tree/develop">' +
-      'https://github.com/aprovost-usgs/SUTRA_4/tree/develop</a>'
+      '<a href="https://www.usgs.gov/software/sutra-a-model-2d-or-3d-sa' +
+      'turated-unsaturated-variable-density-ground-water-flow-solute-or' +
+      '">https://www.usgs.gov/software/sutra-a-model-2d-or-3d-saturated' +
+      '-unsaturated-variable-density-ground-water-flow-solute-or</a>'
     SuperSubScriptRatio = 0.666666666666666600
   end
   object fedSutra22: TJvFilenameEdit
