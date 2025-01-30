@@ -2,6 +2,15 @@ inherited framePackageIst: TframePackageIst
   Height = 417
   OnResize = FrameResize
   ExplicitHeight = 417
+  inherited lblComments: TLabel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited lblPackage: TLabel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited memoComments: TMemo
+    StyleElements = [seFont, seClient, seBorder]
+  end
   inline frameIst: TframeRowGrid [3]
     Left = 0
     Top = 157
@@ -17,12 +26,14 @@ inherited framePackageIst: TframePackageIst
     inherited Panel: TPanel
       Top = 219
       Width = 422
+      StyleElements = [seFont, seClient, seBorder]
       ExplicitTop = 219
       ExplicitWidth = 422
       inherited lblNumber: TLabel
         Width = 145
         Height = 30
         Caption = 'Number of immobile zones'#13#10
+        StyleElements = [seFont, seClient, seBorder]
         ExplicitWidth = 145
         ExplicitHeight = 30
       end
@@ -40,6 +51,7 @@ inherited framePackageIst: TframePackageIst
       end
       inherited seNumber: TJvSpinEdit
         Height = 23
+        StyleElements = [seFont, seClient, seBorder]
         MinValue = 1.000000000000000000
         Value = 1.000000000000000000
         OnChange = frameIstseNumberChange
@@ -141,11 +153,16 @@ inherited framePackageIst: TframePackageIst
           ButtonWidth = 20
           CheckMax = False
           CheckMin = False
-          ComboUsed = False
-          Format = rcf4Boolean
-          LimitToList = False
+          ComboUsed = True
+          Format = rcf4String
+          LimitToList = True
           MaxLength = 0
           ParentButtonFont = False
+          PickList.Strings = (
+            'none'
+            'Linear'
+            'Freundlich'
+            'Langmuir')
           WordWrapCaptions = False
           WordWrapCells = False
           CaseSensitivePicklist = False

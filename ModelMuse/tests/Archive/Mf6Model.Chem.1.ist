@@ -1,7 +1,7 @@
-# IST: Immobile Storage and Transfer Package file created on 8/21/2023 by ModelMuse version 5.1.1.35.
+# IST: Immobile Storage and Transfer Package file created on 1/30/2025 by ModelMuse version 5.3.1.6.
 BEGIN OPTIONS
     SAVE_FLOWS
-  SORPTION
+  SORPTION LINEAR
   ZERO_ORDER_DECAY
 END OPTIONS
 

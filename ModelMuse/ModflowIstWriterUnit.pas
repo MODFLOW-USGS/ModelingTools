@@ -200,6 +200,26 @@ begin
     WritePestZones(DataArray, FileNameToUse, 'DISTCOEF', '.' + ChemSpecies.Name, 'DISTCOEF');
   end;
 
+  if (FIstProp.SorptionType = gscFreundlich)
+    and (FDomainIndex < ChemSpecies.ImmobileFreundlichExponentSp2s.Count) then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(
+      ChemSpecies.ImmobileFreundlichExponentSp2s[FDomainIndex]);
+    Assert(DataArray <> nil);
+    WriteMf6_DataSet(DataArray, 'SP2');
+    WritePestZones(DataArray, FileNameToUse, 'SP2', '.' + ChemSpecies.Name, 'SP2');
+  end;
+
+  if (FIstProp.SorptionType = gscLangmuir)
+    and (FDomainIndex < ChemSpecies.ImmobileSorptionCapacitySp2s.Count) then
+  begin
+    DataArray := Model.DataArrayManager.GetDataSetByName(
+      ChemSpecies.ImmobileSorptionCapacitySp2s[FDomainIndex]);
+    Assert(DataArray <> nil);
+    WriteMf6_DataSet(DataArray, 'SP2');
+    WritePestZones(DataArray, FileNameToUse, 'SP2', '.' + ChemSpecies.Name, 'SP2');
+  end;
+
   WriteEndGridData;
 end;
 
@@ -232,11 +252,36 @@ begin
     NewLine;
   end;
 
-  if FIstProp.Sorption then
-  begin
-    WriteString('  SORPTION');
-    NewLine
+  case FIstProp.SorptionType of
+    gscNone:
+      begin
+        // do nothing
+      end;
+    gscLinear:
+      begin
+        WriteString('  SORPTION LINEAR');
+        NewLine
+      end;
+    gscFreundlich:
+      begin
+        WriteString('  SORPTION FREUNDLICH');
+        NewLine
+      end;
+    gscLangmuir:
+      begin
+        WriteString('  SORPTION LANGMUIR');
+        NewLine
+      end;
+    else
+      begin
+        Assert(False);
+      end;
   end;
+//  if FIstProp.Sorption then
+//  begin
+//    WriteString('  SORPTION');
+//    NewLine
+//  end;
 
   if FIstProp.ZeroOrderDecay then
   begin

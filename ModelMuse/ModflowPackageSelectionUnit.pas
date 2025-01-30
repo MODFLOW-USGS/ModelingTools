@@ -2,6 +2,12 @@ unit ModflowPackageSelectionUnit;
 
 interface
 
+// Whenever a new package is defined or an existing one is modified,
+// the method for importing the package must be updated too.
+// @Link(Modflow6ModelImporter)
+// @link(Modflow6Importer)
+// @link(Modflow2005ImporterUnit)
+
 uses SysUtils, Classes, GoPhastTypes, OrderedCollectionUnit, DataSetUnit,
   ModpathParticleUnit, ModflowBoundaryDisplayUnit, ScreenObjectUnit,
   ModflowBoundaryUnit, Mt3dmsChemSpeciesUnit, System.Generics.Collections,
@@ -7499,9 +7505,10 @@ Type
     FSaveConcentrations: Boolean;
     FColumns: Integer;
     FDigits: Integer;
-    FSorption: Boolean;
+//    FSorption: Boolean;
     FPrintFormat: TPrintFormat;
     FSaveFlows: Boolean;
+    FSorptionType: TGwtSorptionChoice;
     procedure SetBinaryBudgetFileOut(const Value: Boolean);
     procedure SetColumns(const Value: Integer);
     procedure SetDigits(const Value: Integer);
@@ -7513,6 +7520,8 @@ Type
     procedure SetWidth(const Value: Integer);
     procedure SetZeroOrderDecay(const Value: Boolean);
     procedure SetPrintFormat(const Value: TPrintFormat);
+    procedure SetSorptionType(const Value: TGwtSorptionChoice);
+    function GetSorption: Boolean;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -7524,7 +7533,11 @@ Type
     // BUDGETCSV FILEOUT <budgetcsvfile>
     property TextBudgetFileOut: Boolean read FTextBudgetFileOut write SetTextBudgetFileOut;
     // SORPTION
-    property Sorption: Boolean read FSorption write SetSorption;
+    // This is retained for backwards compatibility with MODFLOW version 6.5.0.
+    // When the property is read @name is @True if SorptionType <> gscNone.
+    property Sorption: Boolean read GetSorption write SetSorption stored False;
+    // SORPTION
+    property SorptionType: TGwtSorptionChoice read FSorptionType write SetSorptionType;
     // FIRST_ORDER_DECAY
     property FirstOrderDecay: Boolean read FFirstOrderDecay write SetFirstOrderDecay;
     // ZERO_ORDER_DECAY
@@ -25673,7 +25686,7 @@ begin
     IstSource := TIstPackageItem(Source);
     BinaryBudgetFileOut := IstSource.BinaryBudgetFileOut;
     TextBudgetFileOut := IstSource.TextBudgetFileOut;
-    Sorption := IstSource.Sorption;
+    SorptionType := IstSource.SorptionType;
     FirstOrderDecay := IstSource.FirstOrderDecay;
     ZeroOrderDecay := IstSource.ZeroOrderDecay;
     SaveConcentrations := IstSource.SaveConcentrations;
@@ -25695,6 +25708,11 @@ begin
   FPrintFormat := pfGeneral;
 end;
 
+function TIstPackageItem.GetSorption: Boolean;
+begin
+  result := SorptionType <> gscNone;
+end;
+
 function TIstPackageItem.IsSame(AnotherItem: TOrderedItem): boolean;
 var
   SourceItem: TIstPackageItem;
@@ -25705,7 +25723,7 @@ begin
      SourceItem := TIstPackageItem(AnotherItem);
      result := (BinaryBudgetFileOut = SourceItem.BinaryBudgetFileOut)
       and (TextBudgetFileOut = SourceItem.TextBudgetFileOut)
-      and (Sorption = SourceItem.Sorption)
+      and (SorptionType = SourceItem.SorptionType)
       and (FirstOrderDecay = SourceItem.FirstOrderDecay)
       and (ZeroOrderDecay = SourceItem.ZeroOrderDecay)
       and (SaveConcentrations = SourceItem.SaveConcentrations)
@@ -25754,7 +25772,24 @@ end;
 
 procedure TIstPackageItem.SetSorption(const Value: Boolean);
 begin
-  SetBooleanProperty(FSorption, Value);
+//  SetBooleanProperty(FSorption, Value);
+  if Value then
+  begin
+    SorptionType := gscLinear;
+  end
+  else
+  begin
+    SorptionType := gscNone;
+  end;
+end;
+
+procedure TIstPackageItem.SetSorptionType(const Value: TGwtSorptionChoice);
+begin
+  if FSorptionType <> Value then
+  begin
+    FSorptionType := Value;
+    InvalidateModel;
+  end;
 end;
 
 procedure TIstPackageItem.SetSpecifyPrintFormat(const Value: Boolean);

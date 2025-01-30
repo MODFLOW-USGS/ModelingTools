@@ -1,0 +1,10 @@
+# FMI6 file created on 1/30/2025 by ModelMuse version 5.3.1.6.
+BEGIN OPTIONS
+    SAVE_FLOWS
+END OPTIONS
+
+BEGIN PACKAGEDATA
+  GWFBUDGET FILEIN IstImportTest.cbc
+  GWFHEAD FILEIN IstImportTest.bhd
+END PACKAGEDATA
+

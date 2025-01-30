@@ -483,6 +483,7 @@ type
     function ValidModpathChoice: Boolean;
     function ValidMT3D: Boolean;
     function Fmp4Warnings: string;
+    function ValidSorptionChoices: Boolean;
     property CurrentPackages: TModflowPackages read FCurrentPackages
       write SetCurrentPackages;
     procedure StorePackageDataInFrames(Packages: TModflowPackages);
@@ -689,6 +690,10 @@ resourcestring
   'e land use section of the Farm process.';
   StrIfCropCoefficient = 'If crop coefficient is used in the Farm Process, R' +
   'eference ET must be defined too.';
+  StrMODFLOW6RequiresT = 'MODFLOW 6 requires the type of sorption specified ' +
+  'in the GWT Mobile Storage and Immobile Storage Packages to be the same. Y' +
+  'ou will need to fix this before running MODFLOW. Do you want to fix this ' +
+  'now?';
 //  StrSurfaceWaterRouting = 'Surface-Water Routing';
 
 {$R *.dfm}
@@ -1333,6 +1338,52 @@ begin
   end;
 end;
 
+function TfrmModflowPackages.ValidSorptionChoices: Boolean;
+var
+  FrameIndex: Integer;
+  MstFrame: TframePackageMST;
+  MstSorptionIndex: Integer;
+  IstFrame: TframePackageIst;
+  ColIndex: Integer;
+  IstSorptionIndex: Integer;
+begin
+  result := True;
+  if (frmGoPhast.ModelSelection <> msModflow2015) then
+  begin
+    Exit;
+  end;
+  if not frameGwtProcess.Selected then
+  begin
+    Exit;
+  end;
+  if (FframePackageMSTObjectList = nil) or (FframePackageIstObjectList = nil) then
+  begin
+    Exit;
+  end;
+  Assert(FframePackageMSTObjectList.Count = FframePackageIstObjectList.Count);
+  for FrameIndex := 0 to FframePackageMSTObjectList.Count - 1 do
+  begin
+    IstFrame := FframePackageIstObjectList[FrameIndex];
+    if IstFrame.Selected then
+    begin
+      MstFrame := FframePackageMSTObjectList[FrameIndex];
+      MstSorptionIndex := MstFrame.rgSorption.ItemIndex;
+      for ColIndex := 1 to IstFrame.frameIst.Grid.ColCount - 1 do
+      begin
+        IstSorptionIndex := IstFrame.frameIst.Grid.ItemIndex[ColIndex, Ord(irSorption)];
+        if MstSorptionIndex <> IstSorptionIndex then
+        begin
+          if (MessageDlg(StrMODFLOW6RequiresT, mtWarning, [mbYes, mbNo], 0) <> mrNo) then
+          begin
+            result := False;
+          end;
+          Exit;
+        end;
+      end;
+    end;
+  end;
+end;
+
 procedure TfrmModflowPackages.btnOKClick(Sender: TObject);
 var
   NeedToDefineFluxObservations: Boolean;
@@ -1348,6 +1399,12 @@ begin
   inherited;
 
   ValidMT3D;
+
+  if not ValidSorptionChoices then
+  begin
+    ModalResult := mrNone;
+    Exit;
+  end;
 
   if not ValidModpathChoice then
   begin

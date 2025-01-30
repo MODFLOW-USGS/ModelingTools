@@ -482,7 +482,7 @@ object TTaskHistory
     end
     item
       Name = 'MF6 GWT'
-      Display = False
+      Display = True
     end
     item
       Name = 'SUTRA 4'
@@ -34068,6 +34068,14 @@ object TTaskHistory
       Categories.Strings = (
         'Components'
         'Bug fix'
-        'Testing')
+        'Testing'
+        'MF-2015'
+        'MF6 GWT')
+    end
+    item
+      Date = 45687.000000000000000000
+      Categories.Strings = (
+        'Testing'
+        'Import')
     end>
 end

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Model_Archive_List>
+  <bin Model_Name="IstImportTest" FileType="bin">
+    <FileName Model_Name="IstImportTest" FileType="bin">..\..\..\WRDAPP\mf6.6.0_win64\bin\mf6.exe</FileName>
+  </bin>
+  <ancillary Model_Name="IstImportTest" FileType="ancillary">
+    <FileName Model_Name="IstImportTest" FileType="ancillary">IstImportTest.gpt</FileName>
+  </ancillary>
+  <model Model_Name="IstImportTest" FileType="Model Input">
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.chd</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.1.ist</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.adv</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.cnc</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.dis</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.dsp</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.fmi</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.ic</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.ims</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.mst</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.obs</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.oc</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.ssm</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.Chem1.tdis</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.dis</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.gsf</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.ic</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.ims</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.nam.archive</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.npf</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.oc</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.tdis</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">IstImportTest.wel</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">mfsim.nam</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">RunModflow.Bat.archive</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Input">usgs.IstImportTest.reference</FileName>
+  </model>
+  <output Model_Name="IstImportTest" FileType="Model Output">
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.bhd</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.cbc</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.cbc</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.InnerSolution.CSV</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.lst</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.ob_gw_out_concentration.csv</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.OuterSolution.CSV</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.dis.grb</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.InnerSolution.CSV</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.lst</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.OuterSolution.CSV</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">mfsim.lst</FileName>
+  </output>
+</Model_Archive_List>

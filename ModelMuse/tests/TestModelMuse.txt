@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5749
+5782
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5749,3 +5749,36 @@ ChdMult.gpt
 	Archive\ChdMult.wel
 	Archive\ChdMult.wel.ChdMult.ts
 	Archive\usgs.ChdMult.reference
+IstImportTest.gpt
+	Archive\IstImportTest.axml
+	Archive\IstImportTest.chd
+	Archive\IstImportTest.Chem1.1.ist
+	Archive\IstImportTest.Chem1.adv
+	Archive\IstImportTest.Chem1.cnc
+	Archive\IstImportTest.Chem1.dis
+	Archive\IstImportTest.Chem1.dsp
+	Archive\IstImportTest.Chem1.fmi
+	Archive\IstImportTest.Chem1.gwfgwt
+	Archive\IstImportTest.Chem1.Gwt_nam
+	Archive\IstImportTest.Chem1.ic
+	Archive\IstImportTest.Chem1.ims
+	Archive\IstImportTest.Chem1.mfsim.nam
+	Archive\IstImportTest.Chem1.mst
+	Archive\IstImportTest.Chem1.obs
+	Archive\IstImportTest.Chem1.oc
+	Archive\IstImportTest.Chem1.ssm
+	Archive\IstImportTest.Chem1.tdis
+	Archive\IstImportTest.dis
+	Archive\IstImportTest.gsf
+	Archive\IstImportTest.ic
+	Archive\IstImportTest.ims
+	Archive\IstImportTest.mfsim.nam
+	Archive\IstImportTest.nam
+	Archive\IstImportTest.nam.archive
+	Archive\IstImportTest.npf
+	Archive\IstImportTest.oc
+	Archive\IstImportTest.RunModel.Bat
+	Archive\IstImportTest.RunModflow.Bat
+	Archive\IstImportTest.tdis
+	Archive\IstImportTest.wel
+	Archive\usgs.IstImportTest.reference

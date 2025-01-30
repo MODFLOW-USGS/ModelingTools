@@ -72,6 +72,8 @@ type
     FStoredViscositySlope: TRealStorage;
     FTransverseVertDispDataArrayName: string;
     FTransverseVertDispDisplayName: string;
+    FImmobileFreundlichExponentSp2s: TStringList;
+    FImmobileSorptionCapacitySp2s: TStringList;
     function GetName: string;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
@@ -126,6 +128,8 @@ type
     procedure SetStoredViscositySlope(const Value: TRealStorage);
     procedure SetViscositySlope(const Value: double);
     procedure SetTransverseVertDispArrayNameDataArrayName(const NewName: string);
+    procedure SetImmobileFreundlichExponentSp2s(const Value: TStringList);
+    procedure SetImmobileSorptionCapacitySp2s(const Value: TStringList);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -200,7 +204,7 @@ type
     //MST package, BULK_DENSITY
     property MobileBulkDensityDataArrayName: string read FMobileBulkDensityDataArrayName
       write SetMobileBulkDensityDataArrayName;
-    //MST package, SP2
+    //MST package, SP2 for Freundlich
     property MobileFreundlichExponentDataArrayName: string read FMobileFreundlichExponentDataArrayName
       write SetMobileFreundlichExponentDataArrayName;
     //MST package, SP2  for Langmuir
@@ -240,21 +244,27 @@ type
     // IST package, VOLFRAC
     property ImmobileVolumeFractions: TStringList read FImmobileVolumeFractions
       write SetImmobileVolumeFractions;
-    //IST package, ZETAIM
+    // IST package, ZETAIM
     property ImmobileMassTransferRates: TStringList
       read FImmobileMassTransferRates write SetImmobileMassTransferRates;
-    //IST package, DECAY
+    // IST package, DECAY
     property ImmobileDecay: TStringList read FImmobileDecay
       write SetImmobileDecay;
-    //IST package, DECAY_SORBED
+    // IST package, DECAY_SORBED
     property ImmobileDecaySorbed: TStringList read FImmobileDecaySorbed
       write SetImmobileDecaySorbed;
-    //IST package, BULK_DENSITY
+    // IST package, BULK_DENSITY
     property ImmobileBulkDensities: TStringList read FImmobileBulkDensities
       write SetImmobileBulkDensities;
     //IST package, DISTCOEF
     property ImmobileDistCoeficients: TStringList read FImmobileDistCoeficients
       write SetImmobileDistCoeficients;
+    // IST package SP2
+    property ImmobileFreundlichExponentSp2s: TStringList read FImmobileFreundlichExponentSp2s
+      write SetImmobileFreundlichExponentSp2s;
+    // IST package SP2
+    property ImmobileSorptionCapacitySp2s: TStringList read FImmobileSorptionCapacitySp2s
+      write SetImmobileSorptionCapacitySp2s;
     // Buoyancy package drhodc
     property StoredDensitySlope: TRealStorage read FStoredDensitySlope
       write SetStoredDensitySlope;
@@ -359,6 +369,8 @@ const
   KImmobileDecaySorbed = 'ImmobileDecaySorbed_%0:s_%1:d';
   KImmobileDistCoeficie = 'ImmobileDistCoeficient_%0:s_%1:d';
   KImmobileVolFrac = 'ImmobileVolumeFraction_%0:s_%1:d';
+  KImmobileFreundlichExponent = 'ImmobileFreundlichExponent_%0:s_%1:d';
+  KImmobileSorptionCapacity = 'ImmobileSorptionCapacity_%0:s_%1:d';
 
 resourcestring
   StrInitConcPrefix = kInitConcPrefix;
@@ -503,6 +515,8 @@ begin
     ImmobileBulkDensities := SourceChem.ImmobileBulkDensities;
 //    ImmobileDistCoeficients.Clear;
     ImmobileDistCoeficients := SourceChem.ImmobileDistCoeficients;
+    ImmobileFreundlichExponentSp2s := SourceChem.ImmobileFreundlichExponentSp2s;
+    ImmobileSorptionCapacitySp2s := SourceChem.ImmobileSorptionCapacitySp2s;
 
     DensitySlope := SourceChem.DensitySlope;
     RefConcentration := SourceChem.RefConcentration;
@@ -606,6 +620,21 @@ begin
           TempNames.Add(Format(KImmobileDistCoeficie, [Name, DomainIndex+1]))
         end;
         ImmobileDistCoeficients := TempNames;
+
+        TempNames.Clear;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KImmobileFreundlichExponent, [Name, DomainIndex+1]))
+        end;
+        ImmobileFreundlichExponentSp2s := TempNames;
+
+        TempNames.Clear;
+        for DomainIndex := 0 to IstPackage.IstPackageProperties.Count - 1 do
+        begin
+          TempNames.Add(Format(KImmobileSorptionCapacity, [Name, DomainIndex+1]))
+        end;
+        ImmobileSorptionCapacitySp2s := TempNames;
+
       end;
     finally
       TempNames.Free;
@@ -691,6 +720,8 @@ begin
   FImmobilePorosities := TStringList.Create;
   FImmobileVolumeFractions := TStringList.Create;
   FImmobileMassTransferRates := TStringList.Create;
+  FImmobileFreundlichExponentSp2s := TStringList.Create;
+  FImmobileSorptionCapacitySp2s := TStringList.Create;
 
   FStoredDensitySlope := TRealStorage.Create(OnInvalidateModelEvent);
   FStoredRefConcentration := TRealStorage.Create(OnInvalidateModelEvent);
@@ -786,6 +817,8 @@ begin
   FImmobileVolumeFractions.Free;
   FImmobilePorosities.Free;
   FImmobileMassTransferRates.Free;
+  FImmobileFreundlichExponentSp2s.Free;
+  FImmobileSorptionCapacitySp2s.Free;
 
   if (Model <> nil) and not (csDestroying in (Model as TComponent).ComponentState)
     and not (Model as TCustomModel).Clearing then
@@ -979,6 +1012,9 @@ begin
       and SameStrings(ImmobileDecaySorbed,  ChemItem.ImmobileDecaySorbed)
       and SameStrings(ImmobileBulkDensities,  ChemItem.ImmobileBulkDensities)
       and SameStrings(ImmobileDistCoeficients,  ChemItem.ImmobileDistCoeficients)
+      and SameStrings(ImmobileFreundlichExponentSp2s,  ChemItem.ImmobileFreundlichExponentSp2s)
+      and SameStrings(ImmobileSorptionCapacitySp2s,  ChemItem.ImmobileSorptionCapacitySp2s)
+
   end;
 end;
 
@@ -1592,6 +1628,137 @@ begin
     if FImmobilePorosities <> Value then
     begin
       FImmobilePorosities.Assign(Value);
+    end;
+  end;
+end;
+
+procedure TChemSpeciesItem.SetImmobileSorptionCapacitySp2s(
+  const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobileSorptionCapacitySp2s.Count < Value.Count do
+    begin
+      FImmobileSorptionCapacitySp2s.Add('');
+    end;
+    while FImmobileSorptionCapacitySp2s.Count > Value.Count do
+    begin
+      FImmobileSorptionCapacitySp2s.Delete(FImmobileSorptionCapacitySp2s.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and GwtIst.IsSelected
+        and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobileSorptionCapacitySp2s[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.003';
+      AssociatedDataSets := 'GWT IST Package: SP2';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and (IstProp.SorptionType = gscLangmuir);
+      UpdateDataArray(LocalModel.GwtImmobileSorptionCapacitySp2Used, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
+      FImmobileSorptionCapacitySp2s[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobileSorptionCapacitySp2s <> Value then
+    begin
+      FImmobileSorptionCapacitySp2s.Assign(Value);
+    end;
+  end;
+end;
+
+procedure TChemSpeciesItem.SetImmobileFreundlichExponentSp2s(const Value: TStringList);
+var
+  DomainIndex: Integer;
+  OldName: string;
+  NewName: string;
+  NewDisplayName: string;
+  AssociatedDataSets: string;
+  NewFormula: string;
+  GwtPackages: TGwtPackageCollection;
+  GwtIst: TGwtIstPackage;
+  IstProp: TIstPackageItem;
+  LocalModel: TPhastModel;
+  ShouldCreate: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+  if LocalModel <> nil then
+  begin
+    GwtPackages := LocalModel.ModflowPackages.GwtPackages;
+    if Index < GwtPackages.Count then
+    begin
+      GwtIst := GwtPackages[Index].GwtIst;
+    end
+    else
+    begin
+      GwtIst := nil;
+    end;
+    while FImmobileFreundlichExponentSp2s.Count < Value.Count do
+    begin
+      FImmobileFreundlichExponentSp2s.Add('');
+    end;
+    while FImmobileFreundlichExponentSp2s.Count > Value.Count do
+    begin
+      FImmobileFreundlichExponentSp2s.Delete(FImmobileFreundlichExponentSp2s.Count-1);
+    end;
+    for DomainIndex := 0 to Value.Count - 1 do
+    begin
+      if (GwtIst <> nil) and GwtIst.IsSelected
+        and (DomainIndex < GwtIst.IstPackageProperties.Count) then
+      begin
+        IstProp := GwtIst.IstPackageProperties[DomainIndex];
+      end
+      else
+      begin
+        IstProp := nil;
+      end;
+      OldName := FImmobileFreundlichExponentSp2s[DomainIndex];
+      NewName := Value[DomainIndex];
+      NewDisplayName := NewName;
+      NewFormula := '0.7';
+      AssociatedDataSets := 'GWT IST Package: SP2';
+      ShouldCreate := (IstProp <> nil) and GwtIst.IsSelected and (IstProp.SorptionType = gscFreundlich);
+      UpdateDataArray(LocalModel.GwtImmobileFreundlichExponentSp2Used, OldName, NewName,
+        NewDisplayName, NewFormula, AssociatedDataSets, ShouldCreate, StrGwtClassification);
+      FImmobileFreundlichExponentSp2s[DomainIndex] := NewName;
+    end;
+  end
+  else
+  begin
+    if FImmobileFreundlichExponentSp2s <> Value then
+    begin
+      FImmobileFreundlichExponentSp2s.Assign(Value);
     end;
   end;
 end;
@@ -2262,6 +2429,24 @@ begin
         NewImobileDataSetNames[DomainIndex] := NewDataSetName;
       end;
       ImmobileDistCoeficients := NewImobileDataSetNames;
+
+      NewImobileDataSetNames.Assign(ImmobileFreundlichExponentSp2s);
+      for DomainIndex := 0 to ImmobileFreundlichExponentSp2s.Count - 1 do
+      begin
+        OldDataSetName := ImmobileFreundlichExponentSp2s[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
+      end;
+      ImmobileFreundlichExponentSp2s := NewImobileDataSetNames;
+
+      NewImobileDataSetNames.Assign(ImmobileSorptionCapacitySp2s);
+      for DomainIndex := 0 to ImmobileSorptionCapacitySp2s.Count - 1 do
+      begin
+        OldDataSetName := ImmobileSorptionCapacitySp2s[DomainIndex];
+        NewDataSetName := StringReplace(OldDataSetName, OldRoot,NewRoot, []);
+        NewImobileDataSetNames[DomainIndex] := NewDataSetName;
+      end;
+      ImmobileSorptionCapacitySp2s := NewImobileDataSetNames;
     end
     else
     begin
@@ -2461,6 +2646,25 @@ begin
           NewImobileDataSetNames.Add(AName);
         end;
         ImmobileDistCoeficients := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KImmobileFreundlichExponent, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileFreundlichExponentSp2s := NewImobileDataSetNames;
+
+        NewImobileDataSetNames.Clear;
+        for DomainIndex := 0 to GwtIst.IstPackageProperties.Count - 1 do
+        begin
+          AName := GenerateNewRoot(Format(
+            KImmobileSorptionCapacity, [Value, DomainIndex+1]));
+          NewImobileDataSetNames.Add(AName);
+        end;
+        ImmobileSorptionCapacitySp2s := NewImobileDataSetNames;
+
       end;
     end;
     RenameDependents(Value);

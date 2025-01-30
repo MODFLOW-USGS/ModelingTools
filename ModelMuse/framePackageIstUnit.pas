@@ -88,7 +88,9 @@ begin
     frameIst.Grid.Cells[ColIndex, Ord(IrName)] := IntToStr(ColIndex);
     frameIst.Grid.Checked[ColIndex, Ord(irSaveBudget)] := PackageProp.BinaryBudgetFileOut;
     frameIst.Grid.Checked[ColIndex, Ord(irBudgetText)] := PackageProp.TextBudgetFileOut;
-    frameIst.Grid.Checked[ColIndex, Ord(irSorption)] := PackageProp.Sorption;
+
+    frameIst.Grid.ItemIndex[ColIndex, Ord(irSorption)] := Ord(PackageProp.SorptionType);
+//    frameIst.Grid.Checked[ColIndex, Ord(irSorption)] := PackageProp.Sorption;
     if PackageProp.ZeroOrderDecay then
     begin
       frameIst.Grid.ItemIndex[ColIndex, Ord(irDecay)] := 1;
@@ -142,7 +144,10 @@ begin
     ColIndex := PropIndex + 1;
     PackageProp.BinaryBudgetFileOut := frameIst.Grid.Checked[ColIndex, Ord(irSaveBudget)];
     PackageProp.TextBudgetFileOut := frameIst.Grid.Checked[ColIndex, Ord(irBudgetText)];
-    PackageProp.Sorption := frameIst.Grid.Checked[ColIndex, Ord(irSorption)];
+    if frameIst.Grid.ItemIndex[ColIndex, Ord(irSorption)] >= 0 then
+    begin
+      PackageProp.SorptionType := TGwtSorptionChoice(frameIst.Grid.ItemIndex[ColIndex, Ord(irSorption)]);
+    end;
     case frameIst.Grid.ItemIndex[ColIndex, Ord(irDecay)] of
       0:
         begin

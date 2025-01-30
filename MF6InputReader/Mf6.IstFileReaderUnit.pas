@@ -13,6 +13,7 @@ type
     FBUDGET: Boolean;
     FBUDGETCSV: Boolean;
     FSORPTION: Boolean;
+    FSorptionType: String;
     FFIRST_ORDER_DECAY: Boolean;
     FZERO_ORDER_DECAY: Boolean;
     FCIM: Boolean;
@@ -25,6 +26,7 @@ type
     property BUDGET: Boolean read FBUDGET;
     property BUDGETCSV: Boolean read FBUDGETCSV;
     property SORPTION: Boolean read FSORPTION;
+    property SorptionType: String read FSorptionType write FSorptionType;
     property FIRST_ORDER_DECAY: Boolean read FFIRST_ORDER_DECAY;
     property ZERO_ORDER_DECAY: Boolean read FZERO_ORDER_DECAY;
     property CIM: Boolean read FCIM;
@@ -41,6 +43,7 @@ type
     FDECAY_SORBED: TDArray3D;
     FBULK_DENSITY: TDArray3D;
     FDISTCOEF: TDArray3D;
+    FSp2: TDArray3D;
     FDimensions: TDimensions;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter; Dimensions: TDimensions);
   protected
@@ -55,6 +58,7 @@ type
     property DECAY_SORBED: TDArray3D read FDECAY_SORBED;
     property BULK_DENSITY: TDArray3D read FBULK_DENSITY;
     property DISTCOEF: TDArray3D read FDISTCOEF;
+    property SP2: TDArray3D read FSp2;
   end;
 
   TIst = class(TDimensionedPackageReader)
@@ -81,6 +85,7 @@ begin
   FBUDGET := False;
   FBUDGETCSV := False;
   FSORPTION := False;
+  FSorptionType := '';
   FFIRST_ORDER_DECAY := False;
   FZERO_ORDER_DECAY := False;
   FCIM := False;
@@ -131,6 +136,14 @@ begin
     else if (FSplitter[0] = 'SORPTION') then
     begin
       FSORPTION := True;
+      if (FSplitter.Count >= 2) then
+      begin
+        FSorptionType := UpperCase(FSplitter[1]);
+      end
+      else
+      begin
+        FSorptionType := 'LINEAR';
+      end;
     end
     else if FSplitter[0] = 'FIRST_ORDER_DECAY' then
     begin
@@ -179,6 +192,7 @@ begin
   SetLength(FDECAY_SORBED, 0);
   SetLength(FBULK_DENSITY, 0);
   SetLength(FDISTCOEF, 0);
+  SetLength(FSP2, 0);
 end;
 
 procedure TIstGridData.Read(Stream: TStreamReader; Unhandled: TStreamWriter;
@@ -303,6 +317,18 @@ begin
       try
         DoubleThreeDReader.Read(Stream, Unhandled);
         FDISTCOEF := DoubleThreeDReader.FData;
+      finally
+        DoubleThreeDReader.Free;
+      end;
+    end
+    else if FSplitter[0] = 'SP2' then
+    begin
+      SetLength(FSp2, FDimensions.NLay, FDimensions.NRow, FDimensions.NCol);
+      Layered := (FSplitter.Count >= 2) and (FSplitter[1] = 'LAYERED');
+      DoubleThreeDReader := TDouble3DArrayReader.Create(FDimensions, Layered, FPackageType);
+      try
+        DoubleThreeDReader.Read(Stream, Unhandled);
+        FSp2 := DoubleThreeDReader.FData;
       finally
         DoubleThreeDReader.Free;
       end;

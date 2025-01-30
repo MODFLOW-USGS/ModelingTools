@@ -4590,6 +4590,8 @@ that affects the model output should also have a comment. }
     function GwtImmobileDecaySorbedUsed(Sender: TObject): boolean;
     function GwtImmobileBulkDensityUsed(Sender: TObject): boolean;
     function GwtImmobileDistCoefUsed(Sender: TObject): boolean;
+    function GwtImmobileFreundlichExponentSp2Used(Sender: TObject): boolean;
+    function GwtImmobileSorptionCapacitySp2Used(Sender: TObject): boolean;
     property Mt3d_LktIsSelected;
     function Mf6VTransDispUsed(Sender: TObject): boolean;
     function AnyVTransDispUsed: Boolean;
@@ -10389,6 +10391,9 @@ const
 //                Shapefiles.
 //    '5.3.1.6'  Bug fix: Fixed export of objects as shapefiles for certain
 //                MODFLOW 6 features.
+
+//               Enhancement: Added support for new sorption options in
+//                the IST package of MODFLOW 6.6.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
@@ -19416,6 +19421,96 @@ begin
     result := DataArrayUsed(MobileComponents)
   end;
 end;
+
+function TPhastModel.GwtImmobileFreundlichExponentSp2Used(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileFreundlichExponentSp2s.Count - 1 do
+      begin
+        result := AChemItem.ImmobileFreundlichExponentSp2s[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            result := IstPackage.IstPackageProperties[DomainIndex].SorptionType = gscFreundlich;
+            if result then
+            begin
+              Exit;
+            end;
+          end;
+        end;
+//        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TPhastModel.GwtImmobileSorptionCapacitySp2Used(
+  Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    IstPackage: TGwtIstPackage;
+    DomainIndex: Integer;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      for DomainIndex := 0 to AChemItem.ImmobileSorptionCapacitySp2s.Count - 1 do
+      begin
+        result := AChemItem.ImmobileSorptionCapacitySp2s[DomainIndex] = DataArray.Name;
+        if result then
+        begin
+          IstPackage :=  ModflowPackages.GwtPackages[Index].GwtIst;
+          result := IstPackage.IsSelected
+            and (DomainIndex < IstPackage.IstPackageProperties.Count);
+          if result then
+          begin
+            result := IstPackage.IstPackageProperties[DomainIndex].SorptionType = gscLangmuir;
+            if result then
+            begin
+              Exit;
+            end;
+          end;
+        end;
+//        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GwtUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
 
 function TPhastModel.GwtImmobileThetaimUsed(Sender: TObject): boolean;
 var

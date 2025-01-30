@@ -6625,6 +6625,25 @@ begin
   IstPackageItem.BinaryBudgetFileOut := Options.BUDGET;
   IstPackageItem.TextBudgetFileOut := Options.BUDGETCSV;
   IstPackageItem.Sorption := Options.SORPTION;
+  if Options.SorptionType <> '' then
+  begin
+    if AnsiSameText(Options.SorptionType, 'LINEAR') then
+    begin
+      IstPackageItem.SorptionType := gscLinear;
+    end
+    else if AnsiSameText(Options.SorptionType, 'FREUNDLICH') then
+    begin
+      IstPackageItem.SorptionType := gscFreundlich;
+    end
+    else if AnsiSameText(Options.SorptionType, 'LANGMUIR') then
+    begin
+      IstPackageItem.SorptionType := gscLangmuir;
+    end
+    else
+    begin
+      Assert(False);
+    end;
+  end;
   IstPackageItem.FirstOrderDecay := Options.FIRST_ORDER_DECAY;
   IstPackageItem.ZeroOrderDecay := Options.ZERO_ORDER_DECAY;
   IstPackageItem.SaveConcentrations := Options.CIM;
@@ -6724,6 +6743,24 @@ begin
     begin
       DataArrayName := ChemSpecies.ImmobileDistCoeficients[DomainIndex];
       Assign3DRealDataSet(DataArrayName, GridData.DISTCOEF);
+    end;
+  end;
+
+  if AnsiSameText(Options.SorptionType, 'FREUNDLICH') then
+  begin
+    if GridData.SP2 <> nil then
+    begin
+      DataArrayName := ChemSpecies.ImmobileFreundlichExponentSp2s[DomainIndex];
+      Assign3DRealDataSet(DataArrayName, GridData.SP2);
+    end;
+  end;
+
+  if AnsiSameText(Options.SorptionType, 'LANGMUIR') then
+  begin
+    if GridData.SP2 <> nil then
+    begin
+      DataArrayName := ChemSpecies.ImmobileSorptionCapacitySp2s[DomainIndex];
+      Assign3DRealDataSet(DataArrayName, GridData.SP2);
     end;
   end;
 

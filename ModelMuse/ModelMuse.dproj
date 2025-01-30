@@ -8,7 +8,7 @@
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>20.2</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <ProjectName Condition="'$(ProjectName)'==''">ModelMuse</ProjectName>
     </PropertyGroup>
@@ -2373,9 +2373,7 @@
                 <DeployFile LocalName="Beta\Win32\ModelMuse.exe" Configuration="Beta" Class="ProjectOutput"/>
                 <DeployFile LocalName="Beta\Win64\ModelMuse.exe" Configuration="Beta" Class="ProjectOutput"/>
                 <DeployFile LocalName="Debug\Win32\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="Debug\Win32\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="Debug\Win32\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols"/>
-                <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName="Debug\Win64\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols"/>
                 <DeployFile LocalName="ModelMuse.todo" Configuration="Beta" Class="ProjectFile"/>
@@ -2388,8 +2386,6 @@
                 <DeployFile LocalName="ObserverProxyU.PAS" Configuration="Modflow 6 Beta" Class="ProjectFile"/>
                 <DeployFile LocalName="ObserverProxyU.PAS" Configuration="Release" Class="ProjectFile"/>
                 <DeployFile LocalName="Release\Win32\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
-                <DeployFile LocalName="Release\Win32\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
-                <DeployFile LocalName="Release\Win64\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployFile LocalName="Release\Win64\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="OSX32">
