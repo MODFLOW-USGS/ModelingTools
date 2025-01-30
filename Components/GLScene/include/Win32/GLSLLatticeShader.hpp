@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLLatticeShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlsllatticeshaderHPP
-#define GlsllatticeshaderHPP
+#ifndef GLSLLatticeShaderHPP
+#define GLSLLatticeShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -149,4 +149,4 @@ using namespace Glsllatticeshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsllatticeshaderHPP
+#endif	// GLSLLatticeShaderHPP

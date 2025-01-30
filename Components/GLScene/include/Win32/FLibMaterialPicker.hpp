@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FLibMaterialPicker.pas' rev: 36.00 (Windows)
 
-#ifndef FlibmaterialpickerHPP
-#define FlibmaterialpickerHPP
+#ifndef FLibMaterialPickerHPP
+#define FLibMaterialPickerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -73,4 +73,4 @@ using namespace Flibmaterialpicker;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FlibmaterialpickerHPP
+#endif	// FLibMaterialPickerHPP

@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_Bindings.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_bindingsHPP
-#define Gr32_bindingsHPP
+#ifndef GR32_BindingsHPP
+#define GR32_BindingsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -100,4 +100,4 @@ using namespace Gr32_bindings;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_bindingsHPP
+#endif	// GR32_BindingsHPP

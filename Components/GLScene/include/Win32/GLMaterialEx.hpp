@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMaterialEx.pas' rev: 36.00 (Windows)
 
-#ifndef GlmaterialexHPP
-#define GlmaterialexHPP
+#ifndef GLMaterialExHPP
+#define GLMaterialExHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -1218,4 +1218,4 @@ using namespace Glmaterialex;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmaterialexHPP
+#endif	// GLMaterialExHPP

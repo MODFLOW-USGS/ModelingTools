@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FGuiLayoutEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FguilayouteditorHPP
-#define FguilayouteditorHPP
+#ifndef FGuiLayoutEditorHPP
+#define FGuiLayoutEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -136,4 +136,4 @@ using namespace Fguilayouteditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FguilayouteditorHPP
+#endif	// FGuiLayoutEditorHPP

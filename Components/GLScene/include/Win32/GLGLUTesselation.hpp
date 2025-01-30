@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLGLUTesselation.pas' rev: 36.00 (Windows)
 
-#ifndef GlglutesselationHPP
-#define GlglutesselationHPP
+#ifndef GLGLUTesselationHPP
+#define GLGLUTesselationHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -42,4 +42,4 @@ using namespace Glglutesselation;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlglutesselationHPP
+#endif	// GLGLUTesselationHPP

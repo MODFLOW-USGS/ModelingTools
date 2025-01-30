@@ -34,7 +34,7 @@ requires
   rtl,
   vclimg,
   xmlrtl,
-  GR32_DSGN_RS12_1;
+  GR32_DSGN_RS12_2;
 
 contains
   Const3DS in '..\..\Source\FileFormats\Const3DS.pas',

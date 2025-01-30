@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSpacePartition.pas' rev: 36.00 (Windows)
 
-#ifndef GlspacepartitionHPP
-#define GlspacepartitionHPP
+#ifndef GLSpacePartitionHPP
+#define GLSpacePartitionHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -396,4 +396,4 @@ using namespace Glspacepartition;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlspacepartitionHPP
+#endif	// GLSpacePartitionHPP

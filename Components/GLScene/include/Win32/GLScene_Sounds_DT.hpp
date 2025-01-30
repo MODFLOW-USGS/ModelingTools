@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLScene_Sounds_DT.dpk' rev: 36.00 (Windows)
 
-#ifndef Glscene_sounds_dtHPP
-#define Glscene_sounds_dtHPP
+#ifndef GLScene_Sounds_DTHPP
+#define GLScene_Sounds_DTHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -70,20 +70,20 @@
 #include <GLXCollection.hpp>	// (GLScene_RT)
 #include <GLVectorLists.hpp>	// (GLScene_RT)
 #include <Vcl.Imaging.pngimage.hpp>	// (vclimg)
-#include <GR32_System.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Blend.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Filters.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Image.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32.hpp>	// (GR32_DSGN_RS12_1)
+#include <GR32_System.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Blend.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Filters.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Image.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32.hpp>	// (GR32_DSGN_RS12_2)
 #include <Vcl.Buttons.hpp>	// (vcl)
 #include <Vcl.ExtDlgs.hpp>	// (vcl)
 #include <GLGraphics.hpp>	// (GLScene_RT)
@@ -118,4 +118,4 @@ using namespace Glscene_sounds_dt;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glscene_sounds_dtHPP
+#endif	// GLScene_Sounds_DTHPP

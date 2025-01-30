@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMesh.pas' rev: 36.00 (Windows)
 
-#ifndef GlmeshHPP
-#define GlmeshHPP
+#ifndef GLMeshHPP
+#define GLMeshHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -184,4 +184,4 @@ using namespace Glmesh;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmeshHPP
+#endif	// GLMeshHPP

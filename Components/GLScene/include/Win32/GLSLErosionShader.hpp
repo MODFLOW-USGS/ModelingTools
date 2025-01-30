@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLErosionShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlslerosionshaderHPP
-#define GlslerosionshaderHPP
+#ifndef GLSLErosionShaderHPP
+#define GLSLErosionShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -147,4 +147,4 @@ using namespace Glslerosionshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslerosionshaderHPP
+#endif	// GLSLErosionShaderHPP

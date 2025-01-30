@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileNMF.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilenmfHPP
-#define GlfilenmfHPP
+#ifndef GLFileNMFHPP
+#define GLFileNMFHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -106,4 +106,4 @@ using namespace Glfilenmf;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilenmfHPP
+#endif	// GLFileNMFHPP

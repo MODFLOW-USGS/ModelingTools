@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMeshLines.pas' rev: 36.00 (Windows)
 
-#ifndef GlmeshlinesHPP
-#define GlmeshlinesHPP
+#ifndef GLMeshLinesHPP
+#define GLMeshLinesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -270,4 +270,4 @@ using namespace Glmeshlines;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmeshlinesHPP
+#endif	// GLMeshLinesHPP

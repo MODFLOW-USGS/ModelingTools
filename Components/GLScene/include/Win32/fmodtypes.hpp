@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'fmodtypes.pas' rev: 36.00 (Windows)
 
-#ifndef FmodtypesHPP
-#define FmodtypesHPP
+#ifndef fmodtypesHPP
+#define fmodtypesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -255,4 +255,4 @@ using namespace Fmodtypes;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FmodtypesHPP
+#endif	// fmodtypesHPP

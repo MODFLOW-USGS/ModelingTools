@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSMOpenAL.pas' rev: 36.00 (Windows)
 
-#ifndef GlsmopenalHPP
-#define GlsmopenalHPP
+#ifndef GLSMOpenALHPP
+#define GLSMOpenALHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -71,4 +71,4 @@ using namespace Glsmopenal;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsmopenalHPP
+#endif	// GLSMOpenALHPP

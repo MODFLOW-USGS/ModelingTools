@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'HDRImage.pas' rev: 36.00 (Windows)
 
-#ifndef HdrimageHPP
-#define HdrimageHPP
+#ifndef HDRImageHPP
+#define HDRImageHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -56,4 +56,4 @@ using namespace Hdrimage;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// HdrimageHPP
+#endif	// HDRImageHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMeshBuilder.pas' rev: 36.00 (Windows)
 
-#ifndef GlmeshbuilderHPP
-#define GlmeshbuilderHPP
+#ifndef GLMeshBuilderHPP
+#define GLMeshBuilderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -43,4 +43,4 @@ using namespace Glmeshbuilder;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmeshbuilderHPP
+#endif	// GLMeshBuilderHPP

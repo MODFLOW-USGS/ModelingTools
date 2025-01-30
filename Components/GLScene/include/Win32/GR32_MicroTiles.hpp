@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_MicroTiles.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_microtilesHPP
-#define Gr32_microtilesHPP
+#ifndef GR32_MicroTilesHPP
+#define GR32_MicroTilesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -146,11 +146,11 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 MICROTILE_SHIFT = System::Int8(0x5);
-static const System::Int8 MICROTILE_SIZE = System::Int8(0x20);
-static const System::Int8 MICROTILE_EMPTY = System::Int8(0x0);
-static const System::Word MICROTILE_FULL = System::Word(0x2020);
-static const int MicroTileSize = int(0x7ffffff);
+static _DELPHI_CONST System::Int8 MICROTILE_SHIFT = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 MICROTILE_SIZE = System::Int8(0x20);
+static _DELPHI_CONST System::Int8 MICROTILE_EMPTY = System::Int8(0x0);
+static _DELPHI_CONST System::Word MICROTILE_FULL = System::Word(0x2020);
+static _DELPHI_CONST int MicroTileSize = int(0x7ffffff);
 extern DELPHI_PACKAGE void __fastcall (*MicroTileUnion)(TMicroTile &DstTile, const TMicroTile SrcTile);
 extern DELPHI_PACKAGE TMicroTile __fastcall MakeMicroTile(const int Left, const int Top, const int Right, const int Bottom);
 extern DELPHI_PACKAGE int __fastcall MicroTileHeight(const TMicroTile Tile);
@@ -177,4 +177,4 @@ using namespace Gr32_microtiles;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_microtilesHPP
+#endif	// GR32_MicroTilesHPP

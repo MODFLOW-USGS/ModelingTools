@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLGui.pas' rev: 36.00 (Windows)
 
-#ifndef GlguiHPP
-#define GlguiHPP
+#ifndef GLGuiHPP
+#define GLGuiHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -261,4 +261,4 @@ using namespace Glgui;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlguiHPP
+#endif	// GLGuiHPP

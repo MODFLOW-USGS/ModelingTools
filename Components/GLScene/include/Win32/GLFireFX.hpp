@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFireFX.pas' rev: 36.00 (Windows)
 
-#ifndef GlfirefxHPP
-#define GlfirefxHPP
+#ifndef GLFireFXHPP
+#define GLFireFXHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -180,4 +180,4 @@ using namespace Glfirefx;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfirefxHPP
+#endif	// GLFireFXHPP

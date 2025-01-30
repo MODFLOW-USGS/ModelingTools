@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLVfsPAK.pas' rev: 36.00 (Windows)
 
-#ifndef GlvfspakHPP
-#define GlvfspakHPP
+#ifndef GLVfsPAKHPP
+#define GLVfsPAKHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -118,4 +118,4 @@ using namespace Glvfspak;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlvfspakHPP
+#endif	// GLVfsPAKHPP

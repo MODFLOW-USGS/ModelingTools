@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'OpenGLTokens.pas' rev: 36.00 (Windows)
 
-#ifndef OpengltokensHPP
-#define OpengltokensHPP
+#ifndef OpenGLTokensHPP
+#define OpenGLTokensHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -7061,4 +7061,4 @@ using namespace Opengltokens;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// OpengltokensHPP
+#endif	// OpenGLTokensHPP

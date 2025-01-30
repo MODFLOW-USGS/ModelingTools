@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FShaderUniformEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FshaderuniformeditorHPP
-#define FshaderuniformeditorHPP
+#ifndef FShaderUniformEditorHPP
+#define FShaderUniformEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -104,4 +104,4 @@ using namespace Fshaderuniformeditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FshaderuniformeditorHPP
+#endif	// FShaderUniformEditorHPP

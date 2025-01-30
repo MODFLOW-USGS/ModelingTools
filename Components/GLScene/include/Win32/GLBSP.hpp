@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLBSP.pas' rev: 36.00 (Windows)
 
-#ifndef GlbspHPP
-#define GlbspHPP
+#ifndef GLBSPHPP
+#define GLBSPHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -170,4 +170,4 @@ using namespace Glbsp;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlbspHPP
+#endif	// GLBSPHPP

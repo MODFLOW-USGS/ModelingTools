@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLProjectedTextures.pas' rev: 36.00 (Windows)
 
-#ifndef GlslprojectedtexturesHPP
-#define GlslprojectedtexturesHPP
+#ifndef GLSLProjectedTexturesHPP
+#define GLSLProjectedTexturesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -197,4 +197,4 @@ using namespace Glslprojectedtextures;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslprojectedtexturesHPP
+#endif	// GLSLProjectedTexturesHPP

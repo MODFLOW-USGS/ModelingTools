@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLVerletTypes.pas' rev: 36.00 (Windows)
 
-#ifndef GlverlettypesHPP
-#define GlverlettypesHPP
+#ifndef GLVerletTypesHPP
+#define GLVerletTypesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -932,4 +932,4 @@ using namespace Glverlettypes;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlverlettypesHPP
+#endif	// GLVerletTypesHPP

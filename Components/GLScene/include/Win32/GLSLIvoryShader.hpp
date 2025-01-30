@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLIvoryShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlslivoryshaderHPP
-#define GlslivoryshaderHPP
+#ifndef GLSLIvoryShaderHPP
+#define GLSLIvoryShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -75,4 +75,4 @@ using namespace Glslivoryshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslivoryshaderHPP
+#endif	// GLSLIvoryShaderHPP

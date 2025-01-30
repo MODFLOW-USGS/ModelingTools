@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLEllipseCollision.pas' rev: 36.00 (Windows)
 
-#ifndef GlellipsecollisionHPP
-#define GlellipsecollisionHPP
+#ifndef GLEllipseCollisionHPP
+#define GLEllipseCollisionHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -190,4 +190,4 @@ using namespace Glellipsecollision;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlellipsecollisionHPP
+#endif	// GLEllipseCollisionHPP

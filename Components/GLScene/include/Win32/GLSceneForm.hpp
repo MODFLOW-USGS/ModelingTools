@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSceneForm.pas' rev: 36.00 (Windows)
 
-#ifndef GlsceneformHPP
-#define GlsceneformHPP
+#ifndef GLSceneFormHPP
+#define GLSceneFormHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -150,4 +150,4 @@ using namespace Glsceneform;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsceneformHPP
+#endif	// GLSceneFormHPP

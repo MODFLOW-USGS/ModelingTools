@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLFurShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlslfurshaderHPP
-#define GlslfurshaderHPP
+#ifndef GLSLFurShaderHPP
+#define GLSLFurShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -139,4 +139,4 @@ using namespace Glslfurshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslfurshaderHPP
+#endif	// GLSLFurShaderHPP

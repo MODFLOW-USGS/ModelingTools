@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMultiMaterialShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlmultimaterialshaderHPP
-#define GlmultimaterialshaderHPP
+#ifndef GLMultiMaterialShaderHPP
+#define GLMultiMaterialShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -71,4 +71,4 @@ using namespace Glmultimaterialshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmultimaterialshaderHPP
+#endif	// GLMultiMaterialShaderHPP

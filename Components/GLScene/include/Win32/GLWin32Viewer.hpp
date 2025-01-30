@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLWin32Viewer.pas' rev: 36.00 (Windows)
 
-#ifndef Glwin32viewerHPP
-#define Glwin32viewerHPP
+#ifndef GLWin32ViewerHPP
+#define GLWin32ViewerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -163,4 +163,4 @@ using namespace Glwin32viewer;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glwin32viewerHPP
+#endif	// GLWin32ViewerHPP

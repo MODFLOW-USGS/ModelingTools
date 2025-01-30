@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'Q3MD3.pas' rev: 36.00 (Windows)
 
-#ifndef Q3md3HPP
-#define Q3md3HPP
+#ifndef Q3MD3HPP
+#define Q3MD3HPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -78,4 +78,4 @@ using namespace Q3md3;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Q3md3HPP
+#endif	// Q3MD3HPP

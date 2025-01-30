@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_DrawingEx.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_drawingexHPP
-#define Gr32_drawingexHPP
+#ifndef GR32_DrawingExHPP
+#define GR32_DrawingExHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -39,4 +39,4 @@ using namespace Gr32_drawingex;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_drawingexHPP
+#endif	// GR32_DrawingExHPP

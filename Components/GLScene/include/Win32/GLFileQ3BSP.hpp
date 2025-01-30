@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileQ3BSP.pas' rev: 36.00 (Windows)
 
-#ifndef Glfileq3bspHPP
-#define Glfileq3bspHPP
+#ifndef GLFileQ3BSPHPP
+#define GLFileQ3BSPHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -70,4 +70,4 @@ using namespace Glfileq3bsp;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glfileq3bspHPP
+#endif	// GLFileQ3BSPHPP

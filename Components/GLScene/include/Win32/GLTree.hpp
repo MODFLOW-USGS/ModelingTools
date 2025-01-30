@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTree.pas' rev: 36.00 (Windows)
 
-#ifndef GltreeHPP
-#define GltreeHPP
+#ifndef GLTreeHPP
+#define GLTreeHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -277,4 +277,4 @@ using namespace Gltree;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltreeHPP
+#endif	// GLTreeHPP

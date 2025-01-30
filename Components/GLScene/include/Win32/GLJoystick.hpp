@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLJoystick.pas' rev: 36.00 (Windows)
 
-#ifndef GljoystickHPP
-#define GljoystickHPP
+#ifndef GLJoystickHPP
+#define GLJoystickHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -113,4 +113,4 @@ using namespace Gljoystick;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GljoystickHPP
+#endif	// GLJoystickHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPipelineTransformation.pas' rev: 36.00 (Windows)
 
-#ifndef GlpipelinetransformationHPP
-#define GlpipelinetransformationHPP
+#ifndef GLPipelineTransformationHPP
+#define GLPipelineTransformationHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -123,4 +123,4 @@ using namespace Glpipelinetransformation;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlpipelinetransformationHPP
+#endif	// GLPipelineTransformationHPP

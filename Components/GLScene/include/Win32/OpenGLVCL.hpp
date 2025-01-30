@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'OpenGLVCL.pas' rev: 36.00 (Windows)
 
-#ifndef OpenglvclHPP
-#define OpenglvclHPP
+#ifndef OpenGLVCLHPP
+#define OpenGLVCLHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -257,4 +257,4 @@ using namespace Openglvcl;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// OpenglvclHPP
+#endif	// OpenGLVCLHPP

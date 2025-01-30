@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLHiddenLineShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlhiddenlineshaderHPP
-#define GlhiddenlineshaderHPP
+#ifndef GLHiddenLineShaderHPP
+#define GLHiddenLineShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -110,4 +110,4 @@ using namespace Glhiddenlineshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlhiddenlineshaderHPP
+#endif	// GLHiddenLineShaderHPP

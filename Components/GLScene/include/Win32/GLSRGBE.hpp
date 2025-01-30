@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSRGBE.pas' rev: 36.00 (Windows)
 
-#ifndef GlsrgbeHPP
-#define GlsrgbeHPP
+#ifndef GLSRGBEHPP
+#define GLSRGBEHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -42,4 +42,4 @@ using namespace Glsrgbe;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsrgbeHPP
+#endif	// GLSRGBEHPP

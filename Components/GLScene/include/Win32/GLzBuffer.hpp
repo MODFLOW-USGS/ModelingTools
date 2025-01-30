@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLzBuffer.pas' rev: 36.00 (Windows)
 
-#ifndef GlzbufferHPP
-#define GlzbufferHPP
+#ifndef GLzBufferHPP
+#define GLzBufferHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -245,4 +245,4 @@ using namespace Glzbuffer;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlzbufferHPP
+#endif	// GLzBufferHPP

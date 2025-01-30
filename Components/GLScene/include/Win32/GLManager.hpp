@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLManager.pas' rev: 36.00 (Windows)
 
-#ifndef GlmanagerHPP
-#define GlmanagerHPP
+#ifndef GLManagerHPP
+#define GLManagerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -38,4 +38,4 @@ using namespace Glmanager;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmanagerHPP
+#endif	// GLManagerHPP

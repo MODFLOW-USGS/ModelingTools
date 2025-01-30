@@ -600,10 +600,10 @@ begin
         Application.ProcessMessages;
         FileDate := 0;
         // Wait for a few seconds
-        for TimeIndex := 0 to seTimeDelay.Value - 1 do
+        for TimeIndex := 0 to seTimeDelay.Value * 10 - 1 do
         begin
           Time := Now;
-          while Now - Time < 1 / 24 / 3600 do
+          while Now - Time < 1 / 24 / 3600 /10 do
           begin
             if FAbort then Exit;
             Application.ProcessMessages;

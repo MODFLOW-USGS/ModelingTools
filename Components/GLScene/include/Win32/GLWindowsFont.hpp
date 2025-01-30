@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLWindowsFont.pas' rev: 36.00 (Windows)
 
-#ifndef GlwindowsfontHPP
-#define GlwindowsfontHPP
+#ifndef GLWindowsFontHPP
+#define GLWindowsFontHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -88,4 +88,4 @@ using namespace Glwindowsfont;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlwindowsfontHPP
+#endif	// GLWindowsFontHPP

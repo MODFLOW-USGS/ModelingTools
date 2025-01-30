@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLDynamicTexture.pas' rev: 36.00 (Windows)
 
-#ifndef GldynamictextureHPP
-#define GldynamictextureHPP
+#ifndef GLDynamicTextureHPP
+#define GLDynamicTextureHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -88,4 +88,4 @@ using namespace Gldynamictexture;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GldynamictextureHPP
+#endif	// GLDynamicTextureHPP

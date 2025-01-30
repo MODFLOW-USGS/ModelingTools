@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLObjectManager.pas' rev: 36.00 (Windows)
 
-#ifndef GlobjectmanagerHPP
-#define GlobjectmanagerHPP
+#ifndef GLObjectManagerHPP
+#define GLObjectManagerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -93,4 +93,4 @@ using namespace Globjectmanager;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlobjectmanagerHPP
+#endif	// GLObjectManagerHPP

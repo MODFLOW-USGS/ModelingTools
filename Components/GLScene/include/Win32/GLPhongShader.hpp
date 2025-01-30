@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPhongShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlphongshaderHPP
-#define GlphongshaderHPP
+#ifndef GLPhongShaderHPP
+#define GLPhongShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -76,4 +76,4 @@ using namespace Glphongshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlphongshaderHPP
+#endif	// GLPhongShaderHPP

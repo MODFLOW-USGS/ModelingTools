@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLAnimatedSprite.pas' rev: 36.00 (Windows)
 
-#ifndef GlanimatedspriteHPP
-#define GlanimatedspriteHPP
+#ifndef GLAnimatedSpriteHPP
+#define GLAnimatedSpriteHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -297,4 +297,4 @@ using namespace Glanimatedsprite;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlanimatedspriteHPP
+#endif	// GLAnimatedSpriteHPP

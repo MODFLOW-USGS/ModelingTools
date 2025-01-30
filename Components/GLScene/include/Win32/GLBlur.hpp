@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLBlur.pas' rev: 36.00 (Windows)
 
-#ifndef GlblurHPP
-#define GlblurHPP
+#ifndef GLBlurHPP
+#define GLBlurHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -231,4 +231,4 @@ using namespace Glblur;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlblurHPP
+#endif	// GLBlurHPP

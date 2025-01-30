@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTerrainRenderer.pas' rev: 36.00 (Windows)
 
-#ifndef GlterrainrendererHPP
-#define GlterrainrendererHPP
+#ifndef GLTerrainRendererHPP
+#define GLTerrainRendererHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -148,4 +148,4 @@ using namespace Glterrainrenderer;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlterrainrendererHPP
+#endif	// GLTerrainRendererHPP

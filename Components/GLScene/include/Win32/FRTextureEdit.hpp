@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FRTextureEdit.pas' rev: 36.00 (Windows)
 
-#ifndef FrtextureeditHPP
-#define FrtextureeditHPP
+#ifndef FRTextureEditHPP
+#define FRTextureEditHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -97,4 +97,4 @@ using namespace Frtextureedit;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FrtextureeditHPP
+#endif	// FRTextureEditHPP

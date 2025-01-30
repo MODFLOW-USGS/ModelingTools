@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_Math.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_mathHPP
-#define Gr32_mathHPP
+#ifndef GR32_MathHPP
+#define GR32_MathHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -59,4 +59,4 @@ using namespace Gr32_math;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_mathHPP
+#endif	// GR32_MathHPP

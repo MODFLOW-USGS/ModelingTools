@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLog.pas' rev: 36.00 (Windows)
 
-#ifndef GlslogHPP
-#define GlslogHPP
+#ifndef GLSLogHPP
+#define GLSLogHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -230,4 +230,4 @@ using namespace Glslog;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslogHPP
+#endif	// GLSLogHPP

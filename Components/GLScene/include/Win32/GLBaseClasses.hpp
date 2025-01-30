@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLBaseClasses.pas' rev: 36.00 (Windows)
 
-#ifndef GlbaseclassesHPP
-#define GlbaseclassesHPP
+#ifndef GLBaseClassesHPP
+#define GLBaseClassesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -187,4 +187,4 @@ using namespace Glbaseclasses;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlbaseclassesHPP
+#endif	// GLBaseClassesHPP

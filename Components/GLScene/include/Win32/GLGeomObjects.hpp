@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLGeomObjects.pas' rev: 36.00 (Windows)
 
-#ifndef GlgeomobjectsHPP
-#define GlgeomobjectsHPP
+#ifndef GLGeomObjectsHPP
+#define GLGeomObjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -557,4 +557,4 @@ using namespace Glgeomobjects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlgeomobjectsHPP
+#endif	// GLGeomObjectsHPP

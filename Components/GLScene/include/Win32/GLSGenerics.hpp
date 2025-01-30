@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSGenerics.pas' rev: 36.00 (Windows)
 
-#ifndef GlsgenericsHPP
-#define GlsgenericsHPP
+#ifndef GLSGenericsHPP
+#define GLSGenericsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -197,4 +197,4 @@ using namespace Glsgenerics;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsgenericsHPP
+#endif	// GLSGenericsHPP

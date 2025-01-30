@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMaterialMultiProxy.pas' rev: 36.00 (Windows)
 
-#ifndef GlmaterialmultiproxyHPP
-#define GlmaterialmultiproxyHPP
+#ifndef GLMaterialMultiProxyHPP
+#define GLMaterialMultiProxyHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -183,4 +183,4 @@ using namespace Glmaterialmultiproxy;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmaterialmultiproxyHPP
+#endif	// GLMaterialMultiProxyHPP

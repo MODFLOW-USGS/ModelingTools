@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMeshOptimizer.pas' rev: 36.00 (Windows)
 
-#ifndef GlmeshoptimizerHPP
-#define GlmeshoptimizerHPP
+#ifndef GLMeshOptimizerHPP
+#define GLMeshOptimizerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -48,4 +48,4 @@ using namespace Glmeshoptimizer;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmeshoptimizerHPP
+#endif	// GLMeshOptimizerHPP

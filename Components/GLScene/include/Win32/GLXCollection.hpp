@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLXCollection.pas' rev: 36.00 (Windows)
 
-#ifndef GlxcollectionHPP
-#define GlxcollectionHPP
+#ifndef GLXCollectionHPP
+#define GLXCollectionHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -158,4 +158,4 @@ using namespace Glxcollection;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlxcollectionHPP
+#endif	// GLXCollectionHPP

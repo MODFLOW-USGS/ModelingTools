@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMirror.pas' rev: 36.00 (Windows)
 
-#ifndef GlmirrorHPP
-#define GlmirrorHPP
+#ifndef GLMirrorHPP
+#define GLMirrorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -110,4 +110,4 @@ using namespace Glmirror;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmirrorHPP
+#endif	// GLMirrorHPP

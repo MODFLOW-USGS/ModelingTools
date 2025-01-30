@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLDCE.pas' rev: 36.00 (Windows)
 
-#ifndef GldceHPP
-#define GldceHPP
+#ifndef GLDCEHPP
+#define GLDCEHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -244,4 +244,4 @@ using namespace Gldce;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GldceHPP
+#endif	// GLDCEHPP

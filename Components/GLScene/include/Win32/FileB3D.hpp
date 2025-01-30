@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FileB3D.pas' rev: 36.00 (Windows)
 
-#ifndef Fileb3dHPP
-#define Fileb3dHPP
+#ifndef FileB3DHPP
+#define FileB3DHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -305,4 +305,4 @@ using namespace Fileb3d;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Fileb3dHPP
+#endif	// FileB3DHPP

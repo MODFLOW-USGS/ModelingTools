@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLRagdoll.pas' rev: 36.00 (Windows)
 
-#ifndef GlragdollHPP
-#define GlragdollHPP
+#ifndef GLRagdollHPP
+#define GLRagdollHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -178,4 +178,4 @@ using namespace Glragdoll;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlragdollHPP
+#endif	// GLRagdollHPP

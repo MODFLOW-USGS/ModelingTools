@@ -1,4 +1,4 @@
-# MVR: Water Mover package file created on 4/16/2024 by ModelMuse version 5.2.0.4.
+# MVR: Water Mover package file created on 1/29/2025 by ModelMuse version 5.3.1.6.
 BEGIN OPTIONS
     PRINT_INPUT
     BUDGET FILEOUT MF6_TestSfrMawLakMvrUzf.mvr_budget
@@ -21,6 +21,8 @@ BEGIN PACKAGES
   UZF-1
 END PACKAGES
 
+# For the Lake Package, ID1 for the lake source is the lake outlet number NOT the lake number.
+# ID2 for the lake as a receiver is the lake number
 BEGIN PERIOD      1
   GHB-1     1 LAK-1     1 EXCESS     1.000000000000E-001 
   WEL-1     1 MAW-1     1 THRESHOLD  2.000000000000E-001 

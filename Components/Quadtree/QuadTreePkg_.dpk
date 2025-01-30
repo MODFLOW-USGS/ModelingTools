@@ -1,43 +1,42 @@
-package GR32_DSGN_RS12_1;
+package QuadTreePkg_;
 
 {$R *.res}
-{$R '..\GR32_Reg.dcr'}
+{$R 'QuadtreeClass.dcr'}
+{$R 'OctTreeClass.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
 {$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION OFF}
+{$OPTIMIZATION ON}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
-{$REFERENCEINFO ON}
+{$REFERENCEINFO OFF}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES ON}
+{$STACKFRAMES OFF}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE DEBUG}
+{$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'Graphics32 Design Time Package'}
-{$IMPLICITBUILD ON}
+{$DESCRIPTION 'RBW: Quadtree and Octree data structures'}
+{$LIBSUFFIX AUTO}
+{$IMPLICITBUILD OFF}
 
 requires
-  designide,
-  vcl,
-  rtl;
+  rtl,
+  vcl;
 
 contains
-  GR32_Dsgn_Bitmap in '..\GR32_Dsgn_Bitmap.pas' {PictureEditorForm},
-  GR32_Reg in '..\GR32_Reg.pas',
-  GR32_Dsgn_Color in '..\GR32_Dsgn_Color.pas',
-  GR32_Dsgn_Misc in '..\GR32_Dsgn_Misc.pas';
+  QuadtreeClass in 'QuadtreeClass.PAS',
+  OctTreeClass in 'OctTreeClass.pas';
 
 end.

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMaterialScript.pas' rev: 36.00 (Windows)
 
-#ifndef GlmaterialscriptHPP
-#define GlmaterialscriptHPP
+#ifndef GLMaterialScriptHPP
+#define GLMaterialScriptHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -254,4 +254,4 @@ using namespace Glmaterialscript;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmaterialscriptHPP
+#endif	// GLMaterialScriptHPP

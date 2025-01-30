@@ -3,11 +3,11 @@
         <ProjectGuid>{DBACE99F-0221-4660-936F-15A30233FA90}</ProjectGuid>
         <MainSource>ModelMuse.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <AppType>Application</AppType>
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-        <ProjectVersion>20.1</ProjectVersion>
+        <ProjectVersion>20.2</ProjectVersion>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <ProjectName Condition="'$(ProjectName)'==''">ModelMuse</ProjectName>
@@ -2369,35 +2369,15 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
-            <Deployment Version="4">
+            <Deployment Version="5">
                 <DeployFile LocalName="Beta\Win32\ModelMuse.exe" Configuration="Beta" Class="ProjectOutput"/>
                 <DeployFile LocalName="Beta\Win64\ModelMuse.exe" Configuration="Beta" Class="ProjectOutput"/>
                 <DeployFile LocalName="Debug\Win32\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="Debug\Win32\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>ModelMuse.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Debug\Win32\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win32">
-                        <RemoteName>ModelMuse.rsm</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
+                <DeployFile LocalName="Debug\Win32\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Debug\Win32\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols"/>
                 <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win64">
-                        <RemoteName>ModelMuse.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Debug\Win64\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win64">
-                        <RemoteName>ModelMuse.rsm</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
+                <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Debug\Win64\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols"/>
                 <DeployFile LocalName="ModelMuse.todo" Configuration="Beta" Class="ProjectFile"/>
                 <DeployFile LocalName="ModelMuse.todo" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="ModelMuse.todo" Configuration="Modflow 6 Beta" Class="ProjectFile"/>
@@ -2408,35 +2388,15 @@
                 <DeployFile LocalName="ObserverProxyU.PAS" Configuration="Modflow 6 Beta" Class="ProjectFile"/>
                 <DeployFile LocalName="ObserverProxyU.PAS" Configuration="Release" Class="ProjectFile"/>
                 <DeployFile LocalName="Release\Win32\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
-                <DeployFile LocalName="Release\Win32\ModelMuse.exe" Configuration="Release" Class="ProjectOutput">
-                    <Platform Name="Win32">
-                        <RemoteName>ModelMuse.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
+                <DeployFile LocalName="Release\Win32\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployFile LocalName="Release\Win64\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
-                <DeployFile LocalName="Release\Win64\ModelMuse.exe" Configuration="Release" Class="ProjectOutput">
-                    <Platform Name="Win64">
-                        <RemoteName>ModelMuse.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
+                <DeployFile LocalName="Release\Win64\ModelMuse.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="OSX32">
                         <Operation>1</Operation>
                     </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="AndroidClasses">
-                    <Platform Name="Android">
-                        <RemoteDir>classes</RemoteDir>
-                        <Operation>64</Operation>
-                    </Platform>
-                    <Platform Name="Android64">
-                        <RemoteDir>classes</RemoteDir>
-                        <Operation>64</Operation>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="AndroidFileProvider">
@@ -2446,12 +2406,6 @@
                     </Platform>
                     <Platform Name="Android64">
                         <RemoteDir>res\xml</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="AndroidGDBServer">
-                    <Platform Name="Android">
-                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>

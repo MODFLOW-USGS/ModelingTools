@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FileMD3.pas' rev: 36.00 (Windows)
 
-#ifndef Filemd3HPP
-#define Filemd3HPP
+#ifndef FileMD3HPP
+#define FileMD3HPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -181,4 +181,4 @@ using namespace Filemd3;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Filemd3HPP
+#endif	// FileMD3HPP

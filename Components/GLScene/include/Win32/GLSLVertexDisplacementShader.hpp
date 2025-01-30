@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLVertexDisplacementShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlslvertexdisplacementshaderHPP
-#define GlslvertexdisplacementshaderHPP
+#ifndef GLSLVertexDisplacementShaderHPP
+#define GLSLVertexDisplacementShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -131,4 +131,4 @@ using namespace Glslvertexdisplacementshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslvertexdisplacementshaderHPP
+#endif	// GLSLVertexDisplacementShaderHPP

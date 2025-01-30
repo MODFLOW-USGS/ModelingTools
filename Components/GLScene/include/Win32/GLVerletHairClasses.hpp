@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLVerletHairClasses.pas' rev: 36.00 (Windows)
 
-#ifndef GlverlethairclassesHPP
-#define GlverlethairclassesHPP
+#ifndef GLVerletHairClassesHPP
+#define GLVerletHairClassesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -85,4 +85,4 @@ using namespace Glverlethairclasses;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlverlethairclassesHPP
+#endif	// GLVerletHairClassesHPP

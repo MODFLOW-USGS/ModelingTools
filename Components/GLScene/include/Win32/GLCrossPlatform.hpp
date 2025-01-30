@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCrossPlatform.pas' rev: 36.00 (Windows)
 
-#ifndef GlcrossplatformHPP
-#define GlcrossplatformHPP
+#ifndef GLCrossPlatformHPP
+#define GLCrossPlatformHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -98,4 +98,4 @@ using namespace Glcrossplatform;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcrossplatformHPP
+#endif	// GLCrossPlatformHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileLWO.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilelwoHPP
-#define GlfilelwoHPP
+#ifndef GLFileLWOHPP
+#define GLFileLWOHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -66,4 +66,4 @@ using namespace Glfilelwo;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilelwoHPP
+#endif	// GLFileLWOHPP

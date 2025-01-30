@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTexturedHDS.pas' rev: 36.00 (Windows)
 
-#ifndef GltexturedhdsHPP
-#define GltexturedhdsHPP
+#ifndef GLTexturedHDSHPP
+#define GLTexturedHDSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -80,4 +80,4 @@ using namespace Gltexturedhds;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltexturedhdsHPP
+#endif	// GLTexturedHDSHPP

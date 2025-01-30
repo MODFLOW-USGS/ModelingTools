@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'Types3DS.pas' rev: 36.00 (Windows)
 
-#ifndef Types3dsHPP
-#define Types3dsHPP
+#ifndef Types3DSHPP
+#define Types3DSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -2035,4 +2035,4 @@ using namespace Types3ds;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Types3dsHPP
+#endif	// Types3DSHPP

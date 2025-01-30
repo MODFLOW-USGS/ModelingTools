@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSArchiveManager.pas' rev: 36.00 (Windows)
 
-#ifndef GlsarchivemanagerHPP
-#define GlsarchivemanagerHPP
+#ifndef GLSArchiveManagerHPP
+#define GLSArchiveManagerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -252,4 +252,4 @@ using namespace Glsarchivemanager;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsarchivemanagerHPP
+#endif	// GLSArchiveManagerHPP

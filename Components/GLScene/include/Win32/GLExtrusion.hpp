@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLExtrusion.pas' rev: 36.00 (Windows)
 
-#ifndef GlextrusionHPP
-#define GlextrusionHPP
+#ifndef GLExtrusionHPP
+#define GLExtrusionHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -272,4 +272,4 @@ using namespace Glextrusion;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlextrusionHPP
+#endif	// GLExtrusionHPP

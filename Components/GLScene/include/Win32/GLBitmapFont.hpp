@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLBitmapFont.pas' rev: 36.00 (Windows)
 
-#ifndef GlbitmapfontHPP
-#define GlbitmapfontHPP
+#ifndef GLBitmapFontHPP
+#define GLBitmapFontHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -299,4 +299,4 @@ using namespace Glbitmapfont;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlbitmapfontHPP
+#endif	// GLBitmapFontHPP

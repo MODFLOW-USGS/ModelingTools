@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPortal.pas' rev: 36.00 (Windows)
 
-#ifndef GlportalHPP
-#define GlportalHPP
+#ifndef GLPortalHPP
+#define GLPortalHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -152,4 +152,4 @@ using namespace Glportal;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlportalHPP
+#endif	// GLPortalHPP

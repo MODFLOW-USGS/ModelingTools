@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FXCollectionEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FxcollectioneditorHPP
-#define FxcollectioneditorHPP
+#ifndef FXCollectionEditorHPP
+#define FXCollectionEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -117,4 +117,4 @@ using namespace Fxcollectioneditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FxcollectioneditorHPP
+#endif	// FXCollectionEditorHPP

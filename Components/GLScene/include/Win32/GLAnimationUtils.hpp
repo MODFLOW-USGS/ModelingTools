@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLAnimationUtils.pas' rev: 36.00 (Windows)
 
-#ifndef GlanimationutilsHPP
-#define GlanimationutilsHPP
+#ifndef GLAnimationUtilsHPP
+#define GLAnimationUtilsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -44,4 +44,4 @@ using namespace Glanimationutils;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlanimationutilsHPP
+#endif	// GLAnimationUtilsHPP

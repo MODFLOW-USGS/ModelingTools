@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSMWaveOut.pas' rev: 36.00 (Windows)
 
-#ifndef GlsmwaveoutHPP
-#define GlsmwaveoutHPP
+#ifndef GLSMWaveOutHPP
+#define GLSMWaveOutHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -60,4 +60,4 @@ using namespace Glsmwaveout;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsmwaveoutHPP
+#endif	// GLSMWaveOutHPP

@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_OrdinalMaps.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_ordinalmapsHPP
-#define Gr32_ordinalmapsHPP
+#ifndef GR32_OrdinalMapsHPP
+#define GR32_OrdinalMapsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -186,4 +186,4 @@ using namespace Gr32_ordinalmaps;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_ordinalmapsHPP
+#endif	// GR32_OrdinalMapsHPP

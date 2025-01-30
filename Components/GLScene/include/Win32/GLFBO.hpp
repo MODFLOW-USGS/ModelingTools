@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFBO.pas' rev: 36.00 (Windows)
 
-#ifndef GlfboHPP
-#define GlfboHPP
+#ifndef GLFBOHPP
+#define GLFBOHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -181,4 +181,4 @@ using namespace Glfbo;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfboHPP
+#endif	// GLFBOHPP

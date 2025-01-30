@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileVRML.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilevrmlHPP
-#define GlfilevrmlHPP
+#ifndef GLFileVRMLHPP
+#define GLFileVRMLHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -62,4 +62,4 @@ using namespace Glfilevrml;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilevrmlHPP
+#endif	// GLFileVRMLHPP

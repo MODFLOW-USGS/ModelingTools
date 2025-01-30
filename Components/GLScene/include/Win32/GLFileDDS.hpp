@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileDDS.pas' rev: 36.00 (Windows)
 
-#ifndef GlfileddsHPP
-#define GlfileddsHPP
+#ifndef GLFileDDSHPP
+#define GLFileDDSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -70,4 +70,4 @@ using namespace Glfiledds;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfileddsHPP
+#endif	// GLFileDDSHPP

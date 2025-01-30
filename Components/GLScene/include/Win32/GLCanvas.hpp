@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCanvas.pas' rev: 36.00 (Windows)
 
-#ifndef GlcanvasHPP
-#define GlcanvasHPP
+#ifndef GLCanvasHPP
+#define GLCanvasHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -131,4 +131,4 @@ using namespace Glcanvas;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcanvasHPP
+#endif	// GLCanvasHPP

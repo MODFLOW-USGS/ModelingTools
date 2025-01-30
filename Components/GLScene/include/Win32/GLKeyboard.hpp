@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLKeyboard.pas' rev: 36.00 (Windows)
 
-#ifndef GlkeyboardHPP
-#define GlkeyboardHPP
+#ifndef GLKeyboardHPP
+#define GLKeyboardHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -47,4 +47,4 @@ using namespace Glkeyboard;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlkeyboardHPP
+#endif	// GLKeyboardHPP

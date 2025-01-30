@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLShadowPlane.pas' rev: 36.00 (Windows)
 
-#ifndef GlshadowplaneHPP
-#define GlshadowplaneHPP
+#ifndef GLShadowPlaneHPP
+#define GLShadowPlaneHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -93,4 +93,4 @@ using namespace Glshadowplane;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlshadowplaneHPP
+#endif	// GLShadowPlaneHPP

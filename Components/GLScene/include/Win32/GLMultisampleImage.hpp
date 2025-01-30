@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMultisampleImage.pas' rev: 36.00 (Windows)
 
-#ifndef GlmultisampleimageHPP
-#define GlmultisampleimageHPP
+#ifndef GLMultisampleImageHPP
+#define GLMultisampleImageHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -87,4 +87,4 @@ using namespace Glmultisampleimage;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmultisampleimageHPP
+#endif	// GLMultisampleImageHPP

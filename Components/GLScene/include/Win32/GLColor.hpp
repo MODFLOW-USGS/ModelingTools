@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLColor.pas' rev: 36.00 (Windows)
 
-#ifndef GlcolorHPP
-#define GlcolorHPP
+#ifndef GLColorHPP
+#define GLColorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -357,4 +357,4 @@ using namespace Glcolor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcolorHPP
+#endif	// GLColorHPP

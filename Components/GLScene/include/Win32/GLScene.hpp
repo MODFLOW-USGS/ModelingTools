@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLScene.pas' rev: 36.00 (Windows)
 
-#ifndef GlsceneHPP
-#define GlsceneHPP
+#ifndef GLSceneHPP
+#define GLSceneHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -1345,4 +1345,4 @@ using namespace Glscene;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsceneHPP
+#endif	// GLSceneHPP

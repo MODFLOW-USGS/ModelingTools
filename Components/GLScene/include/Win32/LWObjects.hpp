@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'LWObjects.pas' rev: 36.00 (Windows)
 
-#ifndef LwobjectsHPP
-#define LwobjectsHPP
+#ifndef LWObjectsHPP
+#define LWObjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -798,4 +798,4 @@ using namespace Lwobjects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// LwobjectsHPP
+#endif	// LWObjectsHPP

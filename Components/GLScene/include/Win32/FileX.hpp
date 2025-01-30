@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FileX.pas' rev: 36.00 (Windows)
 
-#ifndef FilexHPP
-#define FilexHPP
+#ifndef FileXHPP
+#define FileXHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -211,4 +211,4 @@ using namespace Filex;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FilexHPP
+#endif	// FileXHPP

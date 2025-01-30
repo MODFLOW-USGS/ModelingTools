@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSpatialPartitioning.pas' rev: 36.00 (Windows)
 
-#ifndef GlspatialpartitioningHPP
-#define GlspatialpartitioningHPP
+#ifndef GLSpatialPartitioningHPP
+#define GLSpatialPartitioningHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -73,4 +73,4 @@ using namespace Glspatialpartitioning;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlspatialpartitioningHPP
+#endif	// GLSpatialPartitioningHPP

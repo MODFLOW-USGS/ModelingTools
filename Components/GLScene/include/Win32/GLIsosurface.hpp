@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLIsosurface.pas' rev: 36.00 (Windows)
 
-#ifndef GlisosurfaceHPP
-#define GlisosurfaceHPP
+#ifndef GLIsosurfaceHPP
+#define GLIsosurfaceHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -175,4 +175,4 @@ using namespace Glisosurface;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlisosurfaceHPP
+#endif	// GLIsosurfaceHPP

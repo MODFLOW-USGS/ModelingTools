@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FRMaterialPreview.pas' rev: 36.00 (Windows)
 
-#ifndef FrmaterialpreviewHPP
-#define FrmaterialpreviewHPP
+#ifndef FRMaterialPreviewHPP
+#define FRMaterialPreviewHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -100,4 +100,4 @@ using namespace Frmaterialpreview;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FrmaterialpreviewHPP
+#endif	// FRMaterialPreviewHPP

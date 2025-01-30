@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_Containers.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_containersHPP
-#define Gr32_containersHPP
+#ifndef GR32_ContainersHPP
+#define GR32_ContainersHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -258,8 +258,8 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Byte BUCKET_MASK = System::Byte(0xff);
-static const System::Word BUCKET_COUNT = System::Word(0x100);
+static _DELPHI_CONST System::Byte BUCKET_MASK = System::Byte(0xff);
+static _DELPHI_CONST System::Word BUCKET_COUNT = System::Word(0x100);
 extern DELPHI_PACKAGE void __fastcall SmartAssign(System::Classes::TPersistent* Src, System::Classes::TPersistent* Dst, System::Typinfo::TTypeKinds TypeKinds = (System::Typinfo::TTypeKinds() << System::TTypeKind::tkInteger << System::TTypeKind::tkChar << System::TTypeKind::tkEnumeration << System::TTypeKind::tkFloat << System::TTypeKind::tkString << System::TTypeKind::tkSet << System::TTypeKind::tkClass << System::TTypeKind::tkWChar << System::TTypeKind::tkLString << System::TTypeKind::tkWString << System::TTypeKind::tkVariant << System::TTypeKind::tkArray << System::TTypeKind::tkRecord << System::TTypeKind::tkInterface << System::TTypeKind::tkInt64 << System::TTypeKind::tkDynArray << System::TTypeKind::tkUString << System::TTypeKind::tkClassRef << System::TTypeKind::tkPointer << System::TTypeKind::tkProcedure << System::TTypeKind::tkMRecord ));
 extern DELPHI_PACKAGE void __fastcall Advance(PLinkedNode &Node, int Steps = 0x1);
 }	/* namespace Gr32_containers */
@@ -271,4 +271,4 @@ using namespace Gr32_containers;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_containersHPP
+#endif	// GR32_ContainersHPP

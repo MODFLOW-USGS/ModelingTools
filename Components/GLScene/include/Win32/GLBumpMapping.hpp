@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLBumpMapping.pas' rev: 36.00 (Windows)
 
-#ifndef GlbumpmappingHPP
-#define GlbumpmappingHPP
+#ifndef GLBumpMappingHPP
+#define GLBumpMappingHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -46,4 +46,4 @@ using namespace Glbumpmapping;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlbumpmappingHPP
+#endif	// GLBumpMappingHPP

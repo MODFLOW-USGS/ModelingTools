@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLVectorFileObjects.pas' rev: 36.00 (Windows)
 
-#ifndef GlvectorfileobjectsHPP
-#define GlvectorfileobjectsHPP
+#ifndef GLVectorFileObjectsHPP
+#define GLVectorFileObjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -1391,4 +1391,4 @@ using namespace Glvectorfileobjects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlvectorfileobjectsHPP
+#endif	// GLVectorFileObjectsHPP

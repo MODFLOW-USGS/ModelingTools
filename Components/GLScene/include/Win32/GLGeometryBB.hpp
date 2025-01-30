@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLGeometryBB.pas' rev: 36.00 (Windows)
 
-#ifndef GlgeometrybbHPP
-#define GlgeometrybbHPP
+#ifndef GLGeometryBBHPP
+#define GLGeometryBBHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -151,4 +151,4 @@ using namespace Glgeometrybb;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlgeometrybbHPP
+#endif	// GLGeometryBBHPP

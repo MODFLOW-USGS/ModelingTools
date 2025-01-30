@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileGRD.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilegrdHPP
-#define GlfilegrdHPP
+#ifndef GLFileGRDHPP
+#define GLFileGRDHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -72,4 +72,4 @@ using namespace Glfilegrd;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilegrdHPP
+#endif	// GLFileGRDHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLVectorLists.pas' rev: 36.00 (Windows)
 
-#ifndef GlvectorlistsHPP
-#define GlvectorlistsHPP
+#ifndef GLVectorListsHPP
+#define GLVectorListsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -702,4 +702,4 @@ using namespace Glvectorlists;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlvectorlistsHPP
+#endif	// GLVectorListsHPP

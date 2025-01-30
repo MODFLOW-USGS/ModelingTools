@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCelShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlcelshaderHPP
-#define GlcelshaderHPP
+#ifndef GLCelShaderHPP
+#define GLCelShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -91,4 +91,4 @@ using namespace Glcelshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcelshaderHPP
+#endif	// GLCelShaderHPP

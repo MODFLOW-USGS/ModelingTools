@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSceneRegister.pas' rev: 36.00 (Windows)
 
-#ifndef GlsceneregisterHPP
-#define GlsceneregisterHPP
+#ifndef GLSceneRegisterHPP
+#define GLSceneRegisterHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -723,4 +723,4 @@ using namespace Glsceneregister;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsceneregisterHPP
+#endif	// GLSceneRegisterHPP

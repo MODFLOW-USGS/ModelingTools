@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLShadowHDS.pas' rev: 36.00 (Windows)
 
-#ifndef GlshadowhdsHPP
-#define GlshadowhdsHPP
+#ifndef GLShadowHDSHPP
+#define GLShadowHDSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -114,4 +114,4 @@ using namespace Glshadowhds;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlshadowhdsHPP
+#endif	// GLShadowHDSHPP

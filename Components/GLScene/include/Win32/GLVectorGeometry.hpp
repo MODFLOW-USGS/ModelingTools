@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLVectorGeometry.pas' rev: 36.00 (Windows)
 
-#ifndef GlvectorgeometryHPP
-#define GlvectorgeometryHPP
+#ifndef GLVectorGeometryHPP
+#define GLVectorGeometryHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -899,4 +899,4 @@ using namespace Glvectorgeometry;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlvectorgeometryHPP
+#endif	// GLVectorGeometryHPP

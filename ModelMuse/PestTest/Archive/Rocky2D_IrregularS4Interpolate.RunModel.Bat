@@ -36,7 +36,7 @@ if exist "Rocky2D_IrregularS4Interpolate.SUTRA.FIL" copy /Y "Rocky2D_IrregularS4
 "EnhancedTemplateProcessor.exe" arrays\Rocky2D_IrregularS4Interpolate.Minimum_Permeability_2.arrays.tpl
 "plproc.exe" 'Rocky2D_IrregularS4Interpolate.14B.script'
 "plproc.exe" 'Rocky2D_IrregularS4Interpolate.15B.script'
-"sutra_4_0_0_PROVISIONAL_2023-02-28_8b569f6.exe"
+"sutra_4_0.exe"
 "SutraObsExtractor.exe" Rocky2D_IrregularS4Interpolate.soe_ev
 @echo off
 rem Get end time:

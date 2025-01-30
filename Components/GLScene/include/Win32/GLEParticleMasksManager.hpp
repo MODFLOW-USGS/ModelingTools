@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLEParticleMasksManager.pas' rev: 36.00 (Windows)
 
-#ifndef GleparticlemasksmanagerHPP
-#define GleparticlemasksmanagerHPP
+#ifndef GLEParticleMasksManagerHPP
+#define GLEParticleMasksManagerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -203,4 +203,4 @@ using namespace Gleparticlemasksmanager;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GleparticlemasksmanagerHPP
+#endif	// GLEParticleMasksManagerHPP

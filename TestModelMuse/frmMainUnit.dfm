@@ -29,8 +29,6 @@ object frmMain: TfrmMain
     Height = 115
     Align = alBottom
     TabOrder = 2
-    ExplicitTop = 506
-    ExplicitWidth = 834
     DesignSize = (
       838
       115)
@@ -132,7 +130,6 @@ object frmMain: TfrmMain
       Anchors = [akLeft, akTop, akRight]
       Step = 1
       TabOrder = 6
-      ExplicitWidth = 650
     end
     object BitBtn1: TBitBtn
       Left = 551
@@ -187,8 +184,6 @@ object frmMain: TfrmMain
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitTop = 621
-    ExplicitWidth = 834
   end
   object tvModflow: TTreeView
     Left = 0
@@ -203,8 +198,6 @@ object frmMain: TfrmMain
     TabOrder = 0
     OnCustomDrawItem = tvModflowCustomDrawItem
     OnDblClick = tvModflowDblClick
-    ExplicitWidth = 834
-    ExplicitHeight = 410
   end
   object memoErrors: TMemo
     Left = 0
@@ -214,8 +207,6 @@ object frmMain: TfrmMain
     Align = alBottom
     ScrollBars = ssBoth
     TabOrder = 1
-    ExplicitTop = 417
-    ExplicitWidth = 834
   end
   object odSelectGoPhast: TOpenDialog
     Filter = '*.exe|*.exe'

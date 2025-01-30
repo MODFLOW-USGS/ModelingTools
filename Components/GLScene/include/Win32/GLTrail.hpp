@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTrail.pas' rev: 36.00 (Windows)
 
-#ifndef GltrailHPP
-#define GltrailHPP
+#ifndef GLTrailHPP
+#define GLTrailHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -120,4 +120,4 @@ using namespace Gltrail;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltrailHPP
+#endif	// GLTrailHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'O3TCImage.pas' rev: 36.00 (Windows)
 
-#ifndef O3tcimageHPP
-#define O3tcimageHPP
+#ifndef O3TCImageHPP
+#define O3TCImageHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -56,4 +56,4 @@ using namespace O3tcimage;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// O3tcimageHPP
+#endif	// O3TCImageHPP

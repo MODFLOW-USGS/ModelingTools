@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileLMTS.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilelmtsHPP
-#define GlfilelmtsHPP
+#ifndef GLFileLMTSHPP
+#define GLFileLMTSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -168,4 +168,4 @@ using namespace Glfilelmts;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilelmtsHPP
+#endif	// GLFileLMTSHPP

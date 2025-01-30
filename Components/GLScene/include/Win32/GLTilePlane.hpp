@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTilePlane.pas' rev: 36.00 (Windows)
 
-#ifndef GltileplaneHPP
-#define GltileplaneHPP
+#ifndef GLTilePlaneHPP
+#define GLTilePlaneHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -157,4 +157,4 @@ using namespace Gltileplane;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltileplaneHPP
+#endif	// GLTilePlaneHPP

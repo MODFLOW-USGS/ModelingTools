@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLAVIRecorder.pas' rev: 36.00 (Windows)
 
-#ifndef GlavirecorderHPP
-#define GlavirecorderHPP
+#ifndef GLAVIRecorderHPP
+#define GLAVIRecorderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -121,4 +121,4 @@ using namespace Glavirecorder;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlavirecorderHPP
+#endif	// GLAVIRecorderHPP

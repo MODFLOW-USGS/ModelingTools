@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLNodes.pas' rev: 36.00 (Windows)
 
-#ifndef GlnodesHPP
-#define GlnodesHPP
+#ifndef GLNodesHPP
+#define GLNodesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -133,4 +133,4 @@ using namespace Glnodes;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlnodesHPP
+#endif	// GLNodesHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLHeightTileFile.pas' rev: 36.00 (Windows)
 
-#ifndef GlheighttilefileHPP
-#define GlheighttilefileHPP
+#ifndef GLHeightTileFileHPP
+#define GLHeightTileFileHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -178,4 +178,4 @@ using namespace Glheighttilefile;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlheighttilefileHPP
+#endif	// GLHeightTileFileHPP

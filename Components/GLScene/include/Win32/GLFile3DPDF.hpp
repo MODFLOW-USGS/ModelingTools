@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFile3DPDF.pas' rev: 36.00 (Windows)
 
-#ifndef Glfile3dpdfHPP
-#define Glfile3dpdfHPP
+#ifndef GLFile3DPDFHPP
+#define GLFile3DPDFHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -84,4 +84,4 @@ using namespace Glfile3dpdf;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glfile3dpdfHPP
+#endif	// GLFile3DPDFHPP

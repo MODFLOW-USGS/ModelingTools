@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLParticles.pas' rev: 36.00 (Windows)
 
-#ifndef GlparticlesHPP
-#define GlparticlesHPP
+#ifndef GLParticlesHPP
+#define GLParticlesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -100,4 +100,4 @@ using namespace Glparticles;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlparticlesHPP
+#endif	// GLParticlesHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLThorFX.pas' rev: 36.00 (Windows)
 
-#ifndef GlthorfxHPP
-#define GlthorfxHPP
+#ifndef GLThorFXHPP
+#define GLThorFXHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -165,4 +165,4 @@ using namespace Glthorfx;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlthorfxHPP
+#endif	// GLThorFXHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSkyBox.pas' rev: 36.00 (Windows)
 
-#ifndef GlskyboxHPP
-#define GlskyboxHPP
+#ifndef GLSkyBoxHPP
+#define GLSkyBoxHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -116,4 +116,4 @@ using namespace Glskybox;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlskyboxHPP
+#endif	// GLSkyBoxHPP

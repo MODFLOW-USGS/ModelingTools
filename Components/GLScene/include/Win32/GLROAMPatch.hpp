@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLROAMPatch.pas' rev: 36.00 (Windows)
 
-#ifndef GlroampatchHPP
-#define GlroampatchHPP
+#ifndef GLROAMPatchHPP
+#define GLROAMPatchHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -178,4 +178,4 @@ using namespace Glroampatch;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlroampatchHPP
+#endif	// GLROAMPatchHPP

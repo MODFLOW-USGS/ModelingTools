@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLScene_DT.dpk' rev: 36.00 (Windows)
 
-#ifndef Glscene_dtHPP
-#define Glscene_dtHPP
+#ifndef GLScene_DTHPP
+#define GLScene_DTHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -83,20 +83,20 @@
 #include <GLColor.hpp>
 #include <Vcl.Imaging.jpeg.hpp>	// (vclimg)
 #include <Vcl.Imaging.pngimage.hpp>	// (vclimg)
-#include <GR32_System.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Blend.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Filters.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Image.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32.hpp>	// (GR32_DSGN_RS12_1)
+#include <GR32_System.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Blend.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Filters.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Image.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32.hpp>	// (GR32_DSGN_RS12_2)
 #include <OpenGLAdapter.hpp>
 #include <XOpenGL.hpp>
 #include <GLContext.hpp>
@@ -371,4 +371,4 @@ using namespace Glscene_dt;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glscene_dtHPP
+#endif	// GLScene_DTHPP

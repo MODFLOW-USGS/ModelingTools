@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FileTGA.pas' rev: 36.00 (Windows)
 
-#ifndef FiletgaHPP
-#define FiletgaHPP
+#ifndef FileTGAHPP
+#define FileTGAHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -60,4 +60,4 @@ using namespace Filetga;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FiletgaHPP
+#endif	// FileTGAHPP

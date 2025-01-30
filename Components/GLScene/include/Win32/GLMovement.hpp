@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMovement.pas' rev: 36.00 (Windows)
 
-#ifndef GlmovementHPP
-#define GlmovementHPP
+#ifndef GLMovementHPP
+#define GLMovementHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -318,4 +318,4 @@ using namespace Glmovement;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmovementHPP
+#endif	// GLMovementHPP

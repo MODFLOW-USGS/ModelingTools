@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'XOpenGL.pas' rev: 36.00 (Windows)
 
-#ifndef XopenglHPP
-#define XopenglHPP
+#ifndef XOpenGLHPP
+#define XOpenGLHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -99,4 +99,4 @@ using namespace Xopengl;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// XopenglHPP
+#endif	// XOpenGLHPP

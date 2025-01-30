@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLAsyncTimer.pas' rev: 36.00 (Windows)
 
-#ifndef GlasynctimerHPP
-#define GlasynctimerHPP
+#ifndef GLAsyncTimerHPP
+#define GLAsyncTimerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -69,4 +69,4 @@ using namespace Glasynctimer;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlasynctimerHPP
+#endif	// GLAsyncTimerHPP

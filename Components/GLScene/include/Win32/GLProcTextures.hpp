@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLProcTextures.pas' rev: 36.00 (Windows)
 
-#ifndef GlproctexturesHPP
-#define GlproctexturesHPP
+#ifndef GLProcTexturesHPP
+#define GLProcTexturesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -99,4 +99,4 @@ using namespace Glproctextures;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlproctexturesHPP
+#endif	// GLProcTexturesHPP

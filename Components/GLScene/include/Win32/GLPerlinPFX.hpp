@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPerlinPFX.pas' rev: 36.00 (Windows)
 
-#ifndef GlperlinpfxHPP
-#define GlperlinpfxHPP
+#ifndef GLPerlinPFXHPP
+#define GLPerlinPFXHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -87,4 +87,4 @@ using namespace Glperlinpfx;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlperlinpfxHPP
+#endif	// GLPerlinPFXHPP

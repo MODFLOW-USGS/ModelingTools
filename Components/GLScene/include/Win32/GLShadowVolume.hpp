@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLShadowVolume.pas' rev: 36.00 (Windows)
 
-#ifndef GlshadowvolumeHPP
-#define GlshadowvolumeHPP
+#ifndef GLShadowVolumeHPP
+#define GLShadowVolumeHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -210,4 +210,4 @@ using namespace Glshadowvolume;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlshadowvolumeHPP
+#endif	// GLShadowVolumeHPP

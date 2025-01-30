@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FileOCT.pas' rev: 36.00 (Windows)
 
-#ifndef FileoctHPP
-#define FileoctHPP
+#ifndef FileOCTHPP
+#define FileOCTHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -143,4 +143,4 @@ using namespace Fileoct;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FileoctHPP
+#endif	// FileOCTHPP

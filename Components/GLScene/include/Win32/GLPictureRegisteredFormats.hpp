@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPictureRegisteredFormats.pas' rev: 36.00 (Windows)
 
-#ifndef GlpictureregisteredformatsHPP
-#define GlpictureregisteredformatsHPP
+#ifndef GLPictureRegisteredFormatsHPP
+#define GLPictureRegisteredFormatsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -37,4 +37,4 @@ using namespace Glpictureregisteredformats;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlpictureregisteredformatsHPP
+#endif	// GLPictureRegisteredFormatsHPP

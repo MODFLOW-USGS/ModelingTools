@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_Transforms.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_transformsHPP
-#define Gr32_transformsHPP
+#ifndef GR32_TransformsHPP
+#define GR32_TransformsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -507,4 +507,4 @@ using namespace Gr32_transforms;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_transformsHPP
+#endif	// GR32_TransformsHPP

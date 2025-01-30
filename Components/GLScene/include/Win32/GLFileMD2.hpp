@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileMD2.pas' rev: 36.00 (Windows)
 
-#ifndef Glfilemd2HPP
-#define Glfilemd2HPP
+#ifndef GLFileMD2HPP
+#define GLFileMD2HPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -56,4 +56,4 @@ using namespace Glfilemd2;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glfilemd2HPP
+#endif	// GLFileMD2HPP

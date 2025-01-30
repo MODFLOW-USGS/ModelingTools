@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPlugInManager.pas' rev: 36.00 (Windows)
 
-#ifndef GlpluginmanagerHPP
-#define GlpluginmanagerHPP
+#ifndef GLPlugInManagerHPP
+#define GLPlugInManagerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -140,4 +140,4 @@ using namespace Glpluginmanager;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlpluginmanagerHPP
+#endif	// GLPlugInManagerHPP

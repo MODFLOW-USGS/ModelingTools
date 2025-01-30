@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLImposter.pas' rev: 36.00 (Windows)
 
-#ifndef GlimposterHPP
-#define GlimposterHPP
+#ifndef GLImposterHPP
+#define GLImposterHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -354,4 +354,4 @@ using namespace Glimposter;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlimposterHPP
+#endif	// GLImposterHPP

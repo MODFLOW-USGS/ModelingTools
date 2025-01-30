@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTexLensFlare.pas' rev: 36.00 (Windows)
 
-#ifndef GltexlensflareHPP
-#define GltexlensflareHPP
+#ifndef GLTexLensFlareHPP
+#define GLTexLensFlareHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -100,4 +100,4 @@ using namespace Gltexlensflare;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltexlensflareHPP
+#endif	// GLTexLensFlareHPP

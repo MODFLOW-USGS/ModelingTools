@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSVfw.pas' rev: 36.00 (Windows)
 
-#ifndef GlsvfwHPP
-#define GlsvfwHPP
+#ifndef GLSVfwHPP
+#define GLSVfwHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -2015,4 +2015,4 @@ using namespace Glsvfw;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsvfwHPP
+#endif	// GLSVfwHPP

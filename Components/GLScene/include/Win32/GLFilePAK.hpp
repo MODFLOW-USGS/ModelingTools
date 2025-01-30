@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFilePAK.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilepakHPP
-#define GlfilepakHPP
+#ifndef GLFilePAKHPP
+#define GLFilePAKHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -96,4 +96,4 @@ using namespace Glfilepak;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilepakHPP
+#endif	// GLFilePAKHPP

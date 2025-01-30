@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileO3TC.pas' rev: 36.00 (Windows)
 
-#ifndef Glfileo3tcHPP
-#define Glfileo3tcHPP
+#ifndef GLFileO3TCHPP
+#define GLFileO3TCHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -61,4 +61,4 @@ using namespace Glfileo3tc;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glfileo3tcHPP
+#endif	// GLFileO3TCHPP

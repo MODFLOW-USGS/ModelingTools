@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLRenderContextInfo.pas' rev: 36.00 (Windows)
 
-#ifndef GlrendercontextinfoHPP
-#define GlrendercontextinfoHPP
+#ifndef GLRenderContextInfoHPP
+#define GLRenderContextInfoHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -107,4 +107,4 @@ using namespace Glrendercontextinfo;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlrendercontextinfoHPP
+#endif	// GLRenderContextInfoHPP

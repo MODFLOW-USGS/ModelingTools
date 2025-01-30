@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'fmoderrors.pas' rev: 36.00 (Windows)
 
-#ifndef FmoderrorsHPP
-#define FmoderrorsHPP
+#ifndef fmoderrorsHPP
+#define fmoderrorsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -35,4 +35,4 @@ using namespace Fmoderrors;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FmoderrorsHPP
+#endif	// fmoderrorsHPP

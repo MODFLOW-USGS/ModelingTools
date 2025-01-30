@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FRFaceEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FrfaceeditorHPP
-#define FrfaceeditorHPP
+#ifndef FRFaceEditorHPP
+#define FRFaceEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -85,4 +85,4 @@ using namespace Frfaceeditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FrfaceeditorHPP
+#endif	// FRFaceEditorHPP

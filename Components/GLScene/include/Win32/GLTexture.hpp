@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTexture.pas' rev: 36.00 (Windows)
 
-#ifndef GltextureHPP
-#define GltextureHPP
+#ifndef GLTextureHPP
+#define GLTextureHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -625,4 +625,4 @@ using namespace Gltexture;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltextureHPP
+#endif	// GLTextureHPP

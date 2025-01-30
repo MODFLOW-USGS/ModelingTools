@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLWindows.pas' rev: 36.00 (Windows)
 
-#ifndef GlwindowsHPP
-#define GlwindowsHPP
+#ifndef GLWindowsHPP
+#define GLWindowsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -786,4 +786,4 @@ using namespace Glwindows;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlwindowsHPP
+#endif	// GLWindowsHPP

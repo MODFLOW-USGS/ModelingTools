@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLShaderCombiner.pas' rev: 36.00 (Windows)
 
-#ifndef GlshadercombinerHPP
-#define GlshadercombinerHPP
+#ifndef GLShaderCombinerHPP
+#define GLShaderCombinerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -93,4 +93,4 @@ using namespace Glshadercombiner;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlshadercombinerHPP
+#endif	// GLShaderCombinerHPP

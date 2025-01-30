@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTexCombineShader.pas' rev: 36.00 (Windows)
 
-#ifndef GltexcombineshaderHPP
-#define GltexcombineshaderHPP
+#ifndef GLTexCombineShaderHPP
+#define GLTexCombineShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -91,4 +91,4 @@ using namespace Gltexcombineshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltexcombineshaderHPP
+#endif	// GLTexCombineShaderHPP

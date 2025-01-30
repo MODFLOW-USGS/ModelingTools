@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLScene_RT.dpk' rev: 36.00 (Windows)
 
-#ifndef Glscene_rtHPP
-#define Glscene_rtHPP
+#ifndef GLScene_RTHPP
+#define GLScene_RTHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -317,20 +317,20 @@
 #include <Vcl.Menus.hpp>	// (vcl)
 #include <Winapi.MsCTF.PkgHelper.hpp>	// (rtl)
 #include <Vcl.Controls.hpp>	// (vcl)
-#include <GR32_System.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Blend.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Filters.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Image.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS12_1)
-#include <GR32.hpp>	// (GR32_DSGN_RS12_1)
+#include <GR32_System.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Bindings.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_LowLevel.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Blend.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Filters.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Rasterizers.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Transforms.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Resamplers.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_XPThemes.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_MicroTiles.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Image.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Backends_Generic.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32_Backends_VCL.hpp>	// (GR32_DSGN_RS12_2)
+#include <GR32.hpp>	// (GR32_DSGN_RS12_2)
 #include <Vcl.Buttons.hpp>	// (vcl)
 #include <Vcl.ExtDlgs.hpp>	// (vcl)
 #include <Vcl.Imaging.jpeg.hpp>	// (vclimg)
@@ -360,4 +360,4 @@ using namespace Glscene_rt;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glscene_rtHPP
+#endif	// GLScene_RTHPP

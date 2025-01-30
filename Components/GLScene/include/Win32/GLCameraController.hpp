@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCameraController.pas' rev: 36.00 (Windows)
 
-#ifndef GlcameracontrollerHPP
-#define GlcameracontrollerHPP
+#ifndef GLCameraControllerHPP
+#define GLCameraControllerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -330,4 +330,4 @@ using namespace Glcameracontroller;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcameracontrollerHPP
+#endif	// GLCameraControllerHPP

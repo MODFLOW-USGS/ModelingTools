@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSmoothNavigator.pas' rev: 36.00 (Windows)
 
-#ifndef GlsmoothnavigatorHPP
-#define GlsmoothnavigatorHPP
+#ifndef GLSmoothNavigatorHPP
+#define GLSmoothNavigatorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -485,4 +485,4 @@ using namespace Glsmoothnavigator;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsmoothnavigatorHPP
+#endif	// GLSmoothNavigatorHPP

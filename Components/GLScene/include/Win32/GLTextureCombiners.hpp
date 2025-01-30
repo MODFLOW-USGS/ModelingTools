@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTextureCombiners.pas' rev: 36.00 (Windows)
 
-#ifndef GltexturecombinersHPP
-#define GltexturecombinersHPP
+#ifndef GLTextureCombinersHPP
+#define GLTextureCombinersHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -75,4 +75,4 @@ using namespace Gltexturecombiners;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltexturecombinersHPP
+#endif	// GLTextureCombinersHPP

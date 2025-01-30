@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLAtmosphere.pas' rev: 36.00 (Windows)
 
-#ifndef GlatmosphereHPP
-#define GlatmosphereHPP
+#ifndef GLAtmosphereHPP
+#define GLAtmosphereHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -168,4 +168,4 @@ using namespace Glatmosphere;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlatmosphereHPP
+#endif	// GLAtmosphereHPP

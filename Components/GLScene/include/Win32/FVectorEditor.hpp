@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FVectorEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FvectoreditorHPP
-#define FvectoreditorHPP
+#ifndef FVectorEditorHPP
+#define FVectorEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -110,4 +110,4 @@ using namespace Fvectoreditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FvectoreditorHPP
+#endif	// FVectorEditorHPP

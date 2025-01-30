@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLConsole.pas' rev: 36.00 (Windows)
 
-#ifndef GlconsoleHPP
-#define GlconsoleHPP
+#ifndef GLConsoleHPP
+#define GLConsoleHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -368,4 +368,4 @@ using namespace Glconsole;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlconsoleHPP
+#endif	// GLConsoleHPP

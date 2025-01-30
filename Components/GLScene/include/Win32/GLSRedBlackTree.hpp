@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSRedBlackTree.pas' rev: 36.00 (Windows)
 
-#ifndef GlsredblacktreeHPP
-#define GlsredblacktreeHPP
+#ifndef GLSRedBlackTreeHPP
+#define GLSRedBlackTreeHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -131,4 +131,4 @@ using namespace Glsredblacktree;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsredblacktreeHPP
+#endif	// GLSRedBlackTreeHPP

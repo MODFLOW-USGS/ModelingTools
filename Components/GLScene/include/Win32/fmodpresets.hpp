@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'fmodpresets.pas' rev: 36.00 (Windows)
 
-#ifndef FmodpresetsHPP
-#define FmodpresetsHPP
+#ifndef fmodpresetsHPP
+#define fmodpresetsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -61,4 +61,4 @@ using namespace Fmodpresets;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FmodpresetsHPP
+#endif	// fmodpresetsHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLScreenSaver.pas' rev: 36.00 (Windows)
 
-#ifndef GlscreensaverHPP
-#define GlscreensaverHPP
+#ifndef GLScreenSaverHPP
+#define GLScreenSaverHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -97,4 +97,4 @@ using namespace Glscreensaver;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlscreensaverHPP
+#endif	// GLScreenSaverHPP

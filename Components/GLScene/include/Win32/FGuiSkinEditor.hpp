@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FGuiSkinEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FguiskineditorHPP
-#define FguiskineditorHPP
+#ifndef FGuiSkinEditorHPP
+#define FGuiSkinEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -204,4 +204,4 @@ using namespace Fguiskineditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FguiskineditorHPP
+#endif	// FGuiSkinEditorHPP

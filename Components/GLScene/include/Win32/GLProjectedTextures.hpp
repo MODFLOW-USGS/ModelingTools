@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLProjectedTextures.pas' rev: 36.00 (Windows)
 
-#ifndef GlprojectedtexturesHPP
-#define GlprojectedtexturesHPP
+#ifndef GLProjectedTexturesHPP
+#define GLProjectedTexturesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -149,4 +149,4 @@ using namespace Glprojectedtextures;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlprojectedtexturesHPP
+#endif	// GLProjectedTexturesHPP

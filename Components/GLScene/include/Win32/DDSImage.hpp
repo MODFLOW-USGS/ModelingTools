@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'DDSImage.pas' rev: 36.00 (Windows)
 
-#ifndef DdsimageHPP
-#define DdsimageHPP
+#ifndef DDSImageHPP
+#define DDSImageHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -82,4 +82,4 @@ using namespace Ddsimage;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DdsimageHPP
+#endif	// DDSImageHPP

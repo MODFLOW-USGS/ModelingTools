@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'OpenAL.pas' rev: 36.00 (Windows)
 
-#ifndef OpenalHPP
-#define OpenalHPP
+#ifndef OpenALHPP
+#define OpenALHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -1159,4 +1159,4 @@ using namespace Openal;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// OpenalHPP
+#endif	// OpenALHPP

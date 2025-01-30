@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMultiPolygon.pas' rev: 36.00 (Windows)
 
-#ifndef GlmultipolygonHPP
-#define GlmultipolygonHPP
+#ifndef GLMultiPolygonHPP
+#define GLMultiPolygonHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -247,4 +247,4 @@ using namespace Glmultipolygon;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmultipolygonHPP
+#endif	// GLMultiPolygonHPP

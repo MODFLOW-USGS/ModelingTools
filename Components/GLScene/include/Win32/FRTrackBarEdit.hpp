@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FRTrackBarEdit.pas' rev: 36.00 (Windows)
 
-#ifndef FrtrackbareditHPP
-#define FrtrackbareditHPP
+#ifndef FRTrackBarEditHPP
+#define FRTrackBarEditHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -74,4 +74,4 @@ using namespace Frtrackbaredit;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FrtrackbareditHPP
+#endif	// FRTrackBarEditHPP

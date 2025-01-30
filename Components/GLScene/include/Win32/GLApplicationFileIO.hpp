@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLApplicationFileIO.pas' rev: 36.00 (Windows)
 
-#ifndef GlapplicationfileioHPP
-#define GlapplicationfileioHPP
+#ifndef GLApplicationFileIOHPP
+#define GLApplicationFileIOHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -113,4 +113,4 @@ using namespace Glapplicationfileio;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlapplicationfileioHPP
+#endif	// GLApplicationFileIOHPP

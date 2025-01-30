@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTextureImageEditors.pas' rev: 36.00 (Windows)
 
-#ifndef GltextureimageeditorsHPP
-#define GltextureimageeditorsHPP
+#ifndef GLTextureImageEditorsHPP
+#define GLTextureImageEditorsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -122,4 +122,4 @@ using namespace Gltextureimageeditors;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltextureimageeditorsHPP
+#endif	// GLTextureImageEditorsHPP

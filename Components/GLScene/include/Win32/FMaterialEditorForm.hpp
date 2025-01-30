@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FMaterialEditorForm.pas' rev: 36.00 (Windows)
 
-#ifndef FmaterialeditorformHPP
-#define FmaterialeditorformHPP
+#ifndef FMaterialEditorFormHPP
+#define FMaterialEditorFormHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -88,4 +88,4 @@ using namespace Fmaterialeditorform;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FmaterialeditorformHPP
+#endif	// FMaterialEditorFormHPP

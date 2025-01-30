@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_RepaintOpt.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_repaintoptHPP
-#define Gr32_repaintoptHPP
+#ifndef GR32_RepaintOptHPP
+#define GR32_RepaintOptHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -84,4 +84,4 @@ using namespace Gr32_repaintopt;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_repaintoptHPP
+#endif	// GR32_RepaintOptHPP

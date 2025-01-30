@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTextureFormat.pas' rev: 36.00 (Windows)
 
-#ifndef GltextureformatHPP
-#define GltextureformatHPP
+#ifndef GLTextureFormatHPP
+#define GLTextureFormatHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -78,4 +78,4 @@ using namespace Gltextureformat;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltextureformatHPP
+#endif	// GLTextureFormatHPP

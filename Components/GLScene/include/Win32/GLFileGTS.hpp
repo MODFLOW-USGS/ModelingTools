@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileGTS.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilegtsHPP
-#define GlfilegtsHPP
+#ifndef GLFileGTSHPP
+#define GLFileGTSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -56,4 +56,4 @@ using namespace Glfilegts;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilegtsHPP
+#endif	// GLFileGTSHPP

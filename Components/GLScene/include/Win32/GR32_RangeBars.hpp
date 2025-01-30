@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_RangeBars.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_rangebarsHPP
-#define Gr32_rangebarsHPP
+#ifndef GR32_RangeBarsHPP
+#define GR32_RangeBarsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -407,4 +407,4 @@ using namespace Gr32_rangebars;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_rangebarsHPP
+#endif	// GR32_RangeBarsHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCadencer.pas' rev: 36.00 (Windows)
 
-#ifndef GlcadencerHPP
-#define GlcadencerHPP
+#ifndef GLCadencerHPP
+#define GLCadencerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -148,4 +148,4 @@ using namespace Glcadencer;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcadencerHPP
+#endif	// GLCadencerHPP

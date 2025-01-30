@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_Image.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_imageHPP
-#define Gr32_imageHPP
+#ifndef GR32_ImageHPP
+#define GR32_ImageHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -675,13 +675,13 @@ __published:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 PST_CUSTOM = System::Int8(0x1);
-static const System::Int8 PST_CLEAR_BUFFER = System::Int8(0x2);
-static const System::Int8 PST_CLEAR_BACKGND = System::Int8(0x3);
-static const System::Int8 PST_DRAW_BITMAP = System::Int8(0x4);
-static const System::Int8 PST_DRAW_LAYERS = System::Int8(0x5);
-static const System::Int8 PST_CONTROL_FRAME = System::Int8(0x6);
-static const System::Int8 PST_BITMAP_FRAME = System::Int8(0x7);
+static _DELPHI_CONST System::Int8 PST_CUSTOM = System::Int8(0x1);
+static _DELPHI_CONST System::Int8 PST_CLEAR_BUFFER = System::Int8(0x2);
+static _DELPHI_CONST System::Int8 PST_CLEAR_BACKGND = System::Int8(0x3);
+static _DELPHI_CONST System::Int8 PST_DRAW_BITMAP = System::Int8(0x4);
+static _DELPHI_CONST System::Int8 PST_DRAW_LAYERS = System::Int8(0x5);
+static _DELPHI_CONST System::Int8 PST_CONTROL_FRAME = System::Int8(0x6);
+static _DELPHI_CONST System::Int8 PST_BITMAP_FRAME = System::Int8(0x7);
 }	/* namespace Gr32_image */
 #if !defined(DELPHIHEADER_NO_IMPLICIT_NAMESPACE_USE) && !defined(NO_USING_NAMESPACE_GR32_IMAGE)
 using namespace Gr32_image;
@@ -691,4 +691,4 @@ using namespace Gr32_image;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_imageHPP
+#endif	// GR32_ImageHPP

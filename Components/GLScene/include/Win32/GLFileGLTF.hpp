@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileGLTF.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilegltfHPP
-#define GlfilegltfHPP
+#ifndef GLFileGLTFHPP
+#define GLFileGLTFHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -63,4 +63,4 @@ using namespace Glfilegltf;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilegltfHPP
+#endif	// GLFileGLTFHPP

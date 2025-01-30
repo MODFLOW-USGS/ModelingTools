@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileASE.pas' rev: 36.00 (Windows)
 
-#ifndef GlfileaseHPP
-#define GlfileaseHPP
+#ifndef GLFileASEHPP
+#define GLFileASEHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -378,4 +378,4 @@ using namespace Glfilease;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfileaseHPP
+#endif	// GLFileASEHPP

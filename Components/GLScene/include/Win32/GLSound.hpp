@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSound.pas' rev: 36.00 (Windows)
 
-#ifndef GlsoundHPP
-#define GlsoundHPP
+#ifndef GLSoundHPP
+#define GLSoundHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -386,4 +386,4 @@ using namespace Glsound;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsoundHPP
+#endif	// GLSoundHPP

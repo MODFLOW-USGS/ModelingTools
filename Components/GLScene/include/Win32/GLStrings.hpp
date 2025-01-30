@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLStrings.pas' rev: 36.00 (Windows)
 
-#ifndef GlstringsHPP
-#define GlstringsHPP
+#ifndef GLStringsHPP
+#define GLStringsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -341,4 +341,4 @@ using namespace Glstrings;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlstringsHPP
+#endif	// GLStringsHPP

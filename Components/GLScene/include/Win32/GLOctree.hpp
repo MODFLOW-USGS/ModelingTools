@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLOctree.pas' rev: 36.00 (Windows)
 
-#ifndef GloctreeHPP
-#define GloctreeHPP
+#ifndef GLOctreeHPP
+#define GLOctreeHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -135,4 +135,4 @@ using namespace Gloctree;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GloctreeHPP
+#endif	// GLOctreeHPP

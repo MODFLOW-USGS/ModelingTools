@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPerlinBase.pas' rev: 36.00 (Windows)
 
-#ifndef GlperlinbaseHPP
-#define GlperlinbaseHPP
+#ifndef GLPerlinBaseHPP
+#define GLPerlinBaseHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -46,4 +46,4 @@ using namespace Glperlinbase;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlperlinbaseHPP
+#endif	// GLPerlinBaseHPP

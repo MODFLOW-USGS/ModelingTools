@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FPlugInManagerEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FpluginmanagereditorHPP
-#define FpluginmanagereditorHPP
+#ifndef FPlugInManagerEditorHPP
+#define FPlugInManagerEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -94,4 +94,4 @@ using namespace Fpluginmanagereditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FpluginmanagereditorHPP
+#endif	// FPlugInManagerEditorHPP

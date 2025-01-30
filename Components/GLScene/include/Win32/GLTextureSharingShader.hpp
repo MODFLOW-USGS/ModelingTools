@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTextureSharingShader.pas' rev: 36.00 (Windows)
 
-#ifndef GltexturesharingshaderHPP
-#define GltexturesharingshaderHPP
+#ifndef GLTextureSharingShaderHPP
+#define GLTextureSharingShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -183,4 +183,4 @@ using namespace Gltexturesharingshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltexturesharingshaderHPP
+#endif	// GLTextureSharingShaderHPP

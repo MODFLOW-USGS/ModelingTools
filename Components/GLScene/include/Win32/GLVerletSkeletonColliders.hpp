@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLVerletSkeletonColliders.pas' rev: 36.00 (Windows)
 
-#ifndef GlverletskeletoncollidersHPP
-#define GlverletskeletoncollidersHPP
+#ifndef GLVerletSkeletonCollidersHPP
+#define GLVerletSkeletonCollidersHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -129,4 +129,4 @@ using namespace Glverletskeletoncolliders;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlverletskeletoncollidersHPP
+#endif	// GLVerletSkeletonCollidersHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCollision.pas' rev: 36.00 (Windows)
 
-#ifndef GlcollisionHPP
-#define GlcollisionHPP
+#ifndef GLCollisionHPP
+#define GLCollisionHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -133,4 +133,4 @@ using namespace Glcollision;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcollisionHPP
+#endif	// GLCollisionHPP

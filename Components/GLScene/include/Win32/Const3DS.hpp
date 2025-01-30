@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'Const3DS.pas' rev: 36.00 (Windows)
 
-#ifndef Const3dsHPP
-#define Const3dsHPP
+#ifndef Const3DSHPP
+#define Const3DSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -819,4 +819,4 @@ using namespace Const3ds;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Const3dsHPP
+#endif	// Const3DSHPP

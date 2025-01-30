@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'File3DS.pas' rev: 36.00 (Windows)
 
-#ifndef File3dsHPP
-#define File3dsHPP
+#ifndef File3DSHPP
+#define File3DSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -247,4 +247,4 @@ using namespace File3ds;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// File3dsHPP
+#endif	// File3DSHPP

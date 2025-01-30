@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLGeometryCoordinates.pas' rev: 36.00 (Windows)
 
-#ifndef GlgeometrycoordinatesHPP
-#define GlgeometrycoordinatesHPP
+#ifndef GLGeometryCoordinatesHPP
+#define GLGeometryCoordinatesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -60,4 +60,4 @@ using namespace Glgeometrycoordinates;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlgeometrycoordinatesHPP
+#endif	// GLGeometryCoordinatesHPP

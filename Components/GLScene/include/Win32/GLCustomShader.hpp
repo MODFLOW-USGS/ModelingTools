@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCustomShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlcustomshaderHPP
-#define GlcustomshaderHPP
+#ifndef GLCustomShaderHPP
+#define GLCustomShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -342,4 +342,4 @@ using namespace Glcustomshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcustomshaderHPP
+#endif	// GLCustomShaderHPP

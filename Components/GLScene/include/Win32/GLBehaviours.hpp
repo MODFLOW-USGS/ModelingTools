@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLBehaviours.pas' rev: 36.00 (Windows)
 
-#ifndef GlbehavioursHPP
-#define GlbehavioursHPP
+#ifndef GLBehavioursHPP
+#define GLBehavioursHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -152,4 +152,4 @@ using namespace Glbehaviours;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlbehavioursHPP
+#endif	// GLBehavioursHPP

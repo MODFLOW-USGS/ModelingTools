@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'Utils3DS.pas' rev: 36.00 (Windows)
 
-#ifndef Utils3dsHPP
-#define Utils3dsHPP
+#ifndef Utils3DSHPP
+#define Utils3DSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -101,4 +101,4 @@ using namespace Utils3ds;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Utils3dsHPP
+#endif	// Utils3DSHPP

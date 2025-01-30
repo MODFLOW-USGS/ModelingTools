@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLNavigator.pas' rev: 36.00 (Windows)
 
-#ifndef GlnavigatorHPP
-#define GlnavigatorHPP
+#ifndef GLNavigatorHPP
+#define GLNavigatorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -140,4 +140,4 @@ using namespace Glnavigator;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlnavigatorHPP
+#endif	// GLNavigatorHPP

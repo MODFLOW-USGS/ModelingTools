@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPostEffects.pas' rev: 36.00 (Windows)
 
-#ifndef GlposteffectsHPP
-#define GlposteffectsHPP
+#ifndef GLPostEffectsHPP
+#define GLPostEffectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -214,4 +214,4 @@ using namespace Glposteffects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlposteffectsHPP
+#endif	// GLPostEffectsHPP

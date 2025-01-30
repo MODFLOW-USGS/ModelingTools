@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLGoochShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlslgoochshaderHPP
-#define GlslgoochshaderHPP
+#ifndef GLSLGoochShaderHPP
+#define GLSLGoochShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -115,4 +115,4 @@ using namespace Glslgoochshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslgoochshaderHPP
+#endif	// GLSLGoochShaderHPP

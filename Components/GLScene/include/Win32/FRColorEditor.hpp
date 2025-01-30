@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FRColorEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FrcoloreditorHPP
-#define FrcoloreditorHPP
+#ifndef FRColorEditorHPP
+#define FRColorEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -112,4 +112,4 @@ using namespace Frcoloreditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FrcoloreditorHPP
+#endif	// FRColorEditorHPP

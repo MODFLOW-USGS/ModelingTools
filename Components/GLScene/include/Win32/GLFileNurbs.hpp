@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileNurbs.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilenurbsHPP
-#define GlfilenurbsHPP
+#ifndef GLFileNurbsHPP
+#define GLFileNurbsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -60,4 +60,4 @@ using namespace Glfilenurbs;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilenurbsHPP
+#endif	// GLFileNurbsHPP

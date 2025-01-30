@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLDCEMisc.pas' rev: 36.00 (Windows)
 
-#ifndef GldcemiscHPP
-#define GldcemiscHPP
+#ifndef GLDCEMiscHPP
+#define GLDCEMiscHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -51,4 +51,4 @@ using namespace Gldcemisc;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GldcemiscHPP
+#endif	// GLDCEMiscHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSMFMOD.pas' rev: 36.00 (Windows)
 
-#ifndef GlsmfmodHPP
-#define GlsmfmodHPP
+#ifndef GLSMFMODHPP
+#define GLSMFMODHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -74,4 +74,4 @@ using namespace Glsmfmod;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsmfmodHPP
+#endif	// GLSMFMODHPP

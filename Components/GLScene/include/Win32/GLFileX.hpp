@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileX.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilexHPP
-#define GlfilexHPP
+#ifndef GLFileXHPP
+#define GLFileXHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -61,4 +61,4 @@ using namespace Glfilex;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilexHPP
+#endif	// GLFileXHPP

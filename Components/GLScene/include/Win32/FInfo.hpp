@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FInfo.pas' rev: 36.00 (Windows)
 
-#ifndef FinfoHPP
-#define FinfoHPP
+#ifndef FInfoHPP
+#define FInfoHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -162,4 +162,4 @@ using namespace Finfo;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FinfoHPP
+#endif	// FInfoHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLImageUtils.pas' rev: 36.00 (Windows)
 
-#ifndef GlimageutilsHPP
-#define GlimageutilsHPP
+#ifndef GLImageUtilsHPP
+#define GLImageUtilsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -114,4 +114,4 @@ using namespace Glimageutils;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlimageutilsHPP
+#endif	// GLImageUtilsHPP

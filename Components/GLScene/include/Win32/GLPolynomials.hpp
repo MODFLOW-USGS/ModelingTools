@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPolynomials.pas' rev: 36.00 (Windows)
 
-#ifndef GlpolynomialsHPP
-#define GlpolynomialsHPP
+#ifndef GLPolynomialsHPP
+#define GLPolynomialsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -44,4 +44,4 @@ using namespace Glpolynomials;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlpolynomialsHPP
+#endif	// GLPolynomialsHPP

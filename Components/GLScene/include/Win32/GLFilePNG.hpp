@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFilePNG.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilepngHPP
-#define GlfilepngHPP
+#ifndef GLFilePNGHPP
+#define GLFilePNGHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -62,4 +62,4 @@ using namespace Glfilepng;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilepngHPP
+#endif	// GLFilePNGHPP

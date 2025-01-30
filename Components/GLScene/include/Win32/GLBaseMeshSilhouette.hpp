@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLBaseMeshSilhouette.pas' rev: 36.00 (Windows)
 
-#ifndef GlbasemeshsilhouetteHPP
-#define GlbasemeshsilhouetteHPP
+#ifndef GLBaseMeshSilhouetteHPP
+#define GLBaseMeshSilhouetteHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -91,4 +91,4 @@ using namespace Glbasemeshsilhouette;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlbasemeshsilhouetteHPP
+#endif	// GLBaseMeshSilhouetteHPP

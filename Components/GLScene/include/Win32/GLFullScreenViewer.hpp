@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFullScreenViewer.pas' rev: 36.00 (Windows)
 
-#ifndef GlfullscreenviewerHPP
-#define GlfullscreenviewerHPP
+#ifndef GLFullScreenViewerHPP
+#define GLFullScreenViewerHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -159,4 +159,4 @@ using namespace Glfullscreenviewer;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfullscreenviewerHPP
+#endif	// GLFullScreenViewerHPP

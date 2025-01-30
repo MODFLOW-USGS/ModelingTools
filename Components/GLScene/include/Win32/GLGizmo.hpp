@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLGizmo.pas' rev: 36.00 (Windows)
 
-#ifndef GlgizmoHPP
-#define GlgizmoHPP
+#ifndef GLGizmoHPP
+#define GLGizmoHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -338,4 +338,4 @@ using namespace Glgizmo;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlgizmoHPP
+#endif	// GLGizmoHPP

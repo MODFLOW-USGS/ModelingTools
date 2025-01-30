@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'DXTC.pas' rev: 36.00 (Windows)
 
-#ifndef DxtcHPP
-#define DxtcHPP
+#ifndef DXTCHPP
+#define DXTCHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -331,4 +331,4 @@ using namespace Dxtc;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DxtcHPP
+#endif	// DXTCHPP

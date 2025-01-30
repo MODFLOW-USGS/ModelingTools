@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTimeEventsMgr.pas' rev: 36.00 (Windows)
 
-#ifndef GltimeeventsmgrHPP
-#define GltimeeventsmgrHPP
+#ifndef GLTimeEventsMgrHPP
+#define GLTimeEventsMgrHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -138,4 +138,4 @@ using namespace Gltimeeventsmgr;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltimeeventsmgrHPP
+#endif	// GLTimeEventsMgrHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FShaderMemo.pas' rev: 36.00 (Windows)
 
-#ifndef FshadermemoHPP
-#define FshadermemoHPP
+#ifndef FShaderMemoHPP
+#define FShaderMemoHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -133,4 +133,4 @@ using namespace Fshadermemo;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FshadermemoHPP
+#endif	// FShaderMemoHPP

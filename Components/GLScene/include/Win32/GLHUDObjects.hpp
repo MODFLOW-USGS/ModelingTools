@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLHUDObjects.pas' rev: 36.00 (Windows)
 
-#ifndef GlhudobjectsHPP
-#define GlhudobjectsHPP
+#ifndef GLHUDObjectsHPP
+#define GLHUDObjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -153,4 +153,4 @@ using namespace Glhudobjects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlhudobjectsHPP
+#endif	// GLHUDObjectsHPP

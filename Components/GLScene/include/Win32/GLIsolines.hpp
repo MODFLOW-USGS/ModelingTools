@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLIsolines.pas' rev: 36.00 (Windows)
 
-#ifndef GlisolinesHPP
-#define GlisolinesHPP
+#ifndef GLIsolinesHPP
+#define GLIsolinesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -123,4 +123,4 @@ using namespace Glisolines;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlisolinesHPP
+#endif	// GLIsolinesHPP

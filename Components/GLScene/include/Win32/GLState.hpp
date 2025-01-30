@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLState.pas' rev: 36.00 (Windows)
 
-#ifndef GlstateHPP
-#define GlstateHPP
+#ifndef GLStateHPP
+#define GLStateHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -662,4 +662,4 @@ using namespace Glstate;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlstateHPP
+#endif	// GLStateHPP

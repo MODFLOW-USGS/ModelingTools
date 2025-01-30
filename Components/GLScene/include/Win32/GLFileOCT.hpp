@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileOCT.pas' rev: 36.00 (Windows)
 
-#ifndef GlfileoctHPP
-#define GlfileoctHPP
+#ifndef GLFileOCTHPP
+#define GLFileOCTHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -68,4 +68,4 @@ using namespace Glfileoct;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfileoctHPP
+#endif	// GLFileOCTHPP

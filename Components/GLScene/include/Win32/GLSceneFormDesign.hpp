@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSceneFormDesign.pas' rev: 36.00 (Windows)
 
-#ifndef GlsceneformdesignHPP
-#define GlsceneformdesignHPP
+#ifndef GLSceneFormDesignHPP
+#define GLSceneFormDesignHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -471,4 +471,4 @@ using namespace Glsceneformdesign;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsceneformdesignHPP
+#endif	// GLSceneFormDesignHPP

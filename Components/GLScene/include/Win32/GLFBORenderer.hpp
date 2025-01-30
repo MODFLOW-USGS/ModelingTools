@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFBORenderer.pas' rev: 36.00 (Windows)
 
-#ifndef GlfborendererHPP
-#define GlfborendererHPP
+#ifndef GLFBORendererHPP
+#define GLFBORendererHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -198,4 +198,4 @@ using namespace Glfborenderer;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfborendererHPP
+#endif	// GLFBORendererHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLOutlineShader.pas' rev: 36.00 (Windows)
 
-#ifndef GloutlineshaderHPP
-#define GloutlineshaderHPP
+#ifndef GLOutlineShaderHPP
+#define GLOutlineShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -69,4 +69,4 @@ using namespace Gloutlineshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GloutlineshaderHPP
+#endif	// GLOutlineShaderHPP

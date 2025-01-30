@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTeapot.pas' rev: 36.00 (Windows)
 
-#ifndef GlteapotHPP
-#define GlteapotHPP
+#ifndef GLTeapotHPP
+#define GLTeapotHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -65,4 +65,4 @@ using namespace Glteapot;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlteapotHPP
+#endif	// GLTeapotHPP

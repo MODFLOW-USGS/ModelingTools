@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTypes.pas' rev: 36.00 (Windows)
 
-#ifndef GltypesHPP
-#define GltypesHPP
+#ifndef GLTypesHPP
+#define GLTypesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -529,4 +529,4 @@ using namespace Gltypes;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltypesHPP
+#endif	// GLTypesHPP

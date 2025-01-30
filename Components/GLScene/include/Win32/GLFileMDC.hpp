@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileMDC.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilemdcHPP
-#define GlfilemdcHPP
+#ifndef GLFileMDCHPP
+#define GLFileMDCHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -209,4 +209,4 @@ using namespace Glfilemdc;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilemdcHPP
+#endif	// GLFileMDCHPP

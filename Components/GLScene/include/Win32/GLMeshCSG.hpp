@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMeshCSG.pas' rev: 36.00 (Windows)
 
-#ifndef GlmeshcsgHPP
-#define GlmeshcsgHPP
+#ifndef GLMeshCSGHPP
+#define GLMeshCSGHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -45,4 +45,4 @@ using namespace Glmeshcsg;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmeshcsgHPP
+#endif	// GLMeshCSGHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileMS3D.pas' rev: 36.00 (Windows)
 
-#ifndef Glfilems3dHPP
-#define Glfilems3dHPP
+#ifndef GLFileMS3DHPP
+#define GLFileMS3DHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -291,4 +291,4 @@ using namespace Glfilems3d;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glfilems3dHPP
+#endif	// GLFileMS3DHPP

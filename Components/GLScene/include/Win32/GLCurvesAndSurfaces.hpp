@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCurvesAndSurfaces.pas' rev: 36.00 (Windows)
 
-#ifndef GlcurvesandsurfacesHPP
-#define GlcurvesandsurfacesHPP
+#ifndef GLCurvesAndSurfacesHPP
+#define GLCurvesAndSurfacesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -48,4 +48,4 @@ using namespace Glcurvesandsurfaces;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcurvesandsurfacesHPP
+#endif	// GLCurvesAndSurfacesHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLCompositeImage.pas' rev: 36.00 (Windows)
 
-#ifndef GlcompositeimageHPP
-#define GlcompositeimageHPP
+#ifndef GLCompositeImageHPP
+#define GLCompositeImageHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -80,4 +80,4 @@ using namespace Glcompositeimage;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcompositeimageHPP
+#endif	// GLCompositeImageHPP

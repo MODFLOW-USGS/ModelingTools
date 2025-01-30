@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLParameter.pas' rev: 36.00 (Windows)
 
-#ifndef GlslparameterHPP
-#define GlslparameterHPP
+#ifndef GLSLParameterHPP
+#define GLSLParameterHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -137,4 +137,4 @@ using namespace Glslparameter;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslparameterHPP
+#endif	// GLSLParameterHPP

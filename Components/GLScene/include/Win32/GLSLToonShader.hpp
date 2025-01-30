@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLToonShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlsltoonshaderHPP
-#define GlsltoonshaderHPP
+#ifndef GLSLToonShaderHPP
+#define GLSLToonShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -110,4 +110,4 @@ using namespace Glsltoonshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsltoonshaderHPP
+#endif	// GLSLToonShaderHPP

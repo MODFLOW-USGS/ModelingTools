@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLContext.pas' rev: 36.00 (Windows)
 
-#ifndef GlcontextHPP
-#define GlcontextHPP
+#ifndef GLContextHPP
+#define GLContextHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -1226,4 +1226,4 @@ using namespace Glcontext;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlcontextHPP
+#endif	// GLContextHPP

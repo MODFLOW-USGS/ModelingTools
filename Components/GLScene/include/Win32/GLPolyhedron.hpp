@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPolyhedron.pas' rev: 36.00 (Windows)
 
-#ifndef GlpolyhedronHPP
-#define GlpolyhedronHPP
+#ifndef GLPolyhedronHPP
+#define GLPolyhedronHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -126,4 +126,4 @@ using namespace Glpolyhedron;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlpolyhedronHPP
+#endif	// GLPolyhedronHPP

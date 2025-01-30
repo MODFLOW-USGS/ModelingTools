@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileBMP.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilebmpHPP
-#define GlfilebmpHPP
+#ifndef GLFileBMPHPP
+#define GLFileBMPHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -81,4 +81,4 @@ using namespace Glfilebmp;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilebmpHPP
+#endif	// GLFileBMPHPP

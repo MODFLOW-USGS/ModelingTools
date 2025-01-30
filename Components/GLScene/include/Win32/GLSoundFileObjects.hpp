@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSoundFileObjects.pas' rev: 36.00 (Windows)
 
-#ifndef GlsoundfileobjectsHPP
-#define GlsoundfileobjectsHPP
+#ifndef GLSoundFileObjectsHPP
+#define GLSoundFileObjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -133,4 +133,4 @@ using namespace Glsoundfileobjects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsoundfileobjectsHPP
+#endif	// GLSoundFileObjectsHPP

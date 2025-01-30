@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFeedback.pas' rev: 36.00 (Windows)
 
-#ifndef GlfeedbackHPP
-#define GlfeedbackHPP
+#ifndef GLFeedbackHPP
+#define GLFeedbackHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -87,4 +87,4 @@ using namespace Glfeedback;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfeedbackHPP
+#endif	// GLFeedbackHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSilhouette.pas' rev: 36.00 (Windows)
 
-#ifndef GlsilhouetteHPP
-#define GlsilhouetteHPP
+#ifndef GLSilhouetteHPP
+#define GLSilhouetteHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -145,4 +145,4 @@ using namespace Glsilhouette;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsilhouetteHPP
+#endif	// GLSilhouetteHPP

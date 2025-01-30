@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSMemo.pas' rev: 36.00 (Windows)
 
-#ifndef GlsmemoHPP
-#define GlsmemoHPP
+#ifndef GLSMemoHPP
+#define GLSMemoHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -966,4 +966,4 @@ using namespace Glsmemo;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsmemoHPP
+#endif	// GLSMemoHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLHeightData.pas' rev: 36.00 (Windows)
 
-#ifndef GlheightdataHPP
-#define GlheightdataHPP
+#ifndef GLHeightDataHPP
+#define GLHeightDataHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -380,4 +380,4 @@ using namespace Glheightdata;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlheightdataHPP
+#endif	// GLHeightDataHPP

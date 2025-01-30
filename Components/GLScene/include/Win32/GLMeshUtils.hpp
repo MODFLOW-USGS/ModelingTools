@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLMeshUtils.pas' rev: 36.00 (Windows)
 
-#ifndef GlmeshutilsHPP
-#define GlmeshutilsHPP
+#ifndef GLMeshUtilsHPP
+#define GLMeshUtilsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -66,4 +66,4 @@ using namespace Glmeshutils;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlmeshutilsHPP
+#endif	// GLMeshUtilsHPP

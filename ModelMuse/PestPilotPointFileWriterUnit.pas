@@ -40,6 +40,9 @@ resourcestring
   'or pilot points to be employed.';
   StrThePilotPointBuffExpl = 'The Pilot Point buffer is specified on the Pil' +
   'ot Points pane of the PEST Properties dialog box.';
+  StrPestParametersWere = 'Pest parameters were not used where needed';
+  StrPestParametersWeredataset = 'Pest parameters were not used in the %s da' +
+  'ta set';
 
 { TPilotPointWriter }
 
@@ -145,7 +148,13 @@ begin
   FormatSettings.DecimalSeparator := '.';
   try
     Assert(DataArray <> nil);
-    Assert(DataArray.PestParametersUsed);
+    if not DataArray.PestParametersUsed then
+    begin
+      Beep;
+      frmErrorsAndWarnings.AddError(Model, StrPestParametersWere,
+        Format(StrPestParametersWeredataset, [DataArray.Name]));
+      Exit
+    end;
     PestProperties := Model.PestProperties;
     ParamNameDataArray := Model.DataArrayManager.GetDataSetByName(
       DataArray.ParamDataSetName);

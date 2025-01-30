@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLScreen.pas' rev: 36.00 (Windows)
 
-#ifndef GlscreenHPP
-#define GlscreenHPP
+#ifndef GLScreenHPP
+#define GLScreenHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -109,4 +109,4 @@ using namespace Glscreen;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlscreenHPP
+#endif	// GLScreenHPP

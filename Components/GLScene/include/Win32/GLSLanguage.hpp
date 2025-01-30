@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLanguage.pas' rev: 36.00 (Windows)
 
-#ifndef GlslanguageHPP
-#define GlslanguageHPP
+#ifndef GLSLanguageHPP
+#define GLSLanguageHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -118,4 +118,4 @@ using namespace Glslanguage;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslanguageHPP
+#endif	// GLSLanguageHPP

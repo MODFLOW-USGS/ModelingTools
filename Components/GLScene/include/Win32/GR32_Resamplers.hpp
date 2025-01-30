@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_Resamplers.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_resamplersHPP
-#define Gr32_resamplersHPP
+#ifndef GR32_ResamplersHPP
+#define GR32_ResamplersHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -927,7 +927,7 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-static const System::Int8 MAX_KERNEL_WIDTH = System::Int8(0x10);
+static _DELPHI_CONST System::Int8 MAX_KERNEL_WIDTH = System::Int8(0x10);
 extern DELPHI_PACKAGE Gr32_containers::TClassList* KernelList;
 extern DELPHI_PACKAGE Gr32_containers::TClassList* ResamplerList;
 extern DELPHI_PACKAGE TBufferEntry EMPTY_ENTRY;
@@ -967,4 +967,4 @@ using namespace Gr32_resamplers;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_resamplersHPP
+#endif	// GR32_ResamplersHPP

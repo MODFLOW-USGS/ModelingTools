@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLWaterPlane.pas' rev: 36.00 (Windows)
 
-#ifndef GlwaterplaneHPP
-#define GlwaterplaneHPP
+#ifndef GLWaterPlaneHPP
+#define GLWaterPlaneHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -131,4 +131,4 @@ using namespace Glwaterplane;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlwaterplaneHPP
+#endif	// GLWaterPlaneHPP

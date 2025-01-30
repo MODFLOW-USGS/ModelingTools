@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLTriangulation.pas' rev: 36.00 (Windows)
 
-#ifndef GltriangulationHPP
-#define GltriangulationHPP
+#ifndef GLTriangulationHPP
+#define GLTriangulationHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -105,4 +105,4 @@ using namespace Gltriangulation;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GltriangulationHPP
+#endif	// GLTriangulationHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FileMD2.pas' rev: 36.00 (Windows)
 
-#ifndef Filemd2HPP
-#define Filemd2HPP
+#ifndef FileMD2HPP
+#define FileMD2HPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -149,4 +149,4 @@ using namespace Filemd2;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Filemd2HPP
+#endif	// FileMD2HPP

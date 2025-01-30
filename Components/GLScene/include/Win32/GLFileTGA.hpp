@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileTGA.pas' rev: 36.00 (Windows)
 
-#ifndef GlfiletgaHPP
-#define GlfiletgaHPP
+#ifndef GLFileTGAHPP
+#define GLFileTGAHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -78,4 +78,4 @@ using namespace Glfiletga;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfiletgaHPP
+#endif	// GLFileTGAHPP

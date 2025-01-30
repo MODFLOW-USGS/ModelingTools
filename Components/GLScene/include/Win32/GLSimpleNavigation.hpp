@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSimpleNavigation.pas' rev: 36.00 (Windows)
 
-#ifndef GlsimplenavigationHPP
-#define GlsimplenavigationHPP
+#ifndef GLSimpleNavigationHPP
+#define GLSimpleNavigationHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -163,4 +163,4 @@ using namespace Glsimplenavigation;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsimplenavigationHPP
+#endif	// GLSimpleNavigationHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSCrossXML.pas' rev: 36.00 (Windows)
 
-#ifndef GlscrossxmlHPP
-#define GlscrossxmlHPP
+#ifndef GLSCrossXMLHPP
+#define GLSCrossXMLHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -60,4 +60,4 @@ using namespace Glscrossxml;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlscrossxmlHPP
+#endif	// GLSCrossXMLHPP

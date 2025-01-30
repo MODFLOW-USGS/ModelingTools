@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileOBJ.pas' rev: 36.00 (Windows)
 
-#ifndef GlfileobjHPP
-#define GlfileobjHPP
+#ifndef GLFileOBJHPP
+#define GLFileOBJHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -131,4 +131,4 @@ using namespace Glfileobj;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfileobjHPP
+#endif	// GLFileOBJHPP

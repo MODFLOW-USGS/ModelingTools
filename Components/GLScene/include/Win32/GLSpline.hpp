@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSpline.pas' rev: 36.00 (Windows)
 
-#ifndef GlsplineHPP
-#define GlsplineHPP
+#ifndef GLSplineHPP
+#define GLSplineHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -76,4 +76,4 @@ using namespace Glspline;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsplineHPP
+#endif	// GLSplineHPP

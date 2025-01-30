@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'VRMLParser.pas' rev: 36.00 (Windows)
 
-#ifndef VrmlparserHPP
-#define VrmlparserHPP
+#ifndef VRMLParserHPP
+#define VRMLParserHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -267,4 +267,4 @@ using namespace Vrmlparser;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// VrmlparserHPP
+#endif	// VRMLParserHPP

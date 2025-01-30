@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'OpenGLAdapter.pas' rev: 36.00 (Windows)
 
-#ifndef OpengladapterHPP
-#define OpengladapterHPP
+#ifndef OpenGLAdapterHPP
+#define OpenGLAdapterHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -1602,4 +1602,4 @@ using namespace Opengladapter;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// OpengladapterHPP
+#endif	// OpenGLAdapterHPP

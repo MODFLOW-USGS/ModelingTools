@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLUtils.pas' rev: 36.00 (Windows)
 
-#ifndef GlutilsHPP
-#define GlutilsHPP
+#ifndef GLUtilsHPP
+#define GLUtilsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -99,4 +99,4 @@ using namespace Glutils;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlutilsHPP
+#endif	// GLUtilsHPP

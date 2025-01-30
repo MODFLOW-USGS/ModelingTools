@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'Q3BSP.pas' rev: 36.00 (Windows)
 
-#ifndef Q3bspHPP
-#define Q3bspHPP
+#ifndef Q3BSPHPP
+#define Q3BSPHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -237,4 +237,4 @@ using namespace Q3bsp;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Q3bspHPP
+#endif	// Q3BSPHPP

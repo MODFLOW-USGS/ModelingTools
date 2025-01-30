@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileB3D.pas' rev: 36.00 (Windows)
 
-#ifndef Glfileb3dHPP
-#define Glfileb3dHPP
+#ifndef GLFileB3DHPP
+#define GLFileB3DHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -62,4 +62,4 @@ using namespace Glfileb3d;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glfileb3dHPP
+#endif	// GLFileB3DHPP

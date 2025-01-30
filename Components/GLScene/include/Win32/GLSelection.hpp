@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSelection.pas' rev: 36.00 (Windows)
 
-#ifndef GlselectionHPP
-#define GlselectionHPP
+#ifndef GLSelectionHPP
+#define GLSelectionHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -183,4 +183,4 @@ using namespace Glselection;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlselectionHPP
+#endif	// GLSelectionHPP

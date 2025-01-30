@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLParticleFX.pas' rev: 36.00 (Windows)
 
-#ifndef GlparticlefxHPP
-#define GlparticlefxHPP
+#ifndef GLParticleFXHPP
+#define GLParticleFXHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -700,4 +700,4 @@ using namespace Glparticlefx;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlparticlefxHPP
+#endif	// GLParticleFXHPP

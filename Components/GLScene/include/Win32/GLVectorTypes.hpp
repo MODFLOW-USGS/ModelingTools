@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLVectorTypes.pas' rev: 36.00 (Windows)
 
-#ifndef GlvectortypesHPP
-#define GlvectortypesHPP
+#ifndef GLVectorTypesHPP
+#define GLVectorTypesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -1360,4 +1360,4 @@ using namespace Glvectortypes;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlvectortypesHPP
+#endif	// GLVectorTypesHPP

@@ -47,7 +47,7 @@ type
     // @name is the top panel.
     pnlTop: TPanel;
     dgCredit: TRbwDataGrid4;
-    JvHTLabel1: TJvHTLabel;
+    htlblWinston: TJvHTLabel;
     htlblVersion2: TJvHTLabel;
     btnGoToWeb: TBitBtn;
     htlblVersion3: TJvHTLabel;
@@ -57,6 +57,7 @@ type
     memoDisclaimer: TMemo;
     ctgrypnl2: TCategoryPanel;
     reReference: TRichEdit;
+    htlblBoyce: TJvHTLabel;
     // @name initialized the data in @link(dgCredit) as well as
     // @link(lblFileVersion) and @link(lblVersion).
     procedure FormCreate(Sender: TObject); override;

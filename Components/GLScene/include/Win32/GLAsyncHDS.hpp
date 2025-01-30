@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLAsyncHDS.pas' rev: 36.00 (Windows)
 
-#ifndef GlasynchdsHPP
-#define GlasynchdsHPP
+#ifndef GLAsyncHDSHPP
+#define GLAsyncHDSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -95,4 +95,4 @@ using namespace Glasynchds;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlasynchdsHPP
+#endif	// GLAsyncHDSHPP

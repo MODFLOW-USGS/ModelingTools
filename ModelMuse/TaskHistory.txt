@@ -34029,5 +34029,45 @@ object TTaskHistory
       Date = 45674.000000000000000000
       Categories.Strings = (
         'Error checking')
+    end
+    item
+      Date = 45675.000000000000000000
+    end
+    item
+      Date = 45676.000000000000000000
+    end
+    item
+      Date = 45677.000000000000000000
+    end
+    item
+      Date = 45678.000000000000000000
+    end
+    item
+      Date = 45679.000000000000000000
+    end
+    item
+      Date = 45680.000000000000000000
+    end
+    item
+      Date = 45681.000000000000000000
+    end
+    item
+      Date = 45682.000000000000000000
+    end
+    item
+      Date = 45683.000000000000000000
+    end
+    item
+      Date = 45684.000000000000000000
+    end
+    item
+      Date = 45685.000000000000000000
+    end
+    item
+      Date = 45686.000000000000000000
+      Categories.Strings = (
+        'Components'
+        'Bug fix'
+        'Testing')
     end>
 end

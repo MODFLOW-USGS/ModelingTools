@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLScriptBase.pas' rev: 36.00 (Windows)
 
-#ifndef GlscriptbaseHPP
-#define GlscriptbaseHPP
+#ifndef GLScriptBaseHPP
+#define GLScriptBaseHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -124,4 +124,4 @@ using namespace Glscriptbase;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlscriptbaseHPP
+#endif	// GLScriptBaseHPP

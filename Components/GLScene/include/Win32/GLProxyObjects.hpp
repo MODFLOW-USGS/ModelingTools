@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLProxyObjects.pas' rev: 36.00 (Windows)
 
-#ifndef GlproxyobjectsHPP
-#define GlproxyobjectsHPP
+#ifndef GLProxyObjectsHPP
+#define GLProxyObjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -277,4 +277,4 @@ using namespace Glproxyobjects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlproxyobjectsHPP
+#endif	// GLProxyObjectsHPP

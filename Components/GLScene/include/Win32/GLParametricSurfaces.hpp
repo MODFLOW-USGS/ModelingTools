@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLParametricSurfaces.pas' rev: 36.00 (Windows)
 
-#ifndef GlparametricsurfacesHPP
-#define GlparametricsurfacesHPP
+#ifndef GLParametricSurfacesHPP
+#define GLParametricSurfacesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -159,4 +159,4 @@ using namespace Glparametricsurfaces;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlparametricsurfacesHPP
+#endif	// GLParametricSurfacesHPP

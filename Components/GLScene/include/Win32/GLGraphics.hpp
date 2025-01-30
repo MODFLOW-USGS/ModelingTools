@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLGraphics.pas' rev: 36.00 (Windows)
 
-#ifndef GlgraphicsHPP
-#define GlgraphicsHPP
+#ifndef GLGraphicsHPP
+#define GLGraphicsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -340,4 +340,4 @@ using namespace Glgraphics;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlgraphicsHPP
+#endif	// GLGraphicsHPP

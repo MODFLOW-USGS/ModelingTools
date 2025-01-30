@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSpaceText.pas' rev: 36.00 (Windows)
 
-#ifndef GlspacetextHPP
-#define GlspacetextHPP
+#ifndef GLSpaceTextHPP
+#define GLSpaceTextHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -202,4 +202,4 @@ using namespace Glspacetext;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlspacetextHPP
+#endif	// GLSpaceTextHPP

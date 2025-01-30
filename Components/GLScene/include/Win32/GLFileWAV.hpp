@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileWAV.pas' rev: 36.00 (Windows)
 
-#ifndef GlfilewavHPP
-#define GlfilewavHPP
+#ifndef GLFileWAVHPP
+#define GLFileWAVHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -71,4 +71,4 @@ using namespace Glfilewav;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfilewavHPP
+#endif	// GLFileWAVHPP

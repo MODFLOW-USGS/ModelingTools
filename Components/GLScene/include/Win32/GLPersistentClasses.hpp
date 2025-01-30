@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLPersistentClasses.pas' rev: 36.00 (Windows)
 
-#ifndef GlpersistentclassesHPP
-#define GlpersistentclassesHPP
+#ifndef GLPersistentClassesHPP
+#define GLPersistentClassesHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -497,4 +497,4 @@ using namespace Glpersistentclasses;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlpersistentclassesHPP
+#endif	// GLPersistentClassesHPP

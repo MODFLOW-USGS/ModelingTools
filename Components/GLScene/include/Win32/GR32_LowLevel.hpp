@@ -1,11 +1,11 @@
 ﻿// CodeGear C++Builder
-// Copyright (c) 1995, 2022 by Embarcadero Technologies, Inc.
+// Copyright (c) 1995, 2024 by Embarcadero Technologies, Inc.
 // All rights reserved
 
 // (DO NOT EDIT: machine generated header) 'GR32_LowLevel.pas' rev: 36.00 (Windows)
 
-#ifndef Gr32_lowlevelHPP
-#define Gr32_lowlevelHPP
+#ifndef GR32_LowLevelHPP
+#define GR32_LowLevelHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -90,4 +90,4 @@ using namespace Gr32_lowlevel;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Gr32_lowlevelHPP
+#endif	// GR32_LowLevelHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLUserShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlusershaderHPP
-#define GlusershaderHPP
+#ifndef GLUserShaderHPP
+#define GLUserShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -66,4 +66,4 @@ using namespace Glusershader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlusershaderHPP
+#endif	// GLUserShaderHPP

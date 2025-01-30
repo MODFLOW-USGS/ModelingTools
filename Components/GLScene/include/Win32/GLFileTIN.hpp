@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileTIN.pas' rev: 36.00 (Windows)
 
-#ifndef GlfiletinHPP
-#define GlfiletinHPP
+#ifndef GLFileTINHPP
+#define GLFileTINHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -59,4 +59,4 @@ using namespace Glfiletin;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlfiletinHPP
+#endif	// GLFileTINHPP

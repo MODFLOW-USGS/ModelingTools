@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFile3DSSceneObjects.pas' rev: 36.00 (Windows)
 
-#ifndef Glfile3dssceneobjectsHPP
-#define Glfile3dssceneobjectsHPP
+#ifndef GLFile3DSSceneObjectsHPP
+#define GLFile3DSSceneObjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -157,4 +157,4 @@ using namespace Glfile3dssceneobjects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glfile3dssceneobjectsHPP
+#endif	// GLFile3DSSceneObjectsHPP

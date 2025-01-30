@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLObjects.pas' rev: 36.00 (Windows)
 
-#ifndef GlobjectsHPP
-#define GlobjectsHPP
+#ifndef GLObjectsHPP
+#define GLObjectsHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -717,4 +717,4 @@ using namespace Globjects;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlobjectsHPP
+#endif	// GLObjectsHPP

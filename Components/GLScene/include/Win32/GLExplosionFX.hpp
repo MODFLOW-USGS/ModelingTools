@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLExplosionFx.pas' rev: 36.00 (Windows)
 
-#ifndef GlexplosionfxHPP
-#define GlexplosionfxHPP
+#ifndef GLExplosionFxHPP
+#define GLExplosionFxHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -95,4 +95,4 @@ using namespace Glexplosionfx;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlexplosionfxHPP
+#endif	// GLExplosionFxHPP

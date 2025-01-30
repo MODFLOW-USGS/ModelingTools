@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSMBASS.pas' rev: 36.00 (Windows)
 
-#ifndef GlsmbassHPP
-#define GlsmbassHPP
+#ifndef GLSMBASSHPP
+#define GLSMBASSHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -75,4 +75,4 @@ using namespace Glsmbass;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsmbassHPP
+#endif	// GLSMBASSHPP

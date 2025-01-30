@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSkydome.pas' rev: 36.00 (Windows)
 
-#ifndef GlskydomeHPP
-#define GlskydomeHPP
+#ifndef GLSkydomeHPP
+#define GLSkydomeHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -303,4 +303,4 @@ using namespace Glskydome;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlskydomeHPP
+#endif	// GLSkydomeHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLAsmShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlasmshaderHPP
-#define GlasmshaderHPP
+#ifndef GLAsmShaderHPP
+#define GLAsmShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -116,4 +116,4 @@ using namespace Glasmshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlasmshaderHPP
+#endif	// GLAsmShaderHPP

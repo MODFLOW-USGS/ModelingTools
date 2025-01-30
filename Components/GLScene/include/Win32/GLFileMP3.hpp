@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLFileMP3.pas' rev: 36.00 (Windows)
 
-#ifndef Glfilemp3HPP
-#define Glfilemp3HPP
+#ifndef GLFileMP3HPP
+#define GLFileMP3HPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -67,4 +67,4 @@ using namespace Glfilemp3;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Glfilemp3HPP
+#endif	// GLFileMP3HPP

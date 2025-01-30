@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLDiffuseSpecularShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlsldiffusespecularshaderHPP
-#define GlsldiffusespecularshaderHPP
+#ifndef GLSLDiffuseSpecularShaderHPP
+#define GLSLDiffuseSpecularShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -298,4 +298,4 @@ using namespace Glsldiffusespecularshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlsldiffusespecularshaderHPP
+#endif	// GLSLDiffuseSpecularShaderHPP

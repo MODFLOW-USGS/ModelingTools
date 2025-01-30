@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLLensFlare.pas' rev: 36.00 (Windows)
 
-#ifndef GllensflareHPP
-#define GllensflareHPP
+#ifndef GLLensFlareHPP
+#define GLLensFlareHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -189,4 +189,4 @@ using namespace Gllensflare;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GllensflareHPP
+#endif	// GLLensFlareHPP

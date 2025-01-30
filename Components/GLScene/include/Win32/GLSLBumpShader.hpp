@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLSLBumpShader.pas' rev: 36.00 (Windows)
 
-#ifndef GlslbumpshaderHPP
-#define GlslbumpshaderHPP
+#ifndef GLSLBumpShaderHPP
+#define GLSLBumpShaderHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -450,4 +450,4 @@ using namespace Glslbumpshader;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GlslbumpshaderHPP
+#endif	// GLSLBumpShaderHPP

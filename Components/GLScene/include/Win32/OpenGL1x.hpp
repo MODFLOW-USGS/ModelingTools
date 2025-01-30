@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'OpenGL1x.pas' rev: 36.00 (Windows)
 
-#ifndef Opengl1xHPP
-#define Opengl1xHPP
+#ifndef OpenGL1xHPP
+#define OpenGL1xHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -7414,4 +7414,4 @@ using namespace Opengl1x;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Opengl1xHPP
+#endif	// OpenGL1xHPP

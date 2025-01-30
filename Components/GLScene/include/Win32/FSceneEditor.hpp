@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'FSceneEditor.pas' rev: 36.00 (Windows)
 
-#ifndef FsceneeditorHPP
-#define FsceneeditorHPP
+#ifndef FSceneEditorHPP
+#define FSceneEditorHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -230,4 +230,4 @@ using namespace Fsceneeditor;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// FsceneeditorHPP
+#endif	// FSceneEditorHPP

@@ -4,8 +4,8 @@
 
 // (DO NOT EDIT: machine generated header) 'GLLinePFX.pas' rev: 36.00 (Windows)
 
-#ifndef GllinepfxHPP
-#define GllinepfxHPP
+#ifndef GLLinePFXHPP
+#define GLLinePFXHPP
 
 #pragma delphiheader begin
 #pragma option push
@@ -105,4 +105,4 @@ using namespace Gllinepfx;
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// GllinepfxHPP
+#endif	// GLLinePFXHPP

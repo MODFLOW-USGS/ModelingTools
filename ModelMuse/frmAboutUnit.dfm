@@ -5,6 +5,7 @@ inherited frmAbout: TfrmAbout
   ClientHeight = 527
   ClientWidth = 732
   FormStyle = fsStayOnTop
+  StyleElements = [seFont, seClient, seBorder]
   ExplicitWidth = 748
   ExplicitHeight = 566
   TextHeight = 18
@@ -16,6 +17,7 @@ inherited frmAbout: TfrmAbout
     Align = alTop
     ParentColor = True
     TabOrder = 0
+    ExplicitTop = -6
     DesignSize = (
       732
       305)
@@ -3044,9 +3046,9 @@ inherited frmAbout: TfrmAbout
     object lblDeveloperName: TLabel
       Left = 8
       Top = 161
-      Width = 133
+      Width = 251
       Height = 18
-      Caption = 'Richard B. Winston'
+      Caption = 'Richard B. Winston and Scott Boyce'
     end
     object lblFileVersion: TLabel
       Left = 8
@@ -3056,7 +3058,7 @@ inherited frmAbout: TfrmAbout
       Caption = 'lblFileVersion'
       Visible = False
     end
-    object JvHTLabel1: TJvHTLabel
+    object htlblWinston: TJvHTLabel
       Left = 8
       Top = 181
       Width = 127
@@ -3092,6 +3094,14 @@ inherited frmAbout: TfrmAbout
       Caption = 
         '<u><a href="https://doi.org/10.3133/ofr20171137">https://doi.org' +
         '/10.3133/ofr20171137</a></u>'
+      SuperSubScriptRatio = 0.666666666666666600
+    end
+    object htlblBoyce: TJvHTLabel
+      Left = 168
+      Top = 181
+      Width = 137
+      Height = 19
+      Caption = '<u><a href="mailto:seboyce@usgs.gov">seboyce@usgs.gov</a></u>'
       SuperSubScriptRatio = 0.666666666666666600
     end
     object ctgrypnlgrp1: TCategoryPanelGroup
