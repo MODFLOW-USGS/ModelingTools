@@ -5,11 +5,13 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, framePackageUnit, RbwController,
-  Vcl.StdCtrls, ModflowPackageSelectionUnit, Vcl.ExtCtrls;
+  Vcl.StdCtrls, ModflowPackageSelectionUnit, Vcl.ExtCtrls, ArgusDataEntry;
 
 type
   TframeGwtAdvPackage = class(TframePackage)
     rgScheme: TRadioGroup;
+    rdeAdePercel: TRbwDataEntry;
+    lblAdePercel: TLabel;
   private
     { Private declarations }
   public
@@ -34,6 +36,7 @@ begin
   inherited;
   Adv := Package as TGwtAdvectionPackage;
   rgScheme.ItemIndex := Ord(Adv.Scheme);
+  rdeAdePercel.RealValue := Adv.AtsPercel;
 end;
 
 procedure TframeGwtAdvPackage.SetData(Package: TModflowPackageSelection);
@@ -43,6 +46,7 @@ begin
   inherited;
   Adv := Package as TGwtAdvectionPackage;
   Adv.Scheme := TGwtScheme(rgScheme.ItemIndex);
+  Adv.AtsPercel := rdeAdePercel.RealValueDefault(0);
 end;
 
 end.

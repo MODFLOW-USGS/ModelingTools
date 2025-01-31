@@ -558,6 +558,8 @@ begin
     Assert(False);
   end;
 
+  AdvectionPackage.AtsPercel := Adv.Options.ATS_PERCEL;
+
 end;
 
 procedure TModflow6Importer.ImportBuy(Package: TPackage; TransportModels: TModelList);

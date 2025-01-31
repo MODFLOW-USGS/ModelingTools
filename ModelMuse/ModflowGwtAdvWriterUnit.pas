@@ -100,6 +100,13 @@ begin
   end;
   NewLine;
 
+  if FAdvPackage.AtsPercel <> 0 then
+  begin
+    WriteString('  ATS_PERCEL');
+    WriteFloat(FAdvPackage.AtsPercel);
+    NewLine;
+  end;
+
   WriteEndOptions;
 end;
 

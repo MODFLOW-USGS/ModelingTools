@@ -10,11 +10,13 @@ type
   TAdvOptions = class(TCustomMf6Persistent)
   private
     FSCHEME: string;
+    FATS_PERCEL: Extended;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
   public
     property SCHEME: string read FSCHEME;
+    property ATS_PERCEL: Extended read FATS_PERCEL;
   end;
 
   TAdv = class(TPackageReader)
@@ -30,12 +32,16 @@ type
 
 implementation
 
+uses
+  ModelMuseUtilities;
+
 { TAdvOptions }
 
 procedure TAdvOptions.Initialize;
 begin
   inherited;
   FSCHEME := 'upstream';
+  FATS_PERCEL := 0;
 end;
 
 procedure TAdvOptions.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
@@ -66,6 +72,15 @@ begin
     else if FSplitter[0] = 'SCHEME' then
     begin
       FSCHEME := FSplitter[1];
+    end
+    else if FSplitter[0] = 'ATS_PERCEL' then
+    begin
+      if not TryFortranStrToFloat(FSplitter[1], FATS_PERCEL) then
+      begin
+        Unhandled.WriteLine(Format('Unable to convert %s to a floating point number in the following Line',
+          [FSplitter[1]]));
+        Unhandled.WriteLine(ErrorLine);
+      end;
     end
     else
     begin

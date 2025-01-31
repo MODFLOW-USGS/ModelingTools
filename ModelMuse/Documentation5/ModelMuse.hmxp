@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="2.0" isskin="false" isrepository="false">
+<helpproject xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="helpproject.xsd" version="2.2" isskin="false" isrepository="false">
   <config>
     <namespaces>
       <namespace name="ModflowGuide" href=".\ModflowGuide\ModflowGuide.hmxp"/>
@@ -43,7 +43,7 @@
     <helpwindows>
       <helpwindow name="Main" left="-1" top="-1" width="-1" height="-1">
         <caption translate="true">&lt;%TITLE%&gt;</caption>
-        <window-options-chm navigation="true" navigationwidth="200" search="true" favorite="true" saveregistry="true" buttons="12366">
+        <window-options-chm navigation="true" navigationwidth="200" index="true" search="true" favorite="true" saveregistry="true" buttons="12366">
           <user-button name="home">
             <caption translate="true">home</caption>
           </user-button>
@@ -128,6 +128,7 @@
       <tablestyleclass name="Default">
         <style-set media="screen">width:auto; cell-padding:0px; cell-spacing:0px; page-break-inside:auto; border-width:0px; border-spacing:0px; cell-border-width:0px; border-style:none; background-color:none; head-row-background-color:none; alt-row-background-color:none;</style-set>
       </tablestyleclass>
+      <imagestyleclass name="Default"/>
     </styleclasses>
     <config-group name="project">
       <config-value name="title" translate="true">ModelMuse Help</config-value>

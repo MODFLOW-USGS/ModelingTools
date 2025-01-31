@@ -1358,6 +1358,7 @@ begin
               begin
                 if ASource.SourcePackage  = spcLak then
                 begin
+                  SourceScreenObject := ASource.Key.SourceKey.ScreenObject as TScreenObject;
                   CellList := TCellAssignmentList.Create;
                   try
                     SourceScreenObject.GetCellsToAssign('0', nil, nil, CellList, alAll, Model);

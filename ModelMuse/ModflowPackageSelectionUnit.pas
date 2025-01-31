@@ -7407,13 +7407,23 @@ Type
   TGwtAdvectionPackage = class(TModflowPackageSelection)
   private
     FScheme: TGwtScheme;
+    FStoredAtsPercel: TRealStorage;
     procedure SetScheme(const Value: TGwtScheme);
+    procedure SetStoredAtsPercel(const Value: TRealStorage);
+    function GetAtsPercel: double;
+    procedure SetAtsPercel(const Value: double);
   public
     Constructor Create(Model: TBaseModel); override;
+    destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
+    property AtsPercel: double read GetAtsPercel write SetAtsPercel;
   published
+    // SCHEME
     property Scheme: TGwtScheme read FScheme write SetScheme;
+    // ATS_PERCEL
+    // fractional cell distance submitted by the ADV Package to the adaptive time stepping (ATS) package.
+    property StoredAtsPercel: TRealStorage read FStoredAtsPercel write SetStoredAtsPercel;
   end;
 
   TGwtSsmPackage = class(TModflowPackageSelection)
@@ -25589,10 +25599,14 @@ end;
 { TGwtAdvectionPackage }
 
 procedure TGwtAdvectionPackage.Assign(Source: TPersistent);
+var
+  AdvSource: TGwtAdvectionPackage;
 begin
   if Source is TGwtAdvectionPackage then
   begin
-    Scheme := TGwtAdvectionPackage(Source).Scheme;
+    AdvSource := TGwtAdvectionPackage(Source);
+    Scheme := AdvSource.Scheme;
+    AtsPercel := AdvSource.AtsPercel;
   end;
   inherited;
 end;
@@ -25600,13 +25614,32 @@ end;
 constructor TGwtAdvectionPackage.Create(Model: TBaseModel);
 begin
   inherited;
+  FStoredAtsPercel := TRealStorage.Create;
   InitializeVariables;
+  FStoredAtsPercel.OnChange := OnValueChanged;
+end;
+
+destructor TGwtAdvectionPackage.Destroy;
+begin
+  FStoredAtsPercel.Free;
+  inherited;
+end;
+
+function TGwtAdvectionPackage.GetAtsPercel: double;
+begin
+  result := StoredAtsPercel.Value;
 end;
 
 procedure TGwtAdvectionPackage.InitializeVariables;
 begin
   inherited;
   FScheme := gsUpstream;
+  AtsPercel := 0;
+end;
+
+procedure TGwtAdvectionPackage.SetAtsPercel(const Value: double);
+begin
+  StoredAtsPercel.Value := Value;
 end;
 
 procedure TGwtAdvectionPackage.SetScheme(const Value: TGwtScheme);
@@ -25616,6 +25649,11 @@ begin
     FScheme := Value;
     InvalidateModel;
   end;
+end;
+
+procedure TGwtAdvectionPackage.SetStoredAtsPercel(const Value: TRealStorage);
+begin
+  FStoredAtsPercel.Assign(Value);
 end;
 
 { TGwtMstPackage }

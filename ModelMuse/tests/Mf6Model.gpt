@@ -57,6 +57,7 @@ object PhastModel: TPhastModel
   ModflowPackages.ChdBoundary.IsSelected = True
   ModflowPackages.ChdBoundary.UseMultiplier = False
   ModflowPackages.GhbBoundary.IsSelected = True
+  ModflowPackages.GhbBoundary.UseMultiplier = False
   ModflowPackages.LpfPackage.IsSelected = True
   ModflowPackages.LpfPackage.UseConstantCV = False
   ModflowPackages.LpfPackage.UseSaturatedThickness = False
@@ -685,6 +686,7 @@ object PhastModel: TPhastModel
   ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtCombined
   ModflowPackages.GwtAdvectionPackage.IsSelected = True
   ModflowPackages.GwtAdvectionPackage.Scheme = gsUpstream
+  ModflowPackages.GwtAdvectionPackage.StoredAtsPercel.Value = 0.500000000000000000
   ModflowPackages.GwtSsmPackage.IsSelected = True
   ModflowPackages.GwtCncPackage.IsSelected = True
   ModflowPackages.GwtCncPackage.UseMultiplier = False
@@ -737,7 +739,7 @@ object PhastModel: TPhastModel
         item
           BinaryBudgetFileOut = False
           TextBudgetFileOut = False
-          Sorption = True
+          SorptionType = gscLinear
           FirstOrderDecay = False
           ZeroOrderDecay = True
           SaveConcentrations = False
@@ -908,7 +910,7 @@ object PhastModel: TPhastModel
   ModflowPackages.TvkPackage.IsSelected = False
   ModflowPackages.TvsPackage.IsSelected = False
   FilesToArchive.Strings = (
-    'C:\ModelingTools\ModelMuse\PracticeModel\Mf6Model.gpt')
+    'C:\ModelingTools\ModelMuse\tests\Mf6Model.gpt')
   ModelInputFiles.Strings = (
     'C:\ModelingTools\ModelMuse\PracticeModel\Mf6Model.buy'
     'C:\ModelingTools\ModelMuse\PracticeModel\Mf6Model.chd'
@@ -1022,7 +1024,7 @@ object PhastModel: TPhastModel
       '.CSV'
     'C:\ModelingTools\ModelMuse\PracticeModel\Mf6Model.water_content'
     'C:\ModelingTools\ModelMuse\PracticeModel\mfsim.lst')
-  ModelFileName = 'C:\ModelingTools\ModelMuse\PracticeModel\Mf6Model.gpt'
+  ModelFileName = 'C:\ModelingTools\ModelMuse\tests\Mf6Model.gpt'
   ModflowOptions.StoredHDry.Value = -2E20
   ModflowOptions.StoredHNoFlow.Value = -1E20
   ModflowOptions.ProjectDate = '8/15/2023'
@@ -1080,6 +1082,10 @@ object PhastModel: TPhastModel
         'ImmobileBulkDensity_Chem_1')
       ImmobileDistCoeficients.Strings = (
         'ImmobileDistCoeficient_Chem_1')
+      ImmobileFreundlichExponentSp2s.Strings = (
+        'ImmobileFreundlichExponent_Chem_1')
+      ImmobileSorptionCapacitySp2s.Strings = (
+        'ImmobileSorptionCapacity_Chem_1')
       StoredDensitySlope.Value = 0.000000000000000000
       StoredRefConcentration.Value = 0.000000000000000000
       StoredViscositySlope.Value = 0.000000000000000000
@@ -1259,6 +1265,31 @@ object PhastModel: TPhastModel
   PestObsCollection.MinTimeLimit.IntegerLimitValue = 0
   PestObsCollection.MinTimeLimit.UseLimit = False
   PestObsCollection = <>
+  Mt3dObsCollection.MaxResidualLimit.BooleanLimitValue = False
+  Mt3dObsCollection.MaxResidualLimit.DataType = rdtDouble
+  Mt3dObsCollection.MaxResidualLimit.IntegerLimitValue = 0
+  Mt3dObsCollection.MaxResidualLimit.UseLimit = False
+  Mt3dObsCollection.MinResidualLimit.BooleanLimitValue = False
+  Mt3dObsCollection.MinResidualLimit.DataType = rdtDouble
+  Mt3dObsCollection.MinResidualLimit.IntegerLimitValue = 0
+  Mt3dObsCollection.MinResidualLimit.UseLimit = False
+  Mt3dObsCollection.MaxWeightedResidualLimit.BooleanLimitValue = False
+  Mt3dObsCollection.MaxWeightedResidualLimit.DataType = rdtDouble
+  Mt3dObsCollection.MaxWeightedResidualLimit.IntegerLimitValue = 0
+  Mt3dObsCollection.MaxWeightedResidualLimit.UseLimit = False
+  Mt3dObsCollection.MinWeightedResidualLimit.BooleanLimitValue = False
+  Mt3dObsCollection.MinWeightedResidualLimit.DataType = rdtDouble
+  Mt3dObsCollection.MinWeightedResidualLimit.IntegerLimitValue = 0
+  Mt3dObsCollection.MinWeightedResidualLimit.UseLimit = False
+  Mt3dObsCollection.MaxTimeLimit.BooleanLimitValue = False
+  Mt3dObsCollection.MaxTimeLimit.DataType = rdtDouble
+  Mt3dObsCollection.MaxTimeLimit.IntegerLimitValue = 0
+  Mt3dObsCollection.MaxTimeLimit.UseLimit = False
+  Mt3dObsCollection.MinTimeLimit.BooleanLimitValue = False
+  Mt3dObsCollection.MinTimeLimit.DataType = rdtDouble
+  Mt3dObsCollection.MinTimeLimit.IntegerLimitValue = 0
+  Mt3dObsCollection.MinTimeLimit.UseLimit = False
+  Mt3dObsCollection = <>
   Mf6TimesSeries = <>
   Diffusivity = 0.000000001000000000
   GridOptions.ChemicalDimensionX = True
@@ -4653,7 +4684,7 @@ object PhastModel: TPhastModel
       ScreenObject.HigherElevationFormula = 'Model_Top'
       ScreenObject.LineColor = clBlack
       ScreenObject.LowerElevationFormula = 'Upper_Aquifer_Bottom'
-      ScreenObject.Selected = True
+      ScreenObject.Selected = False
       ScreenObject.SetValuesByInterpolation = False
       ScreenObject.SetValuesOfEnclosedCells = True
       ScreenObject.SetValuesOfIntersectedCells = False
@@ -4751,7 +4782,7 @@ object PhastModel: TPhastModel
       MixtureFormulas.Strings = (
         '')
     end>
-  Version = '5.3.0.0'
+  Version = '5.3.1.6'
   GuiSettings.FrontHeight = 133
   GuiSettings.Height = 600
   GuiSettings.FrontX = -570.788530465949600000
