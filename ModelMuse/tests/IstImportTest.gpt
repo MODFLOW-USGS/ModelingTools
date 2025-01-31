@@ -1060,6 +1060,7 @@ object PhastModel: TPhastModel
   ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate
   ModflowPackages.GwtAdvectionPackage.IsSelected = True
   ModflowPackages.GwtAdvectionPackage.Scheme = gsUpstream
+  ModflowPackages.GwtAdvectionPackage.StoredAtsPercel.Value = 0.500000000000000000
   ModflowPackages.GwtSsmPackage.IsSelected = True
   ModflowPackages.GwtCncPackage.IsSelected = True
   ModflowPackages.GwtCncPackage.UseMultiplier = False
@@ -1107,6 +1108,7 @@ object PhastModel: TPhastModel
       GwtMst.FirstOrderDecay = False
       GwtMst.Sorption = gscLangmuir
       GwtMst.SeparatePorosity = True
+      GwtMst.Sorbate = True
       GwtIst.IsSelected = True
       GwtIst.IstPackageProperties = <
         item
@@ -1121,6 +1123,7 @@ object PhastModel: TPhastModel
           Width = 15
           Digits = 10
           PrintFormat = pfGeneral
+          Sorbate = True
         end>
     end>
   ModflowPackages.FarmProcess4.IsSelected = False

@@ -18,6 +18,7 @@ type
     FZERO_ORDER_DECAY: Boolean;
     FCIM: Boolean;
     FCIM_PRINT_FORMAT: TPrintFormat;
+    FSORBATE: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -31,6 +32,7 @@ type
     property ZERO_ORDER_DECAY: Boolean read FZERO_ORDER_DECAY;
     property CIM: Boolean read FCIM;
     property CIM_PRINT_FORMAT: TPrintFormat read FCIM_PRINT_FORMAT;
+    property SORBATE: Boolean read FSORBATE;
   end;
 
   TIstGridData = class(TCustomMf6Persistent)
@@ -89,6 +91,7 @@ begin
   FFIRST_ORDER_DECAY := False;
   FZERO_ORDER_DECAY := False;
   FCIM := False;
+  FSORBATE := False;
   FCIM_PRINT_FORMAT.Initialize;
 end;
 
@@ -164,6 +167,11 @@ begin
       and (FSplitter[1] = 'PRINT_FORMAT') then
     begin
       ReadPrintFormat(ErrorLine, Unhandled, FPackageType, FCIM_PRINT_FORMAT);
+    end
+    else if (FSplitter[0] = 'SORBATE')
+      and (FSplitter.Count >= 3) then
+    begin
+      FSORBATE := True
     end
     else
     begin

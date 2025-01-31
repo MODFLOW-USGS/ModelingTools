@@ -37,9 +37,11 @@
   <output Model_Name="IstImportTest" FileType="Model Output">
     <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.bhd</FileName>
     <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.cbc</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.1.ist.SORBATE</FileName>
     <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.cbc</FileName>
     <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.InnerSolution.CSV</FileName>
     <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.lst</FileName>
+    <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.mst.SORBATE</FileName>
     <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.ob_gw_out_concentration.csv</FileName>
     <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.Chem1.OuterSolution.CSV</FileName>
     <FileName Model_Name="IstImportTest" FileType="Model Output">IstImportTest.dis.grb</FileName>

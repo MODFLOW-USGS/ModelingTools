@@ -6675,6 +6675,7 @@ begin
     begin
       Assert(False);
     end;
+    IstPackageItem.Sorbate := Options.Sorbate;
   end;
 
   Model.DataArrayManager.CreateInitialDataSets;
@@ -10761,6 +10762,7 @@ begin
       Assert(False);
     end;
   end;
+  MstPackage.Sorbate := Options.Sorbate;
 
   Model.DataArrayManager.CreateInitialDataSets;
   Model.MobileComponents.UpdateAllDataArrays;

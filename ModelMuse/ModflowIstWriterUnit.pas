@@ -227,6 +227,7 @@ procedure TModflowGwtIstWriter.WriteOptions;
 var
   Budgetfile: string;
   Cimfile: string;
+  SorbateFileName: string;
 begin
   WriteBeginOptions;
 
@@ -335,6 +336,16 @@ begin
     end;
     NewLine;
   end;
+
+  if FIstProp.Sorbate then
+  begin
+    SorbateFileName := FInputFileName + '.SORBATE';
+    WriteString('  SORBATE FILEOUT ');
+    WriteString(SorbateFileName);
+    NewLine;
+    Model.AddModelOutputFile(SorbateFileName);
+  end;
+
 
   WriteEndOptions;
 end;

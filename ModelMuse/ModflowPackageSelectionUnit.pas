@@ -7487,19 +7487,26 @@ Type
     FFirstOrderDecay: Boolean;
     FSorption: TGwtSorptionChoice;
     FSeparatePorosity: Boolean;
+    FSorbate: Boolean;
     procedure SetFirstOrderDecay(const Value: Boolean);
     procedure SetSorption(const Value: TGwtSorptionChoice);
     procedure SetZeroOrderDecay(const Value: Boolean);
     procedure SetSeparatePorosity(const Value: Boolean);
+    procedure SetSorbate(const Value: Boolean);
   public
     Constructor Create(Model: TBaseModel); override;
     procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
   published
+    // ZERO_ORDER_DECAY
     property ZeroOrderDecay: Boolean read FZeroOrderDecay write SetZeroOrderDecay;
+    // FIRST_ORDER_DECAY
     property FirstOrderDecay: Boolean read FFirstOrderDecay write SetFirstOrderDecay;
+    // SORPTION
     property Sorption: TGwtSorptionChoice read FSorption write SetSorption;
     property SeparatePorosity: Boolean read FSeparatePorosity write SetSeparatePorosity;
+    // SORBATE FILEOUT <sorbatefile>
+    property Sorbate: Boolean read FSorbate write SetSorbate;
   end;
 
   TPrintFormat = (pfExponential, pfFixed, pfGeneral, pfScientific);
@@ -7519,6 +7526,7 @@ Type
     FPrintFormat: TPrintFormat;
     FSaveFlows: Boolean;
     FSorptionType: TGwtSorptionChoice;
+    FSorbate: Boolean;
     procedure SetBinaryBudgetFileOut(const Value: Boolean);
     procedure SetColumns(const Value: Integer);
     procedure SetDigits(const Value: Integer);
@@ -7532,6 +7540,7 @@ Type
     procedure SetPrintFormat(const Value: TPrintFormat);
     procedure SetSorptionType(const Value: TGwtSorptionChoice);
     function GetSorption: Boolean;
+    procedure SetSorbate(const Value: Boolean);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
   public
@@ -7564,6 +7573,8 @@ Type
     property Digits: Integer read FDigits write SetDigits;
     // CIM PRINT_FORMAT
     property PrintFormat: TPrintFormat read FPrintFormat write SetPrintFormat;
+    // SORBATE FILEOUT <sorbatefile>
+    property Sorbate: Boolean read FSorbate write SetSorbate;
   end;
 
   TIstPackageProperties = class(TOrderedCollection)
@@ -25669,6 +25680,7 @@ begin
     FirstOrderDecay := MstSource.FirstOrderDecay;
     Sorption := MstSource.Sorption;
     SeparatePorosity := MstSource.SeparatePorosity;
+    Sorbate := MstSource.Sorbate;
   end;
   inherited;
 end;
@@ -25687,6 +25699,7 @@ begin
   FFirstOrderDecay := False;
   FSorption := gscNone;
   FSeparatePorosity := False;
+  FSorbate := False;
 end;
 
 procedure TGwtMstPackage.SetFirstOrderDecay(const Value: Boolean);
@@ -25697,6 +25710,11 @@ end;
 procedure TGwtMstPackage.SetSeparatePorosity(const Value: Boolean);
 begin
   SetBooleanProperty(FSeparatePorosity, Value);
+end;
+
+procedure TGwtMstPackage.SetSorbate(const Value: Boolean);
+begin
+  SetBooleanProperty(FSorbate, Value);
 end;
 
 procedure TGwtMstPackage.SetSorption(const Value: TGwtSorptionChoice);
@@ -25733,6 +25751,7 @@ begin
     Width := IstSource.Width;
     Digits := IstSource.Digits;
     PrintFormat := IstSource.PrintFormat;
+    Sorbate := IstSource.Sorbate;
   end;
   inherited;
 end;
@@ -25769,7 +25788,8 @@ begin
       and (Columns = SourceItem.Columns)
       and (Width = SourceItem.Width)
       and (Digits = SourceItem.Digits)
-      and (PrintFormat = SourceItem.PrintFormat);
+      and (PrintFormat = SourceItem.PrintFormat)
+      and (Sorbate = SourceItem.Sorbate);
   end;
 end;
 
@@ -25806,6 +25826,11 @@ end;
 procedure TIstPackageItem.SetSaveConcentrations(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveConcentrations, Value);
+end;
+
+procedure TIstPackageItem.SetSorbate(const Value: Boolean);
+begin
+  SetBooleanProperty(FSorbate, Value);
 end;
 
 procedure TIstPackageItem.SetSorption(const Value: Boolean);

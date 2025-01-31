@@ -13,6 +13,7 @@ type
     rgPorosity: TRadioGroup;
     rgSorption: TRadioGroup;
     rgDecay: TRadioGroup;
+    cbSorbate: TCheckBox;
   private
     { Private declarations }
   protected
@@ -55,6 +56,7 @@ begin
     rgDecay.ItemIndex := 0;
   end;
   rgSorption.ItemIndex := Ord(MstPackage.Sorption);
+  cbSorbate.Checked := MstPackage.Sorbate;
 end;
 
 procedure TframePackageMST.SetData(Package: TModflowPackageSelection);
@@ -67,6 +69,7 @@ begin
   MstPackage.FirstOrderDecay := rgDecay.ItemIndex = 2;
   MstPackage.ZeroOrderDecay := rgDecay.ItemIndex = 1;
   MstPackage.Sorption := TGwtSorptionChoice(rgSorption.ItemIndex);
+  MstPackage.Sorbate := cbSorbate.Checked;
 end;
 
 procedure TframePackageMST.SetSelected(const Value: boolean);

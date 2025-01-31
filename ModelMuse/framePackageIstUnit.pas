@@ -10,7 +10,7 @@ uses
 
 type
   TIbsRow = (IrName, irSaveBudget, irBudgetText, irSorption, irDecay,
-    irSaveConc, irPrintConc, IrPrintCols, irWidth, IrDigits, irFormat);
+    irSaveConc, irPrintConc, IrPrintCols, irWidth, IrDigits, irFormat, irSorbate);
 
   TframePackageIst = class(TframePackage)
     frameIst: TframeRowGrid;
@@ -109,6 +109,7 @@ begin
     frameIst.Grid.IntegerValue[ColIndex, Ord(irWidth)] := PackageProp.Width;
     frameIst.Grid.IntegerValue[ColIndex, Ord(IrDigits)] := PackageProp.Digits;
     frameIst.Grid.ItemIndex[ColIndex, Ord(irFormat)] := Ord(PackageProp.PrintFormat);
+    frameIst.Grid.Checked[ColIndex, Ord(irSorbate)] := PackageProp.Sorbate;
   end;
 end;
 
@@ -125,6 +126,7 @@ begin
   frameIst.Grid.Cells[0, Ord(irWidth)] := 'width for writing number';
   frameIst.Grid.Cells[0, Ord(IrDigits)] := 'digits';
   frameIst.Grid.Cells[0, Ord(irFormat)] := 'format';
+  frameIst.Grid.Cells[0, Ord(irSorbate)] := 'Save sorbate concentration';
 end;
 
 procedure TframePackageIst.SetData(Package: TModflowPackageSelection);
@@ -184,6 +186,7 @@ begin
     begin
       PackageProp.PrintFormat := pfGeneral;
     end;
+    PackageProp.Sorbate := frameIst.Grid.Checked[ColIndex, Ord(irSorbate)];
   end;
 end;
 

@@ -1,8 +1,9 @@
-# IST: Immobile Storage and Transfer Package file created on 1/30/2025 by ModelMuse version 5.3.1.6.
+# IST: Immobile Storage and Transfer Package file created on 1/31/2025 by ModelMuse version 5.3.1.6.
 BEGIN OPTIONS
     SAVE_FLOWS
   SORPTION LANGMUIR
   ZERO_ORDER_DECAY
+  SORBATE FILEOUT C:\ModelingTools\ModelMuse\tests\IstImportTest.Chem1.1.ist.SORBATE
 END OPTIONS
 
 BEGIN GRIDDATA

@@ -13,6 +13,7 @@ type
     FFIRST_ORDER_DECAY: Boolean;
     FZERO_ORDER_DECAY: Boolean;
     FSORPTION: TStringOption;
+    FSORBATE: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
   protected
     procedure Initialize; override;
@@ -20,6 +21,7 @@ type
     property FIRST_ORDER_DECAY: Boolean read FFIRST_ORDER_DECAY;
     property ZERO_ORDER_DECAY: Boolean read FZERO_ORDER_DECAY;
     property SORPTION: TStringOption read FSORPTION;
+    property SORBATE: Boolean read FSORBATE;
   end;
 
   TMstGridData = class(TCustomMf6Persistent)
@@ -67,6 +69,7 @@ begin
   SAVE_FLOWS := False;
   FFIRST_ORDER_DECAY := False;
   FZERO_ORDER_DECAY := False;
+  FSORBATE := False;
   FSORPTION.Initialize;
 end;
 
@@ -112,6 +115,11 @@ begin
     begin
       FSORPTION.Value := FSplitter[1];
       FSORPTION.Used := True;
+    end
+    else if (FSplitter[0] = 'SORBATE')
+      and (FSplitter.Count >= 3) then
+    begin
+      FSORBATE := True
     end
     else
     begin

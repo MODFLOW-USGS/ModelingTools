@@ -1,10 +1,17 @@
 inherited framePackageMST: TframePackageMST
   Width = 498
-  Height = 462
+  Height = 486
   ExplicitWidth = 498
-  ExplicitHeight = 462
+  ExplicitHeight = 486
+  inherited lblComments: TLabel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited lblPackage: TLabel
+    StyleElements = [seFont, seClient, seBorder]
+  end
   inherited memoComments: TMemo
     Width = 467
+    StyleElements = [seFont, seClient, seBorder]
     ExplicitWidth = 467
   end
   object rgPorosity: TRadioGroup [3]
@@ -49,6 +56,15 @@ inherited framePackageMST: TframePackageMST
       'FIRST_ORDER_DECAY')
     TabOrder = 3
   end
+  object cbSorbate: TCheckBox [6]
+    Left = 16
+    Top = 464
+    Width = 369
+    Height = 17
+    Caption = 'Save sorbate concentration (SORBATE)'
+    Enabled = False
+    TabOrder = 4
+  end
   inherited rcSelectionController: TRbwController
     ControlList = <
       item
@@ -65,6 +81,9 @@ inherited framePackageMST: TframePackageMST
       end
       item
         Control = rgSorption
+      end
+      item
+        Control = cbSorbate
       end>
   end
 end

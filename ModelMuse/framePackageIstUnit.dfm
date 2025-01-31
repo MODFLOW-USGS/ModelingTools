@@ -62,7 +62,7 @@ inherited framePackageIst: TframePackageIst
       Width = 422
       Height = 219
       ColCount = 2
-      RowCount = 11
+      RowCount = 12
       Columns = <
         item
           AutoAdjustColWidths = True
@@ -339,6 +339,29 @@ inherited framePackageIst: TframePackageIst
             'FIXED'
             'GENERAL'
             'SCIENTIFIC')
+          WordWrapCaptions = False
+          WordWrapCells = False
+          CaseSensitivePicklist = False
+          CheckStyle = csCheck
+        end
+        item
+          AutoAdjustRowHeights = False
+          AutoAdjustCaptionRowHeights = False
+          ButtonCaption = '...'
+          ButtonFont.Charset = DEFAULT_CHARSET
+          ButtonFont.Color = clWindowText
+          ButtonFont.Height = -15
+          ButtonFont.Name = 'Segoe UI'
+          ButtonFont.Style = []
+          ButtonUsed = False
+          ButtonWidth = 20
+          CheckMax = False
+          CheckMin = False
+          ComboUsed = False
+          Format = rcf4Boolean
+          LimitToList = False
+          MaxLength = 0
+          ParentButtonFont = False
           WordWrapCaptions = False
           WordWrapCells = False
           CaseSensitivePicklist = False

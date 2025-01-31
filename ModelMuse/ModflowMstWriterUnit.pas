@@ -173,6 +173,8 @@ begin
 end;
 
 procedure TModflowGwtMstWriter.WriteOptions;
+var
+  SorbateFileName: string;
 begin
   WriteBeginOptions;
 
@@ -210,6 +212,15 @@ begin
         WriteString('  SORPTION LANGMUIR');
         NewLine
       end;
+  end;
+
+  if FMstPackage.Sorbate then
+  begin
+    SorbateFileName := FInputFileName + '.SORBATE';
+    WriteString('  SORBATE FILEOUT ');
+    WriteString(SorbateFileName);
+    NewLine;
+    Model.AddModelOutputFile(SorbateFileName);
   end;
 
   WriteEndOptions;
