@@ -1,4 +1,4 @@
-# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/15/2024 by ModelMuse version 5.1.1.54.
+# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/4/2025 by ModelMuse version 5.3.1.7.
 BEGIN OPTIONS
   AUXILIARY Chem
     PRINT_INPUT
@@ -57,6 +57,24 @@ END CONNECTIONDATA
 BEGIN DIVERSIONS
      3     1     9 FRACTION
 End DIVERSIONS
+
+BEGIN INITIALSTAGES
+# <rno>  <initialstage>
+# defined by Object14
+     1  0.000000000000E+000 
+     2  0.000000000000E+000 
+     3  0.000000000000E+000 
+# defined by Object21
+     4  0.000000000000E+000 
+     5  0.000000000000E+000 
+     6  0.000000000000E+000 
+     7  0.000000000000E+000 
+     8  0.000000000000E+000 
+# defined by Object22
+     9  0.000000000000E+000 
+    10  0.000000000000E+000 
+    11  0.000000000000E+000 
+END INITIALSTAGES
 
 BEGIN PERIOD      1
 # rno sfrsetting (defined by Object14)

@@ -28,7 +28,7 @@ if exist "OWHM_EX1.t.ByNode" del "OWHM_EX1.t.ByNode"
 if exist "OWHM_EX1.t.Qsum" del "OWHM_EX1.t.Qsum"
 if exist "OWHM_EX1.t.wl1" del "OWHM_EX1.t.wl1"
 "EnhancedTemplateProcessor.exe" FarmTest1.fmp.tpl FarmTest1.pval
-MF_OWHM.exe FarmTest1.nam /wait
+MF_OWHM_Win32.exe FarmTest1.nam /wait
 "Mf2005ObsExtractor.exe" FarmTest1.Mf2005ExtractValues
 @echo off
 rem Get end time:

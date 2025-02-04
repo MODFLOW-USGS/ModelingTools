@@ -1,4 +1,4 @@
-# Name File for MODFLOW created on 2/5/2018 by ModelMuse Version 3.9.0.29
+# Name File for MODFLOW created on 2/4/2025 by ModelMuse Version 5.3.1.7
 LIST             11 NwtTest1.lst REPLACE
 DATA(BINARY)      9 NwtTest1.cbc REPLACE
 DIS              12 NwtTest1.dis OLD

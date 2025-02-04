@@ -14021,6 +14021,7 @@ type
     SftPackageData: TSftPackageItemList;
     SftBoundNameObs: TObservationLists;
     SftIdObs: TObservationLists;
+    InitialStage: TRealOption;
   public
     constructor Create;
     destructor Destroy; override;
@@ -14075,6 +14076,7 @@ var
   Options: TSfrOptions;
   SfrReachInfoList: TSfrReachInfoObjectList;
   PackageData: TSfrPackageData;
+  InitialStages: TInitialStages;
   SfrReachInfo: TSfrReachInfo;
   CrossSections: TSfrCrossSections;
   Index: Integer;
@@ -14592,6 +14594,16 @@ var
       Values[CellIndex] := AReachList[CellIndex].PackageData.rhk;
     end;
     SfrBoundary.HydraulicConductivity := RealValuesToFormula(Values, 'ReachK', result);
+
+    if (AReachList.Count > 0) and (AReachList[0].InitialStage.Used) then
+    begin
+      for CellIndex := 0 to AReachList.Count - 1 do
+      begin
+        Assert(AReachList[CellIndex].InitialStage.Used);
+        Values[CellIndex] := AReachList[CellIndex].InitialStage.Value;
+      end;
+      SfrBoundary.InitialStage := RealValuesToFormula(Values, 'InitialStage', result);
+    end;
 
     EndTime := Model.ModflowStressPeriods.Last.EndTime;
 
@@ -15173,6 +15185,8 @@ begin
     SfrPackage.SaveGwtBudgetCsv := True;
   end;
 
+  SfrPackage.Storage := Options.STORAGE;
+
   if Model.ModflowOptions.LengthUnit = 0 then
   begin
     if Options.LENGTH_CONVERSION.Used then
@@ -15582,12 +15596,18 @@ begin
       // read data for each reach.
 
       PackageData := Sfr.PackageData;
+      InitialStages := Sfr.InitialStages;
       SfrReachInfoList.Capacity := PackageData.Count;
       for Index := 0 to PackageData.Count - 1 do
       begin
         SfrReachInfo := TSfrReachInfo.Create;
         SfrReachInfoList.Add(SfrReachInfo);
         SfrReachInfo.PackageData := PackageData[Index];
+        if InitialStages.Count > 0 then
+        begin
+          SfrReachInfo.InitialStage.Used := True;
+          SfrReachInfo.InitialStage.Value := InitialStages[Index].initialstage;
+        end;
         for var TransportIndex := 0 to SftList.Count - 1 do
         begin
           Sft := SftList[TransportIndex];
@@ -21106,6 +21126,7 @@ begin
   SftPackageData.OwnsObjects := False;
   SftBoundNameObs := TObservationLists.Create(False);
   SftIdObs := TObservationLists.Create(False);
+  InitialStage.Initialize;
 
 end;
 

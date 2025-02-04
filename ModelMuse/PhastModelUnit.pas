@@ -10392,15 +10392,20 @@ const
 //    '5.3.1.6'  Bug fix: Fixed export of objects as shapefiles for certain
 //                MODFLOW 6 features.
 
-//               Enhancement: Added support for new sorption options in
+//    '5.3.1.7'  Enhancement: Added support for new sorption options in
 //                the IST package of MODFLOW 6.6.
+//               Enhancement: Added support for SORBATE option in MST and IST
+//                packages in MODFLOW 6.
+//               Enhancement: Added support for ATS_PERCEL option in ADV
+//                package in MODFLOW 6.
+//               Bug fix: Fixed assigning properties of DRT boundaries.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.6';
+  IIModelVersion = '5.3.1.7';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
@@ -17466,6 +17471,12 @@ begin
   end;
 
   Sfr6Array := FDataArrayManager.GetDataSetByName(KHydraulicConductivitySFR6);
+  if Sfr6Array <> nil then
+  begin
+    Sfr6Array.OnPostInitialize := UpdateSfr6SteadyData;
+  end;
+
+  Sfr6Array := FDataArrayManager.GetDataSetByName(KInitialStageSFR6);
   if Sfr6Array <> nil then
   begin
     Sfr6Array.OnPostInitialize := UpdateSfr6SteadyData;

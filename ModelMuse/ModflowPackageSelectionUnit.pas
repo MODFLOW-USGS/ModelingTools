@@ -2227,6 +2227,7 @@ Type
     FSaveGwtBudget: Boolean;
     FSaveGwtConcentration: Boolean;
     FSaveGwtBudgetCsv: Boolean;
+    FStorage: Boolean;
     FGwtSpecConcList: TMfBoundDispObjectList;
     FGwtRainConcList: TMfBoundDispObjectList;
     FGwtEvapConcList: TMfBoundDispObjectList;
@@ -2273,6 +2274,7 @@ Type
     procedure UpdatePkgUseList(NewUseList: TStringList;
       DataIndex: integer; const DisplayName: string);
     function GetSfr6Boundary(ScreenObject: TScreenObject): TModflowBoundary;
+    procedure SetStorage(const Value: Boolean);
   public
     procedure InitializeVariables; override;
     procedure Assign(Source: TPersistent); override;
@@ -2330,6 +2332,8 @@ Type
     property SaveGwtConcentration: Boolean read FSaveGwtConcentration
       write SetSaveGwtConcentration
       stored True;
+    // [STORAGE]
+    property Storage: Boolean read FStorage write SetStorage;
   end;
 
   TSftSolverPrintChoice = (sftNone, sftSummary, sftDetailed);
@@ -22333,6 +22337,7 @@ begin
     SaveGwtBudget := SourceSfr.SaveGwtBudget;
     SaveGwtConcentration := SourceSfr.SaveGwtConcentration;
     SaveGwtBudgetCsv := SourceSfr.SaveGwtBudgetCsv;
+    Storage := SourceSfr.Storage;
   end;
   inherited;
 end;
@@ -22813,6 +22818,7 @@ begin
   FPrintStage := True;
   FPrintFlows := True;
   FWriteConvergenceData := True;
+  FStorage := False;
 
   // GWT
   FSaveGwtBudgetCsv := False;
@@ -22903,6 +22909,11 @@ end;
 procedure TSfrModflow6PackageSelection.SetSaveStageFile(const Value: Boolean);
 begin
   SetBooleanProperty(FSaveStageFile, Value);
+end;
+
+procedure TSfrModflow6PackageSelection.SetStorage(const Value: Boolean);
+begin
+  SetBooleanProperty(FStorage, Value);
 end;
 
 procedure TSfrModflow6PackageSelection.SetStoredMaxDepthChange(

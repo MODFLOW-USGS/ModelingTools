@@ -434,6 +434,8 @@ begin
   if Source is TDrtItem then
   begin
     Drt := TDrtItem(Source);
+    Elevation := Drt.Elevation;
+    Conductance := Drt.Conductance;
     ReturnFraction := Drt.ReturnFraction;
   end;
   inherited;

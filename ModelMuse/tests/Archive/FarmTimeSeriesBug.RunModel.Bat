@@ -4,7 +4,7 @@ for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (
    set /A "start=(((%%a*60)+1%%b %% 100)*60+1%%c %% 100)*100+1%%d %% 100"
 )
 @echo on
-C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM.exe FarmTimeSeriesBug.nam /wait
+C:\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe FarmTimeSeriesBug.nam /wait
 @echo off
 rem Get end time:
 for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (

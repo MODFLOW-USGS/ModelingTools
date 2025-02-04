@@ -1,7 +1,7 @@
 ptf @
 etf %
 %ReadArrays(MF6_TestSfrMawLakMvrUzf.sfr.txt)%
-# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/5/2024 by ModelMuse version 5.1.1.53.
+# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/4/2025 by ModelMuse version 5.3.1.7.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     PRINT_INPUT
@@ -59,6 +59,25 @@ BEGIN CONNECTIONDATA
     12    11   -13
     13    12
 END CONNECTIONDATA
+
+BEGIN INITIALSTAGES
+# <rno>  <initialstage>
+# defined by Sfr1
+     1  0.000000000000E+000 
+     2  0.000000000000E+000 
+     3  0.000000000000E+000 
+     4  0.000000000000E+000 
+     5  0.000000000000E+000 
+     6  0.000000000000E+000 
+     7  0.000000000000E+000 
+     8  0.000000000000E+000 
+# defined by SFR2
+     9  0.000000000000E+000 
+    10  0.000000000000E+000 
+    11  0.000000000000E+000 
+    12  0.000000000000E+000 
+    13  0.000000000000E+000 
+END INITIALSTAGES
 
 BEGIN PERIOD      1
 # rno sfrsetting (defined by Sfr1)

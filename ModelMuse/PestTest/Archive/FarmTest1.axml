@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="FarmTest1" FileType="bin">
-    <FileName Model_Name="FarmTest1" FileType="bin">..\..\..\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM.exe</FileName>
+    <FileName Model_Name="FarmTest1" FileType="bin">..\..\..\WRDAPP\MF_OWHM_v1_0\bin\MF_OWHM_Win32.exe</FileName>
   </bin>
   <ancillary Model_Name="FarmTest1" FileType="ancillary">
     <FileName Model_Name="FarmTest1" FileType="ancillary">FarmTest1.gpt</FileName>

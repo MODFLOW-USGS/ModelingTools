@@ -1190,7 +1190,7 @@ procedure TDataArrayManager.DefinePackageDataArrays;
     ARecord.Min := 0;
   end;
 const
-  ArrayCount = 208;
+  ArrayCount = 209;
 var
   Index: integer;
 begin
@@ -3352,6 +3352,21 @@ begin
   FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
   FDataArrayCreationRecords[Index].AssociatedDataSets :=
     StrSFRMODFLOW6Packa_rhk;
+  FDataArrayCreationRecords[Index].Visible := True;
+  Inc(Index);
+
+  FDataArrayCreationRecords[Index].DataSetType := TModflowBoundaryDisplayDataArray;
+  FDataArrayCreationRecords[Index].Orientation := dso3D;
+  FDataArrayCreationRecords[Index].DataType := rdtDouble;
+  FDataArrayCreationRecords[Index].Name := KInitialStageSFR6;
+  FDataArrayCreationRecords[Index].DisplayName := StrInitialStageSFR6;
+  FDataArrayCreationRecords[Index].Formula := kModelTop;
+  FDataArrayCreationRecords[Index].Classification := StrSFRMODFLOW6;
+  FDataArrayCreationRecords[Index].DataSetNeeded := FCustomModel.SfrMf6Selected;
+  FDataArrayCreationRecords[Index].Lock := StandardLock + [dcFormula];
+  FDataArrayCreationRecords[Index].EvaluatedAt := eaBlocks;
+  FDataArrayCreationRecords[Index].AssociatedDataSets :=
+    StrSFRMODFLOW6InitialStages;
   FDataArrayCreationRecords[Index].Visible := True;
   Inc(Index);
 

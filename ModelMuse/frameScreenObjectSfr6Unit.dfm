@@ -59,7 +59,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Align = alClient
         ColCount = 2
         FixedCols = 1
-        RowCount = 7
+        RowCount = 8
         Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing, goAlwaysShowEditor]
         TabOrder = 0
         OnSetEditText = rdgFormulasSetEditText
@@ -402,9 +402,13 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Top = 340
           Width = 539
           Height = 40
-          ExplicitTop = 335
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitTop = 340
           ExplicitWidth = 539
           ExplicitHeight = 40
+          inherited lbNumber: TLabel
+            StyleElements = [seFont, seClient, seBorder]
+          end
           inherited sbAdd: TSpeedButton
             Left = 280
             ExplicitLeft = 281
@@ -418,6 +422,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             ExplicitLeft = 386
           end
           inherited seNumber: TJvSpinEdit
+            StyleElements = [seFont, seClient, seBorder]
             OnChange = frmgrdDownstreamSegmentsseNumberChange
           end
         end
@@ -471,9 +476,13 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           Top = 340
           Width = 539
           Height = 40
-          ExplicitTop = 335
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitTop = 340
           ExplicitWidth = 539
           ExplicitHeight = 40
+          inherited lbNumber: TLabel
+            StyleElements = [seFont, seClient, seBorder]
+          end
           inherited sbAdd: TSpeedButton
             Left = 280
             ExplicitLeft = 281
@@ -487,6 +496,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             ExplicitLeft = 386
           end
           inherited seNumber: TJvSpinEdit
+            StyleElements = [seFont, seClient, seBorder]
             OnChange = frmgrdDiversionsseNumberChange
           end
         end
@@ -585,11 +595,13 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         inherited Panel: TPanel
           Top = 185
           Width = 339
-          ExplicitTop = 180
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitTop = 185
           ExplicitWidth = 339
           inherited lbNumber: TLabel
             Width = 57
             Caption = 'Row count'
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitWidth = 57
           end
           inherited sbAdd: TSpeedButton
@@ -600,7 +612,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           inherited sbInsert: TSpeedButton
             Left = 271
             Width = 22
-            Hint = 'Insert row|Insert a row above the selected row.'
             OnClick = frameCrossSectionsbInsertClick
             ExplicitLeft = 271
             ExplicitWidth = 22
@@ -612,6 +623,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
             ExplicitWidth = 22
           end
           inherited seNumber: TJvSpinEdit
+            StyleElements = [seFont, seClient, seBorder]
             MinValue = 2.000000000000000000
             Value = 2.000000000000000000
             OnChange = frameCrossSectionseNumberChange
@@ -729,7 +741,7 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Exaggeration = 1.000000000000000000
         HorizontalDirection = hdRight
         Image32.Left = 0
-        Image32.Top = 67
+        Image32.Top = 0
         Image32.Width = 539
         Image32.Height = 108
         Image32.Anchors = [akLeft, akBottom]
@@ -740,7 +752,6 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         Image32.Scale = 1.000000000000000000
         Image32.ScaleMode = smNormal
         Image32.TabOrder = 0
-        Image32.ExplicitTop = 0
         ImmediateResize = True
         Magnification = 1.000000000000000000
         VerticalDirection = vdUp
@@ -758,15 +769,17 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
         TabOrder = 3
         ExplicitTop = 41
         ExplicitWidth = 200
-        ExplicitHeight = 221
+        ExplicitHeight = 226
         inherited Panel: TPanel
           Top = 185
           Width = 200
-          ExplicitTop = 180
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitTop = 185
           ExplicitWidth = 200
           inherited lbNumber: TLabel
             Width = 28
             Caption = 'Rows'
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitWidth = 28
           end
           inherited sbAdd: TSpeedButton
@@ -781,6 +794,9 @@ inherited frameScreenObjectSfr6: TframeScreenObjectSfr6
           inherited sbDelete: TSpeedButton
             Left = 168
             ExplicitLeft = 213
+          end
+          inherited seNumber: TJvSpinEdit
+            StyleElements = [seFont, seClient, seBorder]
           end
         end
         inherited Grid: TRbwDataGrid4

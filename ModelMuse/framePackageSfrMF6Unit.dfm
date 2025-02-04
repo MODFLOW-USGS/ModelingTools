@@ -6,6 +6,12 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   DesignSize = (
     492
     457)
+  inherited lblComments: TLabel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited lblPackage: TLabel
+    StyleElements = [seFont, seClient, seBorder]
+  end
   object lblMaxIterations: TLabel [2]
     Left = 167
     Top = 325
@@ -32,7 +38,8 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
   end
   inherited memoComments: TMemo
     Width = 461
-    ExplicitWidth = 396
+    StyleElements = [seFont, seClient, seBorder]
+    ExplicitWidth = 461
   end
   object cbSaveStage: TCheckBox [6]
     Left = 16
@@ -124,6 +131,15 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
     Enabled = False
     TabOrder = 9
   end
+  object cbStorage: TCheckBox [15]
+    Left = 16
+    Top = 431
+    Width = 356
+    Height = 17
+    Caption = 'Kinematic-wave routing (STORAGE)'
+    Enabled = False
+    TabOrder = 10
+  end
   inherited rcSelectionController: TRbwController
     ControlList = <
       item
@@ -158,6 +174,9 @@ inherited framePackageSfrMF6: TframePackageSfrMF6
       end
       item
         Control = cbSaveBudgetCsv
+      end
+      item
+        Control = cbStorage
       end>
   end
 end

@@ -405,6 +405,8 @@ type
     StreambedTop: Double;
     StreambedThickness: Double;
     HydraulicConductivity: Double;
+    InitialStage: double;
+
     ConnectedReaches: array of integer;
     DownstreamDiversions: TDiversionArray;
     ReachLengthAnnotation: string;
@@ -413,6 +415,8 @@ type
     StreambedTopAnnotation: string;
     StreambedThicknessAnnotation: string;
     HydraulicConductivityAnnotation: string;
+    InitialStageAnnotation: string;
+
     BoundName: string;
     ConnectedReacheAnnotations: array of string;
 
@@ -422,6 +426,7 @@ type
     PestStreambedTop: string;
     PestStreambedThickness: string;
     PestHydraulicConductivity: string;
+    PestInitialStage: string;
 
     // GWT
     StartingConcentrations: TGwtCellData;
@@ -556,6 +561,8 @@ type
     FReachLength: IFormulaObject;
     FGradient: IFormulaObject;
     FHydraulicConductivity: IFormulaObject;
+    FInitialStage: IFormulaObject;
+
     FReachWidth: IFormulaObject;
     FRoughness: string;
     FStreambedThickness: IFormulaObject;
@@ -563,6 +570,8 @@ type
     FUpstreamFraction: string;
     FReachLengthObserver: TObserver;
     FHydraulicConductivityObserver: TObserver;
+    FInitialStageObserver: TObserver;
+
     FReachWidthObserver: TObserver;
     FStreambedTopObserver: TObserver;
     FGradientObserver: TObserver;
@@ -621,11 +630,15 @@ type
     procedure SetReachLength(const Value: string);
     function GetGradient: string;
     function GetHydraulicConductivity: string;
+    function GetInitialStage: string;
+
     function GetReachWidth: string;
     function GetStreambedThickness: string;
     function GetStreambedTop: string;
     procedure SetGradient(const Value: string);
     procedure SetHydraulicConductivity(const Value: string);
+    procedure SetInitialStage(const Value: string);
+
     procedure SetReachWidth(const Value: string);
     procedure SetStreambedThickness(const Value: string);
     procedure SetStreambedTop(const Value: string);
@@ -638,6 +651,8 @@ type
     function GetStreambedThicknessObserver: TObserver;
     function GetStreambedTopObserver: TObserver;
     function GetDensityObserver: TObserver;
+    function GetInitialStageObserver: TObserver;
+
     procedure InvalidateDisplayTimeLists;
     procedure LinkReachLength;
     procedure LinkReachWidth;
@@ -645,6 +660,8 @@ type
     procedure LinkStreambedTop;
     procedure LinkStreambedThickness;
     procedure LinkHydraulicConductivity;
+    procedure LinkInitialStage;
+
     procedure InvalidateInflowData(Sender: TObject);
     procedure InvalidateRainfallData(Sender: TObject);
     procedure InvalidateEvaporationData(Sender: TObject);
@@ -734,6 +751,7 @@ type
     property StreambedTopObserver: TObserver read GetStreambedTopObserver;
     property StreambedThicknessObserver: TObserver read GetStreambedThicknessObserver;
     property HydraulicConductivityObserver: TObserver read GetHydraulicConductivityObserver;
+    property InitialStageObserver: TObserver read GetInitialStageObserver;
     function BoundaryObserverPrefix: string; override;
 
     procedure HandleChangedValue(Observer: TObserver); //override;
@@ -789,6 +807,8 @@ type
       write SetStreambedThickness;
     property HydraulicConductivity: string read GetHydraulicConductivity
       write SetHydraulicConductivity;
+//  INITIALSTAGES
+    property InitialStage: string read GetInitialStage write SetInitialStage;
     // @name is only for backwards compatibility. It is not used.
     property Roughness: string read FRoughness write FRoughness stored False;
     // @name is only for backwards compatibility. It is not used.
@@ -887,7 +907,8 @@ const
   SfrMf6StreambedTopPosition = 3;
   SfrMf6StreambedThicknessPosition = 4;
   SfrMf6HydraulicConductivityPosition = 5;
-  SfrMf6PestBoundaryOffset = 6;
+  SfrMf6InitialStagePosition = 6;
+  SfrMf6PestBoundaryOffset = 7;
 
 Const
   SfrGwtConcCount = 5;
@@ -3676,6 +3697,7 @@ begin
     StreambedTop := SourceSfr6.StreambedTop;
     StreambedThickness := SourceSfr6.StreambedThickness;
     HydraulicConductivity := SourceSfr6.HydraulicConductivity;
+    InitialStage := SourceSfr6.InitialStage;
 
     PestInflowFormula := SourceSfr6.PestInflowFormula;
     PestInflowMethod := SourceSfr6.PestInflowMethod;
@@ -4393,6 +4415,7 @@ begin
   LinkStreambedTop;
   LinkStreambedThickness;
   LinkHydraulicConductivity;
+  LinkInitialStage;
   
   ReachLength := StrObjectIntersectLength;
   ReachWidth := '1';
@@ -4400,6 +4423,7 @@ begin
   StreambedTop := '0';
   StreambedThickness := '1';
   HydraulicConductivity := '0';
+  InitialStage := kModelTop;
 
   PestInflowFormula := '';
   PestRainfallFormula := '';
@@ -4426,6 +4450,7 @@ begin
   FStreambedTop := CreateFormulaObjectBlocks(dso3D);
   FStreambedThickness := CreateFormulaObjectBlocks(dso3D);
   FHydraulicConductivity := CreateFormulaObjectBlocks(dso3D);
+  FInitialStage := CreateFormulaObjectBlocks(dso3D);
 
   FInflow := CreateFormulaObjectBlocks(dso3D);
   FRainfall := CreateFormulaObjectBlocks(dso3D);
@@ -4486,6 +4511,7 @@ begin
     FObserverList.Add(StreambedTopObserver);
     FObserverList.Add(StreambedThicknessObserver);
     FObserverList.Add(HydraulicConductivityObserver);
+    FObserverList.Add(InitialStageObserver);
 
     FObserverList.Add(PestInflowObserver);
     FObserverList.Add(PestRainfallObserver);
@@ -4577,6 +4603,7 @@ begin
   PestUpstreamFractionFormula := '';
   PestStageFormula := '';
   PestRoughnessFormula := '';
+  InitialStage := '';
 
   FDiversions.Free;
   FDownstreamSegments.Free;
@@ -4682,6 +4709,24 @@ begin
     CreateObserver('SFR6_HydraulicConductivity_', FHydraulicConductivityObserver, nil);
   end;
   result := FHydraulicConductivityObserver;
+end;
+
+function TSfrMf6Boundary.GetInitialStage: string;
+begin
+  Result := FInitialStage.Formula;
+  if ScreenObject <> nil then
+  begin
+    ResetBoundaryObserver(SfrMf6InitialStagePosition);
+  end;
+end;
+
+function TSfrMf6Boundary.GetInitialStageObserver: TObserver;
+begin
+  if FInitialStageObserver = nil then
+  begin
+    CreateObserver('SFR6_InitialStage_', FInitialStageObserver, nil);
+  end;
+  result := FInitialStageObserver;
 end;
 
 function TSfrMf6Boundary.GetPestBoundaryFormula(FormulaIndex: integer): string;
@@ -5157,6 +5202,10 @@ begin
   begin
     List.Add(FObserverList[SfrMf6HydraulicConductivityPosition]);
   end;
+  if Sender = FInitialStage as TObject then
+  begin
+    List.Add(FObserverList[SfrMf6InitialStagePosition]);
+  end;
 
   if Sender = FInflow as TObject then
   begin
@@ -5516,6 +5565,27 @@ begin
   end;
 end;
 
+procedure TSfrMf6Boundary.LinkInitialStage;
+var
+  LocalScreenObject: TScreenObject;
+  Sfr6InitialStageArray: TDataArray;
+begin
+  LocalScreenObject := ScreenObject as TScreenObject;
+  if (LocalScreenObject <> nil) and LocalScreenObject.CanInvalidateModel then
+  begin
+    LocalScreenObject.TalksTo(InitialStageObserver);
+    if ParentModel <> nil then
+    begin
+      Sfr6InitialStageArray := (ParentModel as TCustomModel).DataArrayManager.
+        GetDataSetByName(KInitialStageSFR6);
+      if Sfr6InitialStageArray <> nil then
+      begin
+        InitialStageObserver.TalksTo(Sfr6InitialStageArray);
+      end;
+    end;
+  end;
+end;
+
 procedure TSfrMf6Boundary.LinkReachLength;
 var
   LocalScreenObject: TScreenObject;
@@ -5613,6 +5683,7 @@ begin
   LinkStreambedTop;
   LinkStreambedThickness;
   LinkHydraulicConductivity;
+  LinkInitialStage;
   if CrossSection.UseCrossSection and (CrossSections.Count = 0) then
   begin
     Item := FCrossSections.Add as TimeVaryingSfr6CrossSectionItem;
@@ -5648,6 +5719,9 @@ begin
     GlobalRemoveMFBoundarySubscription,
     GlobalRestoreMFBoundarySubscription, self);
   frmGoPhast.PhastModel.FormulaManager.Remove(FStreambedTop,
+    GlobalRemoveMFBoundarySubscription,
+    GlobalRestoreMFBoundarySubscription, self);
+  frmGoPhast.PhastModel.FormulaManager.Remove(FInitialStage,
     GlobalRemoveMFBoundarySubscription,
     GlobalRestoreMFBoundarySubscription, self);
 
@@ -5723,6 +5797,11 @@ begin
   UpdateFormulaBlocks(Value, SfrMf6HydraulicConductivityPosition, FHydraulicConductivity);
 end;
 
+
+procedure TSfrMf6Boundary.SetInitialStage(const Value: string);
+begin
+  UpdateFormulaBlocks(Value, SfrMf6InitialStagePosition, FInitialStage);
+end;
 
 procedure TSfrMf6Boundary.SetPestBoundaryFormula(FormulaIndex: integer;
   const Value: string);
@@ -6812,6 +6891,7 @@ begin
   WriteCompReal(Comp, StreambedTop);
   WriteCompReal(Comp, StreambedThickness);
   WriteCompReal(Comp, HydraulicConductivity);
+  WriteCompReal(Comp, InitialStage);
 //  WriteCompReal(Comp, Roughness);
 
   WriteCompInt(Comp, Length(ConnectedReaches));
@@ -6831,6 +6911,7 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(StreambedTopAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(StreambedThicknessAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(HydraulicConductivityAnnotation));
+  WriteCompInt(Comp, Strings.IndexOf(InitialStageAnnotation));
   WriteCompInt(Comp, Strings.IndexOf(BoundName));
 
   WriteCompInt(Comp, Strings.IndexOf(PestReachLength));
@@ -6839,6 +6920,7 @@ begin
   WriteCompInt(Comp, Strings.IndexOf(PestStreambedTop));
   WriteCompInt(Comp, Strings.IndexOf(PestStreambedThickness));
   WriteCompInt(Comp, Strings.IndexOf(PestHydraulicConductivity));
+  WriteCompInt(Comp, Strings.IndexOf(PestInitialStage));
 
   WriteCompInt(Comp, Length(ConnectedReacheAnnotations));
   for index := 0 to Length(ConnectedReacheAnnotations) - 1 do
@@ -6876,6 +6958,10 @@ begin
     SfrMf6HydraulicConductivityPosition:
       begin
         result := HydraulicConductivityAnnotation;
+      end;
+    SfrMf6InitialStagePosition:
+      begin
+        result := InitialStageAnnotation;
       end;
 //    SteadyRoughnessPosition:
 //      begin
@@ -6922,6 +7008,10 @@ begin
       begin
         result := HydraulicConductivity;
       end;
+    SfrMf6InitialStagePosition:
+      begin
+        result := InitialStage;
+      end;
     else
       begin
         // GWT
@@ -6959,6 +7049,10 @@ begin
       begin
         result := PestHydraulicConductivity;
       end;
+    SfrMf6InitialStagePosition:
+      begin
+        result := PestInitialStage;
+      end;
     else
       begin
         // GWT
@@ -6993,6 +7087,7 @@ begin
   Strings.Add(StreambedTopAnnotation);
   Strings.Add(StreambedThicknessAnnotation);
   Strings.Add(HydraulicConductivityAnnotation);
+  Strings.Add(InitialStageAnnotation);
   Strings.Add(BoundName);
 
   Strings.Add(PestReachLength);
@@ -7001,6 +7096,7 @@ begin
   Strings.Add(PestStreambedTop);
   Strings.Add(PestStreambedThickness);
   Strings.Add(PestHydraulicConductivity);
+  Strings.Add(PestInitialStage);
 
 //  Strings.Add(RoughnessAnnotation);
   for index := 0 to Length(ConnectedReacheAnnotations) - 1 do
@@ -7025,6 +7121,7 @@ begin
   StreambedTop := ReadCompReal(Decomp);
   StreambedThickness := ReadCompReal(Decomp);
   HydraulicConductivity := ReadCompReal(Decomp);
+  InitialStage := ReadCompReal(Decomp);
 //  Roughness := ReadCompReal(Decomp);
 
   StreambedTop := ReadCompReal(Decomp);
@@ -7049,6 +7146,7 @@ begin
   StreambedTopAnnotation := Annotations[ReadCompInt(Decomp)];
   StreambedThicknessAnnotation := Annotations[ReadCompInt(Decomp)];
   HydraulicConductivityAnnotation := Annotations[ReadCompInt(Decomp)];
+  InitialStageAnnotation := Annotations[ReadCompInt(Decomp)];
   BoundName := Annotations[ReadCompInt(Decomp)];
 
   PestReachLength := Annotations[ReadCompInt(Decomp)];
@@ -7057,6 +7155,7 @@ begin
   PestStreambedTop := Annotations[ReadCompInt(Decomp)];
   PestStreambedThickness := Annotations[ReadCompInt(Decomp)];
   PestHydraulicConductivity := Annotations[ReadCompInt(Decomp)];
+  PestInitialStage := Annotations[ReadCompInt(Decomp)];
 
   Count := ReadCompInt(Decomp);
   SetLength(ConnectedReacheAnnotations, Count);
@@ -7097,6 +7196,10 @@ begin
     SfrMf6HydraulicConductivityPosition:
       begin
         HydraulicConductivityAnnotation := Value;
+      end;
+    SfrMf6InitialStagePosition:
+      begin
+        InitialStageAnnotation := Value;
       end;
 //    SteadyRoughnessPosition:
 //      begin
@@ -7143,6 +7246,10 @@ begin
       begin
         HydraulicConductivity := Value;
       end;
+    SfrMf6InitialStagePosition:
+      begin
+        InitialStage := Value;
+      end;
 //    SteadyRoughnessPosition:
 //      begin
 //        Roughness := Value;
@@ -7187,6 +7294,10 @@ begin
     SfrMf6HydraulicConductivityPosition:
       begin
         PestHydraulicConductivity := Value;
+      end;
+    SfrMf6InitialStagePosition:
+      begin
+        PestInitialStage := Value;
       end;
     else
       begin

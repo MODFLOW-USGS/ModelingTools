@@ -608,6 +608,7 @@ object PhastModel: TPhastModel
   ModflowPackages.SfrModflow6Package.SaveGwtBudgetCsv = True
   ModflowPackages.SfrModflow6Package.SaveGwtBudget = True
   ModflowPackages.SfrModflow6Package.SaveGwtConcentration = True
+  ModflowPackages.SfrModflow6Package.Storage = True
   ModflowPackages.MawPackage.IsSelected = True
   ModflowPackages.MawPackage.PrintHead = True
   ModflowPackages.MawPackage.SaveMawHeads = True
@@ -734,6 +735,7 @@ object PhastModel: TPhastModel
       GwtMst.FirstOrderDecay = False
       GwtMst.Sorption = gscLinear
       GwtMst.SeparatePorosity = False
+      GwtMst.Sorbate = False
       GwtIst.IsSelected = True
       GwtIst.IstPackageProperties = <
         item
@@ -748,6 +750,7 @@ object PhastModel: TPhastModel
           Width = 15
           Digits = 10
           PrintFormat = pfGeneral
+          Sorbate = False
         end>
     end>
   ModflowPackages.FarmProcess4.IsSelected = False
@@ -3049,6 +3052,7 @@ object PhastModel: TPhastModel
       ScreenObject.ModflowSfr6Boundary.StreambedTop = '0'
       ScreenObject.ModflowSfr6Boundary.StreambedThickness = '1'
       ScreenObject.ModflowSfr6Boundary.HydraulicConductivity = 'Kx'
+      ScreenObject.ModflowSfr6Boundary.InitialStage = 'Model_Top'
       ScreenObject.ModflowSfr6Boundary.PestInflowMethod = ppmMultiply
       ScreenObject.ModflowSfr6Boundary.PestRainfallMethod = ppmMultiply
       ScreenObject.ModflowSfr6Boundary.PestEvaporationMethod = ppmMultiply
@@ -4265,6 +4269,7 @@ object PhastModel: TPhastModel
       ScreenObject.ModflowSfr6Boundary.StreambedTop = '0'
       ScreenObject.ModflowSfr6Boundary.StreambedThickness = '1'
       ScreenObject.ModflowSfr6Boundary.HydraulicConductivity = 'Kx'
+      ScreenObject.ModflowSfr6Boundary.InitialStage = 'Model_Top'
       ScreenObject.ModflowSfr6Boundary.PestInflowMethod = ppmMultiply
       ScreenObject.ModflowSfr6Boundary.PestRainfallMethod = ppmMultiply
       ScreenObject.ModflowSfr6Boundary.PestEvaporationMethod = ppmMultiply
@@ -4497,6 +4502,7 @@ object PhastModel: TPhastModel
       ScreenObject.ModflowSfr6Boundary.StreambedTop = '0'
       ScreenObject.ModflowSfr6Boundary.StreambedThickness = '1'
       ScreenObject.ModflowSfr6Boundary.HydraulicConductivity = 'Kx'
+      ScreenObject.ModflowSfr6Boundary.InitialStage = 'Model_Top'
       ScreenObject.ModflowSfr6Boundary.PestInflowMethod = ppmMultiply
       ScreenObject.ModflowSfr6Boundary.PestRainfallMethod = ppmMultiply
       ScreenObject.ModflowSfr6Boundary.PestEvaporationMethod = ppmMultiply
@@ -4782,7 +4788,7 @@ object PhastModel: TPhastModel
       MixtureFormulas.Strings = (
         '')
     end>
-  Version = '5.3.1.6'
+  Version = '5.3.1.7'
   GuiSettings.FrontHeight = 133
   GuiSettings.Height = 600
   GuiSettings.FrontX = -570.788530465949600000
@@ -8306,6 +8312,46 @@ object PhastModel: TPhastModel
       DataSet.TemplateNeeded = False
       DataSet.UseValuesForObservations = False
       DataSet.StoredObservationDistance.Value = 0.000000000000000000
+    end
+    item
+      DataSetClass = 'TModflowBoundaryDisplayDataArray'
+      DataSetFormula = 'Model_Top'
+      DataSet.Name = 'SFR6_InitialStage'
+      DataSet.Classification = 'SFR MODFLOW 6'
+      DataSet.CheckMax = False
+      DataSet.CheckMin = False
+      DataSet.DataType = rdtDouble
+      DataSet.EvaluatedAt = eaBlocks
+      DataSet.Limits.LowerLimit.BooleanLimitValue = False
+      DataSet.Limits.LowerLimit.DataType = rdtDouble
+      DataSet.Limits.LowerLimit.IntegerLimitValue = 0
+      DataSet.Limits.LowerLimit.UseLimit = False
+      DataSet.Limits.UpperLimit.BooleanLimitValue = False
+      DataSet.Limits.UpperLimit.DataType = rdtDouble
+      DataSet.Limits.UpperLimit.IntegerLimitValue = 0
+      DataSet.Limits.UpperLimit.UseLimit = False
+      DataSet.Limits.LogTransform = False
+      DataSet.Limits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.ContourLimits.LowerLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.LowerLimit.DataType = rdtDouble
+      DataSet.ContourLimits.LowerLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.LowerLimit.UseLimit = False
+      DataSet.ContourLimits.UpperLimit.BooleanLimitValue = False
+      DataSet.ContourLimits.UpperLimit.DataType = rdtDouble
+      DataSet.ContourLimits.UpperLimit.IntegerLimitValue = 0
+      DataSet.ContourLimits.UpperLimit.UseLimit = False
+      DataSet.ContourLimits.LogTransform = False
+      DataSet.ContourLimits.StoredEpsilon.Value = 0.000001000000000000
+      DataSet.Lock = [dcName, dcType, dcOrientation, dcEvaluatedAt, dcFormula]
+      DataSet.Orientation = dso3D
+      DataSet.AngleType = atNone
+      DataSet.ContourInterval.Value = 0.000000000000000000
+      DataSet.PestParametersUsed = False
+      DataSet.PestParametersAllowed = True
+      DataSet.TemplateNeeded = False
+      DataSet.UseValuesForObservations = False
+      DataSet.StoredObservationDistance.Value = 0.000000000000000000
+      DataSet.AddMethod = vamAdd
     end>
   CombinedDisplayColumn = 0
   CombinedDisplayRow = 0

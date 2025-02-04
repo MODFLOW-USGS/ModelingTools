@@ -28,6 +28,7 @@ type
     FTIME_CONVERSION: TRealOption;
     UNIT_CONVERSION: TRealOption;
     FMAXIMUM_DEPTH_CHANGE: TRealOption;
+    FSTORAGE: Boolean;
     procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
     function GetAUXILIARY(Index: Integer): string;
     function GetCount: Integer;
@@ -43,6 +44,7 @@ type
     property BUDGET: Boolean read FBUDGET;
     property BUDGETCSV: Boolean read FBUDGETCSV;
     property PACKAGE_CONVERGENCE: Boolean read FPACKAGE_CONVERGENCE;
+    property STORAGE: Boolean read FSTORAGE;
     property MAXIMUM_PICARD_ITERATIONS: TIntegerOption read FMAXIMUM_PICARD_ITERATIONS;
     property MAXIMUM_ITERATIONS: TIntegerOption read FMAXIMUM_ITERATIONS;
     property LENGTH_CONVERSION: TRealOption read FLENGTH_CONVERSION;
@@ -194,6 +196,28 @@ type
     property Items[index: Integer]: TSfrDiversionItem read GetItem; default;
   end;
 
+  TSfrInitialStageItem = record
+    rno: Integer;
+    initialstage: Extended;
+  end;
+
+  TSfrInitialStageList = TList<TSfrInitialStageItem>;
+
+  TInitialStages = class(TCustomMf6Persistent)
+  private
+    FItems: TSfrInitialStageList;
+    procedure Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+    function GetCount: Integer;
+    function GetItem(index: Integer): TSfrInitialStageItem;
+  protected
+    procedure Initialize; override;
+  public
+    constructor Create(PackageType: string); override;
+    destructor Destroy; override;
+    property Count: Integer read GetCount;
+    property Items[index: Integer]: TSfrInitialStageItem read GetItem; default;
+  end;
+
   TSfrPeriod = class(TCustomMf6Persistent)
   private
     IPER: Integer;
@@ -226,6 +250,7 @@ type
     FObservationsPackages: TPackageList;
     FCosssSectionDictionary: TDictionary<string, TPackage>;
     FCosssSectionPackages: TPackageList;
+    FInitialStages: TInitialStages;
     function GetObservation(Index: Integer): TPackage;
     function GetObservationCount: Integer;
     function GetPeriod(Index: Integer): TSfrPeriod;
@@ -241,6 +266,7 @@ type
     property PackageData: TSfrPackageData read FPackageData;
     property CrossSections: TSfrCrossSections read FSfrCrossSections;
     property Diversions: TSfrDiversions read FSfrDiversions;
+    property InitialStages: TInitialStages read FInitialStages;
     property PeriodCount: Integer read GetPeriodCount;
     property Periods[Index: Integer]: TSfrPeriod read GetPeriod;
     property TimeSeriesCount: Integer read GetTimeSeriesCount;
@@ -309,6 +335,7 @@ begin
   FBUDGET := False;
   FBUDGETCSV := False;
   FPACKAGE_CONVERGENCE := False;
+  FSTORAGE := False;
   TS6_FileNames.Clear;
   Obs6_FileNames.Clear;
   MOVER := False;
@@ -454,6 +481,10 @@ begin
       FSplitter.DelimitedText := CaseSensitiveLine;
       Obs_FileName := FSplitter[2];
       Obs6_FileNames.Add(Obs_FileName);
+    end
+   else if (FSplitter[0] = 'STORAGE') THEN
+    begin
+      FSTORAGE := True;
     end
     else
     begin
@@ -1027,7 +1058,7 @@ begin
     begin
       // do nothing
     end
-    else if (FSplitter.Count >- 4)
+    else if (FSplitter.Count >= 4)
       and TryStrToInt(FSplitter[0],Item.rno)
       and TryStrToInt(FSplitter[1],Item.idv)
       and TryStrToInt(FSplitter[2],Item.iconr)
@@ -1210,6 +1241,7 @@ begin
   FSfrCrossSections := TSfrCrossSections.Create(PackageType);
   FConnections := TSfrConnections.Create(PackageType);
   FSfrDiversions := TSfrDiversions.Create(PackageType);
+  FInitialStages := TInitialStages.Create(PackageType);
   FPeriods := TSfrPeriodList.Create;
   FTimeSeriesPackages := TPackageList.Create;
   FObservationsPackages := TPackageList.Create;
@@ -1225,6 +1257,7 @@ begin
   FSfrCrossSections.Free;
   FConnections.Free;
   FSfrDiversions.Free;
+  FInitialStages.Free;
   FPeriods.Free;
   FTimeSeriesPackages.Free;
   FObservationsPackages.Free;
@@ -1332,6 +1365,10 @@ begin
       begin
         FSfrDiversions.Read(Stream, Unhandled);
       end
+      else if FSplitter[1] ='INITIALSTAGES' then
+      begin
+        FInitialStages.Read(Stream, Unhandled);
+      end
       else if (FSplitter[1] ='PERIOD') and (FSplitter.Count >= 3) then
       begin
         if TryStrToInt(FSplitter[2], IPER) then
@@ -1430,6 +1467,85 @@ begin
       end;
     end;
   end;
+end;
+
+{ TInitialStages }
+
+constructor TInitialStages.Create(PackageType: string);
+begin
+  FItems := TSfrInitialStageList.Create;
+  inherited;
+end;
+
+destructor TInitialStages.Destroy;
+begin
+  FItems.Free;
+  inherited;
+end;
+
+function TInitialStages.GetCount: Integer;
+begin
+  result := FItems.Count;
+end;
+
+function TInitialStages.GetItem(index: Integer): TSfrInitialStageItem;
+begin
+  result := FItems[index];
+end;
+
+procedure TInitialStages.Initialize;
+begin
+  inherited;
+  FItems.Clear;
+end;
+
+procedure TInitialStages.Read(Stream: TStreamReader; Unhandled: TStreamWriter);
+var
+  ALine: string;
+  ErrorLine: string;
+  Item: TSfrInitialStageItem;
+begin
+  Initialize;
+  while not Stream.EndOfStream do
+  begin
+    ALine := Stream.ReadLine;
+    RestoreStream(Stream);
+    ErrorLine := ALine;
+    ALine := StripFollowingComments(ALine);
+    if ALine = '' then
+    begin
+      Continue;
+    end;
+
+    if ReadEndOfSection(ALine, ErrorLine, 'INITIALSTAGES', Unhandled) then
+    begin
+      Exit;
+    end;
+
+    if SwitchToAnotherFile(Stream, ErrorLine, Unhandled, ALine, 'INITIALSTAGES') then
+    begin
+      // do nothing
+    end
+    else if (FSplitter.Count >= 2)
+      and TryStrToInt(FSplitter[0],Item.rno)
+      and TryFortranStrToFloat(FSplitter[1], Item.initialstage)
+      then
+    begin
+      FItems.Add(Item);
+    end
+    else
+    begin
+      Unhandled.WriteLine(Format('Unrecognized %s INITIALSTAGES in the following line', [FPackageType]));
+      Unhandled.WriteLine(ErrorLine);
+    end;
+  end;
+  FItems.Sort(
+    TComparer<TSfrInitialStageItem>.Construct(
+      function(const Left, Right: TSfrInitialStageItem): Integer
+      begin
+        Result := Left.rno - Right.rno;
+      end
+    ));
 end;
 
 end.

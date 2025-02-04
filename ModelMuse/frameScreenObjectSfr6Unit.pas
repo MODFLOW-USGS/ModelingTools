@@ -20,7 +20,7 @@ type
   Tsfr6DiversionCol = (s6dcSegment, d6dcPriority);
 
   TSfr6BoundaryRows = (s6brNone, s6brReachLength, s6brReachWidth, s6brGradient,
-    s6brStreambedTop, s6brStreambedThickness, s6brHydraulicConductivity);
+    s6brStreambedTop, s6brStreambedThickness, s6brHydraulicConductivity, s6brInitialStage);
 
   TSfr6CrossSectionCol = (scsXFraction, scsHeight, scsManningFraction);
 
@@ -184,6 +184,7 @@ resourcestring
   StrStreambedTopRtp = 'Streambed top (rtp)';
   StrStreambedThickness = 'Streambed thickness (rbth)';
   StrHydraulicConductivi = 'Hydraulic conductivity (rhk)';
+  StrInitialStage = 'Initial Stage';
   StrInactive = 'Inactive';
   StrActive = 'Active';
   StrTheMinimumSFRCros = 'The minimum SFR cross section height must be zero.';
@@ -785,6 +786,7 @@ begin
             rdgFormulas.Cells[1, Ord(s6brStreambedTop)] := Sf6Boundary.StreambedTop;
             rdgFormulas.Cells[1, Ord(s6brStreambedThickness)] := Sf6Boundary.StreambedThickness;
             rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)] := Sf6Boundary.HydraulicConductivity;
+            rdgFormulas.Cells[1, Ord(s6brInitialStage)] := Sf6Boundary.InitialStage;
 
             DownstreamSegments := Sf6Boundary.DownstreamSegments;
             frmgrdDownstreamSegments.seNumber.AsInteger :=
@@ -1046,6 +1048,10 @@ begin
             if rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)] <> Sf6Boundary.HydraulicConductivity then
             begin
               rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)] := '';
+            end;
+            if rdgFormulas.Cells[1, Ord(s6brInitialStage)] <> Sf6Boundary.InitialStage then
+            begin
+              rdgFormulas.Cells[1, Ord(s6brInitialStage)] := '';
             end;
 
             if (comboCrossSection.ItemIndex <> -1) then
@@ -1332,6 +1338,7 @@ begin
     rdgFormulas.Cells[0,Ord(s6brStreambedTop)] := StrStreambedTopRtp;
     rdgFormulas.Cells[0,Ord(s6brStreambedThickness)] := StrStreambedThickness;
     rdgFormulas.Cells[0,Ord(s6brHydraulicConductivity)] := StrHydraulicConductivi;
+    rdgFormulas.Cells[0,Ord(s6brInitialStage)] := StrInitialStage;
 //    rdgFormulas.Cells[0,Ord(s6brRoughness)] := 'Roughness (man)';
 //    rdgFormulas.Cells[0,Ord(s6brUpstreamFraction)] := 'Upstream fraction (ustrf)';
 
@@ -1341,6 +1348,7 @@ begin
     rdgFormulas.Cells[1, Ord(s6brStreambedTop)] := '0';
     rdgFormulas.Cells[1, Ord(s6brStreambedThickness)] := '1';
     rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)] := rsKx;
+    rdgFormulas.Cells[1, Ord(s6brInitialStage)] := kModelTop;
 //    rdgFormulas.Cells[1, Ord(s6brRoughness)] := '0';
 //    rdgFormulas.Cells[1, Ord(s6brUpstreamFraction)] := '1';
   finally
@@ -1878,6 +1886,10 @@ begin
       if Trim(rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)]) <> '' then
       begin
         Boundary.HydraulicConductivity := rdgFormulas.Cells[1, Ord(s6brHydraulicConductivity)];
+      end;
+      if Trim(rdgFormulas.Cells[1, Ord(s6brInitialStage)]) <> '' then
+      begin
+        Boundary.InitialStage := rdgFormulas.Cells[1, Ord(s6brInitialStage)];
       end;
 
       if tabDownstreamSegments.TabVisible then

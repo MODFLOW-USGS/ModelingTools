@@ -525,6 +525,7 @@ const
   KStreambedTopSFR6 = 'SFR6_StreambedTop';
   KStreambedThicknessSFR6 = 'SFR6_StreambedThickness';
   KHydraulicConductivitySFR6 = 'SFR6_HydraulicConductivity';
+  KInitialStageSFR6 = 'SFR6_InitialStage';
   KMAWRadius = 'MAW_Radius';
   KMAWBottom = 'MAW_Bottom';
   KMAWInitialHead = 'MAW_Initial_Head';
@@ -774,6 +775,7 @@ resourcestring
   StrSFRMODFLOW6Packa_rtp = 'SFR MODFLOW 6, Package Data: rtp';
   StrSFRMODFLOW6Packa_rbth = 'SFR MODFLOW 6, Package Data: rbth';
   StrSFRMODFLOW6Packa_rhk = 'SFR MODFLOW 6, Package Data: rhk';
+  StrSFRMODFLOW6InitialStages = 'SFR MODFLOW 6, INITIALSTAGES Data';
   StrMAW = 'MAW';
   StrMAWMODFLOW6Packa_radius = 'MAW MODFLOW 6, Package Data: radius';
   StrMAWMODFLOW6Packa_bottom = 'MAW MODFLOW 6, Package Data: bottom';
@@ -1145,6 +1147,7 @@ resourcestring
   StrStreambedTopSFR6 = KStreambedTopSFR6;
   StrStreambedThicknessSFR6 = KStreambedThicknessSFR6;
   StrHydraulicConductivitySFR6 = KHydraulicConductivitySFR6;
+  StrInitialStageSFR6 = KInitialStageSFR6;
   StrMAWRadius = KMAWRadius;
   StrMAWBottom = KMAWBottom;
   StrMAWInitialHead = KMAWInitialHead;

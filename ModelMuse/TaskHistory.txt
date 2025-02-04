@@ -34088,5 +34088,24 @@ object TTaskHistory
         'Import'
         'MF-2015'
         'MF6 GWT')
+    end
+    item
+      Date = 45689.000000000000000000
+    end
+    item
+      Date = 45690.000000000000000000
+      Categories.Strings = (
+        'Bug fix')
+    end
+    item
+      Date = 45691.000000000000000000
+    end
+    item
+      Date = 45692.000000000000000000
+      Categories.Strings = (
+        'Dialog boxes'
+        'Testing'
+        'Import'
+        'MF-2015')
     end>
 end
