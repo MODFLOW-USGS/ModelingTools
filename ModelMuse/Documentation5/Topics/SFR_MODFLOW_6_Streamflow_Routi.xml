@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2024-02-15T11:31:08.765-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2025-02-05T10:51:18.349-05:00" lasteditedby="rbwinst" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">SFR: MODFLOW 6 Streamflow Routing Package Pane</title>
   <body>
     <header>
@@ -22,6 +22,7 @@
             <li styleclass="Normal"><text styleclass="Strong" translate="true">Streambed top (rtp)</text><text styleclass="Normal" translate="true"> the top elevation of the reach streambed.</text></li>
             <li styleclass="Normal"><text styleclass="Strong" translate="true">Streambed thickness (rbth)</text><text styleclass="Normal" translate="true"> is the thickness of the reach streambed. RBTH can be any value if the reach is in a vertical pass-through cell. Otherwise, RBTH must be greater than zero.</text></li>
             <li styleclass="Normal"><text styleclass="Strong" translate="true">Hydraulic conductivity (rhk)</text><text styleclass="Normal" translate="true"> is the hydraulic conductivity of the reach streambed. RHK can be any positive value if the reach is in &#160;a vertical pass-through cell. Otherwise, RHK must be greater than zero.</text></li>
+            <li styleclass="Normal"><text styleclass="Strong" translate="true">Initial Stage</text><text styleclass="Normal" translate="true"> is the head in the stream at the beginning of the simulation. initial stage data are used only if STORAGE is specified in the Options block and the first stress period is transient or for reaches defined to use the SIMPLE STATUS in the Period block. The initial stage must be greater than or equal to the streambed top.</text></li>
           </list>
         </td>
       </tr>

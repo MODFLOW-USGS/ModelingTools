@@ -10785,7 +10785,6 @@ begin
           if Formula = '' then
           begin
             WriteFloat(Value);
-  //          Exit;
           end
           else
           begin

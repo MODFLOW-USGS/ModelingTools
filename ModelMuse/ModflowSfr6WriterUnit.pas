@@ -221,6 +221,21 @@ resourcestring
   StrTheDownstreamReach = 'The downstream reaches of %s are all inactive in ' +
   'stress period %d.';
   StrInitialStage = 'Initial Stage';
+  StrDiversionSegmentAl = 'Diversion segment also listed as downstream segme' +
+  'nt';
+  StrIn0s1dIsLis = 'In %0:s, %1:d is listed as both a downstream segment and' +
+  ' diversion segment.';
+  StrDummyAssignmentOut = 'dummy assignment outside of model area';
+  StrInvalidUseOfADat = 'Invalid use of a data set in formula for an SFR obj' +
+  'ect outside the grid.';
+  StrInvalidDataArrayI = 'Invalid data array in formula for an SFR object ou' +
+  'tside the grid.';
+  StrObject0sFormu = 'Object = %0:s; Formual = %1:s';
+  StrTopAboveStage = 'In the SFR package, the stream top is above the initial stream stage';
+  StrObject0sLayerDisv = 'Object: %0:s; (Layer, Cell): (%1:d, %2:d); Stream top:' +
+  ' %3:g; Initial Stage: %4:g';
+  StrObject0sLayer = 'Object: %0:s; (Layer, Row, Column): (%1:d, %2:d, %3:d)' +
+  '; Stream top: %4:g; Initial Stage: %5:g';
 
 { TModflowSFR_MF6_Writer }
 
@@ -363,8 +378,8 @@ begin
         DivSeg := ASegment.FSfr6Boundary.Diversions[DiversionIndex].DownstreamSegment;
         if ASegment.FSfr6Boundary.DownstreamSegments.IndexOf(DivSeg) >= 0 then
         begin
-          frmErrorsAndWarnings.AddError(Model, 'Diversion segment also listed as downstream segment',
-            Format('In %0:s, %1:d is listed as both a downstream segment and diversion segment.',
+          frmErrorsAndWarnings.AddError(Model, StrDiversionSegmentAl,
+            Format(StrIn0s1dIsLis,
             [ASegment.FScreenObject.Name, DivSeg]),  ASegment.FScreenObject);
         end;
       end;
@@ -601,7 +616,7 @@ begin
     if CellList.Count = 0 then
     begin
       CellList.Add(TCellAssignment.Create(0,0,0, nil, 0,
-        'dummy assignment outside of model area', amIntersect));
+        StrDummyAssignmentOut, amIntersect));
       OutsideGridCell := True;
     end;
     ASegment.ReachCount := CellList.Count;
@@ -626,7 +641,7 @@ begin
         DataArray := Model.DataArrayManager.GetDataSetByName(Formula);
         if OutsideGridCell and (DataArray <> nil) then
         begin
-          frmErrorsAndWarnings.AddError(Model, 'Invalid use of a data set in formula for an SFR object outside the grid.',
+          frmErrorsAndWarnings.AddError(Model, StrInvalidUseOfADat,
             Format('%s', [ASegment.FScreenObject.Name]), ASegment.FScreenObject);
         end;
         if (DataArray <> nil) and DataArray.PestParametersUsed then
@@ -670,7 +685,7 @@ begin
           Model.DataArrayManager.AddDataSetToCache(ADataSet);
           if OutsideGridCell then
           begin
-            frmErrorsAndWarnings.AddError(Model, 'Invalid data array in formula for an SFR object outside the grid.',
+            frmErrorsAndWarnings.AddError(Model, StrInvalidDataArrayI,
               Format('%s', [ASegment.FScreenObject.Name]), ASegment.FScreenObject);
           end;
         end;
@@ -726,7 +741,7 @@ begin
                 Model.DataArrayManager.DataSets[DataSetIndex];
               if OutsideGridCell then
               begin
-                frmErrorsAndWarnings.AddError(Model, 'Invalid data array in formula for an SFR object outside the grid.',
+                frmErrorsAndWarnings.AddError(Model, StrInvalidDataArrayI,
                   Format('%s', [ASegment.FScreenObject.Name]), ASegment.FScreenObject);
               end;
               Assert(Model = (ADataSet.Model as TCustomModel));
@@ -799,7 +814,7 @@ begin
               AnnotationString := E.Message;
             end;
             frmErrorsAndWarnings.AddWarning(Model, StrDivideByZeroInSF,
-            Format('Object = %0:s; Formual = %1:s', [ASegment.FScreenObject.Name, Formula])
+            Format(StrObject0sFormu, [ASegment.FScreenObject.Name, Formula])
              , ASegment.FScreenObject);
           end;
         end;
@@ -825,6 +840,31 @@ begin
           CellValues.WarningCell.Row+1, CellValues.WarningCell.Column+1, ASegment.ScreenObject.Name,
           CellValues.StreambedTop, CellValues.StreambedThickness, CellBottom]),
           ASegment.ScreenObject);
+      end;
+
+      if (CellValues.PestStreambedTop = '') and (CellValues.PestInitialStage = '') then
+      begin
+        if CellValues.InitialStage < CellValues.StreambedTop then
+        begin
+          if Model.DisvUsed then
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrTopAboveStage,
+              Format(StrObject0sLayerDisv,
+              [ASegment.FScreenObject.Name, CellValues.Cell.Layer+1,
+              CellValues.Cell.Column+1,
+              CellValues.StreambedTop, CellValues.InitialStage]),
+              ASegment.FScreenObject);
+          end
+          else
+          begin
+            frmErrorsAndWarnings.AddError(Model, StrTopAboveStage,
+              Format(StrObject0sLayer,
+              [ASegment.FScreenObject.Name, CellValues.Cell.Layer+1,
+              CellValues.Cell.Row+1, CellValues.Cell.Column+1,
+              CellValues.StreambedTop, CellValues.InitialStage]),
+              ASegment.FScreenObject);
+          end;
+        end;
       end;
     end;
 
@@ -921,7 +961,7 @@ begin
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrInvalidMinimumCros);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrNoActiveSFRDownst);
   frmErrorsAndWarnings.RemoveErrorGroup(Model, StrSFRUpstreamValues);
-
+  frmErrorsAndWarnings.RemoveErrorGroup(Model, StrTopAboveStage);
 
   StartTime := Model.ModflowFullStressPeriods.First.StartTime;
   EndTime := Model.ModflowFullStressPeriods.Last.Endtime;
@@ -2225,7 +2265,7 @@ begin
   if SfrMf6Package.WriteConvergenceData then
   begin
     WriteString('  PACKAGE_CONVERGENCE FILEOUT ');
-    CsvFile := ChangeFileExt(BaseFileName, '.SfrConvergence.CSV');
+    CsvFile := ChangeFileExt(BaseFileName, '.SfrConvergence.csv');
     Model.AddModelOutputFile(CsvFile);
     CsvFile := ExtractFileName(CsvFile);
     WriteString(CsvFile);
@@ -2813,8 +2853,6 @@ var
   ReachNumber: Integer;
   ReachIndex: Integer;
   ReachProp: TSfrMF6ConstantRecord;
-  ACellList: TValueCellList;
-  ACell: TSfrMf6_Cell;
 begin
   WriteString('BEGIN INITIALSTAGES');
   NewLine;
@@ -2825,8 +2863,6 @@ begin
   for SegmentIndex := 0 to FSegments.Count - 1 do
   begin
     ASegment := FSegments[SegmentIndex];
-    ACellList := ASegment.FReaches[0];
-    Assert(ACellList.Count = Length(ASegment.SteadyValues));
     for ReachIndex := 0 to Length(ASegment.SteadyValues) - 1 do
     begin
       if ReachIndex = 0 then
@@ -2839,91 +2875,12 @@ begin
       WriteInteger(ReachNumber);
 
       ReachProp := ASegment.SteadyValues[ReachIndex];
-      ACell := ACellList[ReachIndex] as TSfrMF6_Cell;
-
-//      if not ReachProp.OutsideGridCell then
-//      begin
-//        WriteInteger(ReachProp.Cell.Layer+1);
-//        if not Model.DisvUsed then
-//        begin
-//          WriteInteger(ReachProp.Cell.Row+1);
-//        end;
-//        WriteInteger(ReachProp.Cell.Column+1);
-//      end
-//      else
-//      begin
-//        WriteInteger(0);
-//        if not Model.DisvUsed then
-//        begin
-//          WriteInteger(0);
-//        end;
-//        WriteInteger(0);
-//      end;
-//      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestReachLength,
-//        ReachProp.ReachLength, ReachProp.Cell.Layer, ReachProp.Cell.Row,
-//        ReachProp.Cell.Column);
-//
-//      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestReachWidth,
-//        ReachProp.ReachWidth, ReachProp.Cell.Layer, ReachProp.Cell.Row,
-//        ReachProp.Cell.Column);
-//
-//      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestGradient,
-//        ReachProp.Gradient, ReachProp.Cell.Layer, ReachProp.Cell.Row,
-//        ReachProp.Cell.Column);
-//
-//      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestStreambedTop,
-//        ReachProp.StreambedTop, ReachProp.Cell.Layer, ReachProp.Cell.Row,
-//        ReachProp.Cell.Column);
-//
-//      WriteFormulaOrValueBasedOnAPestName(ReachProp.PestStreambedThickness,
-//        ReachProp.StreambedThickness, ReachProp.Cell.Layer, ReachProp.Cell.Row,
-//        ReachProp.Cell.Column);
 
       WriteFormulaOrValueBasedOnAPestName(ReachProp.PestInitialStage,
         ReachProp.InitialStage, ReachProp.Cell.Layer, ReachProp.Cell.Row,
         ReachProp.Cell.Column);
-
-//      WriteValueOrFormula(ACell, SfrMf6RoughnessPosition);
-//
-//      ncon := Length(ReachProp.ConnectedReaches);
-//      WriteInteger(ncon);
-//
-//      if ACell.Values.Status <> ssInactive then
-//      begin
-//        WriteValueOrFormula(ACell, SfrMf6UpstreamFractionPosition);
-//      end
-//      else
-//      begin
-//        WriteFloat(0);
-//      end;
-//
-//      if ReachIndex = Length(ASegment.SteadyValues) - 1 then
-//      begin
-//        ndiv := ASegment.FSfr6Boundary.Diversions.Count;
-//      end
-//      else
-//      begin
-//        ndiv := 0;
-//      end;
-//      WriteInteger(ndiv);
-
-//      if Model.BuoyancyDensityUsed then
-//      begin
-//        WriteFloat(0);
-//      end;
-
-//      if Model.GwtUsed then
-//      begin
-//        for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
-//        begin
-//          WriteFloat(0);
-//        end;
-//      end;
-//
-//      boundname := ' ' + Copy(ReachProp.BoundName, 1, MaxBoundNameLength);
-//      WriteString(boundname);
-
       NewLine;
+
     end;
   end;
   WriteString('END INITIALSTAGES');

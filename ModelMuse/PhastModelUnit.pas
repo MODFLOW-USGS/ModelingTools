@@ -10400,6 +10400,9 @@ const
 //                package in MODFLOW 6.
 //               Bug fix: Fixed assigning properties of DRT boundaries.
 
+//               Enhancement: Added support for STORAGE option and INITIALSTAGES
+//                blocks in the SFR package in MODFLOW 6.
+
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
