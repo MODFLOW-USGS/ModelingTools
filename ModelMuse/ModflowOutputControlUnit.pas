@@ -258,6 +258,7 @@ begin
     SaveBudgetSummary := SourceOutputControl.SaveBudgetSummary;
     ConcentrationOC := SourceOutputControl.ConcentrationOC;
     SaveBudgetCSV := SourceOutputControl.SaveBudgetCSV;
+    ExportArrays := SourceOutputControl.ExportArrays;
   end
   else
   begin

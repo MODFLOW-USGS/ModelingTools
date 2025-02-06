@@ -128,6 +128,7 @@ var
 begin
   WriteBeginOptions;
   WriteSaveFlowsOption;
+  WriteExportAsciiArray;
 
   StoPackage := Model.ModflowPackages.StoPackage;
   if StoPackage.StorageChoice = scStorageCoefficient then

@@ -1,6 +1,7 @@
-# DSP: GWT Dispersion Package file created on 1/30/2025 by ModelMuse version 5.3.1.6.
+# DSP: GWT Dispersion Package file created on 2/6/2025 by ModelMuse version 5.3.1.7.
 BEGIN OPTIONS
   XT3D_OFF
+  EXPORT_ARRAY_ASCII
 END OPTIONS
 
 BEGIN GRIDDATA

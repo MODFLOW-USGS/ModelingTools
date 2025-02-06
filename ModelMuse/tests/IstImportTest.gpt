@@ -989,6 +989,7 @@ object PhastModel: TPhastModel
   ModflowPackages.SfrModflow6Package.SaveGwtBudgetCsv = False
   ModflowPackages.SfrModflow6Package.SaveGwtBudget = True
   ModflowPackages.SfrModflow6Package.SaveGwtConcentration = True
+  ModflowPackages.SfrModflow6Package.Storage = False
   ModflowPackages.MawPackage.IsSelected = False
   ModflowPackages.MawPackage.PrintHead = True
   ModflowPackages.MawPackage.SaveMawHeads = True
@@ -2514,7 +2515,7 @@ object PhastModel: TPhastModel
       ScreenObject.DynamicTimesSeriesCollections = <>
       SelectedVertices = <>
     end>
-  Version = '5.3.1.6'
+  Version = '5.3.1.7'
   GuiSettings.FrontHeight = 133
   GuiSettings.Height = 600
   GuiSettings.FrontX = -176.668424753867600000
@@ -2684,7 +2685,7 @@ object PhastModel: TPhastModel
   ModflowOutputControl.ConcentrationOC.SaveInExternalFile = True
   ModflowOutputControl.ConcentrationOC.Wrapping = wStrip
   ModflowOutputControl.SaveBudgetCSV = False
-  ModflowOutputControl.ExportArrays = False
+  ModflowOutputControl.ExportArrays = True
   Mt3dmsOutputControl.SaveConcentrations = True
   Mt3dmsOutputControl.OutputFreqChoice = mofEndOfSimulation
   Mt3dmsOutputControl.PeriodicOutputCount = 1

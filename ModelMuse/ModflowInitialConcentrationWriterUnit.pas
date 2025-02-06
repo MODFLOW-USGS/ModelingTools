@@ -62,7 +62,6 @@ procedure TGwtInitialConcWriter.WriteInitialConcentrations;
 var
   Item: TMobileChemSpeciesItem;
   DataArray: TDataArray;
-//  LayerIndex: Integer;
   DataSetName: string;
 begin
   Item := Model.MobileComponents[FSpeciesIndex];

@@ -10402,6 +10402,8 @@ const
 
 //               Enhancement: Added support for STORAGE option and INITIALSTAGES
 //                blocks in the SFR package in MODFLOW 6.
+//               Bug fix: Fixed saving "EXPORT_ARRAY_ASCII" option in the
+//                MODFLOW Output Control dialog box.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
