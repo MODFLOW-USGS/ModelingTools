@@ -1,4 +1,4 @@
-# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/4/2025 by ModelMuse version 5.3.1.7.
+# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/6/2025 by ModelMuse version 5.3.1.7.
 BEGIN OPTIONS
   AUXILIARY Chem
     PRINT_INPUT
@@ -10,7 +10,7 @@ BEGIN OPTIONS
     STAGE FILEOUT SftTimeSeries.stage
     BUDGET FILEOUT SftTimeSeries.sfr_budget
     BUDGETCSV FILEOUT SftTimeSeries.sfr_budget.csv
-  PACKAGE_CONVERGENCE FILEOUT SftTimeSeries.SfrConvergence.CSV
+  PACKAGE_CONVERGENCE FILEOUT SftTimeSeries.SfrConvergence.csv
     MAXIMUM_ITERATIONS   100
     MAXIMUM_DEPTH_CHANGE  1.000000000000E-005 
     LENGTH_CONVERSION  3.280810000000E+000 

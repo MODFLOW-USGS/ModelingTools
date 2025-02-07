@@ -10391,7 +10391,6 @@ const
 //                Shapefiles.
 //    '5.3.1.6'  Bug fix: Fixed export of objects as shapefiles for certain
 //                MODFLOW 6 features.
-
 //    '5.3.1.7'  Enhancement: Added support for new sorption options in
 //                the IST package of MODFLOW 6.6.
 //               Enhancement: Added support for SORBATE option in MST and IST
@@ -10399,8 +10398,7 @@ const
 //               Enhancement: Added support for ATS_PERCEL option in ADV
 //                package in MODFLOW 6.
 //               Bug fix: Fixed assigning properties of DRT boundaries.
-
-//               Enhancement: Added support for STORAGE option and INITIALSTAGES
+//    '5.3.1.8'  Enhancement: Added support for STORAGE option and INITIALSTAGES
 //                blocks in the SFR package in MODFLOW 6.
 //               Bug fix: Fixed saving "EXPORT_ARRAY_ASCII" option in the
 //                MODFLOW Output Control dialog box.
@@ -10410,7 +10408,7 @@ const
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.7';
+  IIModelVersion = '5.3.1.8';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }

@@ -82,7 +82,7 @@
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_runoff_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_stage_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.sfr_upstream-flow_ob.csv</FileName>
-    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.SfrConvergence.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">MF6_TestSfrMawLak.stage</FileName>
     <FileName Model_Name="MF6_TestSfrMawLak" FileType="Model Output">mfsim.lst</FileName>
   </output>

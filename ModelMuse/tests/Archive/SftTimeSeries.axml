@@ -76,7 +76,7 @@
     <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.sfr_budget</FileName>
     <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.sfr_budget.csv</FileName>
     <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.sfr_gw_exchange_ob.csv</FileName>
-    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.SfrConvergence.csv</FileName>
     <FileName Model_Name="SftTimeSeries" FileType="Model Output">SftTimeSeries.stage</FileName>
   </output>
 </Model_Archive_List>

@@ -1,4 +1,4 @@
-# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/4/2025 by ModelMuse version 5.3.1.7.
+# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/6/2025 by ModelMuse version 5.3.1.7.
 BEGIN OPTIONS
   AUXILIARY Salinity Temperature Density Viscosity
     PRINT_INPUT
@@ -9,7 +9,7 @@ BEGIN OPTIONS
     STAGE FILEOUT BuoyancySFR.stage
     BUDGET FILEOUT BuoyancySFR.sfr_budget
     BUDGETCSV FILEOUT BuoyancySFR.sfr_budget.csv
-  PACKAGE_CONVERGENCE FILEOUT BuoyancySFR.SfrConvergence.CSV
+  PACKAGE_CONVERGENCE FILEOUT BuoyancySFR.SfrConvergence.csv
     MAXIMUM_ITERATIONS   100
     MAXIMUM_DEPTH_CHANGE  1.000000000000E-005 
     TIME_CONVERSION  8.640000000000E+004 

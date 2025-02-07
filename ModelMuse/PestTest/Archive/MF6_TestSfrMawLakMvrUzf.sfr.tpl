@@ -1,7 +1,7 @@
 ptf @
 etf %
 %ReadArrays(MF6_TestSfrMawLakMvrUzf.sfr.txt)%
-# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/4/2025 by ModelMuse version 5.3.1.7.
+# SFR: MODFLOW-6 Stream Flow Routing package file created on 2/6/2025 by ModelMuse version 5.3.1.7.
 # (and then modified by a parameter estimation program.)
 BEGIN OPTIONS
     PRINT_INPUT
@@ -12,7 +12,7 @@ BEGIN OPTIONS
     STAGE FILEOUT MF6_TestSfrMawLakMvrUzf.stage
     BUDGET FILEOUT MF6_TestSfrMawLakMvrUzf.sfr_budget
     BUDGETCSV FILEOUT MF6_TestSfrMawLakMvrUzf.sfr.sfr_budget.csv
-  PACKAGE_CONVERGENCE FILEOUT MF6_TestSfrMawLakMvrUzf.SfrConvergence.CSV
+  PACKAGE_CONVERGENCE FILEOUT MF6_TestSfrMawLakMvrUzf.SfrConvergence.csv
     MAXIMUM_ITERATIONS   100
     MAXIMUM_DEPTH_CHANGE  1.000000000000E-005 
     OBS6 FILEIN MF6_TestSfrMawLakMvrUzf.ob_sfr

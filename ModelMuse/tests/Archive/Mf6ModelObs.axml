@@ -178,7 +178,7 @@
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.sfr_stage_ob.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.sfr_to_mvr_ob.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.sfr_upstream-flow_ob.csv</FileName>
-    <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.SfrConvergence.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.stage</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.storage_ob.csv</FileName>
     <FileName Model_Name="Mf6ModelObs" FileType="Model Output">Mf6ModelObs.uzet_ob.csv</FileName>

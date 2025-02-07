@@ -82,7 +82,7 @@
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.OuterSolution.CSV</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.sfr_budget</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.sfr_budget.csv</FileName>
-    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.SfrConvergence.csv</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.stage</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.uzf_budget</FileName>
     <FileName Model_Name="Mf6Model" FileType="Model Output">Mf6Model.UzfConvergence.CSV</FileName>

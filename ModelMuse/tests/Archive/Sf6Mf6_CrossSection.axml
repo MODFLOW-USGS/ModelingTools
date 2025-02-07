@@ -35,7 +35,7 @@
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.lst</FileName>
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.OuterSolution.CSV</FileName>
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.sfr_budget</FileName>
-    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.SfrConvergence.csv</FileName>
     <FileName Model_Name="Sf6Mf6_CrossSection" FileType="Model Output">Sf6Mf6_CrossSection.stage</FileName>
   </output>
   <Zonebudget_Input_Files Model_Name="Sf6Mf6_CrossSection" FileType="Zonebudget Input">

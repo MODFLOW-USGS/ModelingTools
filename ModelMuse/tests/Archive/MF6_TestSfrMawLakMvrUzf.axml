@@ -115,7 +115,7 @@
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_stage_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_to_mvr_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.sfr_upstream-flow_ob.csv</FileName>
-    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.SfrConvergence.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.stage</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.storage_ob.csv</FileName>
     <FileName Model_Name="MF6_TestSfrMawLakMvrUzf" FileType="Model Output">MF6_TestSfrMawLakMvrUzf.uzet_ob.csv</FileName>

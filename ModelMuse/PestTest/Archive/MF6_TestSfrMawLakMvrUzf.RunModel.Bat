@@ -86,7 +86,7 @@ if exist "MF6_TestSfrMawLakMvrUzf.sfr_runoff_ob.csv" del "MF6_TestSfrMawLakMvrUz
 if exist "MF6_TestSfrMawLakMvrUzf.sfr_stage_ob.csv" del "MF6_TestSfrMawLakMvrUzf.sfr_stage_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.sfr_to_mvr_ob.csv" del "MF6_TestSfrMawLakMvrUzf.sfr_to_mvr_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.sfr_upstream-flow_ob.csv" del "MF6_TestSfrMawLakMvrUzf.sfr_upstream-flow_ob.csv"
-if exist "MF6_TestSfrMawLakMvrUzf.SfrConvergence.CSV" del "MF6_TestSfrMawLakMvrUzf.SfrConvergence.CSV"
+if exist "MF6_TestSfrMawLakMvrUzf.SfrConvergence.csv" del "MF6_TestSfrMawLakMvrUzf.SfrConvergence.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.stage" del "MF6_TestSfrMawLakMvrUzf.stage"
 if exist "MF6_TestSfrMawLakMvrUzf.storage_ob.csv" del "MF6_TestSfrMawLakMvrUzf.storage_ob.csv"
 if exist "MF6_TestSfrMawLakMvrUzf.uzet_ob.csv" del "MF6_TestSfrMawLakMvrUzf.uzet_ob.csv"

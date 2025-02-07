@@ -4603,7 +4603,15 @@ begin
   PestUpstreamFractionFormula := '';
   PestStageFormula := '';
   PestRoughnessFormula := '';
+
   InitialStage := '';
+  ReachLength := '';
+  ReachWidth := '';
+  Gradient := '';
+  StreambedTop := '';
+  StreambedThickness := '';
+  HydraulicConductivity := '';
+  Roughness := '';
 
   FDiversions.Free;
   FDownstreamSegments.Free;

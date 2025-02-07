@@ -72,7 +72,7 @@
     <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.sfr_budget</FileName>
     <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.sfr_budget.csv</FileName>
     <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.sfr_gw_exchange_ob.csv</FileName>
-    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.SfrConvergence.CSV</FileName>
+    <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.SfrConvergence.csv</FileName>
     <FileName Model_Name="Prudic2004t2" FileType="Model Output">Prudic2004t2.stage</FileName>
   </output>
 </Model_Archive_List>
