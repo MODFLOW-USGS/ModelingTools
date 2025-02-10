@@ -152,6 +152,7 @@ resourcestring
   StrMT3DMS_GWT_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
   StrMt3dClassification = 'MT3DMS or MT3D-USGS';
   StrGwtClassification = 'GWT: Groundwater Transport';
+  StrGweClassification = 'GWE: Energy Transport';
 
   StrNoStressPeriods = 'No stress periods have been defined for MT3DMS.';
   StrMODFLOWFHBHeads = 'FHB Heads';

@@ -2970,7 +2970,7 @@ Type
     procedure SetReleaseTimeTolerance(const Value: double);
     procedure SetReleaseTimeToleranceUsed(const Value: Boolean);
 
-    procedure SetPrtTrackingOutput(const Value: TPrtTrackingOutput);  
+    procedure SetPrtTrackingOutput(const Value: TPrtTrackingOutput);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -7344,6 +7344,8 @@ Type
   TGwtSimulationChoice = (gscAllTogether, gscTransportTogether,
     gscEachSpeciesSeparate);
 
+  // @name is used for both the solute and energy transport models in
+  // MODFLOW 6.
   TGwtProcess = class(TModflowPackageSelection)
   private
     FFLOW_IMBALANCE_CORRECTION: Boolean;
@@ -7359,7 +7361,7 @@ Type
     procedure InitializeVariables; override;
   published
     property SeparateGwt: Boolean read FSeparateGwt write SetSeparateGwt;
-  // retained temporarily for backwards compatiblity.
+    // @name is retained temporarily for backwards compatiblity.
     property GwtSimulationChoice: TGwtSimulationChoice read GetGwtSimulationChoice
       write SetGwtSimulationChoice stored False;
     // @name is an option in the Flow Model Interface package
@@ -7369,16 +7371,31 @@ Type
 
   TDispersivityTreatment = (dtCombined, dtSeparate);
 
-  TGwtDispersionPackage = class(TModflowPackageSelection)
+  TCustomDispersionPackage = class(TModflowPackageSelection)
   private
-    FXt3dRightHandSide: Boolean;
-    FUseXt3d: Boolean;
+    FUseXT3D: boolean;
+    FXt3dRightHandSide: boolean;
+    procedure SetUseXT3D(const Value: boolean);
+    procedure SetXt3dRightHandSide(const Value: boolean);
+  public
+    Constructor Create(Model: TBaseModel); override;
+    procedure InitializeVariables; override;
+    procedure Assign(Source: TPersistent); override;
+  published
+    // Inverse of XT3D_OFF
+    property UseXT3D: boolean read FUseXT3D write SetUseXT3D default True;
+    // XT3D_RHS
+    property Xt3dRightHandSide: boolean read FXt3dRightHandSide
+      write SetXt3dRightHandSide;
+  end;
+
+  // @name is used for the DSP package in MODFLOW 6 GWT models.
+  TGwtDispersionPackage = class(TCustomDispersionPackage)
+  private
     FLongitudinalDispTreatement: TDispersivityTreatment;
     FTransverseDispTreatement: TDispersivityTreatment;
     FUseTransverseDispForVertFlow: Boolean;
     FSeparateDataSetsForEachSpecies: TDispersivityTreatment;
-    procedure SetUseXt3d(const Value: Boolean);
-    procedure SetXt3dRightHandSide(const Value: Boolean);
     procedure SetLongitudinalDispTreatement(
       const Value: TDispersivityTreatment);
     procedure SetTransverseDispTreatement(const Value: TDispersivityTreatment);
@@ -7386,15 +7403,9 @@ Type
     procedure SetSeparateDataSetsForEachSpecies(
       const Value: TDispersivityTreatment);
   public
-    Constructor Create(Model: TBaseModel); override;
     procedure Assign(Source: TPersistent); override;
     procedure InitializeVariables; override;
   published
-    // Inverse of XT3D_OFF
-    property UseXt3d: Boolean read FUseXt3d write SetUseXt3d default True;
-    // XT3D_RHS
-    property Xt3dRightHandSide: Boolean read FXt3dRightHandSide
-      write SetXt3dRightHandSide;
     property LongitudinalDispTreatement: TDispersivityTreatment
       read FLongitudinalDispTreatement write SetLongitudinalDispTreatement;
     property TransverseDispTreatement: TDispersivityTreatment
@@ -7406,8 +7417,12 @@ Type
       write SetSeparateDataSetsForEachSpecies;
   end;
 
+  // @name is used for the CND (Conduction and Dispersion) package in MODFLOW 6 GWE models.
+  TGweDispersionPackage = class(TCustomDispersionPackage);
+
   TGwtScheme = (gsUpstream, gsCentral, gsTVD);
 
+  // @name is used for the ADV packages in both GWT and GWE models in MODFLOW 6
   TGwtAdvectionPackage = class(TModflowPackageSelection)
   private
     FScheme: TGwtScheme;
@@ -7485,6 +7500,7 @@ Type
 
   TGwtSorptionChoice = (gscNone, gscLinear, gscFreundlich, gscLangmuir);
 
+  // @name is used for the MST packages in GWT models in MODFLOW 6
   TGwtMstPackage = class(TModflowPackageSelection)
   private
     FZeroOrderDecay: Boolean;
@@ -7511,6 +7527,49 @@ Type
     property SeparatePorosity: Boolean read FSeparatePorosity write SetSeparatePorosity;
     // SORBATE FILEOUT <sorbatefile>
     property Sorbate: Boolean read FSorbate write SetSorbate;
+  end;
+
+  // @name is used for the EST packages in GWE models in MODFLOW 6
+  TGweEstPackage = class(TModflowPackageSelection)
+  private
+    FZeroOrderDecayWater: Boolean;
+    FZeroOrderDecaySolid: Boolean;
+    FStoredHeatCapacityWater: TRealStorage;
+    FStoredLatentHeatVaporization: TRealStorage;
+    FStoredDensityWater: TRealStorage;
+    function GetDensityWater: double;
+    function GetHeatCapacityWater: double;
+    function GetLatentHeatVaporization: double;
+    procedure SetDensityWater(const Value: double);
+    procedure SetHeatCapacityWater(const Value: double);
+    procedure SetLatentHeatVaporization(const Value: double);
+    procedure SetStoredDensityWater(const Value: TRealStorage);
+    procedure SetStoredHeatCapacityWater(const Value: TRealStorage);
+    procedure SetStoredLatentHeatVaporization(const Value: TRealStorage);
+    procedure SetZeroOrderDecaySolid(const Value: Boolean);
+    procedure SetZeroOrderDecayWater(const Value: Boolean);
+  public
+    Constructor Create(Model: TBaseModel); override;
+    destructor Destroy; override;
+    procedure Assign(Source: TPersistent); override;
+    procedure InitializeVariables; override;
+    // [DENSITY_WATER <density_water>]
+    property DensityWater: double read GetDensityWater write SetDensityWater;
+    // [HEAT_CAPACITY_WATER <heat_capacity_water>]
+    property HeatCapacityWater: double read GetHeatCapacityWater write SetHeatCapacityWater;
+    // [LATENT_HEAT_VAPORIZATION <latent_heat_vaporization>]
+    property LatentHeatVaporization: double read GetLatentHeatVaporization write SetLatentHeatVaporization;
+  published
+    // [ZERO_ORDER_DECAY_WATER]
+    property ZeroOrderDecayWater: Boolean read FZeroOrderDecayWater write SetZeroOrderDecayWater;
+    //[ZERO_ORDER_DECAY_SOLID]
+    property ZeroOrderDecaySolid: Boolean read FZeroOrderDecaySolid write SetZeroOrderDecaySolid;
+    // [DENSITY_WATER <density_water>]
+    property StoredDensityWater: TRealStorage read FStoredDensityWater write SetStoredDensityWater;
+    // [HEAT_CAPACITY_WATER <heat_capacity_water>]
+    property StoredHeatCapacityWater: TRealStorage read FStoredHeatCapacityWater write SetStoredHeatCapacityWater;
+    // [LATENT_HEAT_VAPORIZATION <latent_heat_vaporization>]
+    property StoredLatentHeatVaporization: TRealStorage read FStoredLatentHeatVaporization write SetStoredLatentHeatVaporization;
   end;
 
   TPrintFormat = (pfExponential, pfFixed, pfGeneral, pfScientific);
@@ -25545,8 +25604,6 @@ begin
   if Source is TGwtDispersionPackage then
   begin
     DispSource := TGwtDispersionPackage(Source);
-    UseXt3d := DispSource.UseXt3d;
-    Xt3dRightHandSide := DispSource.Xt3dRightHandSide;
     LongitudinalDispTreatement := DispSource.LongitudinalDispTreatement;
     TransverseDispTreatement := DispSource.TransverseDispTreatement;
     UseTransverseDispForVertFlow := DispSource.UseTransverseDispForVertFlow;
@@ -25555,17 +25612,9 @@ begin
   inherited;
 end;
 
-constructor TGwtDispersionPackage.Create(Model: TBaseModel);
-begin
-  inherited;
-  InitializeVariables;
-end;
-
 procedure TGwtDispersionPackage.InitializeVariables;
 begin
   inherited;
-  FUseXt3d := True;
-  FXt3dRightHandSide := False;
   UseTransverseDispForVertFlow := False;
   FLongitudinalDispTreatement := dtCombined;
   FTransverseDispTreatement := dtCombined;
@@ -25607,17 +25656,6 @@ procedure TGwtDispersionPackage.SetUseTransverseDispForVertFlow(
 begin
   SetBooleanProperty(FUseTransverseDispForVertFlow, Value);
 end;
-
-procedure TGwtDispersionPackage.SetUseXt3d(const Value: Boolean);
-begin
-  SetBooleanProperty(FUseXt3d, Value);
-end;
-
-procedure TGwtDispersionPackage.SetXt3dRightHandSide(const Value: Boolean);
-begin
-  SetBooleanProperty(FXt3dRightHandSide, Value);
-end;
-
 { TGwtAdvectionPackage }
 
 procedure TGwtAdvectionPackage.Assign(Source: TPersistent);
@@ -31949,6 +31987,149 @@ end;
 procedure TPrtModels.SetItem(Index: Integer; const Value: TPrtModelItem);
 begin
   inherited Items[Index] := Value;
+end;
+
+procedure TCustomDispersionPackage.Assign(Source: TPersistent);
+var
+  DispSource: TCustomDispersionPackage;
+begin
+  if Source is TCustomDispersionPackage then
+  begin
+    DispSource := TCustomDispersionPackage(Source);
+    UseXt3d := DispSource.UseXt3d;
+    Xt3dRightHandSide := DispSource.Xt3dRightHandSide;
+  end;
+  inherited;
+end;
+
+constructor TCustomDispersionPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  InitializeVariables;
+end;
+
+procedure TCustomDispersionPackage.InitializeVariables;
+begin
+  inherited;
+  FUseXt3d := True;
+  FXt3dRightHandSide := False;
+end;
+
+procedure TCustomDispersionPackage.SetUseXT3D(const Value: boolean);
+begin
+  SetBooleanProperty(FUseXT3D, Value);
+end;
+
+procedure TCustomDispersionPackage.SetXt3dRightHandSide(const Value: boolean);
+begin
+  SetBooleanProperty(FXt3dRightHandSide, Value);
+end;
+
+{ TGweEstPackage }
+
+procedure TGweEstPackage.Assign(Source: TPersistent);
+var
+  EstSource: TGweEstPackage;
+begin
+  inherited;
+  if Source is TGweEstPackage then
+  begin
+    EstSource := TGweEstPackage(Source);
+    ZeroOrderDecayWater := EstSource.ZeroOrderDecayWater;
+    ZeroOrderDecaySolid := EstSource.ZeroOrderDecaySolid;
+    DensityWater := EstSource.DensityWater;
+    HeatCapacityWater := EstSource.HeatCapacityWater;
+    LatentHeatVaporization := EstSource.LatentHeatVaporization;
+  end;
+end;
+
+constructor TGweEstPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  FStoredHeatCapacityWater := TRealStorage.Create;
+  FStoredLatentHeatVaporization := TRealStorage.Create;
+  FStoredDensityWater := TRealStorage.Create;
+
+  FStoredHeatCapacityWater.OnChange := OnValueChanged;
+  FStoredLatentHeatVaporization.OnChange := OnValueChanged;
+  FStoredDensityWater.OnChange := OnValueChanged;
+
+  InitializeVariables;
+end;
+
+destructor TGweEstPackage.Destroy;
+begin
+  FStoredHeatCapacityWater.Free;
+  FStoredLatentHeatVaporization.Free;
+  FStoredDensityWater.Free;
+
+  inherited;
+end;
+
+function TGweEstPackage.GetDensityWater: double;
+begin
+  result := StoredDensityWater.Value;
+end;
+
+function TGweEstPackage.GetHeatCapacityWater: double;
+begin
+  result := StoredHeatCapacityWater.Value;
+end;
+
+function TGweEstPackage.GetLatentHeatVaporization: double;
+begin
+  result := StoredLatentHeatVaporization.Value;
+end;
+
+procedure TGweEstPackage.InitializeVariables;
+begin
+  inherited;
+  ZeroOrderDecayWater := False;
+  ZeroOrderDecaySolid := False;
+  DensityWater := 1000;
+  HeatCapacityWater := 4184;
+  LatentHeatVaporization := 2453500;
+end;
+
+procedure TGweEstPackage.SetDensityWater(const Value: double);
+begin
+  StoredDensityWater.Value := Value;
+end;
+
+procedure TGweEstPackage.SetHeatCapacityWater(const Value: double);
+begin
+  StoredHeatCapacityWater.Value := Value;
+end;
+
+procedure TGweEstPackage.SetLatentHeatVaporization(const Value: double);
+begin
+  StoredLatentHeatVaporization.Value := Value;
+end;
+
+procedure TGweEstPackage.SetStoredDensityWater(const Value: TRealStorage);
+begin
+  FStoredDensityWater.Assign(Value);
+end;
+
+procedure TGweEstPackage.SetStoredHeatCapacityWater(const Value: TRealStorage);
+begin
+  FStoredHeatCapacityWater.Assign(Value);
+end;
+
+procedure TGweEstPackage.SetStoredLatentHeatVaporization(
+  const Value: TRealStorage);
+begin
+  FStoredLatentHeatVaporization.Assign(Value);
+end;
+
+procedure TGweEstPackage.SetZeroOrderDecaySolid(const Value: Boolean);
+begin
+  SetBooleanProperty(FZeroOrderDecaySolid, Value);
+end;
+
+procedure TGweEstPackage.SetZeroOrderDecayWater(const Value: Boolean);
+begin
+  SetBooleanProperty(FZeroOrderDecayWater, Value);
 end;
 
 end.

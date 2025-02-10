@@ -96,6 +96,7 @@ type
     FTvkPackage: TTvkPackage;
     FTvsPackage: TTvsPackage;
     FPrtModels: TPrtModels;
+    FGweProcess: TGwtProcess;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -181,7 +182,8 @@ type
     procedure SetViscosityPackage(const Value: TViscosityPackage);
     procedure SetTvkPackage(const Value: TTvkPackage);
     procedure SetTvsPackage(const Value: TTvsPackage);
-    procedure SetPrtModels(const Value: TPrtModels);  
+    procedure SetPrtModels(const Value: TPrtModels);
+    procedure SetGweProcess(const Value: TGwtProcess);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -307,7 +309,10 @@ type
     property Mt3dCts: TMt3dCtsPackageSelection read FMt3dCts write SetMt3dCts;
     property CSubPackage: TCSubPackageSelection read FCsubPackage
       write SetCsubPackage;
+      // @name is used for the GWT (solute transport) in MODFLOW 6.
     property GwtProcess: TGwtProcess read FGwtProcess write SetGwtProcess;
+      // @name is used for the GWT (solute transport) in MODFLOW 6.
+    property GweProcess: TGwtProcess read FGweProcess write SetGweProcess stored False;
     property GwtDispersionPackage: TGwtDispersionPackage
       read FGwtDispersionPackage write SetGwtDispersionPackage;
     property GwtAdvectionPackage: TGwtAdvectionPackage
@@ -468,6 +473,7 @@ resourcestring
   StrVSCViscosityPacka = 'VSC: Viscosity Package';
   StrTVKTimeVaryingHy = 'TVK: Time-Varying Hydraulic Conductivity Package';
   StrTVSTimeVaryingSt = 'TVS: Time-Varying Storage Package';
+  StrGWEGroundwaterEne = 'GWE: Groundwater Energy Process';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -553,6 +559,8 @@ begin
     GwtCncPackage := SourcePackages.GwtCncPackage;
     GwtSrcPackage := SourcePackages.GwtSrcPackage;
     GwtPackages := SourcePackages.GwtPackages;
+
+    GweProcess := SourcePackages.GweProcess;
 
     FarmProcess4 := SourcePackages.FarmProcess4;
     FarmSoil4 := SourcePackages.FarmSoil4;
@@ -931,6 +939,15 @@ begin
 
   FGwtPackages := TGwtPackageCollection.Create(Model);
 
+
+
+  FGweProcess := TGwtProcess.Create(Model);
+  FGweProcess.PackageIdentifier := StrGWEGroundwaterEne;;
+  FGweProcess.Classification := StrGweClassification;
+  FGweProcess.SelectionType := stCheckBox;
+
+
+
   FFarmProcess4 := TFarmProcess4.Create(Model);
   FFarmProcess4.PackageIdentifier := StrFMPFarmProcessV4;
   FFarmProcess4.Classification := StrFarmProcessClassification;
@@ -1009,6 +1026,8 @@ begin
   FFarmClimate4.Free;
   FFarmSoil4.Free;
   FFarmProcess4.Free;
+
+  FGweProcess.Free;
 
   FGwtPackages.Free;
   FGwtSrcPackage.Free;
@@ -1168,6 +1187,8 @@ begin
   GwtAdvectionPackage.InitializeVariables;
   GwtCncPackage.InitializeVariables;
   GwtSrcPackage.InitializeVariables;
+
+  GweProcess.InitializeVariables;
 
   FarmProcess4.InitializeVariables;
   FarmSoil4.InitializeVariables;
@@ -1642,6 +1663,11 @@ end;
 procedure TModflowPackages.SetGncPackage(const Value: TGncPackage);
 begin
   FGncPackage.Assign(Value)
+end;
+
+procedure TModflowPackages.SetGweProcess(const Value: TGwtProcess);
+begin
+  FGweProcess.Assign(Value);
 end;
 
 procedure TModflowPackages.SetGwtAdvectionPackage(
