@@ -138,10 +138,6 @@ type
 
 implementation
 
-  {$IFDEF DEBUG}
-
-  {$ENDIF}
-
 constructor TObserver.Create(AnOwner: TComponent);
 begin
   inherited Create(nil);

@@ -7344,8 +7344,8 @@ Type
   TGwtSimulationChoice = (gscAllTogether, gscTransportTogether,
     gscEachSpeciesSeparate);
 
-  // @name is used for both the solute and energy transport models in
-  // MODFLOW 6.
+  // @name is used for both the solute and energy transport models in GWT and GWE
+  // MODFLOW 6 models.
   TGwtProcess = class(TModflowPackageSelection)
   private
     FFLOW_IMBALANCE_CORRECTION: Boolean;
@@ -7418,7 +7418,7 @@ Type
   end;
 
   // @name is used for the CND (Conduction and Dispersion) package in MODFLOW 6 GWE models.
-  TGweDispersionPackage = class(TCustomDispersionPackage);
+  TGweConductionAndDispersionPackage = class(TCustomDispersionPackage);
 
   TGwtScheme = (gsUpstream, gsCentral, gsTVD);
 
@@ -7445,10 +7445,11 @@ Type
     property StoredAtsPercel: TRealStorage read FStoredAtsPercel write SetStoredAtsPercel;
   end;
 
+  // @name is used for the SSM package in both GWT and GWE MODFLOW 6 models
   TGwtSsmPackage = class(TModflowPackageSelection)
   end;
 
-  TGwtCncPackage = class(TMultiplierPackage)
+  TCustomTransportValuePackage = class(TMultiplierPackage)
   private
     FCncConc: TMfBoundDispObjectList;
     FMultConc: TMfBoundDispObjectList;
@@ -7456,16 +7457,29 @@ Type
     procedure InitializeCncDisplay(Sender: TObject);
     procedure InitializeMultipliercDisplay(Sender: TObject);
     procedure InitializeActiveDisplay(Sender: TObject);
-    procedure GetCncConcUseList(Sender: TObject; NewUseList: TStringList);
-    procedure GetMultiplierUseList(Sender: TObject; NewUseList: TStringList);
-    procedure GetActiveUseList(Sender: TObject; NewUseList: TStringList);
-    procedure InitializeDisplay(TimeListIndex: Integer);
+  protected
+    procedure InitializeDisplay(TimeListIndex: Integer); virtual; abstract;
   public
     constructor Create(Model: TBaseModel); override;
     destructor Destroy; override;
-    procedure InvalidateConcentrations;
+    procedure InvalidateConcentrationsOrTemperatures;
     procedure InvalidateMultipliers;
     procedure InvalidateActives;
+  published
+    property UseMultiplier;
+  end;
+
+
+  // @name is used for the CNC package in GWE MODFLOW 6 models.
+  // It needs some updates for CTP.
+  TGwtCncPackage = class(TCustomTransportValuePackage)
+  private
+    procedure GetCncConcUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMultiplierUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetActiveUseList(Sender: TObject; NewUseList: TStringList);
+  protected
+    procedure InitializeDisplay(TimeListIndex: Integer); override;
+  public
     procedure AddRemoveRenameGwtConcentrationTimeLists;
     procedure AddRemoveRenameGwtMultiplierTimeLists;
     procedure AddRemoveRenameGwtActiveTimeLists;
@@ -7473,7 +7487,24 @@ Type
     property UseMultiplier;
   end;
 
-  TGwtSrcPackage = class(TMultiplierPackage)
+  // @name is used for the CTP package in GWE MODFLOW 6 models.
+  { TODO -cGWE : Complete work for GWE }
+  TGweCtpPackage = class(TCustomTransportValuePackage)
+  private
+    procedure GetCtpTemperatureUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMultiplierUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetActiveUseList(Sender: TObject; NewUseList: TStringList);
+  protected
+    procedure InitializeDisplay(TimeListIndex: Integer); override;
+  public
+    procedure AddRemoveRenameGweTemperatureTimeLists;
+    procedure AddRemoveRenameGweMultiplierTimeLists;
+    procedure AddRemoveRenameGwteActiveTimeLists;
+  published
+    property UseMultiplier;
+  end;
+
+  TCustomTransportSrcPackage = class(TMultiplierPackage)
   private
     FSrcConc: TMfBoundDispObjectList;
     FMultConc: TMfBoundDispObjectList;
@@ -7481,19 +7512,44 @@ Type
     procedure InitializeSrcDisplay(Sender: TObject);
     procedure InitializeMultiplierDisplay(Sender: TObject);
     procedure InitializeActiveDisplay(Sender: TObject);
-    procedure GetSrcConcUseList(Sender: TObject; NewUseList: TStringList);
-    procedure GetMultilplierUseList(Sender: TObject; NewUseList: TStringList);
-    procedure GetActiveUseList(Sender: TObject; NewUseList: TStringList);
-    procedure InitializeDisplay(TimeListIndex: Integer);
+  protected
+    procedure InitializeDisplay(TimeListIndex: Integer); virtual; abstract;
   public
     constructor Create(Model: TBaseModel); override;
     destructor Destroy; override;
-    procedure InvalidateConcentrations;
+    procedure InvalidateConcentrationsOrTemperatures;
     procedure InvalidateMultipliers;
     procedure InvalidateActives;
+  end;
+
+  // @name is used for the SRC package in GWT MODFLOW 6 models.
+  TGwtSrcPackage = class(TCustomTransportSrcPackage)
+  private
+    procedure GetSrcConcUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMultilplierUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetActiveUseList(Sender: TObject; NewUseList: TStringList);
+  protected
+    procedure InitializeDisplay(TimeListIndex: Integer); override;
+  public
     procedure AddRemoveRenameGwtConcentrationTimeLists;
     procedure AddRemoveRenameGwtMultiplierTimeLists;
     procedure AddRemoveRenameGwtActiveTimeLists;
+  published
+    property UseMultiplier;
+  end;
+
+  // @name is used for the ESL package in GWE MODFLOW 6 models.
+  { TODO -cGWE : Complete work for GWE }
+  TGweEslPackage = class(TCustomTransportSrcPackage)
+  private
+    procedure GetEslTemperatureUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetMultilplierUseList(Sender: TObject; NewUseList: TStringList);
+    procedure GetActiveUseList(Sender: TObject; NewUseList: TStringList);
+    procedure InitializeDisplay(TimeListIndex: Integer); override;
+  public
+    procedure AddRemoveRenameGweTemperatureTimeLists;
+    procedure AddRemoveRenameGweMultiplierTimeLists;
+    procedure AddRemoveRenameGweActiveTimeLists;
   published
     property UseMultiplier;
   end;
@@ -26086,22 +26142,6 @@ begin
   end;
 end;
 
-constructor TGwtCncPackage.Create(Model: TBaseModel);
-begin
-  inherited;
-  FActiveConc := TMfBoundDispObjectList.Create;
-  FCncConc := TMfBoundDispObjectList.Create;
-  FMultConc := TMfBoundDispObjectList.Create;
-end;
-
-destructor TGwtCncPackage.Destroy;
-begin
-  inherited;
-  FActiveConc.Free;
-  FCncConc.Free;
-  FMultConc.Free;
-end;
-
 procedure TGwtCncPackage.GetActiveUseList(Sender: TObject;
   NewUseList: TStringList);
 var
@@ -26200,75 +26240,6 @@ begin
   end;
 end;
 
-procedure TGwtCncPackage.InitializeActiveDisplay(Sender: TObject);
-var
-  TimeList: TModflowBoundaryDisplayTimeList;
-  TimeListIndex: Integer;
-begin
-  TimeList := Sender as TModflowBoundaryDisplayTimeList;
-  TimeListIndex := FActiveConc.IndexOf(TimeList);
-  Assert(TimeListIndex >= 0);
-  InitializeDisplay(TimeListIndex);
-end;
-
-procedure TGwtCncPackage.InitializeCncDisplay(Sender: TObject);
-var
-  TimeList: TModflowBoundaryDisplayTimeList;
-  TimeListIndex: Integer;
-begin
-  TimeList := Sender as TModflowBoundaryDisplayTimeList;
-  TimeListIndex := FCncConc.IndexOf(TimeList);
-  Assert(TimeListIndex >= 0);
-  InitializeDisplay(TimeListIndex);
-end;
-
-procedure TGwtCncPackage.InitializeMultipliercDisplay(Sender: TObject);
-var
-  TimeList: TModflowBoundaryDisplayTimeList;
-  TimeListIndex: Integer;
-begin
-  TimeList := Sender as TModflowBoundaryDisplayTimeList;
-  TimeListIndex := FMultConc.IndexOf(TimeList);
-  Assert(TimeListIndex >= 0);
-  InitializeDisplay(TimeListIndex);
-end;
-
-procedure TGwtCncPackage.InvalidateActives;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-begin
-  for Index := 0 to FActiveConc.Count - 1 do
-  begin
-    TimeList := FActiveConc[Index];
-    TimeList.Invalidate;
-  end;
-end;
-
-procedure TGwtCncPackage.InvalidateConcentrations;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-begin
-  for Index := 0 to FCncConc.Count - 1 do
-  begin
-    TimeList := FCncConc[Index];
-    TimeList.Invalidate;
-  end;
-end;
-
-procedure TGwtCncPackage.InvalidateMultipliers;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-begin
-  for Index := 0 to FMultConc.Count - 1 do
-  begin
-    TimeList := FMultConc[Index];
-    TimeList.Invalidate;
-  end;
-end;
-
 { TGwtSrcPackage }
 
 procedure TGwtSrcPackage.AddRemoveRenameGwtActiveTimeLists;
@@ -26281,17 +26252,6 @@ procedure TGwtSrcPackage.AddRemoveRenameGwtConcentrationTimeLists;
 begin
   UpdateConcentrationLists(FSrcConc, InitializeSrcDisplay,
     GetSrcConcUseList, 'SRC Conc %s');
-end;
-
-procedure TGwtSrcPackage.InitializeActiveDisplay(Sender: TObject);
-var
-  TimeList: TModflowBoundaryDisplayTimeList;
-  TimeListIndex: Integer;
-begin
-  TimeList := Sender as TModflowBoundaryDisplayTimeList;
-  TimeListIndex := FActiveConc.IndexOf(TimeList);
-  Assert(TimeListIndex >= 0);
-  InitializeDisplay(TimeListIndex);
 end;
 
 procedure TGwtSrcPackage.InitializeDisplay(TimeListIndex: Integer);
@@ -26323,33 +26283,6 @@ procedure TGwtSrcPackage.AddRemoveRenameGwtMultiplierTimeLists;
 begin
   UpdateConcentrationLists(FMultConc, InitializeMultiplierDisplay,
     GetMultilplierUseList, 'SRC Conc Multiplier %s');
-end;
-
-procedure TGwtSrcPackage.InitializeMultiplierDisplay(Sender: TObject);
-var
-  TimeList: TModflowBoundaryDisplayTimeList;
-  TimeListIndex: Integer;
-begin
-  TimeList := Sender as TModflowBoundaryDisplayTimeList;
-  TimeListIndex := FMultConc.IndexOf(TimeList);
-  Assert(TimeListIndex >= 0);
-  InitializeDisplay(TimeListIndex);
-end;
-
-constructor TGwtSrcPackage.Create(Model: TBaseModel);
-begin
-  inherited;
-  FActiveConc := TMfBoundDispObjectList.Create;
-  FSrcConc := TMfBoundDispObjectList.Create;
-  FMultConc := TMfBoundDispObjectList.Create;
-end;
-
-destructor TGwtSrcPackage.Destroy;
-begin
-  inherited;
-  FSrcConc.Free;
-  FMultConc.Free;
-  FActiveConc.Free;
 end;
 
 procedure TGwtSrcPackage.GetActiveUseList(Sender: TObject;
@@ -26448,52 +26381,6 @@ begin
   end;
 end;
 
-procedure TGwtSrcPackage.InitializeSrcDisplay(Sender: TObject);
-var
-  TimeList: TModflowBoundaryDisplayTimeList;
-  TimeListIndex: Integer;
-begin
-  TimeList := Sender as TModflowBoundaryDisplayTimeList;
-  TimeListIndex := FSrcConc.IndexOf(TimeList);
-  Assert(TimeListIndex >= 0);
-  InitializeDisplay(TimeListIndex);
-end;
-
-procedure TGwtSrcPackage.InvalidateActives;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-begin
-  for Index := 0 to FActiveConc.Count - 1 do
-  begin
-    TimeList := FActiveConc[Index];
-    TimeList.Invalidate;
-  end;
-end;
-
-procedure TGwtSrcPackage.InvalidateConcentrations;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-begin
-  for Index := 0 to FSrcConc.Count - 1 do
-  begin
-    TimeList := FSrcConc[Index];
-    TimeList.Invalidate;
-  end;
-end;
-
-procedure TGwtSrcPackage.InvalidateMultipliers;
-var
-  Index: Integer;
-  TimeList: TModflowBoundaryDisplayTimeList;
-begin
-  for Index := 0 to FMultConc.Count - 1 do
-  begin
-    TimeList := FMultConc[Index];
-    TimeList.Invalidate;
-  end;
-end;
 
 { TFarmProcess4 }
 
@@ -32130,6 +32017,268 @@ end;
 procedure TGweEstPackage.SetZeroOrderDecayWater(const Value: Boolean);
 begin
   SetBooleanProperty(FZeroOrderDecayWater, Value);
+end;
+
+{ TCustomTransportSrcPackage }
+
+constructor TCustomTransportSrcPackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  FActiveConc := TMfBoundDispObjectList.Create;
+  FSrcConc := TMfBoundDispObjectList.Create;
+  FMultConc := TMfBoundDispObjectList.Create;
+end;
+
+destructor TCustomTransportSrcPackage.Destroy;
+begin
+  inherited;
+  FSrcConc.Free;
+  FMultConc.Free;
+  FActiveConc.Free;
+end;
+
+procedure TCustomTransportSrcPackage.InitializeActiveDisplay(Sender: TObject);
+var
+  TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
+begin
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FActiveConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+  InitializeDisplay(TimeListIndex);
+end;
+
+procedure TCustomTransportSrcPackage.InitializeMultiplierDisplay(
+  Sender: TObject);
+var
+  TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
+begin
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FMultConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+  InitializeDisplay(TimeListIndex);
+end;
+
+procedure TCustomTransportSrcPackage.InitializeSrcDisplay(Sender: TObject);
+var
+  TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
+begin
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FSrcConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+  InitializeDisplay(TimeListIndex);
+end;
+
+procedure TCustomTransportSrcPackage.InvalidateActives;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FActiveConc.Count - 1 do
+  begin
+    TimeList := FActiveConc[Index];
+    TimeList.Invalidate;
+  end;
+end;
+
+procedure TCustomTransportSrcPackage.InvalidateConcentrationsOrTemperatures;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FSrcConc.Count - 1 do
+  begin
+    TimeList := FSrcConc[Index];
+    TimeList.Invalidate;
+  end;
+end;
+
+procedure TCustomTransportSrcPackage.InvalidateMultipliers;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FMultConc.Count - 1 do
+  begin
+    TimeList := FMultConc[Index];
+    TimeList.Invalidate;
+  end;
+end;
+
+{ TGweEslPackage }
+
+procedure TGweEslPackage.AddRemoveRenameGweActiveTimeLists;
+begin
+  UpdateConcentrationLists(FActiveConc, InitializeActiveDisplay,
+    GetActiveUseList, 'ESL Active %s');
+end;
+
+procedure TGweEslPackage.AddRemoveRenameGweTemperatureTimeLists;
+begin
+  UpdateConcentrationLists(FSrcConc, InitializeSrcDisplay,
+    GetEslTemperatureUseList, 'ESL Temperature %s');
+end;
+
+procedure TGweEslPackage.AddRemoveRenameGweMultiplierTimeLists;
+begin
+  UpdateConcentrationLists(FMultConc, InitializeMultiplierDisplay,
+    GetMultilplierUseList, 'ESL Conc Multiplier %s');
+end;
+
+procedure TGweEslPackage.GetActiveUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+
+end;
+
+procedure TGweEslPackage.GetMultilplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+
+end;
+
+procedure TGweEslPackage.GetEslTemperatureUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+
+end;
+
+procedure TGweEslPackage.InitializeDisplay(TimeListIndex: Integer);
+begin
+
+end;
+
+{ TCustomTransportValuePackage }
+
+constructor TCustomTransportValuePackage.Create(Model: TBaseModel);
+begin
+  inherited;
+  FActiveConc := TMfBoundDispObjectList.Create;
+  FCncConc := TMfBoundDispObjectList.Create;
+  FMultConc := TMfBoundDispObjectList.Create;
+end;
+
+destructor TCustomTransportValuePackage.Destroy;
+begin
+  inherited;
+  FActiveConc.Free;
+  FCncConc.Free;
+  FMultConc.Free;
+end;
+
+procedure TCustomTransportValuePackage.InitializeActiveDisplay(Sender: TObject);
+var
+  TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
+begin
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FActiveConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+  InitializeDisplay(TimeListIndex);
+end;
+
+procedure TCustomTransportValuePackage.InitializeCncDisplay(Sender: TObject);
+var
+  TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
+begin
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FCncConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+  InitializeDisplay(TimeListIndex);
+end;
+
+procedure TCustomTransportValuePackage.InitializeMultipliercDisplay(
+  Sender: TObject);
+var
+  TimeList: TModflowBoundaryDisplayTimeList;
+  TimeListIndex: Integer;
+begin
+  TimeList := Sender as TModflowBoundaryDisplayTimeList;
+  TimeListIndex := FMultConc.IndexOf(TimeList);
+  Assert(TimeListIndex >= 0);
+  InitializeDisplay(TimeListIndex);
+end;
+
+procedure TCustomTransportValuePackage.InvalidateActives;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FActiveConc.Count - 1 do
+  begin
+    TimeList := FActiveConc[Index];
+    TimeList.Invalidate;
+  end;
+end;
+
+procedure TCustomTransportValuePackage.InvalidateConcentrationsOrTemperatures;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FCncConc.Count - 1 do
+  begin
+    TimeList := FCncConc[Index];
+    TimeList.Invalidate;
+  end;
+end;
+
+procedure TCustomTransportValuePackage.InvalidateMultipliers;
+var
+  Index: Integer;
+  TimeList: TModflowBoundaryDisplayTimeList;
+begin
+  for Index := 0 to FMultConc.Count - 1 do
+  begin
+    TimeList := FMultConc[Index];
+    TimeList.Invalidate;
+  end;
+end;
+
+{ TGweCtpPackage }
+
+procedure TGweCtpPackage.AddRemoveRenameGweMultiplierTimeLists;
+begin
+  UpdateConcentrationLists(FMultConc, InitializeMultipliercDisplay,
+    GetMultiplierUseList, 'CTP Temperature Multiplier %s');
+end;
+
+procedure TGweCtpPackage.AddRemoveRenameGweTemperatureTimeLists;
+begin
+  UpdateConcentrationLists(FCncConc, InitializeCnCDisplay,
+    GetCtpTemperatureUseList, 'CTP Temperature %s');
+end;
+
+procedure TGweCtpPackage.AddRemoveRenameGwteActiveTimeLists;
+begin
+  UpdateConcentrationLists(FActiveConc, InitializeActiveDisplay,
+    GetActiveUseList, 'CTP Temperature Active %s');
+end;
+
+procedure TGweCtpPackage.GetActiveUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+
+end;
+
+procedure TGweCtpPackage.GetCtpTemperatureUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+
+end;
+
+procedure TGweCtpPackage.GetMultiplierUseList(Sender: TObject;
+  NewUseList: TStringList);
+begin
+
+end;
+
+procedure TGweCtpPackage.InitializeDisplay(TimeListIndex: Integer);
+begin
+
 end;
 
 end.

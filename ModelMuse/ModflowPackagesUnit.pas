@@ -311,8 +311,6 @@ type
       write SetCsubPackage;
       // @name is used for the GWT (solute transport) in MODFLOW 6.
     property GwtProcess: TGwtProcess read FGwtProcess write SetGwtProcess;
-      // @name is used for the GWT (solute transport) in MODFLOW 6.
-    property GweProcess: TGwtProcess read FGweProcess write SetGweProcess stored False;
     property GwtDispersionPackage: TGwtDispersionPackage
       read FGwtDispersionPackage write SetGwtDispersionPackage;
     property GwtAdvectionPackage: TGwtAdvectionPackage
@@ -349,6 +347,18 @@ type
     {$IFNDEF PRT}
       stored False
     {$ENDIF};
+      // @name is used for the GWT (solute transport) in MODFLOW 6.
+    property GweProcess: TGwtProcess read FGweProcess write SetGweProcess
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+//      property GweAdvectionPackage: TGwtAdvectionPackage;
+//      property GweConductionAndDispersionPackage: TGweConductionAndDispersionPackage;
+//      property TGweEstPackage: TGweEstPackage;
+//      property GwtSsmPackage: TGwtSsmPackage;
+//      property GweCtpPackage: TGweCtpPackage;
+//      property GweEslPackage: TGweEslPackage;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.

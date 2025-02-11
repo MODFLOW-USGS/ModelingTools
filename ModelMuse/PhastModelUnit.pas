@@ -27081,7 +27081,7 @@ end;
 
 procedure TCustomModel.InvalidateCncConcentration(Sender: TObject);
 begin
-  ModflowPackages.GwtCncPackage.InvalidateConcentrations;
+  ModflowPackages.GwtCncPackage.InvalidateConcentrationsOrTemperatures;
 end;
 
 procedure TCustomModel.InvalidateCncMultiplier(Sender: TObject);
@@ -27144,7 +27144,7 @@ end;
 
 procedure TCustomModel.InvalidateMassSrc(Sender: TObject);
 begin
-  ModflowPackages.GwtSrcPackage.InvalidateConcentrations;
+  ModflowPackages.GwtSrcPackage.InvalidateConcentrationsOrTemperatures;
 end;
 
 procedure TCustomModel.InvalidateMassSrcActive(Sender: TObject);
@@ -34936,10 +34936,6 @@ var
   CellSize: Real;
   PointItem: TPointValuesItem;
   SizePosition: Integer;
-  {$IFDEF DEBUG}
-//  StartTime: TDateTime;
-//  EndTime: TDateTime;
-  {$ENDIF}
 begin
   if SutraMesh.MeshType = mtProfile then
   begin
@@ -35115,11 +35111,6 @@ begin
 
       SutraMesh.Mesh2D.MeshGenControls.Apply;
 
-  {$IFDEF DEBUG}
-//      StartTime := Now;
-//      OutputDebugString('SAMPLING ON');
-
-  {$ENDIF}
       try
       MeshCreator.GenerateMesh;
       except on E: EAssertionFailed do
@@ -35135,13 +35126,6 @@ begin
       begin
         MeshCreator.AdjustNodes;
       end;
-//      MeshCreator.FixFinalTriangularElements;
-  {$IFDEF DEBUG}
-//      OutputDebugString('SAMPLING OFF');
-
-//      EndTime := Now;
-  {$ENDIF}
-
 
       if FSutraMesh = nil then
       begin
@@ -35219,22 +35203,13 @@ begin
           end;
         end;
 
-//        FSutraMesh.UpdateElevations;
       finally
         DataArrayManager.InvalidateAllDataSets;
         DataArrayManager.CreateInitialDataSets;
 
-//        FSutraMesh.NodeDrawingChoice := dcEdge;
-//        FSutraMesh.ElementDrawingChoice := dcAll;
-        FSutraMesh.ElevationsNeedUpdating := true;
-
         FSutraMesh.EndUpdate;
       end;
       frmGoPhast.InvalidateGrid;
-  {$IFDEF DEBUG}
-//      ShowMessage('Elapsed time in seconds = '
-//        + FloatToStr((EndTime-StartTime)*24*3600));
-  {$ENDIF}
 
       if (frmMeshInformation <> nil) and frmMeshInformation.Visible then
       begin
@@ -35404,22 +35379,13 @@ begin
           end;
         end;
 
-//        FSutraMesh.UpdateElevations;
-      finally
+     finally
         DataArrayManager.InvalidateAllDataSets;
         DataArrayManager.CreateInitialDataSets;
-
-//        FSutraMesh.NodeDrawingChoice := dcEdge;
-//        FSutraMesh.ElementDrawingChoice := dcAll;
-        FSutraMesh.ElevationsNeedUpdating := true;
 
         FSutraMesh.EndUpdate;
       end;
       frmGoPhast.InvalidateGrid;
-  {$IFDEF DEBUG}
-//      ShowMessage('Elapsed time in seconds = '
-//        + FloatToStr((EndTime-StartTime)*24*3600));
-  {$ENDIF}
 
       if (frmMeshInformation <> nil) and frmMeshInformation.Visible then
       begin
@@ -35583,22 +35549,14 @@ begin
           end;
         end;
 
-//        FSutraMesh.UpdateElevations;
       finally
         DataArrayManager.InvalidateAllDataSets;
         DataArrayManager.CreateInitialDataSets;
-
-//        FSutraMesh.NodeDrawingChoice := dcEdge;
-//        FSutraMesh.ElementDrawingChoice := dcAll;
         FSutraMesh.ElevationsNeedUpdating := true;
 
         FSutraMesh.EndUpdate;
       end;
       frmGoPhast.InvalidateGrid;
-  {$IFDEF DEBUG}
-//      ShowMessage('Elapsed time in seconds = '
-//        + FloatToStr((EndTime-StartTime)*24*3600));
-  {$ENDIF}
 
       if (frmMeshInformation <> nil) and frmMeshInformation.Visible then
       begin
