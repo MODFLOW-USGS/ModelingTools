@@ -308,6 +308,8 @@ type
     jvspTVS: TJvStandardPage;
     framePkgTvs: TframePackageTvs;
     framePackageUzfMf6: TframePackageUzfMf6;
+    jvspGweProcess: TJvStandardPage;
+    frameGweProcess: TframePackageFmi;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -403,6 +405,9 @@ type
       ARow: Integer; var CanSelect: Boolean);
     procedure frameGwtProcessrgSimulationChoiceClick(Sender: TObject);
     procedure framePkgViscositycbSpecifyViscosityClick(Sender: TObject);
+    procedure frameGweProcessrcSelectionControllerEnabledChange(
+      Sender: TObject);
+    procedure frameGweProcessrgSimulationChoiceClick(Sender: TObject);
   private
     IsLoaded: boolean;
     CurrentParameterType: TParameterType;
@@ -417,6 +422,7 @@ type
     FLinkDictionary: TDictionary<TframePackage, TFrameNodeLink>;
     FSettingNumber: Boolean;
     FGwtParentNode: TTreeNode;
+    FGweParentNode: TTreeNode;
     FMstNode: TTreeNode;
     FframePackageMSTObjectList: TframePackageMSTObjectList;
     FIstNode: TTreeNode;
@@ -505,6 +511,7 @@ type
     function CreateImsGwtFrame: TframePkgSms;
     procedure ShowImsPage(Sender: TObject);
     procedure EnableGwtPackages;
+    procedure EnableGwePackages;
     function CheckMt3dSaturation: Boolean;
     function CheckGwtSaturation: Boolean;
     procedure FillIgnoredNames(var IgnoredNames: TStringList; UsingModel: Boolean);
@@ -669,10 +676,10 @@ resourcestring
   StrTheSaveSaturation = 'The Save Saturation option in the NPF package is i' +
   'ncompatible with MT3D. Do you want to fix this?';
   StrTheSaveSaturationGwt = 'The Save Saturation option in the NPF package i' +
-  's required with GWT when the transport simulation is separate from the fl' +
+  's required with GWT and GWE when the transport simulation is separate from the fl' +
   'ow simulation. Do you want to fix this?';
-  StrTheGroundwaterTran = 'The Groundwater Transport process is required whe' +
-  'n using the Buoyancy or Viscosity packages.';
+  StrTheGroundwaterTran = 'The Groundwater Transport or Groundwater Energy ' +
+  'Transport process is required when using the Buoyancy or Viscosity packages.';
   StrTheFlowAndGroundw = 'The Flow and Groundwater Transport processes must ' +
   'both be in the same simulation when using the Buoyancy or Viscosity packages.';
   StrTheBuoyancyPackage = 'The Buoyancy package has been deactived because i' +
@@ -1188,8 +1195,9 @@ end;
 function TfrmModflowPackages.CheckGwtSaturation: Boolean;
 begin
   result := True;
-  if (frmGoPhast.ModelSelection = msModflow2015) and frameGwtProcess.Selected
-    and frameGwtProcess.SeparateSimulations
+  if (frmGoPhast.ModelSelection = msModflow2015)
+    and ((frameGwtProcess.Selected and frameGwtProcess.SeparateSimulations)
+      or (frameGweProcess.Selected and frameGweProcess.SeparateSimulations))
     and not framePkgNpf.SaturationSelected then
   begin
     if (MessageDlg(StrTheSaveSaturationGwt, mtWarning, [mbYes, mbNo], 0)
@@ -2407,6 +2415,38 @@ begin
   MakeIgnoredSpeciesLast;
 end;
 
+procedure TfrmModflowPackages.frameGweProcessrcSelectionControllerEnabledChange(
+  Sender: TObject);
+begin
+  inherited;
+  frameGweProcess.rcSelectionControllerEnabledChange(Sender);
+  EnableChemSpecies;
+  EnableGwePackages;
+end;
+
+procedure TfrmModflowPackages.frameGweProcessrgSimulationChoiceClick(
+  Sender: TObject);
+begin
+  inherited;
+  frameGweProcess.rcSelectionControllerEnabledChange(Sender);
+
+  if framePkgBuoyancy.Selected
+    and (frameGweProcess.rgSimulationChoice.ItemIndex <> 0) then
+  begin
+    framePkgBuoyancy.Selected := False;
+    Beep;
+    MessageDlg(StrTheBuoyancyPackage, mtWarning, [mbOK], 0);
+  end;
+  if framePkgViscosity.Selected
+    and (frameGweProcess.rgSimulationChoice.ItemIndex <> 0) then
+  begin
+    framePkgViscosity.Selected := False;
+    Beep;
+    MessageDlg(StrTheViscosityPackag, mtWarning, [mbOK], 0);
+  end;
+
+end;
+
 procedure TfrmModflowPackages.frameGwtProcessrcSelectionControllerEnabledChange(
   Sender: TObject);
 begin
@@ -2930,6 +2970,10 @@ begin
         FGwtParentNode);
       FGwtImsNode := AddChildNode(StrGwtSolver, StrIMSIterativeModel,
         FGwtParentNode);
+
+      FGweParentNode := AddChildNode(StrGweClassification,
+        StrGweClassification, FTransportNode);
+
     end
     else
     begin
@@ -3105,6 +3149,7 @@ begin
     FframePkgSmsObjectList.Clear;
 
     frameGwtProcess.Selected := frmGoPhast.PhastModel.ModflowPackages.GwtProcess.IsSelected;
+    frameGweProcess.Selected := frmGoPhast.PhastModel.ModflowPackages.GweProcess.IsSelected;
     frameChemSpecies.GetMt3dmsChemSpecies(
       frmGoPhast.PhastModel.MobileComponents,
       frmGoPhast.PhastModel.ImmobileComponents);
@@ -3181,6 +3226,7 @@ var
   IgnoreIndex: Integer;
   AnIgnoreRow: Integer;
   TempRow: TStringList;
+  IgnoredRow: Integer;
 begin
   if not IsLoaded then
   begin
@@ -3196,7 +3242,11 @@ begin
       try
         for IgnoreIndex := 0 to IgnoredNames.Count - 1 do
         begin
-          IntList.Add(Grid.Cols[0].IndexOf(IgnoredNames[IgnoreIndex]));
+          IgnoredRow := Grid.Cols[0].IndexOf(IgnoredNames[IgnoreIndex]);
+          if IgnoredRow >= 1 then
+          begin
+            IntList.Add(IgnoredRow);
+          end;
         end;
         IntList.Sort;
         AnIgnoreRow := Grid.RowCount - 1;
@@ -3268,6 +3318,10 @@ begin
     begin
       IgnoredNames.Add(StrViscosity);
     end;
+    if frameGweProcess.Selected then
+    begin
+      IgnoredNames.Add(StrGweTemperature);
+    end;
   end;
 end;
 
@@ -3334,6 +3388,11 @@ begin
   begin
     framePkgFrm.frameRoutingInformationPrintFlag.rdgGrid.Color := clBtnFace;
   end;
+end;
+
+procedure TfrmModflowPackages.EnableGwePackages;
+begin
+  { TODO -cGWE : Complete work for GWE }
 end;
 
 procedure TfrmModflowPackages.EnableGwtPackages;
@@ -3926,6 +3985,7 @@ var
 begin
   frameChemSpecies.frameGridMobile.Enabled :=
     frameGwtProcess.rcSelectionController.Enabled
+    or frameGweProcess.rcSelectionController.Enabled
     or framePkgMt3dBasic.rcSelectionController.Enabled;
   frameChemSpecies.frameGridImmobile.Enabled :=
     framePkgMt3dBasic.rcSelectionController.Enabled;
@@ -3953,7 +4013,16 @@ begin
             FoundASpecies := True;
             break;
           end;
+          if frameGweProcess.rcSelectionController.Enabled
+            and (not frameGwtProcess.rcSelectionController.Enabled)
+            and (not framePkgMt3dBasic.rcSelectionController.Enabled)
+            and AnsiSameText(AName, StrGweTemperature) then
+          begin
+            FoundASpecies := True;
+            break;
+          end;
         end;
+
         if not FoundASpecies then
         begin
           frameChemSpecies.frameGridMobile.seNumber.AsInteger :=
@@ -3969,10 +4038,21 @@ begin
       Assert(LastRow >= 1);
       if (frameChemSpecies.frameGridMobile.Grid.Cells[0,LastRow] = '') then
       begin
-        frameChemSpecies.frameGridMobile.Grid.Cells[0,LastRow] := 'Chem';
-        if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+        if not frameGweProcess.rcSelectionController.Enabled then
         begin
-          frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, LastRow,  'Chem');
+          frameChemSpecies.frameGridMobile.Grid.Cells[0,LastRow] := 'Chem';
+          if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+          begin
+            frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, LastRow,  'Chem');
+          end;
+        end
+        else
+        begin
+          frameChemSpecies.frameGridMobile.Grid.Cells[0,LastRow] := StrGweTemperature;
+          if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+          begin
+            frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, LastRow,  StrGweTemperature);
+          end;
         end;
       end;
       UpdateGwtFrames;
@@ -4649,37 +4729,49 @@ begin
           end;
           if (Frame = framePkgBuoyancy) and framePkgBuoyancy.Selected then
           begin
-            if not frameGwtProcess.Selected then
+            if not frameGwtProcess.Selected and not frameGweProcess.Selected then
             begin
               frameGwtProcess.Selected := True;
               frameGwtProcess.rgSimulationChoice.ItemIndex := 0;
               Beep;
               MessageDlg(StrTheGroundwaterTran, mtInformation, [mbOK], 0);
             end
-            else if frameGwtProcess.rgSimulationChoice.ItemIndex <> 0 then
+            else if frameGwtProcess.Selected and (frameGwtProcess.rgSimulationChoice.ItemIndex <> 0) then
             begin
               frameGwtProcess.rgSimulationChoice.ItemIndex := 0;
+              Beep;
+              MessageDlg(StrTheFlowAndGroundw, mtInformation, [mbOK], 0);
+            end
+            else if frameGweProcess.Selected and (frameGweProcess.rgSimulationChoice.ItemIndex <> 0) then
+            begin
+              frameGweProcess.rgSimulationChoice.ItemIndex := 0;
               Beep;
               MessageDlg(StrTheFlowAndGroundw, mtInformation, [mbOK], 0);
             end;
           end;
           if (Frame = framePkgViscosity) and framePkgViscosity.Selected then
           begin
-            if not frameGwtProcess.Selected then
+            if not frameGwtProcess.Selected and not frameGweProcess.Selected  then
             begin
               frameGwtProcess.Selected := True;
               frameGwtProcess.rgSimulationChoice.ItemIndex := 0;
               Beep;
               MessageDlg(StrTheGroundwaterTran, mtInformation, [mbOK], 0);
             end
-            else if frameGwtProcess.rgSimulationChoice.ItemIndex <> 0 then
+            else if frameGwtProcess.Selected and (frameGwtProcess.rgSimulationChoice.ItemIndex <> 0) then
             begin
               frameGwtProcess.rgSimulationChoice.ItemIndex := 0;
               Beep;
               MessageDlg(StrTheFlowAndGroundw, mtInformation, [mbOK], 0);
+            end
+            else if frameGweProcess.Selected and (frameGweProcess.rgSimulationChoice.ItemIndex <> 0) then
+            begin
+              frameGweProcess.rgSimulationChoice.ItemIndex := 0;
+              Beep;
+              MessageDlg(StrTheFlowAndGroundw, mtInformation, [mbOK], 0);
             end;
           end;
-          if (Frame = frameGwtProcess) and not frameGwtProcess.Selected then
+          if (Frame = frameGwtProcess) and not frameGwtProcess.Selected and not frameGweProcess.Selected then
           begin
             framePkgBuoyancy.Selected := False;
             framePkgViscosity.Selected := False;
@@ -5362,6 +5454,16 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    Packages.GweProcess.Frame := frameGweProcess;
+    FPackageList.Add(Packages.GweProcess);
+  end
+  else
+  begin
+    frameGweProcess.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
     Packages.GwtAdvectionPackage.Frame := frameGwtAdv;
     FPackageList.Add(Packages.GwtAdvectionPackage);
   end
@@ -5414,16 +5516,11 @@ begin
   try
     FillIgnoredNames(IgnoredNames, not IsLoaded);
     if (frmGoPhast.ModelSelection = msModflow2015)
-      and frameGwtProcess.Selected
-      {and (framePkgMt3dBasic.comboVersion.ItemIndex = 2)} then
+      and frameGwtProcess.Selected then
     begin
       if Packages.GwtPackages.Count < frameChemSpecies.frameGridMobile.seNumber.AsInteger - IgnoredNames.Count then
       begin
         Packages.GwtPackages.Count := frameChemSpecies.frameGridMobile.seNumber.AsInteger - IgnoredNames.Count
-//      end
-//      else
-//      begin
-//        frameChemSpecies.frameGridMobile.seNumber.AsInteger := Packages.GwtPackages.Count +  - IgnoredNames.Count;
       end;
       // MST Package
       CreateMstNode;
@@ -5475,13 +5572,7 @@ begin
         Inc(FrameIndex);
       end;
 
-  //    for MstIndex := frmGoPhast.PhastModel.MobileComponents.Count to
-  //      FframePackageMSTObjectList.Count - 1 do
-  //    begin
-  //      FframePackageMSTObjectList[MstIndex].NilNode;
-  //    end;
-
-      // IST Package
+       // IST Package
       CreateIstNode;
       IstChildNode := FIstNode.GetFirstChild;
       FrameIndex := 0;
@@ -5532,13 +5623,7 @@ begin
         Inc(FrameIndex);
       end;
 
-  //    for IstIndex := frmGoPhast.PhastModel.MobileComponents.Count to
-  //      FframePackageIstObjectList.Count - 1 do
-  //    begin
-  //      FframePackageIstObjectList[IstIndex].NilNode;
-  //    end;
-
-      // IMS Package
+       // IMS Package
       CreateGwtImsNode;
       ImsChildNode := FGwtImsNode.GetFirstChild;
       FrameIndex := 0;
@@ -5879,6 +5964,7 @@ var
   MfStressPeriods: TModflowStressPeriods;
   FirstStressPeriod: TModflowStressPeriod;
   GwtChanged: Boolean;
+  GweChanged: Boolean;
 begin
   if (frmDisplayData <> nil) then
   begin
@@ -5897,7 +5983,8 @@ begin
 
     GwtChanged := (PhastModel.ModelSelection = msModflow2015)
       and (PhastModel.GwtUsed <> NewPackages.GwtProcess.IsSelected);
-//      and (NewPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
+    GweChanged := (PhastModel.ModelSelection = msModflow2015)
+      and (PhastModel.GweUsed <> NewPackages.GweProcess.IsSelected);
 
     Mt3dmsNewlySelected := not OldPackages.Mt3dBasic.SimulateWithMt3D
       and NewPackages.Mt3dBasic.SimulateWithMt3D;
@@ -5958,7 +6045,7 @@ begin
     PhastModel.ModflowPackages.Mt3dSft.ChangeChemSpecies;
   end;
 
-  if GwtChanged or not FComponentsSame then
+  if GwtChanged or GweChanged or not FComponentsSame then
   begin
     PhastModel.UpdateGwtConc;
   end;

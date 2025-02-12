@@ -26,7 +26,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 577
     Height = 513
-    ActivePage = jvspSfrMf6
+    ActivePage = jvspGweProcess
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -14213,6 +14213,66 @@ inherited frmModflowPackages: TfrmModflowPackages
             item
               Control = framePkgTvs.cbEnableStorageChangeIntegration
             end>
+        end
+      end
+    end
+    object jvspGweProcess: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 577
+      Height = 513
+      Caption = 'jvspGweProcess'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGweProcess: TframePackageFmi
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 513
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 56
+        ExplicitTop = 88
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 546
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited cbFlowImbalance: TCheckBox
+          Width = 546
+          ExplicitWidth = 546
+        end
+        inherited rgSimulationChoice: TRadioGroup
+          Width = 546
+          OnClick = frameGweProcessrgSimulationChoiceClick
+          ExplicitWidth = 546
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGweProcess.lblComments
+            end
+            item
+              Control = frameGweProcess.memoComments
+            end
+            item
+              Control = frameGweProcess.rgSimulationChoice
+            end>
+          OnEnabledChange = frameGweProcessrcSelectionControllerEnabledChange
         end
       end
     end

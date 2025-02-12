@@ -1957,6 +1957,7 @@ that affects the model output should also have a comment. }
     function GetOnNodeActiveDataSetChanged: TNotifyEvent;
   protected
     function GetGwtUsed: Boolean; override;
+    function GetGweUsed: Boolean; override;
     procedure SetFrontDataSet(const Value: TDataArray); virtual;
     procedure SetSideDataSet(const Value: TDataArray); virtual;
     procedure SetTopDataSet(const Value: TDataArray); virtual;
@@ -41854,6 +41855,10 @@ begin
     begin
       IgnoredNames.Add(StrViscosity);
     end;
+    if ModflowPackages.GweProcess.IsSelected then
+    begin
+      IgnoredNames.Add(StrGweTemperature);
+    end;
   end;
 end;
 
@@ -50028,6 +50033,18 @@ end;
 function TCustomModel.GetGroundSurfaceUsed: TObjectUsedEvent;
 begin
   result := DoGroundSurfaceUsed;
+end;
+
+function TCustomModel.GetGweUsed: Boolean;
+begin
+  if ModelSelection = msModflow2015 then
+  begin
+    result := ModflowPackages.GweProcess.IsSelected;
+  end
+  else
+  begin
+    result := False;
+  end;
 end;
 
 function TCustomModel.GetGwRootInteractionUsed: TObjectUsedEvent;

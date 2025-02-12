@@ -97,6 +97,12 @@ type
     FTvsPackage: TTvsPackage;
     FPrtModels: TPrtModels;
     FGweProcess: TGwtProcess;
+    FGweCtpPackage: TGweCtpPackage;
+    FGweEstPackage: TGweEstPackage;
+    FGweConductionAndDispersionPackage: TGweConductionAndDispersionPackage;
+    FGweEslPackage: TGweEslPackage;
+    FGweAdvectionPackage: TGwtAdvectionPackage;
+    FGweSsmPackage: TGwtSsmPackage;
     procedure SetChdBoundary(const Value: TChdPackage);
     procedure SetLpfPackage(const Value: TLpfSelection);
     procedure SetPcgPackage(const Value: TPcgSelection);
@@ -184,6 +190,13 @@ type
     procedure SetTvsPackage(const Value: TTvsPackage);
     procedure SetPrtModels(const Value: TPrtModels);
     procedure SetGweProcess(const Value: TGwtProcess);
+    procedure SetGweAdvectionPackage(const Value: TGwtAdvectionPackage);
+    procedure SetGweConductionAndDispersionPackage(
+      const Value: TGweConductionAndDispersionPackage);
+    procedure SetGweCtpPackage(const Value: TGweCtpPackage);
+    procedure SetGweEslPackage(const Value: TGweEslPackage);
+    procedure SetGweEstPackage(const Value: TGweEstPackage);
+    procedure SetGweSsmPackage(const Value: TGwtSsmPackage);
   public
     procedure Assign(Source: TPersistent); override;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -353,12 +366,37 @@ type
       stored False
     {$ENDIF}
       ;
-//      property GweAdvectionPackage: TGwtAdvectionPackage;
-//      property GweConductionAndDispersionPackage: TGweConductionAndDispersionPackage;
-//      property TGweEstPackage: TGweEstPackage;
-//      property GwtSsmPackage: TGwtSsmPackage;
-//      property GweCtpPackage: TGweCtpPackage;
-//      property GweEslPackage: TGweEslPackage;
+    property GweAdvectionPackage: TGwtAdvectionPackage read FGweAdvectionPackage write SetGweAdvectionPackage
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    property GweConductionAndDispersionPackage: TGweConductionAndDispersionPackage
+        read FGweConductionAndDispersionPackage write SetGweConductionAndDispersionPackage
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    property GweEstPackage: TGweEstPackage read FGweEstPackage write SetGweEstPackage
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    property GweSsmPackage: TGwtSsmPackage read FGweSsmPackage write SetGweSsmPackage
+     {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    property GweCtpPackage: TGweCtpPackage read FGweCtpPackage write SetGweCtpPackage
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    property GweEslPackage: TGweEslPackage read FGweEslPackage write SetGweEslPackage
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
 
     // Assign, Create, Destroy, and Reset must be updated each time a new
     // package is added.
@@ -484,6 +522,12 @@ resourcestring
   StrTVKTimeVaryingHy = 'TVK: Time-Varying Hydraulic Conductivity Package';
   StrTVSTimeVaryingSt = 'TVS: Time-Varying Storage Package';
   StrGWEGroundwaterEne = 'GWE: Groundwater Energy Process';
+  StrADVGWEAdvectionP = 'ADV: GWE Advection Package';
+  StrCNDGWEConduction = 'CND: GWE Conduction and Dispersion Package';
+  StrESTGWEEnergyStor = 'EST: GWE Energy Storage and Transfer Package';
+  StrSSMGWESourceAnd = 'SSM: GWE Source and Sink Mixing Package';
+  StrCTPGWEConstantTe = 'CTP: GWE Constant Temperature Package';
+  StrESLGWEEnergySour = 'ESL: GWE Energy Source Loading Package';
 //  StrGroundwaterTranspor = 'GWT: Groundwater Transport';
 
 
@@ -571,6 +615,12 @@ begin
     GwtPackages := SourcePackages.GwtPackages;
 
     GweProcess := SourcePackages.GweProcess;
+    GweAdvectionPackage := SourcePackages.GweAdvectionPackage;
+    GweConductionAndDispersionPackage := SourcePackages.GweConductionAndDispersionPackage;
+    GweEstPackage := SourcePackages.GweEstPackage;
+    GweSsmPackage := SourcePackages.GweSsmPackage;
+    GweCtpPackage := SourcePackages.GweCtpPackage;
+    GweEslPackage := SourcePackages.GweEslPackage;
 
     FarmProcess4 := SourcePackages.FarmProcess4;
     FarmSoil4 := SourcePackages.FarmSoil4;
@@ -943,7 +993,7 @@ begin
   FGwtCncPackage.SelectionType := stCheckBox;
 
   FGwtSrcPackage := TGwtSrcPackage.Create(Model);
-  FGwtSrcPackage.PackageIdentifier := StrSRCGWTMassSource;;
+  FGwtSrcPackage.PackageIdentifier := StrSRCGWTMassSource;
   FGwtSrcPackage.Classification := StrGwtClassification;
   FGwtSrcPackage.SelectionType := stCheckBox;
 
@@ -952,10 +1002,39 @@ begin
 
 
   FGweProcess := TGwtProcess.Create(Model);
-  FGweProcess.PackageIdentifier := StrGWEGroundwaterEne;;
+  FGweProcess.PackageIdentifier := StrGWEGroundwaterEne;
   FGweProcess.Classification := StrGweClassification;
   FGweProcess.SelectionType := stCheckBox;
 
+  FGweAdvectionPackage := TGwtAdvectionPackage.Create(Model);
+  FGweAdvectionPackage.PackageIdentifier := StrADVGWEAdvectionP;
+  FGweAdvectionPackage.Classification := StrGweClassification;
+  FGweAdvectionPackage.SelectionType := stCheckBox;
+
+  FGweConductionAndDispersionPackage := TGweConductionAndDispersionPackage.Create(Model);
+  FGweConductionAndDispersionPackage.PackageIdentifier := StrCNDGWEConduction;
+  FGweConductionAndDispersionPackage.Classification := StrGweClassification;
+  FGweConductionAndDispersionPackage.SelectionType := stCheckBox;
+
+  FGweEstPackage := TGweEstPackage.Create(Model);
+  FGweEstPackage.PackageIdentifier := StrESTGWEEnergyStor;
+  FGweEstPackage.Classification := StrGweClassification;
+  FGweEstPackage.SelectionType := stCheckBox;
+
+  FGweSsmPackage := TGwtSsmPackage.Create(Model);
+  FGweSsmPackage.PackageIdentifier := StrSSMGWESourceAnd;
+  FGweSsmPackage.Classification := StrGweClassification;
+  FGweSsmPackage.SelectionType := stCheckBox;
+
+  FGweCtpPackage := TGweCtpPackage.Create(Model);
+  FGweCtpPackage.PackageIdentifier := StrCTPGWEConstantTe;
+  FGweCtpPackage.Classification := StrGweClassification;
+  FGweCtpPackage.SelectionType := stCheckBox;
+
+  FGweEslPackage := TGweEslPackage.Create(Model);
+  FGweEslPackage.PackageIdentifier := StrESLGWEEnergySour;
+  FGweEslPackage.Classification := StrGweClassification;
+  FGweEslPackage.SelectionType := stCheckBox;
 
 
   FFarmProcess4 := TFarmProcess4.Create(Model);
@@ -1038,6 +1117,12 @@ begin
   FFarmProcess4.Free;
 
   FGweProcess.Free;
+  FGweAdvectionPackage.Free;
+  FGweConductionAndDispersionPackage.Free;
+  FGweEstPackage.Free;
+  FGweSsmPackage.Free;
+  FGweCtpPackage.Free;
+  FGweEslPackage.Free;
 
   FGwtPackages.Free;
   FGwtSrcPackage.Free;
@@ -1199,6 +1284,12 @@ begin
   GwtSrcPackage.InitializeVariables;
 
   GweProcess.InitializeVariables;
+  GweAdvectionPackage.InitializeVariables;
+  GweConductionAndDispersionPackage.InitializeVariables;
+  GweEstPackage.InitializeVariables;
+  GweSsmPackage.InitializeVariables;
+  GweCtpPackage.InitializeVariables;
+  GweEslPackage.InitializeVariables;
 
   FarmProcess4.InitializeVariables;
   FarmSoil4.InitializeVariables;
@@ -1675,9 +1766,36 @@ begin
   FGncPackage.Assign(Value)
 end;
 
+procedure TModflowPackages.SetGweAdvectionPackage(
+  const Value: TGwtAdvectionPackage);
+begin
+  FGweAdvectionPackage.Assign(Value);
+end;
+
+procedure TModflowPackages.SetGweConductionAndDispersionPackage(
+  const Value: TGweConductionAndDispersionPackage);
+begin
+  FGweConductionAndDispersionPackage.Assign(Value);
+end;
+
+procedure TModflowPackages.SetGweCtpPackage(const Value: TGweCtpPackage);
+begin
+  FGweCtpPackage.Assign(Value);
+end;
+
+procedure TModflowPackages.SetGweEslPackage(const Value: TGweEslPackage);
+begin
+  FGweEslPackage.Assign(Value);
+end;
+
 procedure TModflowPackages.SetGweProcess(const Value: TGwtProcess);
 begin
   FGweProcess.Assign(Value);
+end;
+
+procedure TModflowPackages.SetGweSsmPackage(const Value: TGwtSsmPackage);
+begin
+  FGweSsmPackage.Assign(Value);
 end;
 
 procedure TModflowPackages.SetGwtAdvectionPackage(
@@ -1959,6 +2077,11 @@ end;
 procedure TModflowPackages.SetSwtPackage(const Value: TSwtPackageSelection);
 begin
   FSwtPackage.Assign(Value);
+end;
+
+procedure TModflowPackages.SetGweEstPackage(const Value: TGweEstPackage);
+begin
+  FGweEstPackage.Assign(Value);
 end;
 
 procedure TModflowPackages.SetTvkPackage(const Value: TTvkPackage);

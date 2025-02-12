@@ -797,6 +797,7 @@ type
     function GetModelSelection: TModelSelection; virtual; abstract;
     procedure SetModelSelection(const Value: TModelSelection); virtual; abstract;
     function GetGwtUsed: Boolean; virtual; abstract;
+    function GetGweUsed: Boolean; virtual; abstract;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
     property ComponentState: TComponentState read GetComponentState;
@@ -812,6 +813,7 @@ type
     property UpToDate: boolean read FUpToDate write SetUpToDate;
     property DisplayName: string read GetDisplayName;
     property GwtUsed: Boolean read GetGwtUsed;
+    property GweUsed: Boolean read GetGweUsed;
   published
     property ModelSelection: TModelSelection read GetModelSelection
       write SetModelSelection;
@@ -1180,6 +1182,7 @@ resourcestring
 const
   StrDensity = 'Density';
   StrViscosity = 'Viscosity';
+  StrGweTemperature = 'Temperature';
 
 var
   FxButton: TBitMap;
