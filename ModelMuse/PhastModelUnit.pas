@@ -21254,7 +21254,7 @@ var
   end;
 begin
   result := (ModelSelection in ModflowSelection)
-    and (ModflowPackages.Mt3dBasic.IsSelected or  GwtUsed);
+    and (ModflowPackages.Mt3dBasic.IsSelected or GwtUsed or GweUsed);
   if result then
   begin
     DataArray := Sender as TDataArray;
@@ -21263,7 +21263,7 @@ begin
       result := DataArrayUsed(MobileComponents)
         or DataArrayUsed(ImmobileComponents);
     end
-    else if GwtUsed then
+    else if GwtUsed or GweUsed then
     begin
       result := DataArrayUsed(MobileComponents);
     end;
@@ -41854,10 +41854,6 @@ begin
     if Visc.IsSelected and Visc.ViscositySpecified then
     begin
       IgnoredNames.Add(StrViscosity);
-    end;
-    if ModflowPackages.GweProcess.IsSelected then
-    begin
-      IgnoredNames.Add(StrGweTemperature);
     end;
   end;
 end;

@@ -366,7 +366,8 @@ type
       stored False
     {$ENDIF}
       ;
-    property GweAdvectionPackage: TGwtAdvectionPackage read FGweAdvectionPackage write SetGweAdvectionPackage
+    property GweAdvectionPackage: TGwtAdvectionPackage read FGweAdvectionPackage
+      write SetGweAdvectionPackage
     {$IFNDEF GWE}
       stored False
     {$ENDIF}
@@ -1596,6 +1597,43 @@ begin
   begin
     Inc(Result, LocalModel.MobileComponents.Count);
   end;
+
+  if GweProcess.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
+  if GweAdvectionPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
+  if GweConductionAndDispersionPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
+  if GweEstPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
+  if GweSsmPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
+  if GweCtpPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
+  if GweEslPackage.IsSelected and (Model.ModelSelection = msModflow2015)  then
+  begin
+    Inc(Result);
+  end;
+
+
 
   {$IFDEF PRT}
   if Model.ModelSelection = msModflow2015 then

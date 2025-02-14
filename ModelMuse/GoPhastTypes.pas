@@ -783,6 +783,8 @@ type
     property ComponentState: TComponentState read GetComponentState;
     function GetDisplayName: string;
     property DisplayName: string read GetDisplayName;
+    function GetGweUsed: Boolean;
+    property GweUsed: Boolean read GetGweUsed;
   end;
 
   TBaseModel = class abstract(TComponent, IModelMuseModel)

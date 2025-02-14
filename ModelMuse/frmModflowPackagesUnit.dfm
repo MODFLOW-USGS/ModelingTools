@@ -26,7 +26,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 577
     Height = 513
-    ActivePage = jvspGweProcess
+    ActivePage = jvspGweESL
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -5819,6 +5819,72 @@ inherited frmModflowPackages: TfrmModflowPackages
               Height = 28
               StyleElements = [seFont, seClient, seBorder]
               ItemHeight = 22
+              Items = <
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '10G11.4'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '11G10.3'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '9G13.6'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 1668328520
+                  Text = '15F7.1'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '15F7.2'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '15F7.3'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '15F7.4'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '20F5.0'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '20F5.1'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '20F5.2'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '20F5.3'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '20F5.4'
+                end
+                item
+                  Brush.Style = bsClear
+                  Indent = 0
+                  Text = '10G11.4'
+                end>
               ExplicitHeight = 28
             end
             inherited cbMultiPrintSave: TCheckBox
@@ -12522,6 +12588,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
+        ExplicitLeft = -4
+        ExplicitTop = -4
         ExplicitWidth = 577
         ExplicitHeight = 513
         inherited lblComments: TLabel
@@ -12567,6 +12635,9 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = frameGwtAdv.rgScheme
+            end
+            item
+              Control = frameGwtAdv.rdeAdePercel
             end>
         end
       end
@@ -14222,8 +14293,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 577
       Height = 513
       Caption = 'jvspGweProcess'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGweProcess: TframePackageFmi
         Left = 0
         Top = 0
@@ -14232,8 +14301,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 56
-        ExplicitTop = 88
+        ExplicitWidth = 577
+        ExplicitHeight = 513
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -14251,6 +14320,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited memoComments: TMemo
           Width = 546
           StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 546
         end
         inherited cbFlowImbalance: TCheckBox
           Width = 546
@@ -14273,6 +14343,376 @@ inherited frmModflowPackages: TfrmModflowPackages
               Control = frameGweProcess.rgSimulationChoice
             end>
           OnEnabledChange = frameGweProcessrcSelectionControllerEnabledChange
+        end
+      end
+    end
+    object jvspGweAdv: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 577
+      Height = 513
+      Caption = 'jvspGweAdv'
+      inline frameGweAdv: TframeGwtAdvPackage
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 513
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitWidth = 577
+        ExplicitHeight = 513
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited lblAdePercel: TLabel
+          Width = 185
+          Height = 54
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 185
+          ExplicitHeight = 54
+        end
+        inherited memoComments: TMemo
+          Width = 546
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 546
+        end
+        inherited rgScheme: TRadioGroup
+          Width = 546
+          ExplicitWidth = 546
+        end
+        inherited rdeAdePercel: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGweAdv.lblComments
+            end
+            item
+              Control = frameGweAdv.memoComments
+            end
+            item
+              Control = frameGweAdv.rgScheme
+            end
+            item
+              Control = frameGweAdv.rdeAdePercel
+            end>
+        end
+      end
+    end
+    object jvspGweCnd: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 577
+      Height = 513
+      Caption = 'jvspGweCnd'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGweCnd: TframeGweCndPackage
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 513
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 52
+        ExplicitTop = 79
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 546
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGweCnd.lblComments
+            end
+            item
+              Control = frameGweCnd.memoComments
+            end
+            item
+              Control = frameGweCnd.cbUseXT3D
+            end>
+        end
+      end
+    end
+    object jvspGweEst: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 577
+      Height = 513
+      Caption = 'jvspGweEst'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGweEst: TframePackageEst
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 513
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 80
+        ExplicitTop = 120
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited lblDensityWater: TLabel
+          Width = 255
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 255
+          ExplicitHeight = 18
+        end
+        inherited lblHeatCapacityWater: TLabel
+          Width = 359
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 359
+          ExplicitHeight = 18
+        end
+        inherited lblLatentHeat: TLabel
+          Top = 258
+          Width = 359
+          Height = 47
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitTop = 258
+          ExplicitWidth = 359
+          ExplicitHeight = 47
+        end
+        inherited memoComments: TMemo
+          Width = 546
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 457
+        end
+        inherited rdeDensityWater: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited rdeHeatCapacityWater: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited rdeLatentHeat: TRbwDataEntry
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGweEst.lblComments
+            end
+            item
+              Control = frameGweEst.memoComments
+            end
+            item
+              Control = frameGweEst.cbZeroOrderDecayWater
+            end
+            item
+              Control = frameGweEst.cbZeroOrderDecaySolute
+            end
+            item
+              Control = frameGweEst.rdeDensityWater
+            end
+            item
+              Control = frameGweEst.rdeHeatCapacityWater
+            end
+            item
+              Control = frameGweEst.rdeLatentHeat
+            end>
+        end
+      end
+    end
+    object jvspGweSSM: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 577
+      Height = 513
+      Caption = 'jvspGweSSM'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGweSsm: TframePackage
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 513
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 56
+        ExplicitTop = 40
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 546
+          StyleElements = [seFont, seClient, seBorder]
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGweSsm.lblComments
+            end
+            item
+              Control = frameGweSsm.memoComments
+            end>
+        end
+      end
+    end
+    object jvspGweCTP: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 577
+      Height = 513
+      Caption = 'jvspGweCTP'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGweCTP: TframePackageUseMultiplier
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 513
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 104
+        ExplicitTop = 104
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 546
+          Height = 431
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 546
+          ExplicitHeight = 431
+        end
+        inherited cbUseMultiplierMODFLOW6: TCheckBox
+          Caption = 'Use Multiplier'
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGweCTP.lblComments
+            end
+            item
+              Control = frameGweCTP.memoComments
+            end
+            item
+              Control = frameGweCTP.cbUseMultiplierMODFLOW6
+            end>
+        end
+      end
+    end
+    object jvspGweESL: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 577
+      Height = 513
+      Caption = 'jvspGweESL'
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      inline frameGweESL: TframePackageUseMultiplier
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 513
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitLeft = 40
+        ExplicitTop = 48
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 546
+          Height = 431
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 546
+          ExplicitHeight = 431
+        end
+        inherited cbUseMultiplierMODFLOW6: TCheckBox
+          Caption = 'Use Multiplier'
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGweESL.lblComments
+            end
+            item
+              Control = frameGweESL.memoComments
+            end
+            item
+              Control = frameGweESL.cbUseMultiplierMODFLOW6
+            end>
         end
       end
     end

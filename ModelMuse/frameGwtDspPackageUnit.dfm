@@ -6,8 +6,15 @@ inherited frameGwtDspPackage: TframeGwtDspPackage
   DesignSize = (
     525
     434)
+  inherited lblComments: TLabel
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited lblPackage: TLabel
+    StyleElements = [seFont, seClient, seBorder]
+  end
   inherited memoComments: TMemo
     Width = 494
+    StyleElements = [seFont, seClient, seBorder]
     ExplicitWidth = 494
   end
   object cbUseXT3D: TCheckBox [3]
@@ -65,6 +72,7 @@ inherited frameGwtDspPackage: TframeGwtDspPackage
     Width = 441
     Height = 17
     Caption = 'Specify transverse dispersivity for vertical flow'
+    Enabled = False
     TabOrder = 5
   end
   object cbSeparateDataSets: TCheckBox [8]
@@ -95,6 +103,9 @@ inherited frameGwtDspPackage: TframeGwtDspPackage
       end
       item
         Control = cbSeparateDataSets
+      end
+      item
+        Control = cbVertFlowTransDisp
       end>
     OnEnabledChange = rcSelectionControllerEnabledChange
   end

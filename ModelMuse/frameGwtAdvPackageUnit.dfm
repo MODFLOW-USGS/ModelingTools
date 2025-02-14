@@ -15,14 +15,15 @@ inherited frameGwtAdvPackage: TframeGwtAdvPackage
   object lblAdePercel: TLabel [2]
     Left = 167
     Top = 283
-    Width = 250
-    Height = 38
+    Width = 216
+    Height = 30
     Caption = 'Fractional cell distance for adaptive time stepping (ATS_PERCEL)'
     WordWrap = True
   end
   inherited memoComments: TMemo
     Width = 422
     StyleElements = [seFont, seClient, seBorder]
+    ExplicitWidth = 422
   end
   object rgScheme: TRadioGroup [4]
     Left = 16
@@ -38,13 +39,14 @@ inherited frameGwtAdvPackage: TframeGwtAdvPackage
       'Central (rarely used)'
       'Total Variation Diminishing (TVD)')
     TabOrder = 1
-    ExplicitWidth = 391
   end
   object rdeAdePercel: TRbwDataEntry [5]
     Left = 16
     Top = 280
     Width = 145
     Height = 22
+    Color = clBtnFace
+    Enabled = False
     TabOrder = 2
     Text = '0'
     DataType = dtReal
@@ -63,6 +65,9 @@ inherited frameGwtAdvPackage: TframeGwtAdvPackage
       end
       item
         Control = rgScheme
+      end
+      item
+        Control = rdeAdePercel
       end>
   end
 end

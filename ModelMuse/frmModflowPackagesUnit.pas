@@ -58,7 +58,8 @@ uses System.UITypes,
   framePackageFmp4SurfaceWaterUnit, framePackageFmp4WellsUnit,
   framePackageFmp4AllotmentsUnit, framePackageFmp4LandUseUnit,
   framePackageFmp4SalinityFlushUnit, framePackageBuoyancyUnit,
-  framePackageViscosityUnit, framePackageTvsUnit, framePackageUseMultiplierUnit;
+  framePackageViscosityUnit, framePackageTvsUnit, framePackageUseMultiplierUnit,
+  frameGweCndPackageUnit, framePackageEstUnit;
 
 type
 
@@ -310,6 +311,18 @@ type
     framePackageUzfMf6: TframePackageUzfMf6;
     jvspGweProcess: TJvStandardPage;
     frameGweProcess: TframePackageFmi;
+    jvspGweAdv: TJvStandardPage;
+    frameGweAdv: TframeGwtAdvPackage;
+    jvspGweCnd: TJvStandardPage;
+    frameGweCnd: TframeGweCndPackage;
+    jvspGweEst: TJvStandardPage;
+    frameGweEst: TframePackageEst;
+    jvspGweSSM: TJvStandardPage;
+    frameGweSsm: TframePackage;
+    jvspGweCTP: TJvStandardPage;
+    frameGweCTP: TframePackageUseMultiplier;
+    jvspGweESL: TJvStandardPage;
+    frameGweESL: TframePackageUseMultiplier;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -3216,6 +3229,7 @@ begin
   end;
 
   UpdateGwtFrames;
+  EnableGwePackages
 end;
 
 procedure TfrmModflowPackages.MakeIgnoredSpeciesLast;
@@ -3318,10 +3332,10 @@ begin
     begin
       IgnoredNames.Add(StrViscosity);
     end;
-    if frameGweProcess.Selected then
-    begin
-      IgnoredNames.Add(StrGweTemperature);
-    end;
+//    if frameGweProcess.Selected then
+//    begin
+//      IgnoredNames.Add(StrGweTemperature);
+//    end;
   end;
 end;
 
@@ -3391,8 +3405,47 @@ begin
 end;
 
 procedure TfrmModflowPackages.EnableGwePackages;
+var
+  CanSelect: Boolean;
 begin
   { TODO -cGWE : Complete work for GWE }
+  CanSelect := frameGweProcess.rcSelectionController.Enabled;
+
+  frameGweAdv.CanSelect := CanSelect;
+  if not frameGweAdv.CanSelect then
+  begin
+    frameGweAdv.Selected := False;
+  end;
+
+  frameGweCnd.CanSelect := CanSelect;
+  if not frameGweCnd.CanSelect then
+  begin
+    frameGweCnd.Selected := False;
+  end;
+
+  frameGweEst.CanSelect := CanSelect;
+  if not frameGweEst.CanSelect then
+  begin
+    frameGweEst.Selected := False;
+  end;
+
+  frameGweSsm.CanSelect := CanSelect;
+  if not frameGweSsm.CanSelect then
+  begin
+    frameGweSsm.Selected := False;
+  end;
+
+  frameGweCTP.CanSelect := CanSelect;
+  if not frameGweCTP.CanSelect then
+  begin
+    frameGweCTP.Selected := False;
+  end;
+
+  frameGweESL.CanSelect := CanSelect;
+  if not frameGweESL.CanSelect then
+  begin
+    frameGweESL.Selected := False;
+  end;
 end;
 
 procedure TfrmModflowPackages.EnableGwtPackages;
@@ -5474,6 +5527,26 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    Packages.GweAdvectionPackage.Frame := frameGweAdv;
+    FPackageList.Add(Packages.GweAdvectionPackage);
+  end
+  else
+  begin
+    frameGweAdv.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    Packages.GweConductionAndDispersionPackage.Frame := frameGweCnd;
+    FPackageList.Add(Packages.GweConductionAndDispersionPackage);
+  end
+  else
+  begin
+    frameGweCnd.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
     Packages.GwtDispersionPackage.Frame := frameGwtDsp;
     FPackageList.Add(Packages.GwtDispersionPackage);
   end
@@ -5484,12 +5557,52 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+    Packages.GweEstPackage.Frame := frameGweEst;
+    FPackageList.Add(Packages.GweEstPackage);
+  end
+  else
+  begin
+    frameGweEst.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
     Packages.GwtSsmPackage.Frame := frameGwtSSM;
     FPackageList.Add(Packages.GwtSsmPackage);
   end
   else
   begin
     frameGwtSSM.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    Packages.GweSsmPackage.Frame := frameGweSsm;
+    FPackageList.Add(Packages.GweSsmPackage);
+  end
+  else
+  begin
+    frameGweSsm.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    Packages.GweCtpPackage.Frame := frameGweCTP;
+    FPackageList.Add(Packages.GweCtpPackage);
+  end
+  else
+  begin
+    frameGweCTP.NilNode;
+  end;
+
+  if frmGoPhast.ModelSelection = msModflow2015 then
+  begin
+    Packages.GweEslPackage.Frame := frameGweESL;
+    FPackageList.Add(Packages.GweEslPackage);
+  end
+  else
+  begin
+    frameGweESL.NilNode;
   end;
 
   if frmGoPhast.ModelSelection = msModflow2015 then

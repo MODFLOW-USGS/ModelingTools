@@ -588,6 +588,8 @@ const
   StrTransientSS = 'Transient SS';
   StrTransientSY = 'Transient SY';
 
+  kInitialTemperatureGwe = 'Initial_Temperature';
+
 resourcestring
   StrActiveSurfaceEleva = 'Active_Surface_Elevation';
   StrSFTInitialConcentra = KSFTInitialConcentra;

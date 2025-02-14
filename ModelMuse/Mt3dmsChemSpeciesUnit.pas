@@ -533,11 +533,19 @@ var
   IstPackage: TGwtIstPackage;
   DomainIndex: Integer;
 begin
-  if Collection.Model <> nil then
+  if Model <> nil then
   begin
     // Reassigning the name will cause the data set to be created if it is
     // needed.
-    InitialConcDataArrayName := InitialConcDataArrayName;
+    if Model.GweUsed and (Name = StrGweTemperature) then
+    begin
+      FInitialConcDisplayName := kInitialTemperatureGwe;
+      InitialConcDataArrayName := kInitialTemperatureGwe;
+    end
+    else
+    begin
+      InitialConcDataArrayName := InitialConcDataArrayName;
+    end;
     SorbOrImmobInitialConcDataArrayName := SorbOrImmobInitialConcDataArrayName;
     FirstSorbParamDataArrayName := FirstSorbParamDataArrayName;
     SecondSorbParamDataArrayName := SecondSorbParamDataArrayName;
@@ -2206,10 +2214,18 @@ begin
     begin
       OldRoot := GenerateNewRoot(FName);
       NewRoot := GenerateNewRoot(Value);
-      FInitialConcDisplayName := StringReplace(FInitialConcDisplayName,
-        OldRoot,NewRoot, []);
-      InitialConcDataArrayName := StringReplace(InitialConcDataArrayName,
-        OldRoot,NewRoot, []);
+      if (Model <> nil) and Model.GweUsed and (Value = StrGweTemperature) then
+      begin
+        FInitialConcDisplayName := GenerateNewRoot(kInitialTemperatureGwe);
+        InitialConcDataArrayName := GenerateNewRoot(kInitialTemperatureGwe);
+      end
+      else
+      begin
+        FInitialConcDisplayName := StringReplace(FInitialConcDisplayName,
+          OldRoot,NewRoot, []);
+        InitialConcDataArrayName := StringReplace(InitialConcDataArrayName,
+          OldRoot,NewRoot, []);
+      end;
 
       FSorbOrImmobInitialConcDisplayName := StringReplace(
         FSorbOrImmobInitialConcDisplayName,
@@ -2450,12 +2466,20 @@ begin
     end
     else
     begin
-      FInitialConcDisplayName := GenerateNewRoot(StrInitConcPrefix + Value);
-      InitialConcDataArrayName := GenerateNewRoot(kInitConcPrefix + Value);
       LocalModel := Model as TPhastModel;
       if LocalModel = nil then
       begin
         LocalModel := frmGoPhast.PhastModel;
+      end;
+      if (LocalModel <> nil) and LocalModel.GweUsed and (Value = StrGweTemperature) then
+      begin
+        FInitialConcDisplayName := GenerateNewRoot(kInitialTemperatureGwe);
+        InitialConcDataArrayName := GenerateNewRoot(kInitialTemperatureGwe);
+      end
+      else
+      begin
+        FInitialConcDisplayName := GenerateNewRoot(StrInitConcPrefix + Value);
+        InitialConcDataArrayName := GenerateNewRoot(kInitConcPrefix + Value);
       end;
       if LocalModel.ModflowPackages.Mt3dmsChemReact.SorptionChoice
         = scFirstOrderKinetic then

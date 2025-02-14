@@ -948,7 +948,9 @@ uses
   Mt3dObservationResultsUnit in 'Mt3dObservationResultsUnit.pas',
   frameMt3dObsResultsUnit in 'frameMt3dObsResultsUnit.pas' {frameMt3dObsResults: TFrame},
   framePackagePrpUnit in 'framePackagePrpUnit.pas' {framePackagePrp: TFrame},
-  frameOptionalValueUnit in 'frameOptionalValueUnit.pas' {frameOptionalValue: TFrame};
+  frameOptionalValueUnit in 'frameOptionalValueUnit.pas' {frameOptionalValue: TFrame},
+  frameGweCndPackageUnit in 'frameGweCndPackageUnit.pas' {frameGweCndPackage: TFrame},
+  framePackageEstUnit in 'framePackageEstUnit.pas' {framePackageEst: TFrame};
 
 {$R *.res}
 
