@@ -74,6 +74,10 @@ type
     FTransverseVertDispDisplayName: string;
     FImmobileFreundlichExponentSp2s: TStringList;
     FImmobileSorptionCapacitySp2s: TStringList;
+    FThermalConductivityFluid: string;
+    FThermalConductivitySolid: string;
+    FThermalConductivityFluidDisplayName: string;
+    FThermalConductivitySolidDisplayName: string;
     function GetName: string;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
@@ -130,6 +134,8 @@ type
     procedure SetTransverseVertDispArrayNameDataArrayName(const NewName: string);
     procedure SetImmobileFreundlichExponentSp2s(const Value: TStringList);
     procedure SetImmobileSorptionCapacitySp2s(const Value: TStringList);
+    procedure SetThermalConductivityFluid(const NewName: string);
+    procedure SetThermalConductivitySolid(const NewName: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -218,22 +224,24 @@ type
     property LongDispHDataArrayName: string
       read FLongDispHDataArrayName
       write SetLongDispHArrayNameDataArrayName;
-    // GWT DSP package, alv
+    // GWT DSP and CND packages, alv
     property LongDispVertDataArrayName: string
       read FLongDispVertDataArrayName
       write SetLongDispVertArrayNameDataArrayName;
-    // GWT DSP package, ath1
+    // GWT DSP  and CND packages, ath1
     property TransverseDispHDataArrayName: string
       read FTransverseDispHDataArrayName
       write SetTransverseDispHArrayNameDataArrayName;
-    // GWT DSP package, ath2
+    // GWT DSP  and CND packages, ath2
     property TransverseDispVertDataArrayName: string
       read FTransverseDispVertDataArrayName
       write SetTransverseDispVertArrayNameDataArrayName;
-    // GWT DSP package, atv
+    // GWT DSP  and CND packages, atv
     property TransverseVertDispDataArrayName: string
       read FTransverseVertDispDataArrayName
       write SetTransverseVertDispArrayNameDataArrayName;
+    property ThermalConductivityFluid: string read FThermalConductivityFluid write SetThermalConductivityFluid;
+    property ThermalConductivitySolid: string read FThermalConductivitySolid write SetThermalConductivitySolid;
 
     //IST package, CIM
     property ImmobileInitialConcentrations: TStringList
@@ -499,6 +507,12 @@ begin
     FTransverseVertDispDataArrayName := '';
     TransverseVertDispDataArrayName := SourceChem.TransverseVertDispDataArrayName;
 
+    FThermalConductivityFluid := '';
+    ThermalConductivityFluid := SourceChem.ThermalConductivityFluid;
+
+    FThermalConductivitySolid := '';
+    ThermalConductivitySolid := SourceChem.ThermalConductivitySolid;
+
 //    ImmobileInitialConcentrations.Clear;
     ImmobileInitialConcentrations := SourceChem.ImmobileInitialConcentrations;
 //    ImmobilePorosities.Clear;
@@ -567,6 +581,9 @@ begin
     TransverseDispHDataArrayName := TransverseDispHDataArrayName;
     TransverseDispVertDataArrayName := TransverseDispVertDataArrayName;
     TransverseVertDispDataArrayName := TransverseVertDispDataArrayName;
+
+    ThermalConductivityFluid := ThermalConductivityFluid;
+    ThermalConductivitySolid := ThermalConductivitySolid;
 
     TempNames := TStringList.Create;
     try
@@ -1011,6 +1028,8 @@ begin
       and (TransverseDispHDataArrayName = ChemItem.TransverseDispHDataArrayName)
       and (TransverseDispVertDataArrayName = ChemItem.TransverseDispVertDataArrayName)
       and (TransverseVertDispDataArrayName = ChemItem.TransverseVertDispDataArrayName)
+      and (ThermalConductivityFluid = ChemItem.ThermalConductivityFluid)
+      and (ThermalConductivitySolid = ChemItem.ThermalConductivitySolid)
 
       and SameStrings(ImmobileInitialConcentrations,  ChemItem.ImmobileInitialConcentrations)
       and SameStrings(ImmobilePorosities,  ChemItem.ImmobilePorosities)
@@ -1948,6 +1967,7 @@ procedure TChemSpeciesItem.SetLongDispHArrayNameDataArrayName(
 var
   LocalModel: TPhastModel;
   DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
 begin
   LocalModel := Collection.Model as TPhastModel;
 
@@ -1957,11 +1977,20 @@ begin
     if LocalModel.LongitudinalDispersionUsedPerSpecies(nil) then
     begin
       DataSetUsed := True;
+    end
+    else if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweConductionAndDispersionPackage.IsSelected then
+      begin
+        DataSetUsed := True;
+      end;
     end;
     UpdateDataArray(LocalModel.LongitudinalDispersionUsedPerSpecies,
       FLongDispHDataArrayName, NewName,
       FLongDispHDataArrayDisplayName, '10', StrMODFLOW6Dispersion_ALH,
-      DataSetUsed, StrGwtClassification);
+      DataSetUsed, StrGwtGweClassification);
   end;
 
   SetCaseSensitiveStringProperty(FLongDispHDataArrayName, NewName);
@@ -1972,6 +2001,7 @@ procedure TChemSpeciesItem.SetLongDispVertArrayNameDataArrayName(
 var
   LocalModel: TPhastModel;
   DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
 begin
   LocalModel := Collection.Model as TPhastModel;
 
@@ -1981,11 +2011,20 @@ begin
     if LocalModel.SeparatedLongitudinalDispersionUsedPerSpecies(nil) then
     begin
       DataSetUsed := True;
+    end
+    else if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweConductionAndDispersionPackage.IsSelected then
+      begin
+        DataSetUsed := True;
+      end;
     end;
     UpdateDataArray(LocalModel.SeparatedLongitudinalDispersionUsedPerSpecies,
       FLongDispVertDataArrayName, NewName,
       FLongDispVertDataArrayDisplayName, '1', StrMODFLOW6Dispersion_ALV,
-      DataSetUsed, StrGwtClassification);
+      DataSetUsed, StrGwtGweClassification);
   end;
 
   SetCaseSensitiveStringProperty(FLongDispVertDataArrayName, NewName);
@@ -2374,6 +2413,21 @@ begin
         TransverseVertDispDataArrayName,
         OldRoot,NewRoot, []);
 
+
+      FThermalConductivityFluidDisplayName := StringReplace(
+        FThermalConductivityFluidDisplayName,
+        OldRoot,NewRoot, []);
+      ThermalConductivityFluid := StringReplace(
+        ThermalConductivityFluid,
+        OldRoot,NewRoot, []);
+
+      FThermalConductivitySolidDisplayName := StringReplace(
+        FThermalConductivitySolidDisplayName,
+        OldRoot,NewRoot, []);
+      ThermalConductivitySolid := StringReplace(
+        ThermalConductivitySolid,
+        OldRoot,NewRoot, []);
+
       NewImobileDataSetNames.Assign(ImmobileInitialConcentrations);
       for DomainIndex := 0 to ImmobileInitialConcentrations.Count - 1 do
       begin
@@ -2592,9 +2646,19 @@ begin
         GenerateNewRoot(KVerticalTransverse + '_' + Value);
 
       FTransverseVertDispDisplayName :=
-        GenerateNewRoot(rsVertical_Transv_Dispersivity + '_' + Value);
-      TransverseVertDispDataArrayName :=
         GenerateNewRoot(rsVertical_Transv_DispersivityDisplayName + '_' + Value);
+      TransverseVertDispDataArrayName :=
+        GenerateNewRoot(rsVertical_Transv_Dispersivity + '_' + Value);
+
+      FThermalConductivityFluidDisplayName :=
+        GenerateNewRoot(StrThermalCondFluidDisplayName + '_' + Value);
+      ThermalConductivityFluid :=
+        GenerateNewRoot(rsThermalCondFluid + '_' + Value);
+
+      FThermalConductivitySolidDisplayName :=
+        GenerateNewRoot(StrThermalCondSolidDisplayName + '_' + Value);
+      ThermalConductivitySolid :=
+        GenerateNewRoot(rsThermalCondSolid + '_' + Value);
 
       if Index < LocalModel.ModflowPackages.GwtPackages.Count then
       begin
@@ -2817,11 +2881,78 @@ begin
   FStoredViscositySlope.Assign(Value)    ;
 end;
 
+procedure TChemSpeciesItem.SetThermalConductivityFluid(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.SeparatedThermalConductivityUsed(nil) then
+    begin
+      DataSetUsed := True;
+    end
+    else if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweConductionAndDispersionPackage.IsSelected then
+      begin
+        DataSetUsed := True;
+      end;
+    end;
+    UpdateDataArray(LocalModel.SeparatedThermalConductivityUsed,
+      FThermalConductivityFluid, NewName,
+      FThermalConductivityFluidDisplayName, '1', StrMODFLOW6CndKTW,
+      DataSetUsed, StrGweClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FThermalConductivityFluid, NewName);
+end;
+
+procedure TChemSpeciesItem.SetThermalConductivitySolid(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.SeparatedThermalConductivityUsed(nil) then
+    begin
+      DataSetUsed := True;
+    end
+    else if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweConductionAndDispersionPackage.IsSelected then
+      begin
+        DataSetUsed := True;
+      end;
+    end;
+    UpdateDataArray(LocalModel.SeparatedThermalConductivityUsed,
+      FThermalConductivitySolid, NewName,
+      FThermalConductivitySolidDisplayName, '1', StrMODFLOW6CndKTS,
+      DataSetUsed, StrGweClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FThermalConductivitySolid, NewName);
+end;
+
 procedure TChemSpeciesItem.SetTransverseDispHArrayNameDataArrayName(
   const NewName: string);
 var
   LocalModel: TPhastModel;
   DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
 begin
   LocalModel := Collection.Model as TPhastModel;
 
@@ -2831,11 +2962,20 @@ begin
     if LocalModel.CombinedHorizontalTransverseDispersionUsedPerSpecies(nil) then
     begin
       DataSetUsed := True;
+    end
+    else if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweConductionAndDispersionPackage.IsSelected then
+      begin
+        DataSetUsed := True;
+      end;
     end;
     UpdateDataArray(LocalModel.CombinedHorizontalTransverseDispersionUsedPerSpecies,
       FTransverseDispHDataArrayName, NewName,
       FTransverseDispHDataArrayDisplayName, '1', StrMODFLOW6Dispersion_ATH1,
-      DataSetUsed, StrGwtClassification);
+      DataSetUsed, StrGwtGweClassification);
   end;
 
   SetCaseSensitiveStringProperty(FTransverseDispHDataArrayName, NewName);
@@ -2846,6 +2986,7 @@ procedure TChemSpeciesItem.SetTransverseDispVertArrayNameDataArrayName(
 var
   LocalModel: TPhastModel;
   DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
 begin
   LocalModel := Collection.Model as TPhastModel;
 
@@ -2855,11 +2996,20 @@ begin
     if LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies(nil) then
     begin
       DataSetUsed := True;
+    end
+    else if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweConductionAndDispersionPackage.IsSelected then
+      begin
+        DataSetUsed := True;
+      end;
     end;
     UpdateDataArray(LocalModel.SeparatedHorizontalTransverseDispersionUsedPerSpecies,
       FTransverseDispVertDataArrayName, NewName,
       FTransverseDispVertDataArrayDisplayName, '0.1', StrMODFLOW6Dispersion_ATH2,
-      DataSetUsed, StrGwtClassification);
+      DataSetUsed, StrGwtGweClassification);
   end;
 
   SetCaseSensitiveStringProperty(FTransverseDispVertDataArrayName, NewName);

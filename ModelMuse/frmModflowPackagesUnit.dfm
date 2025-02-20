@@ -26,7 +26,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 577
     Height = 513
-    ActivePage = jvspGweESL
+    ActivePage = jvspChemSpecies
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -12588,8 +12588,6 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = -4
-        ExplicitTop = -4
         ExplicitWidth = 577
         ExplicitHeight = 513
         inherited lblComments: TLabel
@@ -14418,8 +14416,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 577
       Height = 513
       Caption = 'jvspGweCnd'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGweCnd: TframeGweCndPackage
         Left = 0
         Top = 0
@@ -14428,8 +14424,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 52
-        ExplicitTop = 79
+        ExplicitWidth = 577
+        ExplicitHeight = 513
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -14447,6 +14443,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited memoComments: TMemo
           Width = 546
           StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 546
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -14468,8 +14465,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 577
       Height = 513
       Caption = 'jvspGweEst'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGweEst: TframePackageEst
         Left = 0
         Top = 0
@@ -14478,8 +14473,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 80
-        ExplicitTop = 120
+        ExplicitWidth = 577
+        ExplicitHeight = 513
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -14510,17 +14505,17 @@ inherited frmModflowPackages: TfrmModflowPackages
         end
         inherited lblLatentHeat: TLabel
           Top = 258
-          Width = 359
-          Height = 47
+          Width = 240
+          Height = 36
           StyleElements = [seFont, seClient, seBorder]
           ExplicitTop = 258
-          ExplicitWidth = 359
-          ExplicitHeight = 47
+          ExplicitWidth = 240
+          ExplicitHeight = 36
         end
         inherited memoComments: TMemo
           Width = 546
           StyleElements = [seFont, seClient, seBorder]
-          ExplicitWidth = 457
+          ExplicitWidth = 546
         end
         inherited rdeDensityWater: TRbwDataEntry
           StyleElements = [seFont, seClient, seBorder]
@@ -14563,8 +14558,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 577
       Height = 513
       Caption = 'jvspGweSSM'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGweSsm: TframePackage
         Left = 0
         Top = 0
@@ -14573,8 +14566,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 56
-        ExplicitTop = 40
+        ExplicitWidth = 577
+        ExplicitHeight = 513
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -14592,6 +14585,7 @@ inherited frmModflowPackages: TfrmModflowPackages
         inherited memoComments: TMemo
           Width = 546
           StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 546
         end
         inherited rcSelectionController: TRbwController
           ControlList = <
@@ -14610,8 +14604,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 577
       Height = 513
       Caption = 'jvspGweCTP'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGweCTP: TframePackageUseMultiplier
         Left = 0
         Top = 0
@@ -14620,8 +14612,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 104
-        ExplicitTop = 104
+        ExplicitWidth = 577
+        ExplicitHeight = 513
         inherited lblComments: TLabel
           Width = 76
           Height = 18
@@ -14666,8 +14658,6 @@ inherited frmModflowPackages: TfrmModflowPackages
       Width = 577
       Height = 513
       Caption = 'jvspGweESL'
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       inline frameGweESL: TframePackageUseMultiplier
         Left = 0
         Top = 0
@@ -14676,8 +14666,8 @@ inherited frmModflowPackages: TfrmModflowPackages
         Align = alClient
         TabOrder = 0
         TabStop = True
-        ExplicitLeft = 40
-        ExplicitTop = 48
+        ExplicitWidth = 577
+        ExplicitHeight = 513
         inherited lblComments: TLabel
           Width = 76
           Height = 18

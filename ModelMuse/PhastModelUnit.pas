@@ -152,7 +152,8 @@ resourcestring
   StrMT3DMS_GWT_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
   StrMt3dClassification = 'MT3DMS or MT3D-USGS';
   StrGwtClassification = 'GWT: Groundwater Transport';
-  StrGweClassification = 'GWE: Energy Transport';
+  StrGweClassification = 'GWE: Groundwater Energy Transport';
+  StrGwtGweClassification = 'GWT, GWE: Groundwater Solute or Energy Transport';
 
   StrNoStressPeriods = 'No stress periods have been defined for MT3DMS.';
   StrMODFLOWFHBHeads = 'FHB Heads';
@@ -1632,6 +1633,7 @@ that affects the model output should also have a comment. }
     function GetMt3dmsTimes: TMt3dmsTimeCollection; virtual; abstract;
     procedure SetMt3dmsTimes(const Value: TMt3dmsTimeCollection); virtual; abstract;
     function DoGwtDispUsed(Sender: TObject): boolean; virtual;
+    function DoGweCndUsed(Sender: TObject): boolean; virtual;
     function GetGwtDispUsed: TObjectUsedEvent;
     property GwtDispUsed: TObjectUsedEvent read GetGwtDispUsed;
     function DoLongitudinalDispersionUsed(Sender: TObject): boolean; virtual;
@@ -1666,6 +1668,8 @@ that affects the model output should also have a comment. }
     function DoCombinedHorizontalTransverseDispersionUsedPerSpecies(Sender: TObject): boolean; virtual;
     function GetCombinedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent;
 
+    function DoSeparatedThermalConductivityUsedPerSpecies(Sender: TObject): boolean; virtual;
+    function GetSeparatedThermalConductivityUsed: TObjectUsedEvent;
 
 //    function
     procedure UpdateMt3dmsActive(Sender: TObject);
@@ -2230,6 +2234,7 @@ that affects the model output should also have a comment. }
     function DoMt3dMS_StrictUsed(Sender: TObject): boolean; virtual;
     property Mt3dMS_StrictUsed: TObjectUsedEvent read GetMt3dMS_StrictUsed;
     function Mf6GwtUsed(Sender: TObject): boolean; virtual;
+    function Mf6GweUsed(Sender: TObject): boolean; virtual;
     procedure ClearPval;
     procedure FinalizePvalAndTemplate(FileName: string);
     function ParamNamesDataSetUsed(Sender: TObject): boolean; virtual;
@@ -3199,6 +3204,7 @@ that affects the model output should also have a comment. }
       read GetSeparatedHorizontalTransverseDispersionUsedPerSpecies;
     property CombinedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent
       read GetCombinedHorizontalTransverseDispersionUsedPerSpecies;
+    property SeparatedThermalConductivityUsed: TObjectUsedEvent read GetSeparatedThermalConductivityUsed;
   published
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
       stored StoreDisvGrid;
@@ -33703,26 +33709,69 @@ end;
 
 function TCustomModel.DoSeparatedHorizontalTransverseDispersionUsedPerSpecies(
   Sender: TObject): boolean;
+var
+  ADataArray: TDataArray;
 begin
   result := GwtDispUsedPerSpecies(Sender)
     and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtSeparate)
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate)
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate);
+  if not result then
+  begin
+    if (Sender <> nil) and DoGweCndUsed(Sender)  then
+    begin
+      ADataArray := Sender as TDataArray;
+      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+    end;
+  end;
 end;
 
 function TCustomModel.DoSeparatedLongitudinalDispersionUsed(
   Sender: TObject): boolean;
+var
+  ADataArray: TDataArray;
 begin
   result := (DoGwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtSeparate))
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtCombined)
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtCombined);
+//  if not result then
+//  begin
+//    if (Sender <> nil) and DoGweCndUsed(Sender)  then
+//    begin
+//      ADataArray := Sender as TDataArray;
+//      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+//    end;
+//  end;
 end;
 
 function TCustomModel.DoSeparatedLongitudinalDispersionUsedPerSpecies(
   Sender: TObject): boolean;
+var
+  ADataArray: TDataArray;
 begin
   result := (GwtDispUsedPerSpecies(Sender)
     and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtSeparate)
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate))
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate));
+  if not result then
+  begin
+    if (Sender <> nil) and DoGweCndUsed(Sender)  then
+    begin
+      ADataArray := Sender as TDataArray;
+      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+    end;
+  end;
+end;
+
+function TCustomModel.DoSeparatedThermalConductivityUsedPerSpecies(
+  Sender: TObject): boolean;
+var
+  ADataArray: TDataArray;
+begin
+  result := False;
+    if (Sender <> nil) and DoGweCndUsed(Sender)  then
+  begin
+    ADataArray := Sender as TDataArray;
+    result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+  end;
 end;
 
 procedure TCustomModel.SetAlternateFlowPackage(const Value: boolean);
@@ -36286,6 +36335,11 @@ end;
 function TCustomModel.GetSeparatedLongitudinalDispersionUsedPerSpecies: TObjectUsedEvent;
 begin
   result := DoSeparatedLongitudinalDispersionUsedPerSpecies;
+end;
+
+function TCustomModel.GetSeparatedThermalConductivityUsed: TObjectUsedEvent;
+begin
+  result := DoSeparatedThermalConductivityUsedPerSpecies;
 end;
 
 function TCustomModel.GetSeparateGwtUsed: Boolean;
@@ -39486,10 +39540,19 @@ end;
 
 function TCustomModel.DoCombinedHorizontalTransverseDispersionUsedPerSpecies(
   Sender: TObject): boolean;
+var
+  ADataArray: TDataArray;
 begin
   result := GwtDispUsedPerSpecies(Sender)
-//    and (ModflowPackages.GwtDispersionPackage.TransverseDispTreatement = dtCombined)
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate)
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate);
+  if not result then
+  begin
+    if (Sender <> nil) and DoGweCndUsed(Sender)  then
+    begin
+      ADataArray := Sender as TDataArray;
+      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+    end;
+  end;
 end;
 
 function TCustomModel.DoConfinedStorageCoefUsed(Sender: TObject): boolean;
@@ -39608,19 +39671,35 @@ end;
 function TCustomModel.DoLongitudinalDispersionUsed(Sender: TObject): boolean;
 begin
   result := DoChemistryUsed(Sender)
-    or (DoMt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected)
-    or (DoGwtDispUsed(Sender)
+    or (DoMt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected);
+
+  if not result then
+  begin
+    result := (DoGwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtCombined))
     and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtCombined)
+  end;
+
 end;
 
 function TCustomModel.DoLongitudinalDispersionUsedPerSpecies(
   Sender: TObject): boolean;
+var
+  ADataArray: TDataArray;
 begin
   result :=(DoMt3dMS_StrictUsed(Sender) and ModflowPackages.Mt3dmsDispersion.IsSelected)
     or (GwtDispUsedPerSpecies(Sender)
-//    and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtCombined)
-    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate))
+    and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtSeparate));
+
+  if not result then
+  begin
+    if (Sender <> nil) and DoGweCndUsed(Sender)  then
+    begin
+      ADataArray := Sender as TDataArray;
+      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+    end;
+  end;
+
 end;
 
 function TCustomModel.Mt3dIsSelected: Boolean;
@@ -40943,6 +41022,12 @@ begin
   begin
     result := 0;
   end;
+end;
+
+function TCustomModel.Mf6GweUsed(Sender: TObject): boolean;
+begin
+  result := (ModelSelection = msModflow2015)
+    and ModflowPackages.GweProcess.IsSelected
 end;
 
 function TCustomModel.Mf6GwtUsed(Sender: TObject): boolean;
@@ -49797,6 +49882,11 @@ end;
 function TCustomModel.DoGroundSurfaceUsed(Sender: TObject): boolean;
 begin
   result := DoUzfPackageUsed(Sender) or FarmProcessUsed(Sender) or Farm4ProcessUsed(Sender);
+end;
+
+function TCustomModel.DoGweCndUsed(Sender: TObject): boolean;
+begin
+  result := Mf6GweUsed(Sender) and ModflowPackages.GweConductionAndDispersionPackage.IsSelected
 end;
 
 function TCustomModel.DoGwRootInteractionUsed(Sender: TObject): Boolean;

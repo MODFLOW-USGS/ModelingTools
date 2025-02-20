@@ -2372,7 +2372,10 @@ resourcestring
   StrCurrentMt3dVersion = 'The current version of %s has a more recent date ' +
   'than the version you are using. '#13#10#13#10'You may be using MT3DMS ins' +
   'tead of MT3D-USGS.'#13#10#13#10'Do you want to continue?';
-  StrItLooksLikeYouMi = 'It looks like you might be using MODPATH version 7.' +
+  StrItLooksLikeYouMi = 'You have selected MODPATH 6 in the ' +
+  '"Model|MODFLOW Packages and Programs" dialog box. ' +
+  'However, it looks like you might be using MODPATH version 7 ' +
+  'in the "Model|MODFLOW Program Locations" dialog box.' +
   ' You can get MODPATH ' +
   'version 6 from the same web page from which you can get MODPATH version 7.' +
   sLineBreak +

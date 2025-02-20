@@ -4,15 +4,20 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
   inherited pnlBottom: TPanel
     Top = 504
     Height = 48
+    StyleElements = [seFont, seClient, seBorder]
     ExplicitTop = 504
-    ExplicitWidth = 485
+    ExplicitWidth = 541
     ExplicitHeight = 48
     DesignSize = (
       541
       48)
     inherited lblNumTimes: TLabel
       Top = 8
+      StyleElements = [seFont, seClient, seBorder]
       ExplicitTop = 8
+    end
+    inherited seNumberOfTimes: TJvSpinEdit
+      StyleElements = [seFont, seClient, seBorder]
     end
     inherited btnDelete: TBitBtn
       ExplicitLeft = 453
@@ -22,20 +27,29 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     end
   end
   inherited pnlTop: TPanel
-    ExplicitWidth = 485
+    StyleElements = [seFont, seClient, seBorder]
+    ExplicitWidth = 541
     inherited pnlCaption: TPanel
-      ExplicitWidth = 483
+      StyleElements = [seFont, seClient, seBorder]
+      ExplicitWidth = 539
     end
   end
   inherited pnlGrid: TPanel
     Top = 360
     Height = 144
     Align = alBottom
+    StyleElements = [seFont, seClient, seBorder]
     ExplicitTop = 360
-    ExplicitWidth = 485
+    ExplicitWidth = 541
     ExplicitHeight = 144
     inherited pnlEditGrid: TPanel
-      ExplicitWidth = 483
+      StyleElements = [seFont, seClient, seBorder]
+      inherited lblFormula: TLabel
+        StyleElements = [seFont, seClient, seBorder]
+      end
+      inherited rdeFormula: TRbwDataEntry
+        StyleElements = [seFont, seClient, seBorder]
+      end
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Height = 92
@@ -261,7 +275,7 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 483
+      ExplicitWidth = 539
       ExplicitHeight = 92
       ColWidths = (
         64
@@ -280,10 +294,9 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
     Top = 25
     Width = 541
     Height = 335
-    ActivePage = tabLakeTable
+    ActivePage = tabLakeTransientProperties
     Align = alClient
     TabOrder = 3
-    ExplicitWidth = 485
     object tabLakeProperties: TTabSheet
       Caption = 'Lake Properties'
       ImageIndex = 2
@@ -573,16 +586,18 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
         Height = 305
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 477
+        ExplicitWidth = 533
         ExplicitHeight = 305
         inherited Panel: TPanel
           Top = 264
           Width = 533
+          StyleElements = [seFont, seClient, seBorder]
           ExplicitTop = 264
-          ExplicitWidth = 477
+          ExplicitWidth = 533
           inherited lbNumber: TLabel
             Width = 152
             Caption = 'Number of rows in lake table'
+            StyleElements = [seFont, seClient, seBorder]
             ExplicitWidth = 152
           end
           inherited sbAdd: TSpeedButton
@@ -601,6 +616,9 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
             Left = 504
             Anchors = [akTop, akRight]
             ExplicitLeft = 449
+          end
+          inherited seNumber: TJvSpinEdit
+            StyleElements = [seFont, seClient, seBorder]
           end
         end
         inherited Grid: TRbwDataGrid4
@@ -705,12 +723,19 @@ inherited frameScreenObjectLakMf6: TframeScreenObjectLakMf6
               CheckStyle = csCheck
               AutoAdjustColWidths = True
             end>
-          ExplicitWidth = 477
+          ExplicitWidth = 533
           ExplicitHeight = 207
         end
         inherited pnlTop: TPanel
           Width = 533
-          ExplicitWidth = 477
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 533
+          inherited edFormula: TLabeledEdit
+            StyleElements = [seFont, seClient, seBorder]
+          end
+          inherited comboChoice: TComboBox
+            StyleElements = [seFont, seClient, seBorder]
+          end
         end
       end
     end

@@ -4047,6 +4047,10 @@ begin
     IgnoredNames := TStringList.Create;
     try
       FillIgnoredNames(IgnoredNames, False);
+//      if frameGweProcess.rcSelectionController.Enabled then
+//      begin
+//        IgnoredNames.Add(StrGweTemperature);
+//      end;
       if (frameChemSpecies.frameGridMobile.seNumber.AsInteger = 0) then
       begin
         frameChemSpecies.frameGridMobile.seNumber.AsInteger := 1;
@@ -4106,6 +4110,63 @@ begin
           begin
             frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, LastRow,  StrGweTemperature);
           end;
+        end;
+      end
+      else if frameGweProcess.rcSelectionController.Enabled then
+      begin
+        FoundASpecies := False;
+        for RowIndex := 1 to frameChemSpecies.frameGridMobile.Grid.RowCount - 1 do
+        begin
+          if AnsiSameText(frameChemSpecies.frameGridMobile.Grid.Cells[0,RowIndex], StrGweTemperature) then
+          begin
+            FoundASpecies := True;
+            break;
+          end;
+        end;
+        if not FoundASpecies then
+        begin
+          frameChemSpecies.frameGridMobile.seNumber.AsInteger :=
+            frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1;
+          if Assigned(frameChemSpecies.frameGridMobile.seNumber.OnChange) then
+          begin
+            frameChemSpecies.frameGridMobile.seNumber.OnChange(Self)
+          end;
+          LastRow := frameChemSpecies.frameGridMobile.Grid.RowCount -1;
+          frameChemSpecies.frameGridMobile.Grid.Cells[0,LastRow] := StrGweTemperature;
+          if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+          begin
+            frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, LastRow,  StrGweTemperature);
+          end;
+        end;
+
+        if frameGwtProcess.rcSelectionController.Enabled then
+        begin
+          FoundASpecies := False;
+          for RowIndex := 1 to frameChemSpecies.frameGridMobile.Grid.RowCount - 1 do
+          begin
+            if (frameChemSpecies.frameGridMobile.Grid.Cells[0,RowIndex] <> '')
+              and not AnsiSameText(frameChemSpecies.frameGridMobile.Grid.Cells[0,RowIndex], StrGweTemperature) then
+            begin
+              FoundASpecies := True;
+              break;
+            end;
+          end;
+          if not FoundASpecies then
+          begin
+            frameChemSpecies.frameGridMobile.seNumber.AsInteger :=
+              frameChemSpecies.frameGridMobile.seNumber.AsInteger + 1;
+            if Assigned(frameChemSpecies.frameGridMobile.seNumber.OnChange) then
+            begin
+              frameChemSpecies.frameGridMobile.seNumber.OnChange(Self)
+            end;
+            LastRow := frameChemSpecies.frameGridMobile.Grid.RowCount -1;
+            frameChemSpecies.frameGridMobile.Grid.Cells[0,LastRow] := 'Chem';
+            if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+            begin
+              frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, LastRow,  'Chem');
+            end;
+          end;
+
         end;
       end;
       UpdateGwtFrames;

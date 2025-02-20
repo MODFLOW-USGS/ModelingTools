@@ -31,6 +31,9 @@ const
   // @name is the name of the @link(TDataArray) that specifies
   // the vertical transverse dispersivity.
   rsVertical_Transv_Dispersivity = 'Vertical_Transverse_Dispersivity';
+
+  rsThermalCondSolid  = 'Thermal_Conductivity_Solid';
+  rsThermalCondFluid  = 'Thermal_Conductivity_Fluid';
   // @name is the name of the @link(TDataArray) that specifies
   // the initial head.
   rsInitial_Head = 'Initial_Head';
@@ -902,11 +905,23 @@ resourcestring
   StrSUTRADataSet14B_PRODI0 = 'SUTRA Data Set 14B: PRODI0';
   StrSUTRADataSet15B_SIGMAS = 'SUTRA Data Set 15B: SIGMAS';
   StrSUTRADataSet15B_SIGMAA = 'SUTRA Data Set 15B: SIGMAA';
-  StrMODFLOW6Dispersion_DIFFC = 'MODFLOW 6 Dispersion Package: DIFFC';
-  StrMODFLOW6Dispersion_ALH = 'MODFLOW 6 Dispersion Package: ALH';
-  StrMODFLOW6Dispersion_ALV = 'MODFLOW 6 Dispersion Package: ALV';
-  StrMODFLOW6Dispersion_ATH1 = 'MODFLOW 6 Dispersion Package: ATH1';
-  StrMODFLOW6Dispersion_ATH2 = 'MODFLOW 6 Dispersion Package: ATH2';
+  StrMODFLOW6Dispersion_DIFFC = 'MODFLOW 6 GWT DSP Package: DIFFC';
+  StrMODFLOW6Dispersion_ALH = 'MODFLOW 6 GWT DSP Package: ALH'
+  + slinebreak
+  + 'MODFLOW 6 GWE CND Package: ALH';
+  StrMODFLOW6Dispersion_ALV = 'MODFLOW 6 GWT DSP Package: ALV'
+  + slinebreak
+  + 'MODFLOW 6 GWE CND Package: ALV';
+  StrMODFLOW6Dispersion_ATH1 = 'MODFLOW 6 GWT DSP Package: ATH1'
+  + slinebreak
+  + 'MODFLOW 6 GWE CND Package: ATH1';
+  StrMODFLOW6Dispersion_ATH2 = 'MODFLOW 6 GWT DSP Package: ATH2'
+  + slinebreak
+  + 'MODFLOW 6 GWE CND Package: ATH2';
+
+  StrMODFLOW6CndKTW = 'MODFLOW 6 GWE CND Package: KTW';
+  StrMODFLOW6CndKTS = 'MODFLOW 6 GWE CND Package: KTS';
+
   StrFarmID = KFarmID;
   StrRefET = KRefET;
   StrPrecipitation = KPrecipitation;
@@ -967,6 +982,8 @@ resourcestring
   // @name is the name of the @link(TDataArray) that specifies
   // the vertical transverse dispersivity.
   rsVertical_Transv_DispersivityDisplayName = rsVertical_Transv_Dispersivity;
+  StrThermalCondFluidDisplayName = rsThermalCondFluid;
+  StrThermalCondSolidDisplayName = rsThermalCondSolid;
   // @name is the name of the @link(TDataArray) that specifies
   // the initial head.
   rsInitial_HeadDisplayName = rsInitial_Head;

@@ -1,3 +1,9 @@
+ {
+    @link(TDataArrayManager) manages the creation of @link(TDataArray)s. The @link(TDataArray)s
+    are defined in @link(TDataArrayManager.DefinePackageDataArrays) and actually created in
+    @link(TDataArrayManager.CreateInitialDataSets). }
+
+
 unit DataArrayManagerUnit;
 
 interface

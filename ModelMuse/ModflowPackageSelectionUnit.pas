@@ -8241,36 +8241,80 @@ procedure TModflowPackageSelection.UpdateConcentrationLists(
   List: TMfBoundDispObjectList; OnInitialize: TNotifyEvent;
   OnGetUseList: TOnGetConcUseList; const NameFormat: string);
 var
-  Index: Integer;
   TimeList: TModflowBoundaryDisplayTimeList;
   Components: TMobileChemSpeciesCollection;
 begin
-  if IsSelected and frmGoPhast.PhastModel.GwtUsed then
+  if IsSelected then
   begin
     Components := frmGoPhast.PhastModel.MobileComponents;
-    while List.Count > Components.Count do
+    if frmGoPhast.PhastModel.GwtUsed then
     begin
-      TimeList := List[List.Count-1];
-      RemoveTimeList(TimeList);
-      List.Delete(List.Count-1);
-    end;
-    while List.Count < Components.Count do
+      while List.Count > Components.Count do
+      begin
+        TimeList := List[List.Count-1];
+        RemoveTimeList(TimeList);
+        List.Delete(List.Count-1);
+      end;
+      while List.Count < Components.Count do
+      begin
+        TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+        AddTimeList(TimeList);
+        List.Add(TimeList);
+        TimeList.OnInitialize := OnInitialize;
+        TimeList.OnGetUseList := OnGetUseList;
+      end;
+      for var Index := 0 to Components.Count - 1 do
+      begin
+        TimeList := List[Index];
+        TimeList.Name := Format(NameFormat, [Components[Index].Name])
+      end;
+    end
+    else if frmGoPhast.PhastModel.GweUsed then
     begin
-      TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
-      AddTimeList(TimeList);
-      List.Add(TimeList);
-      TimeList.OnInitialize := OnInitialize;
-      TimeList.OnGetUseList := OnGetUseList;
-    end;
-    for Index := 0 to Components.Count - 1 do
+      while List.Count > Components.Count do
+      begin
+        TimeList := List[List.Count-1];
+        RemoveTimeList(TimeList);
+        List.Delete(List.Count-1);
+      end;
+      for var ComponentIndex := 0 to Components.Count - 1 do
+      begin
+        if AnsiSameText(Components[ComponentIndex].Name, StrGweTemperature) then
+        begin
+          for var ListIndex := List.Count - 1 downto 0 do
+          begin
+            TimeList := List[ListIndex];
+            if TimeList.Name <> Format(NameFormat, [Components[ComponentIndex].Name]) then
+            begin
+              RemoveTimeList(TimeList);
+              List.Delete(ListIndex);
+            end;
+          end;
+          if List.Count = 0 then
+          begin
+            TimeList := TModflowBoundaryDisplayTimeList.Create(FModel);
+            AddTimeList(TimeList);
+            List.Add(TimeList);
+            TimeList.OnInitialize := OnInitialize;
+            TimeList.OnGetUseList := OnGetUseList;
+            TimeList.Name := Format(NameFormat, [Components[ComponentIndex].Name])
+          end;
+        end;
+      end;
+    end
+    else
     begin
-      TimeList := List[Index];
-      TimeList.Name := Format(NameFormat, [Components[Index].Name])
+      for var Index := 0 to List.Count - 1 do
+      begin
+        TimeList := List[Index];
+        RemoveTimeList(TimeList);
+      end;
+      List.Clear;
     end;
   end
   else
   begin
-    for Index := 0 to List.Count - 1 do
+    for var Index := 0 to List.Count - 1 do
     begin
       TimeList := List[Index];
       RemoveTimeList(TimeList);

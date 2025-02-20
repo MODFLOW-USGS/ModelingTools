@@ -857,8 +857,8 @@ begin
   BoundaryIdentifiers.Add('"CNH             "');
   BoundaryIdentifiers.Add('NODE    VOLUME          RCHLEN');
   BoundaryIdentifiers.Add('NOD1 NOD2 IDIV      FLOW RATE           AREA');
-//  BoundaryIdentifiers.Add('aaa');
-//  BoundaryIdentifiers.Add('aaa');
+  BoundaryIdentifiers.Add('CONNECTED REACH UPSTREAM FRACTION DATA');
+  BoundaryIdentifiers.Add('DATA FOR PERIOD');
 //  BoundaryIdentifiers.Add('aaa');
 //  BoundaryIdentifiers.Add('aaa');
 

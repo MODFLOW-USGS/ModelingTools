@@ -643,15 +643,24 @@ end;
 
 procedure TframeScreenObjectLakMf6.InitializeControls;
 begin
-  rdgModflowBoundary.Cells[Ord(lcStart), 0] := StrStartingTime;
-  rdgModflowBoundary.Cells[Ord(lcEnd), 0] := StrEndingTime;
-  rdgModflowBoundary.Cells[Ord(lcStatus), 0] := StrStatus;
-  rdgModflowBoundary.Cells[Ord(lcStage), 0] := StrStage;
-  rdgModflowBoundary.Cells[Ord(lcRainfall), 0] := StrRainfall;
-  rdgModflowBoundary.Cells[Ord(lcEvaporation), 0] := StrEvaporation;
-  rdgModflowBoundary.Cells[Ord(lcRunoff), 0] := StrRunoff;
-  rdgModflowBoundary.Cells[Ord(lcInflow), 0] := StrInflow;
-  rdgModflowBoundary.Cells[Ord(lcWithdrawal), 0] := StrWithdrawal;
+  rdgModflowBoundary.BeginUpdate;
+  try
+    rdgModflowBoundary.Cells[Ord(lcStart), 0] := StrStartingTime;
+    rdgModflowBoundary.Cells[Ord(lcEnd), 0] := StrEndingTime;
+    rdgModflowBoundary.Cells[Ord(lcStatus), 0] := StrStatus;
+    rdgModflowBoundary.Cells[Ord(lcStage), 0] := StrStage;
+    rdgModflowBoundary.Cells[Ord(lcRainfall), 0] := StrRainfall;
+    rdgModflowBoundary.Cells[Ord(lcEvaporation), 0] := StrEvaporation;
+    rdgModflowBoundary.Cells[Ord(lcRunoff), 0] := StrRunoff;
+    rdgModflowBoundary.Cells[Ord(lcInflow), 0] := StrInflow;
+    rdgModflowBoundary.Cells[Ord(lcWithdrawal), 0] := StrWithdrawal;
+  finally
+    rdgModflowBoundary.EndUpdate;
+  end;
+  for var ColIndex := Ord(lcStatus) to rdgModflowBoundary.ColCount - 1 do
+  begin
+    rdgModflowBoundary.Columns[ColIndex].AutoAdjustColWidths := False;
+  end;
 
   frameLakeTable.Grid.Cells[Ord(ltcStage), 0] := StrStage;
   frameLakeTable.Grid.Cells[Ord(ltcVolume), 0] := StrVolume;
