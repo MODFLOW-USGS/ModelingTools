@@ -4,6 +4,7 @@ inherited frmImportFootprintResults: TfrmImportFootprintResults
   Caption = 'Import WellFootprint Results'
   ClientHeight = 229
   ClientWidth = 422
+  StyleElements = [seFont, seClient, seBorder]
   ExplicitWidth = 438
   ExplicitHeight = 268
   TextHeight = 18

@@ -150,6 +150,7 @@ resourcestring
   rsResClassificaton = 'Reservoir';
   rsLakeClassificaton = 'Lake';
   StrMT3DMS_GWT_Classificaton = 'MT3DMS, MT3D-USGS, or GWT';
+  StrMT3DMS_GWT_GWE_Classificaton = 'MT3DMS, MT3D-USGS, GWT, or GWE';
   StrMt3dClassification = 'MT3DMS or MT3D-USGS';
   StrGwtClassification = 'GWT: Groundwater Transport';
   StrGweClassification = 'GWE: Groundwater Energy Transport';
@@ -4584,6 +4585,7 @@ that affects the model output should also have a comment. }
     function Mf6UzfInitialConcentrationUsed(Sender: TObject): boolean;
     function AnyUzfInitialConcentrationUsed: Boolean;
     function GwtMobileSeparatePorosityUsed(Sender: TObject): boolean;
+    function GwePorosityUsed(Sender: TObject): boolean;
     function GwtMobileDecayUsed(Sender: TObject): boolean;
     function GwtMobileSorbedDecayUsed(Sender: TObject): boolean;
     function GwtMobileDistibutionCoefUsed(Sender: TObject): boolean;
@@ -10410,13 +10412,14 @@ const
 //                blocks in the SFR package in MODFLOW 6.
 //               Bug fix: Fixed saving "EXPORT_ARRAY_ASCII" option in the
 //                MODFLOW Output Control dialog box.
+//    '5.3.1.9   Bug fix: Fixed bug in importing WellFootprint results.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.8';
+  IIModelVersion = '5.3.1.9';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
@@ -19195,6 +19198,41 @@ begin
   end;
 end;
 
+function TPhastModel.GwePorosityUsed(Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+    MstPackage: TGwtMstPackage;
+    GwtPackagesItem: TGwtPackagesItem;
+  begin
+    result := ModflowPackages.GweEstPackage.IsSelected;
+    if result then
+    begin
+      result := False;
+      for Index := 0 to ChemSpecies.Count - 1 do
+      begin
+        AChemItem := ChemSpecies[Index];
+        result := (AChemItem.Name = StrGweTemperature)
+          and (AChemItem.GwePorosityDataArrayName = DataArray.Name);
+        if result then
+        begin
+          Exit;
+        end;
+      end;
+    end;
+  end;
+begin
+  result := GweUsed;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
 function TPhastModel.GwtCncIsSelected: Boolean;
 begin
   result := GwtUsed and (MobileComponents.Count > 0)
@@ -19752,10 +19790,17 @@ var
       result := AChemItem.PorosityDataArrayName = DataArray.Name;
       if result then
       begin
-        GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
-        MstPackage := GwtPackagesItem.GwtMst;
-        result := (MstPackage <> nil) and MstPackage.IsSelected
-          and MstPackage.SeparatePorosity;
+        if Pos(StrGweTemperature, DataArray.Name) > 0 then
+        begin
+          result := not ModflowPackages.GweEstPackage.IsSelected
+        end
+        else
+        begin
+          GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+          MstPackage := GwtPackagesItem.GwtMst;
+          result := (MstPackage <> nil) and MstPackage.IsSelected
+            and MstPackage.SeparatePorosity;
+        end;
         if result then
         begin
           Exit;
@@ -19764,7 +19809,7 @@ var
     end;
   end;
 begin
-  result := GwtUsed;
+  result := GwtUsed or GweUsed;
   if result then
   begin
     DataArray := Sender as TDataArray;

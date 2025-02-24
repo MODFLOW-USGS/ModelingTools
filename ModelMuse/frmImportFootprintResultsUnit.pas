@@ -423,6 +423,10 @@ begin
     begin
       CreateNewDataSet := AskUserIfNewDataSet;
 //      AskIfNewDataSet(FAlreadyAsked, CreateNewDataSet);
+    end
+    else
+    begin
+      CreateNewDataSet := True;
     end;
     if CreateNewDataSet then
     begin

@@ -10,6 +10,9 @@ uses
   Mf6.MvrFileReaderUnit, GoPhastTypes, ModflowPackageSelectionUnit, FastGEO,
   Vcl.Forms, Mf6.NameFileReaderUnit, Mf6.SpcFileReaderUnit;
 
+resourcestring
+  SWarningTheStartDateOfTheModelHas = 'Warning: The start date of the model has been added as a comment to the model description';
+
   // The first name in NameFiles must be the name of the groundwater flow
   // simulation name file (mfsim.nam). Any additional names must be associated
   // transport simulation name files (mfsim.nam)
@@ -4788,7 +4791,7 @@ begin
   if StressPeriods.Options.StartDate <> '' then
   begin
     MfOptions.Description.Add('Start Date = ' + StressPeriods.Options.StartDate);
-    FErrorMessages.Add('Warning: The start date of the model has been added as a comment to the model description')
+    FErrorMessages.Add(SWarningTheStartDateOfTheModelHas)
   end;
 
   ValidUnits := TStringList.Create;

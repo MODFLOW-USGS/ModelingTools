@@ -78,6 +78,8 @@ type
     FThermalConductivitySolid: string;
     FThermalConductivityFluidDisplayName: string;
     FThermalConductivitySolidDisplayName: string;
+    FGwePorosityDataArrayName: string;
+    FGwePorosityDataArrayDisplayName: string;
     function GetName: string;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
@@ -136,6 +138,7 @@ type
     procedure SetImmobileSorptionCapacitySp2s(const Value: TStringList);
     procedure SetThermalConductivityFluid(const NewName: string);
     procedure SetThermalConductivitySolid(const NewName: string);
+    procedure SetGwePorosityDataArrayName(const NewName: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -195,9 +198,11 @@ type
       read FUseInitialConcentrationFile write SetUseInitialConcentrationFile;
     property InitialConcentrationFileName: string
       read FInitialConcentrationFileName write SetInitialConcentrationFileName;
-    //MST package, POROSITY
+    //MST package POROSITY
     property PorosityDataArrayName: string read FPorosityDataArrayName
       write SetPorosityDataArrayName;
+    //EST package POROSITY
+    property GwePorosityDataArrayName: string read FGwePorosityDataArrayName write SetGwePorosityDataArrayName;
     //MST package, DECAY
     property MobileDecayRateDataArrayName: string read FMobileDecayRateDataArrayName
       write SetMobileDecayRateDataArrayName;
@@ -379,6 +384,7 @@ const
   KImmobileVolFrac = 'ImmobileVolumeFraction_%0:s_%1:d';
   KImmobileFreundlichExponent = 'ImmobileFreundlichExponent_%0:s_%1:d';
   KImmobileSorptionCapacity = 'ImmobileSorptionCapacity_%0:s_%1:d';
+  KGwePorosity = 'Porosity_';
 
 resourcestring
   StrInitConcPrefix = kInitConcPrefix;
@@ -399,6 +405,7 @@ resourcestring
   StrMobileBulkDensity = KMobileBulkDensity;
   StrFreundlichExponent = KFreundlichExponent;
   StrSorptionCapacity = KSorptionCapacity;
+  StrGwePorosity = KGwePorosity;
 
   { TChemSpeciesItem }
 
@@ -470,6 +477,9 @@ begin
 
     PorosityDataArrayName := '';
     PorosityDataArrayName := SourceChem.PorosityDataArrayName;
+
+    GwePorosityDataArrayName := '';
+    GwePorosityDataArrayName := SourceChem.GwePorosityDataArrayName;
 
     MobileDecayRateDataArrayName := '';
     MobileDecayRateDataArrayName := SourceChem.MobileDecayRateDataArrayName;
@@ -569,6 +579,7 @@ begin
     ImmobilePartioningCoefficientDataArrayName := ImmobilePartioningCoefficientDataArrayName;
     UztInitialConcDataArrayName := UztInitialConcDataArrayName;
     PorosityDataArrayName := PorosityDataArrayName;
+    GwePorosityDataArrayName := GwePorosityDataArrayName;
     MobileDecayRateDataArrayName := MobileDecayRateDataArrayName;
     MobileSorbedDecayRateDataArrayName := MobileSorbedDecayRateDataArrayName;
     MobileDistCoefDataArrayName := MobiledISTcOEFDataArrayName;
@@ -1030,6 +1041,7 @@ begin
       and (TransverseVertDispDataArrayName = ChemItem.TransverseVertDispDataArrayName)
       and (ThermalConductivityFluid = ChemItem.ThermalConductivityFluid)
       and (ThermalConductivitySolid = ChemItem.ThermalConductivitySolid)
+      and (GwePorosityDataArrayName  = ChemItem.GwePorosityDataArrayName)
 
       and SameStrings(ImmobileInitialConcentrations,  ChemItem.ImmobileInitialConcentrations)
       and SameStrings(ImmobilePorosities,  ChemItem.ImmobilePorosities)
@@ -1172,6 +1184,31 @@ begin
       LocalModel.AnyMt3dSorbParameter, StrMt3dClassification);
   end;
   SetCaseSensitiveStringProperty(FFirstSorbParamDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetGwePorosityDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if LocalModel.GweUsed and (Name = StrGweTemperature)
+      and LocalModel.ModflowPackages.GweEstPackage.IsSelected then
+    begin
+      DataSetUsed := True;
+    end;
+
+    UpdateDataArray(LocalModel.GwePorosityUsed,
+      FGwePorosityDataArrayName, NewName,
+      FGwePorosityDataArrayDisplayName, '0.25', 'GWE EST Package: POROSITY',
+      DataSetUsed, StrGweClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FGwePorosityDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetHalfSaturationConstantDataArrayName(
@@ -1943,8 +1980,9 @@ begin
     UpdateDataArray(LocalModel.Mt3dMsInitialConcUsed,
       FInitialConcDataArrayName, NewName,
       FInitialConcDisplayName, '0', 'MT3DMS or MT3D-USGS BTN package, SCONC'
-        + sLineBreak + 'MODFLOW 6 GWT IC package, STRT',
-      True, StrMT3DMS_GWT_Classificaton);
+        + sLineBreak + 'MODFLOW 6 GWT IC package, STRT'
+        + sLineBreak + 'MODFLOW 6 GWE IC package, STRT',
+      True, StrMT3DMS_GWT_GWE_Classificaton);
   end;
 
   SetCaseSensitiveStringProperty(FInitialConcDataArrayName, NewName);
@@ -2329,6 +2367,13 @@ begin
         PorosityDataArrayName,
         OldRoot,NewRoot, []);
 
+      FGwePorosityDataArrayDisplayName := StringReplace(
+        FGwePorosityDataArrayDisplayName,
+        OldRoot,NewRoot, []);
+      GwePorosityDataArrayName := StringReplace(
+        GwePorosityDataArrayName,
+        OldRoot,NewRoot, []);
+
       FMobileDecayRateDataArrayDisplayName := StringReplace(
         FMobileDecayRateDataArrayDisplayName,
         OldRoot,NewRoot, []);
@@ -2590,6 +2635,11 @@ begin
       PorosityDataArrayName :=
         GenerateNewRoot(kPorosity + Value);
 
+      FGwePorosityDataArrayDisplayName :=
+        GenerateNewRoot(StrGwePorosity + Value);
+      GwePorosityDataArrayName :=
+        GenerateNewRoot(KGwePorosity + Value);
+
       FMobileDecayRateDataArrayDisplayName :=
         GenerateNewRoot(StrMobileDecayRate + Value);
       MobileDecayRateDataArrayName :=
@@ -2782,7 +2832,13 @@ begin
       begin
         DataSetUsed := True;
       end;
+    end
+    else if LocalModel.GweUsed and (Name = StrGweTemperature)
+      and LocalModel.ModflowPackages.GweEstPackage.IsSelected then
+    begin
+      DataSetUsed := False;
     end;
+
     UpdateDataArray(LocalModel.GwtMobileSeparatePorosityUsed,
       FPorosityDataArrayName, NewName,
       FPorosityDataArrayDisplayName, '0.25', 'GWT MST Package: POROSITY',
