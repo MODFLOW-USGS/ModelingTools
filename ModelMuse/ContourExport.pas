@@ -130,10 +130,9 @@ var
   LineMatch1: TLineMatch;
   LineMatch2: TLineMatch;
   LineMatchR: TLineMatchRecord;
-  APointList: TPointList;
   LineMatch1R: TLineMatchRecord;
   LineMatch2R: TLineMatchRecord;
-  procedure RemoveMatchPoints(Line: TPointList; LineMatch: TLineMatch);
+  procedure RemoveMatchPoints(Line: TPointList);
   var
     APoint: TPoint2D;
     PointsTemp: TQuadPointInRegionArray;
@@ -149,10 +148,7 @@ var
         if LineMatchTemp.Match.PointList = Line then
         begin
           QuadTree.RemovePoint(LineMatchTemp.Match.APoint.X, LineMatchTemp.Match.APoint.y, LineMatchTemp);
-          if LineMatchTemp <> LineMatch then
-          begin
-            LineMatchTemp.Free;
-          end;
+          LineMatchTemp.Free;
         end;
       end;
     end;
@@ -167,10 +163,7 @@ var
         if LineMatchTemp.Match.PointList = Line then
         begin
           QuadTree.RemovePoint(LineMatchTemp.Match.APoint.X, LineMatchTemp.Match.APoint.y, LineMatchTemp);
-          if LineMatchTemp <> LineMatch then
-          begin
-            LineMatchTemp.Free;
-          end;
+          LineMatchTemp.Free;
         end;
       end;
     end;
@@ -285,19 +278,17 @@ begin
           // Point2 is matched
           LineMatch := Points2[0].Data[0];
           LineMatchR := LineMatch.Match;
-          RemoveMatchPoints(LineMatchR.PointList, nil);
+          RemoveMatchPoints(LineMatchR.PointList);
           LineMatchR.APoint := Point1;
           if LineMatchR.MatchLocation = mlStart then
           begin
-            APointList := LineMatchR.PointList;
-            APointList.Insert(0, LineMatchR.APoint);
+            LineMatchR.PointList.Insert(0, LineMatchR.APoint);
           end
           else
           begin
-            APointList := LineMatchR.PointList;
-            APointList.Add(LineMatchR.APoint);
+            LineMatchR.PointList.Add(LineMatchR.APoint);
           end;
-          AddMatchPoints(APointList)
+          AddMatchPoints(LineMatchR.PointList)
         end;
       end
       else
@@ -308,19 +299,17 @@ begin
           // Point2 is not matched
           LineMatch := Points1[0].Data[0];
           LineMatchR := LineMatch.Match;
-          RemoveMatchPoints(LineMatchR.PointList, nil);
+          RemoveMatchPoints(LineMatchR.PointList);
           LineMatchR.APoint := Point2;
           if LineMatchR.MatchLocation = mlStart then
           begin
-            APointList := LineMatchR.PointList;
-            APointList.Insert(0, LineMatchR.APoint);
+            LineMatchR.PointList.Insert(0, LineMatchR.APoint);
           end
           else
           begin
-            APointList := LineMatchR.PointList;
-            APointList.Add(LineMatchR.APoint);
+            LineMatchR.PointList.Add(LineMatchR.APoint);
           end;
-          AddMatchPoints(APointList)
+          AddMatchPoints(LineMatchR.PointList)
 
         end
         else
@@ -329,30 +318,26 @@ begin
           // Point2 is matched
           LineMatch1 := Points1[0].Data[0];
           LineMatch2 := Points2[0].Data[0];
-          QuadTree.RemovePoint(LineMatch1.Match.APoint.X, LineMatch1.Match.APoint.y, LineMatch1);
-          QuadTree.RemovePoint(LineMatch2.Match.APoint.X, LineMatch2.Match.APoint.y, LineMatch2);
-          // same lines
+          LineMatch1R := LineMatch1.Match;
+          LineMatch2R := LineMatch2.Match;
           if LineMatch1.Match.PointList = LineMatch2.Match.PointList then
           begin
-            LineMatch1.Match.PointList.Add(LineMatch1.Match.PointList[0]);
-            LineMatch1.Free;
-            LineMatch2.Free;
+          // same lines
+            LineMatch1R.PointList.Add(LineMatch1R.PointList[0]);
+            RemoveMatchPoints(LineMatch1R.PointList);
           end
           else
           begin
-            LineMatch1R := LineMatch1.Match;
-            LineMatch2R := LineMatch2.Match;
-            RemoveMatchPoints(LineMatch1R.PointList, nil);
-            RemoveMatchPoints(LineMatch2R.PointList, nil);
             // different lines
+            RemoveMatchPoints(LineMatch1R.PointList);
+            RemoveMatchPoints(LineMatch2R.PointList);
             if (LineMatch1R.MatchLocation = mlEnd) then
             begin
               if (LineMatch2R.MatchLocation = mlEnd) then
               begin
-                APointList := LineMatch1R.PointList;
                 if PointsNearlyTheSame(LineMatch1R.APoint, LineMatch2R.APoint) then
                 begin
-                  APointList.Delete(LineMatch1R.PointList.Count-1);
+                  LineMatch1R.PointList.Delete(LineMatch1R.PointList.Count-1);
                 end;
                 LineMatch2R.PointList.Reverse;
               end
