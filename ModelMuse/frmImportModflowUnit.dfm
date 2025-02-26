@@ -4,6 +4,7 @@ inherited frmImportModflow: TfrmImportModflow
   Caption = 'Import MODFLOW-2005 or -NWT Model'
   ClientHeight = 444
   ClientWidth = 487
+  StyleElements = [seFont, seClient, seBorder]
   ExplicitWidth = 503
   ExplicitHeight = 483
   TextHeight = 18

@@ -135,6 +135,8 @@ function Interpolate(X, StartX, EndX, StartY, EndY: double): double;
 
 function RoundSigDigits(ANumber: Extended; SignificantDigits: Integer): Extended;
 
+function RemoveQuotes(const Value: string): string;
+
 var
   StartTimeCmdLines: TStringList;
   ShowElapsedTimeCmdLines: TStringList;
@@ -1246,6 +1248,26 @@ begin
     result := Round(ANumber*Factor)/Factor;
   end;
 end;
+
+function RemoveQuotes(const Value: string): string;
+begin
+  result := Trim(Value);
+  if Length(result) > 0 then
+  begin
+    if (result[1] = '"') or (result[1] = '''') then
+    begin
+      result := Copy(result, 2, MAXINT);
+    end;
+    if Length(result) > 0 then
+    begin
+      if (result[Length(result)] = '"') or (result[Length(result)] = '''') then
+      begin
+        result := Copy(result, 1, Length(result) - 1);
+      end;
+    end;
+  end;
+end;
+
 
 initialization
 //  ColorParameters := TColorParameters.Create;

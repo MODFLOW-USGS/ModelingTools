@@ -12835,6 +12835,8 @@ var
   PointList: TPointList;
   PointIndex: Integer;
   ZoneExists: boolean;
+  QPoint: TQuadPoint;
+  AnObject: TObject;
 begin
   InitializeQuadTree;
   Result := CreateScreenObject(Name);
@@ -12915,6 +12917,16 @@ begin
       end;
     end;
   finally
+    for var QPointIndex := FQuadTree.Count - 1 downto 0 do
+    begin
+      QPoint := FQuadTree.Points[QPointIndex];
+      for var QDataIndex := 0 to Length(QPoint.Data) - 1 do
+      begin
+        AnObject := QPoint.Data[QDataIndex];
+        AnObject.Free;
+      end;
+    end;
+
     ContourCreator.Free;
     FPointLists.Free;
   end;

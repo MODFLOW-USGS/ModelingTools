@@ -231,7 +231,6 @@ type
     FModflowOwhmV2Location: string;
     function GetTextEditorLocation: string;
     procedure SetModflowLocation(const Value: string);
-    function RemoveQuotes(const Value: string): string;
     procedure SetModPathLocation(const Value: string);
     procedure SetModelMonitorLocation(const Value: string);
     procedure SetPhastLocation(const Value: string);
@@ -10413,13 +10412,18 @@ const
 //               Bug fix: Fixed saving "EXPORT_ARRAY_ASCII" option in the
 //                MODFLOW Output Control dialog box.
 //    '5.3.1.9   Bug fix: Fixed bug in importing WellFootprint results.
+//    '5.3.1.10' Bug fix: Fixed bug importing MODFLOW-2005 and MODFLOW-NWT
+//                models in which the listing file was enclosed in single quotes.
+//    '5.3.1.11' Bug fix: Fixed importing RCH, EVT, and ETS packages from
+//                MODFLOW-2005 and MODFLOW-NWT models when parameters are used
+//                in them.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.9';
+  IIModelVersion = '5.3.1.11';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
@@ -32328,25 +32332,6 @@ begin
     end;
   finally
     SetCurrentDir(ADirectory);
-  end;
-end;
-
-function TProgramLocations.RemoveQuotes(const Value: string): string;
-begin
-  result := Trim(Value);
-  if Length(result) > 0 then
-  begin
-    if result[1] = '"' then
-    begin
-      result := Copy(result, 2, MAXINT);
-    end;
-    if Length(result) > 0 then
-    begin
-      if result[Length(result)] = '"' then
-      begin
-        result := Copy(result, 1, Length(result) - 1);
-      end;
-    end;
   end;
 end;
 

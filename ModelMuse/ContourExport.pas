@@ -29,6 +29,7 @@ type
     property First: TPoint2D read GetFirst;
     property Last: TPoint2D read GetLast;
     procedure Reverse;
+    procedure Delete(Const Index: Integer);
   end;
 
   TListOfPointLists = TObjectList<TPointList>;
@@ -83,25 +84,150 @@ uses
   frmExportShapefileUnit, RbwParser, ModelMuseUtilities,
   LineStorage, SutraMeshUnit, DataSetNamesUnit;
 
+type
+  TMatchLocation = (mlStart, mlEnd);
+
+  TLineMatchRecord = record
+    APoint: TPoint2D;
+    PointList: TPointList;
+    MatchLocation: TMatchLocation;
+  end;
+
+  TLineMatch = class(TObject)
+    Match: TLineMatchRecord;
+  end;
+
 procedure GlobalImportSegments(Sender: TObject;
   const Segments: TLine2DArray; Epsilon: Real;
   QuadTree: TRbwQuadTree; PointLists: TObjectList<TPointList>);
+  function NearlyTheSame(const A, B: real): boolean;
+  const
+    Epsilon = 1E-10;
+  begin
+    result := A = B;
+    if not result then
+    begin
+      result := Abs(A - B) / (Abs(A) + Abs(B)) < Epsilon;
+    end;
+  end;
+  function PointsNearlyTheSame(Point1, Point2: TPoint2D): boolean;
+  begin
+    result := NearlyTheSame(Point1.X, Point2.X) and
+      NearlyTheSame(Point1.Y, Point2.Y);
+  end;
+
 var
   Index: Integer;
-  APoint: TPoint2D;
-  PointIndex: Integer;
   Exaggeration: double;
   LineIndex: Integer;
-  ALine: TPointList;
   NewLine: TPointList;
-begin
-  for Index := 0 to Length(Segments) - 1 do
+  Point1: TPoint2D;
+  Point2: TPoint2D;
+  PointDistance: double;
+  Points1: TQuadPointInRegionArray;
+  Points2: TQuadPointInRegionArray;
+  LineMatch: TLineMatch;
+  LineMatch1: TLineMatch;
+  LineMatch2: TLineMatch;
+  LineMatchR: TLineMatchRecord;
+  APointList: TPointList;
+  LineMatch1R: TLineMatchRecord;
+  LineMatch2R: TLineMatchRecord;
+  procedure RemoveMatchPoints(Line: TPointList; LineMatch: TLineMatch);
+  var
+    APoint: TPoint2D;
+    PointsTemp: TQuadPointInRegionArray;
+    LineMatchTemp: TLineMatch;
   begin
-    NewLine := TPointList.Create;
-    NewLine.Add(Segments[Index][1]);
-    NewLine.Add(Segments[Index][2]);
-    PointLists.Add(NewLine);
+    APoint := Line.First;
+    QuadTree.FindPointsInCircle(APoint.x, APoint.y, PointDistance, PointsTemp, True);
+    for var Index1 := 0 to Length(PointsTemp) - 1 do
+    begin
+      for Var Index2 := 0 to Length(PointsTemp[Index1].Data) - 1 do
+      begin
+        LineMatchTemp := PointsTemp[Index1].Data[Index2];
+        if LineMatchTemp.Match.PointList = Line then
+        begin
+          QuadTree.RemovePoint(LineMatchTemp.Match.APoint.X, LineMatchTemp.Match.APoint.y, LineMatchTemp);
+          if LineMatchTemp <> LineMatch then
+          begin
+            LineMatchTemp.Free;
+          end;
+        end;
+      end;
+    end;
+
+    APoint := Line.Last;
+    QuadTree.FindPointsInCircle(APoint.x, APoint.y, PointDistance, PointsTemp, True);
+    for var Index1 := 0 to Length(PointsTemp) - 1 do
+    begin
+      for Var Index2 := 0 to Length(PointsTemp[Index1].Data) - 1 do
+      begin
+        LineMatchTemp := PointsTemp[Index1].Data[Index2];
+        if LineMatchTemp.Match.PointList = Line then
+        begin
+          QuadTree.RemovePoint(LineMatchTemp.Match.APoint.X, LineMatchTemp.Match.APoint.y, LineMatchTemp);
+          if LineMatchTemp <> LineMatch then
+          begin
+            LineMatchTemp.Free;
+          end;
+        end;
+      end;
+    end;
   end;
+  procedure AddMatchPoints(Line: TPointList);
+  var
+    LineMatchTemp: TLineMatch;
+  begin
+    LineMatchTemp := TLineMatch.Create;
+    LineMatchTemp.Match.APoint := Line.First;
+    LineMatchTemp.Match.PointList := Line;
+    LineMatchTemp.Match.MatchLocation := mlStart;
+    QuadTree.AddPoint(LineMatchTemp.Match.APoint.X, LineMatchTemp.Match.APoint.y, LineMatchTemp);
+
+    LineMatchTemp := TLineMatch.Create;
+    LineMatchTemp.Match.APoint := Line.Last;
+    LineMatchTemp.Match.PointList := Line;
+    LineMatchTemp.Match.MatchLocation := mlEnd;
+    QuadTree.AddPoint(LineMatchTemp.Match.APoint.X, LineMatchTemp.Match.APoint.y, LineMatchTemp);
+  end;
+ procedure RemoveLine(Line: TPointList);
+  var
+    PointsToRemove: TQuadPointInRegionArray;
+    LineMatch: TLineMatch;
+    APoint: TPoint2D;
+  begin
+    APoint := Line.First;
+    QuadTree.FindPointsInCircle(APoint.x, APoint.y, PointDistance, PointsToRemove, True);
+    for var PointIndex := 0 to Length(PointsToRemove)- 1 do
+    begin
+      for var DataIndex := 0 to Length(PointsToRemove[PointIndex].Data) - 1 do
+      begin
+        LineMatch := PointsToRemove[PointIndex].Data[DataIndex];
+        if LineMatch.Match.PointList = Line then
+        begin
+          QuadTree.RemovePoint(LineMatch.Match.APoint.x, LineMatch.Match.APoint.y, LineMatch);
+          LineMatch.Free;
+        end;
+      end;
+    end;
+    APoint := Line.Last;
+    QuadTree.FindPointsInCircle(APoint.x, APoint.y, PointDistance, PointsToRemove, True);
+    for var PointIndex := 0 to Length(PointsToRemove)- 1 do
+    begin
+      for var DataIndex := 0 to Length(PointsToRemove[PointIndex].Data) - 1 do
+      begin
+        LineMatch := PointsToRemove[PointIndex].Data[DataIndex];
+        if LineMatch.Match.PointList = Line then
+        begin
+          QuadTree.RemovePoint(LineMatch.Match.APoint.x, LineMatch.Match.APoint.y, LineMatch);
+          LineMatch.Free;
+        end;
+      end;
+    end;
+    PointLists.Remove(Line);
+  end;
+begin
   Exaggeration := 1;
   if (frmGoPhast.ModelSelection in [msSutra22, msSutra30, msSutra40])
     and (frmGoPhast.SutraMesh.MeshType = mtProfile) then
@@ -112,16 +238,167 @@ begin
       Exaggeration := 1;
     end;
   end;
+
   if Exaggeration <> 1 then
   begin
-    for LineIndex := 0 to PointLists.Count - 1 do
+    for LineIndex := 0 to Length(Segments) - 1 do
     begin
-      ALine := PointLists[LineIndex];
-      for PointIndex := 0 to ALine.Count - 1 do
+      Segments[LineIndex][1].Y  := Segments[LineIndex][1].Y/Exaggeration;
+      Segments[LineIndex][2].Y  := Segments[LineIndex][2].Y/Exaggeration;
+    end;
+  end;
+
+  for Index := 0 to Length(Segments) - 1 do
+  begin
+    if QuadTree.Count = 0 then
+    begin
+      NewLine := TPointList.Create;
+      NewLine.Add(Segments[Index][1]);
+      NewLine.Add(Segments[Index][2]);
+
+      PointLists.Add(NewLine);
+      AddMatchPoints(NewLine);
+    end
+    else
+    begin
+      Point1 := Segments[Index][1];
+      Point2 := Segments[Index][2];
+      PointDistance := Distance(Point1, Point2)/2;
+      QuadTree.FindPointsInCircle(Point1.x, Point1.y, PointDistance, Points1, True);
+      QuadTree.FindPointsInCircle(Point2.x, Point2.y, PointDistance, Points2, True);
+      if Length(Points1) = 0 then
       begin
-        APoint := ALine.Points[PointIndex];
-        APoint.y := APoint.y/Exaggeration;
-        ALine.Points[PointIndex] := APoint;
+        // Point1 is not matched
+        if Length(Points2) = 0 then
+        begin
+          // Point2 is not matched
+          NewLine := TPointList.Create;
+          NewLine.Add(Segments[Index][1]);
+          NewLine.Add(Segments[Index][2]);
+
+          PointLists.Add(NewLine);
+          AddMatchPoints(NewLine);
+        end
+        else
+        begin
+          // Point1 is not matched
+          // Point2 is matched
+          LineMatch := Points2[0].Data[0];
+          LineMatchR := LineMatch.Match;
+          RemoveMatchPoints(LineMatchR.PointList, nil);
+          LineMatchR.APoint := Point1;
+          if LineMatchR.MatchLocation = mlStart then
+          begin
+            APointList := LineMatchR.PointList;
+            APointList.Insert(0, LineMatchR.APoint);
+          end
+          else
+          begin
+            APointList := LineMatchR.PointList;
+            APointList.Add(LineMatchR.APoint);
+          end;
+          AddMatchPoints(APointList)
+        end;
+      end
+      else
+      begin
+        // Point1 is matched
+        if Length(Points2) = 0 then
+        begin
+          // Point2 is not matched
+          LineMatch := Points1[0].Data[0];
+          LineMatchR := LineMatch.Match;
+          RemoveMatchPoints(LineMatchR.PointList, nil);
+          LineMatchR.APoint := Point2;
+          if LineMatchR.MatchLocation = mlStart then
+          begin
+            APointList := LineMatchR.PointList;
+            APointList.Insert(0, LineMatchR.APoint);
+          end
+          else
+          begin
+            APointList := LineMatchR.PointList;
+            APointList.Add(LineMatchR.APoint);
+          end;
+          AddMatchPoints(APointList)
+
+        end
+        else
+        begin
+          // Point1 is matched
+          // Point2 is matched
+          LineMatch1 := Points1[0].Data[0];
+          LineMatch2 := Points2[0].Data[0];
+          QuadTree.RemovePoint(LineMatch1.Match.APoint.X, LineMatch1.Match.APoint.y, LineMatch1);
+          QuadTree.RemovePoint(LineMatch2.Match.APoint.X, LineMatch2.Match.APoint.y, LineMatch2);
+          // same lines
+          if LineMatch1.Match.PointList = LineMatch2.Match.PointList then
+          begin
+            LineMatch1.Match.PointList.Add(LineMatch1.Match.PointList[0]);
+            LineMatch1.Free;
+            LineMatch2.Free;
+          end
+          else
+          begin
+            LineMatch1R := LineMatch1.Match;
+            LineMatch2R := LineMatch2.Match;
+            RemoveMatchPoints(LineMatch1R.PointList, nil);
+            RemoveMatchPoints(LineMatch2R.PointList, nil);
+            // different lines
+            if (LineMatch1R.MatchLocation = mlEnd) then
+            begin
+              if (LineMatch2R.MatchLocation = mlEnd) then
+              begin
+                APointList := LineMatch1R.PointList;
+                if PointsNearlyTheSame(LineMatch1R.APoint, LineMatch2R.APoint) then
+                begin
+                  APointList.Delete(LineMatch1R.PointList.Count-1);
+                end;
+                LineMatch2R.PointList.Reverse;
+              end
+              else
+              begin
+                if PointsNearlyTheSame(LineMatch1R.APoint, LineMatch2R.APoint) then
+                begin
+                  LineMatch2R.PointList.Delete(0);
+                end;
+              end;
+
+              // mlEnd mlEnd
+              for var PointIndex := 0 to LineMatch2R.PointList.Count - 1 do
+              begin
+                LineMatch1R.PointList.Add(LineMatch2R.PointList[PointIndex]);
+              end;
+              AddMatchPoints(LineMatch1R.PointList);
+              RemoveLine(LineMatch2R.PointList);
+            end
+            else
+            begin
+              // LineMatch1R.MatchLocation = mlStart
+              if (LineMatch2R.MatchLocation = mlStart) then
+              begin
+                if PointsNearlyTheSame(LineMatch1R.APoint, LineMatch2R.APoint) then
+                begin
+                  LineMatch2R.PointList.Delete(0);
+                end;
+                LineMatch2R.PointList.Reverse;
+              end
+              else
+              begin
+                if PointsNearlyTheSame(LineMatch1R.APoint, LineMatch2R.APoint) then
+                begin
+                  LineMatch2R.PointList.Delete(LineMatch2R.PointList.Count-1);
+                end;
+              end;
+              for var PointIndex := 0 to LineMatch1R.PointList.Count - 1 do
+              begin
+                LineMatch2R.PointList.Add(LineMatch1R.PointList[PointIndex]);
+              end;
+              AddMatchPoints(LineMatch2R.PointList);
+              RemoveLine(LineMatch1R.PointList);
+            end;
+          end;
+        end;
       end;
     end;
   end;
@@ -184,6 +461,26 @@ begin
   FPoints[FCount] := Point;
   result := FCount;
   Inc(FCount);
+end;
+
+procedure TPointList.Delete(const Index: Integer);
+begin
+  if Index < Count then
+  begin
+    if Index < Count-1 then
+    begin
+      for var I := Index+1 to Count - 1 do
+      begin
+        FPoints[I-1] := FPoints[I];
+      end;
+    end;
+    Dec(FCount);
+  end
+  else
+  begin
+    Assert(False);
+  end;
+
 end;
 
 function TPointList.GetCapacity: integer;
@@ -385,43 +682,43 @@ var
 begin
   CandidateLines := TList.Create;
   try
-  for MergeCount := 1 to 2 do
-  begin
-    Merged := True;
-    while Merged do
+    for MergeCount := 1 to 2 do
     begin
-      Merged := False;
-      InitializeQuadTree;
-      for index := 0 to FPointLists.Count - 1 do
+      Merged := True;
+      while Merged do
       begin
-        PointList := FPointLists[index];
-        APoint1 := PointList.First;
-        FQuadTree.AddPoint(APoint1.x, APoint1.y, PointList);
-        APoint2 := PointList.Last;
-        FQuadTree.AddPoint(APoint2.x, APoint2.y, PointList);
-      end;
+        Merged := False;
+        InitializeQuadTree;
+        for index := 0 to FPointLists.Count - 1 do
+        begin
+          PointList := FPointLists[index];
+          APoint1 := PointList.First;
+          FQuadTree.AddPoint(APoint1.x, APoint1.y, PointList);
+          APoint2 := PointList.Last;
+          FQuadTree.AddPoint(APoint2.x, APoint2.y, PointList);
+        end;
 
-      for index := FPointLists.Count - 1 downto 0 do
-      begin
-        PointList := FPointLists[index];
-        if PointList <> nil then
+        for index := FPointLists.Count - 1 downto 0 do
         begin
-          MergeLines(MergeCount);
+          PointList := FPointLists[index];
+          if PointList <> nil then
+          begin
+            MergeLines(MergeCount);
+          end;
         end;
-      end;
-      FPointLists.Pack;
-      for index := FPointLists.Count - 1 downto 0 do
-      begin
-        PointList := FPointLists[index];
-        if PointList <> nil then
+        FPointLists.Pack;
+        for index := FPointLists.Count - 1 downto 0 do
         begin
-          PointList.Reverse;
-          MergeLines(MergeCount);
+          PointList := FPointLists[index];
+          if PointList <> nil then
+          begin
+            PointList.Reverse;
+            MergeLines(MergeCount);
+          end;
         end;
+        FPointLists.Pack;
       end;
-      FPointLists.Pack;
     end;
-  end;
   finally
     CandidateLines.Free;
   end;
@@ -856,9 +1153,6 @@ begin
         end
       else Assert(False);
     end;
-//  finally
-//  end;
-//    end;
   finally
     DSValues.Free;
     FreeAndNil(PlotList);

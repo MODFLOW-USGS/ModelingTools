@@ -475,7 +475,7 @@ begin
               ModalResult := mrNone;
               Exit;
             end;
-            ListFileName := LineContents[2];
+            ListFileName := RemoveQuotes(LineContents[2]);
             break;
           end;
         end;

@@ -287,7 +287,7 @@ uses frmGoPhastUnit, DataSetUnit, FastGEO, LayerStructureUnit, PhastModelUnit,
   RasterValuesAlongSegmentsUnit, ModflowPackagesUnit, RealListUnit,
   BasisFunctionUnit, ModflowIrregularMeshUnit, MeshRenumberingTypes,
   SparseDataSets, SparseArrayUnit, Point2DRegressionUnit, JmTypes,
-  DataArrayManagerUnit, DataSetNamesUnit;
+  DataArrayManagerUnit, DataSetNamesUnit, ModelMuseUtilities;
 
 resourcestring
   StrInSVANIParamete = 'In %s, VANI parameters are defined even though that ' +
@@ -333,25 +333,6 @@ resourcestring
   StrInteger = 'integer';
   StrBoolean = 'Boolean';
   StrText = 'text';
-
-function RemoveQuotes(const Value: string): string;
-begin
-  result := Trim(Value);
-  if Length(result) > 0 then
-  begin
-    if result[1] = '"' then
-    begin
-      result := Copy(result, 2, MAXINT);
-    end;
-    if Length(result) > 0 then
-    begin
-      if result[Length(result)] = '"' then
-      begin
-        result := Copy(result, 1, Length(result) - 1);
-      end;
-    end;
-  end;
-end;
 
 var
   SpecialImplementors: TList;
