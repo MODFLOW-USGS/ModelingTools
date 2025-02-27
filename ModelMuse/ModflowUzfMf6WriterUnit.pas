@@ -114,7 +114,7 @@ resourcestring
   StrInTheUZFPackageInitResid = 'In the UZF package, initial water content must be' +
   ' greater or equal to residual water content.';
   StrInTheUZFPackageInitSat = 'In the UZF package, initial water content mus' +
-  't be less than the saturated water content.';
+  't be less than or equal to the saturated water content.';
   StrInTheUZFPackageSatResid = 'In the UZF package, saturated water content ' +
   'must be greater than residual water content.';
   StrAtLayerRowColuResid = 'At (Layer, Row, Column) (%0:d, %1:d, %2:d), resi' +
@@ -1463,7 +1463,7 @@ begin
               LayerIndex, RowIndex, ColumnIndex]]));
           end;
 
-          if thti >= thts then
+          if thti > thts then
           begin
             frmErrorsAndWarnings.AddError(Model, StrInTheUZFPackageInitSat,
               Format(StrAtLayerRowColuInitSat,

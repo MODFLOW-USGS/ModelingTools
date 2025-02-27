@@ -26,7 +26,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 577
     Height = 513
-    ActivePage = jvspChemSpecies
+    ActivePage = jvspGweIms
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange
@@ -14702,6 +14702,216 @@ inherited frmModflowPackages: TfrmModflowPackages
             end
             item
               Control = frameGweESL.cbUseMultiplierMODFLOW6
+            end>
+        end
+      end
+    end
+    object jvspGweIms: TJvStandardPage
+      Left = 0
+      Top = 0
+      Width = 577
+      Height = 513
+      Caption = 'jvspGweIms'
+      inline frameGweIms: TframePkgSms
+        Left = 0
+        Top = 0
+        Width = 577
+        Height = 513
+        Align = alClient
+        TabOrder = 0
+        TabStop = True
+        ExplicitWidth = 577
+        ExplicitHeight = 513
+        inherited lblComments: TLabel
+          Width = 76
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 76
+          ExplicitHeight = 18
+        end
+        inherited lblPackage: TLabel
+          Width = 78
+          Height = 18
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 78
+          ExplicitHeight = 18
+        end
+        inherited memoComments: TMemo
+          Width = 546
+          StyleElements = [seFont, seClient, seBorder]
+          ExplicitWidth = 546
+        end
+        inherited pgcControls: TPageControl
+          Width = 577
+          Height = 410
+          ExplicitWidth = 577
+          ExplicitHeight = 410
+          inherited tabBasic: TTabSheet
+            ExplicitTop = 29
+            ExplicitWidth = 569
+            ExplicitHeight = 377
+            inherited lblPrintOption: TLabel
+              Width = 79
+              Height = 18
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitWidth = 79
+              ExplicitHeight = 18
+            end
+            inherited lblComplexity: TLabel
+              Width = 77
+              Height = 18
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitWidth = 77
+              ExplicitHeight = 18
+            end
+            inherited lblSolutionGroupMaxIter: TLabel
+              Width = 201
+              Height = 18
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitWidth = 201
+              ExplicitHeight = 18
+            end
+            inherited lblUsePTC: TLabel
+              Width = 570
+              Height = 18
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitWidth = 570
+              ExplicitHeight = 18
+            end
+            inherited lblMaxErrors: TLabel
+              Width = 519
+              Height = 18
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitWidth = 519
+              ExplicitHeight = 18
+            end
+            inherited lblMemoryPrint: TLabel
+              Width = 383
+              Height = 18
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitWidth = 383
+              ExplicitHeight = 18
+            end
+            inherited lblAtsMaxFrac: TLabel
+              Width = 275
+              Height = 36
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitWidth = 275
+              ExplicitHeight = 36
+            end
+            inherited comboPrintOption: TJvImageComboBox
+              Height = 28
+              StyleElements = [seFont, seClient, seBorder]
+              ItemHeight = 22
+              ExplicitHeight = 28
+            end
+            inherited comboComplexity: TJvImageComboBox
+              Height = 28
+              StyleElements = [seFont, seClient, seBorder]
+              ItemHeight = 22
+              ExplicitHeight = 28
+            end
+            inherited seSolutionGroupMaxIter: TJvSpinEdit
+              Height = 26
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitHeight = 26
+            end
+            inherited comboUsePTC: TJvImageComboBox
+              Height = 28
+              StyleElements = [seFont, seClient, seBorder]
+              ItemHeight = 22
+              ItemIndex = -1
+              ExplicitHeight = 28
+            end
+            inherited seMaxErrors: TJvSpinEdit
+              Height = 26
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitHeight = 26
+            end
+            inherited comboMemoryPrint: TJvImageComboBox
+              Height = 28
+              StyleElements = [seFont, seClient, seBorder]
+              ItemHeight = 22
+              ExplicitHeight = 28
+            end
+            inherited rdeAtsMaxFrac: TRbwDataEntry
+              StyleElements = [seFont, seClient, seBorder]
+            end
+          end
+          inherited tabNonLinear: TTabSheet
+            ExplicitTop = 29
+            ExplicitHeight = 381
+            inherited rdgNonlinearOptions: TRbwDataGrid4
+              Height = 381
+              FixedCols = 0
+              ExplicitHeight = 381
+            end
+          end
+          inherited tabLinear: TTabSheet
+            ExplicitTop = 29
+            ExplicitHeight = 381
+            inherited rdgLinearOptions: TRbwDataGrid4
+              Height = 381
+              FixedCols = 0
+              ExplicitHeight = 381
+            end
+          end
+        end
+        inherited rcSelectionController: TRbwController
+          ControlList = <
+            item
+              Control = frameGweIms.lblComments
+            end
+            item
+              Control = frameGweIms.memoComments
+            end
+            item
+              Control = frameGweIms.comboPrintOption
+            end
+            item
+              Control = frameGweIms.comboComplexity
+            end
+            item
+              Control = frameGweIms.seSolutionGroupMaxIter
+            end
+            item
+              Control = frameGweIms.cbContinue
+            end
+            item
+              Control = frameGweIms.cbCsvOutput
+            end
+            item
+              Control = frameGweIms.rdgNonlinearOptions
+            end
+            item
+              Control = frameGweIms.rdgLinearOptions
+            end
+            item
+              Control = frameGweIms.lblUsePTC
+            end
+            item
+              Control = frameGweIms.comboUsePTC
+            end
+            item
+              Control = frameGweIms.lblMaxErrors
+            end
+            item
+              Control = frameGweIms.seMaxErrors
+            end
+            item
+              Control = frameGweIms.cbCheckInput
+            end
+            item
+              Control = frameGweIms.lblMemoryPrint
+            end
+            item
+              Control = frameGweIms.comboMemoryPrint
+            end
+            item
+              Control = frameGweIms.cbNewton
+            end
+            item
+              Control = frameGweIms.rdeAtsMaxFrac
             end>
         end
       end

@@ -1671,6 +1671,11 @@ that affects the model output should also have a comment. }
     function DoSeparatedThermalConductivityUsedPerSpecies(Sender: TObject): boolean; virtual;
     function GetSeparatedThermalConductivityUsed: TObjectUsedEvent;
 
+    function DoSeparatedDecayWaterUsedPerSpecies(Sender: TObject): boolean; virtual;
+    function DoSeparatedDecaySolidUsedPerSpecies(Sender: TObject): boolean; virtual;
+    function DoSeparatedHeatCapacitySolidUsedPerSpecies(Sender: TObject): boolean; virtual;
+    function DoSeparatedDensitySolidUsedPerSpecies(Sender: TObject): boolean; virtual;
+
 //    function
     procedure UpdateMt3dmsActive(Sender: TObject);
     function CountStepsInMt3dExport: Integer;
@@ -2226,6 +2231,10 @@ that affects the model output should also have a comment. }
     function GetInputObsInstructionFileNames: TStrings;
     function GetInputObsInstructionFiles: TStrings;
     procedure SetMt3dObsCollection(const Value: TMt3dObsCollection);
+    function GetSeparatedDecaySolidUsed: TObjectUsedEvent;
+    function GetSeparatedDecayWaterUsed: TObjectUsedEvent;
+    function GetSeparatedDensitySolidUsed: TObjectUsedEvent;
+    function GetSeparatedHeatCapacitySolidUsed: TObjectUsedEvent;
   public
     function ChdIsSelected: Boolean; virtual;
     function TvkIsSelected: Boolean; virtual;
@@ -3205,6 +3214,10 @@ that affects the model output should also have a comment. }
     property CombinedHorizontalTransverseDispersionUsedPerSpecies: TObjectUsedEvent
       read GetCombinedHorizontalTransverseDispersionUsedPerSpecies;
     property SeparatedThermalConductivityUsed: TObjectUsedEvent read GetSeparatedThermalConductivityUsed;
+    property SeparatedDecayWaterUsed: TObjectUsedEvent read GetSeparatedDecayWaterUsed;
+    property SeparatedDecaySolidUsed: TObjectUsedEvent read GetSeparatedDecaySolidUsed;
+    property SeparatedHeatCapacitySolidUsed: TObjectUsedEvent read GetSeparatedHeatCapacitySolidUsed;
+    property SeparatedDensitySolidUsed: TObjectUsedEvent read GetSeparatedDensitySolidUsed;
   published
     property DisvGrid: TModflowDisvGrid read FDisvGrid write SetDisvGrid
       stored StoreDisvGrid;
@@ -10417,6 +10430,7 @@ const
 //    '5.3.1.11' Bug fix: Fixed importing RCH, EVT, and ETS packages from
 //                MODFLOW-2005 and MODFLOW-NWT models when parameters are used
 //                in them.
+//               Bug fix: Fixed importing MODFLOW-6 models that include GWE models.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
@@ -19794,9 +19808,19 @@ var
       result := AChemItem.PorosityDataArrayName = DataArray.Name;
       if result then
       begin
-        if Pos(StrGweTemperature, DataArray.Name) > 0 then
+        if ModflowPackages.GweEstPackage.IsSelected then
         begin
-          result := not ModflowPackages.GweEstPackage.IsSelected
+          if AChemItem.Name = StrGweTemperature then
+          begin
+            result := False;
+          end
+          else
+          begin
+            GwtPackagesItem :=  ModflowPackages.GwtPackages[Index];
+            MstPackage := GwtPackagesItem.GwtMst;
+            result := (MstPackage <> nil) and MstPackage.IsSelected
+              and MstPackage.SeparatePorosity;
+          end;
         end
         else
         begin
@@ -33729,6 +33753,164 @@ begin
   end;
 end;
 
+function TCustomModel.DoSeparatedDecaySolidUsedPerSpecies(
+  Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      if AChemItem.Name = StrGweTemperature then
+      begin
+        if DataArray = nil then
+        begin
+          result := True;
+        end
+        else
+        begin
+          result := AChemItem.DecaySolidDataArrayName = DataArray.Name;
+        end;
+      end;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GweUsed and ModflowPackages.GweEstPackage.IsSelected
+    and ModflowPackages.GweEstPackage.ZeroOrderDecaySolid;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TCustomModel.DoSeparatedDecayWaterUsedPerSpecies(
+  Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      if AChemItem.Name = StrGweTemperature then
+      begin
+        if DataArray = nil then
+        begin
+          result := True;
+        end
+        else
+        begin
+          result := AChemItem.DecayWaterDataArrayName = DataArray.Name;
+        end;
+      end;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GweUsed and ModflowPackages.GweEstPackage.IsSelected
+    and ModflowPackages.GweEstPackage.ZeroOrderDecayWater;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TCustomModel.DoSeparatedDensitySolidUsedPerSpecies(
+  Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      if AChemItem.Name = StrGweTemperature then
+      begin
+        if DataArray = nil then
+        begin
+          result := True;
+        end
+        else
+        begin
+          result := AChemItem.DensitySolidDataArrayName = DataArray.Name;
+        end;
+      end;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GweUsed and ModflowPackages.GweEstPackage.IsSelected;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
+function TCustomModel.DoSeparatedHeatCapacitySolidUsedPerSpecies(
+  Sender: TObject): boolean;
+var
+  DataArray: TDataArray;
+  function DataArrayUsed(ChemSpecies: TCustomChemSpeciesCollection): boolean;
+  var
+    Index: Integer;
+    AChemItem: TChemSpeciesItem;
+  begin
+    result := False;
+    for Index := 0 to ChemSpecies.Count - 1 do
+    begin
+      AChemItem := ChemSpecies[Index];
+      if AChemItem.Name = StrGweTemperature then
+      begin
+        if DataArray = nil then
+        begin
+          result := True;
+        end
+        else
+        begin
+          result := AChemItem.HeatCapacitySolidDataArrayName = DataArray.Name;
+        end;
+      end;
+      if result then
+      begin
+        Exit;
+      end;
+    end;
+  end;
+begin
+  result := GweUsed and ModflowPackages.GweEstPackage.IsSelected;
+  if result then
+  begin
+    DataArray := Sender as TDataArray;
+    result := DataArrayUsed(MobileComponents)
+  end;
+end;
+
 function TCustomModel.DoSeparatedHorizontalTransverseDispersionUsed(
   Sender: TObject): boolean;
 begin
@@ -36345,6 +36527,26 @@ begin
   begin
     result := 0;
   end;
+end;
+
+function TCustomModel.GetSeparatedDecaySolidUsed: TObjectUsedEvent;
+begin
+  result := DoSeparatedDecaySolidUsedPerSpecies;
+end;
+
+function TCustomModel.GetSeparatedDecayWaterUsed: TObjectUsedEvent;
+begin
+  result := DoSeparatedDecayWaterUsedPerSpecies;
+end;
+
+function TCustomModel.GetSeparatedDensitySolidUsed: TObjectUsedEvent;
+begin
+  result := DoSeparatedDensitySolidUsedPerSpecies;
+end;
+
+function TCustomModel.GetSeparatedHeatCapacitySolidUsed: TObjectUsedEvent;
+begin
+  result := DoSeparatedHeatCapacitySolidUsedPerSpecies;
 end;
 
 function TCustomModel.GetSeparatedHorizontalTransverseDispersionUsed: TObjectUsedEvent;

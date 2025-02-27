@@ -8,11 +8,16 @@ inherited framePkgSms: TframePkgSms
     517)
   inherited lblComments: TLabel
     Enabled = True
+    StyleElements = [seFont, seClient, seBorder]
+  end
+  inherited lblPackage: TLabel
+    StyleElements = [seFont, seClient, seBorder]
   end
   inherited memoComments: TMemo
     Width = 464
     Height = 35
     Enabled = True
+    StyleElements = [seFont, seClient, seBorder]
     ExplicitWidth = 464
     ExplicitHeight = 35
   end

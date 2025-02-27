@@ -74,12 +74,20 @@ type
     FTransverseVertDispDisplayName: string;
     FImmobileFreundlichExponentSp2s: TStringList;
     FImmobileSorptionCapacitySp2s: TStringList;
-    FThermalConductivityFluid: string;
-    FThermalConductivitySolid: string;
+    FThermalConductivityFluidDataArrayName: string;
+    FThermalConductivitySolidDataArrayName: string;
     FThermalConductivityFluidDisplayName: string;
     FThermalConductivitySolidDisplayName: string;
     FGwePorosityDataArrayName: string;
     FGwePorosityDataArrayDisplayName: string;
+    FDecaySolidDataArrayName: string;
+    FHeatCapacitySolidDataArrayName: string;
+    FDensitySolidDataArrayName: string;
+    FDecayWaterDataArrayName: string;
+    FDecaySolidDisplayName: string;
+    FHeatCapacitySolidDisplayName: string;
+    FDensitySolidDisplayName: string;
+    FDecayWaterDisplayName: string;
     function GetName: string;
     procedure SetName(const Value: string); virtual;
     procedure UpdateDataArray(OnDataSetUsed: TObjectUsedEvent;
@@ -136,9 +144,13 @@ type
     procedure SetTransverseVertDispArrayNameDataArrayName(const NewName: string);
     procedure SetImmobileFreundlichExponentSp2s(const Value: TStringList);
     procedure SetImmobileSorptionCapacitySp2s(const Value: TStringList);
-    procedure SetThermalConductivityFluid(const NewName: string);
-    procedure SetThermalConductivitySolid(const NewName: string);
+    procedure SetThermalConductivityFluidDataArrayName(const NewName: string);
+    procedure SetThermalConductivitySolidDataArrayName(const NewName: string);
     procedure SetGwePorosityDataArrayName(const NewName: string);
+    procedure SetDecaySolidDataArrayName(const NewName: string);
+    procedure SetDecayWaterDataArrayName(const NewName: string);
+    procedure SetDensitySolidDataArrayName(const NewName: string);
+    procedure SetHeatCapacitySolidDataArrayName(const NewName: string);
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -229,7 +241,7 @@ type
     property LongDispHDataArrayName: string
       read FLongDispHDataArrayName
       write SetLongDispHArrayNameDataArrayName;
-    // GWT DSP and CND packages, alv
+    // GWT DSP and GWE CND packages, alv
     property LongDispVertDataArrayName: string
       read FLongDispVertDataArrayName
       write SetLongDispVertArrayNameDataArrayName;
@@ -245,8 +257,62 @@ type
     property TransverseVertDispDataArrayName: string
       read FTransverseVertDispDataArrayName
       write SetTransverseVertDispArrayNameDataArrayName;
-    property ThermalConductivityFluid: string read FThermalConductivityFluid write SetThermalConductivityFluid;
-    property ThermalConductivitySolid: string read FThermalConductivitySolid write SetThermalConductivitySolid;
+    // GWE CND package KTW
+    property ThermalConductivityFluidDataArrayName: string
+      read FThermalConductivityFluidDataArrayName
+      write SetThermalConductivityFluidDataArrayName
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    // retained for backwards compatiblity
+    property ThermalConductivityFluid: string
+      read FThermalConductivityFluidDataArrayName
+      write SetThermalConductivityFluidDataArrayName stored False;
+    // GWE CND package KTS
+    property ThermalConductivitySolidDataArrayName: string
+      read FThermalConductivitySolidDataArrayName
+      write SetThermalConductivitySolidDataArrayName
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    // retained for backwards compatiblity
+    property ThermalConductivitySolid: string
+      read FThermalConductivitySolidDataArrayName
+      write SetThermalConductivitySolidDataArrayName stored False;
+    // GWE EST package DECAY_WATER
+    property DecayWaterDataArrayName: string
+      read FDecayWaterDataArrayName
+      write SetDecayWaterDataArrayName
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    // GWE EST package DECAY_SOLID
+    property DecaySolidDataArrayName: string
+      read FDecaySolidDataArrayName
+      write SetDecaySolidDataArrayName
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    // GWE EST package HEAT_CAPACITY_SOLID
+    property HeatCapacitySolidDataArrayName: string
+      read FHeatCapacitySolidDataArrayName
+      write SetHeatCapacitySolidDataArrayName
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
+    // GWE EST package DENSITY_SOLID
+    property DensitySolidDataArrayName: string
+      read FDensitySolidDataArrayName
+      write SetDensitySolidDataArrayName
+    {$IFNDEF GWE}
+      stored False
+    {$ENDIF}
+      ;
 
     //IST package, CIM
     property ImmobileInitialConcentrations: TStringList
@@ -517,11 +583,23 @@ begin
     FTransverseVertDispDataArrayName := '';
     TransverseVertDispDataArrayName := SourceChem.TransverseVertDispDataArrayName;
 
-    FThermalConductivityFluid := '';
-    ThermalConductivityFluid := SourceChem.ThermalConductivityFluid;
+    FThermalConductivityFluidDataArrayName := '';
+    ThermalConductivityFluidDataArrayName := SourceChem.ThermalConductivityFluidDataArrayName;
 
-    FThermalConductivitySolid := '';
-    ThermalConductivitySolid := SourceChem.ThermalConductivitySolid;
+    FThermalConductivitySolidDataArrayName := '';
+    ThermalConductivitySolidDataArrayName := SourceChem.ThermalConductivitySolidDataArrayName;
+
+    FDecayWaterDataArrayName := '';
+    DecayWaterDataArrayName := SourceChem.DecayWaterDataArrayName;
+
+    FDecaySolidDataArrayName := '';
+    DecaySolidDataArrayName := SourceChem.DecaySolidDataArrayName;
+
+    FHeatCapacitySolidDataArrayName := '';
+    HeatCapacitySolidDataArrayName := SourceChem.HeatCapacitySolidDataArrayName;
+
+    FDensitySolidDataArrayName := '';
+    DensitySolidDataArrayName := SourceChem.DensitySolidDataArrayName;
 
 //    ImmobileInitialConcentrations.Clear;
     ImmobileInitialConcentrations := SourceChem.ImmobileInitialConcentrations;
@@ -593,8 +671,13 @@ begin
     TransverseDispVertDataArrayName := TransverseDispVertDataArrayName;
     TransverseVertDispDataArrayName := TransverseVertDispDataArrayName;
 
-    ThermalConductivityFluid := ThermalConductivityFluid;
-    ThermalConductivitySolid := ThermalConductivitySolid;
+    ThermalConductivityFluidDataArrayName := ThermalConductivityFluidDataArrayName;
+    ThermalConductivitySolidDataArrayName := ThermalConductivitySolidDataArrayName;
+
+    DecayWaterDataArrayName := DecayWaterDataArrayName;
+    DecaySolidDataArrayName := DecaySolidDataArrayName;
+    HeatCapacitySolidDataArrayName := HeatCapacitySolidDataArrayName;
+    DensitySolidDataArrayName := DensitySolidDataArrayName;
 
     TempNames := TStringList.Create;
     try
@@ -1039,9 +1122,14 @@ begin
       and (TransverseDispHDataArrayName = ChemItem.TransverseDispHDataArrayName)
       and (TransverseDispVertDataArrayName = ChemItem.TransverseDispVertDataArrayName)
       and (TransverseVertDispDataArrayName = ChemItem.TransverseVertDispDataArrayName)
-      and (ThermalConductivityFluid = ChemItem.ThermalConductivityFluid)
-      and (ThermalConductivitySolid = ChemItem.ThermalConductivitySolid)
+      and (ThermalConductivityFluidDataArrayName = ChemItem.ThermalConductivityFluidDataArrayName)
+      and (ThermalConductivitySolidDataArrayName = ChemItem.ThermalConductivitySolidDataArrayName)
       and (GwePorosityDataArrayName  = ChemItem.GwePorosityDataArrayName)
+
+      and (DecayWaterDataArrayName = ChemItem.DecayWaterDataArrayName)
+      and (DecaySolidDataArrayName = ChemItem.DecaySolidDataArrayName)
+      and (HeatCapacitySolidDataArrayName = ChemItem.HeatCapacitySolidDataArrayName)
+      and (DensitySolidDataArrayName = ChemItem.DensitySolidDataArrayName)
 
       and SameStrings(ImmobileInitialConcentrations,  ChemItem.ImmobileInitialConcentrations)
       and SameStrings(ImmobilePorosities,  ChemItem.ImmobilePorosities)
@@ -1142,9 +1230,98 @@ begin
   StoredRefViscosity.Value := Value;
 end;
 
+procedure TChemSpeciesItem.SetDecaySolidDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweEstPackage.IsSelected
+        and ModflowPackages.GweEstPackage.ZeroOrderDecaySolid then
+      begin
+        DataSetUsed := True;
+      end;
+    end;
+    UpdateDataArray(LocalModel.SeparatedDecaySolidUsed,
+      FDecaySolidDataArrayName, NewName,
+      FDecaySolidDisplayName, '1', 'MODFLOW 6 GWE ETS Package: DECAY_SOLID',
+      DataSetUsed, StrGweClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FDecaySolidDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetDecayWaterDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweEstPackage.IsSelected
+        and ModflowPackages.GweEstPackage.ZeroOrderDecayWater then
+      begin
+        DataSetUsed := True;
+      end;
+    end;
+    UpdateDataArray(LocalModel.SeparatedDecayWaterUsed,
+      FDecayWaterDataArrayName, NewName,
+      FDecayWaterDisplayName, '1', 'MODFLOW 6 GWE ETS Package: DECAY_WATER',
+      DataSetUsed, StrGweClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FDecayWaterDataArrayName, NewName);
+end;
+
 procedure TChemSpeciesItem.SetDensitySlope(const Value: double);
 begin
   StoredDensitySlope.Value := Value;
+end;
+
+procedure TChemSpeciesItem.SetDensitySolidDataArrayName(const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweEstPackage.IsSelected then
+      begin
+        DataSetUsed := True;
+      end;
+    end;
+    UpdateDataArray(LocalModel.SeparatedDensitySolidUsed,
+      FDensitySolidDataArrayName, NewName,
+      FDensitySolidDisplayName, '1', 'MODFLOW 6 GWE ETS Package: DENSITY_SOLID',
+      DataSetUsed, StrGweClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FDensitySolidDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetDiffusionCoefficientDataArrayName(
@@ -1225,6 +1402,36 @@ begin
       LocalModel.AnyMt3dUsgsMonod, StrMt3dClassification);
   end;
   SetCaseSensitiveStringProperty(FHalfSaturationConstantDataArrayName, NewName);
+end;
+
+procedure TChemSpeciesItem.SetHeatCapacitySolidDataArrayName(
+  const NewName: string);
+var
+  LocalModel: TPhastModel;
+  DataSetUsed: Boolean;
+  ModflowPackages: TModflowPackages;
+begin
+  LocalModel := Collection.Model as TPhastModel;
+
+  if (LocalModel <> nil) then
+  begin
+    DataSetUsed := False;
+    if (Name = StrGweTemperature) then
+    begin
+      ModflowPackages := LocalModel.ModflowPackages;
+      if ModflowPackages.GweProcess.IsSelected
+        and ModflowPackages.GweEstPackage.IsSelected then
+      begin
+        DataSetUsed := True;
+      end;
+    end;
+    UpdateDataArray(LocalModel.SeparatedHeatCapacitySolidUsed,
+      FHeatCapacitySolidDataArrayName, NewName,
+      FHeatCapacitySolidDisplayName, '1', 'MODFLOW 6 GWE ETS Package: HEAT_CAPACITY_SOLID',
+      DataSetUsed, StrGweClassification);
+  end;
+
+  SetCaseSensitiveStringProperty(FHeatCapacitySolidDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetImmobileBulkDensities(const Value: TStringList);
@@ -2462,16 +2669,48 @@ begin
       FThermalConductivityFluidDisplayName := StringReplace(
         FThermalConductivityFluidDisplayName,
         OldRoot,NewRoot, []);
-      ThermalConductivityFluid := StringReplace(
-        ThermalConductivityFluid,
+      ThermalConductivityFluidDataArrayName := StringReplace(
+        ThermalConductivityFluidDataArrayName,
         OldRoot,NewRoot, []);
 
       FThermalConductivitySolidDisplayName := StringReplace(
         FThermalConductivitySolidDisplayName,
         OldRoot,NewRoot, []);
-      ThermalConductivitySolid := StringReplace(
-        ThermalConductivitySolid,
+      ThermalConductivitySolidDataArrayName := StringReplace(
+        ThermalConductivitySolidDataArrayName,
         OldRoot,NewRoot, []);
+
+
+      FDecayWaterDisplayName := StringReplace(
+        FDecayWaterDisplayName,
+        OldRoot,NewRoot, []);
+      DecayWaterDataArrayName := StringReplace(
+        DecayWaterDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FDecaySolidDisplayName := StringReplace(
+        FDecaySolidDisplayName,
+        OldRoot,NewRoot, []);
+      DecaySolidDataArrayName := StringReplace(
+        DecaySolidDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FHeatCapacitySolidDisplayName := StringReplace(
+        FHeatCapacitySolidDisplayName,
+        OldRoot,NewRoot, []);
+      HeatCapacitySolidDataArrayName := StringReplace(
+        HeatCapacitySolidDataArrayName,
+        OldRoot,NewRoot, []);
+
+      FDensitySolidDisplayName := StringReplace(
+        FDensitySolidDisplayName,
+        OldRoot,NewRoot, []);
+      DensitySolidDataArrayName := StringReplace(
+        DensitySolidDataArrayName,
+        OldRoot,NewRoot, []);
+
+
+
 
       NewImobileDataSetNames.Assign(ImmobileInitialConcentrations);
       for DomainIndex := 0 to ImmobileInitialConcentrations.Count - 1 do
@@ -2702,13 +2941,35 @@ begin
 
       FThermalConductivityFluidDisplayName :=
         GenerateNewRoot(StrThermalCondFluidDisplayName + '_' + Value);
-      ThermalConductivityFluid :=
+      ThermalConductivityFluidDataArrayName :=
         GenerateNewRoot(rsThermalCondFluid + '_' + Value);
 
       FThermalConductivitySolidDisplayName :=
         GenerateNewRoot(StrThermalCondSolidDisplayName + '_' + Value);
-      ThermalConductivitySolid :=
+      ThermalConductivitySolidDataArrayName :=
         GenerateNewRoot(rsThermalCondSolid + '_' + Value);
+
+
+      FDecayWaterDisplayName :=
+        GenerateNewRoot(StrDecayWater + '_' + Value);
+      DecayWaterDataArrayName :=
+        GenerateNewRoot(rsDecayWater + '_' + Value);
+
+      FDecaySolidDisplayName :=
+        GenerateNewRoot(StrDecaySolid + '_' + Value);
+      DecaySolidDataArrayName :=
+        GenerateNewRoot(rsDecaySolid + '_' + Value);
+
+      FHeatCapacitySolidDisplayName :=
+        GenerateNewRoot(StrHeatCapacitySolid + '_' + Value);
+      HeatCapacitySolidDataArrayName :=
+        GenerateNewRoot(rsHeatCapacitySolid + '_' + Value);
+
+      FDensitySolidDisplayName :=
+        GenerateNewRoot(StrDensitySolid + '_' + Value);
+      DensitySolidDataArrayName :=
+        GenerateNewRoot(rsDensitySolid + '_' + Value);
+
 
       if Index < LocalModel.ModflowPackages.GwtPackages.Count then
       begin
@@ -2937,7 +3198,7 @@ begin
   FStoredViscositySlope.Assign(Value)    ;
 end;
 
-procedure TChemSpeciesItem.SetThermalConductivityFluid(const NewName: string);
+procedure TChemSpeciesItem.SetThermalConductivityFluidDataArrayName(const NewName: string);
 var
   LocalModel: TPhastModel;
   DataSetUsed: Boolean;
@@ -2962,15 +3223,15 @@ begin
       end;
     end;
     UpdateDataArray(LocalModel.SeparatedThermalConductivityUsed,
-      FThermalConductivityFluid, NewName,
+      FThermalConductivityFluidDataArrayName, NewName,
       FThermalConductivityFluidDisplayName, '1', StrMODFLOW6CndKTW,
       DataSetUsed, StrGweClassification);
   end;
 
-  SetCaseSensitiveStringProperty(FThermalConductivityFluid, NewName);
+  SetCaseSensitiveStringProperty(FThermalConductivityFluidDataArrayName, NewName);
 end;
 
-procedure TChemSpeciesItem.SetThermalConductivitySolid(const NewName: string);
+procedure TChemSpeciesItem.SetThermalConductivitySolidDataArrayName(const NewName: string);
 var
   LocalModel: TPhastModel;
   DataSetUsed: Boolean;
@@ -2995,12 +3256,12 @@ begin
       end;
     end;
     UpdateDataArray(LocalModel.SeparatedThermalConductivityUsed,
-      FThermalConductivitySolid, NewName,
+      FThermalConductivitySolidDataArrayName, NewName,
       FThermalConductivitySolidDisplayName, '1', StrMODFLOW6CndKTS,
       DataSetUsed, StrGweClassification);
   end;
 
-  SetCaseSensitiveStringProperty(FThermalConductivitySolid, NewName);
+  SetCaseSensitiveStringProperty(FThermalConductivitySolidDataArrayName, NewName);
 end;
 
 procedure TChemSpeciesItem.SetTransverseDispHArrayNameDataArrayName(

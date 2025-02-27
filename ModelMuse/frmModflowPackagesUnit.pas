@@ -323,6 +323,8 @@ type
     frameGweCTP: TframePackageUseMultiplier;
     jvspGweESL: TJvStandardPage;
     frameGweESL: TframePackageUseMultiplier;
+    jvspGweIms: TJvStandardPage;
+    frameGweIms: TframePkgSms;
     procedure tvPackagesChange(Sender: TObject; Node: TTreeNode);
     procedure btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject); override;
@@ -435,7 +437,9 @@ type
     FLinkDictionary: TDictionary<TframePackage, TFrameNodeLink>;
     FSettingNumber: Boolean;
     FGwtParentNode: TTreeNode;
+  {$IFDEF GWE}
     FGweParentNode: TTreeNode;
+  {$ENDIF}
     FMstNode: TTreeNode;
     FframePackageMSTObjectList: TframePackageMSTObjectList;
     FIstNode: TTreeNode;
@@ -444,6 +448,7 @@ type
     FGwtImsNode: TTreeNode;
     FTransportNode: TTreeNode;
     FChemNode: TTreeNode;
+    FGweSolverNode: TTreeNode;
     procedure AssignParameterToRow(ActiveGrid: TRbwDataGrid4; RowIndex: Integer;
       Parameter: TModflowParameter);
     procedure SetData;
@@ -2237,6 +2242,8 @@ begin
   FFrameNodeLinks := TObjectList.Create;
   framePkgGMG.pcGMG.ActivePageIndex := 0;
   frameMt3dmsAdvPkg.pcAdvection.ActivePageIndex := 0;
+
+  frameGweIms.InitializeGrids;
 end;
 
 procedure TfrmModflowPackages.FormDestroy(Sender: TObject);
@@ -2984,8 +2991,21 @@ begin
       FGwtImsNode := AddChildNode(StrGwtSolver, StrIMSIterativeModel,
         FGwtParentNode);
 
+    {$IFDEF GWE}
       FGweParentNode := AddChildNode(StrGweClassification,
         StrGweClassification, FTransportNode);
+      FGweSolverNode := AddChildNode(StrSMSSparseMatrixS,
+        StrSMSSparseMatrixS, FGweParentNode);
+
+      Link := TFrameNodeLink.Create;
+      Link.Frame := frameGweIms;
+      Link.Node := FGweSolverNode;
+      Link.AlternateNode := nil;
+      FFrameNodeLinks.Add(Link);
+      FLinkDictionary.Add(Link.Frame, Link);
+
+      FGweSolverNode.Data := jvspGweIms;
+    {$ENDIF}
 
     end
     else
@@ -3446,6 +3466,13 @@ begin
   begin
     frameGweESL.Selected := False;
   end;
+
+  frameGweIms.CanSelect := CanSelect;
+  if not frameGweIms.CanSelect then
+  begin
+    frameGweIms.Selected := False;
+  end;
+
 end;
 
 procedure TfrmModflowPackages.EnableGwtPackages;
@@ -3815,6 +3842,7 @@ var
   MemoWidth: Integer;
   IgnoredNames: TStringList;
   SpeciesCount: Integer;
+  GweSpecies: Boolean;
 begin
   if not IsLoaded then
   begin
@@ -3823,10 +3851,13 @@ begin
 
   IgnoredNames := TStringList.Create;
   try
-    if frameGwtProcess.Selected
-      {and (framePkgMt3dBasic.comboVersion.ItemIndex = 2)} then
+    if frameGwtProcess.Selected then
     begin
       FillIgnoredNames(IgnoredNames, not IsLoaded);
+      if frameGwEProcess.Selected then
+      begin
+        IgnoredNames.Add(StrGweTemperature);
+      end;
 
       if FCurrentPackages <> nil then
       begin
@@ -3834,7 +3865,7 @@ begin
           frameChemSpecies.frameGridMobile.seNumber.AsInteger then
         begin
           FCurrentPackages.GwtPackages.Count :=
-            frameChemSpecies.frameGridMobile.seNumber.AsInteger
+            frameChemSpecies.frameGridMobile.seNumber.AsInteger;
         end;
       end;
       CreateMstNode;
@@ -3843,7 +3874,7 @@ begin
       for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
       begin
         SpeciesName := frameChemSpecies.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
-        if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+        if (IgnoredNames.IndexOf(SpeciesName) >= 0) or (SpeciesName = '') then
         begin
           Continue;
         end;
@@ -3902,7 +3933,7 @@ begin
       for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
       begin
         SpeciesName := frameChemSpecies.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
-        if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+        if (IgnoredNames.IndexOf(SpeciesName) >= 0) or (SpeciesName = '') then
         begin
           Continue;
         end;
@@ -3960,19 +3991,26 @@ begin
       for SpeciesIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger -1 do
       begin
         SpeciesName := frameChemSpecies.frameGridMobile.Grid.Cells[0, SpeciesIndex+1];
-        if IgnoredNames.IndexOf(SpeciesName) >= 0 then
+        GweSpecies := frameGwEProcess.Selected and (SpeciesName = StrGweTemperature);
+        if not GweSpecies then
         begin
-          Continue;
+          if (IgnoredNames.IndexOf(SpeciesName) >= 0) or (SpeciesName = '') then
+          begin
+            Continue;
+          end;
         end;
         Inc(SpeciesCount);
 
-        if ChildNode = nil then
+        if not GweSpecies then
         begin
-          ChildNode := tvPackages.Items.AddChild(FGwtImsNode, SpeciesName);
-        end
-        else
-        begin
-          ChildNode.Text := SpeciesName;
+          if ChildNode = nil then
+          begin
+            ChildNode := tvPackages.Items.AddChild(FGwtImsNode, SpeciesName);
+          end
+          else
+          begin
+            ChildNode.Text := SpeciesName;
+          end;
         end;
 
         if FCurrentPackages <> nil then
@@ -3985,7 +4023,11 @@ begin
         end;
   //      ChildNode.Data := ImsPackage
 
-        if SpeciesCount < FframePkgSmsObjectList.Count then
+        if GweSpecies then
+        begin
+          AnImsframe := frameGweIms;
+        end
+        else if SpeciesCount < FframePkgSmsObjectList.Count then
         begin
           AnImsframe := FframePkgSmsObjectList[SpeciesCount];
         end
@@ -4009,9 +4051,13 @@ begin
           FFrameNodeLinks.Add(Link);
           FLinkDictionary.Add(Link.Frame, Link);
         end;
-        ChildNode.Data := AnImsframe.Parent;
 
-        ChildNode := ChildNode.GetnextSibling;
+        if not GweSpecies then
+        begin
+          ChildNode.Data := AnImsframe.Parent;
+
+          ChildNode := ChildNode.GetnextSibling;
+        end;
       end
     end;
   finally
@@ -4120,6 +4166,14 @@ begin
           if AnsiSameText(frameChemSpecies.frameGridMobile.Grid.Cells[0,RowIndex], StrGweTemperature) then
           begin
             FoundASpecies := True;
+            if frameChemSpecies.frameGridMobile.Grid.Cells[0,RowIndex] <> StrGweTemperature then
+            begin
+              frameChemSpecies.frameGridMobile.Grid.Cells[0,RowIndex] := StrGweTemperature;
+              if Assigned(frameChemSpecies.frameGridMobile.Grid.OnSetEditText) then
+              begin
+                frameChemSpecies.frameGridMobile.Grid.OnSetEditText(Self, 0, RowIndex,  StrGweTemperature);
+              end;
+            end;
             break;
           end;
         end;
@@ -5568,8 +5622,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+  {$IFDEF GWE}
     Packages.GweProcess.Frame := frameGweProcess;
     FPackageList.Add(Packages.GweProcess);
+  {$ELSE}
+    frameGweProcess.NilNode;
+  {$ENDIF}
   end
   else
   begin
@@ -5588,8 +5646,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+  {$IFDEF GWE}
     Packages.GweAdvectionPackage.Frame := frameGweAdv;
     FPackageList.Add(Packages.GweAdvectionPackage);
+  {$ELSE}
+    frameGweAdv.NilNode;
+  {$ENDIF}
   end
   else
   begin
@@ -5598,8 +5660,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+  {$IFDEF GWE}
     Packages.GweConductionAndDispersionPackage.Frame := frameGweCnd;
     FPackageList.Add(Packages.GweConductionAndDispersionPackage);
+  {$ELSE}
+    frameGweCnd.NilNode;
+  {$ENDIF}
   end
   else
   begin
@@ -5618,8 +5684,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+  {$IFDEF GWE}
     Packages.GweEstPackage.Frame := frameGweEst;
     FPackageList.Add(Packages.GweEstPackage);
+  {$ELSE}
+    frameGweEst.NilNode;
+  {$ENDIF}
   end
   else
   begin
@@ -5638,8 +5708,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+  {$IFDEF GWE}
     Packages.GweSsmPackage.Frame := frameGweSsm;
     FPackageList.Add(Packages.GweSsmPackage);
+  {$ELSE}
+    frameGweSsm.NilNode;
+  {$ENDIF}
   end
   else
   begin
@@ -5648,8 +5722,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+  {$IFDEF GWE}
     Packages.GweCtpPackage.Frame := frameGweCTP;
     FPackageList.Add(Packages.GweCtpPackage);
+  {$ELSE}
+    frameGweCTP.NilNode;
+  {$ENDIF}
   end
   else
   begin
@@ -5658,8 +5736,12 @@ begin
 
   if frmGoPhast.ModelSelection = msModflow2015 then
   begin
+  {$IFDEF GWE}
     Packages.GweEslPackage.Frame := frameGweESL;
     FPackageList.Add(Packages.GweEslPackage);
+  {$ELSE}
+    frameGweESL.NilNode;
+  {$ENDIF}
   end
   else
   begin
@@ -5686,9 +5768,39 @@ begin
     frameGwtSrc.NilNode;
   end;
 
+  if  (frmGoPhast.ModelSelection = msModflow2015)
+      and frameGweProcess.Selected then
+  begin
+  {$IFDEF GWE}
+    for ImsIndex := 0 to frameChemSpecies.frameGridMobile.seNumber.AsInteger - 1 do
+    begin
+      SpeciesName := frameChemSpecies.frameGridMobile.Grid.Cells[0, ImsIndex+ 1];
+      if not AnsiSameText(SpeciesName, StrGweTemperature) then
+      begin
+        Continue;
+      end;
+
+      ImsPackage := Packages.GwtPackages[ImsIndex].GwtIms;
+      ImsPackage.Frame := frameGweIms;
+      FPackageList.Add(ImsPackage);
+    end;
+  {$ELSE}
+    frameGweIms.NilNode;
+  {$ENDIF}
+  end
+  else
+  begin
+    frameGweIms.NilNode;
+  end;
+
   IgnoredNames := TStringList.Create;
   try
     FillIgnoredNames(IgnoredNames, not IsLoaded);
+    if (frmGoPhast.ModelSelection = msModflow2015)
+      and frameGweProcess.Selected then
+    begin
+      IgnoredNames.Add(StrGweTemperature);
+    end;
     if (frmGoPhast.ModelSelection = msModflow2015)
       and frameGwtProcess.Selected then
     begin

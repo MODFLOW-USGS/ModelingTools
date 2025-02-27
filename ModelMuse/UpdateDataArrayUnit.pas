@@ -20,14 +20,14 @@ type
     DataType: TRbwDataType;
   end;
 
-procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord); overload;
+procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord);
 
 implementation
 
 uses
   PhastModelUnit, DataSetNamesUnit;
 
-procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord); overload;
+procedure UpdateOrCreateDataArray(const UpdataDat: TUpdataDataArrayRecord);
 var
   DataArray: TDataArray;
   LocalModel: TPhastModel;

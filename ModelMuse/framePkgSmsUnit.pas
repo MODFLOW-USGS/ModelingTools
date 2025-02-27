@@ -68,7 +68,6 @@ type
     FScalingMethodPickList: TStringList;
     FSpeciesIndex: Integer;
 //    FXmdLinearAccPickList: TStringList;
-    procedure InitializeGrids;
     function SmsOrdToRow(SmsOrdinal: TSmsOverride): Integer;
     function LinearRowToToSmsOrd(Row: Integer): TSmsOverride;
 
@@ -82,6 +81,7 @@ type
     procedure SetData(Package: TModflowPackageSelection); override;
     function LineAccel: TSmsLinLinearAcceleration;
     procedure AssignFrame(Frame: TframePkgSms);
+    procedure InitializeGrids;
     { Public declarations }
   end;
 

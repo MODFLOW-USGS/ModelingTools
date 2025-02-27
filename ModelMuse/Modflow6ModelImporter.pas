@@ -517,6 +517,10 @@ begin
           result := Model.ModflowPackages.GwtPackages[ChemIndex].GwtIms;
           Exit;
         end
+        else if AnsiSameText(AModel.ModelType, 'GWE6') then
+        begin
+          FErrorMessages.Add('ModelMuse can not import GWE models.');
+        end
         else
         begin
           Assert(False);
@@ -608,6 +612,11 @@ begin
   begin
     Item := PackageData[index];
     AModel := TransportModels.GetModelByName(Item.modelname);
+    if AModel = nil then
+    begin
+      FErrorMessages.Add(Format('Unrecognized transport model "%s".', [Item.modelname]));
+      Exit;
+    end;
     TransportModel := AModel.FName as TTransportNameFile;
 
     if TransportModel.SpeciesName = '' then
@@ -6575,7 +6584,14 @@ begin
           for ModelIndex := 0 to ASolution.FSolutionModelNames.Count - 1 do
           begin
             ModelIms := GetIms(ASolution.FSolutionModelNames[ModelIndex]);
-            ModelIms.Assign(ImsPackage);
+            if ModelIms = nil then
+            begin
+              FErrorMessages.Add(Format('Model "%s" not found.', [ASolution.FSolutionModelNames[ModelIndex]]));
+            end
+            else
+            begin
+              ModelIms.Assign(ImsPackage);
+            end;
           end;
 
         finally
@@ -19805,6 +19821,11 @@ begin
   begin
     Item := PackageData[index];
     AModel := TransportModels.GetModelByName(Item.modelname);
+    if AModel = nil then
+    begin
+      FErrorMessages.Add(Format('Unrecognized transport model "%s".', [Item.modelname]));
+      Exit;
+    end;
     TransportModel := AModel.FName as TTransportNameFile;
 
     if TransportModel.SpeciesName = '' then
