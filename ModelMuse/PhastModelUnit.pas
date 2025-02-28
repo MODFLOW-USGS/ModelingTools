@@ -10431,13 +10431,15 @@ const
 //                MODFLOW-2005 and MODFLOW-NWT models when parameters are used
 //                in them.
 //               Bug fix: Fixed importing MODFLOW-6 models that include GWE models.
+//    '5.3.1.12' Bug fix: Fixed export of MT3D-USGS SSM input file with
+//                non-MODFLOW 6 model.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.11';
+  IIModelVersion = '5.3.1.12';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }

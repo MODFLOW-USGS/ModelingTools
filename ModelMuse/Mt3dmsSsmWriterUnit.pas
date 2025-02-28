@@ -1132,6 +1132,16 @@ begin
       for BoundaryIndex := 0 to ACell.BoundaryTypes.Count - 1 do
       begin
         BoundaryID := ACell.BoundaryTypes[BoundaryIndex];
+        // This criterion for skipping writng a cell must be consistent with
+        // the one in TMt3dmsConc_Cell.PointSinkCount
+        if (Model.ModelSelection <> msModflow2015) then
+        begin
+          if BoundaryID in [ISSTYPE_RCH, ISSTYPE_EVT, ISSTYPE_ETS] then
+          begin
+            Continue
+          end;
+        end;
+
         if (BoundaryID = ISSTYPE_MNW) and (ACell.Mnw2Layers.Count > 0) then
         begin
           for ScreenIndex := 0 to ACell.Mnw2Layers.Count-1 do
@@ -1515,6 +1525,7 @@ begin
         Exit;
       end;
 
+    // point sources, Data set 11 and 12 in MT3D-USGS
       WriteDataSets7and8(TimeIndex, List);
       Application.ProcessMessages;
       if not frmProgressMM.ShouldContinue then

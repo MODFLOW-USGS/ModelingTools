@@ -26,7 +26,7 @@ inherited frmModflowPackages: TfrmModflowPackages
     Top = 0
     Width = 577
     Height = 513
-    ActivePage = jvspGweIms
+    ActivePage = jvspGweProcess
     PropagateEnable = False
     Align = alClient
     OnChange = jvplPackagesChange

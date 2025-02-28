@@ -2994,17 +2994,6 @@ begin
     {$IFDEF GWE}
       FGweParentNode := AddChildNode(StrGweClassification,
         StrGweClassification, FTransportNode);
-      FGweSolverNode := AddChildNode(StrSMSSparseMatrixS,
-        StrSMSSparseMatrixS, FGweParentNode);
-
-      Link := TFrameNodeLink.Create;
-      Link.Frame := frameGweIms;
-      Link.Node := FGweSolverNode;
-      Link.AlternateNode := nil;
-      FFrameNodeLinks.Add(Link);
-      FLinkDictionary.Add(Link.Frame, Link);
-
-      FGweSolverNode.Data := jvspGweIms;
     {$ENDIF}
 
     end
@@ -3133,6 +3122,11 @@ end;
 
 procedure TfrmModflowPackages.GetData;
 begin
+  FreeAndNil(FGweSolverNode);
+  if FLinkDictionary.ContainsKey(frameGweIms) then
+  begin
+    FLinkDictionary.Remove(frameGweIms);
+  end;
   framePkgMt3dBasic.OnEnableTimeControls := EnableMt3dTimeControls;
   frameChemSpecies.OnEnableTimeControls := EnableMt3dTimeControls;
 
@@ -3428,6 +3422,7 @@ procedure TfrmModflowPackages.EnableGwePackages;
 var
   CanSelect: Boolean;
 begin
+  UpdateGwtFrames;
   { TODO -cGWE : Complete work for GWE }
   CanSelect := frameGweProcess.rcSelectionController.Enabled;
 
@@ -3851,7 +3846,7 @@ begin
 
   IgnoredNames := TStringList.Create;
   try
-    if frameGwtProcess.Selected then
+    if frameGwtProcess.Selected or frameGweProcess.Selected then
     begin
       FillIgnoredNames(IgnoredNames, not IsLoaded);
       if frameGwEProcess.Selected then
@@ -4026,6 +4021,30 @@ begin
         if GweSpecies then
         begin
           AnImsframe := frameGweIms;
+
+          if FGweSolverNode = nil then
+          begin
+            FGweSolverNode := tvPackages.Items.AddChild(FGweParentNode, StrSMSSparseMatrixS);
+            FGweSolverNode.Data := jvspGweIms;
+
+            if not FLinkDictionary.ContainsKey(frameGweIms) then
+            begin
+              Link := TFrameNodeLink.Create;
+              Link.Frame := frameGweIms;
+              Link.Node := FGweSolverNode;
+              Link.AlternateNode := nil;
+              FFrameNodeLinks.Add(Link);
+              FLinkDictionary.Add(Link.Frame, Link);
+            end;
+          end;
+
+          if (ImsPackage <> nil) {and not FLinkDictionary.ContainsKey(frameGweIms)} then
+          begin
+            ImsPackage.Node := FGweSolverNode;
+            AnImsframe.GetData(ImsPackage);
+            AnImsframe.AssignFrame(framePkgIMS);
+          end;
+
         end
         else if SpeciesCount < FframePkgSmsObjectList.Count then
         begin
