@@ -424,7 +424,7 @@ type
       Sender: TObject);
     procedure frameGweProcessrgSimulationChoiceClick(Sender: TObject);
   private
-    IsLoaded: boolean;
+    FIsLoaded: boolean;
     CurrentParameterType: TParameterType;
     FSteadyParameters: TModflowSteadyParameters;
     FHufParameters: THufModflowParameters;
@@ -449,6 +449,7 @@ type
     FTransportNode: TTreeNode;
     FChemNode: TTreeNode;
     FGweSolverNode: TTreeNode;
+    FNewChemSpecies: Boolean;
     procedure AssignParameterToRow(ActiveGrid: TRbwDataGrid4; RowIndex: Integer;
       Parameter: TModflowParameter);
     procedure SetData;
@@ -648,8 +649,6 @@ resourcestring
   ' run MODFLOW again.';
   FormatStr = 'Number of %s parameters';
   StrSWasNotFound = '%s was not found.';
-//  StrYouWillNeedToRun = 'You will need to run MODFLOW again one time before ' +
-//  'running MODPATH.';
   StrFarmProcess = 'Farm Process';
   StrConduitFlowProcess = 'Conduit Flow Process';
   StrMODFLOWDoesNotAll = 'MODFLOW does not allow the MNW1 and MNW2 packages ' +
@@ -719,7 +718,8 @@ resourcestring
   'in the GWT Mobile Storage and Immobile Storage Packages to be the same. Y' +
   'ou will need to fix this before running MODFLOW. Do you want to fix this ' +
   'now?';
-//  StrSurfaceWaterRouting = 'Surface-Water Routing';
+  StrDoYouWantToFixT = 'Do you want to fix this?';
+  StrDoYouWantToFixThese = 'Do you want to fix these?';
 
 {$R *.dfm}
 
@@ -1077,25 +1077,6 @@ begin
 
 end;
 
-//function TfrmModflowPackages.CheckMf6LakeOutlet: Boolean;
-//var
-//  ProblemOutlet: Integer;
-//begin
-//  result := True;
-//  ProblemOutlet := -1;
-//  if (frmGoPhast.ModelSelection = msModflow2015)
-//    and framePackageLakMf6.Selected
-//    and not framePackageLakMf6.LakeOutletsDefined(ProblemOutlet)
-//    and not framePkgMVR.Selected then
-//  begin
-//    if (MessageDlg(Format(StrNoOutletLakeIsSp, [ProblemOutlet]), mtWarning, [mbYes, mbNo], 0)
-//      in [mrNo, mrNone]) then
-//    begin
-//      Result := False;
-//    end;
-//  end;
-//end;
-//
 procedure TfrmModflowPackages.CheckMt3dChemSpeciesDefined;
 var
   Model: TPhastModel;
@@ -1145,7 +1126,6 @@ var
     ParamNames.Add(Param.ParameterName);
   end;
 begin
-//  result := False;
   ParamNames := TStringList.Create;
   DupNames := TStringList.Create;
   try
@@ -1350,12 +1330,12 @@ begin
       if Warnings.Count = 1 then
       begin
         Warnings.Add('');
-        Warnings.Add('Do you want to fix this?');
+        Warnings.Add(StrDoYouWantToFixT);
       end
       else if Warnings.Count > 1 then
       begin
         Warnings.Add('');
-        Warnings.Add('Do you want to fix these?');
+        Warnings.Add(StrDoYouWantToFixThese);
       end;
     end;
     result := Warnings.Text;
@@ -1556,7 +1536,6 @@ begin
   if NeedToDefineFluxObservations then
   begin
     Hide;
-//    frmGoPhast.miManageFluxObservationsClick(nil);
     ShowAForm(TfrmManageFluxObservations);
   end;
 
@@ -1829,7 +1808,7 @@ var
 begin
   inherited;
   framePkgMt3dmsRct.comboKineticChoiceChange(Sender);
-  if (framePkgMt3dmsRct.comboKineticChoice.ItemIndex >= 0) and IsLoaded then
+  if (framePkgMt3dmsRct.comboKineticChoice.ItemIndex >= 0) and FIsLoaded then
   begin
     KineticChoice := TKineticChoice(framePkgMt3dmsRct.comboKineticChoice.ItemIndex);
     if (KineticChoice in [kcMonod, kcFirstOrderChain])
@@ -2011,8 +1990,7 @@ begin
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
   if frmGoPhast.ModelSelection <> msModflowNWT then
   begin
-    // SFT is not currently supported with MODFLOW 6
-//    CanSelect := CanSelect and framePackageSfrMF6.rcSelectionController.Enabled;
+    // SFT in MT3D is not currently supported with MODFLOW 6
     CanSelect := False;
   end
   else
@@ -2232,7 +2210,7 @@ procedure TfrmModflowPackages.FormClose(Sender: TObject;
 begin
   Handle;
   inherited;
-  IsLoaded := False;
+  FIsLoaded := False;
 end;
 
 procedure TfrmModflowPackages.FormCreate(Sender: TObject);
@@ -2305,7 +2283,7 @@ begin
     end;
     framePkgMt3dmsRct.SetSpeciesNames(SpeciesNames);
 
-    if IsLoaded then
+    if FIsLoaded then
     begin
       KineticChoice := TKineticChoice(framePkgMt3dmsRct.comboKineticChoice.ItemIndex);
       if (KineticChoice = kcFirstOrderChain)
@@ -2411,7 +2389,6 @@ procedure TfrmModflowPackages.frameGridMobileGridStateChange(Sender: TObject;
 begin
   inherited;
   frameChemSpecies.frameSpeciesGridStateChange(Sender, ACol, ARow, Value);
-//
 end;
 
 procedure TfrmModflowPackages.frameGridMobileseNumberChange(Sender: TObject);
@@ -2602,7 +2579,7 @@ begin
     end;
     ActiveGrid := ActiveFrame.dgParameters;
     ActiveFrame.seNumberOfParametersChange(nil);
-    if not IsLoaded then
+    if not FIsLoaded then
     begin
       ActiveFrame.PriorNumberOfParameters := ActiveFrame.seNumberOfParameters.AsInteger;
       Exit;
@@ -2852,11 +2829,6 @@ begin
     FSfrParameterInstances := TSfrParamInstances.Create(nil);
     FSfrParameterInstances.Assign(SfrParameterInstances);
 
-//    if ParameterNames.Count = 0 then
-//    begin
-//      FSfrParameterInstances.Clear;
-//    end;
-
     for Index := 0 to FSfrParameterInstances.Count - 1 do
     begin
       Item := FSfrParameterInstances.Items[Index];
@@ -2900,10 +2872,8 @@ var
   AltNodeIndex: Integer;
   AltParentNode: TTreeNode;
   AltChildNode: TTreeNode;
-  FGwtSrcNode: TTreeNode;
   IgnoredNames: TStringList;
   SpeciesName: string;
-//  MstIndex: Integer;
   procedure AddNode(const Key, Caption: string; var PriorNode: TTreeNode);
   begin
     PriorNode := tvPackages.Items.Add(PriorNode, Caption);
@@ -3008,16 +2978,17 @@ begin
     AddChildNode(StrMt3dClassification,
       StrMt3dClassification, FTransportNode);
 
-//    AddNode(StrMT3DMS_GWT_Classificaton, StrMT3DMS_GWT_Classificaton, PriorNode);
-
     NilNodes;
 
-    FGwtSrcNode := nil;
     FFrameNodeLinks.Clear;
     FLinkDictionary.Clear;
     IgnoredNames := TStringList.Create;
     try
-      FillIgnoredNames(IgnoredNames, not IsLoaded);
+      FillIgnoredNames(IgnoredNames, not FIsLoaded);
+      if frameGwEProcess.Selected then
+      begin
+        IgnoredNames.Add(StrGweTemperature);
+      end;
       for Index := 0 to FPackageList.Count - 1 do
       begin
         APackage := FPackageList[Index];
@@ -3035,14 +3006,19 @@ begin
           begin
             ChildNode := tvPackages.Items.AddChild(ParentNode,
               SpeciesName);
-            if Frame = frameGwtSRC then
-            begin
-              FGwtSrcNode := ChildNode;
-            end;
           end
           else
           begin
-            ChildNode := nil;
+            if frameGwEProcess.Selected and (SpeciesName = StrGweTemperature)  then
+            begin
+              ChildNode := tvPackages.Items.AddChild(FGweParentNode,
+                APackage.PackageIdentifier);
+              FGweSolverNode := ChildNode;
+            end
+            else
+            begin
+              ChildNode := nil;
+            end;
           end;
         end
         else
@@ -3107,11 +3083,6 @@ begin
     FTreeNodeList.Free;
   end;
 
-  if FGwtSrcNode <> nil then
-  begin
-
-  end;
-
   FillLpfTree;
   FillHufTree;
   FillTransientGrids;
@@ -3122,25 +3093,19 @@ end;
 
 procedure TfrmModflowPackages.GetData;
 begin
+  FNewChemSpecies := False;
   FreeAndNil(FGweSolverNode);
-  if FLinkDictionary.ContainsKey(frameGweIms) then
-  begin
-    FLinkDictionary.Remove(frameGweIms);
-  end;
   framePkgMt3dBasic.OnEnableTimeControls := EnableMt3dTimeControls;
   frameChemSpecies.OnEnableTimeControls := EnableMt3dTimeControls;
 
   frameFmpParameterDefinition.Parent := framePkgFrm.jvspParameters;
   frameFmpParameterDefinition.Align := alClient;
 
-  IsLoaded := False;
+  FIsLoaded := False;
   try
     StorePackages;
     FPackageList.Free;
     FPackageList := TList.Create;
-
-//    AddPackagesToList(frmGoPhast.PhastModel.ModflowPackages);
-//    NilNodes;
 
     FSteadyParameters.Free;
     FSteadyParameters := TModflowSteadyParameters.Create(nil);
@@ -3186,12 +3151,6 @@ begin
       frmGoPhast.PhastModel.MobileComponents);
 
     ReadPackages;
-//    IsLoaded := True;
-//    try
-//      UpdateGwtFrames;
-//    finally
-//      IsLoaded := False;
-//    end;
 
     comboModel.ItemIndex := 0;
     comboModelChange(nil);
@@ -3239,7 +3198,7 @@ begin
 
     pnlModel.Visible := frmGoPhast.PhastModel.LgrUsed;
   finally
-    IsLoaded := True;
+    FIsLoaded := True;
   end;
 
   UpdateGwtFrames;
@@ -3256,7 +3215,7 @@ var
   TempRow: TStringList;
   IgnoredRow: Integer;
 begin
-  if not IsLoaded then
+  if not FIsLoaded then
   begin
     Exit;
   end;
@@ -3346,10 +3305,6 @@ begin
     begin
       IgnoredNames.Add(StrViscosity);
     end;
-//    if frameGweProcess.Selected then
-//    begin
-//      IgnoredNames.Add(StrGweTemperature);
-//    end;
   end;
 end;
 
@@ -3423,7 +3378,6 @@ var
   CanSelect: Boolean;
 begin
   UpdateGwtFrames;
-  { TODO -cGWE : Complete work for GWE }
   CanSelect := frameGweProcess.rcSelectionController.Enabled;
 
   frameGweAdv.CanSelect := CanSelect;
@@ -3534,10 +3488,6 @@ begin
   begin
     ImsFrame := FframePkgSmsObjectList[index];
     ImsFrame.CanSelect := CanSelect;
-//    if not ImsFrame.CanSelect then
-//    begin
-//      ImsFrame.Selected := False;
-//    end;
   end;
 end;
 
@@ -3549,8 +3499,7 @@ begin
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
   if frmGoPhast.ModelSelection <> msModflowNWT then
   begin
-    // LKT is not currently supported by MODFLOW 6.
-//    CanSelect := CanSelect and framePackageLakMf6.rcSelectionController.Enabled;
+    // LKT in MT3D is not currently supported by MODFLOW 6.
     CanSelect := False;
   end
   else
@@ -3609,7 +3558,6 @@ begin
     begin
       Assert(False);
     end;
-//    Link := FFrameNodeLinks[Index];
     Assert(Frame = Link.Frame);
     APackage.Node := Link.Node;
     Frame.SetData(APackage);
@@ -3633,7 +3581,6 @@ begin
     begin
       Assert(False);
     end;
-//    Link := FFrameNodeLinks[Index];
     Assert(Frame = Link.Frame);
     APackage.Node := Link.Node;
     APackage.AlternateNode := Link.AlternateNode;
@@ -3670,10 +3617,7 @@ procedure TfrmModflowPackages.EnableUnsatTransport;
 begin
   if frmGoPhast.ModelSelection <> msModflowNWT then
   begin
-    // UZT is not currently supported with MODFLOW 6
-//    framePkgMt3dUZT.CanSelect := framePackageUzfMf6.rcSelectionController.Enabled
-//      and framePkgMt3dBasic.rcSelectionController.Enabled
-//      and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
+    // UZT in MT3D is not currently supported with MODFLOW 6
     framePkgMt3dUZT.CanSelect := False;
   end
   else
@@ -3839,7 +3783,7 @@ var
   SpeciesCount: Integer;
   GweSpecies: Boolean;
 begin
-  if not IsLoaded then
+  if not FIsLoaded then
   begin
     Exit;
   end;
@@ -3848,7 +3792,7 @@ begin
   try
     if frameGwtProcess.Selected or frameGweProcess.Selected then
     begin
-      FillIgnoredNames(IgnoredNames, not IsLoaded);
+      FillIgnoredNames(IgnoredNames, not FIsLoaded);
       if frameGwEProcess.Selected then
       begin
         IgnoredNames.Add(StrGweTemperature);
@@ -3861,6 +3805,7 @@ begin
         begin
           FCurrentPackages.GwtPackages.Count :=
             frameChemSpecies.frameGridMobile.seNumber.AsInteger;
+          FNewChemSpecies := True;
         end;
       end;
       CreateMstNode;
@@ -3892,7 +3837,6 @@ begin
         begin
           MstPackage := nil;
         end;
-  //      ChildNode.Data := MstPackage
                           ;
         if SpeciesCount < FframePackageMSTObjectList.Count then
         begin
@@ -3951,7 +3895,6 @@ begin
         begin
           IstPackage := nil;
         end;
-  //      ChildNode.Data := IstPackage
                           ;
         if SpeciesCount < FframePackageISTObjectList.Count then
         begin
@@ -4016,7 +3959,6 @@ begin
         begin
           ImsPackage := nil;
         end;
-  //      ChildNode.Data := ImsPackage
 
         if GweSpecies then
         begin
@@ -4038,11 +3980,18 @@ begin
             end;
           end;
 
-          if (ImsPackage <> nil) {and not FLinkDictionary.ContainsKey(frameGweIms)} then
+          if (ImsPackage <> nil) then
           begin
             ImsPackage.Node := FGweSolverNode;
-            AnImsframe.GetData(ImsPackage);
-            AnImsframe.AssignFrame(framePkgIMS);
+            if not FIsLoaded or FNewChemSpecies then
+            begin
+              AnImsframe.GetData(ImsPackage);
+            end;
+            if FNewChemSpecies then
+            begin
+              AnImsframe.AssignFrame(framePkgIMS);
+              FNewChemSpecies := False;
+            end;
           end;
 
         end
@@ -4107,15 +4056,11 @@ begin
     or framePkgMt3dBasic.rcSelectionController.Enabled;
   frameChemSpecies.frameGridImmobile.Enabled :=
     framePkgMt3dBasic.rcSelectionController.Enabled;
-  if IsLoaded and frameChemSpecies.frameGridMobile.Enabled then
+  if FIsLoaded and frameChemSpecies.frameGridMobile.Enabled then
   begin
     IgnoredNames := TStringList.Create;
     try
       FillIgnoredNames(IgnoredNames, False);
-//      if frameGweProcess.rcSelectionController.Enabled then
-//      begin
-//        IgnoredNames.Add(StrGweTemperature);
-//      end;
       if (frameChemSpecies.frameGridMobile.seNumber.AsInteger = 0) then
       begin
         frameChemSpecies.frameGridMobile.seNumber.AsInteger := 1;
@@ -4263,10 +4208,6 @@ var
 begin
   CanSelect := framePkgMt3dBasic.rcSelectionController.Enabled
     and (framePkgMt3dBasic.comboVersion.ItemIndex = 0);
-//  if frmGoPhast.ModelSelection = msModflow2015 then
-//  begin
-//    CanSelect := False;
-//  end;
   frameMt3dCtsPkg.CanSelect := CanSelect;
   if not frameMt3dCtsPkg.CanSelect then
   begin
@@ -4322,7 +4263,6 @@ begin
     if tvLpfParameterTypes.Selected = nil then
     begin
       CurrentParameterType := ptUndefined;
-//      Assert(False);
     end
     else
     begin
@@ -4501,9 +4441,6 @@ var
   Root: string;
   Index: Integer;
   Param: TModflowParameter;
-//  UpRoot, ParamUpRoot: string;
-//  CountString: string;
-//  Count,
   MaxCount: integer;
 begin
   case CurrentParameterType of
@@ -4553,18 +4490,6 @@ begin
           begin
             Inc(MaxCount);
           end;
-//          ParamUpRoot := UpperCase(Param.ParameterName);
-//          if Pos(UpRoot, ParamUpRoot) > 0 then
-//          begin
-//            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
-//            if TryStrToInt(CountString, Count) then
-//            begin
-//              if Count > MaxCount then
-//              begin
-//                MaxCount := Count;
-//              end;
-//            end;
-//          end;
         end;
       end;
     ptCHD..ptSFR, ptRCH, ptEVT, ptETS, ptSTR, ptQMAX:
@@ -4576,18 +4501,6 @@ begin
           begin
             Inc(MaxCount);
           end;
-//          ParamUpRoot := UpperCase(Param.ParameterName);
-//          if Pos(UpRoot, ParamUpRoot) > 0 then
-//          begin
-//            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
-//            if TryStrToInt(CountString, Count) then
-//            begin
-//              if Count > MaxCount then
-//              begin
-//                MaxCount := Count;
-//              end;
-//            end;
-//          end;
         end;
       end;
     ptHUF_HK..ptHUF_SY, ptHUF_KDEP:
@@ -4599,23 +4512,10 @@ begin
           begin
             Inc(MaxCount);
           end;
-//          ParamUpRoot := UpperCase(Param.ParameterName);
-//          if Pos(UpRoot, ParamUpRoot) > 0 then
-//          begin
-//            CountString := Copy(ParamUpRoot, Length(UpRoot)+1, MAXINT);
-//            if TryStrToInt(CountString, Count) then
-//            begin
-//              if Count > MaxCount then
-//              begin
-//                MaxCount := Count;
-//              end;
-//            end;
-//          end;
         end;
       end;
     else Assert(False);
   end;
-//  Inc(MaxCount);
   result := Root + IntToStr(MaxCount);
 
   While (Length(result) > MaxLengthModflowParameterName) and (Root <> '') do
@@ -5814,7 +5714,7 @@ begin
 
   IgnoredNames := TStringList.Create;
   try
-    FillIgnoredNames(IgnoredNames, not IsLoaded);
+    FillIgnoredNames(IgnoredNames, not FIsLoaded);
     if (frmGoPhast.ModelSelection = msModflow2015)
       and frameGweProcess.Selected then
     begin
@@ -6531,7 +6431,6 @@ begin
     OldPackages := FOldPackages[0].Packages;
     GwtChanged := (PhastModel.ModelSelection = msModflow2015)
       and (PhastModel.GwtUsed <> OldPackages.GwtProcess.IsSelected);
-//      and (OldPackages.Mt3dBasic.Mt3dVersion = mvMf6Gwt)));
 
     frmGoPhast.PhastModel.ModflowPackages := FOldPackages[0].Packages;
     if frmGoPhast.PhastModel.LgrUsed then
@@ -6589,16 +6488,12 @@ end;
 
 procedure TUndoChangeLgrPackageSelection.UpdateInterbedsInObjects;
 var
-//  Interbeds: TCSubInterbeds;
   LocalModel: TPhastModel;
   ScreenObjectIndex: Integer;
   AScreenObject: TScreenObject;
   CSub: TCSubBoundary;
-//  InterbedIndex: Integer;
-//  CSubPkgData: TCSubPackageData;
 begin
   LocalModel := frmGoPhast.PhastModel;
-//  Interbeds := LocalModel.ModflowPackages.CSubPackage.Interbeds;
   for ScreenObjectIndex := 0 to LocalModel.ScreenObjectCount - 1 do
   begin
     AScreenObject := LocalModel.ScreenObjects[ScreenObjectIndex];
