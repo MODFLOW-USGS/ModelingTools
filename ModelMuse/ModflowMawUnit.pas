@@ -5349,7 +5349,7 @@ var
   SpeciesIndex: Integer;
 begin
   LocalModel := Model as TCustomModel;
-  if LocalModel.GwtUsed then
+  if LocalModel.GwtUsed or LocalModel.GweUsed then
   begin
     for SpeciesIndex := FSpecifiedConcList.Count to
       LocalModel.MobileComponents.Count - 1 do

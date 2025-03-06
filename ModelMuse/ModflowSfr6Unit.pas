@@ -3978,46 +3978,46 @@ begin
       end;
       ElevUsed := ThickUsed;
 
-      case ISFROPT of
-        1:
-          begin
-            WidthUsed := ICALC  <= 1;
-          end;
-        2,3, 4:
-          begin
-            if ICALC <= 0 then
-            begin
-              WidthUsed := True;
-            end
-            else if ICALC >= 2 then
-            begin
-              WidthUsed := False;
-            end
-            else
-            begin
-              WidthUsed := ItemIndex = 0;
-            end;
-          end;
-        5:
-          begin
-            if ICALC <= 0 then
-            begin
-              WidthUsed := True;
-            end
-            else if ICALC = 1 then
-            begin
-              WidthUsed := ItemIndex = 0;
-            end
-            else
-            begin
-              WidthUsed := False;
-            end;
-          end;
-        else
-          begin
-            WidthUsed := ICALC  <= 1;
-          end;
-      end;
+//      case ISFROPT of
+//        1:
+//          begin
+//            WidthUsed := ICALC  <= 1;
+//          end;
+//        2,3, 4:
+//          begin
+//            if ICALC <= 0 then
+//            begin
+//              WidthUsed := True;
+//            end
+//            else if ICALC >= 2 then
+//            begin
+//              WidthUsed := False;
+//            end
+//            else
+//            begin
+//              WidthUsed := ItemIndex = 0;
+//            end;
+//          end;
+//        5:
+//          begin
+//            if ICALC <= 0 then
+//            begin
+//              WidthUsed := True;
+//            end
+//            else if ICALC = 1 then
+//            begin
+//              WidthUsed := ItemIndex = 0;
+//            end
+//            else
+//            begin
+//              WidthUsed := False;
+//            end;
+//          end;
+//        else
+//          begin
+//            WidthUsed := ICALC  <= 1;
+//          end;
+//      end;
 
       DepthUsed := ICALC <= 0;
 
@@ -6990,7 +6990,7 @@ end;
 
 function TSfrMF6ConstantRecord.GetBoundaryValue(Index: Integer): double;
 begin
-  result := 0;
+//  result := 0;
   case Index of
     SfrMf6ReachLengthPosition:
       begin
@@ -7458,7 +7458,7 @@ var
   SpeciesIndex: Integer;
 begin
   LocalModel := Model as TCustomModel;
-  if LocalModel.GwtUsed then
+  if LocalModel.GwtUsed or LocalModel.GweUsed then
   begin
     for SpeciesIndex := FSpecifiedConcList.Count to
       LocalModel.MobileComponents.Count - 1 do

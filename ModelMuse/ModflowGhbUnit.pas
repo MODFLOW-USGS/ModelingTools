@@ -493,11 +493,11 @@ begin
   result := 3;
   if GwtConcentrations <> nil then
   begin
-    if (Model <> nil) and Model.GwtUsed then
+    if (Model <> nil) and (Model.GwtUsed or Model.GweUsed) then
     begin
       GwtConcentrations.Count := (Model as TCustomModel).MobileComponents.Count;
     end;
-    if frmGoPhast.PhastModel.GwtUsed then
+    if (frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.GweUsed) then
     begin
       result := result + GwtConcentrations.Count;
     end;
@@ -2612,7 +2612,7 @@ begin
   end;
 
   PhastModel := frmGoPhast.PhastModel;
-  if PhastModel.GwtUsed then
+  if PhastModel.GwtUsed or PhastModel.GweUsed then
   begin
     for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
     begin
@@ -2645,7 +2645,7 @@ var
   SpeciesIndex: Integer;
 begin
   LocalModel := Model as TCustomModel;
-  if LocalModel.GwtUsed then
+  if LocalModel.GwtUsed or LocalModel.GweUsed then
   begin
     for SpeciesIndex := FConcList.Count to
       LocalModel.MobileComponents.Count - 1 do

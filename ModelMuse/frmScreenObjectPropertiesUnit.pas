@@ -5335,7 +5335,7 @@ begin
     TChdBoundary.DefaultBoundaryMethod(EndHeadPosition);
   PestMethod[Frame.rdgModflowBoundary, ColumnOffset+MultiplierPosition] :=
     TChdBoundary.DefaultBoundaryMethod(MultiplierPosition);
-  if frmGoPhast.PhastModel.GwtUsed then
+  if frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.GweUsed then
   begin
     for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
     begin
@@ -7673,7 +7673,7 @@ end;
 function TfrmScreenObjectProperties.GwtColumnCount: integer;
 begin
   result := 0;
-  if frmGoPhast.PhastModel.GwtUsed then
+  if frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.GweUsed then
   begin
     result := frmGoPhast.PhastModel.MobileComponents.Count;
   end;
@@ -7720,16 +7720,7 @@ begin
     frameEvtParam.rdgModflowBoundary.ColCount := 5;
   end;
   frameEtsParam.rdgModflowBoundary.ColCount := EtsColCount;
-//  if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
-//  begin
-//    frameEtsParam.rdgModflowBoundary.ColCount :=
-//      7 + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
-//  end
-//  else
-//  begin
-//    frameEtsParam.rdgModflowBoundary.ColCount :=
-//      6 + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount - 1) * 2;
-//  end;
+
   frameMT3DMS_SSM.rdgModflowBoundary.ColCount :=
     2 + frmGoPhast.PhastModel.NumberOfMt3dChemComponents;
 
@@ -7750,7 +7741,6 @@ begin
   frameSWR_LatInfl.rdgModflowBoundary.ColCount := 3;
   frameSWR_Stage.rdgModflowBoundary.ColCount := 3;
   frameSWR_DirectRunoff.rdgModflowBoundary.ColCount := 4;
-//  frameSwrReach.frameSwr.rdgModflowBoundary.ColCount := 6;
 end;
 
 procedure TfrmScreenObjectProperties.CreateSubPestObsNode(AScreenObject: TScreenObject);
@@ -20317,7 +20307,7 @@ var
 begin
   result := (frmGoPhast.ModelSelection = msModflow2015)
     and ((DataGrid = frameRchParam.rdgModflowBoundary)
-    or ((DataGrid = frameChdParam.rdgModflowBoundary) {and (ACol in [3,4,5,])  GWT concentrations should also be specified.})
+    or (DataGrid = frameChdParam.rdgModflowBoundary)
     or (DataGrid = frameCSUB.rdgModflowBoundary)
     or (DataGrid = frameDrnParam.rdgModflowBoundary)
     or (DataGrid = frameEtsParam.rdgModflowBoundary)
@@ -20716,7 +20706,6 @@ var
   Index: integer;
   ScreenObject: TScreenObject;
   TimeList: TModflowTimeList;
-//  EtsColCount: integer;
   StoredUpToDate: boolean;
   PriorCanInvalidateModel: Boolean;
   ColIndex: Integer;
@@ -20806,7 +20795,6 @@ begin
     frameRchParam.InitializeFrame(AScreenObject.ModflowRchBoundary);
     if frmGoPhast.PhastModel.RchTimeVaryingLayers then
     begin
-//      frameRchParam.rdgModflowBoundary.Columns[3].WordWrapCaptions := True;
       frameRchParam.rdgModflowBoundary.Columns[4 + GwtColumnCount].AutoAdjustColWidths := True;
       TimeList := AScreenObject.ModflowRchBoundary.RechargeLayers.TimeLists[0, frmGoPhast.PhastModel];
       frameRchParam.rdgModflowBoundary.Cells[4 + GwtColumnCount, 0] := TimeList.NonParamDescription;
@@ -20832,7 +20820,6 @@ begin
     frameEvtParam.InitializeFrame(AScreenObject.ModflowEvtBoundary);
     if frmGoPhast.PhastModel.EvtTimeVaryingLayers then
     begin
-//      frameEvtParam.rdgModflowBoundary.Columns[5].WordWrapCaptions := True;
       frameEvtParam.rdgModflowBoundary.Columns[5].AutoAdjustColWidths := True;
       TimeList := AScreenObject.ModflowEvtBoundary.EvapotranspirationLayers.TimeLists[0, frmGoPhast.PhastModel];
       frameEvtParam.rdgModflowBoundary.Cells[5, 0] := TimeList.NonParamDescription;
@@ -20845,7 +20832,6 @@ begin
       EvtSurfDepthCollection.TimeListCount(frmGoPhast.PhastModel) - 1 do
     begin
       frameEvtParam.rdgModflowBoundary.Columns[3+Index].WordWrapCaptions := True;
-//      frameEvtParam.rdgModflowBoundary.Columns[3+Index].AutoAdjustColWidths := True;
       TimeList := AScreenObject.ModflowEvtBoundary.EvtSurfDepthCollection.TimeLists[Index, frmGoPhast.PhastModel];
       frameEvtParam.rdgModflowBoundary.Cells[3+Index, 0] := TimeList.NonParamDescription;
       frameEvtParam.rdgModflowBoundary.Columns[3+Index].AutoAdjustColWidths := False;
@@ -20858,17 +20844,6 @@ begin
       AScreenObject.ModflowEvtBoundary := nil;
     end;
 
-    NumberOfSpecies := GwtColumnCount;
-//    if frmGoPhast.PhastModel.EtsTimeVaryingLayers then
-//    begin
-//      EtsColCount := 7 + NumberOfSpecies
-//        + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount -1) * 2;
-//    end
-//    else
-//    begin
-//      EtsColCount := 6 + NumberOfSpecies
-//        + (frmGoPhast.PhastModel.ModflowPackages.EtsPackage.SegmentCount -1) * 2;
-//    end;
     frameEtsParam.rdgModflowBoundary.ColCount := EtsColCount;
 
     AScreenObject.CreateEtsBoundary;
@@ -20994,7 +20969,6 @@ begin
       frameScreenObjectUZF.rdgModflowBoundary.ColCount := 6;
       // UZF ET Rates
       frameScreenObjectUZF.rdgModflowBoundary.Columns[3].WordWrapCaptions := True;
-//      frameScreenObjectUZF.rdgModflowBoundary.Columns[3].AutoAdjustColWidths := True;
       frameScreenObjectUZF.rdgModflowBoundary.Columns[3].AutoAdjustRowHeights := True;
       TimeList := AScreenObject.ModflowUzfBoundary.EvapotranspirationDemand.TimeLists[0, frmGoPhast.PhastModel];
       frameScreenObjectUZF.rdgModflowBoundary.Cells[3, 0] := TimeList.NonParamDescription;
@@ -21004,7 +20978,6 @@ begin
         frameScreenObjectUZF.rdgModflowBoundary.WidthNeededToFitText(3,0);
       // UZF ET Extinction depth
       frameScreenObjectUZF.rdgModflowBoundary.Columns[4].WordWrapCaptions := True;
-//      frameScreenObjectUZF.rdgModflowBoundary.Columns[4].AutoAdjustColWidths := True;
       frameScreenObjectUZF.rdgModflowBoundary.Columns[4].AutoAdjustRowHeights := True;
       TimeList := AScreenObject.ModflowUzfBoundary.ExtinctionDepth.TimeLists[0, frmGoPhast.PhastModel];
       frameScreenObjectUZF.rdgModflowBoundary.Cells[4, 0] := TimeList.NonParamDescription;
@@ -21014,7 +20987,6 @@ begin
         frameScreenObjectUZF.rdgModflowBoundary.WidthNeededToFitText(4,0);
       // UZF ET Extinction water content
       frameScreenObjectUZF.rdgModflowBoundary.Columns[5].WordWrapCaptions := True;
-//      frameScreenObjectUZF.rdgModflowBoundary.Columns[5].AutoAdjustColWidths := True;
       frameScreenObjectUZF.rdgModflowBoundary.Columns[5].AutoAdjustRowHeights := True;
       TimeList := AScreenObject.ModflowUzfBoundary.WaterContent.TimeLists[0, frmGoPhast.PhastModel];
       frameScreenObjectUZF.rdgModflowBoundary.Cells[5, 0] := TimeList.NonParamDescription;

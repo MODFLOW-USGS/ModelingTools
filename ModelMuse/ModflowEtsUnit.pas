@@ -3552,42 +3552,7 @@ begin
   inherited;
 end;
 
-//procedure TEtsTimeListLink.UpdateGwtTimeLists;
-//var
-//  PhastModel: TPhastModel;
-//  SpeciesIndex: Integer;
-//  ConcTimeList: TModflowTimeList;
-//  LocalModel: TCustomModel;
-//begin
-//  PhastModel := frmGoPhast.PhastModel;
-//  if PhastModel.GwtUsed then
-//  begin
-//    for SpeciesIndex := 0 to PhastModel.MobileComponents.Count - 1 do
-//    begin
-//      if SpeciesIndex < FConcList.Count then
-//      begin
-//        ConcTimeList := FConcList[SpeciesIndex];
-//        ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-//        ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-//      end
-//      else
-//      begin
-//        ConcTimeList := TModflowTimeList.Create(Model, Boundary.ScreenObject);
-//        ConcTimeList.NonParamDescription := PhastModel.MobileComponents[SpeciesIndex].Name;
-//        ConcTimeList.ParamDescription :=  ConcTimeList.NonParamDescription;
-//        if Model <> nil then
-//        begin
-//          LocalModel := Model as TCustomModel;
-//          ConcTimeList.OnInvalidate := LocalModel.InvalidateEtsConc;
-//        end;
-//        AddTimeList(ConcTimeList);
-//        FConcList.Add(ConcTimeList);
-//      end;
-//    end;
-//  end;
-//end;
-
-{ TRchGwtConcCollection }
+{ TEtsGwtConcCollection }
 
 constructor TEtsGwtConcCollection.Create(Model: TBaseModel;
   AScreenObject: TObject; ParentCollection: TEtsCollection);
