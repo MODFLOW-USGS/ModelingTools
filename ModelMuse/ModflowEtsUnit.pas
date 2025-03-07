@@ -81,7 +81,7 @@ type
     property Multiplier: string read GetMultiplier write SetMultiplier;
   end;
 
-  TEtsParamItem = class(TModflowParamItem)
+  TEtsParamItem = class(TEvtParamItem)
   protected
     class function BoundaryClass: TMF_BoundCollClass; override;
   end;

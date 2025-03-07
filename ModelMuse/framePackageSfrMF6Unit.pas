@@ -45,6 +45,9 @@ var
   SfrMf6: TSfrModflow6PackageSelection;
 begin
   inherited;
+{$IFNDEF GWE}
+  cbStorage.Visible := False;
+{$ENDIF}
   SfrMf6 := Package as TSfrModflow6PackageSelection;
   cbPrintStage.Checked := SfrMf6.PrintStage;
   cbPrintFlows.Checked := SfrMf6.PrintFlows;

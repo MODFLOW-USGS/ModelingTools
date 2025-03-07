@@ -448,7 +448,9 @@ type
     FGwtImsNode: TTreeNode;
     FTransportNode: TTreeNode;
     FChemNode: TTreeNode;
+  {$IFDEF GWE}
     FGweSolverNode: TTreeNode;
+  {$ENDIF}
     FNewChemSpecies: Boolean;
     procedure AssignParameterToRow(ActiveGrid: TRbwDataGrid4; RowIndex: Integer;
       Parameter: TModflowParameter);
@@ -3011,9 +3013,13 @@ begin
           begin
             if frameGwEProcess.Selected and (SpeciesName = StrGweTemperature)  then
             begin
+            {$IFDEF GWE}
               ChildNode := tvPackages.Items.AddChild(FGweParentNode,
                 APackage.PackageIdentifier);
               FGweSolverNode := ChildNode;
+            {$ELSE}
+              ChildNode := nil;
+            {$ENDIF}
             end
             else
             begin
@@ -3094,7 +3100,9 @@ end;
 procedure TfrmModflowPackages.GetData;
 begin
   FNewChemSpecies := False;
+{$IFDEF GWE}
   FreeAndNil(FGweSolverNode);
+{$ENDIF}
   framePkgMt3dBasic.OnEnableTimeControls := EnableMt3dTimeControls;
   frameChemSpecies.OnEnableTimeControls := EnableMt3dTimeControls;
 
@@ -3960,6 +3968,7 @@ begin
           ImsPackage := nil;
         end;
 
+          {$IFDEF GWE}
         if GweSpecies then
         begin
           AnImsframe := frameGweIms;
@@ -3995,7 +4004,9 @@ begin
           end;
 
         end
-        else if SpeciesCount < FframePkgSmsObjectList.Count then
+        else
+        {$ENDIF}
+        if SpeciesCount < FframePkgSmsObjectList.Count then
         begin
           AnImsframe := FframePkgSmsObjectList[SpeciesCount];
         end

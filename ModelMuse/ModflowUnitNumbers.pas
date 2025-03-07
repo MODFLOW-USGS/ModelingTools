@@ -37,6 +37,7 @@ const
   StrHEAD = 'HEAD';
   StrDRAWDOWN = 'DRAWDOWN';
   StrConcentration = 'CONCENTRATION';
+  KTemperature = 'TEMPERATURE';
   StrOC = 'OC';
   StrGAG = 'GAGE';
   StrHOB = 'HOB';

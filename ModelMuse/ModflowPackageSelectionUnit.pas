@@ -2333,7 +2333,11 @@ Type
       write SetSaveGwtConcentration
       stored True;
     // [STORAGE]
-    property Storage: Boolean read FStorage write SetStorage;
+    property Storage: Boolean read FStorage write SetStorage
+  {$IFNDEF GWE}
+    Stored False
+  {$ENDIF}
+    ;
   end;
 
   TSftSolverPrintChoice = (sftNone, sftSummary, sftDetailed);
@@ -7442,7 +7446,11 @@ Type
     property Scheme: TGwtScheme read FScheme write SetScheme;
     // ATS_PERCEL
     // fractional cell distance submitted by the ADV Package to the adaptive time stepping (ATS) package.
-    property StoredAtsPercel: TRealStorage read FStoredAtsPercel write SetStoredAtsPercel;
+    property StoredAtsPercel: TRealStorage read FStoredAtsPercel write SetStoredAtsPercel
+  {$IFNDEF GWE}
+    stored False
+  {$ENDIF}
+    ;
   end;
 
   // @name is used for the SSM package in both GWT and GWE MODFLOW 6 models

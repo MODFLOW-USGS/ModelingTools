@@ -6,7 +6,7 @@ uses System.Classes, SysUtils, PhastModelUnit, CustomModflowWriterUnit,
   ModflowOutputControlUnit;
 
 type
-  TOutputType = (otFlow, otTransport);
+  TOutputType = (otFlow, otTransport, otEnergy);
 
   TOutputControlWriter = class(TCustomModflowWriter)
   private
@@ -341,7 +341,7 @@ var
                   WriteToNameFile(StrDATABINARY,
                     Model.UnitNumbers.UnitNumber(DataLabel), NameOfFile, foOutput, Model);
                 end;
-              otTransport:
+              otTransport, otEnergy:
                 begin
 //                  WriteToGwtNameFile(StrDATABINARY, DataLabel, FSpeciesIndex);
                 end;
@@ -416,6 +416,11 @@ begin
       begin
         WritePrintFormat(FOutputControl.ConcentrationOC, StrConcentration);
         WriteSaveFile(FOutputControl.ConcentrationOC, StrConcentration, StrConc, StrConc);
+      end;
+    otEnergy:
+      begin
+        WritePrintFormat(FOutputControl.ConcentrationOC, KTemperature);
+        WriteSaveFile(FOutputControl.ConcentrationOC, KTemperature, StrConc, StrConc);
       end;
     else
       Assert(False);
@@ -587,7 +592,7 @@ begin
         HeadFrequencyChoice := FOutputControl.HeadOC.FrequencyChoice;
         DataLabel := StrHEAD;
       end;
-    otTransport:
+    otTransport, otEnergy:
       begin
         HeadFrequency := FOutputControl.ConcentrationOC.Frequency;
         HeadFrequencyChoice := FOutputControl.ConcentrationOC.FrequencyChoice;
@@ -784,7 +789,7 @@ begin
         begin
           FNameOfFile := FileName(AFileName);
         end;
-      otTransport:
+      otTransport, otEnergy:
         begin
           FNameOfFile := GwtFileName(AFileName, FSpeciesIndex);
         end;
@@ -800,7 +805,7 @@ begin
           begin
             WriteToNameFile(FTYPE, -1, FNameOfFile, foInput, Model, False, 'OC');
           end;
-        otTransport:
+        otTransport, otEnergy:
           begin
             WriteToGwtNameFile(FTYPE, FNameOfFile, FSpeciesIndex);
           end;

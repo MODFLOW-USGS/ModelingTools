@@ -5408,7 +5408,8 @@ uses Dialogs, OpenGL12x, Math, frmGoPhastUnit, UndoItems,
   ModflowGwfGwtExchangeWriterUnit, ModflowFMI_WriterUnit, ModflowFmp4WriterUnit,
   ModflowTimeInterfaceUnit, Modflow6TimeSeriesUnit,
   LockedGlobalVariableChangers, ModflowBuoyancyWriterUnit,
-  ModflowViscosityWriterUnit, ModflowMvrUnit;
+  ModflowViscosityWriterUnit, ModflowMvrUnit, ModflowCndWriterUnit,
+  ModflowEstWriterUnit;
 
 
 
@@ -10433,13 +10434,16 @@ const
 //               Bug fix: Fixed importing MODFLOW-6 models that include GWE models.
 //    '5.3.1.12' Bug fix: Fixed export of MT3D-USGS SSM input file with
 //                non-MODFLOW 6 model.
+//    '5.3.1.13' Bug fix: Fixed bug in importing ETS package.
+//    '5.3.1.14' Change: When importing the MAW package, the BOUNDNAME is now
+//                used as the object name if BOUNDNAME is specified.
 
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 
 const
   // version number of ModelMuse.
-  IIModelVersion = '5.3.1.12';
+  IIModelVersion = '5.3.1.14';
 
 { TODO : Add support for time-varying conductance in MF6 version of SFR }
 { TODO : Support MODFLOW 6 Particle Tracking Model. }
@@ -11074,10 +11078,18 @@ function TPhastModel.AnyVTransDispUsed: Boolean;
 var
   ChildIndex: Integer;
   ChildModel: TChildModel;
+  GwtDspUsed: Boolean;
+  GweDspUsed: Boolean;
 begin
-  result := (ModelSelection = msModflow2015)
-    and ModflowPackages.GwtDispersionPackage.IsSelected and GWTUsed
-    and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow;
+  result := (ModelSelection = msModflow2015);
+  if result then
+  begin
+    GwtDspUsed := ModflowPackages.GwtDispersionPackage.IsSelected and GWTUsed
+      and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow;
+    GweDspUsed := ModflowPackages.GweConductionAndDispersionPackage.IsSelected
+      and GweUsed;
+    result := GwtDspUsed or GweDspUsed;
+  end;
   if not Result and LgrUsed then
   begin
     for ChildIndex := 0 to ChildModels.Count - 1 do
@@ -11085,9 +11097,12 @@ begin
       ChildModel := ChildModels[ChildIndex].ChildModel;
       if ChildModel <> nil then
       begin
-        result := ChildModel.ModflowPackages.GwtDispersionPackage.IsSelected
+        GwtDspUsed := ChildModel.ModflowPackages.GwtDispersionPackage.IsSelected
           and ChildModel.GWTUsed
           and ChildModel.ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow;
+        GweDspUsed := ChildModel.ModflowPackages.GweConductionAndDispersionPackage.IsSelected
+          and ChildModel.GweUsed;
+        result := GwtDspUsed or GweDspUsed;
         if result then
         begin
           Exit;
@@ -20104,9 +20119,10 @@ var
   end;
 begin
   result := (ModelSelection = msModflow2015)
-    and GwtUsed
+    and ((GwtUsed
     and ModflowPackages.GwtDispersionPackage.IsSelected
-    and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow;
+    and ModflowPackages.GwtDispersionPackage.UseTransverseDispForVertFlow)
+    or (GweUsed and ModflowPackages.GweConductionAndDispersionPackage.IsSelected));
   if result then
   begin
     DataArray := Sender as TDataArray;
@@ -44030,16 +44046,25 @@ var
   FmiWriter: TModflowFmiWriter;
   BuoyancyWriter: TBuoyancyWriter;
   ViscosityWriter: TViscosityWriter;
+//  ShouldExport: Boolean;
+  CndWriter: TModflowCndWriter;
+  EstWriter: TModflowGwtMstWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
-  if GwtUsed then
+  if GwtUsed or GweUsed then
   begin
     for SpeciesIndex := 0 to MobileComponents.Count - 1 do
     begin
+
       if MobileComponents[SpeciesIndex].UsedForGWT then
       begin
-        GwtNameWriters.Add(TMf6GwtNameWriter.Create(self, FileName, SpeciesIndex, etExport));
+        GwtNameWriters.Add(TMf6GwtNameWriter.Create(self, FileName, SpeciesIndex, etExport, '.Gwt_nam'));
+      end
+      else if GweUsed and (MobileComponents[SpeciesIndex].Name = StrGweTemperature) then
+      begin
+        { TODO -cGWE : This needs to be updated for GWE. }
+        GwtNameWriters.Add(TMf6GwtNameWriter.Create(self, FileName, SpeciesIndex, etExport, '.Gwe_nam'));
       end;
     end;
   end;
@@ -44254,8 +44279,24 @@ begin
               OCWriter.OutputType := otTransport;
               for SpeciesIndex := 0 to MobileComponents.Count - 1 do
               begin
-                OCWriter.SpeciesIndex := SpeciesIndex;
-                OCWriter.WriteFile(FileName);
+                if MobileComponents[SpeciesIndex].UsedForGWT then
+                begin
+                  OCWriter.SpeciesIndex := SpeciesIndex;
+                  OCWriter.WriteFile(FileName);
+                end;
+              end;
+            end;
+
+            if GweUsed then
+            begin
+              OCWriter.OutputType := otEnergy;
+              for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+              begin
+                if MobileComponents[SpeciesIndex].Name = StrGweTemperature then
+                begin
+                  OCWriter.SpeciesIndex := SpeciesIndex;
+                  OCWriter.WriteFile(FileName);
+                end;
               end;
             end;
 
@@ -45473,6 +45514,61 @@ begin
         end;
       end;
 
+      if GweUsed then
+      begin
+
+        AdvWriter := TModflowGwtAdvWriter.Create(Self, etExport);
+        try
+          AdvWriter.ModelType := mtEnergyTransport;
+          AdvWriter.WriteFile(FileName);
+        finally
+          AdvWriter.Free;
+        end;
+
+        for SpeciesIndex := 0 to MobileComponents.Count - 1 do
+        begin
+          if not (MobileComponents[SpeciesIndex].Name = strGweTemperature) then
+          begin
+            Continue;
+          end;
+
+          GwtIcWriter := TGwtInitialConcWriter.Create(Self, etExport);
+          try
+            GwtIcWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            GwtIcWriter.Free;
+          end;
+
+          CndWriter := TModflowCndWriter.Create(Self, etExport);
+          try
+            CndWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            CndWriter.Free;
+          end;
+
+          EstWriter := TModflowGwtMstWriter.Create(Self, etExport);
+          try
+            EstWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            EstWriter.Free;
+          end;
+
+          ImsWriter := TImsWriter.Create(self, etExport, SpeciesIndex);
+          try
+            ImsWriter.WriteFile(FileName);
+          finally
+            ImsWriter.Free;
+          end;
+          Application.ProcessMessages;
+          if not frmProgressMM.ShouldContinue then
+          begin
+            Exit;
+          end;
+
+        end;
+
+      end;
+
       FinalizePvalAndTemplate(FileName);
       LocalNameWriter.SaveNameFile(FileName);
       finally
@@ -45481,7 +45577,14 @@ begin
 
       for SpeciesIndex := 0 to GwtNameWriters.Count - 1 do
       begin
-        GwtNameWriters[SpeciesIndex].WriteFile;
+        if GweUsed and (MobileComponents[SpeciesIndex].Name = strGweTemperature) then
+        begin
+          GwtNameWriters[SpeciesIndex].WriteFile(mtEnergyTransport);
+        end
+        else
+        begin
+          GwtNameWriters[SpeciesIndex].WriteFile(mtGroundwaterTransport);
+        end;
       end;
 
     except on E: EInvalidTime do

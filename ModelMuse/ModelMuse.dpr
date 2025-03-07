@@ -950,7 +950,9 @@ uses
   framePackagePrpUnit in 'framePackagePrpUnit.pas' {framePackagePrp: TFrame},
   frameOptionalValueUnit in 'frameOptionalValueUnit.pas' {frameOptionalValue: TFrame},
   frameGweCndPackageUnit in 'frameGweCndPackageUnit.pas' {frameGweCndPackage: TFrame},
-  framePackageEstUnit in 'framePackageEstUnit.pas' {framePackageEst: TFrame};
+  framePackageEstUnit in 'framePackageEstUnit.pas' {framePackageEst: TFrame},
+  ModflowCndWriterUnit in 'ModflowCndWriterUnit.pas',
+  ModflowEstWriterUnit in 'ModflowEstWriterUnit.pas';
 
 {$R *.res}
 

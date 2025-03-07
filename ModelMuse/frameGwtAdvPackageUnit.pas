@@ -34,6 +34,9 @@ var
   Adv: TGwtAdvectionPackage;
 begin
   inherited;
+{$IFNDEF GWE}
+  rdeAdePercel.Visible := False;
+{$ENDIF}
   Adv := Package as TGwtAdvectionPackage;
   rgScheme.ItemIndex := Ord(Adv.Scheme);
   rdeAdePercel.RealValue := Adv.AtsPercel;

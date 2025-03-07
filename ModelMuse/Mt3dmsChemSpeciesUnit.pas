@@ -1055,6 +1055,15 @@ begin
   if (Model <> nil) and (Model.ModelSelection = msModflow2015) then
   begin
     LocalModel := Model as TCustomModel;
+    if LocalModel.GweUsed then
+    begin
+      result := Name <> strGweTemperature;
+      if not result then
+      begin
+        Exit;
+      end;
+    end;
+
     IgnoredNames := TStringList.Create;
     try
       LocalModel.GetIgnoredSpeciesNames(IgnoredNames);
@@ -3342,8 +3351,8 @@ begin
   begin
     UpdateDataArray(LocalModel.Mf6VTransDispUsed,
       FTransverseVertDispDataArrayName, NewName,
-      FTransverseVertDispDisplayName, '0.', 'MODFLOW 6 DSP package, atv',
-      LocalModel.AnyVTransDispUsed, StrGwtClassification);
+      FTransverseVertDispDisplayName, '0.', 'MODFLOW 6 DSP and CND packages, ATV',
+      LocalModel.AnyVTransDispUsed, StrGwtGweClassification);
   end;
   SetCaseSensitiveStringProperty(FTransverseVertDispDataArrayName, NewName);
 end;

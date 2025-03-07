@@ -8,7 +8,7 @@
         <FrameworkType>VCL</FrameworkType>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>20.2</ProjectVersion>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <ProjectName Condition="'$(ProjectName)'==''">ModelMuse</ProjectName>
     </PropertyGroup>
@@ -78,7 +78,7 @@
         <VerInfo_MajorVer>5</VerInfo_MajorVer>
         <DCC_ExeOutput>.\$(Config)\$(Platform)</DCC_ExeOutput>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>FileVersion=5.3.1.12;ProductVersion=5.3.1.12</VerInfo_Keys>
+        <VerInfo_Keys>FileVersion=5.3.1.14;ProductVersion=5.3.1.14</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Manifest_File>None</Manifest_File>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
@@ -101,7 +101,7 @@
         <DCC_DcuOutput>.\$(Config)\$(Platform)</DCC_DcuOutput>
         <VerInfo_MinorVer>3</VerInfo_MinorVer>
         <VerInfo_Release>1</VerInfo_Release>
-        <VerInfo_Build>12</VerInfo_Build>
+        <VerInfo_Build>14</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
@@ -2321,6 +2321,8 @@
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="ModflowCndWriterUnit.pas"/>
+        <DCCReference Include="ModflowEstWriterUnit.pas"/>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
@@ -2396,7 +2398,19 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="Debug\Win64\ModelMuse.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>ModelMuse.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Debug\Win64\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols"/>
+                <DeployFile LocalName="Debug\Win64\ModelMuse.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>ModelMuse.rsm</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="ModelMuse.todo" Configuration="Beta" Class="ProjectFile"/>
                 <DeployFile LocalName="ModelMuse.todo" Configuration="Debug" Class="ProjectFile"/>
                 <DeployFile LocalName="ModelMuse.todo" Configuration="Modflow 6 Beta" Class="ProjectFile"/>

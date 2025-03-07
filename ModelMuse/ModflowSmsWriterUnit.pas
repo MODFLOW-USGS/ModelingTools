@@ -33,7 +33,7 @@ type
 
 implementation
 
-uses frmProgressUnit, frmErrorsAndWarningsUnit;
+uses frmProgressUnit, frmErrorsAndWarningsUnit, GoPhastTypes;
 
 resourcestring
   StrIMSSolverProblem = 'IMS solver problem: INNER_DVCLOSE >= OUTER_DVCLOSE';
@@ -76,6 +76,8 @@ begin
 end;
 
 procedure TImsWriter.WriteFile(const AFileName: string);
+var
+  ShouldExport: Boolean;
 begin
   if not Package.IsSelected then
   begin
@@ -94,9 +96,15 @@ begin
   end
   else
   begin
-    if not Model.MobileComponents[FSpeciesIndex].UsedForGWT then
+    ShouldExport := Model.MobileComponents[FSpeciesIndex].UsedForGWT;
+    if not ShouldExport then
     begin
-      Exit;
+      ShouldExport := Model.GweUsed and
+        (Model.MobileComponents[FSpeciesIndex].Name = StrGweTemperature);
+      if not ShouldExport then
+      begin
+        Exit;
+      end;
     end;
     FNameOfFile := GwtFileName(AFileName, FSpeciesIndex);
     FSpeciesName := Model.MobileComponents[FSpeciesIndex].Name;

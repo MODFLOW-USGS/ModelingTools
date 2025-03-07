@@ -9766,11 +9766,20 @@ begin
       AScreenObject := TScreenObject.CreateWithViewDirection(
         Model, vdTop, UndoCreateScreenObject, False);
       FNewScreenObjects.Add(AScreenObject);
-      NewName := ValidName(Format('Imported_%s_Maw_%d',
-        [Package.PackageName, WellIndex + 1]));
+      if PackageItem.Boundname <> '' then
+      begin
+        NewName := ValidName(PackageItem.Boundname);
+      end
+      else
+      begin
+        NewName := ValidName(Format('Imported_%s_Maw_%d',
+          [Package.PackageName, WellIndex + 1]));
+      end;
       AScreenObject.Name := NewName;
       AScreenObject.Comment := 'Imported from ' + FModelNameFile +' on '
-        + DateTimeToStr(Now);
+        + DateTimeToStr(Now)
+        + sLineBreak
+        + Format('%s_Maw_%d', [Package.PackageName, WellIndex + 1]);
 
       Model.AddScreenObject(AScreenObject);
       AScreenObject.ElevationCount := ecZero;

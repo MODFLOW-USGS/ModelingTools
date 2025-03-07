@@ -36,7 +36,7 @@ var
   AGwtFileName: string;
   SpeciesName: string;
 begin
-  if not Model.GwtUsed then
+  if not (Model.GwtUsed or Model.GweUsed) then
   begin
     Exit;
   end;
@@ -52,6 +52,7 @@ begin
   OpenFile(FNameOfFile);
   try
     WriteCommentLine(File_Comment('Initial concentration file for ' + SpeciesName));
+    WriteOptions;
     WriteInitialConcentrations;
   finally
     CloseFile;

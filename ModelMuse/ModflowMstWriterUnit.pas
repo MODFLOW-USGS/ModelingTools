@@ -12,7 +12,7 @@ type
     FMstPackage: TGwtMstPackage;
     FPestScriptName: string;
     procedure WriteOptions;
-    procedure writeGridData;
+    procedure WriteGridData;
     procedure WriteFileInternal;
   protected
     function Package: TModflowPackageSelection; override;
@@ -88,13 +88,13 @@ begin
     WriteTemplateHeader;
     WriteDataSet0;
     WriteOptions;
-    writeGridData;
+    WriteGridData;
   finally
     CloseFile;
   end;
 end;
 
-procedure TModflowGwtMstWriter.writeGridData;
+procedure TModflowGwtMstWriter.WriteGridData;
 var
   DataArray: TDataArray;
   ChemSpecies: TMobileChemSpeciesItem;

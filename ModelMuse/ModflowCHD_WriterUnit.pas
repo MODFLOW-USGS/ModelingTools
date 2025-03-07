@@ -224,7 +224,7 @@ var
   SpeciesIndex: Integer;
   ASpecies: TMobileChemSpeciesItem;
 begin
-  if Model.GwtUsed then
+  if Model.GwtUsed or Model.GweUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -314,7 +314,7 @@ begin
     end;
   end;
 
-  if Model.GwtUsed then
+  if Model.GwtUsed or Model.GweUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -354,7 +354,7 @@ begin
   end;
   WriteIface(CHD_Cell.IFace);
 
-  if Model.GwtUsed then
+  if Model.GwtUsed or Model.GweUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -409,7 +409,7 @@ begin
   if Model.ModelSelection = msModflow2015 then
   begin
     VarID := VariableIdentifiersMF6;
-    if Model.GwtUsed then
+    if Model.GwtUsed or Model.GweUsed then
     begin
       for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
       begin

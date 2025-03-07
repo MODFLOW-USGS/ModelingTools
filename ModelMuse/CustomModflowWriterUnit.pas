@@ -1110,11 +1110,11 @@ end;
     class function Extension: string; override;
   public
     Constructor Create(AModel: TCustomModel; const FileName: string; SpeciesIndex: Integer;
-      EvaluationType: TEvaluationType); reintroduce;
+      EvaluationType: TEvaluationType; const Extension: string); reintroduce;
     destructor Destroy; override;
     procedure AddPackageFile(FileType: string; FileName: string;
       PackageName: string = '');
-    procedure WriteFile;
+    procedure WriteFile(ModelType: TModelType);
   end;
 
   TMf6GwtNameWriters = TObjectList<TMf6GwtNameWriter>;
@@ -10294,27 +10294,6 @@ begin
   for ModelIndex := 0 to FModelDataList.Count - 1 do
   begin
     ModelData := FModelDataList[ModelIndex];
-//    NewGroup := False;
-//    NewImsLine := False;
-//    if (ModelIndex = 0) then
-//    begin
-//      NewGroup := True;
-//    end
-//    else if AnsiCompareText(ModelData.SolutionGroup,
-//      PriorModelData.SolutionGroup) <> 0 then
-//    begin
-//      NewLine;
-//      WriteString('END SOLUTIONGROUP');
-//      NewLine;
-//      NewLine;
-//      NewGroup := True;
-//    end;
-//    if NewGroup then
-//    begin
-//      Inc(isg);
-//      WriteString('BEGIN SOLUTIONGROUP');
-//      WriteInteger(isg);
-//      NewLine;
 
     if ModelIndex = 0 then
     begin
@@ -10329,43 +10308,18 @@ begin
       end;
       NewLine;
     end;
-//      WriteString('  MXITER');
-//      if FModelDataList.Count > 1 then
-//      begin
-//        WriteInteger(ModelData.MaxIterations);
-//      end
-//      else
-//      begin
-//        WriteInteger(1);
-//      end;
-//      NewImsLine := True;
-//    end;
 
-//    if AnsiCompareText(ModelData.ImsFile,
-//      PriorModelData.ImsFile) <> 0 then
-//    begin
-//      NewImsLine := True;
-//    end;
-
-//    if NewImsLine then
-//    begin
-//      NewLine;
     ShouldWriteLine := GetShouldWriteLine(GwtUsed, SeparateGwtUsed, ModelIndex);
     if ShouldWriteLine then
     begin
       WriteString('  IMS6 ');
       WriteString('''' +  ExtractFileName(ModelData.ImsFile) + ''' ');
-  //      NewLine;
-  //    end;
       WriteString('''' +  ModelData.ModelName + ''' ');
       NewLine;
     end;
 
-//    PriorModelData := ModelData;
   end;
 
-
-//  NewLine;
   WriteString('END SOLUTIONGROUP');
   NewLine;
   NewLine;
@@ -11572,13 +11526,14 @@ begin
 end;
 
 constructor TMf6GwtNameWriter.Create(AModel: TCustomModel;
-  const FileName: string; SpeciesIndex: Integer; EvaluationType: TEvaluationType);
+  const FileName: string; SpeciesIndex: Integer; EvaluationType: TEvaluationType;
+  const Extension: string);
 begin
   inherited Create(AModel, EvaluationType);
   FPackageLines := TStringList.Create;
   FSpeciesIndex := SpeciesIndex;
   FSpeciesName := AModel.MobileComponents[SpeciesIndex].Name;
-  FFileName := ChangeFileExt(FileName, '') + '.' + FSpeciesName + '.Gwt_nam';
+  FFileName := ChangeFileExt(FileName, '') + '.' + FSpeciesName + Extension;
 end;
 
 destructor TMf6GwtNameWriter.Destroy;
@@ -11592,13 +11547,13 @@ begin
   result := '.nam';
 end;
 
-procedure TMf6GwtNameWriter.WriteFile;
+procedure TMf6GwtNameWriter.WriteFile(ModelType: TModelType);
 var
   SimNameWriter: IMf6_SimNameFileWriter;
   ModelData: TModelData;
 begin
 
-  ModelData.ModelType := mtGroundWaterTransport;
+  ModelData.ModelType := ModelType;
   ModelData.ModelName := FSpeciesName;
   ModelData.SolutionGroup := StrSolutionGroupName;
   ModelData.MaxIterations := Model.ModflowPackages.SmsPackage.SolutionGroupMaxIteration;

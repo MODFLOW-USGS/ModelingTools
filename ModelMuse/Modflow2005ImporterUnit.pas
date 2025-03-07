@@ -13627,9 +13627,18 @@ begin
     GetParamByName(Param.ModifiedParamName) as TEvtParamItem;
   if ParamItem = nil then
   begin
-    ParamItem := Boundary.
-      Parameters.Add as TEvtParamItem;
-    ParamItem.Param.ParamName := Param.ModifiedParamName;
+    if Param.PARTYP = 'ETS' then
+    begin
+      ParamItem := Boundary.
+        Parameters.Add as TEtsParamItem;
+      ParamItem.Param.ParamName := Param.ModifiedParamName;
+    end
+    else
+    begin
+      ParamItem := Boundary.
+        Parameters.Add as TEvtParamItem;
+      ParamItem.Param.ParamName := Param.ModifiedParamName;
+    end;
   end;
   EvtItem := ParamItem.Param.Add as TEvtItem;
   EvtItem.StartTime := FModel.ModflowStressPeriods[StressPeriodIndex].StartTime;
@@ -18931,8 +18940,6 @@ end;
 procedure TEtsImporter.ReadData(const ALabel: string);
 var
   Handled: Boolean;
-//  IETSCB: integer;
-//  NPETS: integer;
   INETSS: integer;
   INETSR: integer;
   INETSX: integer;
