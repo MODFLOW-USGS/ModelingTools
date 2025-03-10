@@ -44048,7 +44048,7 @@ var
   ViscosityWriter: TViscosityWriter;
 //  ShouldExport: Boolean;
   CndWriter: TModflowCndWriter;
-  EstWriter: TModflowGwtMstWriter;
+  EstWriter: TModflowGwtEstWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -45546,11 +45546,18 @@ begin
             CndWriter.Free;
           end;
 
-          EstWriter := TModflowGwtMstWriter.Create(Self, etExport);
+          EstWriter := TModflowGwtEstWriter.Create(Self, etExport);
           try
             EstWriter.WriteFile(FileName, SpeciesIndex);
           finally
             EstWriter.Free;
+          end;
+
+          GwtSsmWriter := TModflowGwtSsmWriter.Create(Self, etExport);
+          try
+            GwtSsmWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            GwtSsmWriter.Free;
           end;
 
           ImsWriter := TImsWriter.Create(self, etExport, SpeciesIndex);

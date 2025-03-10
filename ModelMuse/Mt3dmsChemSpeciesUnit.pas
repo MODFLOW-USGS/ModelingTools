@@ -151,6 +151,7 @@ type
     procedure SetDecayWaterDataArrayName(const NewName: string);
     procedure SetDensitySolidDataArrayName(const NewName: string);
     procedure SetHeatCapacitySolidDataArrayName(const NewName: string);
+    function GetUsedForGWE: Boolean;
   protected
     function IsSame(AnotherItem: TOrderedItem): boolean; override;
     procedure SetIndex(Value: Integer); override;
@@ -171,6 +172,7 @@ type
     property RefViscosity: Double read GetRefViscosity
       write SetRefViscosity;
     property UsedForGWT: Boolean read GetUsedForGWT;
+    property UsedForGWE: Boolean read GetUsedForGWE;
   published
     property Name: string read GetName write SetName;
     // BTN package, SCONC, GWT IC package, STRT
@@ -1043,6 +1045,32 @@ end;
 function TChemSpeciesItem.GetRefViscosity: Double;
 begin
   result := StoredRefViscosity.Value;
+end;
+
+function TChemSpeciesItem.GetUsedForGWE: Boolean;
+var
+  LocalModel: TCustomModel;
+  IgnoredNames: TStringList;
+begin
+  result := False;
+
+  if Model <> nil then
+  begin
+    if (Model.ModelSelection = msModflow2015) then
+    begin
+      LocalModel := Model as TCustomModel;
+      if LocalModel.GweUsed then
+      begin
+        result := Name = strGweTemperature;
+      end;
+    end;
+  end
+  else
+  begin
+    result := frmGoPhast.PhastModel.ModelSelection = msModflow2015
+      and frmGoPhast.PhastModel.GweUsed
+      and (Name = strGweTemperature);
+  end;
 end;
 
 function TChemSpeciesItem.GetUsedForGWT: Boolean;

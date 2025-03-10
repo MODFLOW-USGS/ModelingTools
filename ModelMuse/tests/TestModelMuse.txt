@@ -1,5 +1,5 @@
 ..\Debug\Win32\ModelMuse.exe
-5782
+5768
 WellTest.gpt
 	Archive\WellTest.axml
 	Archive\WellTest.bas
@@ -5279,8 +5279,6 @@ SaltLake.gpt
 BuoyancyMAW.gpt
 	Archive\BuoyancyMAW.axml
 	Archive\BuoyancyMAW.buy
-	Archive\BuoyancyMAW.Density.adv
-	Archive\BuoyancyMAW.Density.oc
 	Archive\BuoyancyMAW.dis
 	Archive\BuoyancyMAW.ghb
 	Archive\BuoyancyMAW.gsf
@@ -5319,16 +5317,12 @@ BuoyancyMAW.gpt
 	Archive\BuoyancyMAW.Temperature.mwt
 	Archive\BuoyancyMAW.Temperature.oc
 	Archive\BuoyancyMAW.Temperature.ssm
-	Archive\BuoyancyMAW.Viscosity.adv
-	Archive\BuoyancyMAW.Viscosity.oc
 	Archive\BuoyancyMAW.vsc
 	Archive\BuoyancyMAW.wel
 	Archive\usgs.BuoyancyMAW.reference
 BuoyancySFR.gpt
 	Archive\BuoyancySFR.axml
 	Archive\BuoyancySFR.buy
-	Archive\BuoyancySFR.Density.adv
-	Archive\BuoyancySFR.Density.oc
 	Archive\BuoyancySFR.dis
 	Archive\BuoyancySFR.ghb
 	Archive\BuoyancySFR.gsf
@@ -5367,8 +5361,6 @@ BuoyancySFR.gpt
 	Archive\BuoyancySFR.Temperature.oc
 	Archive\BuoyancySFR.Temperature.sft
 	Archive\BuoyancySFR.Temperature.ssm
-	Archive\BuoyancySFR.Viscosity.adv
-	Archive\BuoyancySFR.Viscosity.oc
 	Archive\BuoyancySFR.vsc
 	Archive\BuoyancySFR.wel
 	Archive\usgs.BuoyancySFR.reference
@@ -5376,8 +5368,6 @@ BuoyancyLAK.gpt
 	Archive\BuoyancyLAK.1.laktab
 	Archive\BuoyancyLAK.axml
 	Archive\BuoyancyLAK.buy
-	Archive\BuoyancyLAK.Density.adv
-	Archive\BuoyancyLAK.Density.oc
 	Archive\BuoyancyLAK.dis
 	Archive\BuoyancyLAK.ghb
 	Archive\BuoyancyLAK.gsf
@@ -5416,16 +5406,12 @@ BuoyancyLAK.gpt
 	Archive\BuoyancyLAK.Temperature.mst
 	Archive\BuoyancyLAK.Temperature.oc
 	Archive\BuoyancyLAK.Temperature.ssm
-	Archive\BuoyancyLAK.Viscosity.adv
-	Archive\BuoyancyLAK.Viscosity.oc
 	Archive\BuoyancyLAK.vsc
 	Archive\BuoyancyLAK.wel
 	Archive\usgs.BuoyancyLAK.reference
 Buoyancy.gpt
 	Archive\Buoyancy.axml
 	Archive\Buoyancy.buy
-	Archive\Buoyancy.Density.adv
-	Archive\Buoyancy.Density.oc
 	Archive\Buoyancy.dis
 	Archive\Buoyancy.ghb
 	Archive\Buoyancy.gsf

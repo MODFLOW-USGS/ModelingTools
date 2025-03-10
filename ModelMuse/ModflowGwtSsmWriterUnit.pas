@@ -12,6 +12,7 @@ type
     procedure WriteOptions;
     procedure WriteSources;
   protected
+    procedure WritePrintFlowsOption;
     function Package: TModflowPackageSelection; override;
     class function Extension: string; override;
   public
@@ -20,6 +21,9 @@ type
 
 
 implementation
+
+uses
+  ModflowOutputControlUnit;
 
 
 
@@ -32,7 +36,14 @@ end;
 
 function TModflowGwtSsmWriter.Package: TModflowPackageSelection;
 begin
-  result := Model.ModflowPackages.GwtSsmPackage;
+  if Model.GweUsed and (Model.MobileComponents[FSpeciesIndex].UsedForGWE) then
+  begin
+    result := Model.ModflowPackages.GweSsmPackage;
+  end
+  else
+  begin
+    result := Model.ModflowPackages.GwtSsmPackage;
+  end;
 end;
 
 procedure TModflowGwtSsmWriter.WriteFile(AFileName: string; SpeciesIndex: Integer);
@@ -40,15 +51,15 @@ var
   Abbreviation: string;
   GwtFile: string;
 begin
+  FSpeciesIndex := SpeciesIndex;
   if not Package.IsSelected then
   begin
     Exit
   end;
-  if not Model.GwtUsed then
+  if not (Model.GwtUsed or Model.GweUsed) then
   begin
     Exit
   end;
-  FSpeciesIndex := SpeciesIndex;
 //  FAdvPackage := Model.ModflowPackages.GwtSsmPackage;
 
   Abbreviation := 'SSM6';
@@ -76,10 +87,22 @@ procedure TModflowGwtSsmWriter.WriteOptions;
 begin
   WriteBeginOptions;
 
-//  WritePrintFlowsOption;
+  WritePrintFlowsOption;
   WriteSaveFlowsOption;
 
   WriteEndOptions;
+end;
+
+procedure TModflowGwtSsmWriter.WritePrintFlowsOption;
+var
+  OC: TModflowOutputControl;
+begin
+  OC := Model.ModflowOutputControl;
+  if OC.SaveCellFlows in [csfListing, csfBoth] then
+  begin
+    WriteString('  PRINT_FLOWS');
+    NewLine;
+  end;
 end;
 
 procedure TModflowGwtSsmWriter.WriteSources;

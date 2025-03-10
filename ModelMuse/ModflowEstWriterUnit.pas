@@ -6,7 +6,7 @@ uses
   CustomModflowWriterUnit, ModflowPackageSelectionUnit;
 
 type
-  TModflowGwtMstWriter = class(TCustomPackageWriter)
+  TModflowGwtEstWriter = class(TCustomPackageWriter)
   private
     FSpeciesIndex: Integer;
     FEstPackage: TGweEstPackage;
@@ -27,19 +27,19 @@ implementation
 uses
   DataSetUnit, Mt3dmsChemSpeciesUnit, PhastModelUnit, DataSetNamesUnit;
 
-{ TModflowGwtMstWriter }
+{ TModflowGwtEstWriter }
 
-class function TModflowGwtMstWriter.Extension: string;
+class function TModflowGwtEstWriter.Extension: string;
 begin
   result := '.est';
 end;
 
-function TModflowGwtMstWriter.Package: TModflowPackageSelection;
+function TModflowGwtEstWriter.Package: TModflowPackageSelection;
 begin
   result := Model.ModflowPackages.GweEstPackage;
 end;
 
-procedure TModflowGwtMstWriter.WriteFile(AFileName: string;
+procedure TModflowGwtEstWriter.WriteFile(AFileName: string;
   SpeciesIndex: Integer);
 var
   Abbreviation: string;
@@ -81,7 +81,7 @@ begin
 
 end;
 
-procedure TModflowGwtMstWriter.WriteFileInternal;
+procedure TModflowGwtEstWriter.WriteFileInternal;
 begin
   OpenFile(FNameOfFile);
   try
@@ -94,7 +94,7 @@ begin
   end;
 end;
 
-procedure TModflowGwtMstWriter.WriteGridData;
+procedure TModflowGwtEstWriter.WriteGridData;
 var
   DataArray: TDataArray;
   ChemSpecies: TMobileChemSpeciesItem;
@@ -106,7 +106,7 @@ begin
   ChemSpecies := Model.MobileComponents[FSpeciesIndex];
 
   DataArray := Model.DataArrayManager.GetDataSetByName(
-    ChemSpecies.PorosityDataArrayName);
+    ChemSpecies.GwePorosityDataArrayName);
   Assert(DataArray <> nil);
   WriteMf6_DataSet(DataArray, 'POROSITY');
   WritePestZones(DataArray, FileNameToUse, 'POROSITY', '.' + ChemSpecies.Name, 'POROSITY');
@@ -144,7 +144,7 @@ begin
   WriteEndGridData;
 end;
 
-procedure TModflowGwtMstWriter.WriteOptions;
+procedure TModflowGwtEstWriter.WriteOptions;
 begin
   WriteBeginOptions;
 
