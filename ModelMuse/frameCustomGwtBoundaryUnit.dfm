@@ -2,12 +2,16 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
   inherited pnlBottom: TPanel
     Top = 248
     Height = 68
+    StyleElements = [seFont, seClient, seBorder]
     ExplicitTop = 248
-    ExplicitWidth = 377
+    ExplicitWidth = 541
     ExplicitHeight = 68
     DesignSize = (
       541
       68)
+    inherited lblNumTimes: TLabel
+      StyleElements = [seFont, seClient, seBorder]
+    end
     object lblChemSpecies: TLabel [1]
       Left = 165
       Top = 39
@@ -15,11 +19,14 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
       Height = 15
       Caption = 'Chemical species'
     end
+    inherited seNumberOfTimes: TJvSpinEdit
+      StyleElements = [seFont, seClient, seBorder]
+    end
     inherited btnDelete: TBitBtn
-      ExplicitLeft = 289
+      ExplicitLeft = 453
     end
     inherited btnInsert: TBitBtn
-      ExplicitLeft = 205
+      ExplicitLeft = 369
     end
     object comboChemSpecies: TComboBox
       Left = 14
@@ -31,17 +38,26 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
     end
   end
   inherited pnlTop: TPanel
-    ExplicitWidth = 377
+    StyleElements = [seFont, seClient, seBorder]
+    ExplicitWidth = 541
     inherited pnlCaption: TPanel
-      ExplicitWidth = 375
+      StyleElements = [seFont, seClient, seBorder]
+      ExplicitWidth = 539
     end
   end
   inherited pnlGrid: TPanel
     Height = 223
-    ExplicitWidth = 377
+    StyleElements = [seFont, seClient, seBorder]
+    ExplicitWidth = 541
     ExplicitHeight = 223
     inherited pnlEditGrid: TPanel
-      ExplicitWidth = 375
+      StyleElements = [seFont, seClient, seBorder]
+      inherited lblFormula: TLabel
+        StyleElements = [seFont, seClient, seBorder]
+      end
+      inherited rdeFormula: TRbwDataEntry
+        StyleElements = [seFont, seClient, seBorder]
+      end
     end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Height = 171
@@ -168,7 +184,7 @@ inherited frameCustomGwtBoundary: TframeCustomGwtBoundary
           CheckStyle = csCheck
           AutoAdjustColWidths = True
         end>
-      ExplicitWidth = 375
+      ExplicitWidth = 539
       ExplicitHeight = 171
     end
   end

@@ -1,4 +1,4 @@
-inherited frameScreenObjectSrc: TframeScreenObjectSrc
+inherited frameScreenObjectEsl: TframeScreenObjectEsl
   inherited pnlBottom: TPanel
     StyleElements = [seFont, seClient, seBorder]
     inherited lblNumTimes: TLabel

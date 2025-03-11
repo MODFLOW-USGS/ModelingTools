@@ -33,6 +33,7 @@ type
     procedure CreateNewBoundary(ScreenObject: TScreenObject); virtual; abstract;
     procedure InitializeControls;
     procedure AssignFirstItem(ScreenObject: TScreenObject);
+    function ChemSpeciesAllowed(ChemSpeciesItem: TChemSpeciesItem): Boolean; virtual;
   private
     { Private declarations }
   public
@@ -53,14 +54,18 @@ procedure TframeCustomGwtBoundary.InitializeControls;
 var
   MobileCompenentNames: TStringList;
   index: Integer;
+  ChemSpecies: TMobileChemSpeciesItem;
 begin
   ClearGrid(rdgModflowBoundary);
   MobileCompenentNames := TStringList.Create;
   try
     for index := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
     begin
-      MobileCompenentNames.Add(frmGoPhast.PhastModel.MobileComponents
-        [index].Name);
+      ChemSpecies := frmGoPhast.PhastModel.MobileComponents[index];
+      if ChemSpeciesAllowed(ChemSpecies) then
+      begin
+        MobileCompenentNames.Add(ChemSpecies.Name);
+      end;
     end;
     comboChemSpecies.Items.Assign(MobileCompenentNames);
     if comboChemSpecies.Items.Count >= 1 then
@@ -142,6 +147,20 @@ begin
     [BoundaryValuePosition];
   PestModifier[Ord(ccMultiplier)] := ABoundary.PestBoundaryFormula
     [BoundaryValuePosition];
+end;
+
+function TframeCustomGwtBoundary.ChemSpeciesAllowed(
+  ChemSpeciesItem: TChemSpeciesItem): Boolean;
+var
+  IgnoredNames: TStringList;
+begin
+  IgnoredNames := TStringList.Create;
+  try
+    frmGoPhast.PhastModel.GetIgnoredSpeciesNames(IgnoredNames);
+    result := IgnoredNames.IndexOf(ChemSpeciesItem.Name) < 0;
+  finally
+    IgnoredNames.Free;
+  end;
 end;
 
 procedure TframeCustomGwtBoundary.GetData(ScreenObjectList

@@ -1,11 +1,38 @@
 inherited frameScreenObjectCnc: TframeScreenObjectCnc
   inherited pnlBottom: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited lblNumTimes: TLabel
+      StyleElements = [seFont, seClient, seBorder]
+    end
     inherited lblChemSpecies: TLabel
       Top = 43
+      StyleElements = [seFont, seClient, seBorder]
       ExplicitTop = 43
+    end
+    inherited seNumberOfTimes: TJvSpinEdit
+      StyleElements = [seFont, seClient, seBorder]
+    end
+    inherited comboChemSpecies: TComboBox
+      StyleElements = [seFont, seClient, seBorder]
+    end
+  end
+  inherited pnlTop: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited pnlCaption: TPanel
+      StyleElements = [seFont, seClient, seBorder]
     end
   end
   inherited pnlGrid: TPanel
+    StyleElements = [seFont, seClient, seBorder]
+    inherited pnlEditGrid: TPanel
+      StyleElements = [seFont, seClient, seBorder]
+      inherited lblFormula: TLabel
+        StyleElements = [seFont, seClient, seBorder]
+      end
+      inherited rdeFormula: TRbwDataEntry
+        StyleElements = [seFont, seClient, seBorder]
+      end
+    end
     inherited rdgModflowBoundary: TRbwDataGrid4
       Columns = <
         item

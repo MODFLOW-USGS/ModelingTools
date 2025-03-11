@@ -2323,6 +2323,16 @@
         </DCCReference>
         <DCCReference Include="ModflowCndWriterUnit.pas"/>
         <DCCReference Include="ModflowEstWriterUnit.pas"/>
+        <DCCReference Include="frameScreenObjectCtpUnit.pas">
+            <Form>frameScreenObjectCtp</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="frameScreenObjectEslUnit.pas">
+            <Form>frameScreenObjectEsl</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <None Include="ModelMuse.todo"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

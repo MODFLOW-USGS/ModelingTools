@@ -1,4 +1,4 @@
-unit frameScreenObjectSrcUnit;
+unit frameScreenObjectEslUnit;
 
 interface
 
@@ -10,12 +10,12 @@ uses
   ModflowGwtSpecifiedConcUnit;
 
 type
-  TframeScreenObjectSrc = class(TframeCustomGwtBoundary)
-    procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
-      var CanSelect: Boolean);
+  TframeScreenObjectEsl = class(TframeCustomGwtBoundary)
+    procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: LongInt;
+        var CanSelect: Boolean);
   private
     { Private declarations }
-  protected
+  public
     function GetVariableName: string; override;
     function GetMultiplierName: string; override;
     function GetActiveName: string; override;
@@ -23,12 +23,11 @@ type
       override;
     procedure CreateNewBoundary(ScreenObject: TScreenObject); override;
     function ChemSpeciesAllowed(ChemSpeciesItem: TChemSpeciesItem): Boolean; override;
-  public
     { Public declarations }
   end;
 
 var
-  frameScreenObjectSrc: TframeScreenObjectSrc;
+  frameScreenObjectEsl: TframeScreenObjectEsl;
 
 implementation
 
@@ -36,55 +35,53 @@ uses
   frmGoPhastUnit;
 
 resourcestring
-  StrMassLoading = 'Mass Loading';
+  StrEnergySource = 'Energy Source';
 
 {$R *.dfm}
 
-{ TframeScreenObjectSrc }
-
-function TframeScreenObjectSrc.ChemSpeciesAllowed(
+function TframeScreenObjectEsl.ChemSpeciesAllowed(
   ChemSpeciesItem: TChemSpeciesItem): Boolean;
 begin
   result := inherited;
   if result then
   begin
-    result := ChemSpeciesItem.UsedForGWT;
+    result := ChemSpeciesItem.UsedForGWE;
   end;
 end;
 
-procedure TframeScreenObjectSrc.CreateNewBoundary(ScreenObject: TScreenObject);
+procedure TframeScreenObjectEsl.CreateNewBoundary(ScreenObject: TScreenObject);
 begin
-  ScreenObject.CreateGwtSrcBoundary;
+  ScreenObject.CreateGweEslBoundary;
 end;
 
-function TframeScreenObjectSrc.GetActiveName: string;
+function TframeScreenObjectEsl.GetActiveName: string;
 begin
-  result := StrMassLoading + ' Active';
+  result := StrEnergySource + ' Active';
 end;
 
-function TframeScreenObjectSrc.GetBoundary(
+function TframeScreenObjectEsl.GetBoundary(
   ScreenObject: TScreenObject): TCncBoundary;
 begin
-  result := ScreenObject.GwtSrcBoundary;
+  result := ScreenObject.GweEslBoundary;
 end;
 
-function TframeScreenObjectSrc.GetMultiplierName: string;
+function TframeScreenObjectEsl.GetMultiplierName: string;
 begin
-  result := StrMassLoading + ' Multiplier';
+  result := StrEnergySource + ' Multiplier';
 end;
 
-function TframeScreenObjectSrc.GetVariableName: string;
+function TframeScreenObjectEsl.GetVariableName: string;
 begin
-  result := StrMassLoading;
+  result := StrEnergySource;
 end;
 
-procedure TframeScreenObjectSrc.rdgModflowBoundarySelectCell(Sender: TObject;
-  ACol, ARow: Integer; var CanSelect: Boolean);
+procedure TframeScreenObjectEsl.rdgModflowBoundarySelectCell(Sender: TObject;
+    ACol, ARow: LongInt; var CanSelect: Boolean);
 begin
   inherited;
   if CanSelect  and (ACol = 4) then
   begin
-    CanSelect := frmGoPhast.PhastModel.ModflowPackages.GwtSrcPackage.UseMultiplier;
+    CanSelect := frmGoPhast.PhastModel.ModflowPackages.GweEslPackage.UseMultiplier;
   end;
 end;
 

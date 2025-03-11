@@ -6,20 +6,20 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, frameCustomGwtBoundaryUnit, Vcl.Grids,
   RbwDataGrid4, ArgusDataEntry, Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask, JvExMask,
-  JvSpin, Vcl.ExtCtrls, ScreenObjectUnit,
+  JvSpin, Vcl.ExtCtrls, ScreenObjectUnit, Mt3dmsChemSpeciesUnit,
   ModflowGwtSpecifiedConcUnit;
 
 type
   TframeScreenObjectCnc = class(TframeCustomGwtBoundary)
     procedure rdgModflowBoundarySelectCell(Sender: TObject; ACol, ARow: Integer;
       var CanSelect: Boolean);
-  private
   protected
     function GetVariableName: string; override;
     function GetMultiplierName: string; override;
     function GetActiveName: string; override;
     function GetBoundary(ScreenObject: TScreenObject): TCncBoundary; override;
     procedure CreateNewBoundary(ScreenObject: TScreenObject); override;
+    function ChemSpeciesAllowed(ChemSpeciesItem: TChemSpeciesItem): Boolean; override;
     { Private declarations }
   end;
 
@@ -36,6 +36,16 @@ resourcestring
 {$R *.dfm}
 
 { TframeScreenObjectCnc }
+
+function TframeScreenObjectCnc.ChemSpeciesAllowed(
+  ChemSpeciesItem: TChemSpeciesItem): Boolean;
+begin
+  result := inherited;
+  if result then
+  begin
+    result := ChemSpeciesItem.UsedForGWT;
+  end;
+end;
 
 procedure TframeScreenObjectCnc.CreateNewBoundary(ScreenObject: TScreenObject);
 begin

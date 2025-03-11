@@ -1324,6 +1324,8 @@ view. }
     FModflowSwtObservations: TSwtObservations;
     FGwtCncBoundary: TCncBoundary;
     FGwtSrcBoundary: TSrcBoundary;
+    FGweCtpBoundary: TCncBoundary;
+    FGweEslBoundary: TSrcBoundary;
     FFmp4EfficiencyBoundary: TFmp4EfficiencyBoundary;
     FFmp4EfficiencyImprovementBoundary: TFmp4EfficiencyImprovementBoundary;
     FFmp4BareRunoffFractionBoundary: TFmp4BareRunoffFractionBoundary;
@@ -1466,6 +1468,10 @@ view. }
       write FGwtCncBoundary;
     property GwtSrcBoundary: TSrcBoundary read FGwtSrcBoundary
       write FGwtSrcBoundary;
+    property GweCtpBoundary: TCncBoundary read FGweCtpBoundary
+      write FGweCtpBoundary;
+    property GweEslBoundary: TSrcBoundary read FGweEslBoundary
+      write FGweEslBoundary;
 
     // FMP4
     // FMP WBS: Efficiency
@@ -2767,6 +2773,14 @@ view. }
     function GetGwtSrcBoundary: TSrcBoundary;
     procedure SetGwtSrcBoundary(const Value: TSrcBoundary);
     function StoreGwtSrcBoundary: Boolean;
+
+    function GetGweCtpBoundary: TCncBoundary;
+    procedure SetGweCtpBoundary(const Value: TCncBoundary);
+    function StoreGweCtpBoundary: Boolean;
+    function GetGweEslBoundary: TSrcBoundary;
+    procedure SetGweEslBoundary(const Value: TSrcBoundary);
+    function StoreGweEslBoundary: Boolean;
+
     function GetFmp4EfficiencyBoundary: TFmp4EfficiencyBoundary;
     procedure SetFmp4EfficiencyBoundary(const Value: TFmp4EfficiencyBoundary);
     function StoreFmp4EfficiencyBoundary: Boolean;
@@ -3585,6 +3599,8 @@ view. }
     procedure CreateSwtObservations;
     procedure CreateGwtCncBoundary;
     procedure CreateGwtSrcBoundary;
+    procedure CreateGweCtpBoundary;
+    procedure CreateGweEslBoundary;
     procedure CreateTvkBoundary;
     procedure CreateTvsBoundary;
     { TODO -cRefactor : Consider replacing Model with an interface. }
@@ -4319,6 +4335,11 @@ view. }
       write SetGwtCncBoundary stored StoreGwtCncBoundary;
     property GwtSrcBoundary: TSrcBoundary read GetGwtSrcBoundary
       write SetGwtSrcBoundary stored StoreGwtSrcBoundary;
+
+    property GweCtpBoundary: TCncBoundary read GetGweCtpBoundary
+      write SetGweCtpBoundary stored StoreGweCtpBoundary;
+    property GweEslBoundary: TSrcBoundary read GetGweEslBoundary
+      write SetGweEslBoundary stored StoreGweEslBoundary;
 
     // FMP4
     // FMP WBS: Efficiency
@@ -7125,6 +7146,8 @@ begin
   ModflowSwtObservations := AScreenObject.ModflowSwtObservations;
   GwtCncBoundary := AScreenObject.GwtCncBoundary;
   GwtSrcBoundary := AScreenObject.GwtSrcBoundary;
+  GweCtpBoundary := AScreenObject.GweCtpBoundary;
+  GweEslBoundary := AScreenObject.GweEslBoundary;
   Fmp4EfficiencyBoundary := AScreenObject.Fmp4EfficiencyBoundary;
   Fmp4EfficiencyImprovementBoundary := AScreenObject.Fmp4EfficiencyImprovementBoundary;
   Fmp4BareRunoffFractionBoundary := AScreenObject.Fmp4BareRunoffFractionBoundary;
@@ -9856,6 +9879,16 @@ begin
       GwtSrcBoundary.InvalidateDisplay;
     end;
 
+    if GweCtpBoundary <> nil then
+    begin
+      GweCtpBoundary.InvalidateDisplay;
+    end;
+
+    if GweEslBoundary <> nil then
+    begin
+      GweEslBoundary.InvalidateDisplay;
+    end;
+
     if Fmp4EfficiencyBoundary <> nil then
     begin
       Fmp4EfficiencyBoundary.InvalidateDisplay;
@@ -10487,6 +10520,40 @@ begin
   end;
 end;
 
+procedure TScreenObject.SetGweCtpBoundary(const Value: TCncBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FGweCtpBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FGweCtpBoundary);
+  end
+  else
+  begin
+    CreateGweCtpBoundary;
+    ModflowBoundaries.FGweCtpBoundary.Assign(Value);
+  end;
+end;
+
+procedure TScreenObject.SetGweEslBoundary(const Value: TSrcBoundary);
+begin
+  if (Value = nil) or not Value.Used then
+  begin
+    if ModflowBoundaries.FGweEslBoundary <> nil then
+    begin
+      InvalidateModel;
+    end;
+    FreeAndNil(ModflowBoundaries.FGweEslBoundary);
+  end
+  else
+  begin
+    CreateGweEslBoundary;
+    ModflowBoundaries.FGweEslBoundary.Assign(Value);
+  end;
+end;
+
 procedure TScreenObject.SetGwtCncBoundary(const Value: TCncBoundary);
 begin
   if (Value = nil) or not Value.Used then
@@ -10942,6 +11009,40 @@ begin
       end;
   else
     Assert(False);
+  end;
+end;
+
+function TScreenObject.GetGweCtpBoundary: TCncBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateGweCtpBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FGweCtpBoundary;
+  end;
+end;
+
+function TScreenObject.GetGweEslBoundary: TSrcBoundary;
+begin
+  if (FModel = nil)
+    or ((FModel <> nil) and (csLoading in FModel.ComponentState)) then
+  begin
+    CreateGweEslBoundary;
+  end;
+  if FModflowBoundaries = nil then
+  begin
+    result := nil;
+  end
+  else
+  begin
+    result := ModflowBoundaries.FGweEslBoundary;
   end;
 end;
 
@@ -19921,6 +20022,22 @@ begin
       end;
       Inc(ClosedSectionCount);
     end;
+  end;
+end;
+
+procedure TScreenObject.CreateGweCtpBoundary;
+begin
+  if (ModflowBoundaries.FGweCtpBoundary = nil) then
+  begin
+    ModflowBoundaries.FGweCtpBoundary := TCncBoundary.Create(FModel, self);
+  end;
+end;
+
+procedure TScreenObject.CreateGweEslBoundary;
+begin
+  if (ModflowBoundaries.FGweEslBoundary = nil) then
+  begin
+    ModflowBoundaries.FGweEslBoundary := TSrcBoundary.Create(FModel, self);
   end;
 end;
 
@@ -32897,6 +33014,18 @@ begin
   result := (FFootprintWell <> nil) and FFootprintWell.Used;
 end;
 
+function TScreenObject.StoreGweCtpBoundary: Boolean;
+begin
+  result := (FModflowBoundaries <> nil)
+    and (GweCtpBoundary <> nil) and GweCtpBoundary.Used;
+end;
+
+function TScreenObject.StoreGweEslBoundary: Boolean;
+begin
+  result := (FModflowBoundaries <> nil)
+    and (GweEslBoundary <> nil) and GweEslBoundary.Used;
+end;
+
 function TScreenObject.StoreGwtCncBoundary: Boolean;
 begin
   result := (FModflowBoundaries <> nil)
@@ -42809,6 +42938,33 @@ begin
     FModflowSwtObservations.Assign(Source.FModflowSwtObservations);
   end;
 
+  if Source.FGweCtpBoundary = nil then
+  begin
+    FreeAndNil(FGweCtpBoundary);
+  end
+  else
+  begin
+    if FGweCtpBoundary = nil then
+    begin
+      FGweCtpBoundary := TCncBoundary.Create(Model, FScreenObject);
+    end;
+    FGweCtpBoundary.Assign(Source.FGweCtpBoundary);
+  end;
+
+  if Source.FGweEslBoundary = nil then
+  begin
+    FreeAndNil(FGweEslBoundary);
+  end
+  else
+  begin
+    if FGweEslBoundary = nil then
+    begin
+      FGweEslBoundary := TSrcBoundary.Create(Model, FScreenObject);
+    end;
+    FGweEslBoundary.Assign(Source.FGweEslBoundary);
+  end;
+
+
   if Source.FGwtCncBoundary = nil then
   begin
     FreeAndNil(FGwtCncBoundary);
@@ -43348,6 +43504,8 @@ begin
   FFmp4EfficiencyBoundary.Free;
   FGwtSrcBoundary.Free;
   FGwtCncBoundary.Free;
+  FGweEslBoundary.Free;
+  FGweCtpBoundary.Free;
   FModflowSwtObservations.Free;
   FModflowSubObservations.Free;
   FModflowCSub.Free;
@@ -43631,6 +43789,16 @@ begin
   if (FModflowSwtObservations <> nil) and not FModflowSwtObservations.Used then
   begin
     FreeAndNil(FModflowSwtObservations);
+  end;
+
+  if (FGweCtpBoundary <> nil) and not FGweCtpBoundary.Used then
+  begin
+    FreeAndNil(FGweCtpBoundary);
+  end;
+
+  if (FGweEslBoundary <> nil) and not FGweEslBoundary.Used then
+  begin
+    FreeAndNil(FGweEslBoundary);
   end;
 
   if (FGwtCncBoundary <> nil) and not FGwtCncBoundary.Used then
@@ -44119,6 +44287,16 @@ begin
     FGwtSrcBoundary.Invalidate;
   end;
 
+  if FGweCtpBoundary <> nil then
+  begin
+    FGweCtpBoundary.Invalidate;
+  end;
+
+  if FGweEslBoundary <> nil then
+  begin
+    FGweEslBoundary.Invalidate;
+  end;
+
   if FFmp4EfficiencyBoundary <> nil then
   begin
     FFmp4EfficiencyBoundary.Invalidate;
@@ -44358,6 +44536,17 @@ begin
   begin
     GwtSrcBoundary.Loaded;
   end;
+
+  if GweCtpBoundary <> nil then
+  begin
+    GweCtpBoundary.Loaded;
+  end;
+
+  if GweEslBoundary <> nil then
+  begin
+    GweEslBoundary.Loaded;
+  end;
+
 
 //  if Fmp4EfficiencyBoundary <> nil then
 //  begin
@@ -44601,6 +44790,17 @@ begin
   begin
     FGwtSrcBoundary.RemoveModelLink(AModel);
   end;
+
+  if FGweCtpBoundary <> nil then
+  begin
+    FGweCtpBoundary.RemoveModelLink(AModel);
+  end;
+
+  if FGweEslBoundary <> nil then
+  begin
+    FGweEslBoundary.RemoveModelLink(AModel);
+  end;
+
 
   if FFmp4EfficiencyBoundary <> nil then
   begin
@@ -45097,6 +45297,16 @@ begin
     FGwtSrcBoundary.Values.ReplaceATime(OldTime, NewTime);
   end;
 
+  if FGweCtpBoundary <> nil then
+  begin
+    FGweCtpBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
+  if FGweEslBoundary <> nil then
+  begin
+    FGweEslBoundary.Values.ReplaceATime(OldTime, NewTime);
+  end;
+
   if FFmp4EfficiencyBoundary <> nil then
   begin
     FFmp4EfficiencyBoundary.Values.ReplaceATime(OldTime, NewTime);
@@ -45584,6 +45794,16 @@ begin
   if GwtSrcBoundary <> nil then
   begin
     FGwtSrcBoundary.StopTalkingToAnyone;
+  end;
+
+  if GweCtpBoundary <> nil then
+  begin
+    FGweCtpBoundary.StopTalkingToAnyone;
+  end;
+
+  if GweEslBoundary <> nil then
+  begin
+    FGweEslBoundary.StopTalkingToAnyone;
   end;
 
   if FFmp4EfficiencyBoundary <> nil then
@@ -46244,6 +46464,24 @@ begin
   if FGwtSrcBoundary <> nil then
   begin
     Result := FGwtSrcBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FGweCtpBoundary <> nil then
+  begin
+    Result := FGweCtpBoundary.Values.UsesATime(ATime);
+    if Result then
+    begin
+      Exit;
+    end;
+  end;
+
+  if FGweEslBoundary <> nil then
+  begin
+    Result := FGweEslBoundary.Values.UsesATime(ATime);
     if Result then
     begin
       Exit;

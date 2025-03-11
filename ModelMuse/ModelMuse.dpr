@@ -952,7 +952,9 @@ uses
   frameGweCndPackageUnit in 'frameGweCndPackageUnit.pas' {frameGweCndPackage: TFrame},
   framePackageEstUnit in 'framePackageEstUnit.pas' {framePackageEst: TFrame},
   ModflowCndWriterUnit in 'ModflowCndWriterUnit.pas',
-  ModflowEstWriterUnit in 'ModflowEstWriterUnit.pas';
+  ModflowEstWriterUnit in 'ModflowEstWriterUnit.pas',
+  frameScreenObjectCtpUnit in 'frameScreenObjectCtpUnit.pas' {frameScreenObjectCtp: TFrame},
+  frameScreenObjectEslUnit in 'frameScreenObjectEslUnit.pas' {frameScreenObjectEsl: TFrame};
 
 {$R *.res}
 
