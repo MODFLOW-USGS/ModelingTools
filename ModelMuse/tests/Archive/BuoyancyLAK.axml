@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="BuoyancyLAK" FileType="bin">
-    <FileName Model_Name="BuoyancyLAK" FileType="bin">..\..\..\WRDAPP\mf6.6.0_win64\bin\mf6.exe</FileName>
+    <FileName Model_Name="BuoyancyLAK" FileType="bin">..\..\..\WRDAPP\mf6.6.1_win64\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="BuoyancyLAK" FileType="ancillary">
     <FileName Model_Name="BuoyancyLAK" FileType="ancillary">BuoyancyLAK.gpt</FileName>
@@ -49,7 +49,6 @@
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.bhd</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.cbc</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.density</FileName>
-    <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Density.cbc</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.dis.grb</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.InnerSolution.CSV</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.LakConvergence.CSV</FileName>
@@ -69,7 +68,6 @@
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Temperature.lkt_conc</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Temperature.lst</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Temperature.OuterSolution.CSV</FileName>
-    <FileName Model_Name="BuoyancyLAK" FileType="Model Output">BuoyancyLAK.Viscosity.cbc</FileName>
     <FileName Model_Name="BuoyancyLAK" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

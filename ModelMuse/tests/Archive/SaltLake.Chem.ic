@@ -1,4 +1,7 @@
-# Initial concentration file for Chem file created on 6/21/2024 by ModelMuse version 5.2.0.18.
+# Initial concentration file for Chem file created on 3/10/2025 by ModelMuse version 5.3.1.14.
+BEGIN OPTIONS
+END OPTIONS
+
 BEGIN GRIDDATA
   STRT LAYERED IPRN    12
     CONSTANT   8.400000000000E-005  # STRT 1

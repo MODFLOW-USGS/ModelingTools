@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="BuoyancyMAW" FileType="bin">
-    <FileName Model_Name="BuoyancyMAW" FileType="bin">..\..\..\WRDAPP\mf6.6.0_win64\bin\mf6.exe</FileName>
+    <FileName Model_Name="BuoyancyMAW" FileType="bin">..\..\..\WRDAPP\mf6.6.1_win64\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="BuoyancyMAW" FileType="ancillary">
     <FileName Model_Name="BuoyancyMAW" FileType="ancillary">BuoyancyMAW.gpt</FileName>
@@ -48,7 +48,6 @@
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.bhd</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.cbc</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.density</FileName>
-    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Density.cbc</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.dis.grb</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.InnerSolution.CSV</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.lst</FileName>
@@ -70,7 +69,6 @@
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.mwt_budget.csv</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.mwt_conc</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Temperature.OuterSolution.CSV</FileName>
-    <FileName Model_Name="BuoyancyMAW" FileType="Model Output">BuoyancyMAW.Viscosity.cbc</FileName>
     <FileName Model_Name="BuoyancyMAW" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>

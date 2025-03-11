@@ -19250,7 +19250,7 @@ var
       for Index := 0 to ChemSpecies.Count - 1 do
       begin
         AChemItem := ChemSpecies[Index];
-        result := (AChemItem.Name = StrGweTemperature)
+        result := AChemItem.UsedForGWE
           and (AChemItem.GwePorosityDataArrayName = DataArray.Name);
         if result then
         begin
@@ -19827,7 +19827,7 @@ var
       begin
         if ModflowPackages.GweEstPackage.IsSelected then
         begin
-          if AChemItem.Name = StrGweTemperature then
+          if AChemItem.UsedForGWE then
           begin
             result := False;
           end
@@ -33784,7 +33784,7 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      if AChemItem.Name = StrGweTemperature then
+      if AChemItem.UsedForGWE then
       begin
         if DataArray = nil then
         begin
@@ -33824,7 +33824,7 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      if AChemItem.Name = StrGweTemperature then
+      if AChemItem.UsedForGWE then
       begin
         if DataArray = nil then
         begin
@@ -33864,7 +33864,7 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      if AChemItem.Name = StrGweTemperature then
+      if AChemItem.UsedForGWE then
       begin
         if DataArray = nil then
         begin
@@ -33903,7 +33903,7 @@ var
     for Index := 0 to ChemSpecies.Count - 1 do
     begin
       AChemItem := ChemSpecies[Index];
-      if AChemItem.Name = StrGweTemperature then
+      if AChemItem.UsedForGWE then
       begin
         if DataArray = nil then
         begin
@@ -33950,7 +33950,14 @@ begin
     if (Sender <> nil) and DoGweCndUsed(Sender)  then
     begin
       ADataArray := Sender as TDataArray;
-      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+      for var ChemIndex := 0 to MobileComponents.Count - 1 do
+      begin
+        if MobileComponents[ChemIndex].UsedForGWE then
+        begin
+          result := ADataArray.Name = TransverseDispVertDataArrayName;
+          Exit;
+        end;
+      end;
     end;
   end;
 end;

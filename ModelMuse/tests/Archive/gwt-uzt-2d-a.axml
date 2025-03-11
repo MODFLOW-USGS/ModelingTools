@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="gwt-uzt-2d-a" FileType="bin">
-    <FileName Model_Name="gwt-uzt-2d-a" FileType="bin">..\..\..\WRDAPP\mf6.6.0_win64\bin\mf6.exe</FileName>
+    <FileName Model_Name="gwt-uzt-2d-a" FileType="bin">..\..\..\WRDAPP\mf6.6.1_win64\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="gwt-uzt-2d-a" FileType="ancillary">
     <FileName Model_Name="gwt-uzt-2d-a" FileType="ancillary">gwt-uzt-2d-a.gpt</FileName>

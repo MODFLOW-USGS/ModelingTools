@@ -1,4 +1,7 @@
-# Initial concentration file for Salinity file created on 6/21/2024 by ModelMuse version 5.2.0.18.
+# Initial concentration file for Salinity file created on 3/10/2025 by ModelMuse version 5.3.1.14.
+BEGIN OPTIONS
+END OPTIONS
+
 BEGIN GRIDDATA
   STRT LAYERED IPRN    12
     CONSTANT   0.000000000000E+000  # STRT 1

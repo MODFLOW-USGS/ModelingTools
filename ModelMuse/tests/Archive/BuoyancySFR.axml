@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Model_Archive_List>
   <bin Model_Name="BuoyancySFR" FileType="bin">
-    <FileName Model_Name="BuoyancySFR" FileType="bin">..\..\..\WRDAPP\mf6.6.0_win64\bin\mf6.exe</FileName>
+    <FileName Model_Name="BuoyancySFR" FileType="bin">..\..\..\WRDAPP\mf6.6.1_win64\bin\mf6.exe</FileName>
   </bin>
   <ancillary Model_Name="BuoyancySFR" FileType="ancillary">
     <FileName Model_Name="BuoyancySFR" FileType="ancillary">BuoyancySFR.gpt</FileName>
@@ -48,7 +48,6 @@
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.bhd</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.cbc</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.density</FileName>
-    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Density.cbc</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.dis.grb</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.InnerSolution.CSV</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.lst</FileName>
@@ -71,7 +70,6 @@
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_budget</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_budget.csv</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Temperature.sft_conc</FileName>
-    <FileName Model_Name="BuoyancySFR" FileType="Model Output">BuoyancySFR.Viscosity.cbc</FileName>
     <FileName Model_Name="BuoyancySFR" FileType="Model Output">mfsim.lst</FileName>
   </output>
 </Model_Archive_List>
