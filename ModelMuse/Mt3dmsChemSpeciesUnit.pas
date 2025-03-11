@@ -641,7 +641,7 @@ begin
   begin
     // Reassigning the name will cause the data set to be created if it is
     // needed.
-    if Model.GweUsed and (Name = StrGweTemperature) then
+    if UsedForGWE then
     begin
       FInitialConcDisplayName := kInitialTemperatureGwe;
       InitialConcDataArrayName := kInitialTemperatureGwe;
@@ -1067,7 +1067,7 @@ begin
   end
   else
   begin
-    result := frmGoPhast.PhastModel.ModelSelection = msModflow2015
+    result := (frmGoPhast.PhastModel.ModelSelection = msModflow2015)
       and frmGoPhast.PhastModel.GweUsed
       and (Name = strGweTemperature);
   end;
@@ -1278,7 +1278,7 @@ begin
   if (LocalModel <> nil) then
   begin
     DataSetUsed := False;
-    if (Name = StrGweTemperature) then
+    if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -1308,7 +1308,7 @@ begin
   if (LocalModel <> nil) then
   begin
     DataSetUsed := False;
-    if (Name = StrGweTemperature) then
+    if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -1343,7 +1343,7 @@ begin
   if (LocalModel <> nil) then
   begin
     DataSetUsed := False;
-    if (Name = StrGweTemperature) then
+    if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -1410,7 +1410,7 @@ begin
   if (LocalModel <> nil) then
   begin
     DataSetUsed := False;
-    if LocalModel.GweUsed and (Name = StrGweTemperature)
+    if UsedForGWE
       and LocalModel.ModflowPackages.GweEstPackage.IsSelected then
     begin
       DataSetUsed := True;
@@ -1453,7 +1453,7 @@ begin
   if (LocalModel <> nil) then
   begin
     DataSetUsed := False;
-    if (Name = StrGweTemperature) then
+    if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -2260,7 +2260,7 @@ begin
     begin
       DataSetUsed := True;
     end
-    else if (Name = StrGweTemperature) then
+    else if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -2294,7 +2294,7 @@ begin
     begin
       DataSetUsed := True;
     end
-    else if (Name = StrGweTemperature) then
+    else if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -2535,7 +2535,7 @@ begin
     begin
       OldRoot := GenerateNewRoot(FName);
       NewRoot := GenerateNewRoot(Value);
-      if (Model <> nil) and Model.GweUsed and (Value = StrGweTemperature) then
+      if (Model <> nil) and UsedForGWE then
       begin
         FInitialConcDisplayName := GenerateNewRoot(kInitialTemperatureGwe);
         InitialConcDataArrayName := GenerateNewRoot(kInitialTemperatureGwe);
@@ -2846,7 +2846,7 @@ begin
       begin
         LocalModel := frmGoPhast.PhastModel;
       end;
-      if (LocalModel <> nil) and LocalModel.GweUsed and (Value = StrGweTemperature) then
+      if (LocalModel <> nil) and UsedForGWE then
       begin
         FInitialConcDisplayName := GenerateNewRoot(kInitialTemperatureGwe);
         InitialConcDataArrayName := GenerateNewRoot(kInitialTemperatureGwe);
@@ -3131,7 +3131,7 @@ begin
         DataSetUsed := True;
       end;
     end
-    else if LocalModel.GweUsed and (Name = StrGweTemperature)
+    else if UsedForGWE
       and LocalModel.ModflowPackages.GweEstPackage.IsSelected then
     begin
       DataSetUsed := False;
@@ -3250,7 +3250,7 @@ begin
     begin
       DataSetUsed := True;
     end
-    else if (Name = StrGweTemperature) then
+    else if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -3283,7 +3283,7 @@ begin
     begin
       DataSetUsed := True;
     end
-    else if (Name = StrGweTemperature) then
+    else if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -3317,7 +3317,7 @@ begin
     begin
       DataSetUsed := True;
     end
-    else if (Name = StrGweTemperature) then
+    else if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected
@@ -3351,7 +3351,7 @@ begin
     begin
       DataSetUsed := True;
     end
-    else if (Name = StrGweTemperature) then
+    else if UsedForGWE then
     begin
       ModflowPackages := LocalModel.ModflowPackages;
       if ModflowPackages.GweProcess.IsSelected

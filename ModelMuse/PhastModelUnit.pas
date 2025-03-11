@@ -33954,7 +33954,7 @@ begin
       begin
         if MobileComponents[ChemIndex].UsedForGWE then
         begin
-          result := ADataArray.Name = TransverseDispVertDataArrayName;
+          result := ADataArray.Name = MobileComponents[ChemIndex].TransverseDispVertDataArrayName;
           Exit;
         end;
       end;
@@ -33970,14 +33970,21 @@ begin
   result := (DoGwtDispUsed(Sender)
     and (ModflowPackages.GwtDispersionPackage.LongitudinalDispTreatement = dtSeparate))
     and (ModflowPackages.GwtDispersionPackage.SeparateDataSetsForEachSpecies = dtCombined);
-//  if not result then
-//  begin
-//    if (Sender <> nil) and DoGweCndUsed(Sender)  then
-//    begin
-//      ADataArray := Sender as TDataArray;
-//      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
-//    end;
-//  end;
+  if not result then
+  begin
+    if (Sender <> nil) and DoGweCndUsed(Sender)  then
+    begin
+      ADataArray := Sender as TDataArray;
+      for var ChemIndex := 0 to MobileComponents.Count - 1 do
+      begin
+        if MobileComponents[ChemIndex].UsedForGWE then
+        begin
+          result := ADataArray.Name = MobileComponents[ChemIndex].LongDispVertDataArrayName;
+          Exit;
+        end;
+      end;
+    end;
+  end;
 end;
 
 function TCustomModel.DoSeparatedLongitudinalDispersionUsedPerSpecies(
@@ -33993,7 +34000,14 @@ begin
     if (Sender <> nil) and DoGweCndUsed(Sender)  then
     begin
       ADataArray := Sender as TDataArray;
-      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+      for var ChemIndex := 0 to MobileComponents.Count - 1 do
+      begin
+        if MobileComponents[ChemIndex].UsedForGWE then
+        begin
+          result := ADataArray.Name = MobileComponents[ChemIndex].LongDispVertDataArrayName;
+          Exit;
+        end;
+      end;
     end;
   end;
 end;
@@ -34004,10 +34018,18 @@ var
   ADataArray: TDataArray;
 begin
   result := False;
-    if (Sender <> nil) and DoGweCndUsed(Sender)  then
+  if (Sender <> nil) and DoGweCndUsed(Sender)  then
   begin
     ADataArray := Sender as TDataArray;
-    result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+    for var ChemIndex := 0 to MobileComponents.Count - 1 do
+    begin
+      if MobileComponents[ChemIndex].UsedForGWE then
+      begin
+        result := (ADataArray.Name = MobileComponents[ChemIndex].ThermalConductivityFluidDataArrayName)
+          or (ADataArray.Name = MobileComponents[ChemIndex].ThermalConductivitySolidDataArrayName);
+        Exit;
+      end;
+    end;
   end;
 end;
 
@@ -39807,7 +39829,14 @@ begin
     if (Sender <> nil) and DoGweCndUsed(Sender)  then
     begin
       ADataArray := Sender as TDataArray;
-      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+      for var ChemIndex := 0 to MobileComponents.Count - 1 do
+      begin
+        if MobileComponents[ChemIndex].UsedForGWE then
+        begin
+          result := ADataArray.Name = MobileComponents[ChemIndex].TransverseDispHDataArrayName;
+          Exit;
+        end;
+      end;
     end;
   end;
 end;
@@ -39953,7 +39982,15 @@ begin
     if (Sender <> nil) and DoGweCndUsed(Sender)  then
     begin
       ADataArray := Sender as TDataArray;
-      result := Pos(StrGweTemperature, ADataArray.Name) > 0;
+      for var ChemIndex := 0 to MobileComponents.Count - 1 do
+      begin
+        if MobileComponents[ChemIndex].UsedForGWE then
+        begin
+          result := (ADataArray.Name = MobileComponents[ChemIndex].LongDispHDataArrayName)
+            or (ADataArray.Name = MobileComponents[ChemIndex].LongDispVertDataArrayName);
+          Exit;
+        end;
+      end;
     end;
   end;
 
@@ -44068,9 +44105,8 @@ begin
       begin
         GwtNameWriters.Add(TMf6GwtNameWriter.Create(self, FileName, SpeciesIndex, etExport, '.Gwt_nam'));
       end
-      else if GweUsed and (MobileComponents[SpeciesIndex].Name = StrGweTemperature) then
+      else if GweUsed and (MobileComponents[SpeciesIndex].UsedForGwe) then
       begin
-        { TODO -cGWE : This needs to be updated for GWE. }
         GwtNameWriters.Add(TMf6GwtNameWriter.Create(self, FileName, SpeciesIndex, etExport, '.Gwe_nam'));
       end;
     end;
@@ -44299,7 +44335,7 @@ begin
               OCWriter.OutputType := otEnergy;
               for SpeciesIndex := 0 to MobileComponents.Count - 1 do
               begin
-                if MobileComponents[SpeciesIndex].Name = StrGweTemperature then
+                if MobileComponents[SpeciesIndex].UsedForGWE then
                 begin
                   OCWriter.SpeciesIndex := SpeciesIndex;
                   OCWriter.WriteFile(FileName);
@@ -45534,7 +45570,7 @@ begin
 
         for SpeciesIndex := 0 to MobileComponents.Count - 1 do
         begin
-          if not (MobileComponents[SpeciesIndex].Name = strGweTemperature) then
+          if not (MobileComponents[SpeciesIndex].UsedForGwe) then
           begin
             Continue;
           end;
@@ -45591,7 +45627,7 @@ begin
 
       for SpeciesIndex := 0 to GwtNameWriters.Count - 1 do
       begin
-        if GweUsed and (MobileComponents[SpeciesIndex].Name = strGweTemperature) then
+        if GweUsed and (MobileComponents[SpeciesIndex].UsedForGWE) then
         begin
           GwtNameWriters[SpeciesIndex].WriteFile(mtEnergyTransport);
         end

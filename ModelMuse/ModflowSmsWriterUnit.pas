@@ -96,15 +96,11 @@ begin
   end
   else
   begin
-    ShouldExport := Model.MobileComponents[FSpeciesIndex].UsedForGWT;
+    ShouldExport := Model.MobileComponents[FSpeciesIndex].UsedForGWT
+      or Model.MobileComponents[FSpeciesIndex].UsedForGWE;
     if not ShouldExport then
     begin
-      ShouldExport := Model.GweUsed and
-        (Model.MobileComponents[FSpeciesIndex].Name = StrGweTemperature);
-      if not ShouldExport then
-      begin
-        Exit;
-      end;
+      Exit;
     end;
     FNameOfFile := GwtFileName(AFileName, FSpeciesIndex);
     FSpeciesName := Model.MobileComponents[FSpeciesIndex].Name;

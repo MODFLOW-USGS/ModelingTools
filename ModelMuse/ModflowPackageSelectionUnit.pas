@@ -8287,7 +8287,7 @@ begin
       end;
       for var ComponentIndex := 0 to Components.Count - 1 do
       begin
-        if AnsiSameText(Components[ComponentIndex].Name, StrGweTemperature) then
+        if Components[ComponentIndex].UsedForGWE then
         begin
           for var ListIndex := List.Count - 1 downto 0 do
           begin
