@@ -15,7 +15,7 @@ type
     ogRch, ogEVT, ogMvr, ogWellReduction, ogUndefined);
   TObGenerals = set of TObGeneral;
 
-  TObGwt = (ogwtConcentration, ogwtCNC, ogwtSRC, ogwtUndefined);
+  TObGwt = (ogwtConcentration, ogwtCNC, ogwtSRC, ogwtCTP, ogwtESL, ogwtUndefined);
   TObGwts = set of TObGwt;
 
   TObSeries = (osGeneral, osMaw, osSfr, osLak, osUzf, osCSub, osGWT, osSft,
@@ -325,7 +325,7 @@ uses
 const
   ObGenName: array[TObGeneral] of string = ('Head', 'Drawdown', 'CHD', 'Drain', 'Well', 'GHB', 'Riv',
     'Rch', 'EVT', 'Mvr', 'WellReduction', 'undefined');
-  ObConcName: array[TObGwt] of string = ('Concentration', 'CNC', 'SRC', 'undefined');
+  ObConcName: array[TObGwt] of string = ('Concentration', 'CNC', 'SRC', 'CTP', 'ESL', 'undefined');
 
   ObSeriesName: array[TObSeries] of string = ('General', 'Maw', 'Sfr', 'Lak',
     'Uzf', 'CSub', 'GWT', 'Sft', 'Lkt', 'Mwt', 'Uzt');

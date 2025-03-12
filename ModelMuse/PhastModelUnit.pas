@@ -4535,6 +4535,8 @@ that affects the model output should also have a comment. }
     function Mf6ObsIsSelected: Boolean; override;
     function GwtCncIsSelected: Boolean;
     function GwtSrcIsSelected: Boolean;
+    function GweCtpIsSelected: Boolean;
+    function GweEslIsSelected: Boolean;
     function PackageIsSelected(APackage: TObject): Boolean;
     procedure ExportModflowLgrModel(const FileName: string;
       RunModel, ExportModpath, NewBudgetFileForModpath, ExportZoneBudget,
@@ -19231,6 +19233,18 @@ begin
     DataArray := Sender as TDataArray;
     result := DataArrayUsed(MobileComponents)
   end;
+end;
+
+function TPhastModel.GweCtpIsSelected: Boolean;
+begin
+  result := GweUsed and (MobileComponents.Count > 0)
+    and ModflowPackages.GweCtpPackage.IsSelected;
+end;
+
+function TPhastModel.GweEslIsSelected: Boolean;
+begin
+  result := GweUsed and (MobileComponents.Count > 0)
+    and ModflowPackages.GweEslPackage.IsSelected;
 end;
 
 function TPhastModel.GwePorosityUsed(Sender: TObject): boolean;
@@ -44093,6 +44107,8 @@ var
 //  ShouldExport: Boolean;
   CndWriter: TModflowCndWriter;
   EstWriter: TModflowGwtEstWriter;
+  CtpWriter: TModflowCtpWriter;
+  EslWriter: TModflowEslWriter;
 begin
   GwtNameWriters := Mf6GwtNameWriters as TMf6GwtNameWriters;
   GwtNameWriters.Clear;
@@ -45601,6 +45617,20 @@ begin
             GwtSsmWriter.WriteFile(FileName, SpeciesIndex);
           finally
             GwtSsmWriter.Free;
+          end;
+
+          CtpWriter := TModflowCtpWriter.Create(Self, etExport);
+          try
+            CtpWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            CtpWriter.Free;
+          end;
+
+          EslWriter := TModflowEslWriter.Create(Self, etExport);
+          try
+            EslWriter.WriteFile(FileName, SpeciesIndex);
+          finally
+            EslWriter.Free;
           end;
 
           ImsWriter := TImsWriter.Create(self, etExport, SpeciesIndex);

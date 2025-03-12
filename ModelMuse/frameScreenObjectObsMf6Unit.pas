@@ -10,7 +10,7 @@ uses
 
 type
   TFlowObsRows = (forCHD, forDRN, forEVT, forGHB, forRCH, forRIV, forWEL, forToMvr, forWellReduction);
-  TMassFlowObsRows = (mforCNC, mforSRC);
+  TMassFlowObsRows = (mforCNC, mforSRC, mforCTP, mforESL);
 
   TframeScreenObjectObsMf6 = class(TFrame)
     pnlCaption: TPanel;
@@ -276,6 +276,8 @@ begin
 
           chklstGWT.Checked[Ord(mforCNC)] := ogwtCNC in Mf6Obs.GwtObs;
           chklstGWT.Checked[Ord(mforSRC)] := ogwtSRC in Mf6Obs.GwtObs;
+          chklstGWT.Checked[Ord(mforCTP)] := ogwtCTP in Mf6Obs.GwtObs;
+          chklstGWT.Checked[Ord(mforESL)] := ogwtESL in Mf6Obs.GwtObs;
 
           for MawOb := Low(TMawOb) to High(TMawOb) do
           begin
@@ -548,6 +550,18 @@ begin
             chklstGWT.State[Ord(mforSRC)] := cbGrayed;
           end;
 
+          if chklstGWT.State[Ord(mforCTP)] <>
+            TCheckBoxState(ogwtCTP in Mf6Obs.GwtObs) then
+          begin
+            chklstGWT.State[Ord(mforCTP)] := cbGrayed;
+          end;
+
+          if chklstGWT.State[Ord(mforESL)] <>
+            TCheckBoxState(ogwtESL in Mf6Obs.GwtObs) then
+          begin
+            chklstGWT.State[Ord(mforESL)] := cbGrayed;
+          end;
+
           if rgStreamObsLocation.ItemIndex <> Ord(Mf6Obs.SfrObsLocation) then
           begin
             rgStreamObsLocation.ItemIndex := -1;
@@ -599,19 +613,9 @@ begin
   end;
   chklstFlowObs.Checked[Ord(gfoNearestNeighbor)] := True;
 
-//  comboChemSpecies.Items.Clear;
-//  if frmGoPhast.PhastModel.GwtUsed then
-//  begin
-//    for SpeciesIndex := 0 to frmGoPhast.PhastModel.MobileComponents.Count - 1 do
-//    begin
-//      comboChemSpecies.Items.Add(
-//        frmGoPhast.PhastModel.MobileComponents[SpeciesIndex].Name)
-//    end;
-//  end;
-  cbConcentration.Enabled := frmGoPhast.PhastModel.GwtUsed;
-//  comboChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
-  chklstChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed;
-  chklstGWT.Enabled := frmGoPhast.PhastModel.GwtUsed;
+  cbConcentration.Enabled := frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.GweUsed;
+  chklstChemSpecies.Enabled := frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.GweUsed;
+  chklstGWT.Enabled := frmGoPhast.PhastModel.GwtUsed or frmGoPhast.PhastModel.GweUsed;
 
   for MawIndex := 0 to chklstMAW.Items.Count - 1 do
   begin
@@ -1099,6 +1103,30 @@ begin
         else
         begin
           Exclude(NewObGwts, ogwtSRC);
+        end;
+      end;
+
+      if chklstGWT.State[Ord(mforCTP)] <> cbGrayed then
+      begin
+        if chklstGWT.Checked[Ord(mforCTP)] then
+        begin
+          Include(NewObGwts, ogwtCTP);
+        end
+        else
+        begin
+          Exclude(NewObGwts, ogwtCTP);
+        end;
+      end;
+
+      if chklstGWT.State[Ord(mforESL)] <> cbGrayed then
+      begin
+        if chklstGWT.Checked[Ord(mforESL)] then
+        begin
+          Include(NewObGwts, ogwtESL);
+        end
+        else
+        begin
+          Exclude(NewObGwts, ogwtESL);
         end;
       end;
 

@@ -367,7 +367,7 @@ begin
   FFlowObs := TList<TFlowObservationLocation>.Create;
   FHorizontalCells := TList<TCellAssignment>.Create;
   FConcentrations := TConcentrationLists.Create;
-  if Model.GwtUsed then
+  if Model.GwtUsed or Model.GweUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -618,7 +618,7 @@ begin
       end;
 
       GwtObs := [];
-      if Model.GwtUsed then
+      if Model.GwtUsed or Model.GweUsed then
       begin
         for ChemIndex := 0 to Model.MobileComponents.Count - 1 do
         begin
@@ -1134,7 +1134,7 @@ begin
                   FDrawdownObs.Add(HeadDrawdown);
                 end;
               end;
-              if Model.GwtUsed and (ogwtConcentration in Obs.GwtObs) then
+              if (Model.GwtUsed or Model.GweUsed) and (ogwtConcentration in Obs.GwtObs) then
               begin
                 HeadDrawdown.FCell := ACell.Cell;
                 for SpeciesIndex in Obs.Genus do
@@ -1623,7 +1623,7 @@ begin
 
   if (FHeadObs.Count = 0) and (FDrawdownObs.Count = 0) and (FFlowObs.Count = 0) then
   begin
-    if Model.GwtUsed then
+    if Model.GwtUsed or Model.GweUsed then
     begin
       ShouldQuit := True;
       for SpeciesIndex := 0 to FConcentrations.Count - 1 do
@@ -1666,7 +1666,7 @@ begin
     WritePestFile;
   end;
 
-  if Model.GwtUsed then
+  if Model.GwtUsed or Model.GweUsed then
   begin
     for SpeciesIndex := 0 to Model.MobileComponents.Count - 1 do
     begin
@@ -1759,7 +1759,14 @@ begin
   ObsPackage := Package as TMf6ObservationUtility;
   if FSpeciesIndex >= 0 then
   begin
-    WriteHeadDrawdownOutput('concentration', 'conc_', FConcentrations[FSpeciesIndex]);
+    if Model.MobileComponents[FSpeciesIndex].UsedForGWE then
+    begin
+      WriteHeadDrawdownOutput('temperature', 'temp_', FConcentrations[FSpeciesIndex]);
+    end
+    else
+    begin
+      WriteHeadDrawdownOutput('concentration', 'conc_', FConcentrations[FSpeciesIndex]);
+    end;
   end
   else
   begin
@@ -4200,6 +4207,14 @@ begin
     ogwtSRC:
      begin
        Result := 'src_';
+     end;
+    ogwtCTP:
+     begin
+       Result := 'ctp_';
+     end;
+    ogwtESL:
+     begin
+       Result := 'esl_';
      end;
     else
       begin

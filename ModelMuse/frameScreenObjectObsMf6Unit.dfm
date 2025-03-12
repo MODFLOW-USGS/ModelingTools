@@ -18,7 +18,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
     Top = 71
     Width = 590
     Height = 448
-    ActivePage = tabUZF
+    ActivePage = tabBasic
     Align = alClient
     TabOrder = 1
     object tabBasic: TTabSheet
@@ -38,18 +38,20 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Caption = 'Boundary flow observations'
       end
       object lblSpecies: TLabel
-        Left = 296
+        Left = 297
         Top = 74
-        Width = 91
+        Width = 173
         Height = 15
-        Caption = 'Chemical species'
+        Caption = 'Chemical species or temperature'
+        WordWrap = True
       end
       object lblGwtObs: TLabel
-        Left = 296
-        Top = 195
-        Width = 159
-        Height = 15
-        Caption = 'Type of mass flow observation'
+        Left = 297
+        Top = 221
+        Width = 275
+        Height = 37
+        Caption = 'Type of mass or energy flow observation'
+        WordWrap = True
       end
       object cbHeadObservation: TCheckBox
         Left = 3
@@ -84,6 +86,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Width = 278
         Height = 97
         Enabled = False
+        ItemHeight = 17
         Items.Strings = (
           'Nearest horizontal neighbor'
           'All horizontal neighbors'
@@ -97,6 +100,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 219
         Width = 278
         Height = 142
+        ItemHeight = 17
         Items.Strings = (
           'CHD flows'
           'DRN flows'
@@ -111,31 +115,35 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         OnClickCheck = chklstBoundaryFlowClickCheck
       end
       object cbConcentration: TCheckBox
-        Left = 296
+        Left = 297
         Top = 3
         Width = 217
-        Height = 42
-        Caption = 'Concentration observation (conc)'
+        Height = 54
+        Caption = 'Concentration or temperature observation (conc or temperature)'
         TabOrder = 5
         WordWrap = True
         OnClick = cbConcentrationClick
       end
       object chklstGWT: TCheckListBox
-        Left = 296
-        Top = 221
+        Left = 297
+        Top = 269
         Width = 282
         Height = 97
+        ItemHeight = 17
         Items.Strings = (
           'CNC (Mass flow at spec. conc.)'
-          'SRC (Mass source loading rate)')
+          'SRC (Mass source loading rate)'
+          'CTP (Energy flow at spec. temp.)'
+          'ESL (Energy source loading rate)')
         TabOrder = 6
         OnClickCheck = chklstGWTClickCheck
       end
       object chklstChemSpecies: TCheckListBox
-        Left = 296
-        Top = 93
+        Left = 297
+        Top = 118
         Width = 275
         Height = 97
+        ItemHeight = 17
         TabOrder = 7
       end
     end
@@ -161,6 +169,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 35
         Width = 286
         Height = 230
+        ItemHeight = 17
         Items.Strings = (
           'Head'
           'From MVR'
@@ -183,6 +192,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 35
         Width = 284
         Height = 230
+        ItemHeight = 17
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -219,6 +229,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 109
         Width = 239
         Height = 252
+        ItemHeight = 17
         Items.Strings = (
           'Stream stage'
           'External inflow'
@@ -259,6 +270,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 109
         Width = 232
         Height = 252
+        ItemHeight = 17
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -297,6 +309,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 32
         Width = 270
         Height = 337
+        ItemHeight = 17
         Items.Strings = (
           'Stage'
           'Specified inflow'
@@ -325,6 +338,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Top = 32
         Width = 300
         Height = 337
+        ItemHeight = 17
         Items.Strings = (
           'Concentration'
           'Storage'
@@ -414,6 +428,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Margins.Top = 30
           Margins.Right = 0
           Align = alLeft
+          ItemHeight = 17
           Items.Strings = (
             'Recharge to the aquifer from UZF (uzf-gwrch)'
             'UZF Discharge to land surface (uzf-gwd)'
@@ -444,6 +459,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Margins.Right = 0
           Margins.Bottom = 0
           Align = alClient
+          ItemHeight = 17
           Items.Strings = (
             'UZT_Concentration'
             'UZT_Storage'
@@ -477,6 +493,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Width = 582
         Height = 313
         Align = alClient
+        ItemHeight = 17
         Items.Strings = (
           'Flow: groundwater (GW) and interbeds (IB) (csub)'
           'Flow: GW and IB from inelastic compaction (inelastic-csub)'
@@ -549,6 +566,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Height = 71
           Align = alBottom
           Columns = 8
+          ItemHeight = 17
           TabOrder = 0
         end
       end
@@ -564,7 +582,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         Align = alClient
         TabOrder = 0
         ExplicitWidth = 582
-        ExplicitHeight = 413
+        ExplicitHeight = 418
         inherited splObservations: TSplitter
           Top = 241
           Width = 582
@@ -575,18 +593,22 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
           Width = 582
           Height = 241
           ExplicitWidth = 582
-          ExplicitHeight = 236
+          ExplicitHeight = 241
           inherited frameObservations: TframeGrid
             Width = 578
             Height = 222
             ExplicitTop = 17
             ExplicitWidth = 578
-            ExplicitHeight = 217
+            ExplicitHeight = 222
             inherited Panel: TPanel
               Top = 164
               Width = 578
-              ExplicitTop = 159
+              StyleElements = [seFont, seClient, seBorder]
+              ExplicitTop = 164
               ExplicitWidth = 578
+              inherited lbNumber: TLabel
+                StyleElements = [seFont, seClient, seBorder]
+              end
               inherited sbAdd: TSpeedButton
                 Left = 447
                 ExplicitLeft = 447
@@ -600,6 +622,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
                 ExplicitLeft = 517
               end
               inherited seNumber: TJvSpinEdit
+                StyleElements = [seFont, seClient, seBorder]
                 OnChange = frameObservationsseNumberChange
               end
             end
@@ -614,7 +637,7 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
         inherited grpObsComparisons: TGroupBox
           Top = 246
           Width = 582
-          ExplicitTop = 241
+          ExplicitTop = 246
           ExplicitWidth = 582
           inherited frameObsComparisons: TframeGrid
             Width = 578
@@ -623,8 +646,12 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
             ExplicitHeight = 153
             inherited Panel: TPanel
               Width = 578
+              StyleElements = [seFont, seClient, seBorder]
               ExplicitTop = 118
               ExplicitWidth = 578
+              inherited lbNumber: TLabel
+                StyleElements = [seFont, seClient, seBorder]
+              end
               inherited sbAdd: TSpeedButton
                 Left = 447
                 ExplicitLeft = 447
@@ -636,6 +663,9 @@ object frameScreenObjectObsMf6: TframeScreenObjectObsMf6
               inherited sbDelete: TSpeedButton
                 Left = 517
                 ExplicitLeft = 517
+              end
+              inherited seNumber: TJvSpinEdit
+                StyleElements = [seFont, seClient, seBorder]
               end
             end
             inherited Grid: TRbwDataGrid4

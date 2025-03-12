@@ -88,6 +88,53 @@ type
     class function ObservationOutputExtension: string; override;
   end;
 
+    TModflowCtpWriter = class(TCustomSimpleGwtBoundaryWriter)
+  protected
+    FCtpPackage: TGweCtpPackage;
+    FBoundaryFound: Boolean;
+    procedure PrintStressPeriods; override;
+  protected
+    class function Extension: string; override;
+    function Package: TModflowPackageSelection; override;
+    function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+      override;
+    function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
+    function ObsType: string; override;
+    function Mf6ObservationsUsed: Boolean; override;
+    class function ObservationExtension: string; override;
+    Class function Mf6GwtObType: TObGwt; override;
+    procedure WriteAdditionalAuxVariables; override;
+    procedure WriteListOptions(InputFileName: string); override;
+    procedure WriteMultiplier; override;
+  public
+    procedure WriteFile(const AFileName: string; SpeciesIndex: Integer);
+    class function ObservationOutputExtension: string; override;
+  end;
+
+  TModflowEslWriter = class(TCustomSimpleGwtBoundaryWriter)
+  protected
+    FEslPackage: TGweEslPackage;
+    FBoundaryFound: Boolean;
+    procedure PrintStressPeriods; override;
+  protected
+    class function Extension: string; override;
+    function Package: TModflowPackageSelection; override;
+    function GetBoundary(ScreenObject: TScreenObject): TModflowBoundary;
+      override;
+    function IsMf6Observation(AScreenObject: TScreenObject): Boolean; override;
+    function ObsType: string; override;
+    function Mf6ObservationsUsed: Boolean; override;
+    class function ObservationExtension: string; override;
+    Class function Mf6GwtObType: TObGwt; override;
+    procedure WriteAdditionalAuxVariables; override;
+    procedure WriteListOptions(InputFileName:string); override;
+    procedure WriteMultiplier; override;
+  public
+    procedure WriteFile(const AFileName: string; SpeciesIndex: Integer);
+    class function ObservationOutputExtension: string; override;
+  end;
+
+
 implementation
 
 uses
@@ -122,7 +169,6 @@ function TModflowCncWriter.IsMf6Observation(
 var
   Mf6Obs: TModflow6Obs;
 begin
-//  AScreenObject.modflow
   Mf6Obs := AScreenObject.Modflow6Obs;
   result := (Mf6Obs <> nil) and (((FSpeciesIndex in Mf6Obs.Genus)
     and (ogwtCNC in Mf6Obs.GwtObs))
@@ -380,8 +426,6 @@ function TModflowSrcWriter.IsMf6Observation(
 var
   Mf6Obs: TModflow6Obs;
 begin
-//  result := ((AScreenObject.Modflow6Obs <> nil)
-//    and (ogwtSRC in AScreenObject.Modflow6Obs.GwtObs))
   Mf6Obs := AScreenObject.Modflow6Obs;
   result := (Mf6Obs <> nil) and (((FSpeciesIndex in Mf6Obs.Genus)
     and (ogwtSRC in Mf6Obs.GwtObs))
@@ -573,6 +617,316 @@ begin
       Beep;
       MessageDlg(E.Message, mtError, [mbOK], 0);
     end;
+  end;
+end;
+
+{ TModflowCtpWriter }
+
+class function TModflowCtpWriter.Extension: string;
+begin
+  result := '.ctp';
+end;
+
+function TModflowCtpWriter.GetBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.GweCtpBoundary;
+  if result <> nil then
+  begin
+    if ScreenObject.GweCtpBoundary.ChemSpecies <> FSpeciesName then
+    begin
+      result := nil;
+    end
+    else
+    begin
+      FBoundaryFound := True;
+    end;
+  end;
+end;
+
+function TModflowCtpWriter.IsMf6Observation(
+  AScreenObject: TScreenObject): Boolean;
+var
+  Mf6Obs: TModflow6Obs;
+begin
+  Mf6Obs := AScreenObject.Modflow6Obs;
+  result := (Mf6Obs <> nil) and (((FSpeciesIndex in Mf6Obs.Genus)
+    and (ogwtCTP in Mf6Obs.GwtObs))
+    or (ogwtCTP in Mf6Obs.CalibrationObservations.GwtObs[FSpeciesIndex]))
+end;
+
+class function TModflowCtpWriter.Mf6GwtObType: TObGwt;
+begin
+  result := ogwtCTP;
+end;
+
+function TModflowCtpWriter.Mf6ObservationsUsed: Boolean;
+begin
+  result := (Model.ModelSelection = msModflow2015)
+    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
+end;
+
+class function TModflowCtpWriter.ObservationExtension: string;
+begin
+  result := '.ob_ctp';
+end;
+
+class function TModflowCtpWriter.ObservationOutputExtension: string;
+begin
+  result := '.ob_ctp_out';
+end;
+
+function TModflowCtpWriter.ObsType: string;
+begin
+  result := 'ctp'
+end;
+
+function TModflowCtpWriter.Package: TModflowPackageSelection;
+begin
+  result := Model.ModflowPackages.GweCtpPackage;
+end;
+
+procedure TModflowCtpWriter.PrintStressPeriods;
+const
+  D7PName =      ' # Never Used';
+  D7PNameIname = ' # Never Used';
+  DS5 = ' # Data Set 5: ITMP ';
+  DataSetIdentifier = 'Stress periods:';
+  VariableIdentifiers = 'Temperature IFACE boundname';
+begin
+  WriteStressPeriods(VariableIdentifiers, DataSetIdentifier, DS5,
+    D7PNameIname, D7PName);
+end;
+
+procedure TModflowCtpWriter.WriteAdditionalAuxVariables;
+begin
+  inherited;
+  if FCtpPackage.UseMultiplier then
+  begin
+    writeString(' multiplier');
+  end;
+end;
+
+procedure TModflowCtpWriter.WriteFile(const AFileName: string;
+  SpeciesIndex: Integer);
+var
+  Abbreviation: string;
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if not Model.GweUsed then
+  begin
+    Exit
+  end;
+  if not Model.MobileComponents[SpeciesIndex].UsedForGWE then
+  begin
+    Exit;
+  end;
+  FCtpPackage := Model.ModflowPackages.GweCtpPackage;
+  FPackage := FCtpPackage;
+  FSpeciesName := Model.MobileComponents[SpeciesIndex].Name;
+  FSpeciesIndex := SpeciesIndex;
+
+  Evaluate;
+
+  if not FBoundaryFound then
+  begin
+    Exit;
+  end;
+
+  Abbreviation := 'CTP6';
+
+  FGwtFile := GwtFileName(AFileName, SpeciesIndex);
+  FNameOfFile := FGwtFile;
+  FInputFileName := FGwtFile;
+
+  WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+
+  FPestParamUsed := False;
+  WritingTemplate := False;
+
+  WriteFileInternal;
+
+  WriteModflow6GwtFlowObs(NameOfFile, FEvaluationType, SpeciesIndex);
+
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    FNameOfFile := FNameOfFile + '.tpl';
+    WritePestTemplateLine(FNameOfFile);
+    WritingTemplate := True;
+    WriteFileInternal;
+  end;
+end;
+
+procedure TModflowCtpWriter.WriteListOptions(InputFileName: string);
+begin
+  inherited;
+  WriteMultiplier;
+end;
+
+procedure TModflowCtpWriter.WriteMultiplier;
+begin
+  if FCtpPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
+  end;
+end;
+
+{ TModflowEslWriter }
+
+class function TModflowEslWriter.Extension: string;
+begin
+  result := '.esl';
+end;
+
+function TModflowEslWriter.GetBoundary(
+  ScreenObject: TScreenObject): TModflowBoundary;
+begin
+  result := ScreenObject.GweEslBoundary;
+  if result <> nil then
+  begin
+    if ScreenObject.GweEslBoundary.ChemSpecies <> FSpeciesName then
+    begin
+      result := nil;
+    end
+    else
+    begin
+      FBoundaryFound := True;
+    end;
+  end;
+end;
+
+function TModflowEslWriter.IsMf6Observation(
+  AScreenObject: TScreenObject): Boolean;
+var
+  Mf6Obs: TModflow6Obs;
+begin
+  Mf6Obs := AScreenObject.Modflow6Obs;
+  result := (Mf6Obs <> nil) and (((FSpeciesIndex in Mf6Obs.Genus)
+    and (ogwtESL in Mf6Obs.GwtObs))
+    or (ogwtESL in Mf6Obs.CalibrationObservations.GwtObs[FSpeciesIndex]))
+end;
+
+class function TModflowEslWriter.Mf6GwtObType: TObGwt;
+begin
+  result := ogwtESL;
+end;
+
+function TModflowEslWriter.Mf6ObservationsUsed: Boolean;
+begin
+  result := (Model.ModelSelection = msModflow2015)
+    and Model.ModflowPackages.Mf6ObservationUtility.IsSelected;
+end;
+
+class function TModflowEslWriter.ObservationExtension: string;
+begin
+  result := '.ob_esl';
+end;
+
+class function TModflowEslWriter.ObservationOutputExtension: string;
+begin
+  result := '.ob_esl_out';
+end;
+
+function TModflowEslWriter.ObsType: string;
+begin
+  result := 'esl'
+end;
+
+function TModflowEslWriter.Package: TModflowPackageSelection;
+begin
+  result := Model.ModflowPackages.GweEslPackage;
+end;
+
+procedure TModflowEslWriter.PrintStressPeriods;
+const
+  D7PName =      ' # Never Used';
+  D7PNameIname = ' # Never Used';
+  DS5 = ' # Data Set 5: ITMP ';
+  DataSetIdentifier = 'Stress periods:';
+  VariableIdentifiers = 'senerrate IFACE boundname';
+begin
+  WriteStressPeriods(VariableIdentifiers, DataSetIdentifier, DS5,
+    D7PNameIname, D7PName);
+end;
+
+procedure TModflowEslWriter.WriteAdditionalAuxVariables;
+begin
+  inherited;
+  if FEslPackage.UseMultiplier then
+  begin
+    writeString(' multiplier');
+  end;
+end;
+
+procedure TModflowEslWriter.WriteFile(const AFileName: string;
+  SpeciesIndex: Integer);
+var
+  Abbreviation: string;
+begin
+  if not Package.IsSelected then
+  begin
+    Exit
+  end;
+  if not Model.GweUsed then
+  begin
+    Exit
+  end;
+  if not Model.MobileComponents[SpeciesIndex].UsedForGWE then
+  begin
+    Exit;
+  end;
+  FEslPackage := Model.ModflowPackages.GweEslPackage;
+  FPackage := FEslPackage;
+  FSpeciesName := Model.MobileComponents[SpeciesIndex].Name;
+  FSpeciesIndex := SpeciesIndex;
+
+  Evaluate;
+
+  if not FBoundaryFound then
+  begin
+    Exit;
+  end;
+
+  Abbreviation := 'ESL6';
+
+  FGwtFile := GwtFileName(AFileName, SpeciesIndex);
+  FNameOfFile := FGwtFile;
+  FInputFileName := FGwtFile;
+
+  WriteToGwtNameFile(Abbreviation, FNameOfFile, SpeciesIndex);
+
+  WriteModflow6GwtFlowObs(NameOfFile, FEvaluationType, SpeciesIndex);
+
+  FPestParamUsed := False;
+  WritingTemplate := False;
+
+  WriteFileInternal;
+
+  if  Model.PestUsed and FPestParamUsed then
+  begin
+    FNameOfFile := FNameOfFile + '.tpl';
+    WritePestTemplateLine(FNameOfFile);
+    WritingTemplate := True;
+    WriteFileInternal;
+  end;
+end;
+
+procedure TModflowEslWriter.WriteListOptions(InputFileName: string);
+begin
+  inherited;
+  WriteMultiplier;
+end;
+
+procedure TModflowEslWriter.WriteMultiplier;
+begin
+  if FEslPackage.UseMultiplier then
+  begin
+    WriteString('  AUXMULTNAME multiplier');
+    NewLine;
   end;
 end;
 
