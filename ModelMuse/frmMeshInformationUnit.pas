@@ -459,25 +459,12 @@ begin
 
     xyxlabelaxis(clblack, labels, 'Aspect Ratio', 1, 0, gridoff);
     xyyaxis(clblack,0,MaxCount,0,0,'Number of Elements',5,gridon,lin,fixed, 2);
-//      xylegendentry(1,'bar');
 
-//    xytitle(clBlack,'Element Angles');
-
-
-//    serAngles.Clear;
     for BinIndex := StartIndex to Bins.Count - 1 do
     begin
-//      serAngles.AddBar(Bins[BinIndex], BinTitles[BinIndex], clTeeColor);
       xybar(clblue,BinIndex-StartIndex+1,0.7,Bins[BinIndex],0);
     end;
 
-
-
-//    serAspectRatio.Clear;
-//    for BinIndex := StartIndex to Bins.Count - 1 do
-//    begin
-//      serAspectRatio.AddBar(Bins[BinIndex], BinTitles[BinIndex], clTeeColor);
-//    end;
     Comparer := TElementValueComparer.Create;
     try
       EleAngleSortList.Sort(Comparer);

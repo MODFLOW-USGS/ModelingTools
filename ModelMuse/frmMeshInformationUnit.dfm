@@ -4,6 +4,7 @@ inherited frmMeshInformation: TfrmMeshInformation
   Caption = 'Mesh Information'
   ClientHeight = 405
   ClientWidth = 524
+  StyleElements = [seFont, seClient, seBorder]
   ExplicitWidth = 540
   ExplicitHeight = 444
   TextHeight = 18

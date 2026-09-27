@@ -507,6 +507,10 @@ object TTaskHistory
     item
       Name = 'GWE'
       Display = True
+    end
+    item
+      Name = 'PEST++'
+      Display = True
     end>
   History = <
     item
@@ -36450,5 +36454,44 @@ object TTaskHistory
         'Bug fix'
         'PRT'
         'Installer')
+    end
+    item
+      Date = 46286.000000000000000000
+      Categories.Strings = (
+        'Installer')
+    end
+    item
+      Date = 46287.000000000000000000
+    end
+    item
+      Date = 46288.000000000000000000
+    end
+    item
+      Date = 46289.000000000000000000
+      Categories.Strings = (
+        'Design and Planning'
+        'PEST++'
+        'Documentation'
+        'PRT'
+        'Dialog boxes'
+        'Testing')
+    end
+    item
+      Date = 46290.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'PRT'
+        'Dialog boxes'
+        'Testing')
+    end
+    item
+      Date = 46291.000000000000000000
+    end
+    item
+      Date = 46292.000000000000000000
+      Categories.Strings = (
+        'Documentation'
+        'Dialog boxes'
+        'PRT')
     end>
 end

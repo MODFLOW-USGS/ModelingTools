@@ -978,7 +978,8 @@ uses
   Mf6.PrpFileReaderUnit in '..\MF6InputReader\Mf6.PrpFileReaderUnit.pas',
   frmSelectDisvFileUnit in 'frmSelectDisvFileUnit.pas' {frmSelectDisvFile},
   frmVOROGRIDGEN_Unit in 'frmVOROGRIDGEN_Unit.pas' {frmVOROGRIDGEN},
-  RunVoroGridGenUnit in 'RunVoroGridGenUnit.pas';
+  RunVoroGridGenUnit in 'RunVoroGridGenUnit.pas',
+  frmDisvQualityMetricsUnit in 'frmDisvQualityMetricsUnit.pas' {frmDisvQualityMetrics};
 
 {$R *.res}
 

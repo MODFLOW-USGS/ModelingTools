@@ -290,6 +290,8 @@ uses frmGoPhastUnit, DataSetUnit, FastGEO, LayerStructureUnit, PhastModelUnit,
   DataArrayManagerUnit, DataSetNamesUnit, ModelMuseUtilities;
 
 resourcestring
+  SMin_Crossing_Fraction = 'Min_Crossing_Fraction';
+  SMin_Crossing_Angle = 'Min_Crossing_Angle';
   StrInSVANIParamete = 'In %s, VANI parameters are defined even though that ' +
   'hydrogeologic unit used vertical hydraulic conductivity and vertical anis' +
   'otropy. The VANI parameters will be ignored.';
@@ -459,6 +461,9 @@ var
 
   SelectedCount_Function: TFunctionRecord;
   SutraMeshEdgeNodeFunction: TFunctionRecord;
+
+  MinCrossingAngleFuncti0n: TFunctionRecord;
+  MinCrossingFractionFuncti0n: TFunctionRecord;
 
 //  SutraMaxRealNodeValueFuntion: TFunctionRecord;
 
@@ -723,6 +728,10 @@ begin
   AddItem(VerticalSubdivision_Function, True);
   AddItem(SelectedCount_Function, True);
   AddItem(SutraMeshEdgeNodeFunction, True);
+
+  AddItem(MinCrossingAngleFuncti0n, True);
+  AddItem(MinCrossingFractionFuncti0n, True);
+
 
 //  AddItem(DipDirectionRadiansFunction, True);
 end;
@@ -1667,6 +1676,116 @@ begin
   if Node3D.Active then
   begin
     result := Node3D.BoundaryNode;
+  end;
+end;
+
+function _MinCrossingAngle(Values: array of pointer): double;
+var
+  LocalModel: TPhastModel;
+  ACell: TModflowIrregularCell2D;
+  Cell2: TModflowIrregularCell2D;
+  CellList: TMFIrregularCell2D_List;
+  Angle, MidpointFraction: double;
+  FoundMinimum: Boolean;
+begin
+  result := 0;
+  if not (GlobalCurrentModel is TPhastModel) then
+  begin
+    Exit
+  end;
+  LocalModel := TPhastModel(GlobalCurrentModel);
+  if not LocalModel.DisvUsed then
+  begin
+    Exit;
+  end;
+
+  CellList := TMFIrregularCell2D_List.Create;
+  try
+    ACell := LocalModel.DisvGrid.TwoDGrid.Cells[GlobalColumn-1];
+
+    FoundMinimum := False;
+    ACell.GetNeighbors(CellList);
+    for var NeighborIndex := 0 to CellList.Count - 1 do
+    begin
+      Cell2 := CellList[NeighborIndex];
+      if ACell.GetQualityMetrics(Cell2,
+        Angle, MidpointFraction) then
+      begin
+        if FoundMinimum then
+        begin
+          if result > Angle then
+          begin
+            result := Angle
+          end;
+        end
+        else
+        begin
+          result := Angle;
+          FoundMinimum := True;
+        end;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+    end;
+  finally
+    CellList.Free;
+  end;
+end;
+
+function _MinCrossingFraction(Values: array of pointer): double;
+var
+  LocalModel: TPhastModel;
+  ACell: TModflowIrregularCell2D;
+  Cell2: TModflowIrregularCell2D;
+  CellList: TMFIrregularCell2D_List;
+  Angle, MidpointFraction: double;
+  FoundMinimum: Boolean;
+begin
+  result := 0;
+  if not (GlobalCurrentModel is TPhastModel) then
+  begin
+    Exit
+  end;
+  LocalModel := TPhastModel(GlobalCurrentModel);
+  if not LocalModel.DisvUsed then
+  begin
+    Exit;
+  end;
+
+  CellList := TMFIrregularCell2D_List.Create;
+  try
+    ACell := LocalModel.DisvGrid.TwoDGrid.Cells[GlobalColumn-1];
+
+    FoundMinimum := False;
+    ACell.GetNeighbors(CellList);
+    for var NeighborIndex := 0 to CellList.Count - 1 do
+    begin
+      Cell2 := CellList[NeighborIndex];
+      if ACell.GetQualityMetrics(Cell2,
+        Angle, MidpointFraction) then
+      begin
+        if FoundMinimum then
+        begin
+          if result > MidpointFraction then
+          begin
+            result := MidpointFraction
+          end;
+        end
+        else
+        begin
+          result := MidpointFraction;
+          FoundMinimum := True;
+        end;
+      end
+      else
+      begin
+        Assert(False);
+      end;
+    end;
+  finally
+    CellList.Free;
   end;
 end;
 
@@ -8153,6 +8272,7 @@ resourcestring
   StrModflowLgr = 'MODFLOW-LGR|';
   StrObjectVertexValue = 'Object_VertexValue|';
   StrSutra = 'SUTRA|';
+  StrDISV = 'DISV|';
 
 { TLayerSlope }
 
@@ -9229,6 +9349,24 @@ initialization
   SutraMeshEdgeNodeFunction.Name := StrSUTRA_MeshEdgeNode;
   SutraMeshEdgeNodeFunction.Prototype := StrSutra + StrSUTRA_MeshEdgeNode;
   SutraMeshEdgeNodeFunction.Hidden := False;
+
+  MinCrossingAngleFuncti0n.ResultType := rdtDouble;
+  MinCrossingAngleFuncti0n.RFunctionAddr := _MinCrossingAngle;
+  SetLength(MinCrossingAngleFuncti0n.InputDataTypes, 0);
+  MinCrossingAngleFuncti0n.OptionalArguments := 0;
+  MinCrossingAngleFuncti0n.CanConvertToConstant := False;
+  MinCrossingAngleFuncti0n.Name := SMin_Crossing_Angle;
+  MinCrossingAngleFuncti0n.Prototype := StrDISV + SMin_Crossing_Angle;
+  MinCrossingAngleFuncti0n.Hidden := False;
+
+  MinCrossingFractionFuncti0n.ResultType := rdtDouble;
+  MinCrossingFractionFuncti0n.RFunctionAddr := _MinCrossingFraction;
+  SetLength(MinCrossingFractionFuncti0n.InputDataTypes, 0);
+  MinCrossingFractionFuncti0n.OptionalArguments := 0;
+  MinCrossingFractionFuncti0n.CanConvertToConstant := False;
+  MinCrossingFractionFuncti0n.Name := SMin_Crossing_Fraction;
+  MinCrossingFractionFuncti0n.Prototype := StrDISV + SMin_Crossing_Fraction;
+  MinCrossingFractionFuncti0n.Hidden := False;
 
   SutraMaxNodeValueInElement := TFunctionClass.Create;
   SutraMaxNodeValueInElement.InputDataCount := 1;

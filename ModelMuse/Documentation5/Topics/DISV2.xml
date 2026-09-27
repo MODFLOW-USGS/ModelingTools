@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2026-09-25T06:04:43.501-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">DISV</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">DISV</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">The DISV functions return values related to cells in a DISV grid.</text></para>
+  </body>
+</topic>

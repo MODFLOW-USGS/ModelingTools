@@ -220,6 +220,15 @@
     </topicref>
     <topicref type="topic" id="393234217725197" build="ALL" modified="2007-08-29T11:17:25.057Z" icon="0" href="Functions">
       <caption translate="true">Functions</caption>
+      <topicref type="topic" id="462900407840627" build="ALL" modified="2026-09-25T06:02:14.004Z" icon="0" href="DISV2">
+        <caption translate="true">DISV</caption>
+        <topicref type="topic" id="462903031258359" build="ALL" modified="2026-09-25T06:05:09.718Z" icon="0" href="Min_Crossing_Angle">
+          <caption translate="true">Min_Crossing_Angle</caption>
+        </topicref>
+        <topicref type="topic" id="462903128929039" build="ALL" modified="2026-09-25T06:04:48.315Z" icon="0" href="Min_Crossing_Fraction">
+          <caption translate="true">Min_Crossing_Fraction</caption>
+        </topicref>
+      </topicref>
       <topicref type="topic" id="393235969018056" build="ALL" modified="2022-01-24T16:28:26.341Z" icon="0" href="GIS">
         <caption translate="true">GIS</caption>
         <topicref type="topic" id="393236213510133" build="ALL" modified="2022-01-24T16:28:26.345Z" icon="0" href="X">
@@ -898,6 +907,9 @@
     </topicref>
     <topicref type="topic" id="435918204309951" build="ALL" modified="2019-05-06T17:08:28.860Z" icon="0" href="DISV">
       <caption translate="true">DISV</caption>
+      <topicref type="topic" id="462903799416836" build="ALL" modified="2026-09-25T07:22:30.182Z" icon="0" href="DISV-Quality-Metrics-Dialog-Bo">
+        <caption translate="true">DISV Quality Metrics Dialog Box</caption>
+      </topicref>
     </topicref>
     <topicref type="topic" id="41470383954303" build="ALL" modified="2013-07-17T08:50:39.250Z" icon="0" href="Mesh">
       <caption translate="true">Mesh</caption>
@@ -3420,6 +3432,9 @@
         <topicref type="topic" id="462823876160649" build="ALL" modified="2026-09-17T14:12:16.560Z" icon="0" href="Changing-the-Hydraulic-Conduct">
           <caption translate="true">Changing the Hydraulic Conductivity</caption>
         </topicref>
+        <topicref type="topic" id="462926514973643" build="ALL" modified="2026-09-27T16:31:24.524Z" icon="0" href="Changing-IFLOWFACE">
+          <caption translate="true">Changing IFLOWFACE (Optional)</caption>
+        </topicref>
         <topicref type="topic" id="462826981058815" build="ALL" modified="2026-09-17T14:23:38.604Z" icon="0" href="Running-the-PRT-Model-Again">
           <caption translate="true">Running the PRT Model Again</caption>
         </topicref>
@@ -3437,6 +3452,9 @@
         </topicref>
         <topicref type="topic" id="462829873982296" build="ALL" modified="2026-09-18T04:50:39.129Z" icon="0" href="Displaying-Cell-Centers-and-Ce">
           <caption translate="true">Displaying Cell Centers and Cell Connections</caption>
+        </topicref>
+        <topicref type="topic" id="462926299063028" build="ALL" modified="2026-09-27T16:20:46.546Z" icon="0" href="DISV-Quality-Metrics">
+          <caption translate="true">DISV Quality Metrics</caption>
         </topicref>
       </topicref>
     </topicref>

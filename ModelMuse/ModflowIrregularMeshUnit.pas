@@ -213,6 +213,14 @@ type
     function ShareANode(ACell: TModflowIrregularCell2D): Boolean;
     function BoundarySegment(OtherCell: TModflowIrregularCell2D; out Segment: TSegment2D): Boolean;
     function IntersectionPoint(Segment: TSegment2d; Out PointOfIntersection: TPoint2D): Boolean;
+    // @name computes the quality metrics for the connection between two cells.
+    // Ideally, Angle should be 90 degrees and MidpointFraction should be 0.5.
+    // Angle will range between 0 and 90. Angle is measured in degrees.
+    // MidpointFraction will range between 0 and 0.5 unless, the crossing point
+    // of the line connecting the neighboring cells and the centers of the cells
+    // is not on the boundary line between the cells.
+    function GetQualityMetrics(const OtherCell: TModflowIrregularCell2D;
+      out Angle, MidpointFraction: double): Boolean;
   published
     // @name starts at zero.
     property ElementNumber: integer read GetElementNumber
@@ -271,6 +279,14 @@ type
     property Items[Index: Integer]: TModflowIrregularCell2D read GetItem
       write SetItem; default;
   end;
+
+  TMeshQualityRecord = record
+    Cell1: TModflowIrregularCell2D;
+    Cell2: TModflowIrregularCell2D;
+    Angle: double;
+    MidpointFraction: double;
+  end;
+  TMeshQualityRecordList = TList<TMeshQualityRecord>;
 
   TModflowIrregularGrid2D = class(TCustomMesh, IMesh, IMesh2D)
   private
@@ -410,10 +426,6 @@ type
     property ElementCenters: TRbwQuadTree read GetElementCenters;
     property NodesLocations: TRbwQuadTree read GetNodesLocations;
     property ColumnCount: Integer read GetColumnCount;
-//    property NodeCount: integer read GetActiveNodeCount;
-//    property Nodes[Index: integer]: INode read GetActiveNode;
-//    property ElementNumber: integer read GetElementNumber
-//      write SetElementNumber;
     function MeshBox: TPolygon2D;
     function MeshOutline: TPolygon2D;
     property MinWidth[CellIndex: Integer]: double read GetMinWidth;
@@ -421,6 +433,7 @@ type
     function GetElementOutline(Column: Integer): TElementOutline;
     function OkLocation(const DataSet: TDataArray;
       const CellID: TZeroBasedID): boolean; override;
+    procedure GetMeshQualityMetrics(List: TMeshQualityRecordList);
   published
     procedure Loaded;
     property Cells: TModflowIrregularCell2DCollection read FCells write SetCells;
@@ -1658,6 +1671,48 @@ end;
 function TModflowIrregularCell2D.GetNumber: integer;
 begin
   result := DisplayNumber;
+end;
+
+function TModflowIrregularCell2D.GetQualityMetrics(
+  const OtherCell: TModflowIrregularCell2D; out Angle,
+  MidpointFraction: double): Boolean;
+var
+  ABoundarySegment: TSegment2D;
+  BoundaryLine: TLine2D;
+  ConnectionLine: TLine2D;
+  IntersectPoint: TPoint2D;
+  MidpointDistance1: double;
+  MidpointDistance2: double;
+  MidpointDistance: double;
+begin
+  result := BoundarySegment(OtherCell, ABoundarySegment);
+  if result then
+  begin
+    BoundaryLine := EquateLine(ABoundarySegment[1], ABoundarySegment[2]);
+    ConnectionLine[1] := Self.Center;
+    ConnectionLine[2] := OtherCell.Center;
+    IntersectPoint := FastGEO.IntersectionPoint(BoundaryLine, ConnectionLine);
+    Angle := VertexAngle(Self.Center, IntersectPoint, ABoundarySegment[1]);
+    if Angle = 0 then
+    begin
+      Angle := VertexAngle(Self.Center, IntersectPoint, ABoundarySegment[2]);
+    end;
+    if Angle > 90 then
+    begin
+      Angle := 180 - Angle;
+    end;
+//    Assert(Angle >= 0);
+
+    MidpointDistance1 := Distance(IntersectPoint, ABoundarySegment[1]);
+    MidpointDistance2 := Distance(IntersectPoint, ABoundarySegment[2]);
+    MidpointDistance := Max(MidpointDistance1, MidpointDistance2);
+
+    MidpointFraction :=  MidpointDistance/Distance(ABoundarySegment[1], ABoundarySegment[2]);
+    if MidpointFraction > 0.5 then
+    begin
+      MidpointFraction := 1-MidpointFraction;
+    end;
+  end;
 end;
 
 procedure TModflowIrregularCell2D.GetSharedEdgeNeighbors(
@@ -3145,9 +3200,6 @@ begin
     CellComparerI := nil;
     OverlapList.Free;
   end;
-
-
-
 end;
 
 function TModflowIrregularGrid2D.GetItemTopLocation(const EvalAt: TEvaluatedAt;
@@ -3155,6 +3207,41 @@ function TModflowIrregularGrid2D.GetItemTopLocation(const EvalAt: TEvaluatedAt;
 begin
   Assert(EvalAt = eaBlocks);
   result := Cells[Column].Location;
+end;
+
+procedure TModflowIrregularGrid2D.GetMeshQualityMetrics(
+  List: TMeshQualityRecordList);
+var
+  CellList: TMFIrregularCell2D_List;
+  Quality: TMeshQualityRecord;
+begin
+  List.Clear;
+  CellList := TMFIrregularCell2D_List.Create;
+  try
+    for var CellIndex := 0 to Cells.Count - 1 do
+    begin
+      Quality.Cell1 := Cells[CellIndex];
+      Quality.Cell1.GetNeighbors(CellList);
+      for var NeighborIndex := 0 to CellList.Count - 1 do
+      begin
+        Quality.Cell2 := CellList[NeighborIndex];
+        if Quality.Cell1.ElementNumber < Quality.Cell2.ElementNumber then
+        begin
+          if Quality.Cell1.GetQualityMetrics(Quality.Cell2,
+            Quality.Angle, Quality.MidpointFraction) then
+          begin
+            List.Add(Quality);
+          end
+          else
+          begin
+            Assert(False);
+          end;
+        end;
+      end;
+    end;
+  finally
+    CellList.Free;
+  end;
 end;
 
 function TModflowIrregularGrid2D.GetMinWidth(CellIndex: Integer): double;

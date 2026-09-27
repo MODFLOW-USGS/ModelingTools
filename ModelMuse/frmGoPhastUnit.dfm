@@ -682,7 +682,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarEditGrid: TToolBar
-      Left = 422
+      Left = 165
       Top = 66
       Width = 212
       Height = 28
@@ -784,7 +784,7 @@ inherited frmGoPhast: TfrmGoPhast
       end
     end
     object tbarCreateScreenObject: TToolBar
-      Left = 165
+      Left = 390
       Top = 66
       Width = 244
       Height = 28
@@ -1653,6 +1653,9 @@ inherited frmGoPhast: TfrmGoPhast
       end
       object miSpecifyCrossSection1: TMenuItem
         Action = acSpecifyCrossSection
+      end
+      object mniShowMeshQuality: TMenuItem
+        Action = actShowDisvQuality
       end
     end
     object miData: TMenuItem
@@ -3823,6 +3826,10 @@ inherited frmGoPhast: TfrmGoPhast
     object actShowCellConnections: TAction
       Caption = 'Show Cell Connections'
       OnExecute = mniShowCellConnectionsClick
+    end
+    object actShowDisvQuality: TAction
+      Caption = 'Show DISV Quality'
+      OnExecute = actShowDisvQualityExecute
     end
   end
   object ilDisabledImageList: TImageList

@@ -191,6 +191,9 @@ procedure TCustomFmiWriter.WriteGwfGrid;
 var
   GrbFileName: string;
 begin
+  // In MODFLOW vesion 6.8 the GRB file isn't read correctly.
+  Exit;
+
   if Model.ModflowOptions.WriteBinaryGridFile then
   begin
     WriteString('  GWFGRID');

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2026-09-25T07:21:23.076-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Min_Crossing_Angle</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Min_Crossing_Angle</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Min_Crossing_Angle</text><text styleclass="Normal" translate="true"> calculates the angles between each cell face and a line connecting the cells on opposite sides of that face and returns the minimum angle it calculates. </text><text styleclass="Strong" translate="true">Min_Crossing_Angle</text><text styleclass="Normal" translate="true"> returns 0 for structured grids.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In an ideal DISV mesh, the angle would be 90 degrees for all cells.</text></para>
+    <para styleclass="Normal"><image src="IrregularCellAngle.png" imagestyleclass="Default" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[The red lines illustrate the minimum crossing angle for a cell.]]></caption></image></para>
+  </body>
+</topic>

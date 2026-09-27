@@ -574,6 +574,8 @@ type
     actShowCellCenterPoints: TAction;
     mniShowCellConnections: TMenuItem;
     actShowCellConnections: TAction;
+    mniShowMeshQuality: TMenuItem;
+    actShowDisvQuality: TAction;
     procedure tbUndoClick(Sender: TObject);
     procedure acUndoExecute(Sender: TObject);
     procedure tbRedoClick(Sender: TObject);
@@ -785,6 +787,7 @@ type
     procedure acImportModflow6ModelExecute(Sender: TObject);
     procedure acReverseObjectOrderExecute(Sender: TObject);
     procedure actImportDisvExecute(Sender: TObject);
+    procedure actShowDisvQualityExecute(Sender: TObject);
     procedure actVOROGRIDGENExecute(Sender: TObject);
     procedure dlgOpenImportDisvClose(Sender: TObject);
     procedure dlgOpenImportDisvShow(Sender: TObject);
@@ -2109,7 +2112,6 @@ type
     procedure SetMt3dCaption;
     procedure EnableCTS;
     procedure EnableManageParameters;
-//    property WriteErrorRaised: Boolean read FWriteErrorRaised;
     procedure WMEnterSizeMove(var Message: TMessage); message WM_ENTERSIZEMOVE;
     procedure WMExitSizeMove(var Message: TMessage); message WM_EXITSIZEMOVE;
     procedure EnablePilotPointItems;
@@ -2215,7 +2217,7 @@ uses
   frmImportModflow6Unit,
   frmImportSurferGridFilesUnit, frmImportWarningsUnit, Mf6.DisvFileReaderUnit,
   Mf6.CustomMf6PersistentUnit, Modflow6ModelImporter, LayerStructureUnit,
-  frmVOROGRIDGEN_Unit, InterpolationUnit;
+  frmVOROGRIDGEN_Unit, InterpolationUnit, frmDisvQualityMetricsUnit;
 
 const
   StrDisplayOption = 'DisplayOption';
@@ -2887,6 +2889,7 @@ begin
 
     // Hiding instead of freeing these other forms can cause
     // TfrmStartUp.ShowModal to fail.
+    FreeAndNil(frmDisvQualityMetrics);
     FreeAndNil(frmShowHideObjects);
     FreeAndNil(frmDisplayData);
     FreeAndNil(frmGridValue);
@@ -4140,6 +4143,8 @@ begin
   frame3DView.glWidModelView.Visible := False;
   FreeAndNil(frmGridValue);
   FreeAndNil(frmDisplayData);
+//  FreeAndNil(frmDisvQualityMetrics);
+
 //  OutputDebugString('SAMPLING ON');
   WriteIniFile;
   IniFile.Free;
@@ -12006,6 +12011,8 @@ begin
     UpdateVerticalExaggeration(1);
     FreeAndNil(frmModflowPackages);
     FreeAndNil(frmDataSets);
+    FreeAndNil(frmDisvQualityMetrics);
+
     frmErrorsAndWarnings.Clear;
     Extension := LowerCase(ExtractFileExt(FileName));
     if Extension = '.gpt' then
@@ -12053,6 +12060,7 @@ begin
       FreeAndNil(frmMeshInformation);
       FreeAndNil(frmCustomizeMesh);
       FreeAndNil(frmGlobalVariables);
+      FreeAndNil(frmDisvQualityMetrics);
 
       tbSelectClick(tbSelect);
 
@@ -15413,8 +15421,20 @@ begin
   inherited;
   if dlgOpenImportDisv.Execute then
   begin
+    FreeAndNil(frmDisvQualityMetrics);
     ImportDisv(dlgOpenImportDisv.FileName, FImportDisvElevations);
   end;
+end;
+
+procedure TfrmGoPhast.actShowDisvQualityExecute(Sender: TObject);
+begin
+  inherited;
+  if frmDisvQualityMetrics = nil then
+  begin
+    Application.CreateForm(TfrmDisvQualityMetrics, frmDisvQualityMetrics);
+  end;
+  frmDisvQualityMetrics.GetData;
+  frmDisvQualityMetrics.Show;
 end;
 
 procedure TfrmGoPhast.actVOROGRIDGENExecute(Sender: TObject);
@@ -15507,6 +15527,7 @@ begin
   inherited;
   FImportDisvElevations := FfrmSelectDisvFile.rgImportChoice.ItemIndex = 1;
   FreeAndNil(FfrmSelectDisvFile);
+  FreeAndNil(frmDisvQualityMetrics);
 end;
 
 procedure TfrmGoPhast.dlgOpenImportDisvShow(Sender: TObject);

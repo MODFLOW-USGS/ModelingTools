@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2026-09-25T07:30:36.158-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Min_Crossing_Fraction</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Min_Crossing_Fraction</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Strong" translate="true">Min_Crossing_Fraction</text><text styleclass="Normal" translate="true"> calculates where the line connecting two neighboring cells intersects the cell face between them. It then calculates what fraction of the length of the cell face is on each side of the intersection point and returns the minimum value it calculates for any of the neighboring cells. If the line intersection point is not along the line segment connecting the two cells, Min_Crossing_Fraction can be negative. </text><text styleclass="Strong" translate="true">Min_Crossing_Fraction</text><text styleclass="Normal" translate="true"> returns 0 for structured grids.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">In an ideal DISV mesh, the minimum crossing fraction would be 0.5 for all cells. However, if the cell centers of both neighboring cells are both on the edge of the grid, a minimum crossing fraction of zero would be ideal.</text></para>
+    <para styleclass="Normal"><image src="IrregularCellFraction.png" imagestyleclass="Default" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[The length of the red line divided by the length of the solid blue line would be the crossing fraction for the two cells on either side of the solid blue line.]]></caption></image><text styleclass="Image Caption" translate="true">&#32;</text></para>
+  </body>
+</topic>
