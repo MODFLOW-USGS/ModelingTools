@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2026-09-27T16:41:39.964-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">Changing IFLOWFACE (Optional)</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Changing IFLOWFACE (Optional)</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">By default, CHD boundaries are treatedby PRT as being spread through the whole cell. You can change this using the IFLOWFACE_CHD data set. Assigning a value of -1 will cause PRT to treat the flow as coming from the top of the cell. A value of -2 means it comes from the bottom of the cell, A value of zero (the default) means the boundary encompasses the whole cell. Positive values means that flow comes from one of the vertical faces. For structured grids, 1 is the side on the west, 2 is the side on the north, 3 is the side on the east, and 4 is the side on the south. For DISV grids, you can use the </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Grid_Value_Dialog_Box" styleclass="Strong" translate="true">Grid or Mesh Value</link><text styleclass="Normal" translate="true"> dialog box to see how positive values are related to the sides of the grid cell under the cursor.</text></para>
+    <para styleclass="Normal"><image src="IFLOWFACE Display.png" imagestyleclass="Default" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[Screen capture of the Grid or Mesh Value dialog box showing the assignment of IFLOWFACE for the DISV cell under the cursor.]]></caption></image></para>
+  </body>
+</topic>

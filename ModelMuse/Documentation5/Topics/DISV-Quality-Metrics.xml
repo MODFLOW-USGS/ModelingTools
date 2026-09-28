@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
+<topic template="Default" modified="2026-09-27T16:30:10.750-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+  <title translate="true">DISV Quality Metrics</title>
+  <body>
+    <header>
+      <para styleclass="Heading1"><text styleclass="Heading1" translate="true">DISV Quality Metrics</text></para>
+    </header>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse has a </text><link displaytype="text" defaultstyle="true" type="topiclink" href="DISV-Quality-Metrics-Dialog-Bo" styleclass="Strong" translate="true">DISV Quality Metrics Dialog Box</link><text styleclass="Normal" translate="true"> that can help you locate problematic areas in a DISV grid. The dialog box, calculates the angles of the connections between cells to the boundary between cells and the deviation between the midpoint of the boundary and the location where the connection between cells crosses the boundary. You can also create a data set with </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Min_Crossing_Angle" styleclass="Normal" translate="true">Min_Crossing_Angle</link><text styleclass="Normal" translate="true"> or </text><link displaytype="text" defaultstyle="true" type="topiclink" href="Min_Crossing_Fraction" styleclass="Normal" translate="true">Min_Crossing_Fraction</link><text styleclass="Normal" translate="true"> as the default formula, and then color the grid with that data set to visualize where problematic cells are located.</text></para>
+    <para styleclass="Normal"><image src="DISV Quality Metrics Dialog Box.png" imagestyleclass="Default" scale="100.00%" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[Screen capture of the DISV Quality Metrics dialog box.]]></caption></image></para>
+  </body>
+</topic>
