@@ -1820,9 +1820,7 @@ begin
       end
       else
       begin
-//        BackupMfsimName := FileRoot + 'mfsim.nam';
         MfsimName := 'mfsim.nam';
-//        CopyLine := Format('if exist "%0:s" copy /Y "%0:s" "%1:s"', [BackupMfsimName, MfsimName]);
         MfListName := 'mfsim.lst';
         SimCount := frmGoPhast.PhastModel.SimNameWriter.SimFileNameCount;
         for SimIndex := 0 to SimCount -1 do
@@ -1830,11 +1828,9 @@ begin
           SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.
             SimFileNames[SimIndex]);
           ListFileName := ChangeFileExt(SimFileName, '.lst');
-//          if SimCount > 1 then
-          begin
-            BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
-              [SimFileName, MfsimName]));
-          end;
+          // using the /a option for "Copy" results in an extra character being added to the end of the file.
+          BatchFile.Add(Format('Copy /y "%0:s" "%1:s"',
+            [SimFileName, MfsimName]));
 
           if FileExists(ProgramLocations.ModelMonitorLocation) then
           begin
@@ -1860,7 +1856,8 @@ begin
           end;
           if SimCount > 1 then
           begin
-            BatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
+            // using the /a option for "Copy" results in an extra character being added to the end of the file.
+            BatchFile.Add(Format('Copy /y "%0:s" "%1:s"',
               [MfListName, ListFileName]));
             ListFiles.Add(ListFileName);
             if SimIndex > 0 then
@@ -1918,15 +1915,16 @@ begin
           SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.
             SimFileNames[SimIndex]);
           ListFileName := ChangeFileExt(SimFileName, '.lst');
+          // using the /a option for "Copy" results in an extra character being added to the end of the file.
           if SimCount > 1 then
           begin
-            ArchiveBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
+            ArchiveBatchFile.Add(Format('Copy /y "%0:s" "%1:s"',
               [SimFileName, MfsimName]));
           end;
           ArchiveBatchFile.Add(AFileName);
           if SimCount > 1 then
           begin
-            ArchiveBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"',
+            ArchiveBatchFile.Add(Format('Copy /y "%0:s" "%1:s"',
               [MfListName, ListFileName]));
           end;
         end;
@@ -1961,14 +1959,15 @@ begin
         begin
           SimFileName := ExtractFileName(frmGoPhast.PhastModel.SimNameWriter.SimFileNames[SimIndex]);
           ListFileName := ChangeFileExt(SimFileName, '.lst');
+          // using the /a option for "Copy" results in an extra character being added to the end of the file.
           if SimCount > 1 then
           begin
-            ParamEstBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [SimFileName, MfsimName]));
+            ParamEstBatchFile.Add(Format('Copy /y "%0:s" "%1:s"', [SimFileName, MfsimName]));
           end;
           ParamEstBatchFile.Add(AFileName {+ ' /wait'});
           if SimCount > 1 then
           begin
-            ParamEstBatchFile.Add(Format('Copy /Y /A "%0:s" "%1:s"', [MfListName, ListFileName]));
+            ParamEstBatchFile.Add(Format('Copy /y "%0:s" "%1:s"', [MfListName, ListFileName]));
           end;
         end;
         WriteInstuctionsBatchFile.Add(AFileName {+ ' /wait'});

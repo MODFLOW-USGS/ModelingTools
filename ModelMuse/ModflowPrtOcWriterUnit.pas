@@ -230,6 +230,12 @@ begin
       WriteString('  TRACK_DROPPED');
       NewLine
     end;
+
+    if PrtModel.ScratchBuffer then
+    begin
+      WriteString('  SCRATCH_BUFFER');
+      NewLine;
+    end;
   finally
     WriteEndOptions;
   end;

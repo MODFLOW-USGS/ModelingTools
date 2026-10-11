@@ -191,11 +191,15 @@ procedure TCustomFmiWriter.WriteGwfGrid;
 var
   GrbFileName: string;
 begin
-  // In MODFLOW vesion 6.8 the GRB file isn't read correctly.
-  Exit;
-
   if Model.ModflowOptions.WriteBinaryGridFile then
   begin
+    { TODO : Allow printing GWFGRID FILEIN this in MODFLOW 6.9 }
+    WriteString('# In MODFLOW vesion 6.8 and 6.8.1 the GRB file isn''t read correctly');
+    NewLine;
+    WriteString('# in GWT or GWE models. It can be read correctly in PRT models.');
+    NewLine;
+    WriteString('#');
+
     WriteString('  GWFGRID');
     WriteString(' FILEIN ');
     if Model.DisvUsed then

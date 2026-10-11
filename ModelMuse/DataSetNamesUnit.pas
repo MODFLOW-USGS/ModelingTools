@@ -1274,7 +1274,7 @@ resourcestring
   StrDefaultFootprintPath = 'C:\WRDAPP\WellFootprint.1_0_1\bin\WellFootprint.exe';
 
   // Be sure to update zonebudget path when updating mf6 path.
-  StrDefaultModflow6Path =      'C:\WRDAPP\mf6.8.0_win64\bin\mf6.exe';
+  StrDefaultModflow6Path =      'C:\WRDAPP\mf6.8.1_win64\bin\mf6.exe';
   StrZoneBudgetMf6DefaultPath = 'C:\WRDAPP\mf6.8.0_win64\bin\zbud6.exe';
 
   StrDefaultOwhmV2Path = 'C:\WRDAPP\mf-owhm-2.3.0\bin\mf-owhm.exe';

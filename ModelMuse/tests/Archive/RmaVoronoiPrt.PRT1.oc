@@ -1,6 +1,7 @@
-# OC Package for PRT model file created on 9/18/2026 by ModelMuse version 5.4.0.14.
+# OC Package for PRT model file created on 10/10/2026 by ModelMuse version 5.5.0.0.
 BEGIN OPTIONS
   TRACK FILEOUT 'RmaVoronoiPrt.PRT1.trk'
+  SCRATCH_BUFFER
 END OPTIONS
 
 BEGIN DIMENSIONS

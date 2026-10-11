@@ -7977,14 +7977,7 @@ begin
             FNewScreenObjects.Add(IFaceObject);
             IFaceObject.Name := 'Imported_' + DataArray.Name;
             Model.AddScreenObject(IFaceObject);
-            if DataArray.Orientation = dsoTop then
-            begin
-              IFaceObject.ElevationCount := ecOne;
-            end
-            else
-            begin
-              IFaceObject.ElevationCount := ecZero;
-            end;
+            IFaceObject.ElevationCount := ecOne;
             IFaceObject.ImportedSectionElevations.Count := Model.LayerCount * Model.RowCount * Model.ColumnCount;
             IFaceObject.ElevationFormula := rsObjectImportedValuesR + '("' + StrImportedElevations + '")';
             IFaceObject.SetValuesOfIntersectedCells := True;
@@ -12915,6 +12908,47 @@ begin
     PhastModel.ModflowPackages.GwtProcess.SeparateGwt := False;
     PhastModel.ModflowPackages.GweProcess.SeparateGwt := False;
 
+    NameFile := TStringList.Create;
+    Splitter := TStringList.Create;
+    try
+      NameFile.CaseSensitive := False;
+      for var NameFileIndex := 0 to NameFiles.Count - 1 do
+      begin
+        NameFile.LoadFromFile(NameFiles[NameFileIndex]);
+        ModelLineFound := False;
+        for var LineIndex := 0 to NameFile.Count - 1 do
+        begin
+          ALine := UpperCase(Trim(NameFile[LineIndex]));
+          if ALine = '' then
+          begin
+            Continue;
+          end;
+          if Pos('BEGIN MODELS', ALine) > 0 then
+          begin
+            ModelLineFound := True;
+            Continue;
+          end;
+          if ModelLineFound then
+          begin
+            Splitter.DelimitedText := ALine;
+            if Splitter[0] = 'PRT6' then
+            begin
+              APrtModel := PhastModel.ModflowPackages.PrtModels.Add.PrtModel;
+              APrtModel.IsSelected := True;
+              APrtModel.RunAsSeparateSimulation := NameFileIndex > 0;
+             end;
+            if Pos('END MODELS', ALine) > 0 then
+            begin
+              break;
+            end;
+          end;
+        end;
+      end;
+    finally
+      NameFile.Free;
+      Splitter.Free;
+    end;
+
     if NameFiles.Count > 1 then
     begin
       NameFile := TStringList.Create;
@@ -12955,12 +12989,6 @@ begin
               begin
                 GweFound := True;
               end;
-              if Splitter[0] = 'PRT6' then
-              begin
-                APrtModel := PhastModel.ModflowPackages.PrtModels.Add.PrtModel;
-                APrtModel.IsSelected := True;
-                APrtModel.RunAsSeparateSimulation := NameFileIndex > 0;
-               end;
               if Pos('END MODELS', ALine) > 0 then
               begin
                 if not GwfFound then
@@ -14618,7 +14646,7 @@ begin
     PrpScreenObject.Comment := 'Imported from ' + FModelNameFile +' on ' + DateTimeToStr(Now);
 
     Model.AddScreenObject(PrpScreenObject);
-    PrpScreenObject.ElevationCount := ecTwo;
+    PrpScreenObject.ElevationCount := ecOne;
     PrpScreenObject.SetValuesOfIntersectedCells := True;
     PrpScreenObject.EvaluatedAt := eaBlocks;
     PrpScreenObject.Visible := False;
@@ -14688,6 +14716,10 @@ begin
   Model := frmGoPhast.PhastModel;
   PrtModels := Model.ModflowPackages.PrtModels;
   Assert(FPrtModel <> nil);
+  while PrtModels.Count <= PrtIndex do
+  begin
+    PrtModels.Add;
+  end;
   PrtModel := PrtModels[PrtIndex].PrtModel;
   PrtModel.ModelName := FPrtModel.ModelName;
 

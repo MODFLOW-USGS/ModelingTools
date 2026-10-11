@@ -1,4 +1,4 @@
-# FMI6 file created on 8/5/2026 by ModelMuse version 5.4.0.13.
+# FMI6 file created on 10/10/2026 by ModelMuse version 5.5.0.0.
 BEGIN OPTIONS
     SAVE_FLOWS
   FLOW_IMBALANCE_CORRECTION
@@ -7,7 +7,9 @@ END OPTIONS
 BEGIN PACKAGEDATA
   GWFBUDGET FILEIN Prudic2004t2.cbc
   GWFHEAD FILEIN Prudic2004t2.bhd
-  GWFGRID FILEIN Prudic2004t2.dis.grb
+# In MODFLOW vesion 6.8 and 6.8.1 the GRB file isn't read correctly
+# in GWT or GWE models. It can be read correctly in PRT models.
+#  GWFGRID FILEIN Prudic2004t2.dis.grb
   GWFMOVER FILEIN Prudic2004t2.mvr_budget
   LAK-1 FILEIN Prudic2004t2.lk_bud
   SFR-1 FILEIN Prudic2004t2.sfr_budget

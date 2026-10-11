@@ -10548,7 +10548,7 @@ const
 //     '5.4.0.5' Bug Fix: Fixed export of duplicate time steps in SUTRA.
 //     '5.4.0.6' Bug fix: Changing a parameter for the LPF package to a PEST
 //                parameter now makes any associated multiplier or zone data
-//                sets optiona instead of required That will cause the data sets
+//                sets optional instead of required That will cause the data sets
 //                to no longer be used.
 //     '5.4.0.7' Bug fix: Fixed pasting text for multiple cells into the GWT
 //                tabs for the MODFLOW 6 Lake, MAW, and UZF packages.
@@ -10610,7 +10610,6 @@ const
 //                data sets will now have values set by interpolation as well
 //                as setting the values of intersected cells.
 //               Enhancement Added support for PRT models in MODFLOW 6.
-
 //               Enhancement: The Grid and Mesh Values dialog box now can
 //                display the face numbering used in IFLOWFACE.
 

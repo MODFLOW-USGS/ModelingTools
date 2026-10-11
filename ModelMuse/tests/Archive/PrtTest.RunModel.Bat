@@ -4,12 +4,12 @@ for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (
    set /A "start=(((%%a*60)+1%%b %% 100)*60+1%%c %% 100)*100+1%%d %% 100"
 )
 @echo on
-Copy /Y /A "PrtTest.mfsim.nam" "mfsim.nam"
-C:\WRDAPP\mf6.8.0_win64\bin\mf6.exe
-Copy /Y /A "mfsim.lst" "PrtTest.mfsim.lst"
-Copy /Y /A "PrtTest.PRT1.mfsim.nam" "mfsim.nam"
-C:\WRDAPP\mf6.8.0_win64\bin\mf6.exe
-Copy /Y /A "mfsim.lst" "PrtTest.PRT1.mfsim.lst"
+Copy /y "PrtTest.mfsim.nam" "mfsim.nam"
+C:\WRDAPP\mf6.8.1_win64\bin\mf6.exe
+Copy /y "mfsim.lst" "PrtTest.mfsim.lst"
+Copy /y "PrtTest.PRT1.mfsim.nam" "mfsim.nam"
+C:\WRDAPP\mf6.8.1_win64\bin\mf6.exe
+Copy /y "mfsim.lst" "PrtTest.PRT1.mfsim.lst"
 @echo off
 rem Get end time:
 for /F "tokens=1-4 delims=:.," %%a in ("%time%") do (

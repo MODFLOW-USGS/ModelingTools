@@ -21,7 +21,7 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
     Top = 151
     Width = 665
     Height = 356
-    ActivePage = tabPrpPackages
+    ActivePage = tabOptions
     Align = alBottom
     TabOrder = 1
     object tabOptions: TTabSheet
@@ -53,9 +53,9 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
         end
       end
       object grpOutputControl: TGroupBox
-        Left = 0
-        Top = 95
-        Width = 449
+        Left = 12
+        Top = 97
+        Width = 541
         Height = 226
         HelpType = htKeyword
         HelpKeyword = 'Particle-Transport'
@@ -69,8 +69,8 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           Caption = 'Output Files'
         end
         object lblTrackEvents: TLabel
-          Left = 184
-          Top = 24
+          Left = 267
+          Top = 30
           Width = 65
           Height = 15
           Caption = 'Track Events'
@@ -78,7 +78,7 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
         object chklstOutputFiles: TJvCheckListBox
           Left = 11
           Top = 45
-          Width = 167
+          Width = 250
           Height = 52
           DoubleBuffered = False
           Enabled = False
@@ -91,8 +91,8 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           TabOrder = 0
         end
         object chklstTrackEvents: TJvCheckListBox
-          Left = 184
-          Top = 45
+          Left = 267
+          Top = 51
           Width = 257
           Height = 172
           DoubleBuffered = False
@@ -110,6 +110,14 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           ParentDoubleBuffered = False
           ScrollWidth = 167
           TabOrder = 1
+        end
+        object cbScratchBuffer: TCheckBox
+          Left = 11
+          Top = 112
+          Width = 250
+          Height = 17
+          Caption = 'SCRATCH_BUFFER'
+          TabOrder = 2
         end
       end
       object gbSimulation: TGroupBox
