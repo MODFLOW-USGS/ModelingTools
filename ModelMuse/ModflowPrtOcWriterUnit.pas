@@ -132,7 +132,7 @@ begin
   try
     if pofBinaryBudget in PrtModel.PrtOutputFiles then
     begin
-      BudgetFileOut := BaseNameOfFile + '.cbb';
+      BudgetFileOut := BaseNameOfFile + '.cbc';
       Model.AddModelOutputFile(BudgetFileOut);
       WriteString('  BUDGET FILEOUT ');
       WriteSingleQuoteMF6;

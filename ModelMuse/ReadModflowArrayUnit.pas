@@ -1151,6 +1151,9 @@ begin
       MF2005BudgetTerms.Add(' SOURCE-SINK MIX');
       MF2005BudgetTerms.Add('             UZT');
       MF2005BudgetTerms.Add('STRESS PACK CONC');
+      MF2005BudgetTerms.Add('     TERMINATION');
+      MF2005BudgetTerms.Add('         STORAGE');
+      MF2005BudgetTerms.Add('             PRP');
     end
     else
     begin
