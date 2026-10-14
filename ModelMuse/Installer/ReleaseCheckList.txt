@@ -30,9 +30,10 @@
 15. Update ModflowImporter source in folder for source code.
 16. Create zip file for source.
 16a. Update IPDS biblio data (IPDS.USGS.gov)
-16a1. Update distribution files in IPDS.
-16b. Update credentials in Network Identity Monitor.
-16c. Transfer files to \\AFS\.usgs.gov\www_RW\water\htdocs\water-resources\software\ModelMuse
+16b Generate DOI in https://www1.usgs.gov/csas/doi/
+16c. Update distribution files in IPDS.
+16d. Update credentials in Network Identity Monitor.
+16e. Transfer files to \\AFS\.usgs.gov\www_RW\water\htdocs\water-resources\software\ModelMuse
 17. Update draft web page.
 17a. Update Videos web page.
 17b. Update Download web page.
