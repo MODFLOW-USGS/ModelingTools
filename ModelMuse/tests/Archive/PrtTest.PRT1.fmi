@@ -1,7 +1,9 @@
-# FMI6 file created on 9/18/2026 by ModelMuse version 5.4.0.14.
+# FMI6 file created on 10/10/2026 by ModelMuse version 5.5.0.0.
 BEGIN PACKAGEDATA
   GWFBUDGET FILEIN PrtTest.cbc
   GWFHEAD FILEIN PrtTest.bhd
-  GWFGRID FILEIN PrtTest.disv.grb
+# In MODFLOW vesion 6.8 and 6.8.1 the GRB file isn't read correctly
+# in GWT or GWE models. It can be read correctly in PRT models.
+#  GWFGRID FILEIN PrtTest.disv.grb
 END PACKAGEDATA
 

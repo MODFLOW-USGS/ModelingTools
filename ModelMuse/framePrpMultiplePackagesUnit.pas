@@ -37,6 +37,7 @@ type
     frameReleasePeriodData: TframeGrid;
     cbRunAsSeparateSimulation: TCheckBox;
     gbSimulation: TGroupBox;
+    cbScratchBuffer: TCheckBox;
     procedure framePrpPackagesGridBeforeDrawCell(Sender: TObject; ACol, ARow:
         LongInt);
     procedure framePrpPackagesGridEndUpdate(Sender: TObject);
@@ -344,6 +345,7 @@ begin
     cbRetardationFactor.Checked := PrtModel.RetardationFactorUsed;
     cbUseParticleStopZones.Checked := PrtModel.ZoneUsed;
     cbRunAsSeparateSimulation.Checked := PrtModel.RunAsSeparateSimulation;
+    cbScratchBuffer.Checked := PrtModel.ScratchBuffer;
 
     chklstOutputFiles.Checked[Ord(pofBinaryTrack)] := pofBinaryTrack in PrtModel.PrtOutputFiles;
     chklstOutputFiles.Checked[Ord(pofCsvTrack)] := pofCsvTrack in PrtModel.PrtOutputFiles;
@@ -515,6 +517,7 @@ begin
   PrtModel.RetardationFactorUsed := cbRetardationFactor.Checked;
   PrtModel.ZoneUsed := cbUseParticleStopZones.Checked;
   PrtModel.RunAsSeparateSimulation := cbRunAsSeparateSimulation.Checked;
+  PrtModel.ScratchBuffer := cbScratchBuffer.Checked;
 
   PrtOutputFiles := [];
   if chklstOutputFiles.Checked[Ord(pofBinaryTrack)] then

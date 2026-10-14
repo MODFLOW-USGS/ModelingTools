@@ -1,8 +1,9 @@
-# Discretization File created on 9/18/2026 by ModelMuse version 5.4.0.14.
+# Discretization File created on 10/10/2026 by ModelMuse version 5.5.0.0.
 # Rocky Mountain Arsenal Flow Model with PEST.
 # Number of active cells = 11647.
 BEGIN OPTIONS
   LENGTH_UNITS METERS
+# As of Sept. 16, 2026, PLPROC can't handle .grb files# created by MODFLOW if the CRS option is used.
 #  CRS Unknown
 END OPTIONS
 

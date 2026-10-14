@@ -1402,6 +1402,9 @@ begin
     begin
       // As of Sept. 16, 2026, PLPROC can't handle .grb files created by MODFLOW
       // if the CRS option is used.
+      WriteString('# As of Sept. 16, 2026, PLPROC can''t handle .grb files');
+      WriteString('# created by MODFLOW if the CRS option is used.');
+      NewLine;
       WriteString('#');
     end;
     WriteString('  CRS ');

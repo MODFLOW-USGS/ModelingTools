@@ -3170,6 +3170,7 @@ Type
     FRetardationDataArrayDisplayName: string;
     FZoneDataArrayDisplayName: string;
     FLinkedBoundaries: TPrpBoundaryInterfaceList;
+    FScratchBuffer: Boolean;
     procedure SetRetardationFactorUsed(const Value: Boolean);
     procedure SetZoneUsed(const Value: Boolean);
     procedure SetTrackTimes(const Value: TRealCollection);
@@ -3191,6 +3192,7 @@ Type
       AssociatedDataSets: string; ShouldCreate: boolean;
       const Classification: string);
     function GetModelName: string;
+    procedure SetScratchBuffer(const Value: Boolean);
     property CanCreateDataSets: Boolean read FCanCreateDataSets
       write FCanCreateDataSets;
   public
@@ -3220,6 +3222,8 @@ Type
     property RunAsSeparateSimulation: Boolean read FRunAsSeparateSimulation write SetRunAsSeparateSimulation;
     property RetardationDataArrayName: string read FRetardationDataArrayName write SetRetardationDataArrayName;
     property ZoneDataArrayName: string read FZoneDataArrayName write SetZoneDataArrayName;
+    // OC SCRATCH_BUFFER
+    property ScratchBuffer: Boolean read FScratchBuffer write SetScratchBuffer;
   end;
 
   TPrtModelItem = class(TOrderedItem)
@@ -31788,6 +31792,7 @@ begin
     RunAsSeparateSimulation := PrtSource.RunAsSeparateSimulation;
     RetardationDataArrayName := PrtSource.RetardationDataArrayName;
     ZoneDataArrayName := PrtSource.ZoneDataArrayName;
+    ScratchBuffer := PrtSource.ScratchBuffer;
   end;
   inherited;
 end;
@@ -31868,6 +31873,7 @@ begin
   RetardationFactorUsed := False;
   ZoneUsed := False;
   IsSelected := False;
+  ScratchBuffer := False;
   TrackTimes.clear;
   PrtTrackingOptions := [ptoRelease, ptoExit, ptoTimeStep, ptoTerminate, ptoWeakSink, ptoUserTime];
   PrtOutputFiles := [pofBinaryTrack];
@@ -31892,6 +31898,7 @@ begin
       and (RunAsSeparateSimulation = PrtModel.RunAsSeparateSimulation)
       and (RetardationDataArrayName = PrtModel.RetardationDataArrayName)
       and (ZoneDataArrayName = PrtModel.ZoneDataArrayName)
+      and (ScratchBuffer = PrtModel.ScratchBuffer)
   end;
 end;
 
@@ -32043,6 +32050,15 @@ begin
   if FRunAsSeparateSimulation <> Value then
   begin
     FRunAsSeparateSimulation := Value;
+    InvalidateModel;
+  end;
+end;
+
+procedure TPrtModel.SetScratchBuffer(const Value: Boolean);
+begin
+  if FScratchBuffer <> Value then
+  begin
+    FScratchBuffer := Value;
     InvalidateModel;
   end;
 end;

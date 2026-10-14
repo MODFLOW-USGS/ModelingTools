@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2026-09-20T13:08:47.552-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2026-10-08T10:18:34.248-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Version 5.5</title>
   <body>
     <header>
@@ -15,7 +15,7 @@
             <tr style="vertical-align:top">
               <td>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for PRT models in MODFLOW 6.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Grid and Mesh Values dialog box now can display the face numbering used in IFLOWFACE.Bug fix: </text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">The Grid and Mesh Values dialog box now can display the face numbering used in IFLOWFACE.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added support for generating VOROGRIDGEN input files to generate DISV files for import into ModelMuse.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added the ability to import DISV files without importing an entire model.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now plot the &apos;STREAM FLOW OUT&apos; data written by the STR package.</text></para>
@@ -30,7 +30,7 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Added Support for ELASTIC_INELASTIC_SMOOTHING option in the CSUB package.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMonitor now plots a separate budget for each SWI zone.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now draw a point at the nodal point of each cell in a DISV grid.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now draw lines connecting the nodal points of neighboring cells in a DISV mesh.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">ModelMuse can now draw lines connecting the nodal points of neighboring cells in a DISV grid.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">When importing multiple gridded data files, the data sets will now have values set by interpolation as well as setting the values of intersected cells.</text></para>
               </td>
             </tr>
@@ -45,15 +45,15 @@
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">In the MODFLOW Program Locations dialog box, the edit control for MT3D-USGS now will display with a red background if MT3D-USGS is not installed at the specified location.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that could cause an access violation when exporting contours to Shapefiles.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed export of duplicate time steps in SUTRA.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">Changing a parameter for the LPF package to a PEST parameter now makes any associated multiplier or zone data sets optiona instead of required That will cause the data sets to no longer be used.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Changing a parameter for the LPF package to a PEST parameter now makes any associated multiplier or zone data sets optional instead of required That will cause the data sets to no longer be used.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed pasting text for multiple cells into the GWT tabs for the MODFLOW 6 Lake, MAW, and UZF packages.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed potential problem deleting temporary files.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">handled some errors reading and writing files.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Handled some errors reading and writing files.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed bug that caused access violations when importing MODFLOW 6 GWT models that lacked the SSM package.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in exporting contours to a Shapefile.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of warning about unconnected grids in MODFLOW 6 models.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of Data visualization dialog box in some models.</text></para>
-                <para styleclass="Normal"><text styleclass="Normal" translate="true">fixed getting some FMP4 data in the MODFLOW Packages and Programs dialog box.</text></para>
+                <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed getting some FMP4 data in the MODFLOW Packages and Programs dialog box.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed display of WBS (Farms) dialog box for MODFLOW OWHM version 1 models.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed a bug in the export of objects to Shapefile that could cause assert violations, access violations, or the failure to export some fields.</text></para>
                 <para styleclass="Normal"><text styleclass="Normal" translate="true">Fixed import of CND package in GWE.</text></para>

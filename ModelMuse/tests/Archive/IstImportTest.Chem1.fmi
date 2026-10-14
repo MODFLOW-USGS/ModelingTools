@@ -1,4 +1,4 @@
-# FMI6 file created on 8/5/2026 by ModelMuse version 5.4.0.13.
+# FMI6 file created on 10/10/2026 by ModelMuse version 5.5.0.0.
 BEGIN OPTIONS
     SAVE_FLOWS
 END OPTIONS
@@ -6,6 +6,8 @@ END OPTIONS
 BEGIN PACKAGEDATA
   GWFBUDGET FILEIN IstImportTest.cbc
   GWFHEAD FILEIN IstImportTest.bhd
-  GWFGRID FILEIN IstImportTest.dis.grb
+# In MODFLOW vesion 6.8 and 6.8.1 the GRB file isn't read correctly
+# in GWT or GWE models. It can be read correctly in PRT models.
+#  GWFGRID FILEIN IstImportTest.dis.grb
 END PACKAGEDATA
 

@@ -21,7 +21,7 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
     Top = 151
     Width = 665
     Height = 356
-    ActivePage = tabPrpPackages
+    ActivePage = tabOptions
     Align = alBottom
     TabOrder = 1
     object tabOptions: TTabSheet
@@ -53,9 +53,9 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
         end
       end
       object grpOutputControl: TGroupBox
-        Left = 0
-        Top = 95
-        Width = 449
+        Left = 12
+        Top = 97
+        Width = 541
         Height = 226
         HelpType = htKeyword
         HelpKeyword = 'Particle-Transport'
@@ -69,8 +69,8 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           Caption = 'Output Files'
         end
         object lblTrackEvents: TLabel
-          Left = 184
-          Top = 24
+          Left = 267
+          Top = 30
           Width = 65
           Height = 15
           Caption = 'Track Events'
@@ -78,7 +78,7 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
         object chklstOutputFiles: TJvCheckListBox
           Left = 11
           Top = 45
-          Width = 167
+          Width = 250
           Height = 52
           DoubleBuffered = False
           Enabled = False
@@ -91,8 +91,8 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           TabOrder = 0
         end
         object chklstTrackEvents: TJvCheckListBox
-          Left = 184
-          Top = 45
+          Left = 267
+          Top = 51
           Width = 257
           Height = 172
           DoubleBuffered = False
@@ -110,6 +110,14 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           ParentDoubleBuffered = False
           ScrollWidth = 167
           TabOrder = 1
+        end
+        object cbScratchBuffer: TCheckBox
+          Left = 11
+          Top = 112
+          Width = 250
+          Height = 17
+          Caption = 'SCRATCH_BUFFER'
+          TabOrder = 2
         end
       end
       object gbSimulation: TGroupBox
@@ -327,17 +335,16 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           Height = 49
           Align = alClient
           Caption = 
-            'Tracking times can be specified as specific times, by specific p' +
-            'eriod, or both. In this tab, tracking times are specified by tim' +
-            'e.'
+            'To ensure that particle information for all particles is saved a' +
+            't specific times, speciy those times here.'
           WordWrap = True
-          ExplicitWidth = 625
-          ExplicitHeight = 30
+          ExplicitWidth = 527
+          ExplicitHeight = 15
         end
       end
     end
     object tabTrackByStressPeriod: TTabSheet
-      Caption = 'Track By Stress Period'
+      Caption = 'Budget Data By Stress Period'
       ImageIndex = 3
       object pnlTrackPeriodData: TPanel
         Left = 0
@@ -353,13 +360,10 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           Width = 649
           Height = 49
           Align = alClient
-          Caption = 
-            'Tracking times can be specified as specific times, by specific p' +
-            'eriod, or both. In this tab, tracking times are specified by per' +
-            'iod. '
+          Caption = 'Budget information will be saved as specifed here.'
           WordWrap = True
-          ExplicitWidth = 625
-          ExplicitHeight = 30
+          ExplicitWidth = 264
+          ExplicitHeight = 15
         end
       end
       inline frameReleasePeriodData: TframeGrid

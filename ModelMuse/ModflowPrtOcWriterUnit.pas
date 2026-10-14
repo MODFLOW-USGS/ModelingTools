@@ -132,7 +132,7 @@ begin
   try
     if pofBinaryBudget in PrtModel.PrtOutputFiles then
     begin
-      BudgetFileOut := BaseNameOfFile + '.cbb';
+      BudgetFileOut := BaseNameOfFile + '.cbc';
       Model.AddModelOutputFile(BudgetFileOut);
       WriteString('  BUDGET FILEOUT ');
       WriteSingleQuoteMF6;
@@ -229,6 +229,12 @@ begin
     begin
       WriteString('  TRACK_DROPPED');
       NewLine
+    end;
+
+    if PrtModel.ScratchBuffer then
+    begin
+      WriteString('  SCRATCH_BUFFER');
+      NewLine;
     end;
   finally
     WriteEndOptions;

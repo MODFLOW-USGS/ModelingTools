@@ -10625,6 +10625,7 @@ begin
         SutraFilName := 'SUTRA.FIL';
         BackupBatchFileName := BatchFileName + FileRoot + 'RunSutra.bat';
         BatchFileName := BatchFileName + 'RunSutra.bat';
+        // using the /a option for "Copy" results in an extra character being added to the end of the file.
         CopyLine := Format('if exist "%0:s" copy /Y "%0:s" "%1:s"', [BackupSutraFileName, SutraFilName]);
 
         BatchFile := TStringList.Create;
@@ -16272,7 +16273,7 @@ initialization
   MfOwhmDate := EncodeDate(2016, 6, 15);
   MfCfpDate := EncodeDate(2011, 2, 23);
   ModelMateDate := EncodeDate(2013, 11, 19);
-  Mf6Date := EncodeDate(2026, 9, 2);
+  Mf6Date := EncodeDate(2026, 9, 23);
 //  Mf6WithGwtDate := EncodeDate(2022, 10, 26);
   Mt3dUsgsDate := EncodeDate(2019, 3, 8);
   ZoneBudMf6Date := Mf6Date;

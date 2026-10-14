@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="../helpproject.xsl" ?>
-<topic template="Default" modified="2026-09-18T05:54:50.658-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
+<topic template="Default" modified="2026-10-08T14:06:38.148-04:00" lasteditedby="rbwin" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../helpproject.xsd">
   <title translate="true">Adding a Particle Transport Model.</title>
   <body>
     <header>
       <para styleclass="Heading1"><text styleclass="Heading1" translate="true">Adding a Particle Transport Model.</text></para>
     </header>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">Make a copy of the RmaMf6Completed.gpt model and save it as RmaVoronoiPrt.gpt. You will find it under the PEST examples. Examples are saved in the &quot;C:\Users\Public\Documents\ModelMuse Examples&quot; folder.</text></para>
+    <para styleclass="Normal"><text styleclass="Normal" translate="true">If desired, PEST can be turned off by selecting &quot;Model|PEST Properties...&quot; and changing the PEST Status to &quot;Inactive.&quot;</text></para>
     <para styleclass="Normal"><text styleclass="Normal" translate="true">To add a Particle Transport (PRT) model, open the </text><text styleclass="Strong" translate="true">Model|MODFLOW Packages and Programs</text><text styleclass="Normal" translate="true"> dialog box and set the number of PRT models to 1. (MODFLOW 6 allows there to be multiple PRT models in the same simulation.) When you increase the number of PRT models, a pane for any new PRT models will be created along with one for a Particle Release Point (PRP) package in each model. (In addition to multiple PRT models in a simulation, MODFLOW 6 also allows multiple PRP packages in a PRT model.)</text></para>
     <para styleclass="Normal"><image src="Voronoi5.bmp" imagestyleclass="Default" scale="70.00%" width="536" height="425" styleclass="Image Caption" figurelistinclude="0"><caption translate="true"><![CDATA[Screen capture of the Particle Transport pane in the MODFLOW Packages and Programs dialog box just after setting the number of PRT models to 1.]]></caption></image></para>
     <para styleclass="Normal"></para>
