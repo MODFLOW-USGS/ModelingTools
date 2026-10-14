@@ -79,15 +79,17 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
           Left = 11
           Top = 45
           Width = 250
-          Height = 52
+          Height = 84
           DoubleBuffered = False
           Enabled = False
           ItemHeight = 17
           Items.Strings = (
             'Binary track file'
-            'CSV track file')
+            'CSV track file'
+            'Binary budget file'
+            'CSV budget summary file')
           ParentDoubleBuffered = False
-          ScrollWidth = 109
+          ScrollWidth = 162
           TabOrder = 0
         end
         object chklstTrackEvents: TJvCheckListBox
@@ -113,7 +115,7 @@ inherited framePrpMultiplePackages: TframePrpMultiplePackages
         end
         object cbScratchBuffer: TCheckBox
           Left = 11
-          Top = 112
+          Top = 152
           Width = 250
           Height = 17
           Caption = 'SCRATCH_BUFFER'

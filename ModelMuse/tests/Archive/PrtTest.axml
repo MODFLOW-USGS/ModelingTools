@@ -52,7 +52,7 @@
     <FileName Model_Name="PrtTest" FileType="Model Output">PrtTest.maw_bud</FileName>
     <FileName Model_Name="PrtTest" FileType="Model Output">PrtTest.maw_head</FileName>
     <FileName Model_Name="PrtTest" FileType="Model Output">PrtTest.OuterSolution.CSV</FileName>
-    <FileName Model_Name="PrtTest" FileType="Model Output">PrtTest.PRT1.cbb</FileName>
+    <FileName Model_Name="PrtTest" FileType="Model Output">PrtTest.PRT1.cbc</FileName>
     <FileName Model_Name="PrtTest" FileType="Model Output">PrtTest.PRT1.lst</FileName>
     <FileName Model_Name="PrtTest" FileType="Model Output">PrtTest.PRT1.trk</FileName>
     <FileName Model_Name="PrtTest" FileType="Model Output">PrtTest.PRT1.trk.csv</FileName>

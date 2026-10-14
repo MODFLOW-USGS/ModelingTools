@@ -349,6 +349,8 @@ begin
 
     chklstOutputFiles.Checked[Ord(pofBinaryTrack)] := pofBinaryTrack in PrtModel.PrtOutputFiles;
     chklstOutputFiles.Checked[Ord(pofCsvTrack)] := pofCsvTrack in PrtModel.PrtOutputFiles;
+    chklstOutputFiles.Checked[Ord(pofBinaryBudget)] := pofBinaryBudget in PrtModel.PrtOutputFiles;
+    chklstOutputFiles.Checked[Ord(pofoCsvBudget)] := pofoCsvBudget in PrtModel.PrtOutputFiles;
 
     for TrackingOption in PrtModel.PrtTrackingOptions do
     begin
@@ -527,6 +529,14 @@ begin
   if chklstOutputFiles.Checked[Ord(pofCsvTrack)] then
   begin
     Include(PrtOutputFiles, pofCsvTrack);
+  end;
+  if chklstOutputFiles.Checked[Ord(pofBinaryBudget)] then
+  begin
+    Include(PrtOutputFiles, pofBinaryBudget);
+  end;
+  if chklstOutputFiles.Checked[Ord(pofoCsvBudget)] then
+  begin
+    Include(PrtOutputFiles, pofoCsvBudget);
   end;
 
 

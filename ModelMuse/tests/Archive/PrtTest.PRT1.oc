@@ -1,6 +1,6 @@
-# OC Package for PRT model file created on 9/18/2026 by ModelMuse version 5.4.0.14.
+# OC Package for PRT model file created on 10/14/2026 by ModelMuse version 5.5.0.0.
 BEGIN OPTIONS
-  BUDGET FILEOUT 'PrtTest.PRT1.cbb'
+  BUDGET FILEOUT 'PrtTest.PRT1.cbc'
   TRACK FILEOUT 'PrtTest.PRT1.trk'
   TRACKCSV FILEOUT 'PrtTest.PRT1.trk.csv'
   TRACK_RELEASE
@@ -51,6 +51,7 @@ BEGIN TRACKTIMES
   3.100000000000E+006 
   3.200000000000E+006 
 End TRACKTIMES
+
 BEGIN PERIOD      1
   SAVE BUDGET FIRST
   SAVE BUDGET LAST

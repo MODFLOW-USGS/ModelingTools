@@ -384,6 +384,7 @@ begin
     finally
       WriteString('End TRACKTIMES');
       NewLine;
+      NewLine;
     end;
   end;
 end;
