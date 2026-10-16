@@ -10237,6 +10237,9 @@ begin
       end;
     end;
   end;
+  FSeparateGwt := False;
+  FSeparateGwe := False;
+  FSpeciesIndex := -1;
 
   if Model.PrtUsed and Model.SeparatePrtUsed then
   begin
@@ -10552,7 +10555,8 @@ begin
   begin
     for ModelIndex := 1 to FModelDataList.Count - 1 do
     begin
-      ShouldWriteLine := GetShouldWriteLine(ModelIndex);
+      ShouldWriteLine := GetShouldWriteLine(ModelIndex)
+       and (ModelIndex <= FModel.MobileComponents.Count);
       if ShouldWriteLine then
       begin
         WriteString('  TDIS6 ');
