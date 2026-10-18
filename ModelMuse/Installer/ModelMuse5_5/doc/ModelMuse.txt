@@ -2,7 +2,9 @@ ModelMuse is a graphical user interface (GUI) for the U.S. Geological Survey
 (USGS) models MODFLOW 6, MODFLOW–2005, MODFLOW-LGR, MODFLOW-LGR2, MODFLOW-NWT,
 MODFLOW-CFP, MODFLOW-OWHM versions 1 and 2, MODPATH versions 5, 6, and 7, ZONEBUDGET, PHAST, 
 SUTRA 2.2, SUTRA 3.0, SUTRA 4.0, MT3D-USGS, and WellFootprint and the non-USGS model 
-MT3DMS.  This software package provides a GUI for creating the flow and 
+MT3DMS. For MODFLOW 6 models, ModelMuse supports groundwater flow models, groundwater
+solute transport models, energy transport models, and particle transport models. 
+ModelMuse software package provides a GUI for creating the flow and 
 transport input file for PHAST and the input files for the other models. 
 ModelMuse supports parameter estimation with UCODE in MODFLOW–2005 and 
 MODFLOW-NWT models and with PEST in MODFLOW and SUTRA models except for 

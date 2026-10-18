@@ -183,7 +183,7 @@ https://github.com/project-jedi/jcl and https://github.com/project-jedi/jvcl.
 If installing with the GetIt Package Manager, the installer source code will 
 be downloaded and built and started. You must close Delphi before starting 
 the installation process with the installer. With JCL, you must accept the 
-MPL 1.1 Licence on the MPL 1.1 License tab before the installation starts.
+MPL 1.1 License on the MPL 1.1 License tab before the installation starts.
 Add the following JCL directories to the Library path if they are not added
 automatically when installing the JCL.
 source\common
